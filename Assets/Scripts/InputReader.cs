@@ -7,6 +7,7 @@ using UnityEngine.Events;
 public class InputReader : MonoBehaviour, GameInput.IGameplayActions
 {
 	public UnityAction jumpEvent;
+	public UnityAction jumpCanceledEvent;
 	public UnityAction attackEvent;
 	public UnityAction interactEvent;
 	public UnityAction extraActionEvent;
@@ -59,6 +60,10 @@ public class InputReader : MonoBehaviour, GameInput.IGameplayActions
 		if(jumpEvent != null
 			&& context.phase == InputActionPhase.Started)
 			jumpEvent.Invoke();
+
+		if(jumpCanceledEvent != null
+			&& context.phase == InputActionPhase.Canceled)
+			jumpCanceledEvent.Invoke();
 	}
 
 	public void OnMove(InputAction.CallbackContext context)
