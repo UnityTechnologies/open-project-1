@@ -63,9 +63,9 @@ public class InputReader : MonoBehaviour, GameInput.IGameplayActions
 
 	public void OnMove(InputAction.CallbackContext context)
 	{
-		if(moveEvent != null
-			&& context.phase == InputActionPhase.Performed)
+		if(moveEvent != null)
 		{
+			//Debug.Log("Move Event " + context.phase + " value " + context.ReadValue<Vector2>());
 			moveEvent.Invoke(context.ReadValue<Vector2>());
 		}
 	}
