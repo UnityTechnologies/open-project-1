@@ -9,19 +9,20 @@ public class Protagonist : MonoBehaviour
 	private CharacterController characterController;
 
 	public float speed = 10f;
-	public float gravityMultiplier = 10f;
-	public float jumpMultiplier = 5f;
+	public float gravityMultiplier = 5f;
 	public float initialJumpForce = 10f;
-	public float jumpInputDuration = 1f;
+	public float jumpInputDuration = .4f;
 
 	public float maxFallSpeed = 50f;
 
-	private float gravityCancel = 1f;
+	[SerializeField] private float gravityContributionMultiplier = 0f;
+	[SerializeField] private float gravityDivider = .7f;
+	[SerializeField] private float gravityComebackMultiplier = 5f;
 	private bool isJumping = false;
 	private float jumpBeginTime = -Mathf.Infinity;
 	private float verticalMovement = 0f;
-	private Vector3 finalMovementVector;
 	private Vector3 movementVector;
+	private Vector3 inputVector;
 
 	//Adds listeners for events being triggered in the InputReader script
 	private void OnEnable()
@@ -45,32 +46,64 @@ public class Protagonist : MonoBehaviour
 
 	private void Update()
 	{
-		finalMovementVector = movementVector * speed;
-		
-		gravityCancel += Time.deltaTime * 10f;
+		//Raises the multiplier to how much gravity will affect vertical movement when in mid-air
+		//This is 0f at the beginning of a jump and will raise to maximum 1f
+		if(!characterController.isGrounded)
+		{
+			gravityContributionMultiplier += Time.deltaTime * gravityComebackMultiplier;
+		}
 
-		//Jump input timeout
+		//Reduce the influence of the gravity while holding the Jump button
 		if(isJumping)
 		{
-			gravityCancel *= .5f;
-			//verticalMovement = verticalMovement + (gravityCancel * Time.deltaTime);
-
-			if(Time.time > jumpBeginTime + jumpInputDuration)
+			//The player can only hold the Jump button for so long
+			if(Time.time >= jumpBeginTime + jumpInputDuration)
 			{
 				isJumping = false;
-				gravityCancel = 1f;
+				gravityContributionMultiplier = 1f; //Gravity influence is reset to full effect
+			}
+			else
+			{
+				gravityContributionMultiplier *= gravityDivider; //Reduce the gravity effect
 			}
 		}
 
-		gravityCancel = Mathf.Clamp01(gravityCancel);
-		verticalMovement = verticalMovement + (Physics.gravity.y * gravityMultiplier * Time.deltaTime * gravityCancel); //Add gravity contribution
+		//Calculate the final verticalMovement
+		if(!characterController.isGrounded)
+		{
+			//Less control in mid-air, conserving momentum from previous frame
+			movementVector = inputVector * speed;
 
-		verticalMovement = Mathf.Clamp(verticalMovement, -maxFallSpeed, 100f);
-		finalMovementVector.y = verticalMovement;
+			//The character is either jumping or in freefall, so gravity will add up
+			gravityContributionMultiplier = Mathf.Clamp01(gravityContributionMultiplier);
+			verticalMovement += Physics.gravity.y * gravityMultiplier * Time.deltaTime * gravityContributionMultiplier; //Add gravity contribution
+			//Note that even if it's added, the above value is negative due to Physics.gravity.y
 
-		characterController.Move(finalMovementVector * Time.deltaTime);
+			//Cap the maximum so the player doesn't reach incredible speeds when freefalling from high positions
+			verticalMovement = Mathf.Clamp(verticalMovement, -maxFallSpeed, 100f);
+		}
+		else
+		{
+			//Full speed ground movement
+			movementVector = inputVector * speed;
+			
+			//Resets the verticalMovement while on the ground,
+			//so that regardless of whether the player landed from a high fall or not,
+			//if they drop off a platform they will always start with the same verticalMovement.
+			//-5f is a good value to make it so the player also sticks to uneven terrain/bumps without floating.
+			if(!isJumping)
+			{
+				verticalMovement = -5f;
+				gravityContributionMultiplier = 0f;
+			}
+		}
+
+		//Apply the result and move the character in space
+		movementVector.y = verticalMovement;
+		characterController.Move(movementVector * Time.deltaTime);
 
 		//Rotate to the movement direction
+		movementVector.y = 0f;
 		if(movementVector.sqrMagnitude >= .02f)
 		{
 			transform.forward = movementVector.normalized;
@@ -79,7 +112,7 @@ public class Protagonist : MonoBehaviour
 
 	private void OnMove(Vector2 movement)
 	{
-		movementVector = new Vector3(movement.x, 0f, movement.y);
+		inputVector = new Vector3(movement.x, 0f, movement.y);
 	}
 
 	private void OnJumpInitiated()
@@ -88,13 +121,13 @@ public class Protagonist : MonoBehaviour
 		{
 			isJumping = true;
 			jumpBeginTime = Time.time;
-			verticalMovement = initialJumpForce;
-			gravityCancel = 0f;
+			verticalMovement = initialJumpForce; //This is the only place where verticalMovement is set to a positive value
+			gravityContributionMultiplier = 0f;
 		}
 	}
 
 	private void OnJumpCanceled()
 	{
-		isJumping = false;
+		isJumping = false; //This will stop the reduction to the gravity, which will then quickly pull down the character
 	}
 }
