@@ -8,21 +8,20 @@ public class Protagonist : MonoBehaviour
 	public InputReader inputReader;
 	private CharacterController characterController;
 
-	public float speed = 10f;
-	public float gravityMultiplier = 5f;
-	public float initialJumpForce = 10f;
-	public float jumpInputDuration = .4f;
+	public float speed = 10f; //Horizontal plane speed multiplier
+	public float gravityMultiplier = 5f; //General multiplier for gravity (affects jump and freefall)
+	public float initialJumpForce = 10f; //The initial upwards push when pressing jump. This is injected into verticalMovement, and gradually cancelled by gravity
+	public float jumpInputDuration = .4f; //How long can the player hold the jump button
+	public float gravityComebackMultiplier = 15f; //Represents how fast gravityContributionMultiplier will go back to 1f. The higher, the faster
+	public float maxFallSpeed = 50f; //The maximum speed reached when falling (in units/frame)
+	public float gravityDivider = .6f; //Each frame while jumping, gravity will be multiplied by this amount in an attempt to "cancel it" (= jump higher)
 
-	public float maxFallSpeed = 50f;
-
-	[SerializeField] private float gravityContributionMultiplier = 0f;
-	[SerializeField] private float gravityDivider = .7f;
-	[SerializeField] private float gravityComebackMultiplier = 5f;
-	private bool isJumping = false;
-	private float jumpBeginTime = -Mathf.Infinity;
-	private float verticalMovement = 0f;
-	private Vector3 movementVector;
-	private Vector3 inputVector;
+	private float gravityContributionMultiplier = 0f; //The factor which determines how much gravity is affecting verticalMovement
+	private bool isJumping = false; //If true, a jump is in effect and the player is holding the jump button
+	private float jumpBeginTime = -Mathf.Infinity; //Time of the last jump
+	private float verticalMovement = 0f; //Represents how much a player will move vertically in a frame. Affected by gravity * gravityContributionMultiplier
+	private Vector3 inputVector; //Initial input horizontal movement (y == 0f)
+	private Vector3 movementVector; //Final movement vector
 
 	//Adds listeners for events being triggered in the InputReader script
 	private void OnEnable()
@@ -36,6 +35,9 @@ public class Protagonist : MonoBehaviour
 	//Removes all listeners to the events coming from the InputReader script
 	private void OnDisable()
 	{
+		inputReader.jumpEvent -= OnJumpInitiated;
+		inputReader.jumpCanceledEvent -= OnJumpCanceled;
+		inputReader.moveEvent -= OnMove;
 		//...
 	}
 
