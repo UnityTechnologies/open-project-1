@@ -3,18 +3,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Protagonist : MonoBehaviour
+public class Character : MonoBehaviour
 {
-	public InputReader inputReader;
 	private CharacterController characterController;
 
-	public float speed = 10f; //Horizontal plane speed multiplier
-	public float gravityMultiplier = 5f; //General multiplier for gravity (affects jump and freefall)
-	public float initialJumpForce = 10f; //The initial upwards push when pressing jump. This is injected into verticalMovement, and gradually cancelled by gravity
-	public float jumpInputDuration = .4f; //How long can the player hold the jump button
-	public float gravityComebackMultiplier = 15f; //Represents how fast gravityContributionMultiplier will go back to 1f. The higher, the faster
-	public float maxFallSpeed = 50f; //The maximum speed reached when falling (in units/frame)
-	public float gravityDivider = .6f; //Each frame while jumping, gravity will be multiplied by this amount in an attempt to "cancel it" (= jump higher)
+	[Tooltip("Horizontal XZ plane speed multiplier")] public float speed = 8f;
+	[Tooltip("General multiplier for gravity (affects jump and freefall)")] public float gravityMultiplier = 5f;
+	[Tooltip("The initial upwards push when pressing jump. This is injected into verticalMovement, and gradually cancelled by gravity")] public float initialJumpForce = 10f;
+	[Tooltip("How long can the player hold the jump button")] public float jumpInputDuration = .4f;
+	[Tooltip("Represents how fast gravityContributionMultiplier will go back to 1f. The higher, the faster")] public float gravityComebackMultiplier = 15f;
+	[Tooltip("The maximum speed reached when falling (in units/frame)")] public float maxFallSpeed = 50f;
+	[Tooltip("Each frame while jumping, gravity will be multiplied by this amount in an attempt to 'cancel it' (= jump higher)")] public float gravityDivider = .6f;
 
 	private float gravityContributionMultiplier = 0f; //The factor which determines how much gravity is affecting verticalMovement
 	private bool isJumping = false; //If true, a jump is in effect and the player is holding the jump button
@@ -22,24 +21,6 @@ public class Protagonist : MonoBehaviour
 	private float verticalMovement = 0f; //Represents how much a player will move vertically in a frame. Affected by gravity * gravityContributionMultiplier
 	private Vector3 inputVector; //Initial input horizontal movement (y == 0f)
 	private Vector3 movementVector; //Final movement vector
-
-	//Adds listeners for events being triggered in the InputReader script
-	private void OnEnable()
-	{
-		inputReader.jumpEvent += OnJumpInitiated;
-		inputReader.jumpCanceledEvent += OnJumpCanceled;
-		inputReader.moveEvent += OnMove;
-		//...
-	}
-
-	//Removes all listeners to the events coming from the InputReader script
-	private void OnDisable()
-	{
-		inputReader.jumpEvent -= OnJumpInitiated;
-		inputReader.jumpCanceledEvent -= OnJumpCanceled;
-		inputReader.moveEvent -= OnMove;
-		//...
-	}
 
 	private void Awake()
 	{
@@ -112,12 +93,14 @@ public class Protagonist : MonoBehaviour
 		}
 	}
 
-	private void OnMove(Vector2 movement)
+	//---- COMMANDS ISSUED BY OTHER SCRIPTS ----
+
+	public void Move(Vector3 movement)
 	{
-		inputVector = new Vector3(movement.x, 0f, movement.y);
+		inputVector = movement;
 	}
 
-	private void OnJumpInitiated()
+	public void Jump()
 	{
 		if(characterController.isGrounded)
 		{
@@ -128,7 +111,7 @@ public class Protagonist : MonoBehaviour
 		}
 	}
 
-	private void OnJumpCanceled()
+	public void CancelJump()
 	{
 		isJumping = false; //This will stop the reduction to the gravity, which will then quickly pull down the character
 	}

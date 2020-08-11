@@ -25,8 +25,6 @@ public class InputReader : MonoBehaviour, GameInput.IGameplayActions
 			gameInput.Gameplay.SetCallbacks(this);
 		}
 		gameInput.Gameplay.Enable();
-
-		//Debug.Log("I'm enabled");
 	}
 
 	private void OnDisable()
@@ -70,7 +68,6 @@ public class InputReader : MonoBehaviour, GameInput.IGameplayActions
 	{
 		if(moveEvent != null)
 		{
-			//Debug.Log("Move Event " + context.phase + " value " + context.ReadValue<Vector2>());
 			moveEvent.Invoke(context.ReadValue<Vector2>());
 		}
 	}
@@ -84,8 +81,7 @@ public class InputReader : MonoBehaviour, GameInput.IGameplayActions
 
 	public void OnRotateCamera(InputAction.CallbackContext context)
 	{
-		if(cameraMoveEvent != null
-			&& context.phase == InputActionPhase.Performed)
+		if(cameraMoveEvent != null)
 		{
 			cameraMoveEvent.Invoke(context.ReadValue<Vector2>());
 		}
