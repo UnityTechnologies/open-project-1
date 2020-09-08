@@ -60,22 +60,43 @@ public class ScenesData : ScriptableObject
     {
         for (int i = 0; i < scenesToLoadNames.Count; ++i)
         {
-            //Add the scene to the list of scenes to load asynchronously in the background
-            scenesToLoad.Add(SceneManager.LoadSceneAsync(scenesToLoadNames[i], LoadSceneMode.Additive));
-            //Remove scene from list of scenes to load
-            scenesToLoadNames.Remove(scenesToUnLoadNames[i]);
+            if (!CheckLoadState(scenesToLoadNames[i]))
+            {
+                //Add the scene to the list of scenes to load asynchronously in the background
+                scenesToLoad.Add(SceneManager.LoadSceneAsync(scenesToLoadNames[i], LoadSceneMode.Additive));
+                //Remove scene from list of scenes to load
+                //scenesToUnLoadNames.Add(scenesToLoadNames[i]);
+                scenesToLoadNames.Remove(scenesToLoadNames[i]);
+            }
         }
     }
 
     public void UnloadScenes()
     {
-        for (int i = 0; i < scenesToLoad.Count; ++i)
+        for (int i = 0; i < scenesToUnLoadNames.Count; ++i)
         {
             //Add the scene to the list of scenes to unload asynchronously in the background
             SceneManager.UnloadSceneAsync(scenesToUnLoadNames[i]);
             //Remove scene from list of scenes to unload
             scenesToUnLoadNames.Remove(scenesToUnLoadNames[i]);
         }
+    }
+
+    public bool CheckLoadState(String sceneName)
+    {
+        if (SceneManager.sceneCount > 0)
+        {
+            for (int i = 0; i < SceneManager.sceneCount; ++i)
+            {
+                Scene scene = SceneManager.GetSceneAt(i);
+                if (scene.name == sceneName)
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+
     }
 
     //Start next level
