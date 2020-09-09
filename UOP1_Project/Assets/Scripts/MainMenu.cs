@@ -22,7 +22,7 @@ public class MainMenu : MonoBehaviour
     {
         //We can load the main menu by pressing space bar in the Scenes Loader scene
         //Just for test purpose
-        if (Keyboard.current.spaceKey.wasPressedThisFrame)
+        if (Keyboard.current.lKey.wasPressedThisFrame)
         {
             onGameStart.Raise();
         }
