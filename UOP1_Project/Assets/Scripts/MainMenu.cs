@@ -18,7 +18,7 @@ public class MainMenu : MonoBehaviour
 
     public void Update()
     {
-        //We can load the main menu by pressing space bar in the Scenes Loader scene
+        //We can load the main menu by pressing l in the Scenes Loader scene
         //Just for test purpose
         if (Keyboard.current.lKey.wasPressedThisFrame)
         {
