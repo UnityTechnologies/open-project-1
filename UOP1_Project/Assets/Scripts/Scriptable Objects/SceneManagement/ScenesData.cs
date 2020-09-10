@@ -8,7 +8,7 @@ public class ScenesData : ScriptableObject
 {
     public List<Level> levels = new List<Level>();
     public List<Menu> menus = new List<Menu>();
-    public int CurrentLevelIndex=0;
+    public int CurrentLevelIndex=-1;
 
     //List of the scenes to load and track progress
     public List<AsyncOperation> scenesToLoad = new List<AsyncOperation>();
@@ -28,6 +28,8 @@ public class ScenesData : ScriptableObject
     {
         scenesToLoadNames.Clear();
         scenesToUnLoadNames.Clear();
+        //Reset index
+        CurrentLevelIndex = -1;
     }
 
     /*
@@ -57,7 +59,7 @@ public class ScenesData : ScriptableObject
         }
 
         //Unload previous level if it exists
-        if(scenesToUnLoadNames == null)
+        if(scenesToUnLoadNames.Count == 0)
         {
             return;
         }
