@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class Character : MonoBehaviour
 {
+	public float MAXFallSpeed => maxFallSpeed;
+
 	private CharacterController characterController;
 
 	[Tooltip("Horizontal XZ plane speed multiplier")] public float speed = 8f;
@@ -22,12 +24,27 @@ public class Character : MonoBehaviour
 	private Vector3 inputVector; //Initial input horizontal movement (y == 0f)
 	private Vector3 movementVector; //Final movement vector
 
+	public delegate void CharacterUpdate();
+
 	private void Awake()
 	{
+		// Give Update control to FSM 
+		AppManager.Instance.AppInitializeCharacter(UpdatePaused, UpdatePlay);
+		
 		characterController = GetComponent<CharacterController>();
 	}
-
+	
 	private void Update()
+	{
+		AppManager.Instance.CharacterUpdate(); // invokes appropriate Update for current State
+	}
+
+	private void UpdatePaused()
+	{
+		// do no updates until we resume play
+	}
+
+	private void UpdatePlay()
 	{
 		//Raises the multiplier to how much gravity will affect vertical movement when in mid-air
 		//This is 0f at the beginning of a jump and will raise to maximum 1f

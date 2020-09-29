@@ -9,8 +9,13 @@ public class Protagonist : MonoBehaviour
     private Vector2 previousMovementInput;
     private bool controlsEnabled = true;
 
+    public delegate void ProtagonistUpdate();
+
     private void Awake()
     {
+        // Give Update control to FSM 
+        AppManager.Instance.AppInitializeProtagonist(UpdatePaused, UpdatePlay);
+		
         charScript = GetComponent<Character>();
     }
 
@@ -33,6 +38,16 @@ public class Protagonist : MonoBehaviour
     }
 
     private void Update()
+    {
+        AppManager.Instance.ProtagonistUpdate(); // invokes appropriate Update for current State
+    }
+    
+    private void UpdatePaused()
+    {
+        // do no updates until we resume play
+    }
+
+    private void UpdatePlay()
     {
         RecalculateMovement();
     }
