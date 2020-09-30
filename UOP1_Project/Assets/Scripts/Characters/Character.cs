@@ -6,6 +6,7 @@ using UnityEngine;
 public class Character : MonoBehaviour
 {
     private CharacterController characterController;
+    [Tooltip("Vertical falling direction reference object")] public Transform fallDirection;
 
     [Tooltip("Horizontal XZ plane speed multiplier")] public float speed = 8f;
     [Tooltip("Smoothing for rotating the character to their movement direction")] public float turnSmoothTime = 0.2f;
@@ -21,16 +22,30 @@ public class Character : MonoBehaviour
     private float jumpBeginTime = -Mathf.Infinity; //Time of the last jump
     private float turnSmoothSpeed; //Used by Mathf.SmoothDampAngle to smoothly rotate the character to their movement direction
     private float verticalMovement = 0f; //Represents how much a player will move vertically in a frame. Affected by gravity * gravityContributionMultiplier
+    private float slopeAngle = 0f; //Represents the floor angle under the player. Used to check if it is a walkable slope based on CahracterController.SlopeLimit
+    private float forwardAngle = 0f; //Represents the angle of character's forward in relation to the current slope
+    private float forwardMultiplier = 0f;
+    private float fallMultiplier;
+    private Vector3 collisionPoint;
+    private Ray groundRay = new Ray(); //Ray used to check the ground below player
+    private RaycastHit groundHit;
     private Vector3 inputVector; //Initial input horizontal movement (y == 0f)
     private Vector3 movementVector; //Final movement vector
-
     private void Awake()
     {
         characterController = GetComponent<CharacterController>();
     }
 
+
+    private void LateUpdate()
+    {
+        GroundDirection();
+    }
+
     private void Update()
     {
+        //Checks if character is in a slope to verify if he can walk/jump and if it'll affect it movement
+
         //Raises the multiplier to how much gravity will affect vertical movement when in mid-air
         //This is 0f at the beginning of a jump and will raise to maximum 1f
         if (!characterController.isGrounded)
@@ -54,23 +69,31 @@ public class Character : MonoBehaviour
         }
 
         //Calculate the final verticalMovement
-        if (!characterController.isGrounded)
+        if (!characterController.isGrounded || slopeAngle > characterController.slopeLimit)
         {
             //Less control in mid-air, conserving momentum from previous frame
-            movementVector = inputVector * speed;
 
             //The character is either jumping or in freefall, so gravity will add up
             gravityContributionMultiplier = Mathf.Clamp01(gravityContributionMultiplier);
-            verticalMovement += Physics.gravity.y * gravityMultiplier * Time.deltaTime * gravityContributionMultiplier; //Add gravity contribution
-                                                                                                                        //Note that even if it's added, the above value is negative due to Physics.gravity.y
+            if (slopeAngle > characterController.slopeLimit)
+            {
+                movementVector = Vector3.zero;
+                verticalMovement = Mathf.Lerp(0, -maxFallSpeed, 0.06f) * fallMultiplier;
+            }
+            else
+            {
+                movementVector = inputVector * speed;
+                verticalMovement += Physics.gravity.y * gravityMultiplier * Time.deltaTime * gravityContributionMultiplier; //Add gravity contribution
+            }
+            //Note that even if it's added, the above value is negative due to Physics.gravity.y
 
             //Cap the maximum so the player doesn't reach incredible speeds when freefalling from high positions
             verticalMovement = Mathf.Clamp(verticalMovement, -maxFallSpeed, 100f);
         }
-        else
+        else if (characterController.isGrounded && slopeAngle < characterController.slopeLimit)
         {
             //Full speed ground movement
-            movementVector = inputVector * speed;
+            movementVector = inputVector * speed * forwardMultiplier;
 
             //Resets the verticalMovement while on the ground,
             //so that regardless of whether the player landed from a high fall or not,
@@ -82,9 +105,14 @@ public class Character : MonoBehaviour
                 gravityContributionMultiplier = 0f;
             }
         }
+        else
+        {
+            movementVector = Vector3.zero;
+        }
 
         //Apply the result and move the character in space
-        movementVector.y = verticalMovement;
+        //movementVector.y = verticalMovement;
+        movementVector += fallDirection.up * verticalMovement;
         characterController.Move(movementVector * Time.deltaTime);
 
         //Rotate to the movement direction
@@ -100,6 +128,46 @@ public class Character : MonoBehaviour
         }
     }
 
+    private void GroundDirection()
+    {
+        //setting up groundRay
+        groundRay.origin = transform.position + collisionPoint + Vector3.up * 0.05f;
+        groundRay.direction = Vector3.down;
+
+        //reseting values
+        forwardMultiplier = 1;
+        fallMultiplier = 1;
+        fallDirection.rotation = Quaternion.Euler(0, 0, 0);
+        slopeAngle = 0;
+        forwardAngle = 0;
+        if (Physics.Raycast(groundRay, out groundHit, 0.5f))
+        {
+            //getting how steep is the slope and where the player is facing compared to the slope
+            slopeAngle = Vector3.Angle(transform.up, groundHit.normal);
+            forwardAngle = Vector3.Angle(transform.forward, groundHit.normal) - 90;
+
+            //if player is going down the slope, calculate a speed multiplier based on how steep is the slope
+            if (forwardAngle < 0 && slopeAngle <= characterController.slopeLimit)
+            {
+                forwardMultiplier = 1 / Mathf.Cos(forwardAngle * Mathf.Deg2Rad);
+            }
+            else if (slopeAngle > characterController.slopeLimit)
+            {
+                fallMultiplier = 1 / Mathf.Cos((90 - slopeAngle) * Mathf.Deg2Rad);
+                //get the falling angle to slide
+                Vector3 groundCross = Vector3.Cross(groundHit.normal, Vector3.up);
+                fallDirection.rotation = Quaternion.FromToRotation(transform.up, Vector3.Cross(groundCross, groundHit.normal));
+            }
+        }
+    }
+
+    private void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        //updates where the collider is hiting;
+        collisionPoint = hit.point;
+        collisionPoint = (collisionPoint - transform.position);
+    }
+
     //---- COMMANDS ISSUED BY OTHER SCRIPTS ----
 
     public void Move(Vector3 movement)
@@ -109,7 +177,7 @@ public class Character : MonoBehaviour
 
     public void Jump()
     {
-        if (characterController.isGrounded)
+        if (characterController.isGrounded && slopeAngle <= characterController.slopeLimit)
         {
             isJumping = true;
             jumpBeginTime = Time.time;
