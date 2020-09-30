@@ -74,8 +74,8 @@ public class SpawnManager : MonoBehaviour
     /// <param name="spawnRot">Spawn rotation of the character.</param>
     public void SpawnCharacter(GameObject prefabToSpawn, Vector3 spawnPos, Vector3 spawnRot)
     {
-        Instantiate(prefabToSpawn, spawnPos, Quaternion.Euler(spawnRot));
-        CharacterSpawned?.Invoke(prefabToSpawn);
+        GameObject spawnedObject = Instantiate(prefabToSpawn, spawnPos, Quaternion.Euler(spawnRot));
+        CharacterSpawned?.Invoke(spawnedObject);
     }
 
     /// <summary>
@@ -85,7 +85,7 @@ public class SpawnManager : MonoBehaviour
     /// <param name="spawnPos">Spawn position of the character.</param>
     public void SpawnCharacter(GameObject prefabToSpawn, Vector3 spawnPos)
     {
-        Instantiate(prefabToSpawn, spawnPos, Quaternion.Euler(new Vector3(0.0f, 0.0f, 0.0f)));
-        CharacterSpawned?.Invoke(prefabToSpawn);
+        GameObject spawnedObject = Instantiate(prefabToSpawn, spawnPos, Quaternion.Euler(new Vector3(0.0f, 0.0f, 0.0f)));
+        CharacterSpawned?.Invoke(spawnedObject);
     }
 }
