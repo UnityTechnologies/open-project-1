@@ -9,9 +9,12 @@ public class Protagonist : MonoBehaviour
     private Vector2 previousMovementInput;
     private bool controlsEnabled = true;
 
+    [HideInInspector] public CharacterController characterController;
+
     private void Awake()
     {
         charScript = GetComponent<Character>();
+        characterController = GetComponent<CharacterController>();
     }
 
     //Adds listeners for events being triggered in the InputReader script

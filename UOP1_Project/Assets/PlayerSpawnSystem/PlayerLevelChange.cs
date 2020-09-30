@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Linq;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -26,6 +27,11 @@ public class PlayerLevelChange : MonoBehaviour
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
+    void OnDestroy()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         ClearSpawnPoints();
@@ -44,21 +50,15 @@ public class PlayerLevelChange : MonoBehaviour
     //Teleports/'Spawns' the player at the specified spawn point in the current scene
     public void SpawnPlayerAtSpawnPoint(Protagonist player, string spawnPointLabel)
     {
-        foreach(PlayerSpawnPoint sp in spawnPoints)
-        {
-            if(sp.label == spawnPointLabel)
-            {
-                Spawn(player, sp.transform.position, sp.transform.rotation);
-                return;
-            }
-        }
+        PlayerSpawnPoint sp = spawnPoints.First(point => point.label == spawnPointLabel);
+        Spawn(player, sp.transform.position, sp.transform.rotation);
     }
 
     void Spawn(Protagonist player, Vector3 pos, Quaternion rot)
     {
-        player.GetComponent<CharacterController>().enabled = false; //Disable the controller due to it interfering with changing the position directly
+        player.characterController.enabled = false; //Disable the controller due to it interfering with changing the position directly
         player.transform.position = pos;
-        player.GetComponent<CharacterController>().enabled = true;
+        player.characterController.enabled = true;
 
         player.transform.rotation = rot;
     }
