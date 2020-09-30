@@ -9,6 +9,15 @@ public class CameraManager : MonoBehaviour
 	public InputReader inputReader;
     public CinemachineFreeLook freeLookVCam;
 
+ 	[Tooltip("General multiplier for camera sensitivity/speed")]
+	public float cameraSensitivity = 7.0f;
+
+ 	private void Awake()
+    {
+		// Don't allow the camera to be slower than default and then also 20+ gets pretty crazy.
+        cameraSensitivity = Mathf.Clamp(cameraSensitivity, 1.0f, 20.0f);
+    }
+
 	private void OnEnable()
 	{
 		inputReader.cameraMoveEvent += OnCameraMove;
@@ -24,7 +33,7 @@ public class CameraManager : MonoBehaviour
 
 	private void OnCameraMove(Vector2 cameraMovement)
 	{
-		freeLookVCam.m_XAxis.m_InputAxisValue = cameraMovement.x * Time.smoothDeltaTime;
-		freeLookVCam.m_YAxis.m_InputAxisValue = cameraMovement.y * Time.smoothDeltaTime;
+		freeLookVCam.m_XAxis.m_InputAxisValue = cameraMovement.x * Time.smoothDeltaTime * cameraSensitivity;
+		freeLookVCam.m_YAxis.m_InputAxisValue = cameraMovement.y * Time.smoothDeltaTime * cameraSensitivity;
 	}
 }
