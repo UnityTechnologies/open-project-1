@@ -132,6 +132,6 @@ public class Character : MonoBehaviour
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
         hitNormal = hit.normal;
-        canJump = (!(Vector3.Angle(Vector3.up, hitNormal) <= slopeLimit));
+        canJump = (Vector3.Angle(Vector3.up, hitNormal) <= slopeLimit);
     }
 }
