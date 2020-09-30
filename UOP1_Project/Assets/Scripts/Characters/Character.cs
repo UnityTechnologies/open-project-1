@@ -16,6 +16,11 @@ public class Character : MonoBehaviour
     [Tooltip("The maximum speed reached when falling (in units/frame)")] public float maxFallSpeed = 50f;
     [Tooltip("Each frame while jumping, gravity will be multiplied by this amount in an attempt to 'cancel it' (= jump higher)")] public float gravityDivider = .6f;
 
+    //Peventing Player from climbing up slopes
+    private float slopeLimit = 30f;
+    private Vector3 hitNormal;
+    private bool canJump;
+
     private float gravityContributionMultiplier = 0f; //The factor which determines how much gravity is affecting verticalMovement
     private bool isJumping = false; //If true, a jump is in effect and the player is holding the jump button
     private float jumpBeginTime = -Mathf.Infinity; //Time of the last jump
@@ -27,6 +32,7 @@ public class Character : MonoBehaviour
     private void Awake()
     {
         characterController = GetComponent<CharacterController>();
+        slopeLimit = characterController.slopeLimit;
     }
 
     private void Update()
@@ -98,6 +104,16 @@ public class Character : MonoBehaviour
                 ref turnSmoothSpeed,
                 turnSmoothTime);
         }
+
+        if (!(Vector3.Angle(Vector3.up, hitNormal) <= slopeLimit))
+        {
+            canJump = false;
+        }
+        else
+        {
+            canJump = true;
+
+        }
     }
 
     //---- COMMANDS ISSUED BY OTHER SCRIPTS ----
@@ -109,7 +125,7 @@ public class Character : MonoBehaviour
 
     public void Jump()
     {
-        if (characterController.isGrounded)
+        if (characterController.isGrounded && canJump)
         {
             isJumping = true;
             jumpBeginTime = Time.time;
@@ -121,5 +137,10 @@ public class Character : MonoBehaviour
     public void CancelJump()
     {
         isJumping = false; //This will stop the reduction to the gravity, which will then quickly pull down the character
+    }
+
+    private void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        hitNormal = hit.normal;
     }
 }
