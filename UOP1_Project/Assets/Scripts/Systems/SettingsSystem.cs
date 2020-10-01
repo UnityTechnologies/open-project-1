@@ -51,7 +51,7 @@ public class SettingsSystem : MonoBehaviour
         //TODO: Load previous settings data via save/load interface
         resolutionsDropdown.AddOptions(GetResolutionsDropdownData());
         languageDropdown.AddOptions(GetDropdownData(Enum.GetNames(typeof(LanguageSetting))));
-        qualityPresetsDropdown.AddOptions(GetDropdownData(QualitySettings.names));
+        qualityPresetsDropdown.AddOptions(GetDropdownData(QualitySettings.names, "Custom"));
         foreach (string s in QualitySettings.names)
         {
             Debug.Log(s);
@@ -116,10 +116,9 @@ public class SettingsSystem : MonoBehaviour
         shadowQualityDropdown.SetValueWithoutNotify((int) AdvancedGraphics.shadowQuality);
         shadowDistanceText.text = AdvancedGraphics.shadowDistance.ToString();
         antiAliasingText.text = AdvancedGraphics.antiAliasing.ToString();
-        if (!AdvancedGraphics.custom)
-        {
-            qualityPresetsDropdown.SetValueWithoutNotify(AdvancedGraphics.qualityLevel);
-        }
+        
+        qualityPresetsDropdown.value = (AdvancedGraphics.custom ? qualityPresetsDropdown.options.Count-1 : AdvancedGraphics.qualityLevel);
+        qualityPresetsDropdown.RefreshShownValue();
     }
 
     List<TMP_Dropdown.OptionData> GetResolutionsDropdownData()
@@ -133,7 +132,7 @@ public class SettingsSystem : MonoBehaviour
         return options;
     }
 
-    List<TMP_Dropdown.OptionData> GetDropdownData(string[] optionNames)
+    List<TMP_Dropdown.OptionData> GetDropdownData(string[] optionNames, params string[] customOptions)
     {
         List<TMP_Dropdown.OptionData> options = new List<TMP_Dropdown.OptionData>();
         foreach (string option in optionNames)
@@ -141,6 +140,10 @@ public class SettingsSystem : MonoBehaviour
             options.Add(new TMP_Dropdown.OptionData(option));
         }
 
+        foreach (string option in customOptions)
+        {
+            options.Add(new TMP_Dropdown.OptionData(option));
+        }
         return options;
     }
 
