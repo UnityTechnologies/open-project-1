@@ -74,7 +74,7 @@ public class Character : MonoBehaviour
             //Resets the verticalMovement while on the ground,
             //so that regardless of whether the player landed from a high fall or not,
             //if they drop off a platform they will always start with the same verticalMovement.
-            //-5f is a good value to make it so the player also sticks to uneven terrain/bumps without floating.
+            //-5f is a good value to make it so the player also sticks to uneven terrain/bumps without floating
             if (!isJumping)
             {
                 verticalMovement = -5f;
