@@ -8,6 +8,11 @@ namespace CombatStatemachine
     {
         #region Inspector Vars
         [SerializeField] private CombatState m_initialState;
+        [SerializeField] private HandlerDataSource m_dataSource;
+        #endregion
+
+        #region Properties
+        public MovementHandler MoveHandler { get; private set; }
         #endregion
 
         #region Fields
@@ -23,6 +28,7 @@ namespace CombatStatemachine
         }
         private void OnEnable()
         {
+            InitializeHandlers();
             m_currentState.OnStateEnable(this);
         }
         private void Update()
@@ -31,7 +37,10 @@ namespace CombatStatemachine
         }
         private void OnDisable()
         {
+           
             m_currentState.OnStateDisable(this);
+
+            CleanupHandlers();
 
         }
         private void OnControllerColliderHit(ControllerColliderHit hit)
@@ -54,7 +63,15 @@ namespace CombatStatemachine
         #endregion
 
         #region Utility
-        
+        private void InitializeHandlers()
+        {
+            MoveHandler = new MovementHandler(GetComponent<Transform>(), GetComponent<CharacterController>(), m_dataSource.MoveHandlerData);
+        }
+        private void CleanupHandlers()
+        {
+            MoveHandler.CleanupHandler();
+            MoveHandler = null;
+        }
         #endregion
     }
 
