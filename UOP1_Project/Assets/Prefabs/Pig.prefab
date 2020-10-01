@@ -855,6 +855,7 @@ GameObject:
   - component: {fileID: 211818859182309264}
   - component: {fileID: 3341179906418240708}
   - component: {fileID: 3341179907149091245}
+  - component: {fileID: 127132791176981166}
   m_Layer: 0
   m_Name: Pig
   m_TagString: Untagged
@@ -908,6 +909,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 8
+  turnSmoothTime: 0.2
   gravityMultiplier: 5
   initialJumpForce: 10
   jumpInputDuration: 0.4
@@ -932,6 +934,25 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0.875, z: 0}
+--- !u!95 &127132791176981166
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3341179906418240709}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 0ad338dd826dbd342a264cc3fdbc1338, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &3791421269865525050
 GameObject:
   m_ObjectHideFlags: 0
