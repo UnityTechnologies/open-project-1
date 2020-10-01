@@ -3,6 +3,7 @@ using UnityEngine;
 
 // Created with collaboration from:
 // https://forum.unity.com/threads/inventory-system.980646/
+[CreateAssetMenu(fileName = "Inventory", menuName = "Inventory/Inventory", order = 51)]
 public class Inventory : ScriptableObject
 {
     [Tooltip("The collection of items and their quantities.")]
