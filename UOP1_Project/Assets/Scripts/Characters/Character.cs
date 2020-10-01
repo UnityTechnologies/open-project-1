@@ -15,6 +15,7 @@ public class Character : MonoBehaviour
     [Tooltip("Represents how fast gravityContributionMultiplier will go back to 1f. The higher, the faster")] public float gravityComebackMultiplier = 15f;
     [Tooltip("The maximum speed reached when falling (in units/frame)")] public float maxFallSpeed = 50f;
     [Tooltip("Each frame while jumping, gravity will be multiplied by this amount in an attempt to 'cancel it' (= jump higher)")] public float gravityDivider = .6f;
+    [Tooltip("How far the the player should be nudged on a slope. (Used for sliding down steep slopes)")] public float nudgeDistance = 0.05f;
 
     private float gravityContributionMultiplier = 0f; //The factor which determines how much gravity is affecting verticalMovement
     private bool isJumping = false; //If true, a jump is in effect and the player is holding the jump button
@@ -98,8 +99,25 @@ public class Character : MonoBehaviour
                 ref turnSmoothSpeed,
                 turnSmoothTime);
         }
+        NudgePlayer();
     }
 
+    private void NudgePlayer()
+    {
+        RaycastHit hit;
+        Ray ray = new Ray(transform.position, -transform.up * 5f); //TODO: make variable
+        if (Physics.Raycast(ray, out hit))
+        {
+            Vector3 hitNormal = hit.normal;
+            float angle = Vector3.Angle(transform.up, hit.normal);
+            if (angle >= characterController.slopeLimit)
+            {
+                // Nudge along normal
+                transform.position += hitNormal * nudgeDistance;
+            }
+        }
+    }
+    
     //---- COMMANDS ISSUED BY OTHER SCRIPTS ----
 
     public void Move(Vector3 movement)
