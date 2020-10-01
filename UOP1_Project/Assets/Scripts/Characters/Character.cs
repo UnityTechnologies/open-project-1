@@ -66,8 +66,7 @@ public class Character : MonoBehaviour
             gravityContributionMultiplier = Mathf.Clamp01(gravityContributionMultiplier);
             verticalMovement += Physics.gravity.y * gravityMultiplier * Time.deltaTime * gravityContributionMultiplier; //Add gravity contribution
                                                                                                                         //Note that even if it's added, the above value is negative due to Physics.gravity.y
-
-            //Cap the maximum so the player doesn't reach incredible speeds when freefalling from high positions
+                                                                                                                        //Cap the maximum so the player doesn't reach incredible speeds when freefalling from high positions
             verticalMovement = Mathf.Clamp(verticalMovement, -maxFallSpeed, 100f);
         }
         else
