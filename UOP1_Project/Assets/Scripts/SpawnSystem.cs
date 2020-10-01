@@ -96,7 +96,7 @@ public class SpawnSystem : MonoBehaviour
         return playerInstance;
     }
 
-    public static void SetRequestSpawnIndex(int spawnIndex)
+    public static void SetSpawnIndex(int spawnIndex)
     {
         // Prevent setting negative numbers from external sources
         requestedSpawnIndex = Mathf.Max(spawnIndex, 0);
