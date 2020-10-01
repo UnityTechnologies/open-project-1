@@ -81,7 +81,7 @@ public class Character : MonoBehaviour
                 gravityContributionMultiplier = 0f;
             }
         }
-        UpdateSlide();
+        
         //Apply the result and move the character in space
         movementVector.y = verticalMovement;
         characterController.Move(movementVector * Time.deltaTime);
