@@ -27,8 +27,6 @@ public class Character : MonoBehaviour
     private bool shouldSlide; // Should player slide?
     private Vector3 inputVector; //Initial input horizontal movement (y == 0f)
     private Vector3 movementVector; //Final movement vector
-    
-    
 
     private void Awake()
     {
