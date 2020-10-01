@@ -10,13 +10,8 @@ public class CameraManager : MonoBehaviour
     public CinemachineFreeLook freeLookVCam;
 
  	[Tooltip("General multiplier for camera sensitivity/speed")]
+	[Range(1.0f, 20.0f)]
 	public float cameraSensitivity = 7.0f;
-
- 	private void Awake()
-    {
-		// Don't allow the camera to be slower than default and then also 20+ gets pretty crazy.
-        cameraSensitivity = Mathf.Clamp(cameraSensitivity, 1.0f, 20.0f);
-    }
 
 	private void OnEnable()
 	{
