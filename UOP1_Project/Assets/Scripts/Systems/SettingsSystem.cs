@@ -254,6 +254,9 @@ public class SettingsSystem : MonoBehaviour
         //No need to save non custom settings as these are applied straight away in OnChangeQualityPreset because there is no way of iterating through unitys quality presets atm
         previousSettings = AdvancedGraphics;
         Debug.Log("Antialiasing: " + QualitySettings.antiAliasing);
+        Debug.Log("Anisotropic Filtering: " + QualitySettings.anisotropicFiltering);
+        Debug.Log("Shadow Distance: " + QualitySettings.shadowDistance);
+        Debug.Log("Shadow Quality: " + QualitySettings.shadows);
     }
 
     public void OnCancelGraphicsSettings()
