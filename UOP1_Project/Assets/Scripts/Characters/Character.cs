@@ -41,7 +41,6 @@ public class Character : MonoBehaviour
         {
             gravityContributionMultiplier += Time.deltaTime * gravityComebackMultiplier;
         }
-
         //Reduce the influence of the gravity while holding the Jump button
         if (isJumping)
         {
@@ -56,7 +55,6 @@ public class Character : MonoBehaviour
                 gravityContributionMultiplier *= gravityDivider; //Reduce the gravity effect
             }
         }
-
         //Calculate the final verticalMovement
         if (!characterController.isGrounded)
         {
