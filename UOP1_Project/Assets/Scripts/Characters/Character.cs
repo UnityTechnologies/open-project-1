@@ -31,14 +31,10 @@ public class Character : MonoBehaviour
     private void Awake()
     {
         characterController = GetComponent<CharacterController>();
-        
     }
 
     private void Update()
     {
-       
-        
-
         //Raises the multiplier to how much gravity will affect vertical movement when in mid-air
         //This is 0f at the beginning of a jump and will raise to maximum 1f
         if (!characterController.isGrounded)
@@ -64,7 +60,6 @@ public class Character : MonoBehaviour
         //Calculate the final verticalMovement
         if (!characterController.isGrounded)
         {
-
             //Less control in mid-air, conserving momentum from previous frame
             movementVector = inputVector * speed;
 
@@ -80,7 +75,6 @@ public class Character : MonoBehaviour
         {
             //Full speed ground movement
             movementVector = inputVector * speed;
-
             //Resets the verticalMovement while on the ground,
             //so that regardless of whether the player landed from a high fall or not,
             //if they drop off a platform they will always start with the same verticalMovement.
@@ -98,8 +92,6 @@ public class Character : MonoBehaviour
             movementVector.x += (1f - hitNormal.y) * hitNormal.x * (speed - slideFriction);
             movementVector.z += (1f - hitNormal.y) * hitNormal.z * (speed - slideFriction);
         }
-        
-
         //Apply the result and move the character in space
         movementVector.y = verticalMovement;
         characterController.Move(movementVector * Time.deltaTime);
@@ -136,10 +128,8 @@ public class Character : MonoBehaviour
             {
                 // Stopping any upwards movement
                 // and having the player fall back down
-
                 isJumping = false;
                 gravityContributionMultiplier = 1f;
-
                 verticalMovement = 0f;
             }
         }
@@ -169,6 +159,4 @@ public class Character : MonoBehaviour
     {
         isJumping = false; //This will stop the reduction to the gravity, which will then quickly pull down the character
     }
-
-   
 }
