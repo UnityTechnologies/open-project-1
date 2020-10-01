@@ -112,7 +112,7 @@ public class Character : MonoBehaviour
             float angle = Vector3.Angle(transform.up, hit.normal);
             if (angle >= characterController.slopeLimit)
             {
-                // Nudge along normal
+                // Nudge across normal
                 transform.position += Vector3.Cross(hitNormal, Vector3.Cross(hitNormal, transform.up)) * nudgeDistance;
             }
         }
