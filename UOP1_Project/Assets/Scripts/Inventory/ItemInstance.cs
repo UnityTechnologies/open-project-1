@@ -5,7 +5,7 @@
 public class ItemInstance : MonoBehaviour
 {
     [SerializeField]
-    private Item _item;
+    private Item item;
 
-    public Item Item => _item;
+    public Item Item => item;
 }
