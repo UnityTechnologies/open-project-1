@@ -9,6 +9,14 @@ public class Protagonist : MonoBehaviour
     private Vector2 previousMovementInput;
     private bool controlsEnabled = true;
 
+    public void Initialise(InputReader inputReader, Transform gameplayCamera)
+    {
+        this.inputReader = inputReader;
+        this.gameplayCamera = gameplayCamera;
+
+        EnableInputs();
+    }
+
     private void Awake()
     {
         charScript = GetComponent<Character>();
@@ -17,14 +25,30 @@ public class Protagonist : MonoBehaviour
     //Adds listeners for events being triggered in the InputReader script
     private void OnEnable()
     {
+        if (inputReader != null)
+        {
+            EnableInputs();
+        }
+    }
+
+    //Removes all listeners to the events coming from the InputReader script
+    private void OnDisable()
+    {
+        if (inputReader != null)
+        {
+            DisableInputs();
+        }
+    }
+
+    private void EnableInputs()
+    {
         inputReader.jumpEvent += OnJumpInitiated;
         inputReader.jumpCanceledEvent += OnJumpCanceled;
         inputReader.moveEvent += OnMove;
         //...
     }
 
-    //Removes all listeners to the events coming from the InputReader script
-    private void OnDisable()
+    private void DisableInputs()
     {
         inputReader.jumpEvent -= OnJumpInitiated;
         inputReader.jumpCanceledEvent -= OnJumpCanceled;
