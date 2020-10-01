@@ -105,15 +105,15 @@ public class Character : MonoBehaviour
     private void NudgePlayer()
     {
         RaycastHit hit;
-        Ray ray = new Ray(transform.position, -transform.up * 5f); //TODO: make variable
-        if (Physics.Raycast(ray, out hit))
+        Ray ray = new Ray(transform.position, -transform.up);
+        if (Physics.Raycast(ray, out hit, characterController.height/2))
         {
             Vector3 hitNormal = hit.normal;
             float angle = Vector3.Angle(transform.up, hit.normal);
             if (angle >= characterController.slopeLimit)
             {
                 // Nudge along normal
-                transform.position += hitNormal * nudgeDistance;
+                transform.position += Vector3.Cross(hitNormal, Vector3.Cross(hitNormal, transform.up)) * nudgeDistance;
             }
         }
     }
