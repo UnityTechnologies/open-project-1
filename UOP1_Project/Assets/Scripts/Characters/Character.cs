@@ -27,7 +27,7 @@ public class Character : MonoBehaviour
     private bool shouldSlide; // Should player slide?
     private Vector3 inputVector; //Initial input horizontal movement (y == 0f)
     private Vector3 movementVector; //Final movement vector
-    
+
     private void Awake()
     {
         characterController = GetComponent<CharacterController>();
@@ -81,7 +81,7 @@ public class Character : MonoBehaviour
                 gravityContributionMultiplier = 0f;
             }
         }
-        
+        UpdateSlide();
         //Apply the result and move the character in space
         movementVector.y = verticalMovement;
         characterController.Move(movementVector * Time.deltaTime);
@@ -139,4 +139,20 @@ public class Character : MonoBehaviour
     {
         isJumping = false; //This will stop the reduction to the gravity, which will then quickly pull down the character
     }
+
+    private void UpdateSlide()
+    {
+        // if player has to slide then add sideways speed to make it go down
+        if (shouldSlide)
+        {
+            movementVector.x += (1f - hitNormal.y) * hitNormal.x * (speed - slideFriction);
+            movementVector.z += (1f - hitNormal.y) * hitNormal.z * (speed - slideFriction);
+        }
+        // check if the controller is grounded and above slope limit
+        // if player is grounded and above slope limit
+        // player has to slide
+        currentSlope = Vector3.Angle(Vector3.up, hitNormal);
+        shouldSlide = currentSlope >= characterController.slopeLimit;
+    }
 }
+
