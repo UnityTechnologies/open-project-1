@@ -9,7 +9,7 @@ namespace UOP1.Cutscene
     public class DialoguePlayableAsset : PlayableAsset
     {
 #pragma warning disable 649
-        [SerializeField] private PseudoDialogueSO dialogue;
+        [SerializeField] private conversation dialogue;
 #pragma warning restore 649
         
         public override Playable CreatePlayable(PlayableGraph graph, GameObject owner)

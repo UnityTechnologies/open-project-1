@@ -1,26 +1,30 @@
 using UOP1.Dialogue;
 using UnityEngine;
 using UnityEngine.Playables;
+using UnityEngine.Timeline;
 
 namespace UOP1.Cutscene
 {
     public class DialoguePlayableBehaviour : PlayableBehaviour
     {
-        public PseudoDialogueSO Dialogue;
+        public conversation Dialogue;
         public PlayableDirector Director;
-        
+        public TimelineAsset timelineasset;
         private bool isDialoguePlaying;
         private bool isDialogueActioned;
-        
+   
+    
         public override void ProcessFrame(Playable playable, FrameData info, object playerData)
         {
+            var rootTracks = timelineasset.GetRootTracks();
+         
             if (isDialoguePlaying) return;
-            
+           
             isDialoguePlaying = true;
             isDialogueActioned = false;
-
+         
             if (!Application.isPlaying) return;
-            PseudoDialogueSystem.ShowDialogue(Dialogue, OnDialogueActioned);
+           DialogueRendererer.dialogueRendererer_static.StartCoroutine(DialogueRendererer.dialogueRendererer_static.NewChat(Dialogue));
         }
 
         public override void OnBehaviourPause(Playable playable, FrameData info)

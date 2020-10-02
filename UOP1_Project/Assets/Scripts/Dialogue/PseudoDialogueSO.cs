@@ -8,5 +8,6 @@ namespace UOP1.Dialogue
     public class PseudoDialogueSO : ScriptableObject
     {
         
+
     }
 }
