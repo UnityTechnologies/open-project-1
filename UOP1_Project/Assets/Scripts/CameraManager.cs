@@ -11,7 +11,7 @@ public class CameraManager : MonoBehaviour
 
  	[Tooltip("General multiplier for camera sensitivity/speed")]
 	[Range(1.0f, 20.0f)]
-	public float cameraSensitivity = 7.0f;
+	[SerializeField] private float cameraSensitivity = 7.0f;
 
 	private void OnEnable()
 	{
