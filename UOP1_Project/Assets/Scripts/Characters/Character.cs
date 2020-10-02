@@ -18,7 +18,6 @@ public class Character : MonoBehaviour
 
     //Peventing Player from climbing up slopes
     private float slopeLimit = 30f;
-    private Vector3 hitNormal;
     private bool canJump;
 
     private float gravityContributionMultiplier = 0f; //The factor which determines how much gravity is affecting verticalMovement
@@ -131,7 +130,6 @@ public class Character : MonoBehaviour
 
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
-        hitNormal = hit.normal;
-        canJump = (Vector3.Angle(Vector3.up, hitNormal) <= slopeLimit);
+        canJump = Vector3.Angle(Vector3.up, hit.normal) <= slopeLimit;
     }
 }
