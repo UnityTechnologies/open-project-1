@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
 
-public class JumpingOrFallingState : IState{
+public class JumpingState : IState{
 
 	private Character character;
 	
-	public JumpingOrFallingState(Character character){
+	public JumpingState(Character character){
 		this.character = character;
 	}
 	
@@ -15,22 +15,15 @@ public class JumpingOrFallingState : IState{
 			character.SetJumpingState(false);
 			character.ResetGravityContributorMultiplier();
 		}
-		else{
-			character.ReduceGravityEffect();
-		}
 
 		character.ApplyMovementAndRotate();
-
-		character.CalculateFinalAirMovement();
 	}
 
 	public void OnEnter(){
-		// TODO: reduce movement speeds to create slower movement in mid-air
+		// TODO: move setup code for jumping here
 	}
 
 	public void OnExit(){
-		// TODO: 
+		// TODO: move exit code for jumping here
 	}
-	
-	// TODO: add a method to calculate vertical movement for character when jumping
 }

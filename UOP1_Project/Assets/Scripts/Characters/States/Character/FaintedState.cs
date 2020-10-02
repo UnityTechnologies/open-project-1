@@ -1,6 +1,6 @@
 ﻿public class FaintedState : IState{
 	public void Tick(){
-		// TODO: reduces the effect of gravity, allowing for a slower fall
+		throw new System.NotImplementedException();
 	}
 
 	public void OnEnter(){

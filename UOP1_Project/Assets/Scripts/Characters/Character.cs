@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditorInternal;
 using UnityEngine;
 
 public class Character : MonoBehaviour
@@ -32,7 +33,7 @@ public class Character : MonoBehaviour
     
     private void Update()
     {
-	    // TODO: one day this will only call tick and that's it!
+	    // calls tick on the currently active state
 	    stateMachine.Tick();
     }
 
@@ -43,8 +44,17 @@ public class Character : MonoBehaviour
 	    // create all states and pass in references to this character
 	    IdleState idleState = new IdleState();
 	    WalkingState walkingState = new WalkingState(this);
+	    JumpingState jumpingState = new JumpingState(this);
+	    FallingState fallingState = new FallingState(this);
 	    
-	    // create all possible transitions up-front
+	    // setup all explicit transitions
+	    stateMachine.AddTransition(idleState, jumpingState, PerformedJumpAction());
+	    stateMachine.AddTransition(idleState, walkingState, IsCharacterMoving());
+	    stateMachine.AddTransition(walkingState, jumpingState, PerformedJumpAction());
+	    stateMachine.AddTransition(jumpingState, fallingState, IsFallingAndNotJumping());
+
+	    // you can idle from any state, assuming that you're not moving and are on the ground
+	    stateMachine.AddAnyTransition(idleState, IsCharacterNotMovingAndGrounded());
 	    
 	    // now, initialize the state machine and start ticking
 	    stateMachine.SetState(idleState);
@@ -71,6 +81,34 @@ public class Character : MonoBehaviour
             }
         }
     }
+    
+    private void CalculateFinalAirMovement()
+    {
+	    //Less control in mid-air, conserving momentum from previous frame
+	    movementVector = inputVector * speed;
+
+	    //The character is either jumping or in freefall, so gravity will add up
+	    gravityContributionMultiplier = Mathf.Clamp01(gravityContributionMultiplier);
+	    verticalMovement += Physics.gravity.y * gravityMultiplier * Time.deltaTime * gravityContributionMultiplier; //Add gravity contribution
+	    //Note that even if it's added, the above value is negative due to Physics.gravity.y
+
+	    //Cap the maximum so the player doesn't reach incredible speeds when freefalling from high positions
+	    verticalMovement = Mathf.Clamp(verticalMovement, -maxFallSpeed, 100f);   
+    }
+
+    private bool IsThereInput(){
+	    return inputVector != Vector3.zero;
+    }
+    
+    //---- PREDICATES TO DEFINE STATE TRANSITIONS ----
+
+    private Func<bool> IsCharacterMoving() => () => IsThereInput();
+
+    private Func<bool> IsCharacterNotMovingAndGrounded() => () => characterController.isGrounded && !IsThereInput();
+
+    private Func<bool> PerformedJumpAction() => () => isJumping;
+
+    private Func<bool> IsFallingAndNotJumping() => () => !characterController.isGrounded && !isJumping;
 
     //---- METHODS USED TO CONTROL CHARACTER STATE ----
 
@@ -94,8 +132,12 @@ public class Character : MonoBehaviour
 			    ref turnSmoothSpeed,
 			    turnSmoothTime);
 	    }
+
+	    if (!characterController.isGrounded){
+		    CalculateFinalAirMovement();
+	    }
     }
-    
+
     public void ResetVerticalMovement()
     {
 	    verticalMovement = -5f;
@@ -117,20 +159,6 @@ public class Character : MonoBehaviour
     public void ResetGravityContributorMultiplier()
     {
 	    gravityContributionMultiplier = 1f;
-    }
-
-    public void CalculateFinalAirMovement()
-    {
-	    //Less control in mid-air, conserving momentum from previous frame
-	    movementVector = inputVector * speed;
-
-	    //The character is either jumping or in freefall, so gravity will add up
-	    gravityContributionMultiplier = Mathf.Clamp01(gravityContributionMultiplier);
-	    verticalMovement += Physics.gravity.y * gravityMultiplier * Time.deltaTime * gravityContributionMultiplier; //Add gravity contribution
-	    //Note that even if it's added, the above value is negative due to Physics.gravity.y
-
-	    //Cap the maximum so the player doesn't reach incredible speeds when freefalling from high positions
-	    verticalMovement = Mathf.Clamp(verticalMovement, -maxFallSpeed, 100f);   
     }
 
     public void SetJumpingState(bool isJumping)
