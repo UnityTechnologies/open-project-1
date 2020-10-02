@@ -17,7 +17,6 @@ public class Character : MonoBehaviour
     [Tooltip("Each frame while jumping, gravity will be multiplied by this amount in an attempt to 'cancel it' (= jump higher)")] public float gravityDivider = .6f;
 
     //Peventing Player from climbing up slopes
-    private float slopeLimit = 30f;
     private bool canJump;
 
     private float gravityContributionMultiplier = 0f; //The factor which determines how much gravity is affecting verticalMovement
@@ -31,7 +30,6 @@ public class Character : MonoBehaviour
     private void Awake()
     {
         characterController = GetComponent<CharacterController>();
-        slopeLimit = characterController.slopeLimit;
     }
 
     private void Update()
@@ -130,6 +128,6 @@ public class Character : MonoBehaviour
 
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
-        canJump = Vector3.Angle(Vector3.up, hit.normal) <= slopeLimit;
+        canJump = Vector3.Angle(Vector3.up, hit.normal) <= characterController.slopeLimit;
     }
 }
