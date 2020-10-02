@@ -10,8 +10,14 @@ public class GameSceneEditor : Editor
 {
     #region UI_Warnings
 
-    private string noScenesWarning = "There are no scenes set for this level yet! Add a new scene with the dropdown above";
+    private const string noScenesWarning = "There are no scenes set for this level yet! Add a new scene with the dropdown above";
     
+    #endregion
+
+    #region GUI_Styles
+
+    private GUIStyle headerLabelStyle;
+
     #endregion
     
     // it holds a list of properties to hide from basic inspector
@@ -23,13 +29,13 @@ public class GameSceneEditor : Editor
     private void OnEnable()
     {
         gameSceneTarget = target as GameScene;
+        PopulateScenePicker();
+        InitializeGuiStyles();
     }
 
     public override void OnInspectorGUI()
     {
-        PopulateScenePicker();
-        EditorGUILayout.LabelField("Scene information", new GUIStyle(EditorStyles.largeLabel) {fontStyle = FontStyle.Bold, 
-            fontSize = 18, fixedHeight = 70.0f});
+        EditorGUILayout.LabelField("Scene information", headerLabelStyle);
         EditorGUILayout.Space();
         DrawScenePicker();
         DrawPropertiesExcluding(serializedObject, ExcludedProperties);
@@ -54,6 +60,15 @@ public class GameSceneEditor : Editor
         {
             EditorGUILayout.HelpBox(noScenesWarning, MessageType.Warning);
         }
+    }
+    
+    private void InitializeGuiStyles()
+    {
+        headerLabelStyle = new GUIStyle(EditorStyles.largeLabel)
+        {
+            fontStyle = FontStyle.Bold,
+            fontSize = 18, fixedHeight = 70.0f
+        };
     }
 
     /// <summary>
