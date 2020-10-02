@@ -32,6 +32,12 @@ public class PrefabSpawnPoint : MonoBehaviour
     /// </summary>
     public void SpawnPrefab()
     {
+        if (prefabToSpawn == null)
+        {
+            Debug.LogError("No prefab to spawn");
+            return;
+        }
+
         var player = Instantiate(prefabToSpawn, transform.position, transform.rotation);
         if (parentUnderSpawnedObject)
             transform.parent = player.transform;
