@@ -49,12 +49,12 @@ public class Character : MonoBehaviour
 	    
 	    // setup all explicit transitions
 	    stateMachine.AddTransition(idleState, jumpingState, PerformedJumpAction());
-	    stateMachine.AddTransition(idleState, walkingState, IsCharacterMoving());
+	    stateMachine.AddTransition(idleState, walkingState, IsMovingAndGrounded());
 	    stateMachine.AddTransition(walkingState, jumpingState, PerformedJumpAction());
-	    stateMachine.AddTransition(jumpingState, fallingState, IsFallingAndNotJumping());
-
-	    // you can idle from any state, assuming that you're not moving and are on the ground
-	    stateMachine.AddAnyTransition(idleState, IsCharacterNotMovingAndGrounded());
+	    stateMachine.AddTransition(fallingState, idleState, IsCharacterNotMovingAndGrounded());
+	    stateMachine.AddTransition(fallingState, walkingState, IsMovingAndGrounded());
+	    
+	    stateMachine.AddAnyTransition(fallingState, IsFallingAndNotJumping());
 	    
 	    // now, initialize the state machine and start ticking
 	    stateMachine.SetState(idleState);
@@ -102,11 +102,11 @@ public class Character : MonoBehaviour
     
     //---- PREDICATES TO DEFINE STATE TRANSITIONS ----
 
-    private Func<bool> IsCharacterMoving() => () => IsThereInput();
-
+    private Func<bool> IsMovingAndGrounded() => () => IsThereInput() && characterController.isGrounded;
+    
     private Func<bool> IsCharacterNotMovingAndGrounded() => () => characterController.isGrounded && !IsThereInput();
 
-    private Func<bool> PerformedJumpAction() => () => isJumping;
+    private Func<bool> PerformedJumpAction() => () =>  isJumping;
 
     private Func<bool> IsFallingAndNotJumping() => () => !characterController.isGrounded && !isJumping;
 
@@ -161,6 +161,12 @@ public class Character : MonoBehaviour
 	    gravityContributionMultiplier = 1f;
     }
 
+    public void InitJumpingValues(){
+	    jumpBeginTime = Time.time;
+	    verticalMovement = initialJumpForce; //This is the only place where verticalMovement is set to a positive value
+	    gravityContributionMultiplier = 0f;
+    }
+    
     public void SetJumpingState(bool isJumping)
     {
 	    this.isJumping = isJumping;
@@ -179,15 +185,12 @@ public class Character : MonoBehaviour
     {
         if (characterController.isGrounded)
         {
-            isJumping = true;
-            jumpBeginTime = Time.time;
-            verticalMovement = initialJumpForce; //This is the only place where verticalMovement is set to a positive value
-            gravityContributionMultiplier = 0f;
+            SetJumpingState(true);
         }
     }
 
     public void CancelJump()
     {
-        isJumping = false; //This will stop the reduction to the gravity, which will then quickly pull down the character
+        SetJumpingState(false); //This will stop the reduction to the gravity, which will then quickly pull down the character
     }
 }

@@ -15,7 +15,7 @@ public class StateMachine
 
 	public void Tick()
 	{
-		Transition transition = GetTransitionIfAvailable();
+		Transition transition = GetTransitionIfAvailable(_currentState);
 		if (transition != null)
 		{
 			SetState(transition.To);
@@ -30,8 +30,7 @@ public class StateMachine
 		{
 			return;
 		}
-
-		Debug.Log("Setting current state: " + state.GetType().Name);
+		
 		_currentState?.OnExit();
 		_currentState = state;
   
@@ -61,11 +60,11 @@ public class StateMachine
 		_transitionsFromAnyState.Add(new Transition(state, predicate));
 	}
 
-	private Transition GetTransitionIfAvailable()
+	private Transition GetTransitionIfAvailable(IState currentState)
 	{
 		Transition transitionIfAny = GetNextTransitionFromList(_transitionsFromAnyState);
 
-		if (transitionIfAny == null)
+		if (transitionIfAny == null || transitionIfAny.To == currentState)
 		{
 			transitionIfAny = GetNextTransitionFromList(_transitionsForCurrentState);
 		}

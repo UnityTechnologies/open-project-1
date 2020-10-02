@@ -15,15 +15,18 @@ public class JumpingState : IState{
 			character.SetJumpingState(false);
 			character.ResetGravityContributorMultiplier();
 		}
+		else{
+			character.ReduceGravityEffect();
+		}
 
 		character.ApplyMovementAndRotate();
 	}
 
 	public void OnEnter(){
-		// TODO: move setup code for jumping here
+		character.InitJumpingValues();
 	}
 
 	public void OnExit(){
-		// TODO: move exit code for jumping here
+		
 	}
 }

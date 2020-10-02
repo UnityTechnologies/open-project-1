@@ -9,8 +9,9 @@ public class FallingState : IState{
 	}
 	
 	public void Tick(){
-		// all this does is reduce the gravity effect
-		character.ReduceGravityEffect();
+		character.ApplyGravityComeback();
+
+		character.ApplyMovementAndRotate();
 	}
 
 	public void OnEnter(){
