@@ -2,42 +2,38 @@
 
 public class Protagonist : MonoBehaviour
 {
-    public InputReader inputReader;
-    public Transform gameplayCamera;
+    InputReader inputReader;
+    Transform gameplayCamera;
 
     private Character charScript;
     private Vector2 previousMovementInput;
     private bool controlsEnabled = true;
 
-    public void Initialise(InputReader inputReader, Transform gameplayCamera)
-    {
-        this.inputReader = inputReader;
-        this.gameplayCamera = gameplayCamera;
-
-        EnableInputs();
-    }
-
     private void Awake()
     {
         charScript = GetComponent<Character>();
+        if (charScript == null)
+            Debug.LogError("No Character script");
+
+        inputReader = FindObjectOfType<InputReader>();
+        if (inputReader == null)
+            Debug.LogError("No Input Reader found in the scene");
+
+        gameplayCamera = Camera.main.transform;
+        if (gameplayCamera == null)
+            Debug.LogError("No Gameplay Camera found in the scene");
     }
 
     //Adds listeners for events being triggered in the InputReader script
     private void OnEnable()
     {
-        if (inputReader != null)
-        {
-            EnableInputs();
-        }
+        EnableInputs();
     }
 
     //Removes all listeners to the events coming from the InputReader script
     private void OnDisable()
     {
-        if (inputReader != null)
-        {
-            DisableInputs();
-        }
+        DisableInputs();
     }
 
     private void EnableInputs()
