@@ -55,6 +55,7 @@ public class Character : MonoBehaviour
 	    stateMachine.AddTransition(fallingState, walkingState, IsMovingAndGrounded());
 	    
 	    stateMachine.AddAnyTransition(fallingState, IsFallingAndNotJumping());
+	    stateMachine.AddAnyTransition(idleState, IsCharacterNotMovingAndGrounded());
 	    
 	    // now, initialize the state machine and start ticking
 	    stateMachine.SetState(idleState);
