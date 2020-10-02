@@ -10,7 +10,6 @@ public class FallingState : IState{
 	
 	public void Tick(){
 		character.ApplyGravityComeback();
-
 		character.ApplyMovementAndRotate();
 	}
 

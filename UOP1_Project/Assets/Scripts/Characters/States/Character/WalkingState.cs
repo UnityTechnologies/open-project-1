@@ -13,7 +13,6 @@ public class WalkingState : IState{
 	}
 
 	public void OnEnter(){
-		// TODO: should this be called on every tick? It actually appears to be called each frame
 		character.ResetVerticalMovement();
 	}
 
