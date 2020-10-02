@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class JumpingState : IState{
+public class JumpingState : State{
 
 	private Character character;
 	
@@ -8,7 +8,7 @@ public class JumpingState : IState{
 		this.character = character;
 	}
 	
-	public void Tick(){
+	public override void Tick(){
 		character.ApplyGravityComeback();
 
 		if (character.IsJumpingTooLong(Time.time)){
@@ -22,11 +22,11 @@ public class JumpingState : IState{
 		character.ApplyMovementAndRotate();
 	}
 
-	public void OnEnter(){
+	public override void OnEnter(){
 		character.InitJumpingValues();
 	}
 
-	public void OnExit(){
+	public override void OnExit(){
 		
 	}
 }

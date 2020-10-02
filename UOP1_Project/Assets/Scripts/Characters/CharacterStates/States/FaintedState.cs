@@ -1,13 +1,13 @@
-﻿public class AttackingState : IState{
-	public void Tick(){
+﻿public class FaintedState : State{
+	public override void Tick(){
 		throw new System.NotImplementedException();
 	}
 
-	public void OnEnter(){
+	public override void OnEnter(){
 		throw new System.NotImplementedException();
 	}
 
-	public void OnExit(){
+	public override void OnExit(){
 		throw new System.NotImplementedException();
 	}
 }

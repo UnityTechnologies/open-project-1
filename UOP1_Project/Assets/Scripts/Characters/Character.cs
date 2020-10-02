@@ -48,11 +48,11 @@ public class Character : MonoBehaviour
 	    FallingState fallingState = new FallingState(this);
 	    
 	    // setup all explicit transitions
-	    stateMachine.AddTransition(idleState, jumpingState, PerformedJumpAction());
-	    stateMachine.AddTransition(idleState, walkingState, IsMovingAndGrounded());
-	    stateMachine.AddTransition(walkingState, jumpingState, PerformedJumpAction());
-	    stateMachine.AddTransition(fallingState, idleState, IsCharacterNotMovingAndGrounded());
-	    stateMachine.AddTransition(fallingState, walkingState, IsMovingAndGrounded());
+	    idleState.AddTransition(jumpingState, PerformedJumpAction());
+	    idleState.AddTransition(walkingState, IsMovingAndGrounded());
+	    walkingState.AddTransition(jumpingState, PerformedJumpAction());
+	    fallingState.AddTransition(idleState, IsCharacterNotMovingAndGrounded());
+	    fallingState.AddTransition(walkingState, IsMovingAndGrounded());
 	    
 	    stateMachine.AddAnyTransition(fallingState, IsFallingAndNotJumping());
 	    stateMachine.AddAnyTransition(idleState, IsCharacterNotMovingAndGrounded());

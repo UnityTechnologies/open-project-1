@@ -1,6 +1,6 @@
 ﻿using System;
 
-public class FallingState : IState{
+public class FallingState : State{
 
 	private Character character;
 
@@ -8,16 +8,16 @@ public class FallingState : IState{
 		this.character = character;
 	}
 	
-	public void Tick(){
+	public override void Tick(){
 		character.ApplyGravityComeback();
 		character.ApplyMovementAndRotate();
 	}
 
-	public void OnEnter(){
+	public override void OnEnter(){
 		
 	}
 
-	public void OnExit(){
+	public override void OnExit(){
 		
 	}
 }

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class WalkingState : IState{
+public class WalkingState : State{
 
 	private Character character;
 
@@ -8,15 +8,15 @@ public class WalkingState : IState{
 		this.character = character;
 	}
 	
-	public void Tick(){
+	public override void Tick(){
 		character.ApplyMovementAndRotate();
 	}
 
-	public void OnEnter(){
+	public override void OnEnter(){
 		character.ResetVerticalMovement();
 	}
 
-	public void OnExit(){
+	public override void OnExit(){
 		
 	}
 }
