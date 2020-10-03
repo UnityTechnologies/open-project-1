@@ -28,6 +28,7 @@ public class Character : MonoBehaviour
     private void Awake()
     {
         characterController = GetComponent<CharacterController>();
+        characterAnimator = GetComponent<CharacterAnimator>();
     }
 
     private void Update()
