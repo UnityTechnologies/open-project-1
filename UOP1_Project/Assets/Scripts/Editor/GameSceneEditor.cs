@@ -46,19 +46,18 @@ public class GameSceneEditor : Editor
         var sceneName = gameSceneTarget.sceneName;
         EditorGUI.BeginChangeCheck();
         var selectedScene = sceneList.ToList().IndexOf(sceneName);
-        selectedScene = EditorGUILayout.Popup("Scene", selectedScene, sceneList);
-        if (selectedScene > -1)
-        {
-            if (EditorGUI.EndChangeCheck())
-            {
-                Undo.RecordObject(target, "Changed selected scene");
-                gameSceneTarget.sceneName = sceneList[selectedScene];
-                MarkAllDirty();
-            }
-        }
-        else
+
+        if (selectedScene < 0)
         {
             EditorGUILayout.HelpBox(noScenesWarning, MessageType.Warning);
+        }
+        
+        selectedScene = EditorGUILayout.Popup("Scene", selectedScene, sceneList);
+        if (EditorGUI.EndChangeCheck())
+        {
+            Undo.RecordObject(target, "Changed selected scene");
+            gameSceneTarget.sceneName = sceneList[selectedScene];
+            MarkAllDirty();
         }
     }
     
