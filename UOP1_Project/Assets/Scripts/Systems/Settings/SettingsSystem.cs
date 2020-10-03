@@ -20,14 +20,15 @@ public class SettingsSystem : MonoBehaviour
     [SerializeField] Slider sfxVolumeSlider;
     [SerializeField] TextMeshProUGUI antiAliasingText;
     [SerializeField] TextMeshProUGUI shadowDistanceText;
+    [SerializeField] SettingsPresetsScriptableObject settingsPresets;
 
     public bool FullScreen { get; private set; }
     public float MusicVolume { get; private set; }
     public float SfxVolume { get; private set; }
     public LanguageSetting Language { get; private set; }
-    public AdvancedGraphicsSettings AdvancedGraphics { get; private set; }
 
-    AdvancedGraphicsSettings previousSettings;
+    SettingsPresetsScriptableObject.AdvancedGraphics currentAdvancedGraphics, previousAdvancedGraphics;
+    int currentQualityLevel, previousQualityLevel; //-1 is custom
 
     public enum LanguageSetting
     {
@@ -36,22 +37,12 @@ public class SettingsSystem : MonoBehaviour
         //TODO: which languages are going to be supported?
     }
 
-    public struct AdvancedGraphicsSettings
-    {
-        public ShadowQuality shadowQuality;
-        public AnisotropicFiltering anisotropicFiltering;
-        public int antiAliasing;
-        public float shadowDistance;
-        public bool custom;
-        public int qualityLevel;
-    }
-
     void Start()
     {
         //TODO: Load previous settings data via save/load interface
         resolutionsDropdown.AddOptions(GetResolutionsDropdownData());
         languageDropdown.AddOptions(GetDropdownData(Enum.GetNames(typeof(LanguageSetting))));
-        qualityPresetsDropdown.AddOptions(GetDropdownData(QualitySettings.names, "Custom"));
+        qualityPresetsDropdown.AddOptions(GetDropdownData(settingsPresets.GetPresetNames(), "Custom"));
         foreach (string s in QualitySettings.names)
         {
             Debug.Log(s);
@@ -74,18 +65,11 @@ public class SettingsSystem : MonoBehaviour
         }
 
         resolutionsDropdown.SetValueWithoutNotify(resolutionIndex);
-        //TODO: load previous quality level. If custom, set qualityPresetsDropdown to custom. Option "custom" is added in GetQualityPresetsDropdownData()
-        AdvancedGraphics = new AdvancedGraphicsSettings()
-        {
-            anisotropicFiltering = QualitySettings.anisotropicFiltering,
-            antiAliasing = QualitySettings.antiAliasing,
-            shadowDistance = QualitySettings.shadowDistance,
-            shadowQuality = QualitySettings.shadows,
-            custom = false,
-            qualityLevel = qualityPresetsDropdown.options.Count-1
-        };
-        previousSettings = AdvancedGraphics;
-        qualityPresetsDropdown.SetValueWithoutNotify(AdvancedGraphics.custom ? qualityPresetsDropdown.options.Count-1 : QualitySettings.GetQualityLevel());
+        //TODO: load quality level from previous session. If custom, set qualityPresetsDropdown to custom. Option "custom" is added in GetQualityPresetsDropdownData()
+        previousQualityLevel = currentQualityLevel;
+        currentAdvancedGraphics = settingsPresets.presetList[currentQualityLevel]; //Set to lowest preset initially
+        previousAdvancedGraphics = currentAdvancedGraphics;
+        qualityPresetsDropdown.SetValueWithoutNotify(currentAdvancedGraphics.custom ? qualityPresetsDropdown.options.Count-1 : currentQualityLevel);
 
         UpdateAdvancedGraphicsUI();
 
@@ -110,15 +94,14 @@ public class SettingsSystem : MonoBehaviour
 
     void UpdateAdvancedGraphicsUI()
     {
-        anisotropicFilteringDropdown.SetValueWithoutNotify((int) AdvancedGraphics.anisotropicFiltering);
-        antiAliasingSlider.SetValueWithoutNotify(AdvancedGraphics.antiAliasing);
-        shadowDistanceSlider.SetValueWithoutNotify(AdvancedGraphics.shadowDistance);
-        shadowQualityDropdown.SetValueWithoutNotify((int) AdvancedGraphics.shadowQuality);
-        shadowDistanceText.text = AdvancedGraphics.shadowDistance.ToString();
-        antiAliasingText.text = AdvancedGraphics.antiAliasing.ToString();
+        anisotropicFilteringDropdown.SetValueWithoutNotify((int) currentAdvancedGraphics.anisotropicFiltering);
+        antiAliasingSlider.SetValueWithoutNotify(currentAdvancedGraphics.antiAliasing);
+        shadowDistanceSlider.SetValueWithoutNotify(currentAdvancedGraphics.shadowDistance);
+        shadowQualityDropdown.SetValueWithoutNotify((int) currentAdvancedGraphics.shadowQuality);
+        shadowDistanceText.text = currentAdvancedGraphics.shadowDistance.ToString();
+        antiAliasingText.text = currentAdvancedGraphics.antiAliasing.ToString();
         
-        qualityPresetsDropdown.value = (AdvancedGraphics.custom ? qualityPresetsDropdown.options.Count-1 : AdvancedGraphics.qualityLevel);
-        qualityPresetsDropdown.RefreshShownValue();
+        qualityPresetsDropdown.SetValueWithoutNotify(currentAdvancedGraphics.custom ? qualityPresetsDropdown.options.Count-1 : currentQualityLevel);
     }
 
     List<TMP_Dropdown.OptionData> GetResolutionsDropdownData()
@@ -172,55 +155,45 @@ public class SettingsSystem : MonoBehaviour
 
     public void OnChangeAnisotropicFiltering(int anisoLevel)
     {
-        AdvancedGraphicsSettings newSettings = AdvancedGraphics;
-        newSettings.anisotropicFiltering = (AnisotropicFiltering) anisoLevel;
-        newSettings.custom = true;
-        AdvancedGraphics = newSettings;
+        currentAdvancedGraphics.anisotropicFiltering = (AnisotropicFiltering) anisoLevel;
+        currentAdvancedGraphics.custom = true;
         UpdateAdvancedGraphicsUI();
     }
 
     public void OnChangeAntialiasing(float value)
     {
-        AdvancedGraphicsSettings newSettings = AdvancedGraphics;
-        newSettings.antiAliasing = (int)value;
-        newSettings.custom = true;
-        AdvancedGraphics = newSettings;
+        currentAdvancedGraphics.antiAliasing = (int) value;
+        currentAdvancedGraphics.custom = true;
         UpdateAdvancedGraphicsUI();
     }
 
     public void OnChangeShadowDistance(float shadowDistanceValue)
     {
         //TODO: configure min max value in slider
-        AdvancedGraphicsSettings newSettings = AdvancedGraphics;
-        newSettings.shadowDistance = shadowDistanceValue;
-        newSettings.custom = true;
-        AdvancedGraphics = newSettings;
+        currentAdvancedGraphics.shadowDistance = shadowDistanceValue;
+        currentAdvancedGraphics.custom = true;
         UpdateAdvancedGraphicsUI();
     }
 
     public void OnChangeShadowQuality(int level)
     {
-        AdvancedGraphicsSettings newSettings = AdvancedGraphics;
-        newSettings.shadowQuality = (ShadowQuality) level;
-        newSettings.custom = true;
-        AdvancedGraphics = newSettings;
+        currentAdvancedGraphics.shadowQuality = (ShadowQuality) level;
+        currentAdvancedGraphics.custom = true;
         UpdateAdvancedGraphicsUI();
     }
 
     public void OnChangeQualityPreset(int level)
     {
-        QualitySettings.SetQualityLevel(level, true);
-        Debug.Log("Current quality: " + QualitySettings.names[QualitySettings.GetQualityLevel()]);
-        Debug.Log("Antialiasing: " + QualitySettings.antiAliasing);
-        Debug.Log("Shadow Distance: " + QualitySettings.shadowDistance);
-        AdvancedGraphicsSettings newSettings = AdvancedGraphics;
-        newSettings.anisotropicFiltering = QualitySettings.anisotropicFiltering;
-        newSettings.antiAliasing = QualitySettings.antiAliasing;
-        newSettings.shadowDistance = QualitySettings.shadowDistance;
-        newSettings.shadowQuality = QualitySettings.shadows;
-        newSettings.qualityLevel = level;
-        newSettings.custom = false;
-        AdvancedGraphics = newSettings;
+        if (level >= settingsPresets.presetList.Count)
+        {
+            //Custom level chosen
+            currentAdvancedGraphics.custom = true;
+        }
+        else
+        {
+            currentAdvancedGraphics = settingsPresets.presetList[level];
+        }
+        currentQualityLevel = level;
         UpdateAdvancedGraphicsUI();
     }
 
@@ -244,15 +217,13 @@ public class SettingsSystem : MonoBehaviour
 
     public void OnSaveGraphicsSettings()
     {
-        if (AdvancedGraphics.custom)
-        {
-            QualitySettings.anisotropicFiltering = AdvancedGraphics.anisotropicFiltering;
-            QualitySettings.antiAliasing = AdvancedGraphics.antiAliasing;
-            QualitySettings.shadowDistance = AdvancedGraphics.shadowDistance;
-            QualitySettings.shadows = AdvancedGraphics.shadowQuality;
-        }
-        //No need to save non custom settings as these are applied straight away in OnChangeQualityPreset because there is no way of iterating through unitys quality presets atm
-        previousSettings = AdvancedGraphics;
+        QualitySettings.anisotropicFiltering = currentAdvancedGraphics.anisotropicFiltering;
+        QualitySettings.antiAliasing = currentAdvancedGraphics.antiAliasing;
+        QualitySettings.shadowDistance = currentAdvancedGraphics.shadowDistance;
+        QualitySettings.shadows = currentAdvancedGraphics.shadowQuality;
+        
+        previousAdvancedGraphics = currentAdvancedGraphics;
+        previousQualityLevel = currentQualityLevel;
         Debug.Log("Antialiasing: " + QualitySettings.antiAliasing);
         Debug.Log("Anisotropic Filtering: " + QualitySettings.anisotropicFiltering);
         Debug.Log("Shadow Distance: " + QualitySettings.shadowDistance);
@@ -261,18 +232,13 @@ public class SettingsSystem : MonoBehaviour
 
     public void OnCancelGraphicsSettings()
     {
-        AdvancedGraphics = previousSettings;
-        if (AdvancedGraphics.custom)
-        {
-            QualitySettings.anisotropicFiltering = AdvancedGraphics.anisotropicFiltering;
-            QualitySettings.antiAliasing = AdvancedGraphics.antiAliasing;
-            QualitySettings.shadowDistance = AdvancedGraphics.shadowDistance;
-            QualitySettings.shadows = AdvancedGraphics.shadowQuality;
-        }
-        else
-        {
-            QualitySettings.SetQualityLevel(AdvancedGraphics.qualityLevel);
-        }
+        currentAdvancedGraphics = previousAdvancedGraphics;
+        currentQualityLevel = previousQualityLevel;
+        QualitySettings.anisotropicFiltering = currentAdvancedGraphics.anisotropicFiltering;
+        QualitySettings.antiAliasing = currentAdvancedGraphics.antiAliasing;
+        QualitySettings.shadowDistance = currentAdvancedGraphics.shadowDistance;
+        QualitySettings.shadows = currentAdvancedGraphics.shadowQuality;
+        
         UpdateAdvancedGraphicsUI();
     }
 }
