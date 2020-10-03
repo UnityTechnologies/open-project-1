@@ -17,17 +17,17 @@ public class Character : MonoBehaviour
     [Tooltip("Each frame while jumping, gravity will be multiplied by this amount in an attempt to 'cancel it' (= jump higher)")] public float gravityDivider = .6f;
     [Tooltip("Adjust the friction of the slope")] public float slideFriction = 0.3f;
 
-
     private float gravityContributionMultiplier = 0f; //The factor which determines how much gravity is affecting verticalMovement
     private bool isJumping = false; //If true, a jump is in effect and the player is holding the jump button
     private float jumpBeginTime = -Mathf.Infinity; //Time of the last jump
     private float turnSmoothSpeed; //Used by Mathf.SmoothDampAngle to smoothly rotate the character to their movement direction
     private float verticalMovement = 0f; //Represents how much a player will move vertically in a frame. Affected by gravity * gravityContributionMultiplier
+    private float currentSlope;
     private Vector3 hitNormal; // ground normal
     private bool shouldSlide; // Should player slide?
     private Vector3 inputVector; //Initial input horizontal movement (y == 0f)
     private Vector3 movementVector; //Final movement vector
-
+    
     private void Awake()
     {
         characterController = GetComponent<CharacterController>();
@@ -62,13 +62,11 @@ public class Character : MonoBehaviour
         {
             //Less control in mid-air, conserving momentum from previous frame
             movementVector = inputVector * speed;
-
             //The character is either jumping or in freefall, so gravity will add up
             gravityContributionMultiplier = Mathf.Clamp01(gravityContributionMultiplier);
             verticalMovement += Physics.gravity.y * gravityMultiplier * Time.deltaTime * gravityContributionMultiplier; //Add gravity contribution
                                                                                                                         //Note that even if it's added, the above value is negative due to Physics.gravity.y
-
-            //Cap the maximum so the player doesn't reach incredible speeds when freefalling from high positions
+                                                                                                                        //Cap the maximum so the player doesn't reach incredible speeds when freefalling from high positions
             verticalMovement = Mathf.Clamp(verticalMovement, -maxFallSpeed, 100f);
         }
         else
@@ -85,22 +83,10 @@ public class Character : MonoBehaviour
                 gravityContributionMultiplier = 0f;
             }
         }
-
-        // if player has to slide then add sideways speed to make it go down
-        if (shouldSlide)
-        {
-            movementVector.x += (1f - hitNormal.y) * hitNormal.x * (speed - slideFriction);
-            movementVector.z += (1f - hitNormal.y) * hitNormal.z * (speed - slideFriction);
-        }
+        UpdateSlide();
         //Apply the result and move the character in space
         movementVector.y = verticalMovement;
         characterController.Move(movementVector * Time.deltaTime);
-
-        // check if the controller is grounded and above slope limit
-        // if player is grounded and above slope limit
-        // player has to slide
-        shouldSlide = !(Vector3.Angle(Vector3.up, hitNormal) <= characterController.slopeLimit);
-
         //Rotate to the movement direction
         movementVector.y = 0f;
         if (movementVector.sqrMagnitude >= .02f)
@@ -123,7 +109,6 @@ public class Character : MonoBehaviour
             float permittedDistance = characterController.radius / 2f;
             float topPositionY = transform.position.y + characterController.height;
             float distance = Mathf.Abs(hit.point.y - topPositionY);
-
             if (distance <= permittedDistance)
             {
                 // Stopping any upwards movement
@@ -133,11 +118,8 @@ public class Character : MonoBehaviour
                 verticalMovement = 0f;
             }
         }
-
     }
-
     //---- COMMANDS ISSUED BY OTHER SCRIPTS ----
-
     public void Move(Vector3 movement)
     {
         inputVector = movement;
@@ -158,5 +140,23 @@ public class Character : MonoBehaviour
     public void CancelJump()
     {
         isJumping = false; //This will stop the reduction to the gravity, which will then quickly pull down the character
+    }
+
+    private void UpdateSlide()
+    {
+        // if player has to slide then add sideways speed to make it go down
+        if (shouldSlide)
+        {
+            movementVector.x += (1f - hitNormal.y) * hitNormal.x * (speed - slideFriction);
+            movementVector.z += (1f - hitNormal.y) * hitNormal.z * (speed - slideFriction);
+        }
+        // check if the controller is grounded and above slope limit
+        // if player is grounded and above slope limit
+        // player has to slide
+        if (characterController.isGrounded)
+        {
+            currentSlope = Vector3.Angle(Vector3.up, hitNormal);
+            shouldSlide = currentSlope >= characterController.slopeLimit;
+        }
     }
 }
