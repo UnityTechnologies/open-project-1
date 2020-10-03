@@ -153,7 +153,10 @@ public class Character : MonoBehaviour
         // check if the controller is grounded and above slope limit
         // if player is grounded and above slope limit
         // player has to slide
-        currentSlope = Vector3.Angle(Vector3.up, hitNormal);
-        shouldSlide = currentSlope >= characterController.slopeLimit;
+        if (characterController.isGrounded)
+        {
+            currentSlope = Vector3.Angle(Vector3.up, hitNormal);
+            shouldSlide = currentSlope >= characterController.slopeLimit;
+        }
     }
 }
