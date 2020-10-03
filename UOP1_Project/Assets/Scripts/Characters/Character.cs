@@ -6,16 +6,7 @@ using UnityEngine;
 public class Character : MonoBehaviour
 {
     private CharacterController characterController;
-    private Animator animator;
-
-    #region Animator_Hashes
-
-    private int isWalking = Animator.StringToHash("IsWalking");
-    private int isGrounded = Animator.StringToHash("IsGrounded");
-    private int receivedHit = Animator.StringToHash("ReceivedHit");
-    private int isAttacking = Animator.StringToHash("IsAttacking");
-
-    #endregion
+    private CharacterAnimator characterAnimator;
 
     [Tooltip("Horizontal XZ plane speed multiplier")] public float speed = 8f;
     [Tooltip("Smoothing for rotating the character to their movement direction")] public float turnSmoothTime = 0.2f;
@@ -37,7 +28,6 @@ public class Character : MonoBehaviour
     private void Awake()
     {
         characterController = GetComponent<CharacterController>();
-        animator = GetComponent<Animator>();
     }
 
     private void Update()
@@ -46,12 +36,12 @@ public class Character : MonoBehaviour
         //This is 0f at the beginning of a jump and will raise to maximum 1f
         if (!characterController.isGrounded)
         {
-            animator.SetBool(isGrounded, false);
+            characterAnimator.SetIsIdle(false);
             gravityContributionMultiplier += Time.deltaTime * gravityComebackMultiplier;
         }
         else
         {
-            animator.SetBool(isGrounded, true);
+            characterAnimator.SetIsIdle(true);
         }
 
         //Reduce the influence of the gravity while holding the Jump button
@@ -88,13 +78,16 @@ public class Character : MonoBehaviour
             //Full speed ground movement
             movementVector = inputVector * speed;
 
-            if ((Math.Abs(movementVector.x) > 0.01f || Math.Abs(movementVector.z) > 0.01f) && characterController.isGrounded)
+            // to avoid float point precision problems
+            bool walking = (Math.Abs(movementVector.x) > float.Epsilon || Math.Abs(movementVector.z) > float.Epsilon);
+            
+            if (walking && characterController.isGrounded)
             {
-                animator.SetBool(isWalking, true);
+                characterAnimator.SetIsWalking(true);
             }
             else
             {
-                animator.SetBool(isWalking, false);
+                characterAnimator.SetIsWalking(false);
             }
 
             //Resets the verticalMovement while on the ground,
