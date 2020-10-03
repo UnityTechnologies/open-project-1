@@ -10,7 +10,7 @@ public class GameSceneEditor : Editor
 {
     #region UI_Warnings
 
-    private const string noScenesWarning = "There are no scenes set for this level yet! Add a new scene with the dropdown above";
+    private const string noScenesWarning = "There are no scenes set for this level yet! Add a new scene with the dropdown below";
     
     #endregion
 
