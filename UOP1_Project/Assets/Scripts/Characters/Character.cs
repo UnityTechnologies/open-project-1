@@ -23,6 +23,7 @@ public class Character : MonoBehaviour
     private float verticalMovement = 0f; //Represents how much a player will move vertically in a frame. Affected by gravity * gravityContributionMultiplier
     private Vector3 inputVector; //Initial input horizontal movement (y == 0f)
     private Vector3 movementVector; //Final movement vector
+    private bool isUnderneathStable = false; //If true, it is stable enough to be able to jump and to not slide if there is no input
 
     private void Awake()
     {
@@ -87,6 +88,24 @@ public class Character : MonoBehaviour
         movementVector.y = verticalMovement;
         characterController.Move(movementVector * Time.deltaTime);
 
+        if (characterController.isGrounded) {
+            //Check if underneath the character is stable
+            isUnderneathStable = false; //By default, underneath is not stable
+            RaycastHit hit;
+            Ray ray = new Ray(transform.position + characterController.center, Vector3.down);
+            if (Physics.Raycast(ray, out hit, Mathf.Infinity)) {
+                float underneathSlopeAngle = Vector3.Angle(transform.up, hit.normal);
+                if (underneathSlopeAngle <= characterController.slopeLimit) {
+                    //We found a stable underneath
+                    isUnderneathStable = true;
+                } else {
+                    //Add a slide movement along the underneath slope direction
+                    Vector3 underneathSlopeDirection = Vector3.Cross(hit.normal, Vector3.Cross(hit.normal, Vector3.up));
+                    characterController.Move(underneathSlopeDirection * gravityMultiplier * Time.deltaTime);
+                }
+            }
+        }
+
         //Rotate to the movement direction
         movementVector.y = 0f;
         if (movementVector.sqrMagnitude >= .02f)
@@ -133,7 +152,7 @@ public class Character : MonoBehaviour
 
     public void Jump()
     {
-        if (characterController.isGrounded)
+        if (characterController.isGrounded && isUnderneathStable)
         {
             isJumping = true;
             jumpBeginTime = Time.time;
