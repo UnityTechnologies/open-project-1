@@ -7,9 +7,11 @@ using UnityEngine.Playables;
 using UnityEngine.Timeline;
 using UOP1.Dialogue;
 using UOP1.Cutscene;
+using UnityEngine.UI;
+
 public class DialogueRendererer : MonoBehaviour
 {
-    public static DialogueRendererer dialogueRendererer_static;
+    
   [SerializeField]  private TextMeshProUGUI Text;
   [SerializeField] string[] sentences;
   [SerializeField] int sentence;
@@ -23,34 +25,49 @@ public class DialogueRendererer : MonoBehaviour
     public Object o;
     void Start()
     {
-        p.GetGenericBinding(o);
-        dialogueRendererer_static = this;
+     
+    
            Text = gameObject.GetComponent<TextMeshProUGUI>();
         //  StartCoroutine(NewChat(conversation conversation));
-        track = timelineasset.GetRootTrack(0);
-        Debug.Log(track.duration);
+   
     }
 
     
  public   IEnumerator NewChat(conversation conversation)
     {
+        if(!conversation.triggered_once ){
 
-        
-        for (int i = 0; i < conversation.lines.Length ; i++)
-        {
-          
-            Text.color = conversation.lines[sentence].color;
-            Text.fontStyle = (FontStyles)conversation.lines[sentence].fontstyle;
-      
-            for (int t = 0; t < conversation.lines[sentence].text.Length ; t++)
+            for (int i = 0; i < conversation.lines.Length; i++)
             {
-                Debug.Log(t);
-                displayed += conversation.lines[sentence].text[t];
-                Text.text = displayed;
-                yield return new WaitForSeconds(letterdelay);
+                conversation.triggered_once = true;
+                this.gameObject.transform.GetChild(0).gameObject.SetActive(true);
+                this.gameObject.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = conversation.lines[sentence].Speaking.name;
+                if (conversation.lines[sentence].NameOveride != null)
+                {
+                    this.gameObject.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = conversation.lines[sentence].NameOveride;
+                }
+
+                gameObject.GetComponentInChildren<Image>().sprite = conversation.lines[sentence].Speaking;
+                Text.color = conversation.lines[sentence].color;
+                Text.fontStyle = (FontStyles)conversation.lines[sentence].fontstyle;
+
+                for (int t = 0; t < conversation.lines[sentence].text.Length; t++)
+                {
+                    //   Debug.Log(t);
+                    displayed += conversation.lines[sentence].text[t];
+                    Text.text = displayed;
+                    yield return new WaitForSeconds(letterdelay);
+                }
+
+                sentence++;
+                displayed = "";
+
+
             }
-            sentence++;
-            displayed = "";
+            Text.text = "";
+            this.gameObject.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = "";
+
+            this.gameObject.transform.GetChild(0).gameObject.SetActive(false);
         }
     }
 

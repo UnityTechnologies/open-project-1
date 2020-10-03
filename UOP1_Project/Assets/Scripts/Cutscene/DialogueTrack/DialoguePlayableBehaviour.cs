@@ -16,7 +16,7 @@ namespace UOP1.Cutscene
     
         public override void ProcessFrame(Playable playable, FrameData info, object playerData)
         {
-            var rootTracks = timelineasset.GetRootTracks();
+
          
             if (isDialoguePlaying) return;
            
@@ -24,8 +24,7 @@ namespace UOP1.Cutscene
             isDialogueActioned = false;
          
             if (!Application.isPlaying) return;
-           DialogueRendererer.dialogueRendererer_static.StartCoroutine(DialogueRendererer.dialogueRendererer_static.NewChat(Dialogue));
-        }
+       }
 
         public override void OnBehaviourPause(Playable playable, FrameData info)
         {

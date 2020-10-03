@@ -8,4 +8,6 @@ public class sentence
     public string text;
     public Color color;
     public FontStyle fontstyle;
+    public Sprite Speaking;
+  [Tooltip("dont enter anything to use the sprite name")]  public string NameOveride;
 }
