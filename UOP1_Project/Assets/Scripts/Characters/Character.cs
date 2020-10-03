@@ -99,6 +99,30 @@ public class Character : MonoBehaviour
                 turnSmoothTime);
         }
     }
+    
+    private void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        bool isMovingUpwards = verticalMovement > 0f;
+
+        if (isMovingUpwards)
+        {
+            // Making sure the collision is near the top of the head
+            float permittedDistance = characterController.radius / 2f;
+            float topPositionY = transform.position.y + characterController.height;
+            float distance = Mathf.Abs(hit.point.y - topPositionY);
+
+            if (distance <= permittedDistance)
+            {
+                // Stopping any upwards movement
+                // and having the player fall back down
+
+                isJumping = false;
+                gravityContributionMultiplier = 1f;
+
+                verticalMovement = 0f;
+            }
+        }
+    }
 
     //---- COMMANDS ISSUED BY OTHER SCRIPTS ----
 
