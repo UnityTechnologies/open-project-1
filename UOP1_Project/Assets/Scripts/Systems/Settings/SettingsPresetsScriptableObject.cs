@@ -11,7 +11,7 @@ public class SettingsPresetsScriptableObject : ScriptableObject
     [Serializable]
     public struct AdvancedGraphics
     {
-        public string name;
+        public GraphicsQualityLevel qualityLevel;
         public ShadowQuality shadowQuality;
         public AnisotropicFiltering anisotropicFiltering;
         public int antiAliasing;
@@ -19,14 +19,23 @@ public class SettingsPresetsScriptableObject : ScriptableObject
         public bool custom;
     }
 
-    public string[] GetPresetNames()
+    public enum GraphicsQualityLevel
     {
-        string[] presetNames = new string[presetList.Count];
-        for (int i = 0; i < presetList.Count; i++)
+        Low,
+        Middle,
+        High
+    }
+
+    public AdvancedGraphics GetPresetByQualityLevel(GraphicsQualityLevel level)
+    {
+        foreach (AdvancedGraphics preset in presetList)
         {
-            presetNames[i] = presetList[i].name;
+            if (level == preset.qualityLevel)
+            {
+                return preset;
+            }
         }
 
-        return presetNames;
+        return default;
     }
 }

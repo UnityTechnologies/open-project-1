@@ -5,14 +5,15 @@ using UnityEngine.UI;
 
 public class SettingsUIController : MonoBehaviour
 {
-    [SerializeField] GameObject generalSettings, graphicsSettings, audioSettings;
-    [SerializeField] Button generalSettingsButton, graphicsSettingsButton, audioSettingsButton, saveGraphicsSettingsButton, cancelGraphicsSettingsButton;
+    [SerializeField] GameObject generalSettings, graphicsSettings, audioSettings, inputSettings;
+    [SerializeField] Button generalSettingsButton, graphicsSettingsButton, audioSettingsButton, inputSettingsButton, saveGraphicsSettingsButton, cancelGraphicsSettingsButton;
 
     public enum SettingsType
     {
         General,
         Graphics,
-        Audio
+        Audio,
+        Input
     }
 
     public void OpenGeneralSettings()
@@ -30,6 +31,11 @@ public class SettingsUIController : MonoBehaviour
         OpenSetting(SettingsType.Audio);
     }
 
+    public void OpenInputSettings()
+    {
+        OpenSetting(SettingsType.Input);
+    }
+
     public void OnSaveGraphicsSettings()
     {
         saveGraphicsSettingsButton.interactable = false;
@@ -40,9 +46,11 @@ public class SettingsUIController : MonoBehaviour
         generalSettings.SetActive(settingType == SettingsType.General);
         graphicsSettings.SetActive((settingType == SettingsType.Graphics));
         audioSettings.SetActive(settingType == SettingsType.Audio);
+        inputSettings.SetActive(settingType == SettingsType.Input);
         
         generalSettingsButton.interactable = settingType != SettingsType.General;
         graphicsSettingsButton.interactable = settingType != SettingsType.Graphics;
         audioSettingsButton.interactable = settingType != SettingsType.Audio;
+        inputSettingsButton.interactable = settingType != SettingsType.Input;
     }
 }
