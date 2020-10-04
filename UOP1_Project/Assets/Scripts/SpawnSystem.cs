@@ -13,7 +13,6 @@ public class SpawnSystem : MonoBehaviour
 	[SerializeField] private Protagonist _playerPrefab = null;
 
 	[Header("Scene References")]
-	[SerializeField] private InputReader _inputReader;
 	[SerializeField] private CameraManager _cameraManager;
 	[SerializeField] private Transform[] _spawnLocations;
 
@@ -37,9 +36,6 @@ public class SpawnSystem : MonoBehaviour
 	[ContextMenu("Attempt Auto Fill")]
 	private void AutoFill()
 	{
-		if (_inputReader == null)
-			_inputReader = FindObjectOfType<InputReader>();
-
 		if(_cameraManager == null)
 			_cameraManager = FindObjectOfType<CameraManager>();
 
@@ -52,7 +48,8 @@ public class SpawnSystem : MonoBehaviour
 	private void Spawn(int spawnIndex)
 	{
 		Transform spawnLocation = GetSpawnLocation(spawnIndex, _spawnLocations);
-		Protagonist playerInstance = InstantiatePlayer(_playerPrefab, spawnLocation, _inputReader, _cameraManager);
+		Protagonist playerInstance = InstantiatePlayer(_playerPrefab, spawnLocation, _cameraManager);
+		SetupCameras(playerInstance);
 	}
 
 	private Transform GetSpawnLocation(int index, Transform[] spawnLocations)
@@ -64,25 +61,19 @@ public class SpawnSystem : MonoBehaviour
 		return spawnLocations[index];
 	}
 
-	private Protagonist InstantiatePlayer(Protagonist playerPrefab, Transform spawnLocation, InputReader inputReader, CameraManager _cameraManager)
+	private Protagonist InstantiatePlayer(Protagonist playerPrefab, Transform spawnLocation, CameraManager _cameraManager)
 	{
 		if (playerPrefab == null)
 			throw new Exception("Player Prefab can't be null.");
 
-		bool originalState = playerPrefab.enabled;
-		// Prevents playerInstance's Protagonist.OnEnable from running now
-		playerPrefab.enabled = false;
 		Protagonist playerInstance = Instantiate(playerPrefab, spawnLocation.position, spawnLocation.rotation);
-		playerPrefab.enabled = originalState;
-
-		playerInstance.inputReader = inputReader;
-		playerInstance.gameplayCamera = _cameraManager.mainCamera.transform;
-		// Since the prefab's script was disabled it need to be enabled here
-		playerInstance.enabled = true;
-
-		//Feed the player to the CameraManager
-		_cameraManager.SetupProtagonistVirtualCamera(playerInstance.transform);
 
 		return playerInstance;
+	}
+
+	private void SetupCameras(Protagonist player)
+	{
+		player.gameplayCamera = _cameraManager.mainCamera.transform;
+		_cameraManager.SetupProtagonistVirtualCamera(player.transform);
 	}
 }
