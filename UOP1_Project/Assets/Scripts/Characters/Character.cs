@@ -23,6 +23,9 @@ public class Character : MonoBehaviour
     private float verticalMovement = 0f; //Represents how much a player will move vertically in a frame. Affected by gravity * gravityContributionMultiplier
     private Vector3 inputVector; //Initial input horizontal movement (y == 0f)
     private Vector3 movementVector; //Final movement vector
+    private bool isAboveSlopeLimit = false; // Used to check if current ground is above Slope Limit set on Character Controller
+    private bool isSliding = false; // Detects if character is currently sliding down a slope
+    private Vector3 slideMovement; //Movement direction of character sliding down a slope
 
     private void Awake()
     {
@@ -69,6 +72,11 @@ public class Character : MonoBehaviour
         }
         else
         {
+            if(isSliding)
+            {
+                inputVector = slideMovement;
+            }
+
             //Full speed ground movement
             movementVector = inputVector * speed;
 
@@ -89,7 +97,7 @@ public class Character : MonoBehaviour
 
         //Rotate to the movement direction
         movementVector.y = 0f;
-        if (movementVector.sqrMagnitude >= .02f)
+        if (movementVector.sqrMagnitude >= .02f && !isSliding)
         {
             float targetRotation = Mathf.Atan2(movementVector.x, movementVector.z) * Mathf.Rad2Deg;
             transform.eulerAngles = Vector3.up * Mathf.SmoothDampAngle(
@@ -103,6 +111,18 @@ public class Character : MonoBehaviour
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
         bool isMovingUpwards = verticalMovement > 0f;
+
+        // Calculates if hit vector is above slopelimit set on Character Controller
+        isAboveSlopeLimit = (Vector3.Angle (Vector3.up, hit.normal) >= characterController.slopeLimit);
+        slideMovement = new Vector3(hit.normal.x, hit.normal.y, hit.normal.z);
+
+        if (isAboveSlopeLimit) 
+        {
+            isSliding = true;
+        } else
+        {
+            isSliding = false;
+        }
 
         if (isMovingUpwards)
         {
@@ -133,7 +153,7 @@ public class Character : MonoBehaviour
 
     public void Jump()
     {
-        if (characterController.isGrounded)
+        if (characterController.isGrounded && !isSliding)
         {
             isJumping = true;
             jumpBeginTime = Time.time;
