@@ -5,8 +5,6 @@ using UnityEngine;
 
 public class Character : MonoBehaviour
 {
-
-
     private CharacterController characterController;
 
     [Tooltip("Horizontal XZ plane speed multiplier")] public float speed = 8f;
