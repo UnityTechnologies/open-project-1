@@ -102,11 +102,9 @@ public class Character : MonoBehaviour
     
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
-
         bool isMovingUpwards = verticalMovement > 0f;
 
         if (isMovingUpwards)
-
         {
             // Making sure the collision is near the top of the head
             float permittedDistance = characterController.radius / 2f;
