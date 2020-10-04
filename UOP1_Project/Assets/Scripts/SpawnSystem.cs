@@ -4,34 +4,24 @@ using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.Events;
 
-[Serializable]
-public class PlayerSpawnEvent : UnityEvent<Transform> { }
-
 public class SpawnSystem : MonoBehaviour
 {
-    private static int requestedSpawnIndex = -1;
+	[Header("Settings")]
+	[SerializeField] private int _defaultSpawnIndex = 0;
 
-    [Header("Settings")]
-    [SerializeField] private int defaultSpawnIndex = 0;
+	[Header("Project References")]
+	[SerializeField] private Protagonist _playerPrefab = null;
 
-    [Header("Project References")]
-#pragma warning disable 649
-    [SerializeField] private Protagonist playerPrefab;
-#pragma warning restore 649
+	[Header("Scene References")]
+	[SerializeField] private InputReader _inputReader;
+	[SerializeField] private CameraManager _cameraManager;
+	[SerializeField] private Transform[] _spawnLocations;
 
-    [Header("Scene References")]
-    [SerializeField] private InputReader inputReader;
-    [SerializeField] private Transform gameplayCamera;
-    [SerializeField] private Transform[] spawnLocations;
-
-    [Header("Events")]
-    public PlayerSpawnEvent onPlayerSpawnEvent;
-
-    void Awake()
-    {
+	void Awake()
+	{
         try
         {
-            Spawn();
+            Spawn(_defaultSpawnIndex);
         }
         catch (Exception e)
         {
@@ -39,66 +29,60 @@ public class SpawnSystem : MonoBehaviour
         }
     }
 
-    void Reset()
-    {
-        AutoFill();
-    }
+	void Reset()
+	{
+		AutoFill();
+	}
 
-    [ContextMenu("Attempt Auto Fill")]
-    private void AutoFill()
-    {
-        if (inputReader == null)
-            inputReader = FindObjectOfType<InputReader>();
+	[ContextMenu("Attempt Auto Fill")]
+	private void AutoFill()
+	{
+		if (_inputReader == null)
+			_inputReader = FindObjectOfType<InputReader>();
 
-        if (gameplayCamera == null)
-            gameplayCamera = GameObject.FindGameObjectWithTag("MainCamera")?.transform;
+		if(_cameraManager == null)
+			_cameraManager = FindObjectOfType<CameraManager>();
 
-        if (spawnLocations == null || spawnLocations.Length == 0)
-            spawnLocations = transform.GetComponentsInChildren<Transform>(true)
-                                .Where(t => t != this.transform)
-                                .ToArray();
-    }
+		if (_spawnLocations == null || _spawnLocations.Length == 0)
+			_spawnLocations = transform.GetComponentsInChildren<Transform>(true)
+								.Where(t => t != this.transform)
+								.ToArray();
+	}
 
-    private void Spawn()
-    {
-        int spawnIndex = requestedSpawnIndex < 0 ? defaultSpawnIndex : requestedSpawnIndex;
-        var spawnLocation = GetSpawnLocation(spawnIndex, spawnLocations);
-        var playerInstance = InstantiatePlayer(playerPrefab, spawnLocation, inputReader, gameplayCamera);
-        requestedSpawnIndex = -1;
+	private void Spawn(int spawnIndex)
+	{
+		Transform spawnLocation = GetSpawnLocation(spawnIndex, _spawnLocations);
+		Protagonist playerInstance = InstantiatePlayer(_playerPrefab, spawnLocation, _inputReader, _cameraManager);
+	}
 
-        onPlayerSpawnEvent.Invoke(playerInstance.transform);
-    }
+	private Transform GetSpawnLocation(int index, Transform[] spawnLocations)
+	{
+		if (spawnLocations == null || spawnLocations.Length == 0)
+			throw new Exception("No spawn locations set.");
 
-    private static Transform GetSpawnLocation(int index, Transform[] spawnLocations)
-    {
-        if (spawnLocations == null || spawnLocations.Length == 0)
-            throw new Exception("No spawn locations set.");
+		index = Mathf.Clamp(index, 0, spawnLocations.Length - 1);
+		return spawnLocations[index];
+	}
 
-        index = Mathf.Clamp(index, 0, spawnLocations.Length - 1);
-        return spawnLocations[index];
-    }
+	private Protagonist InstantiatePlayer(Protagonist playerPrefab, Transform spawnLocation, InputReader inputReader, CameraManager _cameraManager)
+	{
+		if (playerPrefab == null)
+			throw new Exception("Player Prefab can't be null.");
 
-    private static Protagonist InstantiatePlayer(Protagonist playerPrefab, Transform spawnLocation, InputReader inputReader, Transform gameplayCamera)
-    {
-        if (playerPrefab == null)
-            throw new Exception("Player Prefab can't be null.");
+		bool originalState = playerPrefab.enabled;
+		// Prevents playerInstance's Protagonist.OnEnable from running now
+		playerPrefab.enabled = false;
+		Protagonist playerInstance = Instantiate(playerPrefab, spawnLocation.position, spawnLocation.rotation);
+		playerPrefab.enabled = originalState;
 
-        bool originalState = playerPrefab.enabled;
-        // Prevents playerInstance's Protagonist.OnEnable from running before we set the inputReader and gameplayCamera references
-        playerPrefab.enabled = false;
-        var playerInstance = Instantiate(playerPrefab, spawnLocation.position, spawnLocation.rotation);
-        playerPrefab.enabled = originalState;
+		playerInstance.inputReader = inputReader;
+		playerInstance.gameplayCamera = _cameraManager.mainCamera.transform;
+		// Since the prefab's script was disabled it need to be enabled here
+		playerInstance.enabled = true;
 
-        playerInstance.inputReader = inputReader;
-        playerInstance.gameplayCamera = gameplayCamera;
-        // Since the prefab's script was disabled it need to be enabled here
-        playerInstance.enabled = true;
-        return playerInstance;
-    }
+		//Feed the player to the CameraManager
+		_cameraManager.SetupProtagonistVirtualCamera(playerInstance.transform);
 
-    public static void SetSpawnIndex(int spawnIndex)
-    {
-        // Prevent setting negative numbers from external sources
-        requestedSpawnIndex = Mathf.Max(spawnIndex, 0);
-    }
+		return playerInstance;
+	}
 }
