@@ -32,7 +32,15 @@ public class InputReader : MonoBehaviour, GameInput.IGameplayActions
 		gameInput.Gameplay.Disable();
 	}
 
-	public void OnAttack(InputAction.CallbackContext context)
+    private void Update()
+    {
+        Vector2 delta;
+        delta.x = Mouse.current.rightButton.isPressed ? Mouse.current.delta.ReadValue().x : 0;
+        delta.y = Mouse.current.scroll.ReadValue().y * 0.15f;
+        cameraMoveEvent.Invoke(delta);
+    }
+
+    public void OnAttack(InputAction.CallbackContext context)
 	{
 		if(attackEvent != null
 			&& context.phase == InputActionPhase.Started)
@@ -83,7 +91,7 @@ public class InputReader : MonoBehaviour, GameInput.IGameplayActions
 	{
 		if(cameraMoveEvent != null)
 		{
-			cameraMoveEvent.Invoke(context.ReadValue<Vector2>());
+            cameraMoveEvent.Invoke(context.ReadValue<Vector2>());
 		}
 	}
 }
