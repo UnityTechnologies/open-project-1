@@ -114,15 +114,7 @@ public class Character : MonoBehaviour
 
         // Calculates if hit vector is above slopelimit set on Character Controller
         isAboveSlopeLimit = (Vector3.Angle (Vector3.up, hit.normal) >= characterController.slopeLimit);
-        slideMovement = new Vector3(hit.normal.x, hit.normal.y, hit.normal.z);
-
-        if (isAboveSlopeLimit) 
-        {
-            isSliding = true;
-        } else
-        {
-            isSliding = false;
-        }
+        slideMovement = isAboveSlopeLimit;
 
         if (isMovingUpwards)
         {
