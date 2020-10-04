@@ -17,7 +17,7 @@ jobs:
       - uses: xt0rted/dotnet-format-problem-matcher@v1
       - uses: xt0rted/dotnet-tool-restore@v1
       - uses: xt0rted/dotnet-format@v1.0.1
-      - run: dotnet-format format "./UOP1_Project/Assets/Scripts" -f
+      - run: dotnet-format format "./UOP1_Project/Assets/Scripts" -f --fix-style
 
       - name: Commit files
         if: steps.command.outputs.command-name && steps.command.outputs.command-arguments == 'format' && steps.format.outputs.has-changes == 'true'
