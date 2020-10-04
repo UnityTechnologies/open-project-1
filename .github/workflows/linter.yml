@@ -13,18 +13,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Setup .NET Core SDK
-        uses: actions/setup-dotnet@v1.7.2
-        with:
-          # SDK version to use. Examples: 2.2.104, 3.1, 3.1.x
-          dotnet-version: 4.8 # optional
-          # Optional package source for which to set up authentication. Will consult any existing NuGet.config in the root of the repo and provide a temporary NuGet.config using the NUGET_AUTH_TOKEN environment variable as a ClearTextPassword
-          #source-url: # optional
-          # Optional OWNER for using packages from GitHub Package Registry organizations/users other than the current repository's owner. Only used if a GPR URL is also provided in source-url
-          #owner: # optional
-          # Optional NuGet.config location, if your NuGet.config isn't located in the root of the repo.
-          #config-file: # optional
-
       - name: dotnet-format
         # You may pin to the exact commit or the version.
         # uses: xt0rted/dotnet-format@b5de3d03ea0f2d689f6e2949931ab50f4d2cd3e3
@@ -33,8 +21,24 @@ jobs:
           # The GITHUB_TOKEN secret
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           # The primary action dotnet-format should perform (check for errors or apply fixes)
-          # action: # optional, default is check
+          action: fix # optional, default is check
           # Only changed files in the current pull request should be formatted
           only-changed-files: false # optional
           # The job should fail if there's a formatting error
           fail-fast: false # optional, default is true
+
+      - name: Commit files
+        if: steps.command.outputs.command-name && steps.command.outputs.command-arguments == 'format' && steps.format.outputs.has-changes == 'true'
+        run: |
+          git config --local user.name "github-actions[bot]"
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -a -m 'Automated dotnet-format update
+
+          Co-authored-by: ${{ github.event.comment.user.login }} <${{ github.event.comment.user.id }}+${{ github.event.comment.user.login }}@users.noreply.github.com>'
+
+      - name: Push changes
+        if: steps.command.outputs.command-name && steps.command.outputs.command-arguments == 'format' && steps.format.outputs.has-changes == 'true'
+        uses: ad-m/github-push-action@v0.5.0
+        with:
+          branch: ${{ steps.comment-branch.outputs.ref }}
+          github_token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
