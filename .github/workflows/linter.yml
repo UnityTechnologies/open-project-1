@@ -25,8 +25,8 @@ jobs:
       - name: dotnet-format
         # You may pin to the exact commit or the version.
         run: |
-          dotnet tool install -g dotnet-format
-          dotnet-format format ./UOP1_Project/Assets/Scripts -f
+          dotnet tool install -g dotnet-format;
+          dotnet-format format "./UOP1_Project/Assets/Scripts" -f;
 
       - name: Commit files
         if: steps.command.outputs.command-name && steps.command.outputs.command-arguments == 'format' && steps.format.outputs.has-changes == 'true'
