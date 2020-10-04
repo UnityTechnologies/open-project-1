@@ -99,7 +99,7 @@ public class Character : MonoBehaviour
                 turnSmoothTime);
         }
     }
-    
+
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
         bool isMovingUpwards = verticalMovement > 0f;
