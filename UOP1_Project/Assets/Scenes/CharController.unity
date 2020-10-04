@@ -286,7 +286,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 233317031}
-  m_LocalRotation: {x: 0.18994758, y: -0.2052703, z: 0.040647592, w: 0.959235}
+  m_LocalRotation: {x: 0.18994758, y: -0.20527026, z: 0.040647585, w: 0.959235}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -736,7 +736,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33ab1b7e00e7e6e44bc2ddf5ee0e73ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Conversation: {fileID: 11400000, guid: 9a1491904d8ca74409541fdf9e605376, type: 2}
+  Conversations_loop:
+  - {fileID: 11400000, guid: 9a1491904d8ca74409541fdf9e605376, type: 2}
+  - {fileID: 11400000, guid: a00bb2f06eab9b944b8862a22b82a4e2, type: 2}
 --- !u!135 &682395288
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -1574,6 +1576,40 @@ Transform:
   m_Father: {fileID: 1502793902}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1258033230 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7500093032234365829, guid: fe3004506b4c6cd478eb2cca639b3713,
+    type: 3}
+  m_PrefabInstance: {fileID: 6560919939139749480}
+  m_PrefabAsset: {fileID: 0}
+--- !u!135 &1258033233
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1258033230}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 2.95
+  m_Center: {x: 0, y: 2.45, z: 0}
+--- !u!114 &1258033234
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1258033230}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 33ab1b7e00e7e6e44bc2ddf5ee0e73ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Conversations_loop:
+  - {fileID: 11400000, guid: 9a1491904d8ca74409541fdf9e605376, type: 2}
+  - {fileID: 11400000, guid: a00bb2f06eab9b944b8862a22b82a4e2, type: 2}
 --- !u!1001 &1259640866
 PrefabInstance:
   m_ObjectHideFlags: 0

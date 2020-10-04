@@ -20,7 +20,8 @@ public class DialogueRendererer : MonoBehaviour
     
  public   IEnumerator NewChat(Conversation conversation)
     {
-        if(!conversation.triggered_once ){
+        if(!conversation.triggered_once || conversation.repeatable)
+        {
 
             for (int i = 0; i < conversation.lines.Length; i++)
             {
@@ -51,7 +52,7 @@ public class DialogueRendererer : MonoBehaviour
             }
             Text.text = "";
             this.gameObject.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = "";
-
+            SentenceCount = 0;
             this.gameObject.transform.GetChild(0).gameObject.SetActive(false);
         }
     }

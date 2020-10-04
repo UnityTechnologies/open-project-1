@@ -6,8 +6,17 @@ public class Conversation : ScriptableObject
 {
     public Sentence[] lines;
     public bool triggered_once =false;
-    private void Awake()
+    public bool repeatable;
+   
+
+    public void OnEnable()
     {
-        triggered_once = false;
+        if (Application.isEditor)
+        {
+             triggered_once = false;
 }
+       
+    }
+
+  
 }
