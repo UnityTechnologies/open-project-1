@@ -9,8 +9,6 @@ namespace CombatStatemachine
     {
         #region Inspector Vars
         [SerializeField] private CombatAction[] m_onEnterActions;
-        [SerializeField] private CombatAction[] m_onAwakeActions;
-        [SerializeField] private CombatAction[] m_onEnableActions;
         [SerializeField] private CombatAction[] m_onUpdateActions;
         [SerializeField] private CombatAction[] m_onAnimMoveActions;
         [SerializeField] private CombatAction[] m_onExitActions;
@@ -19,14 +17,6 @@ namespace CombatStatemachine
         #endregion
 
         #region Public API
-        public void OnStateAwake(CombatStateMachineController _controller)
-        {
-            PerformActions(_controller, m_onAwakeActions);
-        }
-        public void OnStateEnable(CombatStateMachineController _controller)
-        {
-            PerformActions(_controller, m_onEnableActions);
-        }
         public void OnStateEnter(CombatStateMachineController _controller)
         {
             PerformActions(_controller,m_onEnterActions);

@@ -10,6 +10,9 @@ namespace CombatStatemachine
     {
         [SerializeField] private MovementHandlerData m_moveHandlerData;
         public MovementHandlerData MoveHandlerData { get { return m_moveHandlerData; } }
+
+        [SerializeField] private InputHandlerData m_inputHandlerData;
+        public InputHandlerData InHandlerData { get { return m_inputHandlerData; } }
         
     }
 

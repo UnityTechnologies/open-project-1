@@ -1,5 +1,6 @@
 ﻿#pragma warning disable CS0649
 
+using System.Security.Policy;
 using UnityEngine;
 
 namespace CombatStatemachine
@@ -7,12 +8,16 @@ namespace CombatStatemachine
     public class CombatStateMachineController : MonoBehaviour
     {
         #region Inspector Vars
+        [SerializeField] private Transform m_gameplayCamera;
+        [SerializeField] private InputReader m_inputReader;
         [SerializeField] private CombatState m_initialState;
         [SerializeField] private HandlerDataSource m_dataSource;
+
         #endregion
 
         #region Properties
-        public MovementHandler MoveHandler { get; private set; }
+        public MovementHandler HandlerMovement { get; private set; }
+        public InputHandler HandlerInput { get; private set; }
         #endregion
 
         #region Fields
@@ -21,15 +26,14 @@ namespace CombatStatemachine
 
 
         #region Unity API
-        private void Awake()
-        {
-            ChangeState(m_currentState);
-            m_currentState.OnStateAwake(this);
-        }
+       
         private void OnEnable()
         {
             InitializeHandlers();
-            m_currentState.OnStateEnable(this);
+        }
+        private void Start()
+        {
+            ChangeState(m_initialState);
         }
         private void Update()
         {
@@ -65,12 +69,17 @@ namespace CombatStatemachine
         #region Utility
         private void InitializeHandlers()
         {
-            MoveHandler = new MovementHandler(GetComponent<Transform>(), GetComponent<CharacterController>(), m_dataSource.MoveHandlerData);
+            HandlerMovement = new MovementHandler(m_gameplayCamera,GetComponent<Transform>(), GetComponent<CharacterController>(), m_dataSource.MoveHandlerData);
+
+            HandlerInput = new InputHandler(m_dataSource.InHandlerData,m_inputReader);;
         }
         private void CleanupHandlers()
         {
-            MoveHandler.CleanupHandler();
-            MoveHandler = null;
+            HandlerMovement.CleanupHandler();
+            HandlerMovement = null;
+
+            HandlerInput.CleanupHandler();
+            HandlerInput = null;
         }
         #endregion
     }

@@ -12,38 +12,43 @@ namespace CombatStatemachine
         public bool HasJumpInput { get; set; }
         #endregion
 
+        #region Fields
+        private InputReader m_inputReader;
+        #endregion
+
         #region public API
         public InputHandler(InputHandlerData _handlerData, InputReader _inputReader)
         {
             HandlerData = _handlerData;
-
-            SubscribeToEvents(_inputReader);
+            m_inputReader = _inputReader;
         }
-        public void CleanupHandler(InputReader _inputReader)
+        public void CleanupHandler()
         {
-            UnsubscribeEvents(_inputReader);
+            m_inputReader = null;
+        }
+        public void SubscribeToEvents()
+        {
+            m_inputReader.jumpEvent += OnJumpInitiated;
+            m_inputReader.jumpCanceledEvent += OnJumpCanceled;
+            m_inputReader.moveEvent += OnMove;
+        }
+        public void UnsubscribeEvents()
+        {
+            m_inputReader.jumpEvent += OnJumpInitiated;
+            m_inputReader.jumpCanceledEvent += OnJumpCanceled;
+            m_inputReader.moveEvent += OnMove;
         }
         #endregion
 
         #region Utility
-        private void SubscribeToEvents(InputReader _inputReader)
-        {
-            _inputReader.jumpEvent += OnJumpInitiated;
-            _inputReader.jumpCanceledEvent += OnJumpCanceled;
-            _inputReader.moveEvent += OnMove;
-        }
-        private void UnsubscribeEvents(InputReader _inputReader)
-        {
-            _inputReader.jumpEvent += OnJumpInitiated;
-            _inputReader.jumpCanceledEvent += OnJumpCanceled;
-            _inputReader.moveEvent += OnMove;
-        }
+
 
         #endregion
 
         #region InputEvents
         private void OnMove(Vector2 _movement)
         {
+            Debug.Log("Movement " + _movement);
             RawMovementInput = _movement;
         }
 
