@@ -22,7 +22,7 @@ namespace CombatStatemachine
         {
             m_rootElement.Clear();
 
-            //m_rootElement.Add(new PropertyField(m_obj.FindProperty("m_combatAnim"), "Combat Animation"));
+            m_rootElement.Add(new PropertyField(m_obj.FindProperty("m_combatAnim"), "Combat Animation"));
             m_rootElement.Add(new ReorderableListViewElement(m_obj, m_obj.FindProperty("m_onEnterActions"), "On Enter Actions"));
             m_rootElement.Add(new ReorderableListViewElement(m_obj, m_obj.FindProperty("m_onUpdateActions"), "On Update Actions"));
             m_rootElement.Add(new ReorderableListViewElement(m_obj, m_obj.FindProperty("m_onAnimMoveActions"), "On AnimatorMoveActions Actions"));

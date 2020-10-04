@@ -13,6 +13,9 @@ namespace CombatStatemachine
 
         [SerializeField] private InputHandlerData m_inputHandlerData;
         public InputHandlerData InHandlerData { get { return m_inputHandlerData; } }
+
+        [SerializeField] private AnimationHandlerData m_animHandlerData;
+        public AnimationHandlerData AnimHandlerData { get { return m_animHandlerData; } }
         
     }
 

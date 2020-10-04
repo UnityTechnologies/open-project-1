@@ -18,6 +18,7 @@ namespace CombatStatemachine
         #region Properties
         public MovementHandler HandlerMovement { get; private set; }
         public InputHandler HandlerInput { get; private set; }
+        public AnimationHandler HandlerAnimation { get; private set; }
         #endregion
 
         #region Fields
@@ -71,7 +72,9 @@ namespace CombatStatemachine
         {
             HandlerMovement = new MovementHandler(m_gameplayCamera,GetComponent<Transform>(), GetComponent<CharacterController>(), m_dataSource.MoveHandlerData);
 
-            HandlerInput = new InputHandler(m_dataSource.InHandlerData,m_inputReader);;
+            HandlerInput = new InputHandler(m_dataSource.InHandlerData,m_inputReader);
+
+            HandlerAnimation = new AnimationHandler(GetComponent<Animator>(), m_dataSource.AnimHandlerData);
         }
         private void CleanupHandlers()
         {
@@ -80,6 +83,9 @@ namespace CombatStatemachine
 
             HandlerInput.CleanupHandler();
             HandlerInput = null;
+
+            HandlerAnimation.CleanupHandler();
+            HandlerAnimation = null;
         }
         #endregion
     }

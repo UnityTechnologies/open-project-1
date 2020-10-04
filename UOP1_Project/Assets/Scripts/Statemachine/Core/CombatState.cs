@@ -8,6 +8,7 @@ namespace CombatStatemachine
     public class CombatState : ScriptableObject
     {
         #region Inspector Vars
+        [SerializeField] private CombatAnimation m_combatAnim;
         [SerializeField] private CombatAction[] m_onEnterActions;
         [SerializeField] private CombatAction[] m_onUpdateActions;
         [SerializeField] private CombatAction[] m_onAnimMoveActions;
@@ -19,6 +20,7 @@ namespace CombatStatemachine
         #region Public API
         public void OnStateEnter(CombatStateMachineController _controller)
         {
+            PlayAnimation(_controller);
             PerformActions(_controller,m_onEnterActions);
         }
         public void OnStateUpdate(CombatStateMachineController _controller)
@@ -54,6 +56,13 @@ namespace CombatStatemachine
             {
                 _actions[i].Act(_controller);
             }
+        }
+        private void PlayAnimation(CombatStateMachineController _controller)
+        {
+            if (m_combatAnim == null || m_combatAnim.Clip == null)
+                return;
+
+            _controller.HandlerAnimation.PlayAnimationClip(m_combatAnim.Clip);
         }
         #endregion
     }
