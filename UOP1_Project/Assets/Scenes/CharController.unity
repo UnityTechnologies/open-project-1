@@ -267,7 +267,7 @@ MonoBehaviour:
   m_Lens:
     FieldOfView: 40
     OrthographicSize: 10
-    NearClipPlane: 0.1
+    NearClipPlane: 0.01
     FarClipPlane: 2000
     Dutch: 0
     LensShift: {x: 0, y: 0}
@@ -703,6 +703,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inputReader: {fileID: 1724036687}
   freeLookVCam: {fileID: 1502793901}
+  cameraSensitivity: 7
 --- !u!4 &526256411
 Transform:
   m_ObjectHideFlags: 0
@@ -1415,7 +1416,7 @@ MonoBehaviour:
   m_Lens:
     FieldOfView: 40
     OrthographicSize: 10
-    NearClipPlane: 0.1
+    NearClipPlane: 0.01
     FarClipPlane: 2000
     Dutch: 0
     LensShift: {x: 0, y: 0}
@@ -1771,6 +1772,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1502793902}
   - component: {fileID: 1502793901}
+  - component: {fileID: 1502793903}
   m_Layer: 0
   m_Name: CM FreeLook1
   m_TagString: Untagged
@@ -1802,7 +1804,7 @@ MonoBehaviour:
   m_Lens:
     FieldOfView: 40
     OrthographicSize: 10
-    NearClipPlane: 0.1
+    NearClipPlane: 0.01
     FarClipPlane: 2000
     Dutch: 0
     LensShift: {x: 0, y: 0}
@@ -1896,6 +1898,36 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1502793903
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1502793900}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e501d18bb52cf8c40b1853ca4904654f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_CollideAgainst:
+    serializedVersion: 2
+    m_Bits: 1
+  m_IgnoreTag: Player
+  m_TransparentLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_MinimumDistanceFromTarget: 0.84
+  m_AvoidObstacles: 1
+  m_DistanceLimit: 200
+  m_MinimumOcclusionTime: 0
+  m_CameraRadius: 4.58
+  m_Strategy: 0
+  m_MaximumEffort: 4
+  m_SmoothingTime: 1.28
+  m_Damping: 3.3
+  m_DampingWhenOccluded: 4.8
+  m_OptimalTargetDistance: 0
 --- !u!1 &1523164311
 GameObject:
   m_ObjectHideFlags: 0
@@ -2560,7 +2592,7 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.1
+  near clip plane: 0.01
   far clip plane: 2000
   field of view: 40
   orthographic: 0
@@ -2917,7 +2949,7 @@ MonoBehaviour:
   m_Lens:
     FieldOfView: 40
     OrthographicSize: 10
-    NearClipPlane: 0.1
+    NearClipPlane: 0.01
     FarClipPlane: 2000
     Dutch: 0
     LensShift: {x: 0, y: 0}
@@ -3160,6 +3192,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Pig
+      objectReference: {fileID: 0}
+    - target: {fileID: 3341179906418240709, guid: 0fa393e1e37bc9e4e829c25a9452bcd3,
+        type: 3}
+      propertyPath: m_TagString
+      value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 3341179906418240731, guid: 0fa393e1e37bc9e4e829c25a9452bcd3,
         type: 3}
