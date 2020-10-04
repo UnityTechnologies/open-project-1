@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class dialoguetriger : MonoBehaviour
+public class DialogueTrigger : MonoBehaviour
 {
     //  [Tooltip("leave empty if using distancetrigger")] [SerializeField] private   bool usingcollidertrigger;
     //  [Tooltip("leave at 0 if using colidertrigger")] [SerializeField] private float distancetrigger;
