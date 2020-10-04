@@ -17,7 +17,7 @@ jobs:
 
       - uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: '4.8.x'
+          dotnet-version: '4.x'
 
       - run: dotnet tool install -g dotnet-format
       - run: dotnet-format format --fix-style
