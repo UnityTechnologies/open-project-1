@@ -14,6 +14,11 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+
+      - uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '4.8.x'
+
       - run: dotnet tool install -g dotnet-format
       - run: dotnet-format format --fix-style
 
