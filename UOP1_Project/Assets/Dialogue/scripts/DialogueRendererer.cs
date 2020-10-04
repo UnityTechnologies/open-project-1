@@ -18,7 +18,7 @@ public class DialogueRendererer : MonoBehaviour
     }
 
     
- public   IEnumerator NewChat(conversation conversation)
+ public   IEnumerator NewChat(Conversation conversation)
     {
         if(!conversation.triggered_once ){
 

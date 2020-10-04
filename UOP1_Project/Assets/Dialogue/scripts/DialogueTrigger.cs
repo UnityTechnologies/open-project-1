@@ -6,7 +6,7 @@ public class DialogueTrigger : MonoBehaviour
 {
     //  [Tooltip("leave empty if using distancetrigger")] [SerializeField] private   bool usingcollidertrigger;
     //  [Tooltip("leave at 0 if using colidertrigger")] [SerializeField] private float distancetrigger;
-    [SerializeField] public conversation Conversation;
+    [SerializeField] public Conversation Conversation;
     // Start is called before the first frame update
     void Start()
     {
