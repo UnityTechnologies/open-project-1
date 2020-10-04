@@ -101,7 +101,7 @@ public class Character : MonoBehaviour
                 turnSmoothTime);
         }
     }
-    
+
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
         hitNormal = hit.normal;
@@ -163,4 +163,3 @@ public class Character : MonoBehaviour
         }
     }
 }
-

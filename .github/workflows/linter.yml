@@ -1,0 +1,28 @@
+name: Linter
+
+# Run this workflow every time a new commit pushed to your repository
+on: push
+
+jobs:
+  # Set the job key. The key is displayed as the job name
+  # when a job name is not provided
+  super-lint:
+    # Name the Job
+    name: Lint code base
+    # Set the type of machine to run on
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - run: git pull
+      - run: dotnet tool install -g dotnet-format
+      - run: dotnet-format -f UOP1_Project/Assets/Scripts -v d
+      - name: Commit changes
+        uses: EndBug/add-and-commit@v5
+        with:
+          author_name: github-actions[bot]
+          author_email: 41898282+github-actions[bot]@users.noreply.github.com
+          message: "Automated dotnet-format update Co-authored-by ${{ github.event.comment.user.login }} <${{ github.event.comment.user.id }}+${{ github.event.comment.user.login }}@users.noreply.github.com>"
+          add: "*.cs"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
