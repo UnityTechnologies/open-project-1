@@ -13,6 +13,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: Add dotnet-format problem matcher
+        uses: xt0rted/dotnet-format-problem-matcher@v1
+
+      - name: Restore dotnet tools
+        uses: xt0rted/dotnet-tool-restore@v1
+
       - name: dotnet-format
         # You may pin to the exact commit or the version.
         # uses: xt0rted/dotnet-format@b5de3d03ea0f2d689f6e2949931ab50f4d2cd3e3
