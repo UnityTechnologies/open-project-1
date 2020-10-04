@@ -1,0 +1,28 @@
+name: Linter
+
+# Run this workflow every time a new commit pushed to your repository
+on: push
+
+jobs:
+  # Set the job key. The key is displayed as the job name
+  # when a job name is not provided
+  super-lint:
+    # Name the Job
+    name: Lint code base
+    # Set the type of machine to run on
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: dotnet-format
+        # You may pin to the exact commit or the version.
+        # uses: xt0rted/dotnet-format@b5de3d03ea0f2d689f6e2949931ab50f4d2cd3e3
+        uses: xt0rted/dotnet-format@v1.0.1
+        with:
+          # The GITHUB_TOKEN secret
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          # The primary action dotnet-format should perform (check for errors or apply fixes)
+          # action: # optional, default is check
+          # Only changed files in the current pull request should be formatted
+          only-changed-files: false # optional
+          # The job should fail if there's a formatting error
+          fail-fast: false # optional, default is true
