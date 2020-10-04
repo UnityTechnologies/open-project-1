@@ -24,7 +24,8 @@ public class Character : MonoBehaviour
     private float verticalMovement = 0f; //Represents how much a player will move vertically in a frame. Affected by gravity * gravityContributionMultiplier
     private Vector3 inputVector; //Initial input horizontal movement (y == 0f)
     private Vector3 movementVector; //Final movement vector
-    private float rotationThreshold = .02f; // Used to prevent NaN result causing rotation in a non direction
+
+    private const float ROTATION_TRESHOLD = .02f; // Used to prevent NaN result causing rotation in a non direction
 
     private void Awake()
     {
@@ -91,7 +92,7 @@ public class Character : MonoBehaviour
 
         //Rotate to the movement direction
         movementVector.y = 0f;
-        if (movementVector.sqrMagnitude >= rotationThreshold)
+        if (movementVector.sqrMagnitude >= ROTATION_TRESHOLD)
         {
             float targetRotation = Mathf.Atan2(movementVector.x, movementVector.z) * Mathf.Rad2Deg;
             transform.eulerAngles = Vector3.up * Mathf.SmoothDampAngle(
