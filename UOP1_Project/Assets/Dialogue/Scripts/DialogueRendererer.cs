@@ -5,22 +5,23 @@ using UnityEngine.UI;
 
 public class DialogueRendererer : MonoBehaviour
 {
-    
-  [SerializeField]  private TextMeshProUGUI Text;
- public int SentenceCount;
+
+    [SerializeField] private TextMeshProUGUI Text;
+    public int SentenceCount;
     private float letterdelay = 0.2f;
     private string displayed;
- 
+
     void Start()
     {
-       
-           Text = gameObject.GetComponent<TextMeshProUGUI>();
+
+        Text = gameObject.GetComponent<TextMeshProUGUI>();
     }
 
-    
- public   IEnumerator NewChat(conversation conversation)
+
+    public IEnumerator NewChat(conversation conversation)
     {
-        if(!conversation.triggered_once ){
+        if (!conversation.triggered_once)
+        {
 
             for (int i = 0; i < conversation.lines.Length; i++)
             {
@@ -38,7 +39,7 @@ public class DialogueRendererer : MonoBehaviour
 
                 for (int t = 0; t < conversation.lines[SentenceCount].text.Length; t++)
                 {
-                  
+
                     displayed += conversation.lines[SentenceCount].text[t];
                     Text.text = displayed;
                     yield return new WaitForSeconds(letterdelay);
