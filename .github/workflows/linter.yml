@@ -16,7 +16,6 @@ jobs:
       - uses: actions/checkout@v2
       - uses: xt0rted/dotnet-format-problem-matcher@v1
       - uses: xt0rted/dotnet-tool-restore@v1
-      - uses: xt0rted/dotnet-format@v1.0.1
       - run: dotnet-format format "./UOP1_Project/Assets/Scripts" -f --fix-style
 
       - name: Commit files
