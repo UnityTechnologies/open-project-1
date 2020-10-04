@@ -15,7 +15,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: dotnet tool install -g dotnet-format
-      - run: dotnet-format format "./UOP1_Project/Assets/Scripts" -f --fix-style
+      - run: dotnet-format format --fix-style
 
       - name: Commit files
         if: steps.command.outputs.command-name && steps.command.outputs.command-arguments == 'format' && steps.format.outputs.has-changes == 'true'
