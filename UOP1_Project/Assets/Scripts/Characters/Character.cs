@@ -88,23 +88,8 @@ public class Character : MonoBehaviour
         movementVector.y = verticalMovement;
         characterController.Move(movementVector * Time.deltaTime);
 
-        if (characterController.isGrounded) {
-            //Check if underneath the character is stable
-            isUnderneathStable = false; //By default, underneath is not stable
-            RaycastHit hit;
-            Ray ray = new Ray(transform.position + characterController.center, Vector3.down);
-            if (Physics.Raycast(ray, out hit, Mathf.Infinity)) {
-                float underneathSlopeAngle = Vector3.Angle(transform.up, hit.normal);
-                if (underneathSlopeAngle <= characterController.slopeLimit) {
-                    //We found a stable underneath
-                    isUnderneathStable = true;
-                } else {
-                    //Add a slide movement along the underneath slope direction
-                    Vector3 underneathSlopeDirection = Vector3.Cross(hit.normal, Vector3.Cross(hit.normal, Vector3.up));
-                    characterController.Move(underneathSlopeDirection * gravityMultiplier * Time.deltaTime);
-                }
-            }
-        }
+        //Check if underneath is stable and slide accordingly
+        CheckUnderneathStabilityAndSlide();
 
         //Rotate to the movement direction
         movementVector.y = 0f;
@@ -139,6 +124,28 @@ public class Character : MonoBehaviour
                 gravityContributionMultiplier = 1f;
 
                 verticalMovement = 0f;
+            }
+        }
+    }
+
+    private void CheckUnderneathStabilityAndSlide()
+    {
+        isUnderneathStable = false; //By default, underneath is not stable
+
+        if (characterController.isGrounded) {
+            //Perform a downward raycast to check underneath the character
+            RaycastHit hit;
+            Ray ray = new Ray(transform.position + characterController.center, Vector3.down);
+            if (Physics.Raycast(ray, out hit, Mathf.Infinity)) {
+                float underneathSlopeAngle = Vector3.Angle(transform.up, hit.normal);
+                if (underneathSlopeAngle <= characterController.slopeLimit) {
+                    //We found a stable underneath
+                    isUnderneathStable = true;
+                } else {
+                    //Add a slide movement along the underneath slope direction
+                    Vector3 underneathSlopeDirection = Vector3.Cross(hit.normal, Vector3.Cross(hit.normal, Vector3.up)).normalized;
+                    characterController.Move(underneathSlopeDirection * gravityMultiplier * Time.deltaTime);
+                }
             }
         }
     }
