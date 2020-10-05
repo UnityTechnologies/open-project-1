@@ -16,6 +16,8 @@ public class Character : MonoBehaviour
     [Tooltip("The maximum speed reached when falling (in units/frame)")] public float maxFallSpeed = 50f;
     [Tooltip("Each frame while jumping, gravity will be multiplied by this amount in an attempt to 'cancel it' (= jump higher)")] public float gravityDivider = .6f;
     [Tooltip("Adjust the friction of the slope")] public float slideFriction = 0.3f;
+    [Tooltip("Starting vertical movement when falling from a platform")] public float fallingVerticalMovement = -5f;
+
 
     private float gravityContributionMultiplier = 0f; //The factor which determines how much gravity is affecting verticalMovement
     private bool isJumping = false; //If true, a jump is in effect and the player is holding the jump button
@@ -27,6 +29,8 @@ public class Character : MonoBehaviour
     private bool shouldSlide; // Should player slide?
     private Vector3 inputVector; //Initial input horizontal movement (y == 0f)
     private Vector3 movementVector; //Final movement vector
+
+    private const float ROTATION_TRESHOLD = .02f; // Used to prevent NaN result causing rotation in a non direction
 
     private void Awake()
     {
@@ -77,7 +81,7 @@ public class Character : MonoBehaviour
             //-5f is a good value to make it so the player also sticks to uneven terrain/bumps without floating
             if (!isJumping)
             {
-                verticalMovement = -5f;
+                verticalMovement = fallingVerticalMovement;
                 gravityContributionMultiplier = 0f;
             }
         }
@@ -87,7 +91,7 @@ public class Character : MonoBehaviour
         characterController.Move(movementVector * Time.deltaTime);
         //Rotate to the movement direction
         movementVector.y = 0f;
-        if (movementVector.sqrMagnitude >= .02f)
+        if (movementVector.sqrMagnitude >= ROTATION_TRESHOLD)
         {
             float targetRotation = Mathf.Atan2(movementVector.x, movementVector.z) * Mathf.Rad2Deg;
             transform.eulerAngles = Vector3.up * Mathf.SmoothDampAngle(
