@@ -15,6 +15,7 @@ public class Character : MonoBehaviour
     [Tooltip("Represents how fast gravityContributionMultiplier will go back to 1f. The higher, the faster")] public float gravityComebackMultiplier = 15f;
     [Tooltip("The maximum speed reached when falling (in units/frame)")] public float maxFallSpeed = 50f;
     [Tooltip("Each frame while jumping, gravity will be multiplied by this amount in an attempt to 'cancel it' (= jump higher)")] public float gravityDivider = .6f;
+    [Tooltip("Starting vertical movement when falling from a platform")] public float fallingVerticalMovement = -5f;
     [Tooltip("Friction that will be applied when there is a slide movement")] public float slideFriction = .25f;
 
     private float gravityContributionMultiplier = 0f; //The factor which determines how much gravity is affecting verticalMovement
@@ -25,6 +26,8 @@ public class Character : MonoBehaviour
     private Vector3 inputVector; //Initial input horizontal movement (y == 0f)
     private Vector3 movementVector; //Final movement vector
     private bool isUnderneathStable = false; //If true, it is stable enough to be able to jump and to not slide if there is no input
+
+    private const float ROTATION_TRESHOLD = .02f; // Used to prevent NaN result causing rotation in a non direction
 
     private void Awake()
     {
@@ -80,7 +83,7 @@ public class Character : MonoBehaviour
             //-5f is a good value to make it so the player also sticks to uneven terrain/bumps without floating.
             if (!isJumping)
             {
-                verticalMovement = -5f;
+                verticalMovement = fallingVerticalMovement;
                 gravityContributionMultiplier = 0f;
             }
         }
@@ -94,7 +97,7 @@ public class Character : MonoBehaviour
 
         //Rotate to the movement direction
         movementVector.y = 0f;
-        if (movementVector.sqrMagnitude >= .02f)
+        if (movementVector.sqrMagnitude >= ROTATION_TRESHOLD)
         {
             float targetRotation = Mathf.Atan2(movementVector.x, movementVector.z) * Mathf.Rad2Deg;
             transform.eulerAngles = Vector3.up * Mathf.SmoothDampAngle(
