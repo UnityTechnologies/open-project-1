@@ -4,6 +4,8 @@ namespace Assets.Scripts.Characters
 {
     public class Character : MonoBehaviour
     {
+        [Tooltip("Starting vertical movement when falling from a platform")]
+        public float fallingVerticalMovement = -5f;
         [Tooltip("Horizontal XZ plane speed multiplier")]
         public float speed = 8f;
         [Tooltip("Smoothing for rotating the character to their movement direction")]
@@ -20,6 +22,11 @@ namespace Assets.Scripts.Characters
         public float maxFallSpeed = 50f;
         [Tooltip("Each frame while jumping, gravity will be multiplied by this amount in an attempt to 'cancel it' (= jump higher)")]
         public float gravityDivider = .6f;
+
+        /// <summary>
+        /// Used to prevent NaN result causing rotation in a non direction.
+        /// </summary>
+        private const float ROTATION_TRESHOLD = .02f;
 
         private CharacterController characterController;
 
@@ -121,7 +128,6 @@ namespace Assets.Scripts.Characters
                 // The character is either jumping or in freefall, so gravity will add up
                 gravityContributionMultiplier = Mathf.Clamp01(gravityContributionMultiplier);
                 verticalMovement += Physics.gravity.y * gravityMultiplier * Time.deltaTime * gravityContributionMultiplier; // Add gravity contribution
-
                                                                                                                             // Note that even if it's added, the above value is negative due to Physics.gravity.y
 
                 // Cap the maximum so the player doesn't reach incredible speeds when freefalling from high positions
@@ -138,7 +144,7 @@ namespace Assets.Scripts.Characters
                 // -5f is a good value to make it so the player also sticks to uneven terrain/bumps without floating.
                 if (!isJumping)
                 {
-                    verticalMovement = -5f;
+                    verticalMovement = fallingVerticalMovement;
                     gravityContributionMultiplier = 0f;
                 }
             }
@@ -149,7 +155,7 @@ namespace Assets.Scripts.Characters
 
             // Rotate to the movement direction
             movementVector.y = 0f;
-            if (movementVector.sqrMagnitude >= .02f)
+            if (movementVector.sqrMagnitude >= ROTATION_TRESHOLD)
             {
                 float targetRotation = Mathf.Atan2(movementVector.x, movementVector.z) * Mathf.Rad2Deg;
                 transform.eulerAngles = Vector3.up * Mathf.SmoothDampAngle(

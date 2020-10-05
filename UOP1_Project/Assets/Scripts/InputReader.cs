@@ -4,7 +4,8 @@ using UnityEngine.InputSystem;
 
 namespace Assets.Scripts
 {
-    public class InputReader : MonoBehaviour, GameInput.IGameplayActions
+    [CreateAssetMenu(fileName = "Input Reader", menuName = "Game/Input Reader")]
+    public class InputReader : ScriptableObject, GameInput.IGameplayActions
     {
         public UnityAction jumpEvent;
         public UnityAction jumpCanceledEvent;
