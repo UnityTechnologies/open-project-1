@@ -15,6 +15,7 @@ public class Character : MonoBehaviour
     [Tooltip("Represents how fast gravityContributionMultiplier will go back to 1f. The higher, the faster")] public float gravityComebackMultiplier = 15f;
     [Tooltip("The maximum speed reached when falling (in units/frame)")] public float maxFallSpeed = 50f;
     [Tooltip("Each frame while jumping, gravity will be multiplied by this amount in an attempt to 'cancel it' (= jump higher)")] public float gravityDivider = .6f;
+    [Tooltip("Friction that will be applied when there is a slide movement")] public float slideFriction = .25f;
 
     private float gravityContributionMultiplier = 0f; //The factor which determines how much gravity is affecting verticalMovement
     private bool isJumping = false; //If true, a jump is in effect and the player is holding the jump button
@@ -130,22 +131,29 @@ public class Character : MonoBehaviour
 
     private void CheckUnderneathStabilityAndSlide()
     {
-        isUnderneathStable = false; //By default, underneath is not stable
+        isUnderneathStable = true;
 
         if (characterController.isGrounded) {
             //Perform a downward raycast to check underneath the character
-            RaycastHit hit;
             Ray ray = new Ray(transform.position + characterController.center, Vector3.down);
-            if (Physics.Raycast(ray, out hit, Mathf.Infinity)) {
+            //if (Physics.Raycast(ray, out hit, Mathf.Infinity)) {
+            var hits = Physics.SphereCastAll(ray, characterController.radius, characterController.height / 2 + characterController.skinWidth);
+            Vector3 underneathAllSlopesDirection = Vector3.zero;
+            foreach (var hit in hits) { 
                 float underneathSlopeAngle = Vector3.Angle(transform.up, hit.normal);
-                if (underneathSlopeAngle <= characterController.slopeLimit) {
-                    //We found a stable underneath
-                    isUnderneathStable = true;
-                } else {
+                if (underneathSlopeAngle > characterController.slopeLimit) {
                     //Add a slide movement along the underneath slope direction
-                    Vector3 underneathSlopeDirection = Vector3.Cross(hit.normal, Vector3.Cross(hit.normal, Vector3.up)).normalized;
-                    characterController.Move(underneathSlopeDirection * gravityMultiplier * Time.deltaTime);
+                    underneathAllSlopesDirection += Vector3.Cross(hit.normal, Vector3.Cross(hit.normal, Vector3.up)).normalized;
                 }
+            }
+
+            if (underneathAllSlopesDirection != Vector3.zero) {
+                //Project the gravity on slopes direction
+                //The character will fall faster if the total slopes angle is steep
+                float gravityMagnitude = Vector3.Dot(-Physics.gravity.y * gravityMultiplier * Vector3.down, underneathAllSlopesDirection);
+                //Move along every unstable slopes direction
+                characterController.Move(underneathAllSlopesDirection * gravityMagnitude * slideFriction * Time.deltaTime);
+                isUnderneathStable = false;
             }
         }
     }
