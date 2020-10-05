@@ -24,7 +24,7 @@ public class Character : MonoBehaviour
     private Vector3 inputVector; //Initial input horizontal movement (y == 0f)
     private Vector3 movementVector; //Final movement vector
     private bool isAboveSlopeLimit = false; // Used to check if current ground is above Slope Limit set on Character Controller
-    public bool isSliding = false; // Detects if character is currently sliding down a slope
+    private bool isSliding = false; // Detects if character is currently sliding down a slope
     private Vector3 slideMovement; //Movement direction of character sliding down a slope
 
     private void Awake()
