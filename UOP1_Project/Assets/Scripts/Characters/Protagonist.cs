@@ -1,71 +1,87 @@
 ﻿using UnityEngine;
 
-public class Protagonist : MonoBehaviour
+namespace Assets.Scripts.Characters
 {
-    public InputReader inputReader;
-    public Transform gameplayCamera;
-
-    private Character charScript;
-    private Vector2 previousMovementInput;
-    private bool controlsEnabled = true;
-
-    private void Awake()
+    public class Protagonist : MonoBehaviour
     {
-        charScript = GetComponent<Character>();
-    }
+        public InputReader inputReader;
+        public Transform gameplayCamera;
 
-    //Adds listeners for events being triggered in the InputReader script
-    private void OnEnable()
-    {
-        inputReader.jumpEvent += OnJumpInitiated;
-        inputReader.jumpCanceledEvent += OnJumpCanceled;
-        inputReader.moveEvent += OnMove;
-        //...
-    }
+        private readonly bool controlsEnabled = true;
+        private Character charScript;
+        private Vector2 previousMovementInput;
 
-    //Removes all listeners to the events coming from the InputReader script
-    private void OnDisable()
-    {
-        inputReader.jumpEvent -= OnJumpInitiated;
-        inputReader.jumpCanceledEvent -= OnJumpCanceled;
-        inputReader.moveEvent -= OnMove;
-        //...
-    }
+        private void Awake()
+        {
+            charScript = GetComponent<Character>();
+        }
 
-    private void Update()
-    {
-        RecalculateMovement();
-    }
+        // Adds listeners for events being triggered in the InputReader script
+        private void OnEnable()
+        {
+            inputReader.jumpEvent += OnJumpInitiated;
+            inputReader.jumpCanceledEvent += OnJumpCanceled;
+            inputReader.moveEvent += OnMove;
 
-    private void RecalculateMovement()
-    {
-        //Get the two axes from the camera and flatten them on the XZ plane
-        Vector3 cameraForward = gameplayCamera.forward;
-        cameraForward.y = 0f;
-        Vector3 cameraRight = gameplayCamera.right;
-        cameraRight.y = 0f;
+            // ...
+        }
 
-        //Use the two axes, modulated by the corresponding inputs, and construct the final vector
-        Vector3 adjustedMovement = cameraRight.normalized * previousMovementInput.x +
-            cameraForward.normalized * previousMovementInput.y;
+        // Removes all listeners to the events coming from the InputReader script
+        private void OnDisable()
+        {
+            inputReader.jumpEvent -= OnJumpInitiated;
+            inputReader.jumpCanceledEvent -= OnJumpCanceled;
+            inputReader.moveEvent -= OnMove;
 
-        charScript.Move(Vector3.ClampMagnitude(adjustedMovement, 1f));
-    }
+            // ...
+        }
 
-    //---- EVENT LISTENERS ----
+        private void Update()
+        {
+            RecalculateMovement();
+        }
 
-    private void OnMove(Vector2 movement)
-    {
-        if (controlsEnabled) previousMovementInput = movement;
-    }
+        private void RecalculateMovement()
+        {
+            // Get the two axes from the camera and flatten them on the XZ plane
+            Vector3 cameraForward = gameplayCamera.forward;
+            cameraForward.y = 0f;
+            Vector3 cameraRight = gameplayCamera.right;
+            cameraRight.y = 0f;
 
-    private void OnJumpInitiated()
-    {
-        if (controlsEnabled) charScript.Jump();
-    }
+            // Use the two axes, modulated by the corresponding inputs, and construct the final vector
+            Vector3 adjustedMovement = (cameraRight.normalized * previousMovementInput.x) +
+                (cameraForward.normalized * previousMovementInput.y);
 
-    private void OnJumpCanceled()
-    {
-        if (controlsEnabled) charScript.CancelJump();
+            charScript.Move(Vector3.ClampMagnitude(adjustedMovement, 1f));
+        }
+
+        #region  EVENT LISTENERS
+
+        private void OnMove(Vector2 movement)
+        {
+            if (controlsEnabled)
+            {
+                previousMovementInput = movement;
+            }
+        }
+
+        private void OnJumpInitiated()
+        {
+            if (controlsEnabled)
+            {
+                charScript.Jump();
+            }
+        }
+
+        private void OnJumpCanceled()
+        {
+            if (controlsEnabled)
+            {
+                charScript.CancelJump();
+            }
+        }
+
+        #endregion
     }
 }

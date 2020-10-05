@@ -1,149 +1,186 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class Character : MonoBehaviour
+namespace Assets.Scripts.Characters
 {
-    private CharacterController characterController;
-
-    [Tooltip("Horizontal XZ plane speed multiplier")] public float speed = 8f;
-    [Tooltip("Smoothing for rotating the character to their movement direction")] public float turnSmoothTime = 0.2f;
-    [Tooltip("General multiplier for gravity (affects jump and freefall)")] public float gravityMultiplier = 5f;
-    [Tooltip("The initial upwards push when pressing jump. This is injected into verticalMovement, and gradually cancelled by gravity")] public float initialJumpForce = 10f;
-    [Tooltip("How long can the player hold the jump button")] public float jumpInputDuration = .4f;
-    [Tooltip("Represents how fast gravityContributionMultiplier will go back to 1f. The higher, the faster")] public float gravityComebackMultiplier = 15f;
-    [Tooltip("The maximum speed reached when falling (in units/frame)")] public float maxFallSpeed = 50f;
-    [Tooltip("Each frame while jumping, gravity will be multiplied by this amount in an attempt to 'cancel it' (= jump higher)")] public float gravityDivider = .6f;
-
-    private float gravityContributionMultiplier = 0f; //The factor which determines how much gravity is affecting verticalMovement
-    private bool isJumping = false; //If true, a jump is in effect and the player is holding the jump button
-    private float jumpBeginTime = -Mathf.Infinity; //Time of the last jump
-    private float turnSmoothSpeed; //Used by Mathf.SmoothDampAngle to smoothly rotate the character to their movement direction
-    private float verticalMovement = 0f; //Represents how much a player will move vertically in a frame. Affected by gravity * gravityContributionMultiplier
-    private Vector3 inputVector; //Initial input horizontal movement (y == 0f)
-    private Vector3 movementVector; //Final movement vector
-
-    private void Awake()
+    public class Character : MonoBehaviour
     {
-        characterController = GetComponent<CharacterController>();
-    }
+        [Tooltip("Horizontal XZ plane speed multiplier")]
+        public float speed = 8f;
+        [Tooltip("Smoothing for rotating the character to their movement direction")]
+        public float turnSmoothTime = 0.2f;
+        [Tooltip("General multiplier for gravity (affects jump and freefall)")]
+        public float gravityMultiplier = 5f;
+        [Tooltip("The initial upwards push when pressing jump. This is injected into verticalMovement, and gradually cancelled by gravity")]
+        public float initialJumpForce = 10f;
+        [Tooltip("How long can the player hold the jump button")]
+        public float jumpInputDuration = .4f;
+        [Tooltip("Represents how fast gravityContributionMultiplier will go back to 1f. The higher, the faster")]
+        public float gravityComebackMultiplier = 15f;
+        [Tooltip("The maximum speed reached when falling (in units/frame)")]
+        public float maxFallSpeed = 50f;
+        [Tooltip("Each frame while jumping, gravity will be multiplied by this amount in an attempt to 'cancel it' (= jump higher)")]
+        public float gravityDivider = .6f;
 
-    private void Update()
-    {
-        //Raises the multiplier to how much gravity will affect vertical movement when in mid-air
-        //This is 0f at the beginning of a jump and will raise to maximum 1f
-        if (!characterController.isGrounded)
+        private CharacterController characterController;
+
+        /// <summary>
+        /// The factor which determines how much gravity is affecting verticalMovement.
+        /// </summary>
+        private float gravityContributionMultiplier = 0f;
+
+        /// <summary>
+        /// If true, a jump is in effect and the player is holding the jump button.
+        /// </summary>
+        private bool isJumping = false;
+
+        /// <summary>
+        /// Time of the last jump.
+        /// </summary>
+        private float jumpBeginTime = -Mathf.Infinity;
+
+        /// <summary>
+        /// Used by Mathf.SmoothDampAngle to smoothly rotate the character to their movement direction.
+        /// </summary>
+        private float turnSmoothSpeed;
+
+        /// <summary>
+        /// Represents how much a player will move vertically in a frame. Affected by gravity * gravityContributionMultiplier.
+        /// </summary>
+        private float verticalMovement = 0f;
+
+        /// <summary>
+        /// Initial input horizontal movement (y == 0f).
+        /// </summary>
+        private Vector3 inputVector;
+
+        /// <summary>
+        /// The final movement vector.
+        /// </summary>
+        private Vector3 movementVector;
+
+        #region COMMANDS ISSUED BY OTHER SCRIPTS
+
+        public void Move(Vector3 movement)
         {
-            gravityContributionMultiplier += Time.deltaTime * gravityComebackMultiplier;
+            inputVector = movement;
         }
 
-        //Reduce the influence of the gravity while holding the Jump button
-        if (isJumping)
+        public void Jump()
         {
-            //The player can only hold the Jump button for so long
-            if (Time.time >= jumpBeginTime + jumpInputDuration)
+            if (characterController.isGrounded)
             {
-                isJumping = false;
-                gravityContributionMultiplier = 1f; //Gravity influence is reset to full effect
-            }
-            else
-            {
-                gravityContributionMultiplier *= gravityDivider; //Reduce the gravity effect
-            }
-        }
-
-        //Calculate the final verticalMovement
-        if (!characterController.isGrounded)
-        {
-            //Less control in mid-air, conserving momentum from previous frame
-            movementVector = inputVector * speed;
-
-            //The character is either jumping or in freefall, so gravity will add up
-            gravityContributionMultiplier = Mathf.Clamp01(gravityContributionMultiplier);
-            verticalMovement += Physics.gravity.y * gravityMultiplier * Time.deltaTime * gravityContributionMultiplier; //Add gravity contribution
-                                                                                                                        //Note that even if it's added, the above value is negative due to Physics.gravity.y
-
-            //Cap the maximum so the player doesn't reach incredible speeds when freefalling from high positions
-            verticalMovement = Mathf.Clamp(verticalMovement, -maxFallSpeed, 100f);
-        }
-        else
-        {
-            //Full speed ground movement
-            movementVector = inputVector * speed;
-
-            //Resets the verticalMovement while on the ground,
-            //so that regardless of whether the player landed from a high fall or not,
-            //if they drop off a platform they will always start with the same verticalMovement.
-            //-5f is a good value to make it so the player also sticks to uneven terrain/bumps without floating.
-            if (!isJumping)
-            {
-                verticalMovement = -5f;
+                isJumping = true;
+                jumpBeginTime = Time.time;
+                verticalMovement = initialJumpForce; // This is the only place where verticalMovement is set to a positive value
                 gravityContributionMultiplier = 0f;
             }
         }
 
-        //Apply the result and move the character in space
-        movementVector.y = verticalMovement;
-        characterController.Move(movementVector * Time.deltaTime);
-
-        //Rotate to the movement direction
-        movementVector.y = 0f;
-        if (movementVector.sqrMagnitude >= .02f)
+        public void CancelJump()
         {
-            float targetRotation = Mathf.Atan2(movementVector.x, movementVector.z) * Mathf.Rad2Deg;
-            transform.eulerAngles = Vector3.up * Mathf.SmoothDampAngle(
-                transform.eulerAngles.y,
-                targetRotation,
-                ref turnSmoothSpeed,
-                turnSmoothTime);
+            isJumping = false; // This will stop the reduction to the gravity, which will then quickly pull down the character
         }
-    }
-    
-    private void OnControllerColliderHit(ControllerColliderHit hit)
-    {
-        bool isMovingUpwards = verticalMovement > 0f;
 
-        if (isMovingUpwards)
+        #endregion
+
+        private void Awake()
         {
-            // Making sure the collision is near the top of the head
-            float permittedDistance = characterController.radius / 2f;
-            float topPositionY = transform.position.y + characterController.height;
-            float distance = Mathf.Abs(hit.point.y - topPositionY);
+            characterController = GetComponent<CharacterController>();
+        }
 
-            if (distance <= permittedDistance)
+        private void Update()
+        {
+            // Raises the multiplier to how much gravity will affect vertical movement when in mid-air
+            // This is 0f at the beginning of a jump and will raise to maximum 1f
+            if (!characterController.isGrounded)
             {
-                // Stopping any upwards movement
-                // and having the player fall back down
+                gravityContributionMultiplier += Time.deltaTime * gravityComebackMultiplier;
+            }
 
-                isJumping = false;
-                gravityContributionMultiplier = 1f;
+            // Reduce the influence of the gravity while holding the Jump button
+            if (isJumping)
+            {
+                // The player can only hold the Jump button for so long
+                if (Time.time >= jumpBeginTime + jumpInputDuration)
+                {
+                    isJumping = false;
+                    gravityContributionMultiplier = 1f; // Gravity influence is reset to full effect
+                }
+                else
+                {
+                    gravityContributionMultiplier *= gravityDivider; // Reduce the gravity effect
+                }
+            }
 
-                verticalMovement = 0f;
+            // Calculate the final verticalMovement
+            if (!characterController.isGrounded)
+            {
+                // Less control in mid-air, conserving momentum from previous frame
+                movementVector = inputVector * speed;
+
+                // The character is either jumping or in freefall, so gravity will add up
+                gravityContributionMultiplier = Mathf.Clamp01(gravityContributionMultiplier);
+                verticalMovement += Physics.gravity.y * gravityMultiplier * Time.deltaTime * gravityContributionMultiplier; // Add gravity contribution
+
+                                                                                                                            // Note that even if it's added, the above value is negative due to Physics.gravity.y
+
+                // Cap the maximum so the player doesn't reach incredible speeds when freefalling from high positions
+                verticalMovement = Mathf.Clamp(verticalMovement, -maxFallSpeed, 100f);
+            }
+            else
+            {
+                // Full speed ground movement
+                movementVector = inputVector * speed;
+
+                // Resets the verticalMovement while on the ground,
+                // so that regardless of whether the player landed from a high fall or not,
+                // if they drop off a platform they will always start with the same verticalMovement.
+                // -5f is a good value to make it so the player also sticks to uneven terrain/bumps without floating.
+                if (!isJumping)
+                {
+                    verticalMovement = -5f;
+                    gravityContributionMultiplier = 0f;
+                }
+            }
+
+            // Apply the result and move the character in space
+            movementVector.y = verticalMovement;
+            characterController.Move(movementVector * Time.deltaTime);
+
+            // Rotate to the movement direction
+            movementVector.y = 0f;
+            if (movementVector.sqrMagnitude >= .02f)
+            {
+                float targetRotation = Mathf.Atan2(movementVector.x, movementVector.z) * Mathf.Rad2Deg;
+                transform.eulerAngles = Vector3.up * Mathf.SmoothDampAngle(
+                    transform.eulerAngles.y,
+                    targetRotation,
+                    ref turnSmoothSpeed,
+                    turnSmoothTime);
             }
         }
-    }
 
-    //---- COMMANDS ISSUED BY OTHER SCRIPTS ----
-
-    public void Move(Vector3 movement)
-    {
-        inputVector = movement;
-    }
-
-    public void Jump()
-    {
-        if (characterController.isGrounded)
+        private void OnControllerColliderHit(ControllerColliderHit hit)
         {
-            isJumping = true;
-            jumpBeginTime = Time.time;
-            verticalMovement = initialJumpForce; //This is the only place where verticalMovement is set to a positive value
-            gravityContributionMultiplier = 0f;
-        }
-    }
+            bool isMovingUpwards = verticalMovement > 0f;
 
-    public void CancelJump()
-    {
-        isJumping = false; //This will stop the reduction to the gravity, which will then quickly pull down the character
+            if (isMovingUpwards)
+            {
+                // Making sure the collision is near the top of the head
+                float permittedDistance = characterController.radius / 2f;
+                float topPositionY = transform.position.y + characterController.height;
+                float distance = Mathf.Abs(hit.point.y - topPositionY);
+
+                if (distance <= permittedDistance)
+                {
+                    // Stopping any upwards movement
+                    // and having the player fall back down
+                    isJumping = false;
+                    gravityContributionMultiplier = 1f;
+
+                    verticalMovement = 0f;
+                }
+            }
+        }
     }
 }
