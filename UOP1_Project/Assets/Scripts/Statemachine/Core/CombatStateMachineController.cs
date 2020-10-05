@@ -42,11 +42,7 @@ namespace CombatStatemachine
         }
         private void OnDisable()
         {
-           
-            m_currentState.OnStateDisable(this);
-
             CleanupHandlers();
-
         }
         private void OnControllerColliderHit(ControllerColliderHit hit)
         {

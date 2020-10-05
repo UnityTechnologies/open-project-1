@@ -27,7 +27,6 @@ namespace CombatStatemachine
             m_rootElement.Add(new ReorderableListViewElement(m_obj, m_obj.FindProperty("m_onUpdateActions"), "On Update Actions"));
             m_rootElement.Add(new ReorderableListViewElement(m_obj, m_obj.FindProperty("m_onAnimMoveActions"), "On AnimatorMoveActions Actions"));
             m_rootElement.Add(new ReorderableListViewElement(m_obj, m_obj.FindProperty("m_onExitActions"), "On Exit Actions"));
-            m_rootElement.Add(new ReorderableListViewElement(m_obj, m_obj.FindProperty("m_onDisableActions"), "On Exit Actions"));
             m_rootElement.Add(new StateTransitionListView(m_obj, m_obj.FindProperty("m_transitions"), "Transitions"));
 
             m_obj.ApplyModifiedProperties();

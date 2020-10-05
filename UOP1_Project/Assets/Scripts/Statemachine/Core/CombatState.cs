@@ -13,7 +13,6 @@ namespace CombatStatemachine
         [SerializeField] private CombatAction[] m_onUpdateActions;
         [SerializeField] private CombatAction[] m_onAnimMoveActions;
         [SerializeField] private CombatAction[] m_onExitActions;
-        [SerializeField] private CombatAction[] m_onDisableActions;
         [SerializeField] private CombatTransition[] m_transitions;
         #endregion
 
@@ -36,10 +35,7 @@ namespace CombatStatemachine
         {
             PerformActions(_controller, m_onExitActions);
         }
-        public void OnStateDisable(CombatStateMachineController _controller)
-        {
-            PerformActions(_controller, m_onDisableActions);
-        }
+      
         #endregion
 
         #region Utility
