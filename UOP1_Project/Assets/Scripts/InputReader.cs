@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Events;
 
@@ -66,10 +65,7 @@ public class InputReader : ScriptableObject, GameInput.IGameplayActions
 
 	public void OnMove(InputAction.CallbackContext context)
 	{
-		if (moveEvent != null)
-		{
-			moveEvent.Invoke(context.ReadValue<Vector2>());
-		}
+		moveEvent?.Invoke(context.ReadValue<Vector2>());
 	}
 
 	public void OnPause(InputAction.CallbackContext context)
@@ -81,9 +77,6 @@ public class InputReader : ScriptableObject, GameInput.IGameplayActions
 
 	public void OnRotateCamera(InputAction.CallbackContext context)
 	{
-		if (cameraMoveEvent != null)
-		{
-			cameraMoveEvent.Invoke(context.ReadValue<Vector2>());
-		}
+		cameraMoveEvent?.Invoke(context.ReadValue<Vector2>());
 	}
 }
