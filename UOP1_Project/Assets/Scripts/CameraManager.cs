@@ -8,7 +8,7 @@ public class CameraManager : MonoBehaviour
 {
 	public InputReader inputReader;
 	public Camera mainCamera;
-    public CinemachineFreeLook freeLookVCam;
+	public CinemachineFreeLook freeLookVCam;
 
 	public void SetupProtagonistVirtualCamera(Transform target)
 	{
