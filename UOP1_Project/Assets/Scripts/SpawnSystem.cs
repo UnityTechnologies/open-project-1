@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Linq;
-using UnityEditor.PackageManager;
 using UnityEngine;
-using UnityEngine.Events;
 
 public class SpawnSystem : MonoBehaviour
 {
