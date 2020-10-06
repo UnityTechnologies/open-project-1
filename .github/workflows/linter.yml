@@ -20,9 +20,7 @@ jobs:
       - name: Commit changes
         uses: EndBug/add-and-commit@v5
         with:
-          author_name: github-actions[bot]
-          author_email: 41898282+github-actions[bot]@users.noreply.github.com
-          message: "Automated dotnet-format update Co-authored-by ${{ github.event.comment.user.login }} <${{ github.event.comment.user.id }}+${{ github.event.comment.user.login }}@users.noreply.github.com>"
+          message: "[Bot] Automated dotnet-format update"
           add: "*.cs"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
