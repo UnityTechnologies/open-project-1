@@ -81,14 +81,14 @@ namespace Assets.Scripts.Characters
 			{
 				isJumping = true;
 				jumpBeginTime = Time.time;
-				verticalMovement = initialJumpForce; //This is the only place where verticalMovement is set to a positive value
+				verticalMovement = initialJumpForce; // This is the only place where verticalMovement is set to a positive value
 				gravityContributionMultiplier = 0f;
 			}
 		}
 
 		public void CancelJump()
 		{
-			isJumping = false; //This will stop the reduction to the gravity, which will then quickly pull down the character
+			isJumping = false; // This will stop the reduction to the gravity, which will then quickly pull down the character
 		}
 
 		private void Awake()
@@ -98,46 +98,46 @@ namespace Assets.Scripts.Characters
 
 		private void Update()
 		{
-			//Raises the multiplier to how much gravity will affect vertical movement when in mid-air
-			//This is 0f at the beginning of a jump and will raise to maximum 1f
+			// Raises the multiplier to how much gravity will affect vertical movement when in mid-air
+			// This is 0f at the beginning of a jump and will raise to maximum 1f
 			if (!characterController.isGrounded)
 			{
 				gravityContributionMultiplier += Time.deltaTime * gravityComebackMultiplier;
 			}
-			//Reduce the influence of the gravity while holding the Jump button
+			// Reduce the influence of the gravity while holding the Jump button
 			if (isJumping)
 			{
-				//The player can only hold the Jump button for so long
+				// The player can only hold the Jump button for so long
 				if (Time.time >= jumpBeginTime + jumpInputDuration)
 				{
 					isJumping = false;
-					gravityContributionMultiplier = 1f; //Gravity influence is reset to full effect
+					gravityContributionMultiplier = 1f; // Gravity influence is reset to full effect
 				}
 				else
 				{
-					gravityContributionMultiplier *= gravityDivider; //Reduce the gravity effect
+					gravityContributionMultiplier *= gravityDivider; // Reduce the gravity effect
 				}
 			}
-			//Calculate the final verticalMovement
+			// Calculate the final verticalMovement
 			if (!characterController.isGrounded)
 			{
-				//Less control in mid-air, conserving momentum from previous frame
+				// Less control in mid-air, conserving momentum from previous frame
 				movementVector = inputVector * speed;
-				//The character is either jumping or in freefall, so gravity will add up
+				// The character is either jumping or in freefall, so gravity will add up
 				gravityContributionMultiplier = Mathf.Clamp01(gravityContributionMultiplier);
-				verticalMovement += Physics.gravity.y * gravityMultiplier * Time.deltaTime * gravityContributionMultiplier; //Add gravity contribution
-																															//Note that even if it's added, the above value is negative due to Physics.gravity.y
-																															//Cap the maximum so the player doesn't reach incredible speeds when freefalling from high positions
+				verticalMovement += Physics.gravity.y * gravityMultiplier * Time.deltaTime * gravityContributionMultiplier; // Add gravity contribution
+																															// Note that even if it's added, the above value is negative due to Physics.gravity.y
+																															// Cap the maximum so the player doesn't reach incredible speeds when freefalling from high positions
 				verticalMovement = Mathf.Clamp(verticalMovement, -maxFallSpeed, 100f);
 			}
 			else
 			{
-				//Full speed ground movement
+				// Full speed ground movement
 				movementVector = inputVector * speed;
-				//Resets the verticalMovement while on the ground,
-				//so that regardless of whether the player landed from a high fall or not,
-				//if they drop off a platform they will always start with the same verticalMovement.
-				//-5f is a good value to make it so the player also sticks to uneven terrain/bumps without floating
+				// Resets the verticalMovement while on the ground,
+				// so that regardless of whether the player landed from a high fall or not,
+				// if they drop off a platform they will always start with the same verticalMovement.
+				// -5f is a good value to make it so the player also sticks to uneven terrain/bumps without floating
 				if (!isJumping)
 				{
 					verticalMovement = fallingVerticalMovement;
@@ -145,10 +145,10 @@ namespace Assets.Scripts.Characters
 				}
 			}
 			UpdateSlide();
-			//Apply the result and move the character in space
+			// Apply the result and move the character in space
 			movementVector.y = verticalMovement;
 			characterController.Move(movementVector * Time.deltaTime);
-			//Rotate to the movement direction
+			// Rotate to the movement direction
 			movementVector.y = 0f;
 			if (movementVector.sqrMagnitude >= ROTATION_TRESHOLD)
 			{
