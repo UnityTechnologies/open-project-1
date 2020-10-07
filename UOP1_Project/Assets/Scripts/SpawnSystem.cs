@@ -1,93 +1,85 @@
 ﻿using System;
 using System.Linq;
+using Assets.Scripts;
 using Assets.Scripts.Characters;
+using UnityEditor.PackageManager;
 using UnityEngine;
+using UnityEngine.Events;
 
-namespace Assets.Scripts
+public class SpawnSystem : MonoBehaviour
 {
-	public class SpawnSystem : MonoBehaviour
+	[Header("Settings")]
+	[SerializeField]
+	private int _defaultSpawnIndex = 0;
+
+	[Header("Project References")]
+	[SerializeField]
+	private Protagonist _playerPrefab = null;
+
+	[Header("Scene References")]
+	[SerializeField]
+	private CameraManager _cameraManager;
+	[SerializeField]
+	private Transform[] _spawnLocations;
+
+	void Awake()
 	{
-		[Header("Settings")]
-		[SerializeField]
-		private int _defaultSpawnIndex = 0;
-
-		[Header("Project References")]
-		[SerializeField]
-		private Protagonist _playerPrefab = null;
-
-		[Header("Scene References")]
-		[SerializeField]
-		private CameraManager _cameraManager;
-		[SerializeField]
-		private Transform[] _spawnLocations;
-
-		[ContextMenu("Attempt Auto Fill")]
-		private void AutoFill()
+		try
 		{
-			if (_cameraManager == null)
-			{
-				_cameraManager = FindObjectOfType<CameraManager>();
-			}
-
-			if (_spawnLocations == null || _spawnLocations.Length == 0)
-			{
-				_spawnLocations = transform.GetComponentsInChildren<Transform>(true)
-									.Where(t => t != transform)
-									.ToArray();
-			}
+			Spawn(_defaultSpawnIndex);
 		}
-
-		private void Spawn(int spawnIndex)
+		catch (Exception e)
 		{
-			Transform spawnLocation = GetSpawnLocation(spawnIndex, _spawnLocations);
-			Protagonist playerInstance = InstantiatePlayer(_playerPrefab, spawnLocation, _cameraManager);
-			SetupCameras(playerInstance);
+			Debug.LogError($"[SpawnSystem] Failed to spawn player. {e.Message}");
 		}
+	}
 
-		private Transform GetSpawnLocation(int index, Transform[] spawnLocations)
-		{
-			if (spawnLocations == null || spawnLocations.Length == 0)
-			{
-				throw new Exception("No spawn locations set.");
-			}
+	void Reset()
+	{
+		AutoFill();
+	}
 
-			index = Mathf.Clamp(index, 0, spawnLocations.Length - 1);
-			return spawnLocations[index];
-		}
+	[ContextMenu("Attempt Auto Fill")]
+	private void AutoFill()
+	{
+		if (_cameraManager == null)
+			_cameraManager = FindObjectOfType<CameraManager>();
 
-		private Protagonist InstantiatePlayer(Protagonist playerPrefab, Transform spawnLocation, CameraManager _cameraManager)
-		{
-			if (playerPrefab == null)
-			{
-				throw new Exception("Player Prefab can't be null.");
-			}
+		if (_spawnLocations == null || _spawnLocations.Length == 0)
+			_spawnLocations = transform.GetComponentsInChildren<Transform>(true)
+								.Where(t => t != this.transform)
+								.ToArray();
+	}
 
-			Protagonist playerInstance = Instantiate(playerPrefab, spawnLocation.position, spawnLocation.rotation);
+	private void Spawn(int spawnIndex)
+	{
+		Transform spawnLocation = GetSpawnLocation(spawnIndex, _spawnLocations);
+		Protagonist playerInstance = InstantiatePlayer(_playerPrefab, spawnLocation, _cameraManager);
+		SetupCameras(playerInstance);
+	}
 
-			return playerInstance;
-		}
+	private Transform GetSpawnLocation(int index, Transform[] spawnLocations)
+	{
+		if (spawnLocations == null || spawnLocations.Length == 0)
+			throw new Exception("No spawn locations set.");
 
-		private void SetupCameras(Protagonist player)
-		{
-			player.gameplayCamera = _cameraManager.mainCamera.transform;
-			_cameraManager.SetupProtagonistVirtualCamera(player.transform);
-		}
+		index = Mathf.Clamp(index, 0, spawnLocations.Length - 1);
+		return spawnLocations[index];
+	}
 
-		private void Awake()
-		{
-			try
-			{
-				Spawn(_defaultSpawnIndex);
-			}
-			catch (Exception e)
-			{
-				Debug.LogError($"[SpawnSystem] Failed to spawn player. {e.Message}");
-			}
-		}
+	private Protagonist InstantiatePlayer(Protagonist playerPrefab, Transform spawnLocation, CameraManager _cameraManager)
+	{
+		if (playerPrefab == null)
+			throw new Exception("Player Prefab can't be null.");
 
-		private void Reset()
-		{
-			AutoFill();
-		}
+		Protagonist playerInstance = Instantiate(playerPrefab, spawnLocation.position, spawnLocation.rotation);
+
+		return playerInstance;
+	}
+
+	private void SetupCameras(Protagonist player)
+	{
+		player.gameplayCamera = _cameraManager.mainCamera.transform;
+		_cameraManager.SetupProtagonistVirtualCamera(player.transform);
 	}
 }
