@@ -16,53 +16,48 @@ namespace Assets.Scripts
 		public UnityAction<Vector2> moveEvent;
 		public UnityAction<Vector2> cameraMoveEvent;
 
-		GameInput gameInput;
-
-		private void OnEnable()
-		{
-			if (gameInput == null)
-			{
-				gameInput = new GameInput();
-				gameInput.Gameplay.SetCallbacks(this);
-			}
-			gameInput.Gameplay.Enable();
-		}
-
-		private void OnDisable()
-		{
-			gameInput.Gameplay.Disable();
-		}
+		public GameInput gameInput;
 
 		public void OnAttack(InputAction.CallbackContext context)
 		{
 			if (attackEvent != null
 				&& context.phase == InputActionPhase.Started)
+			{
 				attackEvent.Invoke();
+			}
 		}
 
 		public void OnExtraAction(InputAction.CallbackContext context)
 		{
 			if (extraActionEvent != null
 				&& context.phase == InputActionPhase.Started)
+			{
 				extraActionEvent.Invoke();
+			}
 		}
 
 		public void OnInteract(InputAction.CallbackContext context)
 		{
 			if (interactEvent != null
 				&& context.phase == InputActionPhase.Started)
+			{
 				interactEvent.Invoke();
+			}
 		}
 
 		public void OnJump(InputAction.CallbackContext context)
 		{
 			if (jumpEvent != null
 				&& context.phase == InputActionPhase.Started)
+			{
 				jumpEvent.Invoke();
+			}
 
 			if (jumpCanceledEvent != null
 				&& context.phase == InputActionPhase.Canceled)
+			{
 				jumpCanceledEvent.Invoke();
+			}
 		}
 
 		public void OnMove(InputAction.CallbackContext context)
@@ -77,7 +72,9 @@ namespace Assets.Scripts
 		{
 			if (pauseEvent != null
 				&& context.phase == InputActionPhase.Started)
+			{
 				pauseEvent.Invoke();
+			}
 		}
 
 		public void OnRotateCamera(InputAction.CallbackContext context)
@@ -86,6 +83,22 @@ namespace Assets.Scripts
 			{
 				cameraMoveEvent.Invoke(context.ReadValue<Vector2>());
 			}
+		}
+
+		private void OnEnable()
+		{
+			if (gameInput == null)
+			{
+				gameInput = new GameInput();
+				gameInput.Gameplay.SetCallbacks(this);
+			}
+
+			gameInput.Gameplay.Enable();
+		}
+
+		private void OnDisable()
+		{
+			gameInput.Gameplay.Disable();
 		}
 	}
 }

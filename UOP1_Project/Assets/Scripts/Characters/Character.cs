@@ -143,6 +143,7 @@ namespace Assets.Scripts.Characters
 					gravityContributionMultiplier = 0f;
 				}
 			}
+
 			UpdateSlide();
 
 			// Apply the result and move the character in space
