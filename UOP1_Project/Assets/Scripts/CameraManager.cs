@@ -1,34 +1,34 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using Cinemachine;
-using System;
+using UnityEngine;
 
-public class CameraManager : MonoBehaviour
+namespace Assets.Scripts
 {
-	public InputReader inputReader;
-	public Camera mainCamera;
-	public CinemachineFreeLook freeLookVCam;
-
-	public void SetupProtagonistVirtualCamera(Transform target)
+	public class CameraManager : MonoBehaviour
 	{
-		freeLookVCam.Follow = target;
-		freeLookVCam.LookAt = target;
-	}
+		public InputReader inputReader;
+		public Camera mainCamera;
+		public CinemachineFreeLook freeLookVCam;
 
-	private void OnEnable()
-	{
-		inputReader.cameraMoveEvent += OnCameraMove;
-	}
+		public void SetupProtagonistVirtualCamera(Transform target)
+		{
+			freeLookVCam.Follow = target;
+			freeLookVCam.LookAt = target;
+		}
 
-	private void OnDisable()
-	{
-		inputReader.cameraMoveEvent -= OnCameraMove;
-	}
+		private void OnEnable()
+		{
+			inputReader.cameraMoveEvent += OnCameraMove;
+		}
 
-	private void OnCameraMove(Vector2 cameraMovement)
-	{
-		freeLookVCam.m_XAxis.m_InputAxisValue = cameraMovement.x * Time.smoothDeltaTime;
-		freeLookVCam.m_YAxis.m_InputAxisValue = cameraMovement.y * Time.smoothDeltaTime;
+		private void OnDisable()
+		{
+			inputReader.cameraMoveEvent -= OnCameraMove;
+		}
+
+		private void OnCameraMove(Vector2 cameraMovement)
+		{
+			freeLookVCam.m_XAxis.m_InputAxisValue = cameraMovement.x * Time.smoothDeltaTime;
+			freeLookVCam.m_YAxis.m_InputAxisValue = cameraMovement.y * Time.smoothDeltaTime;
+		}
 	}
 }
