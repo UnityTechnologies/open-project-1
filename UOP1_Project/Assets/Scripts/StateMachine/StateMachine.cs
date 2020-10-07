@@ -2,44 +2,44 @@
 
 namespace KarimCastagnini.PluggableFSM
 {
-    public abstract class StateMachine<T> : MonoBehaviour
-    {
-        private State<T> _currentState;
+	public abstract class StateMachine<T> : MonoBehaviour
+	{
+		private State<T> _currentState;
 
-        private void Awake()
-        {
-            TransitionTable<T> table = GetTransitionTable();
+		private void Awake()
+		{
+			TransitionTable<T> table = GetTransitionTable();
 
-            if (table == null)
-                return; //implement a properly formatted warning message
+			if (table == null)
+				return; //implement a properly formatted warning message
 
-            _currentState = table.InitialState;
-        }
+			_currentState = table.InitialState;
+		}
 
-        private void Update()
-        {
-            T data = GetData();
-            TransitionTable<T> table = GetTransitionTable();
+		private void Update()
+		{
+			T data = GetData();
+			TransitionTable<T> table = GetTransitionTable();
 
-            if (data == null || table == null)
-                return; //implement a properly formatted warning message
+			if (data == null || table == null)
+				return; //implement a properly formatted warning message
 
-            State<T> nextState;
-      
-            if (table.CanTransit(_currentState, out nextState, data))
-                TransitToState(nextState, data);
+			State<T> nextState;
 
-            _currentState?.OnUpdate(data);
-        }
+			if (table.CanTransit(_currentState, out nextState, data))
+				TransitToState(nextState, data);
 
-        private void TransitToState(State<T> nextState, T data)
-        {
-            _currentState?.OnExit(data);
-            _currentState = nextState;
-            _currentState?.OnEnter(data);
-        }
+			_currentState?.OnUpdate(data);
+		}
 
-        protected abstract T GetData();
-        protected abstract TransitionTable<T> GetTransitionTable();
-    }
+		private void TransitToState(State<T> nextState, T data)
+		{
+			_currentState?.OnExit(data);
+			_currentState = nextState;
+			_currentState?.OnEnter(data);
+		}
+
+		protected abstract T GetData();
+		protected abstract TransitionTable<T> GetTransitionTable();
+	}
 }
