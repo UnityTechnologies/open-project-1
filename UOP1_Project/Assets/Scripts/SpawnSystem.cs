@@ -1,85 +1,93 @@
 ﻿using System;
 using System.Linq;
-using Assets.Scripts;
-using Assets.Scripts.Characters;
-using UnityEditor.PackageManager;
 using UnityEngine;
-using UnityEngine.Events;
+using UOP1.Characters;
 
-public class SpawnSystem : MonoBehaviour
+namespace UOP1
 {
-	[Header("Settings")]
-	[SerializeField]
-	private int _defaultSpawnIndex = 0;
-
-	[Header("Project References")]
-	[SerializeField]
-	private Protagonist _playerPrefab = null;
-
-	[Header("Scene References")]
-	[SerializeField]
-	private CameraManager _cameraManager;
-	[SerializeField]
-	private Transform[] _spawnLocations;
-
-	void Awake()
+	public class SpawnSystem : MonoBehaviour
 	{
-		try
+		[Header("Settings")]
+		[SerializeField]
+		private int _defaultSpawnIndex = 0;
+
+		[Header("Project References")]
+		[SerializeField]
+		private Protagonist _playerPrefab = null;
+
+		[Header("Scene References")]
+		[SerializeField]
+		private CameraManager _cameraManager;
+		[SerializeField]
+		private Transform[] _spawnLocations;
+
+		private void Awake()
 		{
-			Spawn(_defaultSpawnIndex);
+			try
+			{
+				Spawn(_defaultSpawnIndex);
+			}
+			catch (Exception e)
+			{
+				Debug.LogError($"[SpawnSystem] Failed to spawn player. {e.Message}");
+			}
 		}
-		catch (Exception e)
+
+		private void Reset()
 		{
-			Debug.LogError($"[SpawnSystem] Failed to spawn player. {e.Message}");
+			AutoFill();
 		}
-	}
 
-	void Reset()
-	{
-		AutoFill();
-	}
+		[ContextMenu("Attempt Auto Fill")]
+		private void AutoFill()
+		{
+			if (_cameraManager == null)
+			{
+				_cameraManager = FindObjectOfType<CameraManager>();
+			}
 
-	[ContextMenu("Attempt Auto Fill")]
-	private void AutoFill()
-	{
-		if (_cameraManager == null)
-			_cameraManager = FindObjectOfType<CameraManager>();
+			if (_spawnLocations == null || _spawnLocations.Length == 0)
+			{
+				_spawnLocations = transform.GetComponentsInChildren<Transform>(true)
+									.Where(t => t != transform)
+									.ToArray();
+			}
+		}
 
-		if (_spawnLocations == null || _spawnLocations.Length == 0)
-			_spawnLocations = transform.GetComponentsInChildren<Transform>(true)
-								.Where(t => t != this.transform)
-								.ToArray();
-	}
+		private void Spawn(int spawnIndex)
+		{
+			Transform spawnLocation = GetSpawnLocation(spawnIndex, _spawnLocations);
+			Protagonist playerInstance = InstantiatePlayer(_playerPrefab, spawnLocation, _cameraManager);
+			SetupCameras(playerInstance);
+		}
 
-	private void Spawn(int spawnIndex)
-	{
-		Transform spawnLocation = GetSpawnLocation(spawnIndex, _spawnLocations);
-		Protagonist playerInstance = InstantiatePlayer(_playerPrefab, spawnLocation, _cameraManager);
-		SetupCameras(playerInstance);
-	}
+		private Transform GetSpawnLocation(int index, Transform[] spawnLocations)
+		{
+			if (spawnLocations == null || spawnLocations.Length == 0)
+			{
+				throw new Exception("No spawn locations set.");
+			}
 
-	private Transform GetSpawnLocation(int index, Transform[] spawnLocations)
-	{
-		if (spawnLocations == null || spawnLocations.Length == 0)
-			throw new Exception("No spawn locations set.");
+			index = Mathf.Clamp(index, 0, spawnLocations.Length - 1);
+			return spawnLocations[index];
+		}
 
-		index = Mathf.Clamp(index, 0, spawnLocations.Length - 1);
-		return spawnLocations[index];
-	}
+		private Protagonist InstantiatePlayer(Protagonist playerPrefab, Transform spawnLocation, CameraManager _cameraManager)
+		{
+			if (playerPrefab == null)
+			{
+				throw new Exception("Player Prefab can't be null.");
+			}
 
-	private Protagonist InstantiatePlayer(Protagonist playerPrefab, Transform spawnLocation, CameraManager _cameraManager)
-	{
-		if (playerPrefab == null)
-			throw new Exception("Player Prefab can't be null.");
+			Protagonist playerInstance = Instantiate(playerPrefab, spawnLocation.position, spawnLocation.rotation);
 
-		Protagonist playerInstance = Instantiate(playerPrefab, spawnLocation.position, spawnLocation.rotation);
+			return playerInstance;
+		}
 
-		return playerInstance;
-	}
-
-	private void SetupCameras(Protagonist player)
-	{
-		player.gameplayCamera = _cameraManager.mainCamera.transform;
-		_cameraManager.SetupProtagonistVirtualCamera(player.transform);
+		private void SetupCameras(Protagonist player)
+		{
+			player.gameplayCamera = _cameraManager.mainCamera.transform;
+			_cameraManager.SetupProtagonistVirtualCamera(player.transform);
+		}
 	}
 }

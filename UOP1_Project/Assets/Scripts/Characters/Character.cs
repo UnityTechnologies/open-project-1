@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Assets.Scripts.Characters
+namespace UOP1.Characters
 {
 	public class Character : MonoBehaviour
 	{
