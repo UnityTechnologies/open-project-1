@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace KarimCastagnini.PluggableFSM.Example
 {
-    [CreateAssetMenu(menuName = "PluggableFSM/Character/State/Standing")]
-    public class StandingState : State<Character> { }
+	[CreateAssetMenu(menuName = "PluggableFSM/Character/State")]
+	public class CharacterControllerState : State<Character> { }
 }
+
