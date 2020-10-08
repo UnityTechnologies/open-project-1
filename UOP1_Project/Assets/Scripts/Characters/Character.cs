@@ -195,6 +195,7 @@ public class Character : MonoBehaviour
 
 	public void Jump()
 	{
+		// Disable jumping if player has to slide
 		if (characterController.isGrounded && !shouldSlide)
 		{
 			SetJumpingState(true);
