@@ -195,13 +195,9 @@ public class Character : MonoBehaviour
 
 	public void Jump()
 	{
-		// Disable jumping if player has to slide
 		if (characterController.isGrounded && !shouldSlide)
 		{
-			isJumping = true;
-			jumpBeginTime = Time.time;
-			verticalMovement = initialJumpForce; //This is the only place where verticalMovement is set to a positive value
-			gravityContributionMultiplier = 0f;
+			SetJumpingState(true);
 		}
 	}
 
