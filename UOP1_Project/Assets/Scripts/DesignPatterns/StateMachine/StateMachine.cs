@@ -5,7 +5,7 @@ using UnityEngine;
 public class StateMachine
 {
 	private State currentState;
-	
+
 	private readonly List<Transition> transitionFromAnyState = new List<Transition>();
 
 	public void Tick()
@@ -25,7 +25,7 @@ public class StateMachine
 		{
 			return;
 		}
-		
+
 		currentState?.OnExit();
 		currentState = state;
 
