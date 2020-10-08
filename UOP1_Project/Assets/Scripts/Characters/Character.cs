@@ -50,7 +50,7 @@ public class Character : MonoBehaviour
 		stateMachine = new StateMachine();
 
 		// create all states and pass in references to this character
-		IdleState idleState = new IdleState();
+		IdleState idleState = new IdleState(this);
 		WalkingState walkingState = new WalkingState(this);
 		JumpingState jumpingState = new JumpingState(this);
 		FallingState fallingState = new FallingState(this);
@@ -123,11 +123,11 @@ public class Character : MonoBehaviour
 
 	public void ApplyMovementAndRotate()
 	{
-		UpdateSlide();
-
 		// apply movement vector based
 		movementVector = inputVector * speed;
 
+		UpdateSlide();
+		
 		//Apply the result and move the character in space
 		movementVector.y = verticalMovement;
 		characterController.Move(movementVector * Time.deltaTime);
