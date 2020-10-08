@@ -10,6 +10,6 @@ public abstract class ParticleEvent : StateAction
     
     protected override void OnUpdate()
     {
-        Play(GetAttachedComponent<ParticleSystem>());
+        Play(GetComponent<ParticleSystem>());
     }
 }

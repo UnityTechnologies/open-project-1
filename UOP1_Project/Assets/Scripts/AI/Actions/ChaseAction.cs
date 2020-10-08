@@ -12,7 +12,7 @@ namespace AI.States
     {
         protected override void OnUpdate()
         {
-            var agent = GetAttachedComponent<NavMeshAgent>();
+            var agent = GetComponent<NavMeshAgent>();
             
             if(TryGetData<ChaseState>(out var chase))
             {

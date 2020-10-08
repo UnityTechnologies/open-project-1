@@ -15,6 +15,8 @@ MonoBehaviour:
   actions:
   - trigger: 0
     logic: {fileID: 11400000, guid: 002721a82d18a42408bca91c30ae5c91, type: 2}
+  - trigger: 2
+    logic: {fileID: 11400000, guid: 167f5409f2f32aa4ca29cebd98256922, type: 2}
   transitions:
   - enabled: 1
     decisions:
@@ -23,9 +25,16 @@ MonoBehaviour:
     - trigger: 0
       state: {fileID: 11400000, guid: b687f3f76c34aed46981ee6afafa4574, type: 2}
       type: 0
-    - trigger: 0
+    - trigger: 1
       state: {fileID: 11400000, guid: 1445cc45589207748ab76e44b338eeb8, type: 2}
       type: 1
     - trigger: 0
       state: {fileID: 11400000, guid: 167f5409f2f32aa4ca29cebd98256922, type: 2}
       type: 1
+  - enabled: 1
+    decisions:
+    - {fileID: 11400000, guid: 5ce2b5815cb459644859d1e92cf21128, type: 2}
+    actions:
+    - trigger: 0
+      state: {fileID: 11400000, guid: 5bcbe3ff25b242a49b0b202c7afbe592, type: 2}
+      type: 0

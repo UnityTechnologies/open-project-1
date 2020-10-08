@@ -1,4 +1,5 @@
-﻿using AV.Logic;
+﻿using AI.Navigation;
+using AV.Logic;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -9,12 +10,12 @@ namespace AI.States
     {
         protected override void OnUpdate()
         {
-            var agent = GetAttachedComponent<NavMeshAgent>();
+            var agent = GetComponent<NavMeshAgent>();
             var patrol = GetData<PatrolState>();
-
+            
             if (!patrol.waypoints) 
                 return;
-            
+
             var position = transform.position;
             var distanceToPoint = 0f;
 

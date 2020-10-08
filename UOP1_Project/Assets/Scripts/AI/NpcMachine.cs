@@ -19,19 +19,16 @@ namespace AI
         
         private void Awake()
         {
-            AttachComponent(GetComponent<NavMeshAgent>());
-            AttachComponent(audioSource);
-            AttachComponent(alertParticle);
+            SetComponent(GetComponent<NavMeshAgent>());
+            SetComponent(audioSource);
+            SetComponent(alertParticle);
             
-            AttachData(data, new NpcState(data));
-            AttachData(new PatrolState(waypoints));
+            SetData(data, new NpcState(data));
+            SetData(new PatrolState(waypoints));
 
             Initialize();
         }
 
-        private void Update()
-        {
-            Run();
-        }
+        private void Update() => Run();
     }
 }

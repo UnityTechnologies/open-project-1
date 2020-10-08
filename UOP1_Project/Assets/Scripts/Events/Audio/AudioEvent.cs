@@ -9,6 +9,6 @@ public abstract class AudioEvent : StateAction
     
     protected override void OnUpdate()
     {
-        Play(GetAttachedComponent<AudioSource>());
+        Play(GetComponent<AudioSource>());
     }
 }
