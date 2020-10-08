@@ -137,9 +137,8 @@ public class Character : MonoBehaviour
         isUnderneathStable = true;
 
         if (characterController.isGrounded) {
-            //Perform a downward raycast to check underneath the character
+            //Perform multiple downward spherecast to check underneath the character every slope
             Ray ray = new Ray(transform.position + characterController.center, Vector3.down);
-            //if (Physics.Raycast(ray, out hit, Mathf.Infinity)) {
             var hits = Physics.SphereCastAll(ray, characterController.radius, characterController.height / 2 + characterController.skinWidth);
             Vector3 underneathAllSlopesDirection = Vector3.zero;
             foreach (var hit in hits) { 
