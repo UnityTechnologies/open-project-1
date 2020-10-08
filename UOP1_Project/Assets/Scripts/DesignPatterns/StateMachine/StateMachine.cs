@@ -49,7 +49,7 @@ public class StateMachine
 		return transitionIfAny;
 	}
 
-	private Transition GetNextTransitionFromList(List<Transition> transitions)
+	private static Transition GetNextTransitionFromList(List<Transition> transitions)
 	{
 		foreach (Transition transition in transitions)
 		{
