@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Settings.Core;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Utilities;
 
 namespace Settings.Controls
 {
@@ -83,9 +84,9 @@ namespace Settings.Controls
         private BindingsOverridesList GetControlOverrides()
         {
             BindingsOverridesList bindingsList = new BindingsOverridesList();
-            foreach (var map in _inputActionAsset.actionMaps)
+            foreach (InputActionMap map in _inputActionAsset.actionMaps)
             {
-                foreach (var binding in map.bindings)
+                foreach (InputBinding binding in map.bindings)
                 {
                     if (!string.IsNullOrEmpty(binding.overridePath))
                     {
@@ -99,25 +100,25 @@ namespace Settings.Controls
         }
 
         /// <summary>
-        /// Loads control overrides
+        /// Sets control overrides into InputActionAsset
         /// </summary>
         private void SetControlOverrides(BindingsOverridesList bindingsList)
         {
             //create a dictionary to easier check for existing overrides
             Dictionary<System.Guid, string> overrides = new Dictionary<System.Guid, string>();
-            foreach (var item in bindingsList.bindingList)
+            foreach (BindingSerializable item in bindingsList.bindingList)
             {
                 overrides.Add(new System.Guid(item.id), item.path);
             }
 
             //walk through action maps check dictionary for overrides
-            foreach (var map in _inputActionAsset.actionMaps)
+            foreach (InputActionMap map in _inputActionAsset.actionMaps)
             {
                 // we want to load binding overrides into map, that is clean from previous overrides
                 map.RemoveAllBindingOverrides();
 
-                var bindings = map.bindings;
-                for (var i = 0; i < bindings.Count; ++i)
+                ReadOnlyArray<InputBinding> bindings = map.bindings;
+                for (int i = 0; i < bindings.Count; ++i)
                 {
                     if (overrides.TryGetValue(bindings[i].id, out string overridePath))
                     {

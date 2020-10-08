@@ -8,15 +8,15 @@ namespace Settings.UI
     {
         protected override void OnDropdownValueChanged(int index)
         {
-            var availableLanguages = Setting.GetAvailableLanguages();
+            string[] availableLanguages = Setting.GetAvailableLanguages();
             Setting.Value = availableLanguages[index];
         }
 
         protected override List<Dropdown.OptionData> GetOptions()
         {
-            var options = new List<Dropdown.OptionData>();
+            List<Dropdown.OptionData> options = new List<Dropdown.OptionData>();
             
-            foreach (var language in Setting.GetAvailableLanguages())
+            foreach (string language in Setting.GetAvailableLanguages())
             {
                 options.Add(new Dropdown.OptionData(language));
             }

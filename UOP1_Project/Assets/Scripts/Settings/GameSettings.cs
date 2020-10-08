@@ -1,21 +1,25 @@
 using System.Linq;
 using Settings.Controls;
+using Settings.Core;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.InputSystem;
 
-namespace Settings.Core
+namespace Settings
 {
-    // This class derives from ScriptableObject so we can set references using inspector.
+    // This class derives from ScriptableObject so we can set references like AudioMixer through inspector.
     // While this approach works fine, I don't really like it. For now there is no DI or something like this, so...
+    /// <summary>
+    /// Root of the Settings System of the game. 
+    /// </summary>
     [CreateAssetMenu(fileName = "GameSettings", menuName = "Settings/GameSettings asset")]
     public class GameSettings : ScriptableObject
     {
         #region Temporary solution
 
         // injecting references through Unity's serialization (inspector)
-        [SerializeField] private InputActionAsset inputActionAsset = default;
-        [SerializeField] private AudioMixer audioMixer = default;
+        [SerializeField] private InputActionAsset _inputActionAsset = default;
+        [SerializeField] private AudioMixer _audioMixer = default;
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         static void Initialize()
@@ -33,9 +37,9 @@ namespace Settings.Core
             // setting collection of all game settings
             _settings = new ISetting[]
             {
-                new InputBindingsSetting(inputActionAsset),
-                new MusicVolumeSetting(audioMixer),
-                new SfxVolumeSetting(audioMixer),
+                new InputBindingsSetting(_inputActionAsset),
+                new MusicVolumeSetting(_audioMixer),
+                new SfxVolumeSetting(_audioMixer),
                 new GraphicSetting(),
                 new LanguageSetting(),
                 new ResolutionSetting(),
@@ -52,7 +56,7 @@ namespace Settings.Core
 
         public void Load()
         {
-            foreach (var setting in _settings)
+            foreach (ISetting setting in _settings)
             {
                 if (!_storage.HasKey(setting.Id))
                 {
@@ -67,7 +71,7 @@ namespace Settings.Core
 
         public void Save()
         {
-            foreach (var setting in _settings)
+            foreach (ISetting setting in _settings)
             {
                 string json = JsonUtility.ToJson(setting.Save());
                 _storage.Set(setting.Id, json);

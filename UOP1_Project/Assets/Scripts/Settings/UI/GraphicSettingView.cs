@@ -12,9 +12,9 @@ namespace Settings.UI
 
         protected override List<Dropdown.OptionData> GetOptions()
         {
-            var options = new List<Dropdown.OptionData>();
+            List<Dropdown.OptionData> options = new List<Dropdown.OptionData>();
             
-            foreach (var graphicLevel in Setting.GetAvailableGraphicLevels())
+            foreach (string graphicLevel in Setting.GetAvailableGraphicLevels())
             {
                 options.Add(new Dropdown.OptionData(graphicLevel));
             }

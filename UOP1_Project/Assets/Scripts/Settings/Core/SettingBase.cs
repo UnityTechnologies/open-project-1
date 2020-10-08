@@ -4,7 +4,7 @@ namespace Settings.Core
 {
     public abstract class SettingBase<TValue> : ISetting
     {
-        public string Id => GetType().Name;
+        public virtual string Id => GetType().Name;
 
         private TValue _value;
         public virtual TValue Value
@@ -24,8 +24,8 @@ namespace Settings.Core
 
         public virtual bool IsValueEqual(TValue a, TValue b)
         {
-            if (a is IComparable<TValue>)
-                return (a as IComparable<TValue>).CompareTo(b) == 0;
+            if (a is IComparable<TValue> comparable)
+                return comparable.CompareTo(b) == 0;
             throw new ArgumentException($"'{typeof(TValue).FullName}' does not implement {typeof(IComparable<TValue>).Name}, so you need to override {nameof(IsValueEqual)}.");
         }
 

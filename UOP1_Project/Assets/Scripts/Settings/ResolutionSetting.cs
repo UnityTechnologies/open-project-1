@@ -25,7 +25,7 @@ namespace Settings
 
         public override void Load(string saveData)
         {
-            if (!ResolutionData.TryParse(saveData, out var value))
+            if (!ResolutionData.TryParse(saveData, out ResolutionData value))
             {
                 SetDefault();
                 return;
@@ -37,6 +37,48 @@ namespace Settings
         public override string Save()
         {
             return Value.ToString();
+        }
+
+        public int GetCurrentResolutionIndex()
+        {
+            ResolutionData[] resolutions = GetAvailableResolutions();
+            for (int i = 0; i < resolutions.Length; i++)
+            {
+                ResolutionData res = resolutions[i];
+                if (res.width == Screen.width && res.height == Screen.height)
+                    return i;
+            }
+
+            Debug.LogError($"Can't find current resolution ({Screen.width}, {Screen.height}) in settings.");
+            return 0;
+        }
+
+        public void SetResolutionIndex(int index)
+        {
+            ResolutionData[] resolutions = GetAvailableResolutions();
+            if (index < 0 || index >= resolutions.Length)
+            {
+                Debug.LogError($"Resolution index {index} is out of range ({resolutions.Length})");
+                return;
+            }
+
+            ResolutionData res = resolutions[index];
+            Value = new ResolutionData() {width = res.width, height = res.height};
+        }
+
+        // This method could return cached value but I'm not sure if Screen.resolutions always returns the same value.
+        public ResolutionData[] GetAvailableResolutions()
+        {
+            List<ResolutionData> resolutions = new List<ResolutionData>();
+            
+            // Screen.resolutions returns duplicated resolutions so we need to filter them out
+            foreach (Resolution resolution in Screen.resolutions)
+            {
+                if (resolutions.All(r => r.width != resolution.width && r.height != resolution.height))
+                    resolutions.Add(new ResolutionData(){width = resolution.width, height = resolution.height});
+            }
+
+            return resolutions.ToArray();
         }
 
         [Serializable]
@@ -61,7 +103,7 @@ namespace Settings
             {
                 try
                 {
-                    var values = s.Split(new[] {" X "}, StringSplitOptions.RemoveEmptyEntries);
+                    string[] values = s.Split(new[] {" X "}, StringSplitOptions.RemoveEmptyEntries);
                     int width = int.Parse(values[0]);
                     int height = int.Parse(values[1]);
                     value = new ResolutionData(){width = width, height = height};
@@ -73,48 +115,6 @@ namespace Settings
                 }
                 return true;
             }
-        }
-
-        public int GetCurrentResolutionIndex()
-        {
-            var resolutions = GetAvailableResolutions();
-            for (int i = 0; i < resolutions.Length; i++)
-            {
-                var res = resolutions[i];
-                if (res.width == Screen.width && res.height == Screen.height)
-                    return i;
-            }
-
-            Debug.LogError($"Can't find current resolution ({Screen.width}, {Screen.height}) in settings.");
-            return 0;
-        }
-
-        public void SetResolutionIndex(int index)
-        {
-            var resolutions = GetAvailableResolutions();
-            if (index < 0 || index >= resolutions.Length)
-            {
-                Debug.LogError($"Resolution index {index} is out of range ({resolutions.Length})");
-                return;
-            }
-
-            var res = resolutions[index];
-            Value = new ResolutionData() {width = res.width, height = res.height};
-        }
-
-        // This method could return cached value but I'm not sure if Screen.resolutions always returns the same value.
-        public ResolutionData[] GetAvailableResolutions()
-        {
-            var resolutions = new List<ResolutionData>();
-            
-            // Screen.resolutions returns duplicated resolutions so we need to filter them out
-            foreach (var resolution in Screen.resolutions)
-            {
-                if (resolutions.All(r => r.width != resolution.width && r.height != resolution.height))
-                    resolutions.Add(new ResolutionData(){width = resolution.width, height = resolution.height});
-            }
-
-            return resolutions.ToArray();
         }
     }
 }

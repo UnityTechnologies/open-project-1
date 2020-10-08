@@ -7,15 +7,15 @@ namespace Settings.UI
     {
         protected override void OnDropdownValueChanged(int index)
         {
-            var availableResolutions = Setting.GetAvailableResolutions();
+            ResolutionSetting.ResolutionData[] availableResolutions = Setting.GetAvailableResolutions();
             Setting.Value = availableResolutions[index];
         }
 
         protected override List<Dropdown.OptionData> GetOptions()
         {
-            var options = new List<Dropdown.OptionData>();
+            List<Dropdown.OptionData> options = new List<Dropdown.OptionData>();
             
-            foreach (var resolutionData in Setting.GetAvailableResolutions())
+            foreach (ResolutionSetting.ResolutionData resolutionData in Setting.GetAvailableResolutions())
             {
                 options.Add(new Dropdown.OptionData(resolutionData.ToString()));
             }

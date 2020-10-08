@@ -4,6 +4,15 @@ namespace Settings
 {
     public class LanguageSetting : SettingBase<string>
     {
+        public override string Value
+        {
+            set
+            {
+                base.Value = value;
+                //TODO: set language for LocalizationSystem.
+            }
+        }
+
         public override void Load(string saveData)
         {
             Value = saveData;
@@ -14,7 +23,7 @@ namespace Settings
             return Value;
         }
 
-        // todo
+        //TODO: specify array of supported languages from inspector or from chosen LocalizationSystem. 
         public string[] GetAvailableLanguages()
         {
             return new[]
@@ -26,7 +35,7 @@ namespace Settings
         public override void SetDefault()
         {
             base.SetDefault();
-            Value = "English"; // todo: make use of System.Globalization.CultureInfo.CurrentCulture.Name
+            Value = "English"; //TODO: make use of System.Globalization.CultureInfo.CurrentCulture.Name
         }
     }
 }
