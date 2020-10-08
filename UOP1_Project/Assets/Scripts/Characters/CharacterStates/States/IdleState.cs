@@ -12,7 +12,7 @@ public class IdleState : State
 
 	public override void Tick()
 	{
-		// character.ApplyMovementAndRotate();
+		character.ApplyMovementAndRotate();
 	}
 
 	public override void OnEnter()
