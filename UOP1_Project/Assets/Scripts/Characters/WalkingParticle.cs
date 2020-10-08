@@ -32,19 +32,16 @@ public class WalkingParticle : MonoBehaviour
 
     private void Update()
     {
-        if(particleObject)
+        currentPosition = new Vector2(transform.position.x, transform.position.z);
+        if (Vector2.Distance(currentPosition, lastPosition) > walkingDistance && charController.isGrounded)
         {
-            currentPosition = new Vector2(transform.position.x, transform.position.z);
-            if(Vector2.Distance(currentPosition, lastPosition) > walkingDistance && charController.isGrounded)
-            {
-                if(!particleObject.isPlaying) particleObject.Play();
-            }
-            else
-            {
-                particleObject.Stop();
-            }
-            lastPosition = currentPosition;
+            if (!particleObject.isPlaying) particleObject.Play();
         }
+        else
+        {
+            particleObject.Stop();
+        }
+        lastPosition = currentPosition;
     }
 
 }
