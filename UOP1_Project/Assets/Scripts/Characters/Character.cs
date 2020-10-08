@@ -91,98 +91,101 @@ public class Character : MonoBehaviour
 	}
 
 	private void CalculateFinalAirMovement()
-    {
-	    //Less control in mid-air, conserving momentum from previous frame
-	    movementVector = inputVector * speed;
+	{
+		//Less control in mid-air, conserving momentum from previous frame
+		movementVector = inputVector * speed;
 
-	    //The character is either jumping or in freefall, so gravity will add up
-	    gravityContributionMultiplier = Mathf.Clamp01(gravityContributionMultiplier);
-	    verticalMovement += Physics.gravity.y * gravityMultiplier * Time.deltaTime * gravityContributionMultiplier; //Add gravity contribution
-	    //Note that even if it's added, the above value is negative due to Physics.gravity.y
+		//The character is either jumping or in freefall, so gravity will add up
+		gravityContributionMultiplier = Mathf.Clamp01(gravityContributionMultiplier);
+		verticalMovement += Physics.gravity.y * gravityMultiplier * Time.deltaTime * gravityContributionMultiplier; //Add gravity contribution
+																													//Note that even if it's added, the above value is negative due to Physics.gravity.y
 
-	    //Cap the maximum so the player doesn't reach incredible speeds when freefalling from high positions
-	    verticalMovement = Mathf.Clamp(verticalMovement, -maxFallSpeed, 100f);
-    }
+		//Cap the maximum so the player doesn't reach incredible speeds when freefalling from high positions
+		verticalMovement = Mathf.Clamp(verticalMovement, -maxFallSpeed, 100f);
+	}
 
-    private bool IsThereInput(){
-	    return inputVector != Vector3.zero;
-    }
+	private bool IsThereInput()
+	{
+		return inputVector != Vector3.zero;
+	}
 
-    //---- PREDICATES TO DEFINE STATE TRANSITIONS ----
+	//---- PREDICATES TO DEFINE STATE TRANSITIONS ----
 
-    private Func<bool> IsMovingAndGrounded() => () => IsThereInput() && characterController.isGrounded;
+	private Func<bool> IsMovingAndGrounded() => () => IsThereInput() && characterController.isGrounded;
 
-    private Func<bool> IsCharacterNotMovingAndGrounded() => () => characterController.isGrounded && !IsThereInput();
+	private Func<bool> IsCharacterNotMovingAndGrounded() => () => characterController.isGrounded && !IsThereInput();
 
-    private Func<bool> PerformedJumpAction() => () =>  isJumping;
+	private Func<bool> PerformedJumpAction() => () => isJumping;
 
-    private Func<bool> IsFallingAndNotJumping() => () => !characterController.isGrounded && !isJumping;
+	private Func<bool> IsFallingAndNotJumping() => () => !characterController.isGrounded && !isJumping;
 
-    //---- METHODS USED TO CONTROL CHARACTER STATE ----
+	//---- METHODS USED TO CONTROL CHARACTER STATE ----
 
-    public void ApplyMovementAndRotate()
-    {
-	    UpdateSlide();
+	public void ApplyMovementAndRotate()
+	{
+		UpdateSlide();
 
-	    // apply movement vector based
-	    movementVector = inputVector * speed;
+		// apply movement vector based
+		movementVector = inputVector * speed;
 
-	    //Apply the result and move the character in space
-	    movementVector.y = verticalMovement;
-	    characterController.Move(movementVector * Time.deltaTime);
+		//Apply the result and move the character in space
+		movementVector.y = verticalMovement;
+		characterController.Move(movementVector * Time.deltaTime);
 
-	    //Rotate to the movement direction
-	    movementVector.y = 0f;
-	    if (movementVector.sqrMagnitude >= .02f)
-	    {
-		    float targetRotation = Mathf.Atan2(movementVector.x, movementVector.z) * Mathf.Rad2Deg;
-		    transform.eulerAngles = Vector3.up * Mathf.SmoothDampAngle(
-			    transform.eulerAngles.y,
-			    targetRotation,
-			    ref turnSmoothSpeed,
-			    turnSmoothTime);
-	    }
+		//Rotate to the movement direction
+		movementVector.y = 0f;
+		if (movementVector.sqrMagnitude >= .02f)
+		{
+			float targetRotation = Mathf.Atan2(movementVector.x, movementVector.z) * Mathf.Rad2Deg;
+			transform.eulerAngles = Vector3.up * Mathf.SmoothDampAngle(
+				transform.eulerAngles.y,
+				targetRotation,
+				ref turnSmoothSpeed,
+				turnSmoothTime);
+		}
 
-	    if (!characterController.isGrounded){
-		    CalculateFinalAirMovement();
-	    }
-    }
+		if (!characterController.isGrounded)
+		{
+			CalculateFinalAirMovement();
+		}
+	}
 
-    public void ResetVerticalMovement()
-    {
-	    verticalMovement = -5f;
-	    gravityContributionMultiplier = 0f;
-    }
+	public void ResetVerticalMovement()
+	{
+		verticalMovement = -5f;
+		gravityContributionMultiplier = 0f;
+	}
 
-    public void ApplyGravityComeback()
-    {
-	    //Raises the multiplier to how much gravity will affect vertical movement when in mid-air
-	    //This is 0f at the beginning of a jump and will raise to maximum 1f
-	    gravityContributionMultiplier += Time.deltaTime * gravityComebackMultiplier;
-    }
+	public void ApplyGravityComeback()
+	{
+		//Raises the multiplier to how much gravity will affect vertical movement when in mid-air
+		//This is 0f at the beginning of a jump and will raise to maximum 1f
+		gravityContributionMultiplier += Time.deltaTime * gravityComebackMultiplier;
+	}
 
-    public void ReduceGravityEffect()
-    {
-	    gravityContributionMultiplier *= gravityDivider;
-    }
+	public void ReduceGravityEffect()
+	{
+		gravityContributionMultiplier *= gravityDivider;
+	}
 
-    public void ResetGravityContributorMultiplier()
-    {
-	    gravityContributionMultiplier = 1f;
-    }
+	public void ResetGravityContributorMultiplier()
+	{
+		gravityContributionMultiplier = 1f;
+	}
 
-    public void InitJumpingValues(){
-	    jumpBeginTime = Time.time;
-	    verticalMovement = initialJumpForce; //This is the only place where verticalMovement is set to a positive value
-	    gravityContributionMultiplier = 0f;
-    }
+	public void InitJumpingValues()
+	{
+		jumpBeginTime = Time.time;
+		verticalMovement = initialJumpForce; //This is the only place where verticalMovement is set to a positive value
+		gravityContributionMultiplier = 0f;
+	}
 
-    public void SetJumpingState(bool isJumping)
-    {
-	    this.isJumping = isJumping;
-    }
+	public void SetJumpingState(bool isJumping)
+	{
+		this.isJumping = isJumping;
+	}
 
-    public bool IsJumpingTooLong(float deltaTime) => deltaTime >= jumpBeginTime + jumpInputDuration;
+	public bool IsJumpingTooLong(float deltaTime) => deltaTime >= jumpBeginTime + jumpInputDuration;
 
 	//---- COMMANDS ISSUED BY OTHER SCRIPTS ----
 	public void Move(Vector3 movement)
