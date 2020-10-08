@@ -1,4 +1,4 @@
-﻿#ifndef CUSTOM_LIGHTING_INCLUDED
+#ifndef CUSTOM_LIGHTING_INCLUDED
 #define CUSTOM_LIGHTING_INCLUDED
 
 void MainLight_float(float3 WorldPos, out float3 Direction, out float3 Color, out float DistanceAtten, out float ShadowAtten)
@@ -22,9 +22,7 @@ void MainLight_float(float3 WorldPos, out float3 Direction, out float3 Color, ou
 
 	ShadowSamplingData shadowSamplingData = GetMainLightShadowSamplingData();
 	float shadowStrength = GetMainLightShadowStrength();
-	ShadowAtten = SampleShadowmap(shadowCoord, TEXTURE2D_ARGS(_MainLightShadowmapTexture,
-	sampler_MainLightShadowmapTexture),
-	shadowSamplingData, shadowStrength, false);
+	ShadowAtten = SampleShadowmap(shadowCoord, TEXTURE2D_ARGS(_MainLightShadowmapTexture, sampler_MainLightShadowmapTexture), shadowSamplingData, shadowStrength, false);
 #endif
 }
 
