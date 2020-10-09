@@ -8,7 +8,7 @@ namespace AI.States
     [CreateAssetMenu(menuName = "NPC/Actions/Patrol")]
     public class PatrolAction : StateAction
     {
-        protected override void OnUpdate()
+        public override void OnUpdate()
         {
             var agent = GetComponent<NavMeshAgent>();
             var patrol = GetData<PatrolState>();

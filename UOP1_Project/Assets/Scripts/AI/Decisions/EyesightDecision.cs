@@ -34,9 +34,10 @@ namespace AI.States
             return seesTarget;
         }
 
-        public override void OnTrue()
+        public override void AfterDecision(bool decided)
         {
-            SetData(new ChaseState { target = targetHit.transform });
+            if(decided)
+                SetData(new ChaseState { target = targetHit.transform });
         }
     }
 }

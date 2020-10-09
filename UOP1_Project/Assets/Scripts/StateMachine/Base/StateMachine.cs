@@ -44,7 +44,7 @@ namespace AV.Logic
             currentState.CheckTransitions(this);
         }
 
-        public void EnterState(StateNode nextState)
+        public void ChangeState(StateNode nextState)
         {
             if (!nextState)
                 return;
@@ -63,7 +63,9 @@ namespace AV.Logic
             {
                 if (action.trigger != trigger || !action.logic)
                     continue;
-                action.logic.BeginUpdate(this);
+                
+                action.logic.machine = this;
+                action.logic.OnUpdate();
             }
         }
     }

@@ -8,10 +8,13 @@ namespace Island.AI.States
     [CreateAssetMenu(menuName = "NPC/Decisions/Hunger")]
     public class HungerDecision : StateDecision
     {
+        [Range(0, 100)]
+        public float hungerBarrier = 50;
+        
         public override bool OnDecide()
         {
             var state = GetData<NpcState>();
-            return state.energy < 50;
+            return state.energy < hungerBarrier;
         }
     }
 }

@@ -14,13 +14,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   actions:
   - trigger: 0
-    logic: {fileID: 11400000, guid: 38cd9e503aac57e469fb80fb97dcdfcc, type: 2}
+    logic: {fileID: 11400000, guid: 3d06b82f811fc104bbb40e28a153de57, type: 2}
   transitions:
   - enabled: 1
     decisions:
-    - {fileID: 11400000, guid: 44e337553b2b9e0459b057e355a2c02f, type: 2}
-    - {fileID: 11400000, guid: 5ce2b5815cb459644859d1e92cf21128, type: 2}
+    - condition: 1
+      state: {fileID: 11400000, guid: c47e24e4bee6b8348838eb3af5617fa4, type: 2}
+    nextState: {fileID: 11400000, guid: 8df72a7cd62df3c48bea2f8601267c56, type: 2}
     actions:
     - trigger: 0
-      state: {fileID: 11400000, guid: 5bcbe3ff25b242a49b0b202c7afbe592, type: 2}
-      type: 0
+      state: {fileID: 0}
+      type: 1
+  - enabled: 1
+    decisions:
+    - condition: 0
+      state: {fileID: 11400000, guid: 5ce2b5815cb459644859d1e92cf21128, type: 2}
+    - condition: 0
+      state: {fileID: 11400000, guid: 44e337553b2b9e0459b057e355a2c02f, type: 2}
+    nextState: {fileID: 11400000, guid: 5bcbe3ff25b242a49b0b202c7afbe592, type: 2}
+    actions:
+    - trigger: 0
+      state: {fileID: 0}
+      type: 1

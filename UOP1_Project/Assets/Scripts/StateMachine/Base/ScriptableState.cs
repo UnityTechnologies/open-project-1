@@ -16,10 +16,6 @@ namespace AV.Logic
         protected Transform transform => machine.transform;
 
 
-        // Used only for internal invoke
-        internal abstract void BeginUpdate(StateMachine machine);
-
-
         #region Shared Data
         /// <inheritdoc cref="StateMachine.SetSharedData{TScriptableObject}"/>
         protected TScriptableObject SetSharedData<TScriptableObject>() where TScriptableObject : ScriptableObject

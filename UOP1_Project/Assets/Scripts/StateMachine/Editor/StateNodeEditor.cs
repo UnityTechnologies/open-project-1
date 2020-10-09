@@ -3,25 +3,40 @@ using AV.UnityEditor;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
+using static UnityEditor.EditorGUIUtility;
 
 namespace AV.Logic
 {
     [CustomEditor(typeof(StateNode))]
     internal class StateNodeEditor : Editor
     {
-        private class Content
+        private static class Guids
+        {
+            public const string ActionIcon = "ac3b011b7b5a64548956402b6c471cef";
+            public const string StateChangeIcon = "e9215b03c7583f54a870c9a16a7d3885";
+        }
+        private static class Icons
+        {
+            public static GUIContent action;
+            public static GUIContent stateChange;
+        }
+        private static class Content
         {
             public static GUIContent systemsContent;
             public static GUIContent transitionsContent;
             public static GUIContent plusMore;
             public static GUIContent minus;
         }
+        private static class Styles
+        {
+            public static GUIStyle iconLabel;
+            public static GUIStyle preButton;
+            public static GUIStyle footerBackground;
+        }
 
-        private const int ElementsSpacing = 4;
-        
-        private static GUIStyle preButton;
-        private static GUIStyle footerBackground;
         private static GenericMenu transitionAddMenu;
+
+        private StateNode target;
         
         private SerializedProperty actionsProperty;
         private SerializedProperty transitionsProperty;
@@ -33,9 +48,30 @@ namespace AV.Logic
         private int lastTransitionsCount;
         private ReorderableList selectedList;
         private SerializedProperty transitionAddTarget;
+        private int lastPlusIndex;
 
+        
         private void OnEnable()
         {
+            GetGUIContent();
+
+            target = (StateNode) base.target;
+            
+            actionsProperty = serializedObject.FindProperty("actions");
+            transitionsProperty = serializedObject.FindProperty("transitions");
+            
+            CreateActionsGUI();
+            CreateTransitionsGUI();
+        }
+
+        private static void GetGUIContent()
+        { 
+            var actionIcon = AssetDatabase.LoadAssetAtPath<Texture2D>(AssetDatabase.GUIDToAssetPath(Guids.ActionIcon));
+            var stateChangeIcon = AssetDatabase.LoadAssetAtPath<Texture2D>(AssetDatabase.GUIDToAssetPath(Guids.StateChangeIcon));
+            
+            Icons.action = new GUIContent(actionIcon, "Invoke State Action");
+            Icons.stateChange = new GUIContent(stateChangeIcon, "State Change");
+            
             Content.systemsContent = new GUIContent("Actions", EditorGUIUtility.IconContent("AnimatorState Icon").image);
             Content.transitionsContent = new GUIContent("Transitions",
                 EditorGUIUtility.IconContent("AnimatorStateTransition Icon").image);
@@ -44,20 +80,15 @@ namespace AV.Logic
             Content.plusMore.tooltip = "Add node";
             Content.minus = EditorGUIUtility.IconContent("Toolbar Minus");
             Content.minus.tooltip = "Remove selected element";
-            
-            actionsProperty = serializedObject.FindProperty("actions");
-            transitionsProperty = serializedObject.FindProperty("transitions");
-            
-            CreateActionsGUI();
-            CreateTransitionsGUI();
-            CreateTransitionAddMenu();
         }
         
         private static void GetGUIStyles()
         {
-            if (preButton != null) return;
-            preButton = "RL FooterButton";
-            footerBackground = "RL Footer";
+            if (Styles.preButton != null) 
+                return;
+            Styles.iconLabel = new GUIStyle(EditorStyles.label) { padding = new RectOffset(4, 4, 0, 0) };
+            Styles.preButton = "RL FooterButton";
+            Styles.footerBackground = "RL Footer";
         }
         
         public override void OnInspectorGUI()
@@ -92,6 +123,16 @@ namespace AV.Logic
                 serializedObject.ApplyModifiedProperties();
             });
             
+            transitionAddMenu.AddSeparator("");
+            
+            var hasChangeStateAction = false;
+            var transition = target.transitions[lastPlusIndex];
+            foreach (var action in transition.actions)
+            {
+                if (action.type == StateTransition.ActionType.ChangeState)
+                    hasChangeStateAction = true;
+            }
+            
             transitionAddMenu.AddItem(new GUIContent("Action"), false, () =>
             {
                 var actions = transitionAddTarget.FindPropertyRelative("actions");
@@ -99,14 +140,35 @@ namespace AV.Logic
                 actions.InsertArrayElementAtIndex(0);
                 actions.GetArrayElementAtIndex(0).FindPropertyRelative("state").objectReferenceValue = null;
                 serializedObject.ApplyModifiedProperties();
-            });        
+                
+                transition.actions[0].type = StateTransition.ActionType.Action;
+            });
+
+            if (!hasChangeStateAction)
+            {
+                transitionAddMenu.AddItem(new GUIContent("State Change"), false, () =>
+                {
+                    var actions = transitionAddTarget.FindPropertyRelative("actions");
+
+                    actions.InsertArrayElementAtIndex(0);
+                    actions.GetArrayElementAtIndex(0).FindPropertyRelative("state").objectReferenceValue = null;
+                    
+                    serializedObject.ApplyModifiedProperties();
+                    
+                    transition.actions[0].type = StateTransition.ActionType.ChangeState;
+                });
+            }
+            else
+            {
+                transitionAddMenu.AddDisabledItem(new GUIContent("State Change"), true);
+            }
         }
 
         private void CreateActionsGUI()
         {
             actionsList = new ReorderableList(serializedObject, actionsProperty)
             {
-                elementHeight = EditorGUIUtility.singleLineHeight + ElementsSpacing
+                elementHeight = singleLineHeight + standardVerticalSpacing
             };
             
             actionsList.drawHeaderCallback += rect =>
@@ -114,31 +176,31 @@ namespace AV.Logic
                 GUI.Label(rect, Content.systemsContent);
             };
             
-            actionsList.drawElementCallback += (elementRect, index, active, focused) =>
+            actionsList.drawElementCallback += (rect, index, active, focused) =>
             {
                 var property = actionsProperty.GetArrayElementAtIndex(index);
                 var trigger = property.FindPropertyRelative("trigger");
                 var logic = property.FindPropertyRelative("logic");
-                
-                var rect = new Rect(elementRect);
-                rect.height -= ElementsSpacing;
 
-                rect.width = 90;
-                EditorGUI.PropertyField(rect, trigger, GUIContent.none);
-                rect.x += rect.width;
+                rect.height = singleLineHeight;
+                rect.y += standardVerticalSpacing / 2;
                 
-                rect.width = elementRect.width - 90;
+                var popupRect = new Rect(rect) { width = 90 };
+
+                EditorStyles.popup.fontSize--;
+                EditorGUI.PropertyField(popupRect, trigger, GUIContent.none);
+                EditorStyles.popup.fontSize++;
+                
+                rect.x += popupRect.width;
+                rect.width -= popupRect.width;
                     
                 EditorGUI.PropertyField(rect, logic, GUIContent.none);
-                rect.y += ElementsSpacing;
             };
         }
 
         private void CreateTransitionsGUI()
         {
-            var lineHeight = EditorGUIUtility.singleLineHeight;
-            var lineSpacing = lineHeight + 4;
-
+            var lineHeight = singleLineHeight + standardVerticalSpacing;
             transitionsList = new ReorderableList(serializedObject, transitionsProperty);
             
             transitionsList.drawHeaderCallback += rect =>
@@ -151,11 +213,11 @@ namespace AV.Logic
                 var property = transitionsProperty.GetArrayElementAtIndex(index);
                 var decisions = property.FindPropertyRelative("decisions");
                 var actions = property.FindPropertyRelative("actions");
+
+                var height = lineHeight;
                 
-                var height = lineSpacing;
-                
-                height += lineSpacing * Mathf.Max(decisions.arraySize, 1);
-                height += lineSpacing * Mathf.Max(actions.arraySize, 1);
+                height += lineHeight * Mathf.Max(decisions.arraySize, 1);
+                height += lineHeight * Mathf.Max(actions.arraySize, 1);
                 
                 return height;
             };
@@ -164,8 +226,9 @@ namespace AV.Logic
             {
                 var rect = new Rect(elementRect);
 
-                rect.y += ElementsSpacing;
-                rect.height = lineHeight;
+                var verticalSpacing = standardVerticalSpacing;
+                rect.y += verticalSpacing;
+                rect.height = singleLineHeight;
                 
                 var transition = transitionsProperty.GetArrayElementAtIndex(index);
 
@@ -174,11 +237,11 @@ namespace AV.Logic
                 var actions = transition.FindPropertyRelative("actions");
                 
                 var decisionsList = decisionsLists[index];
-                var actionsList = transitionActionLists[index];
+                var decisionActionsList = transitionActionLists[index];
                 
                 var isSomethingSelected = selectedList != null && selectedList.index != -1;
                 var isDecisionSelected = isSomethingSelected && selectedList == decisionsList;
-                var isActionSelected = isSomethingSelected && selectedList == actionsList;
+                var isActionSelected = isSomethingSelected && selectedList == decisionActionsList;
                 
                 
                 rect.width = 20;
@@ -191,22 +254,25 @@ namespace AV.Logic
                 rect.width -= 20;
                 
                 decisionsList.DoList(rect);
-                rect.y += lineSpacing * Mathf.Max(decisions.arraySize, 1) + ElementsSpacing + 1;
+                rect.y += lineHeight * Mathf.Max(decisions.arraySize, 1) + verticalSpacing * 2 + 1;
 
                 var addRemoveRect = new Rect(rect) { width = 20, height = 20 };
                 
                 addRemoveRect.x += 5;
                 addRemoveRect.y += 5;
-                if (GUI.Button(addRemoveRect, Content.plusMore, preButton))
+                if (GUI.Button(addRemoveRect, Content.plusMore, Styles.preButton))
                 {
                     transitionAddTarget = transition;
+                    lastPlusIndex = index;
+                    
+                    CreateTransitionAddMenu();
                     transitionAddMenu.DropDown(addRemoveRect);
                 }
                 
                 EditorGUI.BeginDisabledGroup(!isDecisionSelected && !isActionSelected);
                 
                 addRemoveRect.x += 20;
-                if (GUI.Button(addRemoveRect, Content.minus, preButton))
+                if (GUI.Button(addRemoveRect, Content.minus, Styles.preButton))
                 {
                     if(isDecisionSelected)
                         decisions.DeleteArrayElementAtIndex(selectedList.index);
@@ -217,13 +283,13 @@ namespace AV.Logic
                 
                 rect.x += 50;
                 rect.width -= 50;
-                actionsList.DoList(rect);
+                decisionActionsList.DoList(rect);
                 
                 EditorGUI.EndDisabledGroup();
             };
             
             CreateDecisionsGUI();
-            CreateEventsGUI();
+            CreateDecisionActionsGUI();
         }
 
         private void CreateDecisionsGUI()
@@ -232,13 +298,12 @@ namespace AV.Logic
             
             for (int i = 0; i < transitionsProperty.arraySize; i++)
             {
-                var list = decisionsLists[i];
                 var transition = transitionsProperty.GetArrayElementAtIndex(i);
                 var decisions = transition.FindPropertyRelative("decisions");
 
-                list = new ReorderableList(serializedObject, decisions, true, false, false, false)
+                var list = new ReorderableList(serializedObject, decisions, true, false, false, false)
                 {
-                    elementHeight = EditorGUIUtility.singleLineHeight + ElementsSpacing,
+                    elementHeight = singleLineHeight + standardVerticalSpacing,
                     headerHeight = 1
                 };
                 
@@ -250,24 +315,38 @@ namespace AV.Logic
                 list.drawElementCallback += (rect, index, active, focused) =>
                 {
                     var element = decisions.GetArrayElementAtIndex(index);
-                    EditorGUI.PropertyField(rect, element, GUIContent.none);
+                    var condition = element.FindPropertyRelative("condition");
+                    var state = element.FindPropertyRelative("state");
+
+                    rect.height = singleLineHeight;
+                    rect.y += standardVerticalSpacing / 2;
+                    
+                    var conditionRect = new Rect(rect) { width = 55 };
+                    EditorStyles.popup.fontSize--;
+                    EditorGUI.PropertyField(conditionRect, condition, GUIContent.none);
+                    EditorStyles.popup.fontSize++;
+
+                    rect.x += conditionRect.width;
+                    rect.width -= conditionRect.width;
+                    EditorGUI.PropertyField(rect, state, GUIContent.none);
                 };
                 decisionsLists[i] = list;
             }
         }
 
-        private void CreateEventsGUI()
+        private void CreateDecisionActionsGUI()
         {
             transitionActionLists = new ReorderableList[transitionsProperty.arraySize];
             
             for (int i = 0; i < transitionsProperty.arraySize; i++)
             {
-                var list = transitionActionLists[i];
                 var transition = transitionsProperty.GetArrayElementAtIndex(i);
                 var actions = transition.FindPropertyRelative("actions");
+                var nextState = transition.FindPropertyRelative("nextState");
 
-                list = new ReorderableList(serializedObject, actions, true, false, false, false)
+                var list = new ReorderableList(serializedObject, actions, true, false, false, false)
                 {
+                    elementHeight = singleLineHeight + standardVerticalSpacing,
                     headerHeight = 0
                 };
                 
@@ -283,25 +362,38 @@ namespace AV.Logic
                     var state = element.FindPropertyRelative("state");
                     var type = element.FindPropertyRelative("type");
 
-                    rect.y += ElementsSpacing / 2f;
-                    rect.height -= ElementsSpacing;
+                    rect.height = singleLineHeight;
+                    rect.y += standardVerticalSpacing / 2;
                     
-                    var triggerRect = new Rect(rect) { width = 70 };
+                    EditorStyles.popup.fontSize--;
+                    
+                    var triggerRect = new Rect(rect) { width = 55 };
                     EditorGUI.PropertyField(triggerRect, trigger, GUIContent.none);
-                    
                     rect.x += triggerRect.width;
                     rect.width -= triggerRect.width;
-                    EditorGUI.PropertyField(rect, state, GUIContent.none);
-
-                    var reference = state.objectReferenceValue;
-                    if (reference != null)
+                    
+                    EditorStyles.popup.fontSize++;
+                    
+                    var iconRect = new Rect(rect) { width = 24, height = 20 };
+                    rect.x += iconRect.width;
+                    rect.width -= iconRect.width;
+                    
+                    var actionType = (StateTransition.ActionType)type.enumValueIndex;
+                    switch (actionType)
                     {
-                        switch (reference)
-                        {
-                            case StateNode _: type.enumValueIndex = (int) StateTransition.StateType.Node; break;
-                            case StateAction _: type.enumValueIndex = (int) StateTransition.StateType.Action; break;
-                            case StateDecision _: type.enumValueIndex = (int) StateTransition.StateType.Decision; break;
-                        }
+                        case StateTransition.ActionType.Action:
+                            GUI.Label(iconRect, Icons.action, Styles.iconLabel);
+                            EditorGUI.PropertyField(rect, state, GUIContent.none);
+                            break;
+                            
+                        case StateTransition.ActionType.ChangeState:
+                            GUI.Label(iconRect, Icons.stateChange, Styles.iconLabel);
+                            EditorGUI.PropertyField(rect, nextState, GUIContent.none);
+                            break;
+                            
+                        default:
+                            GUI.Label(rect, "No GUI implemented.");
+                            break;
                     }
                 };
                 transitionActionLists[i] = list;

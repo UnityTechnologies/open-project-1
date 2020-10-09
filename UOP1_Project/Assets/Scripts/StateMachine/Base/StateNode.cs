@@ -15,9 +15,11 @@ namespace AV.Logic
         }
         public ActionUsage[] actions;
         public StateTransition[] transitions;
-
+        
+        
         internal void UpdateActions(StateMachine machine)
         {
+            this.machine = machine;
             foreach (var action in actions)
             {
                 if (action.trigger != StateTrigger.OnUpdate)
@@ -26,7 +28,7 @@ namespace AV.Logic
                 UpdateAction(action);
             }
         }
-
+        
         private void UpdateAction(ActionUsage action)
         {
             if (!action.logic)
@@ -34,17 +36,15 @@ namespace AV.Logic
                 Debug.Log($"{name} (StateNode) has unassigned action.", this);
                 return;
             }
-                
-            action.logic.BeginUpdate(machine);
+            
+            action.logic.machine = machine;
+            action.logic.OnUpdate();
         }
-
+        
         internal void CheckTransitions(StateMachine machine)
         {
             // Prioritised transition index
             // [0] transitions have highest priority
-            // Example:
-            // We see player and start chase, but if we hungry and see food - we chase food instead
-            // If watching for player is higher on the list, we'll not care about food while chasing player
             // TODO: Make priority matter
             var priority = int.MaxValue;
             
@@ -58,25 +58,38 @@ namespace AV.Logic
                 var finalDecision = true;
                 foreach (var decision in transition.decisions)
                 {
-                    if (!decision)
+                    var state = decision.state;
+                    if (!state)
                         continue;
                     
-                    decision.machine = machine;
-                    var decided = decision.OnDecide();
-
+                    state.machine = machine;
+                    var decided = state.OnDecide();
+                    
+                    switch (decision.condition)
+                    {
+                        case DecisionCondition.When:
+                            // Nothing changes
+                            break;
+                        case DecisionCondition.Not:
+                            decided = !decided;
+                            break;
+                        default:
+                            throw new NotImplementedException();
+                    }
+                    
                     if (!decided)
                     {
                         finalDecision = false;
-                        decision.OnFalse();
                     }
                 }
                 
                 foreach (var decision in transition.decisions)
                 {
-                    if (finalDecision)
-                        decision.OnTrue();
-                    else
-                        decision.OnFalse();
+                    var state = decision.state;
+                    if (!state)
+                        continue;
+                    
+                    state.AfterDecision(finalDecision);
                 }
 
                 // Skip if decision has not changed
@@ -92,29 +105,45 @@ namespace AV.Logic
             if (priority != int.MaxValue)
             {
                 var transition = transitions[priority];
-
+                var decision = machine.previousDecisions[priority];
+                
                 foreach (var action in transition.actions)
                 {
-                    if (!action.state)
-                        continue;
+                    // How did I forgot to actually implement this...
+                    switch (action.trigger)
+                    {
+                        case TransitionTrigger.True:
+                            if (!decision)
+                                continue;
+                            break;
+                        
+                        case TransitionTrigger.False:
+                            if (decision)
+                                continue;
+                            break;
+                        
+                        default: throw new NotImplementedException();
+                    }
                     
                     switch (action.type)
                     {
-                        case StateTransition.StateType.Node:
-                            machine.EnterState(action.state as StateNode);
+                        case StateTransition.ActionType.Action:
+                            if (!action.state)
+                                break;
+                            action.state.machine = machine;
+                            action.state.OnUpdate();
+                            break;
+                        
+                        case StateTransition.ActionType.ChangeState:
+                            machine.ChangeState(transition.nextState);
                             break;
                         
                         default:
-                            action.state.BeginUpdate(machine);
-                            break;
+                            throw new NotImplementedException();
                     }
+                   
                 }
             }
-        }
-
-        internal override void BeginUpdate(StateMachine machine)
-        {
-            // Unused
         }
     }
 }

@@ -7,7 +7,7 @@ public abstract class AudioEvent : StateAction
 {
     public abstract void Play(AudioSource source);
     
-    protected override void OnUpdate()
+    public override void OnUpdate()
     {
         Play(GetComponent<AudioSource>());
     }

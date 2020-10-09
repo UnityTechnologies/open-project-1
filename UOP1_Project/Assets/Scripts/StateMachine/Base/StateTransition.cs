@@ -7,27 +7,34 @@ namespace AV.Logic
     [Serializable]
     public class StateTransition
     {
-        // Used to avoid type checks
-        internal enum StateType
+        internal enum ActionType
         {
-            Node,
             Action,
-            Decision
+            ChangeState
         }
         
         [Serializable]
-        public struct TransitionAction
+        public struct Decision
+        {
+            public DecisionCondition condition;
+            public StateDecision state;
+        }
+        
+        [Serializable]
+        public struct DecisionAction
         {
             public TransitionTrigger trigger;
-            public ScriptableState state;
+            public StateAction state;
+            
 #pragma warning disable 649
             [SerializeField] 
-            internal StateType type; // assigned by StateNodeEditor
+            internal ActionType type; // assigned by StateNodeEditor
 #pragma warning restore 649
         }
         
         public bool enabled;
-        public StateDecision[] decisions; // TODO: Add custom condition (Or, When etc..)
-        public TransitionAction[] actions;
+        public Decision[] decisions;
+        public StateNode nextState;
+        public DecisionAction[] actions;
     }
 }

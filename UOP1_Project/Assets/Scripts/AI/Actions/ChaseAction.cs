@@ -10,7 +10,7 @@ namespace AI.States
     [CreateAssetMenu(menuName = "NPC/Actions/Chase")]
     public class ChaseAction : StateAction
     {
-        protected override void OnUpdate()
+        public override void OnUpdate()
         {
             var agent = GetComponent<NavMeshAgent>();
             

@@ -2,7 +2,7 @@
 {
     public enum TransitionTrigger
     {
-        OnTrue,
-        OnFalse
+        True,
+        False
     }
 }

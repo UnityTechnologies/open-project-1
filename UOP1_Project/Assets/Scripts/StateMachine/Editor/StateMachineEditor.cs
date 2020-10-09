@@ -13,17 +13,19 @@ namespace AV.Logic
     [CanEditMultipleObjects]
     internal class StateMachineEditor : Editor
     {
-        private SerializedProperty stateProperty;
+        private SerializedProperty currentStateProperty;
 
         private void OnEnable()
         {
-            stateProperty = serializedObject.FindProperty("currentState");
+            currentStateProperty = serializedObject.FindProperty("currentState");
         }
 
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
-            EditorGUILayout.PropertyField(stateProperty);
+            
+            EditorGUILayout.PropertyField(currentStateProperty);
+            
             serializedObject.ApplyModifiedProperties();
         }
     }
