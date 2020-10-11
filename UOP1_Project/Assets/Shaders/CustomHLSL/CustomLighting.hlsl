@@ -41,11 +41,10 @@ void DirectSpecular_float(float3 Specular, float Smoothness, float3 Direction, f
 #endif
 }
 
-void AdditionalLights_float(float3 SpecColor, float Smoothness, float3 WorldPosition, float3 WorldNormal, float3 WorldView, out float3 Diffuse, out float3 LightColor, out float3 Specular)
+void AdditionalLights_float(float3 SpecColor, float Smoothness, float3 WorldPosition, float3 WorldNormal, float3 WorldView, out float3 Diffuse, out float3 Specular)
 {
     float3 diffuseColor = 0;
     float3 specularColor = 0;
-	float3 lightColor = 0;
 
 #ifndef SHADERGRAPH_PREVIEW
     Smoothness = exp2(10 * Smoothness + 1);
@@ -56,14 +55,12 @@ void AdditionalLights_float(float3 SpecColor, float Smoothness, float3 WorldPosi
     {
         Light light = GetAdditionalLight(i, WorldPosition);
         half3 attenuatedLightColor = light.color * (light.distanceAttenuation * light.shadowAttenuation);
-		lightColor = light.color;
         diffuseColor += LightingLambert(attenuatedLightColor, light.direction, WorldNormal);
         specularColor += LightingSpecular(attenuatedLightColor, light.direction, WorldNormal, WorldView, float4(SpecColor, 0), Smoothness);
     }
 #endif
 
     Diffuse = diffuseColor;
-	LightColor = lightColor;
     Specular = specularColor;
 }
 
