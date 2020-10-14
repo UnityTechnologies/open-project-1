@@ -6,7 +6,9 @@ Welcome! This is the repository for the first Unity **Open Project**, an initiat
 ## Follow the progress
 The [dedicated sub-forum](https://forum.unity.com/forums/open-projects.531/) on the Unity Forums is where the Unity team and the whole community discuss and brainstorm ideas.
 
-The [public roadmap](https://open.codecks.io/unity-open-project-1) is the central location to know what's coming to the game. Also a great way to find something to contribute on!  
+The [public roadmap](https://open.codecks.io/unity-open-project-1) is the central location to know what's coming to the game. Also a great way to find something to contribute on!
+
+The [#open-projects channel](https://discord.gg/EZBXA4V) on the Official Unity Discord is where collaborators can meet for quick feedback and non-threaded discussion.
 
 ## Contribute
 We would love to get your contributions into the game! Whether you create code, art, narrative, sounds; whether you feel you are experienced enough or not; there is probably something you can add to it.
