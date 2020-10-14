@@ -1,6 +1,6 @@
 ![Unity Open Projects](https://imgur.com/Y0svl0w.png)
 # Unity Open Project #1
-....
+
 Welcome! This is the repository for the first Unity **Open Project**, an initiative where Unity and the community collaborate together to create **a small game**, in an open source way. As of now the game is still unnamed so we just refer to it as *Open Project #1*.
 
 ## Follow the progress
