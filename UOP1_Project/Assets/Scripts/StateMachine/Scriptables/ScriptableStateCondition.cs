@@ -23,10 +23,4 @@ namespace DeivSky.StateMachine.Scriptables
 	{
 		protected override Condition CreateCondition() => new T();
 	}
-
-	public abstract class SerializableStateCondition<T> : ScriptableStateCondition where T : Condition, new()
-	{
-		[SerializeField] private T _condition = new T();
-		protected override Condition CreateCondition() => _condition;
-	}
 }

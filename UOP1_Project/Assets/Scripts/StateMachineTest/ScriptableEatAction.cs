@@ -1,21 +1,26 @@
-﻿using System;
-using DeivSky.StateMachine;
+﻿using DeivSky.StateMachine;
 using DeivSky.StateMachine.Scriptables;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Eat", menuName = "State Machines/Tests/Actions/Eat")]
-public class ScriptableEatAction : SerializableStateAction<EatAction> { }
+public class ScriptableEatAction : ScriptableStateAction
+{
+	public float amount = 10f;
 
-[Serializable]
+	protected override StateAction CreateAction() => new EatAction(amount);
+}
+
 public class EatAction : StateAction
 {
-	[SerializeField] private float amount = 10f;
+	private float _amount = 10f;
 	private HungerComponent _hungerComponent;
+
+	public EatAction(float amount) => _amount = amount;
 
 	public override void Awake(StateMachine stateMachine)
 		=> _hungerComponent = stateMachine.GetComponent<HungerComponent>();
 
 	public override void Perform() { }
 
-	public override void OnStateExit() => _hungerComponent.Eat(amount);
+	public override void OnStateExit() => _hungerComponent.Eat(_amount);
 }

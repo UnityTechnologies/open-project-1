@@ -1,16 +1,21 @@
-﻿using System;
-using DeivSky.StateMachine;
+﻿using DeivSky.StateMachine;
 using DeivSky.StateMachine.Scriptables;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Timer", menuName = "State Machines/Tests/Conditions/Timer")]
-public class ScriptableTimedCondition : SerializableStateCondition<TimedCondition> { }
+public class ScriptableTimedCondition : ScriptableStateCondition
+{
+	public float Duration = 10f;
 
-[Serializable]
+	protected override Condition CreateCondition() => new TimedCondition(Duration);
+}
+
 public class TimedCondition : Condition
 {
-	[SerializeField] private float _duration = 10f;
+	private float _duration = 10f;
 	private float _time;
+
+	public TimedCondition(float duration) => _duration = duration;
 
 	public override void OnStateEnter() => _time = Time.time + _duration;
 

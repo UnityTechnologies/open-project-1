@@ -22,10 +22,4 @@ namespace DeivSky.StateMachine.Scriptables
 	{
 		protected override StateAction CreateAction() => new T();
 	}
-
-	public abstract class SerializableStateAction<T> : ScriptableStateAction where T : StateAction, new()
-	{
-		[SerializeField] private T _action = new T();
-		protected override StateAction CreateAction() => _action;
-	}
 }

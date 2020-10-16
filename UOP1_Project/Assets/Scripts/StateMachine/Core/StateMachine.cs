@@ -7,6 +7,7 @@ namespace DeivSky.StateMachine
 	public class StateMachine : MonoBehaviour
 	{
 #if UNITY_EDITOR
+		public string CurrentState;
 		public bool debug;
 #endif
 		[SerializeField] private Scriptables.ScriptableState _initialStateSO = null;
@@ -21,6 +22,9 @@ namespace DeivSky.StateMachine
 			_scriptableObjectsTypes = GetObjectTypes(_scriptableObjects);
 			_currentState = _initialStateSO.GetState(this);
 			_currentState.OnStateEnter();
+#if UNITY_EDITOR
+			CurrentState = _currentState.Name;
+#endif
 		}
 
 		private static List<Type> GetObjectTypes(object[] objects)
@@ -90,6 +94,7 @@ namespace DeivSky.StateMachine
 #if UNITY_EDITOR
 			if (debug)
 				Debug.Log($"{name} entering state {_currentState.Name}");
+			CurrentState = _currentState.Name;
 #endif
 		}
 	}
