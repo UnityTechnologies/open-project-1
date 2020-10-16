@@ -29,7 +29,7 @@ public class ChaseAction : StateAction
 		if (_chaseData == null)
 			throw new ArgumentNullException(nameof(_chaseData));
 
-		if(string.IsNullOrEmpty(_chaseData.TargetName))
+		if (string.IsNullOrEmpty(_chaseData.TargetName))
 			throw new ArgumentNullException(nameof(_chaseData.TargetName));
 
 		_chaseTransform = GameObject.Find(_chaseData.TargetName).transform;

@@ -4,31 +4,31 @@ using UnityEngine;
 
 namespace DeivSky.StateMachine
 {
-    public class StateMachine : MonoBehaviour
-    {
-        [SerializeField] private Scriptables.ScriptableState _initialStateSO = null;
-        [SerializeField] private ScriptableObject[] _scriptableObjects = null;
-        private List<Type> _scriptableObjectsTypes = null;
-        private readonly Dictionary<Type, Component> _cachedComponents = new Dictionary<Type, Component>();
+	public class StateMachine : MonoBehaviour
+	{
+		[SerializeField] private Scriptables.ScriptableState _initialStateSO = null;
+		[SerializeField] private ScriptableObject[] _scriptableObjects = null;
+		private List<Type> _scriptableObjectsTypes = null;
+		private readonly Dictionary<Type, Component> _cachedComponents = new Dictionary<Type, Component>();
 
-        private State _currentState;
+		private State _currentState;
 
-        protected void Awake()
-        {
+		protected void Awake()
+		{
 			_scriptableObjectsTypes = GetObjectTypes(_scriptableObjects);
-            _currentState = _initialStateSO.GetState(this);
+			_currentState = _initialStateSO.GetState(this);
 			_currentState.OnStateEnter();
-        }
+		}
 
-        private static List<Type> GetObjectTypes(object[] objects)
-        {
-            int count = objects.Length;
-            var types = new List<Type>(count);
-            for (int i = 0; i < count; i++)
-                types.Add(objects[i].GetType());
+		private static List<Type> GetObjectTypes(object[] objects)
+		{
+			int count = objects.Length;
+			var types = new List<Type>(count);
+			for (int i = 0; i < count; i++)
+				types.Add(objects[i].GetType());
 
-            return types;
-        }
+			return types;
+		}
 
 		public bool TryGetScriptableObject<T>(out T sObject) where T : ScriptableObject
 		{
@@ -37,25 +37,25 @@ namespace DeivSky.StateMachine
 			return i >= 0;
 		}
 
-        public T GetScriptableObject<T>() where T : ScriptableObject
-        {
-            return TryGetScriptableObject<T>(out var sObject) ? sObject : throw new InvalidOperationException($"{typeof(T).Name} not found in {name}");
+		public T GetScriptableObject<T>() where T : ScriptableObject
+		{
+			return TryGetScriptableObject<T>(out var sObject) ? sObject : throw new InvalidOperationException($"{typeof(T).Name} not found in {name}");
 		}
 
 		public new bool TryGetComponent<T>(out T component) where T : Component
 		{
-            var type = typeof(T);
-            if (!_cachedComponents.TryGetValue(type, out var value))
-            {
-                if (base.TryGetComponent<T>(out component))
-                    _cachedComponents.Add(type, component);
+			var type = typeof(T);
+			if (!_cachedComponents.TryGetValue(type, out var value))
+			{
+				if (base.TryGetComponent<T>(out component))
+					_cachedComponents.Add(type, component);
 
-                return component != null;
-            }
+				return component != null;
+			}
 
-            component = (T)value;
-            return true;
-        }
+			component = (T)value;
+			return true;
+		}
 
 		public T GetOrAddComponent<T>() where T : Component
 		{
@@ -68,28 +68,28 @@ namespace DeivSky.StateMachine
 			return component;
 		}
 
-        public new T GetComponent<T>() where T : Component
-            => TryGetComponent(out T component) ? component : throw new InvalidOperationException($"{typeof(T).Name} not found in {name}.");
+		public new T GetComponent<T>() where T : Component
+			=> TryGetComponent(out T component) ? component : throw new InvalidOperationException($"{typeof(T).Name} not found in {name}.");
 
-        protected void Update()
-        {
-            if (_currentState.TryGetTransition(out var transitionState))
-                Transition(transitionState);
+		protected void Update()
+		{
+			if (_currentState.TryGetTransition(out var transitionState))
+				Transition(transitionState);
 
-            _currentState.OnUpdate();
-        }
+			_currentState.OnUpdate();
+		}
 
-        private void Transition(State transitionState)
-        {
-            _currentState.OnStateExit();
+		private void Transition(State transitionState)
+		{
+			_currentState.OnStateExit();
 			_currentState = transitionState;
 			_currentState.OnStateEnter();
 			Debug.Log("Entering state " + _currentState.Name);
 		}
-    }
+	}
 
-    public abstract class StateMachine<T> : StateMachine
-    {
-        public abstract T GetContext();
-    }
+	public abstract class StateMachine<T> : StateMachine
+	{
+		public abstract T GetContext();
+	}
 }
