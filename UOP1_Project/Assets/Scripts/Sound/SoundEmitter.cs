@@ -6,53 +6,46 @@ using UnityEngine.Audio;
 [RequireComponent (typeof(AudioSource))]
 public class SoundEmitter : MonoBehaviour
 {
-	private AudioSource thisAudioSource;
+	private AudioSource audioSource;
 
 	private void Awake()
 	{
 		DontDestroyOnLoad(this);
-		thisAudioSource = this.GetComponent<AudioSource>();
+		audioSource = this.GetComponent<AudioSource>();
 	}
 
 	// Start is called before the first frame update
 	void Start()
     {
-		thisAudioSource.playOnAwake = false;
+		audioSource.playOnAwake = false;
     }
 
-	public void PlaySound(AudioClip clip, AudioMixerGroup mixer, Vector3 position, bool loop, float volume, float pitch = 1)
+	public void PlaySound(AudioClip clip, AudioMixerGroup mixer, Vector3 position, bool loop, float volume, float pitch, float spartialBlend)
 	{
-		if (position == Vector3.zero)
-		{
-			thisAudioSource.spatialBlend = 0;
-		}
-		else
-		{
-			thisAudioSource.spatialBlend = 1;
-			this.transform.position = position;
-		}
+		this.transform.position = position;
 
-		thisAudioSource.clip = clip;
-		thisAudioSource.outputAudioMixerGroup = mixer;
-		thisAudioSource.loop = loop;
-		thisAudioSource.volume = volume;
-		thisAudioSource.pitch = pitch;
+		audioSource.clip = clip;
+		audioSource.outputAudioMixerGroup = mixer;
+		audioSource.loop = loop;
+		audioSource.volume = volume;
+		audioSource.pitch = pitch;
+		audioSource.spatialBlend = spartialBlend;	
 
-		thisAudioSource.Play();
+		audioSource.Play();
 	}
 
 	public void StopSound()
 	{
-		thisAudioSource.Stop();
+		audioSource.Stop();
 	}
 
 	public bool IsInUse()
 	{
-		return thisAudioSource.isPlaying;
+		return audioSource.isPlaying;
 	}
 
 	public bool IsLooping()
 	{
-		return thisAudioSource.loop;
+		return audioSource.loop;
 	}
 }

@@ -36,10 +36,6 @@ public class SoundManager : MonoBehaviour
 	void Start()
     {
 		InitEmitterPool();
-
-		float tempVal = Mathf.Infinity;
-
-		Debug.Log(tempVal == Mathf.Infinity);
     }
 
 	#region mixer groups functions
@@ -87,26 +83,26 @@ public class SoundManager : MonoBehaviour
 
 	#region play sounds functions
 	// Vector3.zero is used as a marker of a 2D sound
-	public SoundEmitter Play2DSound(AudioClip clip, AudioMixerGroup mixer, bool loop = false, float volume = 1, float pitch = 1)
+	public SoundEmitter Play2DSound(AudioClip clip, AudioMixerGroup mixer, bool loop = false, float volume = 1, float pitch = 1, float spartialBlend = 0)
 	{
 		if (!mixer)
 			mixer = masterMixer;
 
 		SoundEmitter foundSoundEmit = GetSoundEmitter();
 
-		foundSoundEmit.PlaySound(clip, mixer, Vector3.zero, loop, volume, pitch);
+		foundSoundEmit.PlaySound(clip, mixer, Vector3.zero, loop, volume, pitch, spartialBlend);
 
 		return foundSoundEmit;
 	}
 
-	public SoundEmitter PlaySpatialSound(AudioClip clip, AudioMixerGroup mixer, Vector3 position, bool loop = false, float volume = 1, float pitch = 1)
+	public SoundEmitter PlaySpatialSound(AudioClip clip, AudioMixerGroup mixer, Vector3 position, bool loop = false, float volume = 1, float pitch = 1, float spartialBlend = 1)
 	{
 		if (!mixer)
 			mixer = masterMixer;
 
 		SoundEmitter foundSoundEmit = GetSoundEmitter();
 
-		foundSoundEmit.PlaySound(clip, mixer, position, loop, volume, pitch);
+		foundSoundEmit.PlaySound(clip, mixer, position, loop, volume, pitch, spartialBlend);
 
 		return foundSoundEmit;
 	}
