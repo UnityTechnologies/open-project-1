@@ -20,7 +20,7 @@ public class SoundEmitter : MonoBehaviour
 		_audioSource.playOnAwake = false;
     }
 
-	public void PlaySound(AudioClip clip, AudioMixerGroup mixer, Vector3 position, bool loop, float volume, float pitch, float spartialBlend)
+	public void PlaySound(AudioClip clip, AudioMixerGroup mixer, Vector3 position, bool loop, float volume, float pitch, float spatialBlend)
 	{
 		this.transform.position = position;
 
@@ -29,7 +29,7 @@ public class SoundEmitter : MonoBehaviour
 		_audioSource.loop = loop;
 		_audioSource.volume = volume;
 		_audioSource.pitch = pitch;
-		_audioSource.spatialBlend = spartialBlend;	
+		_audioSource.spatialBlend = spatialBlend;	
 
 		_audioSource.Play();
 	}
