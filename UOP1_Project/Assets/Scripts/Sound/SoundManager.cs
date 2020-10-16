@@ -43,12 +43,12 @@ public class SoundManager : MonoBehaviour
     }
 
 	#region mixer groups functions
-	public void ChangeVolumeOfMixerGroup(AudioMixerGroup mixer, float newVolumeNormalized)
+	public static void ChangeVolumeOfMixerGroup(AudioMixerGroup mixer, float newVolumeNormalized)
 	{
 		mixer.audioMixer.SetFloat("Volume", NormalizedToMixerValue(newVolumeNormalized));
 	}
 
-	public void SaveVolumeOfMixerGroup(AudioMixerGroup mixer)
+	public static void SaveVolumeOfMixerGroup(AudioMixerGroup mixer)
 	{
 		float tempVolume;
 
@@ -60,7 +60,7 @@ public class SoundManager : MonoBehaviour
 			Debug.LogError("Could not save volume for mixer group " + mixer.name + ". It does not contain an exposer variable with name Volume" );
 	}
 
-	public void LoadVolumeOfMixerGroup(AudioMixerGroup mixer)
+	public static void LoadVolumeOfMixerGroup(AudioMixerGroup mixer)
 	{
 		float tempVolume = PlayerPrefs.GetFloat(mixer.name, Mathf.Infinity);
 
@@ -74,11 +74,11 @@ public class SoundManager : MonoBehaviour
 
 	#region mixerHelpers
 	// Both MixerValueNormalized and NormalizedToMixerValue functions are used for easier transformations when using UI sliders normalized format
-	private float MixerValueNormalized(float value)
+	private static float MixerValueNormalized(float value)
 	{
 		return  (-(value - 80) / 80) - 1;
 	}
-	private float NormalizedToMixerValue(float normalizedValue)
+	private static float NormalizedToMixerValue(float normalizedValue)
 	{
 		return -80 + (normalizedValue * 80);
 	}
