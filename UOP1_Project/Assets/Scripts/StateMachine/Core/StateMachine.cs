@@ -4,9 +4,12 @@ using UnityEngine;
 
 namespace DeivSky.StateMachine
 {
-    public class StateMachine : MonoBehaviour
-    {
-        [SerializeField] private Scriptables.ScriptableState _initialStateSO = null;
+	public class StateMachine : MonoBehaviour
+	{
+#if UNITY_EDITOR
+		public bool debug;
+#endif
+		[SerializeField] private Scriptables.ScriptableState _initialStateSO = null;
         [SerializeField] private ScriptableObject[] _scriptableObjects = null;
         private List<Type> _scriptableObjectsTypes = null;
         private readonly Dictionary<Type, Component> _cachedComponents = new Dictionary<Type, Component>();
@@ -84,7 +87,10 @@ namespace DeivSky.StateMachine
             _currentState.OnStateExit();
 			_currentState = transitionState;
 			_currentState.OnStateEnter();
-			Debug.Log("Entering state " + _currentState.Name);
+#if UNITY_EDITOR
+			if (debug)
+				Debug.Log($"{name} entering state {_currentState.Name}");
+#endif
 		}
     }
 
