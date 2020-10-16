@@ -6,46 +6,46 @@ using UnityEngine.Audio;
 [RequireComponent (typeof(AudioSource))]
 public class SoundEmitter : MonoBehaviour
 {
-	private AudioSource audioSource;
+	private AudioSource _audioSource;
 
 	private void Awake()
 	{
 		DontDestroyOnLoad(this);
-		audioSource = this.GetComponent<AudioSource>();
+		_audioSource = this.GetComponent<AudioSource>();
 	}
 
 	// Start is called before the first frame update
 	void Start()
     {
-		audioSource.playOnAwake = false;
+		_audioSource.playOnAwake = false;
     }
 
 	public void PlaySound(AudioClip clip, AudioMixerGroup mixer, Vector3 position, bool loop, float volume, float pitch, float spartialBlend)
 	{
 		this.transform.position = position;
 
-		audioSource.clip = clip;
-		audioSource.outputAudioMixerGroup = mixer;
-		audioSource.loop = loop;
-		audioSource.volume = volume;
-		audioSource.pitch = pitch;
-		audioSource.spatialBlend = spartialBlend;	
+		_audioSource.clip = clip;
+		_audioSource.outputAudioMixerGroup = mixer;
+		_audioSource.loop = loop;
+		_audioSource.volume = volume;
+		_audioSource.pitch = pitch;
+		_audioSource.spatialBlend = spartialBlend;	
 
-		audioSource.Play();
+		_audioSource.Play();
 	}
 
 	public void StopSound()
 	{
-		audioSource.Stop();
+		_audioSource.Stop();
 	}
 
 	public bool IsInUse()
 	{
-		return audioSource.isPlaying;
+		return _audioSource.isPlaying;
 	}
 
 	public bool IsLooping()
 	{
-		return audioSource.loop;
+		return _audioSource.loop;
 	}
 }
