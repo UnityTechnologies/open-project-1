@@ -82,7 +82,6 @@ public class SoundManager : MonoBehaviour
 	#endregion
 
 	#region play sounds functions
-	// Vector3.zero is used as a marker of a 2D sound
 	public SoundEmitter Play2DSound(AudioClip clip, AudioMixerGroup mixer, bool loop = false, float volume = 1, float pitch = 1)
 	{
 		if (!mixer)
