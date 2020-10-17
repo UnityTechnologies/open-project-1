@@ -6,7 +6,7 @@ public class HungerComponent : MonoBehaviour
 	[SerializeField] private float _hungerPerSecond = 1f;
 	[SerializeField] [Range(0.01f, 0.99f)] private float _isHungryThreshold = 0.4f;
 	private bool _getHungry;
-	public float _currentFullness;
+	private float _currentFullness;
 	public bool IsHungry => _currentFullness <= _maxFullness * _isHungryThreshold;
 
 	private void Awake() => _currentFullness = _maxFullness;
