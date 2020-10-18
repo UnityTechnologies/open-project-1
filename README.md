@@ -18,6 +18,8 @@ To learn all about contributing, head to the [Contribution Guidelines](https://d
 
 If you feel like taking on some **bugs**, check out the [Issues page](https://github.com/UnityTechnologies/open-project-1/issues) on this very repo. In fact, another thing you could help with is by doing some **QA testing**: download the [latest release](https://github.com/UnityTechnologies/open-project-1/releases) of the game, play it, and report issues in the appropriate page. That's also a great way to be part of this project!
 
+For **code style**, **scene hierarchy**, and **project organization** standards, please read the [Open Projects - Conventions](https://docs.google.com/document/d/1-eUWZ0lWREFu5iH-ggofwnixDDQqalOoT4Yc0NpWR3k/edit) document.
+
 This project is built on **Unity 2019.4 LTS**, whatever latest patch is available.
 
 ## Play the game
