@@ -148,13 +148,13 @@ public class SoundManager : MonoBehaviour
 	private SoundEmitter CreateNewSoundEmitter()
 	{
 		GameObject temp = new GameObject();
-		temp.AddComponent<SoundEmitter>();
+		var emitter = temp.AddComponent<SoundEmitter>();
 		temp.name = "SoundEmitter #" + soundEmitterPool.Count;
 
 		temp.transform.SetParent(soundEmittersContainer.transform);
 
-		soundEmitterPool.Add(temp.GetComponent<SoundEmitter>());
-		return temp.GetComponent<SoundEmitter>();
+		soundEmitterPool.Add(emitter);
+		return emitter;
 	}
 
 	// GetSoundEmitter with return the next SoundEmitter that is not playing any sounds, if all the sound emitters are busy it will extend the pool
