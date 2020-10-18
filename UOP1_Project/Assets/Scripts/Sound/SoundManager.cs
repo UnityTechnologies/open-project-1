@@ -39,33 +39,19 @@ public class SoundManager : MonoBehaviour
     }
 
 	#region mixer groups functions
-	public static void ChangeVolumeOfMixerGroup(AudioMixerGroup mixer, float newVolumeNormalized)
+	public static bool SetGroupVolume(AudioMixerGroup group, float volume)
 	{
-		mixer.audioMixer.SetFloat("Volume", NormalizedToMixerValue(newVolumeNormalized));
+		return group.audioMixer.SetFloat("Volume", NormalizedToMixerValue(volume));
 	}
-
-	public static void SaveVolumeOfMixerGroup(AudioMixerGroup mixer)
+	
+	public static bool GetGroupVolume(AudioMixerGroup group, out float volume)
 	{
-		float tempVolume;
-
-		if (mixer.audioMixer.GetFloat("Volume", out tempVolume))
-		{
-			PlayerPrefs.SetFloat(mixer.name, tempVolume);
-		}
-		else
-			Debug.LogError("Could not save volume for mixer group " + mixer.name + ". It does not contain an exposer variable with name Volume" );
-	}
-
-	public static void LoadVolumeOfMixerGroup(AudioMixerGroup mixer)
-	{
-		float tempVolume = PlayerPrefs.GetFloat(mixer.name, Mathf.Infinity);
-
-		if (tempVolume != Mathf.Infinity)
-		{
-			mixer.audioMixer.SetFloat("Volume", tempVolume);
-		}
-		else
-			Debug.Log("There is no saved volume preferences for mixer " + mixer.name + ", could not load volume.");
+	        if(group.audioMixer.GetFloat("Volume", out float rawVolume)){
+	                volume = MixerValueNormalized(rawVolume);
+	                return true;
+	        }
+	        volume = default;
+	        return false;
 	}
 
 	#region mixerHelpers
