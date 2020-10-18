@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
@@ -18,7 +19,6 @@ public class SoundManager : MonoBehaviour
 
 	private List<SoundEmitter> soundEmitterPool = new List<SoundEmitter>();
 	private GameObject soundEmittersContainer;
-	private int poolIndex = 0;
 
 	private void Awake()
 	{
@@ -133,6 +133,9 @@ public class SoundManager : MonoBehaviour
 
 	private SoundEmitter CreateNewSoundEmitter()
 	{
+		if (soundEmitterPool.Count >= AudioSettings.GetConfiguration().numVirtualVoices)
+			throw new UnityException("Error creating a new SoundEmitter instance, this sound will not be played. Sound emitter pool already has enough instances to cover the number of virtual voices.");
+
 		GameObject temp = new GameObject();
 		var emitter = temp.AddComponent<SoundEmitter>();
 		temp.name = "SoundEmitter #" + soundEmitterPool.Count;
@@ -146,31 +149,7 @@ public class SoundManager : MonoBehaviour
 	// GetSoundEmitter with return the next SoundEmitter that is not playing any sounds, if all the sound emitters are busy it will extend the pool
 	private SoundEmitter GetSoundEmitter()
 	{
-		SoundEmitter toReturn = null;
-		int startIndex = poolIndex;
-		poolIndex++;
-
-		// Cycles through the list of emitters until it finds one in use or has completed a full cycle
-		while (toReturn == null)
-		{
-			if (poolIndex >= soundEmitterPool.Count)
-				poolIndex = 0;
-
-			if (poolIndex == startIndex) // If none of the sound emitters are available, create a new sound emitter and assign the index to the newly created one
-			{
-				toReturn = CreateNewSoundEmitter();
-				poolIndex = soundEmitterPool.Count - 1;
-			}
-
-			if (!soundEmitterPool[poolIndex].IsInUse())
-			{
-				toReturn = soundEmitterPool[poolIndex];
-			}
-			else
-				poolIndex++;
-		}
-
-		return toReturn;
+		return soundEmitterPool.FirstOrDefault(emitter => !emitter.IsInUse()) ?? CreateNewSoundEmitter();
 	}
 	#endregion
 }
