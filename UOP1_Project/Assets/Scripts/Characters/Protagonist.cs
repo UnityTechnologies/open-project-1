@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using PlayerStateMachine;
+using UnityEngine;
 
 public class Protagonist : MonoBehaviour
 {
@@ -6,12 +7,14 @@ public class Protagonist : MonoBehaviour
     public Transform gameplayCamera;
 
     private Character charScript;
+    private CharacterMotor charMotorScript;
     private Vector2 previousMovementInput;
     private bool controlsEnabled = true;
 
     private void Awake()
     {
         charScript = GetComponent<Character>();
+        charMotorScript = GetComponent<CharacterMotor>();
     }
 
     //Adds listeners for events being triggered in the InputReader script
@@ -49,7 +52,8 @@ public class Protagonist : MonoBehaviour
         Vector3 adjustedMovement = cameraRight.normalized * previousMovementInput.x +
             cameraForward.normalized * previousMovementInput.y;
 
-        charScript.Move(Vector3.ClampMagnitude(adjustedMovement, 1f));
+        charScript?.Move(Vector3.ClampMagnitude(adjustedMovement, 1f));
+        charMotorScript?.Move(Vector3.ClampMagnitude(adjustedMovement, 1f));
     }
 
     //---- EVENT LISTENERS ----
@@ -61,11 +65,19 @@ public class Protagonist : MonoBehaviour
 
     private void OnJumpInitiated()
     {
-        if (controlsEnabled) charScript.Jump();
+        if (controlsEnabled)
+        {
+            charScript?.Jump();
+            charMotorScript?.Jump();
+        }
     }
 
     private void OnJumpCanceled()
     {
-        if (controlsEnabled) charScript.CancelJump();
+        if (controlsEnabled)
+        {
+            charScript?.CancelJump();
+            charMotorScript?.CancelJump();
+        }
     }
 }
