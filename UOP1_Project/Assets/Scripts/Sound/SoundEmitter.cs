@@ -20,18 +20,35 @@ public class SoundEmitter : MonoBehaviour
 		_audioSource.playOnAwake = false;
     }
 
-	public void PlaySound(AudioClip clip, AudioMixerGroup mixer, Vector3 position, bool loop, float volume, float pitch, float spatialBlend)
+	public void PlaySound(AudioClip clip, SoundEmitterSettings settings, Vector3 position = default)
 	{
-		this.transform.position = position;
-
 		_audioSource.clip = clip;
-		_audioSource.outputAudioMixerGroup = mixer;
-		_audioSource.loop = loop;
-		_audioSource.volume = volume;
-		_audioSource.pitch = pitch;
-		_audioSource.spatialBlend = spatialBlend;	
-
+		ApplySettings(_audioSource, settings);
+		_audioSource.transform.position = position;
 		_audioSource.Play();
+	}
+
+	private void ApplySettings(AudioSource source, SoundEmitterSettings settings)
+	{
+		source.outputAudioMixerGroup = settings.OutputAudioMixerGroup;
+		source.mute = settings.Mute;
+		source.bypassEffects = settings.BypassEffects;
+		source.bypassListenerEffects = settings.BypassListenerEffects;
+		source.bypassReverbZones = settings.BypassReverbZones;
+		source.loop = settings.Loop;
+		source.priority = settings.Priority;
+		source.volume = settings.Volume;
+		source.pitch = settings.Pitch;
+		source.panStereo = settings.PanStereo;
+		source.spatialBlend = settings.SpatialBlend;
+		source.reverbZoneMix = settings.ReverbZoneMix;
+		source.dopplerLevel = settings.DopplerLevel;
+		source.spread = settings.Spread;
+		source.rolloffMode = settings.RolloffMode;
+		source.minDistance = settings.MinDistance;
+		source.maxDistance = settings.MaxDistance;
+		source.ignoreListenerVolume = settings.IgnoreListenerVolume;
+		source.ignoreListenerPause = settings.IgnoreListenerPause;
 	}
 
 	public void StopSound()

@@ -68,28 +68,14 @@ public class SoundManager : MonoBehaviour
 	#endregion
 
 	#region play sounds functions
-	public SoundEmitter Play2DSound(AudioClip clip, AudioMixerGroup mixer, bool loop = false, float volume = 1, float pitch = 1)
+	public SoundEmitter PlaySound(AudioClip clip, SoundEmitterSettings settings, Vector3 position = default)
 	{
-		if (!mixer)
-			mixer = masterMixer;
-
-		SoundEmitter foundSoundEmit = GetSoundEmitter();
-
-		foundSoundEmit.PlaySound(clip, mixer, Vector3.zero, loop, volume, pitch, 0);
-
-		return foundSoundEmit;
-	}
-
-	public SoundEmitter PlaySpatialSound(AudioClip clip, AudioMixerGroup mixer, Vector3 position, bool loop = false, float volume = 1, float pitch = 1, float spartialBlend = 1)
-	{
-		if (!mixer)
-			mixer = masterMixer;
-
-		SoundEmitter foundSoundEmit = GetSoundEmitter();
-
-		foundSoundEmit.PlaySound(clip, mixer, position, loop, volume, pitch, spartialBlend);
-
-		return foundSoundEmit;
+		SoundEmitter soundEmitter = GetSoundEmitter();
+		if (soundEmitter != null)
+		{
+			soundEmitter.PlaySound(clip, settings, position);
+		}
+		return soundEmitter;
 	}
 
 	public void StopAllSounds()
