@@ -8,6 +8,9 @@ public class SoundEmitter : MonoBehaviour
 {
 	private AudioSource _audioSource;
 
+	public bool _initialPool = false;
+	public float _lastUseTimestamp = 0;
+
 	private void Awake()
 	{
 		DontDestroyOnLoad(this);
@@ -25,6 +28,7 @@ public class SoundEmitter : MonoBehaviour
 		_audioSource.clip = clip;
 		ApplySettings(_audioSource, settings);
 		_audioSource.transform.position = position;
+		_lastUseTimestamp = Time.realtimeSinceStartup + clip.length;
 		_audioSource.Play();
 	}
 
