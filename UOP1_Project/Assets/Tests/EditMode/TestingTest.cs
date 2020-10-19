@@ -6,7 +6,7 @@ using UnityEngine.TestTools;
 
 namespace Tests
 {
-    public class TestingTest
+    public class EditModeTestingTest
     {
         // A Test behaves as an ordinary method
         [Test]

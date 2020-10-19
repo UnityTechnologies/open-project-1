@@ -1,16 +1,22 @@
 {
-    "name": "PlayMode",
+    "name": "OpenProject1.Tests.EditMode",
     "references": [
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
-        "UnityOpenProject1"
+        "OpenProject1.Scripts",
+        "UnityEngine.UI",
+        "OpenProject1.Settings.Input",
+        "Unity.InputSystem"
     ],
-    "includePlatforms": [],
+    "includePlatforms": [
+        "Editor"
+    ],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": true,
     "precompiledReferences": [
-        "nunit.framework.dll"
+        "nunit.framework.dll",
+        "Moq.dll"
     ],
     "autoReferenced": false,
     "defineConstraints": [
