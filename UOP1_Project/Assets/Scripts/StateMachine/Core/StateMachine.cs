@@ -13,7 +13,8 @@ namespace DeivSky.StateMachine
 		[Tooltip("Set the initial state of this StateMachine")]
 		[SerializeField] private ScriptableObjects.StateSO _initialStateSO = null;
 
-		[Space][Tooltip("Certain Actions and Conditions allow overriding their default behaviour through the use of ScriptableObjects. Place the SOs here so they can be accessed.")]
+		[Space]
+		[Tooltip("Certain Actions and Conditions allow overriding their default behaviour through the use of ScriptableObjects. Place the SOs here so they can be accessed.")]
 		[SerializeField] private ScriptableObject[] _scriptableObjects = null;
 
 		private List<Type> _scriptableObjectsTypes = null;
