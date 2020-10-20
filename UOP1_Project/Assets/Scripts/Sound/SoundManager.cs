@@ -12,17 +12,17 @@ public class SoundManager : MonoBehaviour
 	[Tooltip ("Amount of sound emitters created on Start")]
 	public int initialPoolSize = 1;
 	[Tooltip ("Frequency at which the sound manager will delete extra emitters that are not in use")]
-	public float _trimFrequency = 5;
+	public float trimFrequency = 5;
 	[Tooltip ("Extra time after instanced emitters are not in use anymore before destroying them")]
-	public float _extraTimeBeforeTrim = 5;
+	public float extraTimeBeforeTrim = 5;
 
 	[Header ("Mixer Groups")]
 	public AudioMixerGroup masterMixer;
 	public AudioMixerGroup sfxMixer;
 	public AudioMixerGroup musicMixer;
 
-	private List<SoundEmitter> soundEmitterPool = new List<SoundEmitter>();
-	private GameObject soundEmittersContainer;
+	private List<SoundEmitter> _soundEmitterPool = new List<SoundEmitter>();
+	private GameObject _soundEmittersContainer;
 
 	private void Awake()
 	{
@@ -41,7 +41,7 @@ public class SoundManager : MonoBehaviour
     {
 		InitEmitterPool();
 
-		InvokeRepeating("TrimUnusedEmitters", _trimFrequency, _trimFrequency);
+		InvokeRepeating("TrimUnusedEmitters", trimFrequency, trimFrequency);
     }
 
 	#region mixer groups functions
@@ -86,7 +86,7 @@ public class SoundManager : MonoBehaviour
 
 	public void StopAllSounds()
 	{
-		foreach (SoundEmitter emit in soundEmitterPool)
+		foreach (SoundEmitter emit in _soundEmitterPool)
 		{
 			if (emit.IsInUse())
    				emit.StopSound();
@@ -94,7 +94,7 @@ public class SoundManager : MonoBehaviour
 	}
 	public void StopAllNonLoopSounds()
 	{
-		foreach (SoundEmitter emit in soundEmitterPool)
+		foreach (SoundEmitter emit in _soundEmitterPool)
 		{
 			if (emit.IsInUse() && !emit.IsLooping())
 				emit.StopSound();
@@ -102,7 +102,7 @@ public class SoundManager : MonoBehaviour
 	}
 	public void StopAllLoopSounds()
 	{
-		foreach (SoundEmitter emit in soundEmitterPool)
+		foreach (SoundEmitter emit in _soundEmitterPool)
 		{
 			if (emit.IsInUse() && emit.IsLooping())
 				emit.StopSound();
@@ -113,40 +113,40 @@ public class SoundManager : MonoBehaviour
 	#region SoundEmitters Pool Functions
 	private void InitEmitterPool()
 	{
-		soundEmittersContainer = new GameObject();
-		soundEmittersContainer.name = "Sound Emitters Pool";
-		DontDestroyOnLoad(soundEmittersContainer);
+		_soundEmittersContainer = new GameObject();
+		_soundEmittersContainer.name = "Sound Emitters Pool";
+		DontDestroyOnLoad(_soundEmittersContainer);
 
 		for (int i = 0; i < initialPoolSize; i++)
 		{
 			SoundEmitter temp = CreateNewSoundEmitter();
-			temp._initialPool = true;
+			temp.initialPool = true;
 		}
 	}
 
 	private SoundEmitter CreateNewSoundEmitter()
 	{
-		if (soundEmitterPool.Count >= AudioSettings.GetConfiguration().numVirtualVoices)
+		if (_soundEmitterPool.Count >= AudioSettings.GetConfiguration().numVirtualVoices)
 			throw new UnityException("Error creating a new SoundEmitter instance, this sound will not be played. Sound emitter pool already has enough instances to cover the number of virtual voices.");
 
 		GameObject temp = new GameObject();
 		var emitter = temp.AddComponent<SoundEmitter>();
-		temp.name = "SoundEmitter #" + soundEmitterPool.Count;
+		temp.name = "SoundEmitter #" + _soundEmitterPool.Count;
 
-		temp.transform.SetParent(soundEmittersContainer.transform);
+		temp.transform.SetParent(_soundEmittersContainer.transform);
 
-		soundEmitterPool.Add(emitter);
+		_soundEmitterPool.Add(emitter);
 		return emitter;
 	}
 
 	private void TrimUnusedEmitters()
 	{
-		if (soundEmitterPool.Count <= initialPoolSize)
+		if (_soundEmitterPool.Count <= initialPoolSize)
 			return;
 
-		SoundEmitter[] emittersToDelete = soundEmitterPool.Where(emitter => !emitter._initialPool && !emitter.IsInUse() && emitter.LastUseTimestamp() + _extraTimeBeforeTrim <= Time.realtimeSinceStartup).ToArray();
+		SoundEmitter[] emittersToDelete = _soundEmitterPool.Where(emitter => !emitter.initialPool && !emitter.IsInUse() && emitter.LastUseTimestamp() + extraTimeBeforeTrim <= Time.realtimeSinceStartup).ToArray();
 
-		soundEmitterPool.RemoveAll(emitter => !emitter._initialPool && !emitter.IsInUse() && emitter.LastUseTimestamp() + _extraTimeBeforeTrim <= Time.realtimeSinceStartup);
+		_soundEmitterPool.RemoveAll(emitter => !emitter.initialPool && !emitter.IsInUse() && emitter.LastUseTimestamp() + extraTimeBeforeTrim <= Time.realtimeSinceStartup);
 
 		foreach (SoundEmitter instance in emittersToDelete)
 		{
@@ -157,7 +157,7 @@ public class SoundManager : MonoBehaviour
 	// GetSoundEmitter with return the next SoundEmitter that is not playing any sounds, if all the sound emitters are busy it will extend the pool
 	private SoundEmitter GetSoundEmitter()
 	{
-		return soundEmitterPool.FirstOrDefault(emitter => !emitter.IsInUse()) ?? CreateNewSoundEmitter();
+		return _soundEmitterPool.FirstOrDefault(emitter => !emitter.IsInUse()) ?? CreateNewSoundEmitter();
 	}
 	#endregion
 }

@@ -8,7 +8,7 @@ public class SoundEmitter : MonoBehaviour
 {
 	private AudioSource _audioSource;
 
-	public bool _initialPool = false;
+	public bool initialPool = false;
 
 	private float _lastUseTimestamp = 0;
 
