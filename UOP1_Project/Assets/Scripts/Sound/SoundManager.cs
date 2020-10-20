@@ -144,9 +144,9 @@ public class SoundManager : MonoBehaviour
 		if (soundEmitterPool.Count <= initialPoolSize)
 			return;
 
-		SoundEmitter[] emittersToDelete = soundEmitterPool.Where(emitter => !emitter._initialPool && !emitter.IsInUse() && emitter._lastUseTimestamp + _extraTimeBeforeTrim <= Time.realtimeSinceStartup).ToArray();
+		SoundEmitter[] emittersToDelete = soundEmitterPool.Where(emitter => !emitter._initialPool && !emitter.IsInUse() && emitter.LastUseTimestamp() + _extraTimeBeforeTrim <= Time.realtimeSinceStartup).ToArray();
 
-		soundEmitterPool.RemoveAll(emitter => !emitter._initialPool && !emitter.IsInUse() && emitter._lastUseTimestamp + _extraTimeBeforeTrim <= Time.realtimeSinceStartup);
+		soundEmitterPool.RemoveAll(emitter => !emitter._initialPool && !emitter.IsInUse() && emitter.LastUseTimestamp() + _extraTimeBeforeTrim <= Time.realtimeSinceStartup);
 
 		foreach (SoundEmitter instance in emittersToDelete)
 		{

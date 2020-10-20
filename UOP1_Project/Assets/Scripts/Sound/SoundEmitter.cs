@@ -9,7 +9,8 @@ public class SoundEmitter : MonoBehaviour
 	private AudioSource _audioSource;
 
 	public bool _initialPool = false;
-	public float _lastUseTimestamp = 0;
+
+	private float _lastUseTimestamp = 0;
 
 	private void Awake()
 	{
@@ -28,7 +29,7 @@ public class SoundEmitter : MonoBehaviour
 		_audioSource.clip = clip;
 		ApplySettings(_audioSource, settings);
 		_audioSource.transform.position = position;
-		_lastUseTimestamp = Time.realtimeSinceStartup + clip.length;
+		_lastUseTimestamp = settings.Loop ? Mathf.Infinity : Time.realtimeSinceStartup + clip.length;
 		_audioSource.Play();
 	}
 
@@ -57,6 +58,7 @@ public class SoundEmitter : MonoBehaviour
 
 	public void StopSound()
 	{
+		_lastUseTimestamp = Time.realtimeSinceStartup;
 		_audioSource.Stop();
 	}
 
@@ -68,5 +70,10 @@ public class SoundEmitter : MonoBehaviour
 	public bool IsLooping()
 	{
 		return _audioSource.loop;
+	}
+
+	public float LastUseTimestamp()
+	{
+		return _lastUseTimestamp;
 	}
 }
