@@ -34,7 +34,7 @@
 		public void OnUpdate()
 		{
 			for (int i = 0; i < _actions.Length; i++)
-				_actions[i].Perform();
+				_actions[i].OnUpdate();
 		}
 
 		public void OnStateExit()

@@ -10,14 +10,18 @@ namespace DeivSky.StateMachine
 		public string CurrentState;
 		public bool debug;
 #endif
+		[Tooltip("Set the initial state of this StateMachine")]
 		[SerializeField] private ScriptableObjects.StateSO _initialStateSO = null;
+
+		[Space][Tooltip("Certain Actions and Conditions allow overriding their default behaviour through the use of ScriptableObjects. Place the SOs here so they can be accessed.")]
 		[SerializeField] private ScriptableObject[] _scriptableObjects = null;
+
 		private List<Type> _scriptableObjectsTypes = null;
 		private readonly Dictionary<Type, Component> _cachedComponents = new Dictionary<Type, Component>();
 
 		private State _currentState;
 
-		protected void Awake()
+		private void Awake()
 		{
 			_scriptableObjectsTypes = GetObjectTypes(_scriptableObjects);
 			_currentState = _initialStateSO.GetState(this);
@@ -78,7 +82,7 @@ namespace DeivSky.StateMachine
 		public new T GetComponent<T>() where T : Component
 			=> TryGetComponent(out T component) ? component : throw new InvalidOperationException($"{typeof(T).Name} not found in {name}.");
 
-		protected void Update()
+		private void Update()
 		{
 			if (_currentState.TryGetTransition(out var transitionState))
 				Transition(transitionState);
@@ -97,10 +101,5 @@ namespace DeivSky.StateMachine
 			CurrentState = _currentState.Name;
 #endif
 		}
-	}
-
-	public abstract class StateMachine<T> : StateMachine
-	{
-		public abstract T GetContext();
 	}
 }

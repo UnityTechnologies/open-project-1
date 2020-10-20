@@ -12,7 +12,7 @@ public class HungerAction : StateAction
 	public override void Awake(StateMachine stateMachine)
 		=> _hungerComponent = stateMachine.GetComponent<HungerComponent>();
 
-	public override void Perform() { }
+	public override void OnUpdate() { }
 
 	public override void OnStateEnter() => _hungerComponent.ToggleHunger(true);
 	public override void OnStateExit() => _hungerComponent.ToggleHunger(false);

@@ -6,6 +6,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Chase", menuName = "State Machines/Tests/Actions/Chase")]
 public class ChaseActionSO : StateActionSO
 {
+	[Tooltip("Object that specifies the speed and the target to chase. This can be overriden in the StateMachine.")]
 	[SerializeField] private ChaseDataSO _chaseData = null;
 
 	protected override StateAction CreateAction() => new ChaseAction(_chaseData);
@@ -35,7 +36,7 @@ public class ChaseAction : StateAction
 		_chaseTransform = GameObject.Find(_chaseData.TargetName).transform;
 	}
 
-	public override void Perform()
+	public override void OnUpdate()
 	{
 		_transform.position = Vector3.MoveTowards(
 			_transform.position,
