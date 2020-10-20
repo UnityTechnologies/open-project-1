@@ -1,12 +1,12 @@
 ﻿using System;
 using DeivSky.StateMachine;
-using DeivSky.StateMachine.Scriptables;
+using DeivSky.StateMachine.ScriptableObjects;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Chase", menuName = "State Machines/Tests/Actions/Chase")]
-public class ScriptableChaseAction : ScriptableStateAction
+public class ChaseActionSO : StateActionSO
 {
-	[SerializeField] private ChaseDataObject _chaseData = null;
+	[SerializeField] private ChaseDataSO _chaseData = null;
 
 	protected override StateAction CreateAction() => new ChaseAction(_chaseData);
 }
@@ -15,15 +15,15 @@ public class ChaseAction : StateAction
 {
 	private Transform _transform;
 	private Transform _chaseTransform;
-	private ChaseDataObject _chaseData;
+	private ChaseDataSO _chaseData;
 
-	public ChaseAction(ChaseDataObject chaseData) => _chaseData = chaseData;
+	public ChaseAction(ChaseDataSO chaseData) => _chaseData = chaseData;
 
 	public override void Awake(StateMachine stateMachine)
 	{
 		_transform = stateMachine.transform;
 
-		if (stateMachine.TryGetScriptableObject<ChaseDataObject>(out var chaseData))
+		if (stateMachine.TryGetScriptableObject<ChaseDataSO>(out var chaseData))
 			_chaseData = chaseData;
 
 		if (_chaseData == null)

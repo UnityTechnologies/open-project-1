@@ -1,9 +1,9 @@
 ﻿using DeivSky.StateMachine;
-using DeivSky.StateMachine.Scriptables;
+using DeivSky.StateMachine.ScriptableObjects;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "IsHungry", menuName = "State Machines/Tests/Conditions/IsHungry")]
-public class ScriptableHungerCondition : ScriptableStateCondition<HungerCondition> { }
+public class HungerConditionSO : ScriptableStateCondition<HungerCondition> { }
 
 public class HungerCondition : Condition
 {

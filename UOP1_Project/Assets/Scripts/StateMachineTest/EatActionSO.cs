@@ -1,9 +1,9 @@
 ﻿using DeivSky.StateMachine;
-using DeivSky.StateMachine.Scriptables;
+using DeivSky.StateMachine.ScriptableObjects;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Eat", menuName = "State Machines/Tests/Actions/Eat")]
-public class ScriptableEatAction : ScriptableStateAction
+public class EatActionSO : StateActionSO
 {
 	public float amount = 10f;
 

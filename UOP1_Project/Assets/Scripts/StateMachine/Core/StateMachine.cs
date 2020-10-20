@@ -10,7 +10,7 @@ namespace DeivSky.StateMachine
 		public string CurrentState;
 		public bool debug;
 #endif
-		[SerializeField] private Scriptables.ScriptableState _initialStateSO = null;
+		[SerializeField] private ScriptableObjects.StateSO _initialStateSO = null;
 		[SerializeField] private ScriptableObject[] _scriptableObjects = null;
 		private List<Type> _scriptableObjectsTypes = null;
 		private readonly Dictionary<Type, Component> _cachedComponents = new Dictionary<Type, Component>();

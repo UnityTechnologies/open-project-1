@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace DeivSky.StateMachine.Scriptables
+namespace DeivSky.StateMachine.ScriptableObjects
 {
-	public abstract class ScriptableStateAction : ScriptableObject
+	public abstract class StateActionSO : ScriptableObject
 	{
 		internal StateAction GetAction(StateMachine stateMachine, Dictionary<ScriptableObject, object> createdInstances)
 		{
@@ -18,7 +18,7 @@ namespace DeivSky.StateMachine.Scriptables
 		protected abstract StateAction CreateAction();
 	}
 
-	public abstract class ScriptableStateAction<T> : ScriptableStateAction where T : StateAction, new()
+	public abstract class ScriptableStateAction<T> : StateActionSO where T : StateAction, new()
 	{
 		protected override StateAction CreateAction() => new T();
 	}

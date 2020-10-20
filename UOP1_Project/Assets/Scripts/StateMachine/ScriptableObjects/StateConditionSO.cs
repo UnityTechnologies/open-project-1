@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace DeivSky.StateMachine.Scriptables
+namespace DeivSky.StateMachine.ScriptableObjects
 {
-	public abstract class ScriptableStateCondition : ScriptableObject
+	public abstract class StateConditionSO : ScriptableObject
 	{
 		internal StateCondition GetCondition(StateMachine stateMachine, bool expectedResult, Dictionary<ScriptableObject, object> createdInstances)
 		{
@@ -19,7 +19,7 @@ namespace DeivSky.StateMachine.Scriptables
 	}
 
 
-	public abstract class ScriptableStateCondition<T> : ScriptableStateCondition where T : Condition, new()
+	public abstract class ScriptableStateCondition<T> : StateConditionSO where T : Condition, new()
 	{
 		protected override Condition CreateCondition() => new T();
 	}

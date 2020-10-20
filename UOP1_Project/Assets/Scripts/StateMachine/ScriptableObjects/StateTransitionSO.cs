@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace DeivSky.StateMachine.Scriptables
+namespace DeivSky.StateMachine.ScriptableObjects
 {
 	[CreateAssetMenu(fileName = "New Transition", menuName = "State Machines/Transition")]
-	public class ScriptableStateTransition : ScriptableObject
+	public class StateTransitionSO : ScriptableObject
 	{
-		[SerializeField] private ScriptableState _targetState = null;
+		[SerializeField] private StateSO _targetState = null;
 		[SerializeField] private ConditionUsage[] _conditions = default;
 
 		internal StateTransition GetTransition(StateMachine stateMachine, Dictionary<ScriptableObject, object> createdInstances)
@@ -56,7 +56,7 @@ namespace DeivSky.StateMachine.Scriptables
 		public struct ConditionUsage
 		{
 			public Result ExpectedResult;
-			public ScriptableStateCondition Condition;
+			public StateConditionSO Condition;
 			public Operator Operator;
 		}
 

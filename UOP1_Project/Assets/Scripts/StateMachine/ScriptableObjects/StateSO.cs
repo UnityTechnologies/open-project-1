@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace DeivSky.StateMachine.Scriptables
+namespace DeivSky.StateMachine.ScriptableObjects
 {
 	[CreateAssetMenu(fileName = "New State", menuName = "State Machines/State")]
-	public class ScriptableState : ScriptableObject
+	public class StateSO : ScriptableObject
 	{
-		[SerializeField] private ScriptableStateAction[] _actions = null;
-		[SerializeField] private ScriptableStateTransition[] _transitions = null;
+		[SerializeField] private StateActionSO[] _actions = null;
+		[SerializeField] private StateTransitionSO[] _transitions = null;
 
 		public State GetState(StateMachine stateMachine)
 			=> GetState(stateMachine, new Dictionary<ScriptableObject, object>());
@@ -28,7 +28,7 @@ namespace DeivSky.StateMachine.Scriptables
 			return state;
 		}
 
-		private static StateTransition[] GetTransitions(ScriptableStateTransition[] scriptableTransitions,
+		private static StateTransition[] GetTransitions(StateTransitionSO[] scriptableTransitions,
 			StateMachine stateMachine, Dictionary<ScriptableObject, object> createdInstances)
 		{
 			int count = scriptableTransitions.Length;
@@ -39,7 +39,7 @@ namespace DeivSky.StateMachine.Scriptables
 			return transitions;
 		}
 
-		private static StateAction[] GetActions(ScriptableStateAction[] scriptableActions,
+		private static StateAction[] GetActions(StateActionSO[] scriptableActions,
 			StateMachine stateMachine, Dictionary<ScriptableObject, object> createdInstances)
 		{
 			int count = scriptableActions.Length;

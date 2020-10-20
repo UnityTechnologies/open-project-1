@@ -1,12 +1,12 @@
 ﻿using System;
 using DeivSky.StateMachine;
-using DeivSky.StateMachine.Scriptables;
+using DeivSky.StateMachine.ScriptableObjects;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "CloseToTarget", menuName = "State Machines/Tests/Conditions/Close To Target")]
-public class ScriptableCloseToTargetCondition : ScriptableStateCondition
+public class CloseToTargetConditionSO : StateConditionSO
 {
-	[SerializeField] private ChaseDataObject _chaseData = null;
+	[SerializeField] private ChaseDataSO _chaseData = null;
 
 	protected override Condition CreateCondition() => new CloseToTargetCondition(_chaseData);
 }
@@ -15,15 +15,15 @@ public class CloseToTargetCondition : Condition
 {
 	private Transform _transform;
 	private Transform _chaseTransform;
-	private ChaseDataObject _chaseData;
+	private ChaseDataSO _chaseData;
 
-	public CloseToTargetCondition(ChaseDataObject chaseData) => _chaseData = chaseData;
+	public CloseToTargetCondition(ChaseDataSO chaseData) => _chaseData = chaseData;
 
 	public override void Awake(StateMachine stateMachine)
 	{
 		_transform = stateMachine.transform;
 
-		if (stateMachine.TryGetScriptableObject<ChaseDataObject>(out var chaseData))
+		if (stateMachine.TryGetScriptableObject<ChaseDataSO>(out var chaseData))
 			_chaseData = chaseData;
 
 		if (_chaseData == null)
