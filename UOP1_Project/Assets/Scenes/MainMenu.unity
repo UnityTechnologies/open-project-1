@@ -295,13 +295,13 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 11400000, guid: 95eb00b1852501648b8f37799fcd78f7, type: 2}
+      - m_Target: {fileID: 11400000, guid: c499d87f35465124f8fb2751b150430d, type: 2}
         m_MethodName: Raise
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 555
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -823,6 +823,7 @@ GameObject:
   - component: {fileID: 1967191114}
   - component: {fileID: 1967191113}
   - component: {fileID: 1967191112}
+  - component: {fileID: 1967191115}
   m_Layer: 5
   m_Name: Start
   m_TagString: Untagged
@@ -893,8 +894,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 11400000, guid: 31d49a74dcfce42488af012acaf74bdb, type: 2}
-        m_MethodName: Raise
+      - m_Target: {fileID: 1967191115}
+        m_MethodName: OnPlayButtonPress
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -952,6 +953,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1967191110}
   m_CullTransparentMesh: 0
+--- !u!114 &1967191115
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1967191110}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45ecefb9fe27f1f4b8cf3ecc3fad707c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onPlayButtonPress: {fileID: 11400000, guid: 00e3063edc5902e40832ea618644c597, type: 2}
+  locationsToLoad:
+  - {fileID: 11400000, guid: 2f386bbc670c05145834a0f9c7d55798, type: 2}
+  showLoadScreen: 1
 --- !u!1 &2140469179
 GameObject:
   m_ObjectHideFlags: 0
