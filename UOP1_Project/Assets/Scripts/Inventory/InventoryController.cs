@@ -5,7 +5,7 @@
 public class InventoryController : MonoBehaviour
 {
 	[SerializeField]
-	private Inventory _inventory;
+	private Inventory _inventory = default;
 
 	private void OnTriggerEnter(Collider other)
 	{
