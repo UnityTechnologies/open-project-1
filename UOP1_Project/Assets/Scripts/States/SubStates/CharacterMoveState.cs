@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using UnityEngine;
-
-public class CharacterMoveState : CharacterGroundedState
+﻿public class CharacterMoveState : CharacterGroundedState
 {
     public CharacterMoveState(Character character, CharacterStateMachine stateMachine, CharacterData characterData) : base(character, stateMachine, characterData)
     {

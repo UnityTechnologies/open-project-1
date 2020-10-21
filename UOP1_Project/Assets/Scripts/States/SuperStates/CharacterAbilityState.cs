@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class CharacterAbilityState : CharacterState
 {
@@ -63,7 +61,5 @@ public class CharacterAbilityState : CharacterState
     public override void PhysicsUpdate()
     {
         base.PhysicsUpdate();
-
-		
     }
 }

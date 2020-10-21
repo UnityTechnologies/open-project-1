@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-
-public class CharacterJumpState : CharacterAbilityState
+﻿public class CharacterJumpState : CharacterAbilityState
 {
 	private int amountOfJumpsLeft;
 
@@ -13,10 +11,11 @@ public class CharacterJumpState : CharacterAbilityState
 	{
 		base.Enter();
 
+		character.UseJump();
 		character.SetVelocityY(characterData.initialJumpForce);
 		isAbilityDone = true;
 		amountOfJumpsLeft--;
-		character.InAirState.SetIsJumping();
+		character.InAirState.SetIsJumping(true);
 	}
 
 	public override void Exit()

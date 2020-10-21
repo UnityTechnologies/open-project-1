@@ -2,24 +2,9 @@
 
 public class Character : MonoBehaviour
 {
-	private CharacterController characterController;
-	[SerializeField]
-	private CharacterData characterData;
-
-	private float turnSmoothSpeed; //Used by Mathf.SmoothDampAngle to smoothly rotate the character to their movement direction
-	private float currentSlope;
-	private Vector3 hitNormal; // ground normal
-	public bool shouldSlide; // Should player slide?
-	public bool collisionTop;
-
-	private Vector3 workspace;
-
 	private const float ROTATION_TRESHOLD = .02f; // Used to prevent NaN result causing rotation in a non direction
-	public Vector3 InputVector { get; private set; }
-	public bool JumpInput { get; private set; }
-	public bool JumpInputStop { get; private set; }
-	public Vector3 CurrentVelocity { get; private set; }
 
+	#region State variables
 	public CharacterStateMachine StateMachine { get; private set; }
 
 	public CharacterIdleState IdleState { get; private set; }
@@ -27,6 +12,24 @@ public class Character : MonoBehaviour
 	public CharacterJumpState JumpState { get; private set; }
 	public CharacterInAirState InAirState { get; private set; }
 
+	#endregion
+
+	[SerializeField]
+	private CharacterData characterData = default;
+	private CharacterController characterController;
+	private float turnSmoothSpeed; //Used by Mathf.SmoothDampAngle to smoothly rotate the character to their movement direction
+	private float currentSlope;
+	private Vector3 hitNormal; // ground normal
+	private Vector3 workspace;
+
+	public Vector3 InputVector { get; private set; }
+	public bool JumpInput { get; private set; }
+	public bool JumpInputStop { get; private set; }
+	public Vector3 CurrentVelocity { get; private set; }
+	public bool ShouldSlide { get; private set; } // Should player slide?
+	public bool CollisionTop { get; private set; }
+
+	#region Unity Hooks
 	private void Awake()
 	{
 		characterController = GetComponent<CharacterController>();
@@ -52,7 +55,9 @@ public class Character : MonoBehaviour
 
 		characterController.Move(CurrentVelocity * Time.deltaTime);
 
-		if (new Vector3(CurrentVelocity.x, 0, CurrentVelocity.z).sqrMagnitude >= ROTATION_TRESHOLD)
+		workspace.Set(CurrentVelocity.x, 0, CurrentVelocity.z);
+
+		if (workspace.sqrMagnitude >= ROTATION_TRESHOLD)
 		{
 			float targetRotation = Mathf.Atan2(CurrentVelocity.x, CurrentVelocity.z) * Mathf.Rad2Deg;
 			transform.eulerAngles = Vector3.up * Mathf.SmoothDampAngle(
@@ -80,11 +85,14 @@ public class Character : MonoBehaviour
 			float distance = Mathf.Abs(hit.point.y - topPositionY);
 			if (distance <= permittedDistance)
 			{
-				collisionTop = true;
+				CollisionTop = true;
 			}
 		}
 	}
-	//---- COMMANDS ISSUED BY OTHER SCRIPTS ----
+
+	#endregion
+
+	#region Input Handler Commands
 	public void Move(Vector3 movement)
 	{
 		InputVector = movement;
@@ -95,30 +103,26 @@ public class Character : MonoBehaviour
 		JumpInput = true;
 	}
 
-	public void CancelJump()
+	public void UseJump()
 	{
 		JumpInput = false;
-		InAirState.ResetIsJumping();
 	}
 
-	private void UpdateSlide()
+	public void CancelJump()
 	{
-		// if player has to slide then add sideways speed to make it go down
-		if (shouldSlide)
-		{
-			SetVelocityX(CurrentVelocity.x + (1f - hitNormal.y) * hitNormal.x * (characterData.speed - characterData.slideFriction));
-			SetVelocityZ(CurrentVelocity.z + (1f - hitNormal.y) * hitNormal.z * (characterData.speed - characterData.slideFriction));
-		}
-		// check if the controller is grounded and above slope limit
-		// if player is grounded and above slope limit
-		// player has to slide
-		if (characterController.isGrounded)
-		{
-			currentSlope = Vector3.Angle(Vector3.up, hitNormal);
-			shouldSlide = currentSlope >= characterController.slopeLimit;
-		}
+		InAirState.SetIsJumping(false);
 	}
 
+	#endregion
+
+	#region Check Functions
+	public bool CheckIfGrounded()
+	{
+		return characterController.isGrounded;
+	}
+	#endregion
+
+	#region Public Functions
 	public void SetVelocityZero()
 	{
 		CurrentVelocity = Vector2.zero;
@@ -144,9 +148,25 @@ public class Character : MonoBehaviour
 		workspace.Set(CurrentVelocity.x, CurrentVelocity.y, velocityZ);
 		CurrentVelocity = workspace;
 	}
+	#endregion
 
-	public bool CheckIfGrounded()
+	#region Private Functions
+	private void UpdateSlide()
 	{
-		return characterController.isGrounded;
+		// if player has to slide then add sideways speed to make it go down
+		if (ShouldSlide)
+		{
+			SetVelocityX(CurrentVelocity.x + (1f - hitNormal.y) * hitNormal.x * (characterData.speed - characterData.slideFriction));
+			SetVelocityZ(CurrentVelocity.z + (1f - hitNormal.y) * hitNormal.z * (characterData.speed - characterData.slideFriction));
+		}
+		// check if the controller is grounded and above slope limit
+		// if player is grounded and above slope limit
+		// player has to slide
+		if (characterController.isGrounded)
+		{
+			currentSlope = Vector3.Angle(Vector3.up, hitNormal);
+			ShouldSlide = currentSlope >= characterController.slopeLimit;
+		}
 	}
+	#endregion
 }

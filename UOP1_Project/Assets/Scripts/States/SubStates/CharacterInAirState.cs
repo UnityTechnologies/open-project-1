@@ -1,15 +1,14 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class CharacterInAirState : CharacterState
 {
 	// Input
 	private Vector3 inputVector;
+	private bool jumpInput;
 
 	// Checks
 	private bool _isGrounded;
-	private bool isJumping;
+	private bool _isJumping;
 
 	private float gravityContributionMultiplier = 0f; //The factor which determines how much gravity is affecting verticalMovement
 	private float verticalMovement = 0f; //Represents how much a player will move vertically in a frame. Affected by gravity * gravityContributionMultiplier
@@ -33,13 +32,6 @@ public class CharacterInAirState : CharacterState
 	public override void Exit()
 	{
 		base.Exit();
-
-		character.SetVelocityY(characterData.fallingVerticalMovement);
-		character.SetVelocityX(0);
-		character.SetVelocityZ(0);
-
-		verticalMovement = 0;
-		gravityContributionMultiplier = 0f;
 	}
 
 	public override void LogicUpdate()
@@ -51,27 +43,31 @@ public class CharacterInAirState : CharacterState
 		if (_isGrounded)
 		{
 			stateMachine.ChangeState(character.IdleState);
-		} else
+		}
+		else if (jumpInput && character.JumpState.CanJump()) {
+			stateMachine.ChangeState(character.JumpState);
+		}
+		else
 		{
 			gravityContributionMultiplier += Time.deltaTime * characterData.gravityComebackMultiplier;
 
-			if (isJumping)
+			if (_isJumping)
 			{
 				if (Time.time >= startTime + characterData.jumpInputDuration)
 				{
-					isJumping = false;
+					_isJumping = false;
 					gravityContributionMultiplier = 1f; //Gravity influence is reset to full effect
 				}
 				else
 				{
-					
+
 					gravityContributionMultiplier *= characterData.gravityDivider; //Reduce the gravity effect
 				}
 			}
 
-			if (character.collisionTop)
+			if (character.CollisionTop)
 			{
-				isJumping = false;
+				_isJumping = false;
 				gravityContributionMultiplier = 1f;
 				verticalMovement = 0f;
 			}
@@ -102,9 +98,8 @@ public class CharacterInAirState : CharacterState
 	private void GetInput()
 	{
 		inputVector = character.InputVector;
+		jumpInput = character.JumpInput;
 	}
 
-	public void SetIsJumping() => isJumping = true;
-
-	public void ResetIsJumping() => isJumping = false;
+	public void SetIsJumping(bool isJumping) => _isJumping = isJumping;
 }

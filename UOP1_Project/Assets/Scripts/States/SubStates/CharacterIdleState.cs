@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class CharacterIdleState : CharacterGroundedState
+﻿public class CharacterIdleState : CharacterGroundedState
 {
     public CharacterIdleState(Character character, CharacterStateMachine stateMachine, CharacterData characterData) : base(character, stateMachine, characterData)
     {

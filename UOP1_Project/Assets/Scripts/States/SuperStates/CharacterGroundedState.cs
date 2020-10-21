@@ -23,6 +23,7 @@ public class CharacterGroundedState : CharacterState
     {
         base.Enter();
 
+		character.UseJump();
 		character.JumpState.ResetAmountOfJumpsLeft();
 	}
 
@@ -38,9 +39,10 @@ public class CharacterGroundedState : CharacterState
 		inputVector = character.InputVector;
 		jumpInput = character.JumpInput;
 
+		
 		character.SetVelocityY(characterData.fallingVerticalMovement);
 
-		if (jumpInput && character.JumpState.CanJump() && !character.shouldSlide)
+		if (jumpInput && character.JumpState.CanJump() && !character.ShouldSlide)
 		{
 			stateMachine.ChangeState(character.JumpState);
 		}
