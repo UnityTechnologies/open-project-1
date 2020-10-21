@@ -1,6 +1,10 @@
 ﻿using UnityEngine;
 using UnityEngine.Events;
 
+/// <summary>
+/// This class is listener for Void Events
+/// </summary>
+
 public class VoidEventListener : MonoBehaviour
 {
     public VoidGameEvent voidGameEvent;

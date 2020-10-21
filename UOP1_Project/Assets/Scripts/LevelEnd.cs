@@ -1,5 +1,9 @@
 ﻿using UnityEngine;
 
+/// <summary>
+/// This class detecs when the level(Location) ends
+/// </summary>
+
 public class LevelEnd : MonoBehaviour
 {
     public LoadEvent onLevelEnd;

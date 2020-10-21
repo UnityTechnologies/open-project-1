@@ -3,9 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
+/// <summary>
+/// This class manages the scenes loading and unloading
+/// </summary>
 
 public class LocationLoader : MonoBehaviour
 {
@@ -15,7 +17,7 @@ public class LocationLoader : MonoBehaviour
     public Image loadingProgressBar;
 
     [Header("Load Event")]
-    //Load Event we are listening to
+    //The load event we are listening to
     [SerializeField] private LoadEvent _loadEvent = default;
 
     //List of the scenes to load and track progress
@@ -43,10 +45,7 @@ public class LocationLoader : MonoBehaviour
         LoadScenes(mainMenuScenes, false);
     }
 
-    /*
-     * Scenes methods
-     */
-    //Load the scenes passed as parameter
+    /// <summary> This function loads the scenes passed as array parameter </summary>
     public void LoadScenes(GameScene[] locationsToLoad, bool showLoadingScreen)
     {
         //Add all current open scenes to unload list
@@ -91,6 +90,7 @@ public class LocationLoader : MonoBehaviour
             }
         }
     }
+
     public void UnloadScenes()
     {
         if(_ScenesToUnload != null)
@@ -104,7 +104,8 @@ public class LocationLoader : MonoBehaviour
         _ScenesToUnload.Clear();
     }
 
-    //Check if a scene is already loaded
+    /// <summary> This function checks if a scene is already loaded </summary>
+
     public bool CheckLoadState(String sceneName)
     {
         if (SceneManager.sceneCount > 0)
@@ -121,7 +122,8 @@ public class LocationLoader : MonoBehaviour
         return false;
     }
 
-    //Update loading progress
+    /// <summary> This function update loading progress </summary>
+
     IEnumerator LoadingScreen()
     {
         float totalProgress = 0;
