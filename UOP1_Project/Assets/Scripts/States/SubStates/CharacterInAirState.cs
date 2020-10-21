@@ -67,6 +67,7 @@ public class CharacterInAirState : CharacterState
 
 			if (character.CollisionTop)
 			{
+				character.ResetCollisionTop();
 				_isJumping = false;
 				gravityContributionMultiplier = 1f;
 				verticalMovement = 0f;

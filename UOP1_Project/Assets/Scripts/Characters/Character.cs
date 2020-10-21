@@ -148,6 +148,10 @@ public class Character : MonoBehaviour
 		workspace.Set(CurrentVelocity.x, CurrentVelocity.y, velocityZ);
 		CurrentVelocity = workspace;
 	}
+	public void ResetCollisionTop()
+	{
+		CollisionTop = false;
+	}
 	#endregion
 
 	#region Private Functions
