@@ -9,7 +9,7 @@ public class Inventory : ScriptableObject
 	[Tooltip("The collection of items and their quantities.")]
 	[SerializeField]
 	private Dictionary<Item, int> _items = new Dictionary<Item, int>();
-    public IReadOnlyDictionary<Item, int> Items => _items;
+	public IReadOnlyDictionary<Item, int> Items => _items;
 
 	public void Add(Item item, int count = 1)
 	{
