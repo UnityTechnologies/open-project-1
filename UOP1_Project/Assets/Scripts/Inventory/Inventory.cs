@@ -53,4 +53,6 @@ public class Inventory : ScriptableObject
 
 		return _items[item];
 	}
+
+    public IEnumerable<KeyValuePair<Item, int>> Items => _items;
 }
