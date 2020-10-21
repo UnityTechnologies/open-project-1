@@ -8,19 +8,19 @@ public class Inventory : ScriptableObject
 {
 	[Tooltip("The collection of items and their quantities.")]
 	[SerializeField]
-	private Dictionary<Item, int> items = new Dictionary<Item, int>();
+	private Dictionary<Item, int> _items = new Dictionary<Item, int>();
 
 	public void Add(Item item, int count = 1)
 	{
 		if (count <= 0)
 			return;
 
-		if (!items.ContainsKey(item))
+		if (!_items.ContainsKey(item))
 		{
-			items.Add(item, 0);
+			_items.Add(item, 0);
 		}
 
-		items[item] += count;
+		_items[item] += count;
 	}
 
 	public void Remove(Item item, int count = 1)
@@ -28,29 +28,29 @@ public class Inventory : ScriptableObject
 		if (count <= 0)
 			return;
 
-		if (!items.ContainsKey(item))
+		if (!_items.ContainsKey(item))
 			return;
 
-		items[item] -= count;
+		_items[item] -= count;
 
-		if (items[item] <= 0)
+		if (_items[item] <= 0)
 		{
-			items.Remove(item);
+			_items.Remove(item);
 		}
 	}
 
 	public bool Contains(Item item)
 	{
-		return items.ContainsKey(item);
+		return _items.ContainsKey(item);
 	}
 
 	public int Count(Item item)
 	{
-		if (!items.ContainsKey(item))
+		if (!_items.ContainsKey(item))
 		{
 			return 0;
 		}
 
-		return items[item];
+		return _items[item];
 	}
 }
