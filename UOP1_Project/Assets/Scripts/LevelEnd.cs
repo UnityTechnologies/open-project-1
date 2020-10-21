@@ -1,17 +1,15 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class LevelEnd : MonoBehaviour
 {
-    public GameEvent onLevelEnd;
-
-
+    public LoadEvent onLevelEnd;
+    public GameScene[] locationsToLoad;
+    public bool showLoadScreen;
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            onLevelEnd.Raise();
+            onLevelEnd.RaiseEvent(locationsToLoad, showLoadScreen);
         }
     }
 }
