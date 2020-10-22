@@ -13,7 +13,8 @@ public abstract class Item : ScriptableObject
 	[Tooltip("The Item's description")]
 	[SerializeField] [Multiline] private string _itemDescription; // TODO: Consider using a string table for localization
 	[SerializeField] private string _itemActionName; // TODO: Consider using a string table for localization
-	
-	
+	[Tooltip("The Item's background color in the UI")]
+	[SerializeField] private Color _itemBackgroundColor;
+
 	// TODO: Add common functionality for properties
 }
