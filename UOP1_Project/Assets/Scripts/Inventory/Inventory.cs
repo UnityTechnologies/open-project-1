@@ -8,50 +8,42 @@ public class Inventory : ScriptableObject
 {
 	[Tooltip("The collection of items and their quantities.")]
 	[SerializeField]
-	private Dictionary<Item, int> _items = new Dictionary<Item, int>();
-	public IReadOnlyDictionary<Item, int> Items => _items;
+	private List<ItemStack> _items = new List<ItemStack>();
+	public List<ItemStack> Items => _items;
 
-	public void Add(Item item, int count = 1)
-	{
-		if (count <= 0)
-			return;
+    public void Add(Item item, int count = 1)
+    {
+        _items.Add(new ItemStack(item, count));
+    }
 
-		if (!_items.ContainsKey(item))
-		{
-			_items.Add(item, 0);
-		}
+    //public void Remove(Item item, int count = 1)
+    //{
+    //    if (count <= 0)
+    //        return;
 
-		_items[item] += count;
-	}
+    //    if (!_items.ContainsKey(item))
+    //        return;
 
-	public void Remove(Item item, int count = 1)
-	{
-		if (count <= 0)
-			return;
+    //    _items[item] -= count;
 
-		if (!_items.ContainsKey(item))
-			return;
+    //    if (_items[item] <= 0)
+    //    {
+    //        _items.Remove(item);
+    //    }
+    //}
 
-		_items[item] -= count;
+    //public bool Contains(Item item)
+    //{
+    //    return _items.ContainsKey(item);
+    //}
 
-		if (_items[item] <= 0)
-		{
-			_items.Remove(item);
-		}
-	}
+    //public int Count(Item item)
+    //{
+    //    if (!_items.ContainsKey(item))
+    //    {
+    //        return 0;
+    //    }
 
-	public bool Contains(Item item)
-	{
-		return _items.ContainsKey(item);
-	}
-
-	public int Count(Item item)
-	{
-		if (!_items.ContainsKey(item))
-		{
-			return 0;
-		}
-
-		return _items[item];
-	}
+    //    return _items[item];
+    //}
 }
