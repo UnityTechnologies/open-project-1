@@ -4,21 +4,6 @@
 // https://forum.unity.com/threads/inventory-system.980646/
 public abstract class Item : ScriptableObject
 {
-
-	/*
-	// TODO: review if this enum redundant due to abstraction 
-	enum ItemType
-	{
-		CharacterCustomisation,
-		Ingredients,
-		Utensils,
-		Dishes,
-	}
-
-	[Tooltip("Item's Type")] 
-	[SerializeField] private ItemType _itemType;
-  */
-
 	[Tooltip("The Item's name")]
 	[SerializeField] private string _itemName; // TODO: Consider using a string table for localization
 	[Tooltip("A preview Image for the Item")]
