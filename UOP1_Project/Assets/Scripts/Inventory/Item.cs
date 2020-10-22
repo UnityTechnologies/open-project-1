@@ -5,6 +5,7 @@
 public abstract class Item : ScriptableObject
 {
 
+	/*
 	// TODO: review if this enum redundant due to abstraction 
 	enum ItemType
 	{
@@ -16,6 +17,7 @@ public abstract class Item : ScriptableObject
 
 	[Tooltip("Item's Type")] 
 	[SerializeField] private ItemType _itemType;
+  */
 
 	[Tooltip("The Item's name")]
 	[SerializeField] private string _itemName; // TODO: Consider using a string table for localization
