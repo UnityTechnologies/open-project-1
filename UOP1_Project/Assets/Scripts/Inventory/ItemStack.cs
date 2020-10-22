@@ -4,12 +4,13 @@ using UnityEngine;
 
 public class ItemStack
 {
-    private Item _item;
-    private int _amount;
+    public Item Item { get; }
+
+    public int Amount { get; set; }
 
     public ItemStack(Item item, int amount)
     {
-        _item = item;
-        _amount = amount;
+        Item = item;
+        Amount = amount;
     }
 }

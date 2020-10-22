@@ -13,37 +13,67 @@ public class Inventory : ScriptableObject
 
     public void Add(Item item, int count = 1)
     {
+        if (count <= 0)
+            return;
+
+        for (int i = 0; i < _items.Count; i++)
+        {
+            ItemStack currentItemStack = _items[i];
+            if (item == currentItemStack.Item)
+            {
+                currentItemStack.Amount += count;
+                return;
+            }
+        }
+
         _items.Add(new ItemStack(item, count));
     }
 
-    //public void Remove(Item item, int count = 1)
-    //{
-    //    if (count <= 0)
-    //        return;
+    public void Remove(Item item, int count = 1)
+    {
+        if (count <= 0)
+            return;
 
-    //    if (!_items.ContainsKey(item))
-    //        return;
+        for (int i = 0; i < _items.Count; i++)
+        {
+            ItemStack currentItemStack = _items[i];
 
-    //    _items[item] -= count;
+            if (currentItemStack.Item == item)
+            {
+                currentItemStack.Amount -= count;
 
-    //    if (_items[item] <= 0)
-    //    {
-    //        _items.Remove(item);
-    //    }
-    //}
+                if (currentItemStack.Amount <= 0)
+                    _items.Remove(currentItemStack);
 
-    //public bool Contains(Item item)
-    //{
-    //    return _items.ContainsKey(item);
-    //}
+                return;
+            }
+        }
+    }
 
-    //public int Count(Item item)
-    //{
-    //    if (!_items.ContainsKey(item))
-    //    {
-    //        return 0;
-    //    }
+    public bool Contains(Item item)
+    {
+        for (int i = 0; i < _items.Count; i++)
+        {
+            if (item == _items[i].Item)
+            {
+                return true;
+            }
+        }
 
-    //    return _items[item];
-    //}
+        return false;
+    }
+
+    public int Count(Item item)
+    {
+        for (int i = 0; i < _items.Count; i++)
+        {
+            ItemStack currentItemStack = _items[i];
+            if (item == currentItemStack.Item)
+            {
+                return currentItemStack.Amount;
+            }
+        }
+
+        return 0;
+    }
 }
