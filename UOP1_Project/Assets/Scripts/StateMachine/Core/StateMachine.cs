@@ -52,7 +52,7 @@ namespace DeivSky.StateMachine
 		}
 
 		public new T GetComponent<T>() where T : Component
-		{ 
+		{
 			return TryGetComponent(out T component)
 				? component : throw new InvalidOperationException($"{typeof(T).Name} not found in {name}.");
 		}

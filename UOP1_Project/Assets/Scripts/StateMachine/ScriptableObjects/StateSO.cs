@@ -10,7 +10,7 @@ namespace DeivSky.StateMachine.ScriptableObjects
 		[SerializeField] private StateTransitionSO[] _transitions = null;
 
 		public State GetState(StateMachine stateMachine)
-		{ 
+		{
 			return GetState(stateMachine, new Dictionary<ScriptableObject, object>());
 		}
 

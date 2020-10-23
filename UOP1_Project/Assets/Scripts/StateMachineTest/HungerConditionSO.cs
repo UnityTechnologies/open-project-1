@@ -10,7 +10,7 @@ public class HungerCondition : Condition
 	private HungerComponent _hungerComponent;
 
 	public override void Awake(StateMachine stateMachine)
-	{ 
+	{
 		_hungerComponent = stateMachine.GetComponent<HungerComponent>();
 	}
 
