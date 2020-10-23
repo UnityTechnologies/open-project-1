@@ -13,45 +13,16 @@ namespace DeivSky.StateMachine
 		[Tooltip("Set the initial state of this StateMachine")]
 		[SerializeField] private ScriptableObjects.StateSO _initialStateSO = null;
 
-		[Space]
-		[Tooltip("Certain Actions and Conditions allow overriding their default behaviour through the use of ScriptableObjects. Place the SOs here so they can be accessed.")]
-		[SerializeField] private ScriptableObject[] _scriptableObjects = null;
-
-		private List<Type> _scriptableObjectsTypes = null;
 		private readonly Dictionary<Type, Component> _cachedComponents = new Dictionary<Type, Component>();
-
 		private State _currentState;
 
 		private void Awake()
 		{
-			_scriptableObjectsTypes = GetObjectTypes(_scriptableObjects);
 			_currentState = _initialStateSO.GetState(this);
 			_currentState.OnStateEnter();
 #if UNITY_EDITOR
 			CurrentState = _currentState.Name;
 #endif
-		}
-
-		private static List<Type> GetObjectTypes(object[] objects)
-		{
-			int count = objects.Length;
-			var types = new List<Type>(count);
-			for (int i = 0; i < count; i++)
-				types.Add(objects[i].GetType());
-
-			return types;
-		}
-
-		public bool TryGetScriptableObject<T>(out T sObject) where T : ScriptableObject
-		{
-			int i = _scriptableObjectsTypes.IndexOf(typeof(T));
-			sObject = i >= 0 ? (T)_scriptableObjects[i] : null;
-			return i >= 0;
-		}
-
-		public T GetScriptableObject<T>() where T : ScriptableObject
-		{
-			return TryGetScriptableObject<T>(out var sObject) ? sObject : throw new InvalidOperationException($"{typeof(T).Name} not found in {name}");
 		}
 
 		public new bool TryGetComponent<T>(out T component) where T : Component
@@ -81,7 +52,10 @@ namespace DeivSky.StateMachine
 		}
 
 		public new T GetComponent<T>() where T : Component
-			=> TryGetComponent(out T component) ? component : throw new InvalidOperationException($"{typeof(T).Name} not found in {name}.");
+		{ 
+			return TryGetComponent(out T component)
+				? component : throw new InvalidOperationException($"{typeof(T).Name} not found in {name}.");
+		}
 
 		private void Update()
 		{

@@ -15,9 +15,18 @@ public class TimerCondition : Condition
 	private float _duration = 10f;
 	private float _time;
 
-	public TimerCondition(float duration) => _duration = duration;
+	public TimerCondition(float duration)
+	{
+		_duration = duration;
+	}
 
-	public override void OnStateEnter() => _time = Time.time + _duration;
+	public override void OnStateEnter()
+	{
+		_time = Time.time + _duration;
+	}
 
-	public override bool Statement() => Time.time >= _time;
+	public override bool Statement()
+	{
+		return Time.time >= _time;
+	}
 }

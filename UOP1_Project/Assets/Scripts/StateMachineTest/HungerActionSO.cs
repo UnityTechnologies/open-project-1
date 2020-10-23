@@ -3,7 +3,7 @@ using DeivSky.StateMachine.ScriptableObjects;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "EnableHunger", menuName = "State Machines/Tests/Actions/Enable Hunger")]
-public class HungerActionSO : ScriptableStateAction<HungerAction> { }
+public class HungerActionSO : StateActionSO<HungerAction> { }
 
 public class HungerAction : StateAction
 {

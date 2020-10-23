@@ -2,6 +2,7 @@
 
 public class HungerComponent : MonoBehaviour
 {
+	[SerializeField] private float _eatAmount = 10f;
 	[SerializeField] private float _maxFullness = 100f;
 	[SerializeField] private float _hungerPerSecond = 1f;
 	[SerializeField] [Range(0.01f, 0.99f)] private float _isHungryThreshold = 0.4f;
@@ -9,7 +10,10 @@ public class HungerComponent : MonoBehaviour
 	private float _currentFullness;
 	public bool IsHungry => _currentFullness <= _maxFullness * _isHungryThreshold;
 
-	private void Awake() => _currentFullness = _maxFullness;
+	private void Awake()
+	{
+		_currentFullness = _maxFullness;
+	}
 
 	private void Update()
 	{
@@ -17,8 +21,13 @@ public class HungerComponent : MonoBehaviour
 			_currentFullness = Mathf.Max(_currentFullness - _hungerPerSecond * Time.deltaTime, 0f);
 	}
 
-	public void Eat(float amount)
-		=> _currentFullness = Mathf.Min(_currentFullness + amount, _maxFullness);
+	public void Eat()
+	{
+		_currentFullness = Mathf.Min(_currentFullness + _eatAmount, _maxFullness);
+	}
 
-	public void ToggleHunger(bool value) => _getHungry = value;
+	public void ToggleHunger(bool value)
+	{
+		_getHungry = value;
+	}
 }

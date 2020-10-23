@@ -18,7 +18,7 @@ namespace DeivSky.StateMachine.ScriptableObjects
 		protected abstract StateAction CreateAction();
 	}
 
-	public abstract class ScriptableStateAction<T> : StateActionSO where T : StateAction, new()
+	public abstract class StateActionSO<T> : StateActionSO where T : StateAction, new()
 	{
 		protected override StateAction CreateAction() => new T();
 	}
