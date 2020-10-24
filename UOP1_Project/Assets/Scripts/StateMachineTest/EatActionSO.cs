@@ -1,5 +1,5 @@
-﻿using DeivSky.StateMachine;
-using DeivSky.StateMachine.ScriptableObjects;
+﻿using UOP1.StateMachine;
+using UOP1.StateMachine.ScriptableObjects;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Eat", menuName = "State Machines/Tests/Actions/Eat")]

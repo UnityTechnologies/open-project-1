@@ -1,6 +1,6 @@
 ﻿using System;
-using DeivSky.StateMachine;
-using DeivSky.StateMachine.ScriptableObjects;
+using UOP1.StateMachine;
+using UOP1.StateMachine.ScriptableObjects;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "CloseToTarget", menuName = "State Machines/Tests/Conditions/Close To Target")]

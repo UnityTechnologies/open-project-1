@@ -1,4 +1,4 @@
-﻿namespace DeivSky.StateMachine
+﻿namespace UOP1.StateMachine
 {
 	/// <summary>
 	/// Class that represents a conditional statement.
