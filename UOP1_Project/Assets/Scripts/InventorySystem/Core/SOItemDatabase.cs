@@ -40,10 +40,5 @@ namespace InventorySystem.Core
                 throw new ArgumentNullException(nameof(scriptableObject));
             itemDatabase.Add(new ItemData(++lastIndex, scriptableObject));
         }
-
-        public IEnumerable<ScriptableObject> GetAllSOInDatabase()
-        {
-            return itemDatabase.Select(x => x.ItemScriptableObject);
-        }
     }
 }

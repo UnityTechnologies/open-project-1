@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
+using InventorySystem.Core;
 using UnityEngine;
 
-namespace InventorySystem.Core
+namespace InventorySystem
 {
     /// <summary>
     /// MonoGameObject implementation for InventorySystem with item as index only.
@@ -12,12 +13,13 @@ namespace InventorySystem.Core
     {
         public int maxItem = 16;
         
-        [SerializeField]
+        [SerializeField] [HideInInspector]
         public List<Item> items;
 
         [Serializable]
         public struct Item
         {
+            [ItemID]
             public int id;
             public int count;
 

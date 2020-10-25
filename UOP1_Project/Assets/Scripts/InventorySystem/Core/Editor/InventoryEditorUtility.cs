@@ -1,6 +1,5 @@
 using System;
 using System.IO;
-using InventorySystem.Core;
 using UnityEditor;
 using UnityEngine;
 
@@ -48,7 +47,6 @@ namespace InventorySystem.Core.Editor
             AssetDatabase.CreateAsset (asset, assetPathAndName);
             Selection.activeInstanceID = asset.GetInstanceID();
             ItemDatabaseInstance.AddNewItem(asset);
-            // No force Asset Save
         }
     }
 }

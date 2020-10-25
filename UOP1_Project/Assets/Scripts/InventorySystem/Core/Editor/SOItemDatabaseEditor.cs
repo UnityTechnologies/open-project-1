@@ -1,5 +1,6 @@
+using System.Collections.Generic;
 using System.Linq;
-using InventorySystem.Core;
+using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 
@@ -10,7 +11,7 @@ namespace InventorySystem.Core.Editor
     {
         public override void OnInspectorGUI()
         {
-            if (GUILayout.Button("Scan for new Item"))
+            if (GUILayout.Button("Scan Project for new Item"))
             {
                 ScanForMissingItemInDatabase();
             }
@@ -19,10 +20,17 @@ namespace InventorySystem.Core.Editor
 
         private void ScanForMissingItemInDatabase()
         {
+            var database = (SOItemDatabase) target;
+            
+            var field = typeof(SOItemDatabase).GetField("itemDatabase", BindingFlags.Instance | BindingFlags.NonPublic);
+            var itemList = (List<ItemData>) field.GetValue(database);
+
+            var nonNullItemList = itemList.Where(data => data.ItemScriptableObject != null);
+            var databaseItemID =  nonNullItemList.Select(x => x.ItemScriptableObject.GetInstanceID());
+            
             var foundItemID = AssetDatabase.FindAssets("t:SOItem").Select(s =>
                 AssetDatabase.LoadAssetAtPath<ScriptableObject>(AssetDatabase.GUIDToAssetPath(s)).GetInstanceID());
-            var database = (SOItemDatabase) target;
-            var databaseItemID = database.GetAllSOInDatabase().Select(x => x.GetInstanceID());
+            
             var missingItemsID = foundItemID.Except(databaseItemID).ToList();
 
             if (missingItemsID.Count == 0)

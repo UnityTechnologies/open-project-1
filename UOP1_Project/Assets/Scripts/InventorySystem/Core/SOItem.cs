@@ -22,7 +22,7 @@ namespace InventorySystem.Core
         /// </summary>
         [SerializeField]
         [CanBeNull]
-        private GameObject content;
+        private GameObject prefab;
 
         [Multiline()]
         [SerializeField]
@@ -31,6 +31,7 @@ namespace InventorySystem.Core
         public string ItemName => itemName;
         public string Description => description;
         public Sprite PreviewSprite => previewSprite;
-        public GameObject Content => content;
+        [CanBeNull]
+        public GameObject Prefab => prefab;
     }
 }
