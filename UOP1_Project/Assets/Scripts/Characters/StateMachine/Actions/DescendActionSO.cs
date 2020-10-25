@@ -26,7 +26,10 @@ public class DescendAction : StateAction
 	public override void OnStateEnter()
 	{
 		_verticalMovement = _characterScript.movementVector.y;
-		_characterScript.jumpInput = false; //Prevents a double jump if the player keeps holding the jump button
+
+		//Prevents a double jump if the player keeps holding the jump button
+		//Basically it "consumes" the input
+		_characterScript.jumpInput = false;
 	}
 
 	public override void OnUpdate()

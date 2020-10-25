@@ -30,16 +30,13 @@ public class HasHitHeadCondition : Condition
 			float distance = Mathf.Abs(_characterScript.lastHit.point.y - topPositionY);
 			if (distance <= permittedDistance)
 			{
+				_characterScript.jumpInput = false;
+				_characterScript.movementVector.y = 0f;
+
 				return true;
 			}
 		}
 
 		return false;
-	}
-
-	public override void OnStateExit()
-	{
-		_characterScript.jumpInput = false;
-		_characterScript.movementVector.y = 0f;
 	}
 }

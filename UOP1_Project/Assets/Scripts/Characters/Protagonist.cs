@@ -1,5 +1,8 @@
 ﻿using UnityEngine;
 
+/// <summary>
+/// <para>This class listens to the input and it deposits it on the <c>Character</c> component, ready to be used by the <c>StateMachine</c></para>
+/// </summary>
 public class Protagonist : MonoBehaviour
 {
 	[SerializeField] private InputReader _inputReader = default;
