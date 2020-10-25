@@ -46,6 +46,7 @@ namespace InventorySystem.Core.Editor
                 {
                     database.AddNewItem((ScriptableObject) EditorUtility.InstanceIDToObject(item));
                 }
+                EditorUtility.SetDirty(target);
             }
         }
     }
