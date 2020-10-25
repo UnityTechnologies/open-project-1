@@ -1,4 +1,4 @@
-﻿namespace DeivSky.StateMachine
+﻿namespace UOP1.StateMachine
 {
 	/// <summary>
 	/// An object representing an action.

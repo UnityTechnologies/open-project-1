@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace DeivSky.StateMachine.ScriptableObjects
+namespace UOP1.StateMachine.ScriptableObjects
 {
 	[CreateAssetMenu(fileName = "New Transition", menuName = "State Machines/Transition")]
 	public class StateTransitionSO : ScriptableObject

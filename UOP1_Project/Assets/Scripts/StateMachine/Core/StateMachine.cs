@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace DeivSky.StateMachine
+namespace UOP1.StateMachine
 {
 	public class StateMachine : MonoBehaviour
 	{

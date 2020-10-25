@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace DeivSky.StateMachine.ScriptableObjects
+namespace UOP1.StateMachine.ScriptableObjects
 {
 	public abstract class StateConditionSO : ScriptableObject
 	{
