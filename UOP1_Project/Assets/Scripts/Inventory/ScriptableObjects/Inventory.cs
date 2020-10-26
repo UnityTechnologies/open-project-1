@@ -9,6 +9,7 @@ public class Inventory : ScriptableObject
 	[Tooltip("The collection of items and their quantities.")]
 	[SerializeField]
 	private List<ItemStack> _items = new List<ItemStack>();
+
 	public List<ItemStack> Items => _items;
 
     public void Add(Item item, int count = 1)

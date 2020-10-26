@@ -2,19 +2,35 @@
 
 // Created with collaboration from:
 // https://forum.unity.com/threads/inventory-system.980646/
-public abstract class Item : ScriptableObject
+[CreateAssetMenu(fileName = "Item", menuName = "Inventory/Item", order = 51)]
+public class Item : ScriptableObject
 {
-	[Tooltip("The Item's name")]
-	[SerializeField] private string _name; // TODO: Consider using a string table for localization
-	[Tooltip("A preview Image for the Item")]
-	[SerializeField] private Sprite _image;
-	[Tooltip("A prefab reference for the model of the item.")]
-	[SerializeField] private GameObject _model; // use this as reference prefab
-	[Tooltip("The Item's description")]
-	[SerializeField] [Multiline] private string _description; // TODO: Consider using a string table for localization
-	[SerializeField] private string _actionName; // TODO: Consider using a string table for localization
-	[Tooltip("The Item's background color in the UI")]
-	[SerializeField] private Color _backgroundColor;
+	[Tooltip("The name of the item")]
+	[SerializeField]
+	private string _name;
 
-	// TODO: Add common functionality for properties
+	[Tooltip("A preview image for the item")]
+	[SerializeField]
+	private Sprite _previewImage;
+
+	[Tooltip("A description of the item")]
+	[SerializeField]
+	[Multiline]
+	private string _description;
+
+
+	[Tooltip("The type of item")]
+	[SerializeField]
+	private ItemType _itemType;
+
+	[Tooltip("A prefab reference for the model of the item")]
+	[SerializeField]
+	private GameObject _prefab;
+
+	public string Name => _name;
+	public Sprite PreviewImage => _previewImage;
+	public string Description => _description;
+	public ItemType ItemType => _itemType;
+	public GameObject Prefab => _prefab;
+
 }
