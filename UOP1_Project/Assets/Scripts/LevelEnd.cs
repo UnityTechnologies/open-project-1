@@ -13,7 +13,7 @@ public class LevelEnd : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            onLevelEnd.RaiseEvent(locationsToLoad, showLoadScreen);
+            onLevelEnd.Raise(locationsToLoad, showLoadScreen);
         }
     }
 }

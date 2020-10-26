@@ -12,6 +12,6 @@ public class StartGame : MonoBehaviour
 
     public void OnPlayButtonPress()
     {
-        onPlayButtonPress.RaiseEvent(locationsToLoad, showLoadScreen);
+        onPlayButtonPress.Raise(locationsToLoad, showLoadScreen);
     }
 }

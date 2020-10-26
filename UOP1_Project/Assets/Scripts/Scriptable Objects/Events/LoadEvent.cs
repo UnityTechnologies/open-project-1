@@ -11,7 +11,7 @@ using UnityEngine.Events;
 public class LoadEvent : ScriptableObject
 {
     public UnityAction<GameScene[], bool> loadEvent;
-    public void RaiseEvent(GameScene[] locationsToLoad, bool showLoadingScreen)
+    public void Raise(GameScene[] locationsToLoad, bool showLoadingScreen)
     {
         if (loadEvent != null) loadEvent.Invoke(locationsToLoad, showLoadingScreen);
     }
