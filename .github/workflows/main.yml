@@ -2,7 +2,7 @@ name: Build project
 
 on:
   pull_request: {}
-  push: { branches: [main] }
+  push: { branches: [build, main] }
 
 env:
   UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
