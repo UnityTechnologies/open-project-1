@@ -14,34 +14,34 @@ public class IntEvent : UnityEvent<int>
 /// </summary>
 public class IntEventListener : MonoBehaviour
 {
-    public IntGameEvent intGameEvent;
-    public IntEvent OnEventRaised;
+	public IntGameEvent intGameEvent;
+	public IntEvent OnEventRaised;
 
-    private void OnEnable()
-    {
-        //Check if the event exists to avoid errors
-        if (intGameEvent == null)
-        {
-            return;
-        }
-        intGameEvent.eventRaised += Respond;
-    }
+	private void OnEnable()
+	{
+		//Check if the event exists to avoid errors
+		if (intGameEvent == null)
+		{
+			return;
+		}
+		intGameEvent.eventRaised += Respond;
+	}
 
-    private void OnDisable()
-    {
-        if (intGameEvent == null)
-        {
-            return;
-        }
-        intGameEvent.eventRaised -= Respond;
-    }
+	private void OnDisable()
+	{
+		if (intGameEvent == null)
+		{
+			return;
+		}
+		intGameEvent.eventRaised -= Respond;
+	}
 
-    public void Respond(int value)
-    {
-        if (OnEventRaised == null)
-        {
-            return;
-        }
-        OnEventRaised.Invoke(value);
-    }
+	public void Respond(int value)
+	{
+		if (OnEventRaised == null)
+		{
+			return;
+		}
+		OnEventRaised.Invoke(value);
+	}
 }

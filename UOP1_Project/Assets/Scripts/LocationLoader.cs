@@ -11,14 +11,14 @@ using UnityEngine.UI;
 
 public class LocationLoader : MonoBehaviour
 {
-    public GameScene[] mainMenuScenes;
-    [Header("Loading Screen")]
-    public GameObject loadingInterface;
-    public Image loadingProgressBar;
+	public GameScene[] mainMenuScenes;
+	[Header("Loading Screen")]
+	public GameObject loadingInterface;
+	public Image loadingProgressBar;
 
-    [Header("Load Event")]
-    //The load event we are listening to
-    [SerializeField] private LoadEvent _loadEvent = default;
+	[Header("Load Event")]
+	//The load event we are listening to
+	[SerializeField] private LoadEvent _loadEvent = default;
 
     //List of the scenes to load and track progress
     private List<AsyncOperation> _scenesToLoadAsyncOperations = new List<AsyncOperation>();
@@ -27,25 +27,25 @@ public class LocationLoader : MonoBehaviour
 	//Keep track of the scene we want to set as active (for lighting/skybox)
 	private GameScene _activeScene;
 
-    private void OnEnable()
-    {
-        _loadEvent.loadEvent += LoadScenes;
-    }
+	private void OnEnable()
+	{
+		_loadEvent.loadEvent += LoadScenes;
+	}
 
-    private void OnDisable()
-    {
-        _loadEvent.loadEvent -= LoadScenes;
-    }
+	private void OnDisable()
+	{
+		_loadEvent.loadEvent -= LoadScenes;
+	}
 
-    private void Start()
-    {
-        LoadMainMenu();
-    }
+	private void Start()
+	{
+		LoadMainMenu();
+	}
 
-    private void LoadMainMenu()
-    {
-        LoadScenes(mainMenuScenes, false);
-    }
+	private void LoadMainMenu()
+	{
+		LoadScenes(mainMenuScenes, false);
+	}
 
 	/// <summary> This function loads the scenes passed as array parameter </summary>
 	public void LoadScenes(GameScene[] locationsToLoad, bool showLoadingScreen)
@@ -101,38 +101,38 @@ public class LocationLoader : MonoBehaviour
         }
     }
 
-    public void UnloadScenes()
-    {
-        if(_ScenesToUnload != null)
-        {
-            for (int i = 0; i < _ScenesToUnload.Count; ++i)
-            {
-                //Unload the scene asynchronously in the background
-                SceneManager.UnloadSceneAsync(_ScenesToUnload[i]);
-            }
-        }
-        _ScenesToUnload.Clear();
-    }
+	public void UnloadScenes()
+	{
+		if (_ScenesToUnload != null)
+		{
+			for (int i = 0; i < _ScenesToUnload.Count; ++i)
+			{
+				//Unload the scene asynchronously in the background
+				SceneManager.UnloadSceneAsync(_ScenesToUnload[i]);
+			}
+		}
+		_ScenesToUnload.Clear();
+	}
 
-    /// <summary> This function checks if a scene is already loaded </summary>
+	/// <summary> This function checks if a scene is already loaded </summary>
 
-    public bool CheckLoadState(String sceneName)
-    {
-        if (SceneManager.sceneCount > 0)
-        {
-            for (int i = 0; i < SceneManager.sceneCount; ++i)
-            {
-                Scene scene = SceneManager.GetSceneAt(i);
-                if (scene.name == sceneName)
-                {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
+	public bool CheckLoadState(String sceneName)
+	{
+		if (SceneManager.sceneCount > 0)
+		{
+			for (int i = 0; i < SceneManager.sceneCount; ++i)
+			{
+				Scene scene = SceneManager.GetSceneAt(i);
+				if (scene.name == sceneName)
+				{
+					return true;
+				}
+			}
+		}
+		return false;
+	}
 
-    /// <summary> This function update loading progress </summary>
+	/// <summary> This function update loading progress </summary>
 
     IEnumerator TrackLoadingProgress()
     {
@@ -165,10 +165,10 @@ public class LocationLoader : MonoBehaviour
 		loadingInterface.SetActive(false);
     }
 
-    public void ExitGame()
-    {
-        Application.Quit();
-        Debug.Log("Exit!");
-    }
+	public void ExitGame()
+	{
+		Application.Quit();
+		Debug.Log("Exit!");
+	}
 
 }
