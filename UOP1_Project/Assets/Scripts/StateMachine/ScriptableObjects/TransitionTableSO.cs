@@ -29,7 +29,7 @@ namespace UOP1.StateMachine.ScriptableObjects
 				transitions.Clear();
 				foreach (var transitionItem in fromState)
 				{
-					if(transitionItem.ToState == null)
+					if (transitionItem.ToState == null)
 						throw new ArgumentNullException(nameof(transitionItem.ToState), $"TransitionTable: {name}, From State: {fromState.Key.name}");
 
 					var toState = transitionItem.ToState.GetState(stateMachine, createdInstances);
