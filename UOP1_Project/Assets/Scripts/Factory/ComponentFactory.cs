@@ -5,7 +5,7 @@ namespace OP1.Factory
 	/// <summary>
 	/// Implements the IFactory interface for Component types.
 	/// </summary>
-	/// <typeparam name="T"></typeparam>
+	/// <typeparam name="T">Specifies the component to create.</typeparam>
 	public class ComponentFactory<T> : IFactory<T> where T : Component
 	{
 		string _name;

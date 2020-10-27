@@ -3,7 +3,7 @@
 	/// <summary>
 	/// Implements the IFactory interface for non-abstract types.
 	/// </summary>
-	/// <typeparam name="T"></typeparam>
+	/// <typeparam name="T">Specifies the non-abstract type to create.</typeparam>
 	public class Factory<T> : IFactory<T> where T : new()
 	{
 		public T Create()
