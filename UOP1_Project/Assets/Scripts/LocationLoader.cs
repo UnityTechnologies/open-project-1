@@ -20,10 +20,10 @@ public class LocationLoader : MonoBehaviour
 	//The load event we are listening to
 	[SerializeField] private LoadEvent _loadEvent = default;
 
-    //List of the scenes to load and track progress
-    private List<AsyncOperation> _scenesToLoadAsyncOperations = new List<AsyncOperation>();
-    //List of scenes to unload
-    private List<Scene> _ScenesToUnload = new List<Scene>();
+	//List of the scenes to load and track progress
+	private List<AsyncOperation> _scenesToLoadAsyncOperations = new List<AsyncOperation>();
+	//List of scenes to unload
+	private List<Scene> _ScenesToUnload = new List<Scene>();
 	//Keep track of the scene we want to set as active (for lighting/skybox)
 	private GameScene _activeScene;
 
@@ -78,28 +78,28 @@ public class LocationLoader : MonoBehaviour
 
 		//Unload the scenes
 		UnloadScenes();
-    }
+	}
 
 	private void SetActiveScene(AsyncOperation asyncOp)
 	{
 		SceneManager.SetActiveScene(SceneManager.GetSceneByName(_activeScene.sceneName));
 	}
-    public void AddScenesToUnload()
-    {
-        if (SceneManager.sceneCount > 0)
-        {
-            for (int i = 0; i < SceneManager.sceneCount; ++i)
-            {
-                Scene scene = SceneManager.GetSceneAt(i);
-                if (scene.name != "ScenesLoader")
-                {
-                    Debug.Log("Added scene to unload = " + scene.name);
-                    //Add the scene to the list of the scenes to unload
-                    _ScenesToUnload.Add(scene);
-                }
-            }
-        }
-    }
+	public void AddScenesToUnload()
+	{
+		if (SceneManager.sceneCount > 0)
+		{
+			for (int i = 0; i < SceneManager.sceneCount; ++i)
+			{
+				Scene scene = SceneManager.GetSceneAt(i);
+				if (scene.name != "ScenesLoader")
+				{
+					Debug.Log("Added scene to unload = " + scene.name);
+					//Add the scene to the list of the scenes to unload
+					_ScenesToUnload.Add(scene);
+				}
+			}
+		}
+	}
 
 	public void UnloadScenes()
 	{
@@ -134,14 +134,14 @@ public class LocationLoader : MonoBehaviour
 
 	/// <summary> This function update loading progress </summary>
 
-    IEnumerator TrackLoadingProgress()
-    {
-        float totalProgress = 0;
-        //When the scene reaches 0.9f, it means that it is loaded
-        //The remaining 0.1f are for the integration
-        while (totalProgress <= 0.9f)
-        {
-			
+	IEnumerator TrackLoadingProgress()
+	{
+		float totalProgress = 0;
+		//When the scene reaches 0.9f, it means that it is loaded
+		//The remaining 0.1f are for the integration
+		while (totalProgress <= 0.9f)
+		{
+
 			//Reset the progress for the new values
 			totalProgress = 0;
 			//Iterate through all the scenes to load
@@ -154,16 +154,16 @@ public class LocationLoader : MonoBehaviour
 			//the fillAmount for all scenes, so we devide the progress by the number of scenes to load
 			loadingProgressBar.fillAmount = totalProgress / _scenesToLoadAsyncOperations.Count;
 			Debug.Log("progress bar" + loadingProgressBar.fillAmount + "and value =" + totalProgress / _scenesToLoadAsyncOperations.Count);
-			
-            yield return null;
-        }
+
+			yield return null;
+		}
 
 		//Clear the scenes to load
 		_scenesToLoadAsyncOperations.Clear();
 
 		//Hide progress bar when loading is done
 		loadingInterface.SetActive(false);
-    }
+	}
 
 	public void ExitGame()
 	{
