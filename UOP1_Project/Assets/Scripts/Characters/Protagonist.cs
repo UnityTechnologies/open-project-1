@@ -17,7 +17,7 @@ public class Protagonist : MonoBehaviour
 	//Adds listeners for events being triggered in the InputReader script
 	private void OnEnable()
 	{
-		inputReader.JumpEvent += OnJumpInitiated;
+		inputReader.jumpEvent += OnJumpInitiated;
 		inputReader.jumpCanceledEvent += OnJumpCanceled;
 		inputReader.moveEvent += OnMove;
 		//...
@@ -26,7 +26,7 @@ public class Protagonist : MonoBehaviour
 	//Removes all listeners to the events coming from the InputReader script
 	private void OnDisable()
 	{
-		inputReader.JumpEvent -= OnJumpInitiated;
+		inputReader.jumpEvent -= OnJumpInitiated;
 		inputReader.jumpCanceledEvent -= OnJumpCanceled;
 		inputReader.moveEvent -= OnMove;
 		//...
