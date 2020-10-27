@@ -7,6 +7,6 @@
 [CreateAssetMenu(fileName = "NewLocation", menuName = "Scene Data/Location")]
 public class Location : GameScene
 {
-    [Header("Location specific")]
-    public int enemiesCount;
+	[Header("Location specific")]
+	public int enemiesCount;
 }
