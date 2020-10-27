@@ -26,7 +26,7 @@ namespace OP1.Pool
 			}
 		}
 
-		public virtual T Request()
+		public T Request()
 		{
 			if (_available.Count <= 0)
 			{
