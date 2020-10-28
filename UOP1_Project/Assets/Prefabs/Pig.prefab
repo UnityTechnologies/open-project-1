@@ -852,12 +852,13 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3341179906418240731}
-  - component: {fileID: 211818859182309264}
-  - component: {fileID: 3341179906418240708}
   - component: {fileID: 3341179907149091245}
+  - component: {fileID: 3341179906418240708}
+  - component: {fileID: 211818859182309264}
+  - component: {fileID: 1044138830}
   m_Layer: 0
   m_Name: Pig
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -881,40 +882,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &211818859182309264
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3341179906418240709}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 45f6466be0a32e746abeb31b2a794001, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  inputReader: {fileID: 11400000, guid: 945ec0365077176418488737deed54be, type: 2}
-  gameplayCamera: {fileID: 0}
---- !u!114 &3341179906418240708
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3341179906418240709}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4eb0e4f8f5e39624ea81504bf968dcce, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 8
-  turnSmoothTime: 0.2
-  gravityMultiplier: 5
-  initialJumpForce: 10
-  jumpInputDuration: 0.4
-  gravityComebackMultiplier: 15
-  maxFallSpeed: 50
-  gravityDivider: 0.6
 --- !u!143 &3341179907149091245
 CharacterController:
   m_ObjectHideFlags: 0
@@ -928,11 +895,55 @@ CharacterController:
   serializedVersion: 2
   m_Height: 1.75
   m_Radius: 0.4
-  m_SlopeLimit: 30
+  m_SlopeLimit: 45
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0.875, z: 0}
+--- !u!114 &3341179906418240708
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3341179906418240709}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4eb0e4f8f5e39624ea81504bf968dcce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  jumpInput: 0
+  movementInput: {x: 0, y: 0, z: 0}
+  movementVector: {x: 0, y: 0, z: 0}
+--- !u!114 &211818859182309264
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3341179906418240709}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45f6466be0a32e746abeb31b2a794001, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _inputReader: {fileID: 11400000, guid: 945ec0365077176418488737deed54be, type: 2}
+  gameplayCamera: {fileID: 0}
+--- !u!114 &1044138830
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3341179906418240709}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1eeda163c70b3cb4ebb88ba92f608fd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CurrentState: 
+  debug: 0
+  _initialStateSO: {fileID: 11400000, guid: e128814ff6dbf63449bbc4dc8b6dc066, type: 2}
 --- !u!1 &3791421269865525050
 GameObject:
   m_ObjectHideFlags: 0

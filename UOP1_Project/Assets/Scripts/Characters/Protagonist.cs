@@ -1,34 +1,36 @@
 ﻿using UnityEngine;
 
+/// <summary>
+/// <para>This class listens to the input and it deposits it on the <c>Character</c> component, ready to be used by the <c>StateMachine</c></para>
+/// </summary>
 public class Protagonist : MonoBehaviour
 {
-	public InputReader inputReader;
+	[SerializeField] private InputReader _inputReader = default;
 	public Transform gameplayCamera;
 
-	private Character charScript;
-	private Vector2 previousMovementInput;
-	private bool controlsEnabled = true;
+	private Character _charScript;
+	private Vector2 _previousMovementInput;
 
 	private void Awake()
 	{
-		charScript = GetComponent<Character>();
+		_charScript = GetComponent<Character>();
 	}
 
 	//Adds listeners for events being triggered in the InputReader script
 	private void OnEnable()
 	{
-		inputReader.jumpEvent += OnJumpInitiated;
-		inputReader.jumpCanceledEvent += OnJumpCanceled;
-		inputReader.moveEvent += OnMove;
+		_inputReader.jumpEvent += OnJumpInitiated;
+		_inputReader.jumpCanceledEvent += OnJumpCanceled;
+		_inputReader.moveEvent += OnMove;
 		//...
 	}
 
 	//Removes all listeners to the events coming from the InputReader script
 	private void OnDisable()
 	{
-		inputReader.jumpEvent -= OnJumpInitiated;
-		inputReader.jumpCanceledEvent -= OnJumpCanceled;
-		inputReader.moveEvent -= OnMove;
+		_inputReader.jumpEvent -= OnJumpInitiated;
+		_inputReader.jumpCanceledEvent -= OnJumpCanceled;
+		_inputReader.moveEvent -= OnMove;
 		//...
 	}
 
@@ -46,29 +48,26 @@ public class Protagonist : MonoBehaviour
 		cameraRight.y = 0f;
 
 		//Use the two axes, modulated by the corresponding inputs, and construct the final vector
-		Vector3 adjustedMovement = cameraRight.normalized * previousMovementInput.x +
-			cameraForward.normalized * previousMovementInput.y;
+		Vector3 adjustedMovement = cameraRight.normalized * _previousMovementInput.x +
+			cameraForward.normalized * _previousMovementInput.y;
 
-		charScript.Move(Vector3.ClampMagnitude(adjustedMovement, 1f));
+		_charScript.Move(Vector3.ClampMagnitude(adjustedMovement, 1f));
 	}
 
 	//---- EVENT LISTENERS ----
 
 	private void OnMove(Vector2 movement)
 	{
-		if (controlsEnabled)
-			previousMovementInput = movement;
+		_previousMovementInput = movement;
 	}
 
 	private void OnJumpInitiated()
 	{
-		if (controlsEnabled)
-			charScript.Jump();
+		_charScript.Jump();
 	}
 
 	private void OnJumpCanceled()
 	{
-		if (controlsEnabled)
-			charScript.CancelJump();
+		_charScript.CancelJump();
 	}
 }
