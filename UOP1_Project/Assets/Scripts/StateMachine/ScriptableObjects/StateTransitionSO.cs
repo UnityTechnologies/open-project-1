@@ -40,8 +40,8 @@ namespace UOP1.StateMachine.ScriptableObjects
 			List<int> resultGroupsList = new List<int>();
 			for (int i = 0; i < count; i++)
 			{
-				int idx = i;
 				resultGroupsList.Add(1);
+				int idx = resultGroupsList.Count - 1;
 				while (i < count - 1 && conditionUsages[i].Operator == Operator.And)
 				{
 					i++;
