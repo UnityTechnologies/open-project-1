@@ -1,14 +1,19 @@
-﻿namespace UOP1.StateMachine
+﻿using UnityEngine;
+
+namespace UOP1.StateMachine
 {
 	public class StateTransition : IStateComponent
 	{
+		private readonly ScriptableObject _originSO;
 		private readonly State _targetState;
 		private readonly StateCondition[] _conditions;
 		private readonly int[] _resultGroups;
 		private readonly bool[] _results;
+		
 
-		public StateTransition(State targetState, StateCondition[] conditions, int[] resultGroups = null)
+		public StateTransition(ScriptableObject originSO, State targetState, StateCondition[] conditions, int[] resultGroups = null)
 		{
+			_originSO = originSO;
 			_targetState = targetState;
 			_conditions = conditions;
 			_resultGroups = resultGroups != null && resultGroups.Length > 0 ? resultGroups : new int[1];
@@ -41,7 +46,7 @@
 		private bool ShouldTransition()
 		{
 #if UNITY_EDITOR
-			_targetState._stateMachine._debugger.TransitionEvaluationBegin(_targetState.Name);
+			_targetState._stateMachine._debugger.TransitionEvaluationBegin(_originSO.name, _targetState.Name);
 #endif
 
 			int count = _resultGroups.Length;

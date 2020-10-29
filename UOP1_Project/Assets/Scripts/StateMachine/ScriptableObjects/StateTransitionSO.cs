@@ -18,7 +18,7 @@ namespace UOP1.StateMachine.ScriptableObjects
 			var state = _targetState.GetState(stateMachine, createdInstances);
 			ProcessConditionUsages(stateMachine, _conditions, createdInstances, out var conditions, out var resultGroups);
 
-			var transition = new StateTransition(state, conditions, resultGroups);
+			var transition = new StateTransition(this, state, conditions, resultGroups);
 			createdInstances.Add(this, transition);
 			return transition;
 		}

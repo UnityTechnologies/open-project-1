@@ -25,7 +25,7 @@ namespace UOP1.StateMachine
 			CurrentState = initialState;
 		}
 
-		internal void TransitionEvaluationBegin(string targetState)
+		internal void TransitionEvaluationBegin(string transitionName, string targetState)
 		{
 			_targetState = targetState;
 
@@ -34,16 +34,18 @@ namespace UOP1.StateMachine
 
 			_logBuilder.Clear();
 			_logBuilder.AppendLine($"{_stateMachine.gameObject.name} state changed");
-			_logBuilder.Append($"{CurrentState} > > > {_targetState}");
+			_logBuilder.AppendLine($"{CurrentState}  >>>  {_targetState}");
+			_logBuilder.AppendLine();
+			_logBuilder.Append($"[{transitionName}]");
 		}
 
-		internal void TransitionConditionResult(Type conditionType, bool result, bool isMet)
+		internal void TransitionConditionResult(string conditionName, bool result, bool isMet)
 		{
 			if (!debugTransitions || _logBuilder.Length == 0)
 				return;
 
 			_logBuilder.AppendLine();
-			_logBuilder.Append($"> {conditionType} == {result}");
+			_logBuilder.Append($"    > {conditionName} == {result}");
 
 			if (isMet) //Unicode checked and Unchecked marks
 				_logBuilder.Append(" [\u2714]"); 

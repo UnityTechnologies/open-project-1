@@ -1,4 +1,6 @@
-﻿namespace UOP1.StateMachine
+﻿using UnityEngine;
+
+namespace UOP1.StateMachine
 {
 	/// <summary>
 	/// Class that represents a conditional statement.
@@ -25,12 +27,14 @@
 	/// </summary>
 	public readonly struct StateCondition
 	{
+		internal readonly ScriptableObject _originSO;
 		internal readonly StateMachine _stateMachine;
 		internal readonly Condition _condition;
 		internal readonly bool _expectedResult;
 
-		public StateCondition(StateMachine stateMachine, Condition condition, bool expectedResult)
+		public StateCondition(ScriptableObject originSO, StateMachine stateMachine, Condition condition, bool expectedResult)
 		{
+			_originSO = originSO;
 			_stateMachine = stateMachine;
 			_condition = condition;
 			_expectedResult = expectedResult;
@@ -42,7 +46,7 @@
 			bool isMet = statement == _expectedResult;
 
 #if UNITY_EDITOR
-			_stateMachine._debugger.TransitionConditionResult(_condition.GetType(), statement, isMet);
+			_stateMachine._debugger.TransitionConditionResult(_originSO.name, statement, isMet);
 #endif
 			return isMet;
 		}
