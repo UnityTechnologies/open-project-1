@@ -46,7 +46,7 @@ namespace UOP1.StateMachine
 			_logBuilder.Append($"> {conditionType} == {result}");
 
 			if (isMet) //Unicode checked and Unchecked marks
-				_logBuilder.Append(" [\u2714]"); 
+				_logBuilder.Append(" [\u2714]");
 			else
 				_logBuilder.Append(" [\u2718]");
 		}
@@ -59,7 +59,7 @@ namespace UOP1.StateMachine
 			if (!debugTransitions || _logBuilder.Length == 0)
 				return;
 
-			if(passed)
+			if (passed)
 				PrintDebugLog();
 
 			_logBuilder.Clear();
