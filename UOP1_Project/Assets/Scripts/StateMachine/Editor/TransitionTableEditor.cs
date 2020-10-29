@@ -186,7 +186,7 @@ namespace UOP1.StateMachine.Editor
 
 				if (!up && i <= serializedTransition.Index)
 					continue;
-				
+
 				st = new SerializedTransition(_transitions, i);
 				if (st.FromState.objectReferenceInstanceIDValue != fromId)
 					continue;
@@ -270,7 +270,7 @@ namespace UOP1.StateMachine.Editor
 		private bool TryGetExistingTransition(SerializedProperty from, SerializedProperty to, out int fromIndex, out int toIndex)
 		{
 			fromIndex = _fromStates.IndexOf(from.objectReferenceValue);
-			if(fromIndex < 0)
+			if (fromIndex < 0)
 			{
 				toIndex = -1;
 				return false;

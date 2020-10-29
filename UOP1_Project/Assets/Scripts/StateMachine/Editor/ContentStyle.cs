@@ -36,7 +36,7 @@ namespace UOP1.StateMachine.Editor
 			Margin = new RectOffset(8, 8, 8, 8);
 			WithPadding = new GUIStyle { padding = Padding };
 			WithPaddingAndMargins = new GUIStyle { padding = Padding, margin = Margin };
-			
+
 			BoldCentered = new GUIStyle { fontStyle = FontStyle.Bold, alignment = TextAnchor.MiddleCenter };
 			StateListStyle = new GUIStyle
 			{
