@@ -12,69 +12,69 @@ public class Inventory : ScriptableObject
 
 	public List<ItemStack> Items => _items;
 
-    public void Add(Item item, int count = 1)
-    {
-        if (count <= 0)
-            return;
+	public void Add(Item item, int count = 1)
+	{
+		if (count <= 0)
+			return;
 
-        for (int i = 0; i < _items.Count; i++)
-        {
-            ItemStack currentItemStack = _items[i];
-            if (item == currentItemStack.Item)
-            {
-                currentItemStack.Amount += count;
-                return;
-            }
-        }
+		for (int i = 0; i < _items.Count; i++)
+		{
+			ItemStack currentItemStack = _items[i];
+			if (item == currentItemStack.Item)
+			{
+				currentItemStack.Amount += count;
+				return;
+			}
+		}
 
-        _items.Add(new ItemStack(item, count));
-    }
+		_items.Add(new ItemStack(item, count));
+	}
 
-    public void Remove(Item item, int count = 1)
-    {
-        if (count <= 0)
-            return;
+	public void Remove(Item item, int count = 1)
+	{
+		if (count <= 0)
+			return;
 
-        for (int i = 0; i < _items.Count; i++)
-        {
-            ItemStack currentItemStack = _items[i];
+		for (int i = 0; i < _items.Count; i++)
+		{
+			ItemStack currentItemStack = _items[i];
 
-            if (currentItemStack.Item == item)
-            {
-                currentItemStack.Amount -= count;
+			if (currentItemStack.Item == item)
+			{
+				currentItemStack.Amount -= count;
 
-                if (currentItemStack.Amount <= 0)
-                    _items.Remove(currentItemStack);
+				if (currentItemStack.Amount <= 0)
+					_items.Remove(currentItemStack);
 
-                return;
-            }
-        }
-    }
+				return;
+			}
+		}
+	}
 
-    public bool Contains(Item item)
-    {
-        for (int i = 0; i < _items.Count; i++)
-        {
-            if (item == _items[i].Item)
-            {
-                return true;
-            }
-        }
+	public bool Contains(Item item)
+	{
+		for (int i = 0; i < _items.Count; i++)
+		{
+			if (item == _items[i].Item)
+			{
+				return true;
+			}
+		}
 
-        return false;
-    }
+		return false;
+	}
 
-    public int Count(Item item)
-    {
-        for (int i = 0; i < _items.Count; i++)
-        {
-            ItemStack currentItemStack = _items[i];
-            if (item == currentItemStack.Item)
-            {
-                return currentItemStack.Amount;
-            }
-        }
+	public int Count(Item item)
+	{
+		for (int i = 0; i < _items.Count; i++)
+		{
+			ItemStack currentItemStack = _items[i];
+			if (item == currentItemStack.Item)
+			{
+				return currentItemStack.Amount;
+			}
+		}
 
-        return 0;
-    }
+		return 0;
+	}
 }
