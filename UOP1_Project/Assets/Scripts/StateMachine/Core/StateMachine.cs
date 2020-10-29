@@ -6,12 +6,14 @@ namespace UOP1.StateMachine
 {
 	public class StateMachine : MonoBehaviour
 	{
-#if UNITY_EDITOR
-		public string CurrentState;
-		public bool debug;
-#endif
 		[Tooltip("Set the initial state of this StateMachine")]
 		[SerializeField] private ScriptableObjects.StateSO _initialStateSO = null;
+
+#if UNITY_EDITOR
+		[Space]
+		[SerializeField]
+		internal StateMachineDebugger _debugger = default;
+#endif
 
 		private readonly Dictionary<Type, Component> _cachedComponents = new Dictionary<Type, Component>();
 		private State _currentState;
@@ -21,7 +23,7 @@ namespace UOP1.StateMachine
 			_currentState = _initialStateSO.GetState(this);
 			_currentState.OnStateEnter();
 #if UNITY_EDITOR
-			CurrentState = _currentState.Name;
+			_debugger.Awake(this, _currentState.Name);
 #endif
 		}
 
@@ -70,11 +72,6 @@ namespace UOP1.StateMachine
 			_currentState.OnStateExit();
 			_currentState = transitionState;
 			_currentState.OnStateEnter();
-#if UNITY_EDITOR
-			if (debug)
-				Debug.Log($"{name} entering state {_currentState.Name}");
-			CurrentState = _currentState.Name;
-#endif
 		}
 	}
 }

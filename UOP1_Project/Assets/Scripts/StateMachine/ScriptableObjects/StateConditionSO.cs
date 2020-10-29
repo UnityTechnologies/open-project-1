@@ -8,9 +8,9 @@ namespace UOP1.StateMachine.ScriptableObjects
 		internal StateCondition GetCondition(StateMachine stateMachine, bool expectedResult, Dictionary<ScriptableObject, object> createdInstances)
 		{
 			if (createdInstances.TryGetValue(this, out var cond))
-				return new StateCondition((Condition)cond, expectedResult);
+				return new StateCondition(stateMachine, (Condition)cond, expectedResult);
 
-			var condition = new StateCondition(CreateCondition(), expectedResult);
+			var condition = new StateCondition(stateMachine, CreateCondition(), expectedResult);
 			createdInstances.Add(this, condition._condition);
 			condition._condition.Awake(stateMachine);
 			return condition;

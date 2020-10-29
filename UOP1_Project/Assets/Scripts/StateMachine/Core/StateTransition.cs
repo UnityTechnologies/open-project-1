@@ -40,16 +40,24 @@
 
 		private bool ShouldTransition()
 		{
+#if UNITY_EDITOR
+			_targetState._stateMachine._debugger.TransitionEvaluationBegin(_targetState.Name);
+#endif
+
 			int count = _resultGroups.Length;
 			for (int i = 0, idx = 0; i < count && idx < _conditions.Length; i++)
 				for (int j = 0; j < _resultGroups[i]; j++, idx++)
 					_results[i] = j == 0 ?
-						_conditions[idx].IsMet :
-						_results[i] && _conditions[idx].IsMet;
+						_conditions[idx].IsMet() :
+						_results[i] && _conditions[idx].IsMet();
 
 			bool ret = false;
 			for (int i = 0; i < count && !ret; i++)
 				ret = ret || _results[i];
+
+#if UNITY_EDITOR
+			_targetState._stateMachine._debugger.TransitionEvaluationEnd(ret);
+#endif
 
 			return ret;
 		}
