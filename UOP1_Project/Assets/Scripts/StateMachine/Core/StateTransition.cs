@@ -9,7 +9,7 @@ namespace UOP1.StateMachine
 		private readonly StateCondition[] _conditions;
 		private readonly int[] _resultGroups;
 		private readonly bool[] _results;
-		
+
 
 		public StateTransition(ScriptableObject originSO, State targetState, StateCondition[] conditions, int[] resultGroups = null)
 		{
