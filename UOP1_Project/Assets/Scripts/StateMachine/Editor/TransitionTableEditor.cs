@@ -11,11 +11,20 @@ namespace UOP1.StateMachine.Editor
 	[CustomEditor(typeof(TransitionTableSO))]
 	internal class TransitionTableEditor : UnityEditor.Editor
 	{
+		// Property with all the transitions.
 		private SerializedProperty _transitions;
+
+		// _fromStates and _transitionsByFromStates form an Object->Transitions dictionary.
 		private List<Object> _fromStates;
 		private List<List<TransitionDisplayHelper>> _transitionsByFromStates;
+
+		// _toggles for the opened states. Only one should be active at a time.
 		private bool[] _toggles;
+
+		// Helper class to add new transitions.
 		private AddTransitionHelper _addTransitionHelper;
+
+		// Editor to display the StateSO inspector.
 		private UnityEditor.Editor _cachedStateEditor;
 		private bool _displayStateEditor;
 
@@ -23,6 +32,7 @@ namespace UOP1.StateMachine.Editor
 		{
 			_addTransitionHelper = new AddTransitionHelper(this);
 			Undo.undoRedoPerformed += ResetIfRequired;
+			_transitions = serializedObject.FindProperty("_transitions");
 			Reset();
 		}
 
@@ -32,79 +42,96 @@ namespace UOP1.StateMachine.Editor
 			_addTransitionHelper?.Dispose();
 		}
 
+		/// <summary>
+		/// Method to fully reset the editor. Should be used whenever adding, removing and reordering transitions.
+		/// </summary>
 		internal void Reset()
 		{
-			_transitions = serializedObject.FindProperty("_transitions");
 			GroupByFromState();
-			_toggles = new bool[_transitionsByFromStates.Count];
-		}
-
-		private void ResetIfRequired()
-		{
-			if (serializedObject.UpdateIfRequiredOrScript())
-				Reset();
+			_toggles = new bool[_fromStates.Count];
 		}
 
 		public override void OnInspectorGUI()
 		{
 			if (!_displayStateEditor)
-				MyInspectorGUI();
+				TransitionTableGUI();
 			else
-			{
-				if (GUILayout.Button(EditorGUIUtility.IconContent("scrollleft"), GUILayout.Width(35), GUILayout.Height(20)))
-					_displayStateEditor = false;
-
-				EditorGUILayout.LabelField(_cachedStateEditor.target.name, EditorStyles.boldLabel);
-				_cachedStateEditor.OnInspectorGUI();
-			}
+				StateEditorGUI();
 		}
 
-		private void MyInspectorGUI()
+		private void StateEditorGUI()
+		{
+			if (GUILayout.Button(EditorGUIUtility.IconContent("scrollleft"), GUILayout.Width(35), GUILayout.Height(20)))
+				_displayStateEditor = false;
+
+			EditorGUILayout.LabelField(_cachedStateEditor.target.name, EditorStyles.boldLabel);
+			_cachedStateEditor.OnInspectorGUI();
+		}
+
+		private void TransitionTableGUI()
 		{
 			serializedObject.UpdateIfRequiredOrScript();
 
+			// For each fromState
 			for (int i = 0; i < _fromStates.Count; i++)
 			{
 				EditorGUI.DrawRect(BeginVertical(ContentStyle.WithPaddingAndMargins), ContentStyle.LightGray);
 
 				var transitions = _transitionsByFromStates[i];
 
+				// State Header
 				BeginHorizontal();
-				BeginVertical();
-				string label = transitions[0].SerializedTransition.FromState.objectReferenceValue.name;
-				if (i == 0)
-					label += " (Initial State)";
-				_toggles[i] = BeginFoldoutHeaderGroup(
-					foldout: _toggles[i],
-					content: label,
-					style: ContentStyle.StateListStyle);
-				Separator();
-				EndVertical();
+				{
+					BeginVertical();
+					string label = transitions[0].SerializedTransition.FromState.objectReferenceValue.name;
+					if (i == 0)
+						label += " (Initial State)";
 
-				if (GUILayout.Button(EditorGUIUtility.IconContent("SceneViewTools"), GUILayout.Width(35), GUILayout.Height(20)))
-				{
-					if (_cachedStateEditor == null)
-						_cachedStateEditor = CreateEditor(transitions[0].SerializedTransition.FromState.objectReferenceValue, typeof(StateEditor));
-					else
-						CreateCachedEditor(transitions[0].SerializedTransition.FromState.objectReferenceValue, typeof(StateEditor), ref _cachedStateEditor);
-					_displayStateEditor = true;
-				}
-				if (GUILayout.Button(EditorGUIUtility.IconContent("scrollup"), GUILayout.Width(35), GUILayout.Height(20)))
-				{
-					if (ReorderState(i, true))
-						return;
-				}
-				if (GUILayout.Button(EditorGUIUtility.IconContent("scrolldown"), GUILayout.Width(35), GUILayout.Height(20)))
-				{
-					if (ReorderState(i, false))
-						return;
+					// State toggle
+					_toggles[i] = BeginFoldoutHeaderGroup(
+						foldout: _toggles[i],
+						content: label,
+						style: ContentStyle.StateListStyle);
+					Separator();
+					EndVertical();
+
+					// Buttons
+					{
+						bool Button(string icon) => GUILayout.Button(EditorGUIUtility.IconContent(icon), GUILayout.Width(35), GUILayout.Height(20));
+
+						// Switch to state editor
+						if (Button("SceneViewTools"))
+						{
+							if (_cachedStateEditor == null)
+								_cachedStateEditor = CreateEditor(transitions[0].SerializedTransition.FromState.objectReferenceValue, typeof(StateEditor));
+							else
+								CreateCachedEditor(transitions[0].SerializedTransition.FromState.objectReferenceValue, typeof(StateEditor), ref _cachedStateEditor);
+
+							_displayStateEditor = true;
+							return;
+						}
+						// Move state up
+						if (Button("scrollup"))
+						{
+							if (ReorderState(i, true))
+								return;
+						}
+						// Move state down
+						if (Button("scrolldown"))
+						{
+							if (ReorderState(i, false))
+								return;
+						}
+					}
 				}
 				EndHorizontal();
 
+				// If state is open
 				if (_toggles[i])
 				{
 					DisableAllStateTogglesExcept(i);
 					EditorGUI.BeginChangeCheck();
+					// Display all the transitions in the state
 					foreach (var transition in transitions)
 					{
 						if (transition.Display())
@@ -125,16 +152,24 @@ namespace UOP1.StateMachine.Editor
 			var rect = BeginHorizontal();
 			Space(rect.width - 55);
 
+			// Display add transition button
 			_addTransitionHelper.Display();
 
 			EndHorizontal();
 		}
 
+		/// <summary>
+		/// Move a state up or down
+		/// </summary>
+		/// <param name="index">Index of the state in _fromStates</param>
+		/// <param name="up">Moving up(true) or down(true)</param>
+		/// <returns>True if changes were made and returning is required. Otherwise false.</returns>
 		internal bool ReorderState(int index, bool up)
 		{
 			if ((up && index == 0) || (!up && index == _fromStates.Count - 1))
 				return false;
 
+			// Moving a state up is easier than moving it down. So when moving a state down, we instead move the next state up.
 			MoveStateUp(up ? index : index + 1);
 			return true;
 		}
@@ -149,6 +184,11 @@ namespace UOP1.StateMachine.Editor
 			Reset();
 		}
 
+		/// <summary>
+		/// Add a new transition. If a transition with the same from and to states is found,
+		/// the conditions in the new transition are added to it.
+		/// </summary>
+		/// <param name="source">Source Transition</param>
 		internal void AddTransition(SerializedTransition source)
 		{
 			SerializedTransition transition;
@@ -174,6 +214,12 @@ namespace UOP1.StateMachine.Editor
 			_toggles[fromIndex >= 0 ? fromIndex : _toggles.Length - 1] = true;
 		}
 
+		/// <summary>
+		/// Move a transition up or down
+		/// </summary>
+		/// <param name="serializedTransition">The transition to move</param>
+		/// <param name="up">Move up(true) or down(false)</param>
+		/// <returns>True if changes were made and returning is required. Otherwise false.</returns>
 		internal bool ReorderTransition(SerializedTransition serializedTransition, bool up)
 		{
 			int targetIndex = -1;
@@ -212,6 +258,10 @@ namespace UOP1.StateMachine.Editor
 			return true;
 		}
 
+		/// <summary>
+		/// Remove a transition by index.
+		/// </summary>
+		/// <param name="index">Index of the transition in the transition table</param>
 		internal void RemoveTransition(int index)
 		{
 			var state = _transitions.GetArrayElementAtIndex(index).FindPropertyRelative("FromState").objectReferenceValue;
@@ -280,6 +330,12 @@ namespace UOP1.StateMachine.Editor
 				transitionHelper => transitionHelper.SerializedTransition.ToState.objectReferenceValue == to.objectReferenceValue);
 
 			return toIndex >= 0;
+		}
+
+		private void ResetIfRequired()
+		{
+			if (serializedObject.UpdateIfRequiredOrScript())
+				Reset();
 		}
 
 		private void GroupByFromState()

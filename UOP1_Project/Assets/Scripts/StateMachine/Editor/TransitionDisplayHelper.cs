@@ -7,8 +7,8 @@ namespace UOP1.StateMachine.Editor
 	internal class TransitionDisplayHelper
 	{
 		internal SerializedTransition SerializedTransition { get; }
-		private ReorderableList _reorderableList;
-		private TransitionTableEditor _editor;
+		private readonly ReorderableList _reorderableList;
+		private readonly TransitionTableEditor _editor;
 
 		internal TransitionDisplayHelper(SerializedTransition serializedTransition, TransitionTableEditor editor)
 		{
@@ -20,26 +20,35 @@ namespace UOP1.StateMachine.Editor
 
 		internal bool Display()
 		{
+			// Transition Header
 			EditorGUI.DrawRect(EditorGUILayout.BeginHorizontal(), ContentStyle.DarkGray);
-			EditorGUILayout.LabelField("To", GUILayout.Width(20));
-			EditorGUILayout.LabelField(SerializedTransition.ToState.objectReferenceValue.name, EditorStyles.boldLabel);
-			if (GUILayout.Button(EditorGUIUtility.IconContent("scrollup"), GUILayout.Width(35), GUILayout.Height(16)))
 			{
-				if (_editor.ReorderTransition(SerializedTransition, true))
-					return true;
-			}
-			if (GUILayout.Button(EditorGUIUtility.IconContent("scrolldown"), GUILayout.Width(35), GUILayout.Height(16)))
-			{
-				if (_editor.ReorderTransition(SerializedTransition, false))
-					return true;
-			}
-			if (GUILayout.Button(EditorGUIUtility.IconContent("Toolbar Minus"), GUILayout.Width(35), GUILayout.Height(16)))
-			{
-				_editor.RemoveTransition(SerializedTransition.Index);
-				return true;
-			}
+				// Target state
+				EditorGUILayout.LabelField("To", GUILayout.Width(20));
+				EditorGUILayout.LabelField(SerializedTransition.ToState.objectReferenceValue.name, EditorStyles.boldLabel);
 
+				// Move transition up
+				if (GUILayout.Button(EditorGUIUtility.IconContent("scrollup"), GUILayout.Width(35), GUILayout.Height(16)))
+				{
+					if (_editor.ReorderTransition(SerializedTransition, true))
+						return true;
+				}
+				// Move transition down
+				if (GUILayout.Button(EditorGUIUtility.IconContent("scrolldown"), GUILayout.Width(35), GUILayout.Height(16)))
+				{
+					if (_editor.ReorderTransition(SerializedTransition, false))
+						return true;
+				}
+				// Remove transition
+				if (GUILayout.Button(EditorGUIUtility.IconContent("Toolbar Minus"), GUILayout.Width(35), GUILayout.Height(16)))
+				{
+					_editor.RemoveTransition(SerializedTransition.Index);
+					return true;
+				}
+			}
 			EditorGUILayout.EndHorizontal();
+
+			// Conditions
 			_reorderableList.DoLayoutList();
 
 			return false;
