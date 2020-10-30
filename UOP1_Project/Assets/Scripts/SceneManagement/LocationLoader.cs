@@ -39,7 +39,10 @@ public class LocationLoader : MonoBehaviour
 
 	private void Start()
 	{
-		LoadMainMenu();
+		if(SceneManager.GetActiveScene().name == "ScenesLoader")
+		{
+			LoadMainMenu();
+		}
 	}
 
 	private void LoadMainMenu()
@@ -68,6 +71,7 @@ public class LocationLoader : MonoBehaviour
 		if (showLoadingScreen)
 		{
 			//Show the progress bar and track progress if loadScreen is true
+			loadingInterface.SetActive(true);
 			StartCoroutine(TrackLoadingProgress());
 		}
 		else
