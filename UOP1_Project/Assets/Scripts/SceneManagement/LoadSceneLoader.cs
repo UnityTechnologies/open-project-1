@@ -8,9 +8,9 @@ using UnityEngine.SceneManagement;
 public class LoadSceneLoader : MonoBehaviour
 {
 	public GameSceneSO initializationScene;
-    void Start()
-    {
-		#if UNITY_EDITOR
+	void Start()
+	{
+#if UNITY_EDITOR
 		for (int i = 0; i < SceneManager.sceneCount; ++i)
 		{
 			Scene scene = SceneManager.GetSceneAt(i);
@@ -20,6 +20,6 @@ public class LoadSceneLoader : MonoBehaviour
 			}
 		}
 		SceneManager.LoadSceneAsync(initializationScene.sceneName, LoadSceneMode.Additive);
-		#endif
+#endif
 	}
 }

@@ -42,7 +42,7 @@ public class LocationLoader : MonoBehaviour
 
 	private void Start()
 	{
-		if(SceneManager.GetActiveScene().name == initializationScene.sceneName)
+		if (SceneManager.GetActiveScene().name == initializationScene.sceneName)
 		{
 			LoadMainMenu();
 		}
