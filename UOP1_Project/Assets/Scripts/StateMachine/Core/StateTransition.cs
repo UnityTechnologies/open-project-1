@@ -61,7 +61,7 @@ namespace UOP1.StateMachine
 				ret = ret || _results[i];
 
 #if UNITY_EDITOR
-			_targetState._stateMachine._debugger.TransitionEvaluationEnd(ret);
+			_targetState._stateMachine._debugger.TransitionEvaluationEnd(ret, _targetState._actions);
 #endif
 
 			return ret;

@@ -11,7 +11,13 @@ namespace UOP1.StateMachine
 		internal bool debugTransitions = false;
 
 		[SerializeField]
-		internal string CurrentState;
+		internal bool appendConditionsInfo = true;
+
+		[SerializeField]
+		internal bool appendActionsInfo = true;
+
+		[SerializeField]
+		internal string currentState;
 
 		private StateMachine _stateMachine;
 		private StringBuilder _logBuilder;
@@ -22,7 +28,7 @@ namespace UOP1.StateMachine
 			_stateMachine = stateMachine;
 			_logBuilder = new StringBuilder();
 
-			CurrentState = initialState;
+			currentState = initialState;
 		}
 
 		internal void TransitionEvaluationBegin(string transitionName, string targetState)
@@ -34,37 +40,57 @@ namespace UOP1.StateMachine
 
 			_logBuilder.Clear();
 			_logBuilder.AppendLine($"{_stateMachine.gameObject.name} state changed");
-			_logBuilder.AppendLine($"{CurrentState}  >>>  {_targetState}");
-			_logBuilder.AppendLine();
-			_logBuilder.Append($"[{transitionName}]");
+			_logBuilder.AppendLine($"{currentState}  >>>  {_targetState}");
+			
+			if (appendConditionsInfo)
+			{
+				_logBuilder.AppendLine();
+				_logBuilder.AppendLine($"Transition: {transitionName}");
+			}
 		}
 
 		internal void TransitionConditionResult(string conditionName, bool result, bool isMet)
 		{
+			if (!debugTransitions || _logBuilder.Length == 0 || !appendConditionsInfo)
+				return;
+
+			_logBuilder.Append($"    \u279C {conditionName} == {result}");
+
+			if (isMet) //Unicode checked and Unchecked marks
+				_logBuilder.AppendLine(" [\u2714]");
+			else
+				_logBuilder.AppendLine(" [\u2718]");
+		}
+
+		internal void TransitionEvaluationEnd(bool passed, StateAction[] actions)
+		{
+			if (passed)
+				currentState = _targetState;
+
 			if (!debugTransitions || _logBuilder.Length == 0)
+				return;
+
+			if (passed)
+			{
+				LogActions(actions);
+				PrintDebugLog();
+			}
+
+			_logBuilder.Clear();
+		}
+
+		private void LogActions(StateAction[] actions)
+		{
+			if (!appendActionsInfo)
 				return;
 
 			_logBuilder.AppendLine();
-			_logBuilder.Append($"    > {conditionName} == {result}");
+			_logBuilder.AppendLine("State Actions:");
 
-			if (isMet) //Unicode checked and Unchecked marks
-				_logBuilder.Append(" [\u2714]");
-			else
-				_logBuilder.Append(" [\u2718]");
-		}
-
-		internal void TransitionEvaluationEnd(bool passed)
-		{
-			if (passed)
-				CurrentState = _targetState;
-
-			if (!debugTransitions || _logBuilder.Length == 0)
-				return;
-
-			if (passed)
-				PrintDebugLog();
-
-			_logBuilder.Clear();
+			foreach (StateAction action in actions)
+			{
+				_logBuilder.AppendLine($"    \u279C {action._originSO.name}");
+			}
 		}
 
 		private void PrintDebugLog()
