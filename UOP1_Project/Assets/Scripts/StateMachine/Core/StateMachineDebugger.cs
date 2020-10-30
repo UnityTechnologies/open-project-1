@@ -41,7 +41,7 @@ namespace UOP1.StateMachine
 			_logBuilder.Clear();
 			_logBuilder.AppendLine($"{_stateMachine.gameObject.name} state changed");
 			_logBuilder.AppendLine($"{currentState}  >>>  {_targetState}");
-			
+
 			if (appendConditionsInfo)
 			{
 				_logBuilder.AppendLine();
