@@ -7,7 +7,7 @@
 public class StartGame : MonoBehaviour
 {
 	public LoadEvent onPlayButtonPress;
-	public GameScene[] locationsToLoad;
+	public GameSceneSO[] locationsToLoad;
 	public bool showLoadScreen;
 
 	public void OnPlayButtonPress()

@@ -7,21 +7,19 @@ using UnityEngine.SceneManagement;
 
 public class LoadSceneLoader : MonoBehaviour
 {
+	public GameSceneSO initializationScene;
     void Start()
     {
 		#if UNITY_EDITOR
-		if (SceneManager.sceneCount > 0)
+		for (int i = 0; i < SceneManager.sceneCount; ++i)
 		{
-			for (int i = 0; i < SceneManager.sceneCount; ++i)
+			Scene scene = SceneManager.GetSceneAt(i);
+			if (scene.name == initializationScene.sceneName)
 			{
-				Scene scene = SceneManager.GetSceneAt(i);
-				if (scene.name == "ScenesLoader")
-				{
-					return;
-				}
+				return;
 			}
-			SceneManager.LoadSceneAsync("ScenesLoader", LoadSceneMode.Additive);
 		}
+		SceneManager.LoadSceneAsync(initializationScene.sceneName, LoadSceneMode.Additive);
 		#endif
 	}
 }

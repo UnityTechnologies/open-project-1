@@ -5,7 +5,7 @@ using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-[CustomEditor(typeof(GameScene), true)]
+[CustomEditor(typeof(GameSceneSO), true)]
 public class GameSceneEditor : Editor
 {
 	#region UI_Warnings
@@ -24,11 +24,11 @@ public class GameSceneEditor : Editor
 	private static readonly string[] ExcludedProperties = { "m_Script", "sceneName" };
 
 	private string[] sceneList;
-	private GameScene gameSceneTarget;
+	private GameSceneSO gameSceneTarget;
 
 	private void OnEnable()
 	{
-		gameSceneTarget = target as GameScene;
+		gameSceneTarget = target as GameSceneSO;
 		PopulateScenePicker();
 		InitializeGuiStyles();
 	}

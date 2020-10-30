@@ -7,7 +7,7 @@
 public class LevelEnd : MonoBehaviour
 {
 	public LoadEvent onLevelEnd;
-	public GameScene[] locationsToLoad;
+	public GameSceneSO[] locationsToLoad;
 	public bool showLoadScreen;
 	private void OnTriggerEnter(Collider other)
 	{
