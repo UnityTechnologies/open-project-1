@@ -4,8 +4,7 @@ using UnityEngine;
 [Serializable]
 public class DialogueLine
 {
-	public Sprite Figure;
-	public string ActorName;
+	public Actor Actor;
 	[TextArea(3, 3)]
 	public string Sentence;
 }
