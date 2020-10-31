@@ -466,8 +466,29 @@ public class @GameInput : IInputActionCollection, IDisposable
         {
             ""name"": ""Menus"",
             ""id"": ""a6b0dc37-2ef3-420d-990a-eef5df26ae21"",
-            ""actions"": [],
-            ""bindings"": []
+            ""actions"": [
+                {
+                    ""name"": ""Advance"",
+                    ""type"": ""Button"",
+                    ""id"": ""96e1d616-4de6-46d2-9e46-9ba5a4430ff2"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""66fe9f25-70cd-4276-8872-73b4d1e1a823"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Advance"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": [
@@ -500,6 +521,7 @@ public class @GameInput : IInputActionCollection, IDisposable
         m_Gameplay_RotateCamera = m_Gameplay.FindAction("RotateCamera", throwIfNotFound: true);
         // Menus
         m_Menus = asset.FindActionMap("Menus", throwIfNotFound: true);
+        m_Menus_Advance = m_Menus.FindAction("Advance", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -630,10 +652,12 @@ public class @GameInput : IInputActionCollection, IDisposable
     // Menus
     private readonly InputActionMap m_Menus;
     private IMenusActions m_MenusActionsCallbackInterface;
+    private readonly InputAction m_Menus_Advance;
     public struct MenusActions
     {
         private @GameInput m_Wrapper;
         public MenusActions(@GameInput wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Advance => m_Wrapper.m_Menus_Advance;
         public InputActionMap Get() { return m_Wrapper.m_Menus; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -643,10 +667,16 @@ public class @GameInput : IInputActionCollection, IDisposable
         {
             if (m_Wrapper.m_MenusActionsCallbackInterface != null)
             {
+                @Advance.started -= m_Wrapper.m_MenusActionsCallbackInterface.OnAdvance;
+                @Advance.performed -= m_Wrapper.m_MenusActionsCallbackInterface.OnAdvance;
+                @Advance.canceled -= m_Wrapper.m_MenusActionsCallbackInterface.OnAdvance;
             }
             m_Wrapper.m_MenusActionsCallbackInterface = instance;
             if (instance != null)
             {
+                @Advance.started += instance.OnAdvance;
+                @Advance.performed += instance.OnAdvance;
+                @Advance.canceled += instance.OnAdvance;
             }
         }
     }
@@ -672,5 +702,6 @@ public class @GameInput : IInputActionCollection, IDisposable
     }
     public interface IMenusActions
     {
+        void OnAdvance(InputAction.CallbackContext context);
     }
 }
