@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using OP1.Factory;
 
 namespace OP1.Pool
@@ -8,11 +7,10 @@ namespace OP1.Pool
 	/// A generic pool that generates members of type T on-demand via a factory.
 	/// </summary>
 	/// <typeparam name="T">Specifies the type of elements in the pool.</typeparam>
-	public class Pool<T> : IEnumerable where T : IPoolable
+	public class Pool<T> : IPool<T> where T : IPoolable
 	{
-		public Stack<T> _available = new Stack<T>();
-		public HashSet<T> _unavailable = new HashSet<T>();
-		IFactory<T> _factory;
+		private readonly Stack<T> _available = new Stack<T>();
+		private readonly IFactory<T> _factory;
 
 		public Pool(IFactory<T> factory) : this(factory, 0) { }
 
@@ -33,26 +31,36 @@ namespace OP1.Pool
 				_available.Push(_factory.Create());
 			}
 			T member = _available.Pop();
-			_unavailable.Add(member);
 			member.Initialize();
 			return member;
+		}
+
+		public IEnumerable<T> Request(int num=1)
+		{
+			List<T> members = new List<T>();
+			for (int i = 0; i < num; i++)
+			{
+				members.Add(Request());
+			}
+			return members;
 		}
 
 		public void Return(T member)
 		{
 			member.Reset(() =>
 			{
-				_unavailable.Remove(member);
 				_available.Push(member);
 			});
 		}
 
-		IEnumerator IEnumerable.GetEnumerator()
+		public void Return(IEnumerable<T> members)
 		{
-			HashSet<T> members = new HashSet<T>(_available);
-			members.UnionWith(_unavailable);
-			return (IEnumerator<T>)members;
+			foreach(T member in members)
+			{
+				Return(member);
+			}
 		}
+
 	} 
 }
 
