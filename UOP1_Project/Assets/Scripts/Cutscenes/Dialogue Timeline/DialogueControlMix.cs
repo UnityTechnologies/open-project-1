@@ -36,7 +36,7 @@ public class DialogueControlMix : PlayableBehaviour
 
 					_showDialogueBox = true; 
 
-					if (_cutsceneManager._dialogueCounter <= behaviour.WaitUntil)
+					if (_cutsceneManager.DialogueCounter <= behaviour.WaitUntil)
 					{
 						// If we reached end of clip before wait id.
 						if (playable.GetTime() >= ClipsEndTime[i] - PauseThreshold)
@@ -46,14 +46,14 @@ public class DialogueControlMix : PlayableBehaviour
 					}
 					else
 					{
-						// playable.SetTime(ClipsEndTime[i] + PauseThreshold);
+						// playable.SetTime(ClipsEndTime[i] + PauseThreshold);  // Not working...?
 						_showDialogueBox = false;	
-						_cutsceneManager.director.time = ClipsEndTime[i] + PauseThreshold;
+						_cutsceneManager.Director.time = ClipsEndTime[i] + PauseThreshold;
 						_cutsceneManager.ResumeTimeline(); 
 					}
 				}
 
-				_cutsceneManager.OpenDialogueBox(_showDialogueBox);
+				_cutsceneManager.SetDialogueBox(_showDialogueBox);
 			}
 		}
          

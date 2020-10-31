@@ -4,16 +4,28 @@ using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.UI;
 
+/// <summary>
+/// Manager to control cutscene.
+/// Has direct access to:
+/// <list type="bullet">
+///<item>Dialogue Box</item>
+///<item>Interaction Box</item>
+///<item>Playable director</item> 
+/// </list>
+/// </summary>
+
 [RequireComponent(typeof(PlayableDirector))]
 public class CutsceneManager : MonoBehaviour
 {
 	// Singleton
-	public static CutsceneManager Instance;
+	private static CutsceneManager _instance;
+	public static CutsceneManager Instance { get => _instance; }
 
+	#region Properties
 	public bool IsInteracting { get; private set; }
-	public int _dialogueCounter { get; private set; }
-
-	[SerializeField] private InputReader _inputReader;
+	public int DialogueCounter { get; private set; } 
+	public PlayableDirector Director { get; private set; }
+	#endregion
 
 	#region UI Related
 	[SerializeField] private DialogueBox _normalDialogueBox;
@@ -22,9 +34,8 @@ public class CutsceneManager : MonoBehaviour
 	#endregion
 
 	#region Fields
-	public PlayableDirector director;
-	private CutsceneData _cutsceneData;
-	
+	private CutsceneData _cutsceneData; 
+	[SerializeField] private InputReader _inputReader;
 	#endregion
 
 	// Singleton DP
@@ -32,10 +43,10 @@ public class CutsceneManager : MonoBehaviour
 	{ 
 		if(Instance == null)
 		{
-			Instance = this;
+			_instance = this;
 
 			// Initialize CutsceneManager.
-			director = gameObject.GetComponent<PlayableDirector>();
+			Director = gameObject.GetComponent<PlayableDirector>();
 			_inputReader.GameInput.Menus.Advance.performed += ctx => OnAdvance();
 		}
 		else
@@ -44,10 +55,12 @@ public class CutsceneManager : MonoBehaviour
 		}
 	}
 
+	#region Public methods
 	public int GetDialogueLength()
 	{
 		return _cutsceneData.DialogueData.Conversation.Count;
 	}
+	#endregion
 
 	/// <summary>
 	/// Disable gameplay input.
@@ -63,29 +76,19 @@ public class CutsceneManager : MonoBehaviour
 
 		if(cutsceneData.DialogueData.TimelineAsset != null)
 		{
-			if(director.state != PlayState.Playing)
+			if(Director.state != PlayState.Playing)
 			{
-				director.playableAsset = cutsceneData.DialogueData.TimelineAsset;
-				director.Play();
-				director.stopped += ctx => NotAbleToInteract();
+				Director.playableAsset = cutsceneData.DialogueData.TimelineAsset;
+				Director.Play();
+				Director.stopped += ctx => NotAbleToInteract();
 			}
 		}
 		else
 		{
-			OpenDialogueBox(true);
+			SetDialogueBox(true);
 		}
 
 		Interacting(); 
-	}
-
-	public void PauseTimeline()
-	{
-		director.playableGraph.GetRootPlayable(0).SetSpeed(0); 
-	}
-
-	public void ResumeTimeline()
-	{
-		director.playableGraph.GetRootPlayable(0).SetSpeed(1);
 	}
 
 	/// <summary>
@@ -109,11 +112,11 @@ public class CutsceneManager : MonoBehaviour
 	/// </summary> 
 	public void NotAbleToInteract()
 	{
-		director.Stop();
+		Director.Stop();
 		EnableGameplayInput();
-		CloseDialogueBox();
+		SetDialogueBox(false);
 		IsInteracting = false;
-		_dialogueCounter = 0;
+		DialogueCounter = 0;
 		DisableInteractionBox();
 	}
 
@@ -141,14 +144,14 @@ public class CutsceneManager : MonoBehaviour
 	/// </summary>
 	private void OnAdvance()
 	{
-		if(_dialogueCounter == 0)
+		if(DialogueCounter == 0)
 		{
 			Play(_cutsceneData);
 		}
 
 		if (_normalDialogueBox.Box.activeInHierarchy)
 		{
-			if (_dialogueCounter < _cutsceneData.DialogueData.Conversation.Count - 1)
+			if (DialogueCounter < _cutsceneData.DialogueData.Conversation.Count - 1)
 			{
 				AdvanceDialogueBox();
 			}
@@ -156,8 +159,20 @@ public class CutsceneManager : MonoBehaviour
 			{
 				NotAbleToInteract();
 			}
-		} 
+		}
 	}
+
+	#region Director
+	public void PauseTimeline()
+	{
+		Director.playableGraph.GetRootPlayable(0).SetSpeed(0);
+	}
+
+	public void ResumeTimeline()
+	{
+		Director.playableGraph.GetRootPlayable(0).SetSpeed(1);
+	}
+	#endregion
 
 	#region Input related methods.
 	/// <summary>
@@ -206,29 +221,24 @@ public class CutsceneManager : MonoBehaviour
 	#endregion
 
 	#region DialogueBox methods.
-	public void OpenDialogueBox(bool condition)
+	public void SetDialogueBox(bool condition)
 	{
 		if (condition)
 			UpdateDialogueBox();
-		else
-			CloseDialogueBox();
+		else 
+			_normalDialogueBox.Box.SetActive(false);
 	}
 
 	private void AdvanceDialogueBox()
 	{
-		_dialogueCounter++;
+		DialogueCounter++;
 		UpdateDialogueBox();
-	}
-
-	private void CloseDialogueBox()
-	{
-		_normalDialogueBox.Box.SetActive(false);
-	}
+	} 
 
 	private void UpdateDialogueBox()
 	{
 		DetermineWhichNameAndFaceShouldBeUsed();
-		_normalDialogueBox.Message.text = _cutsceneData.DialogueData.Conversation[_dialogueCounter].Sentence;
+		_normalDialogueBox.Message.text = _cutsceneData.DialogueData.Conversation[DialogueCounter].Sentence;
 		_normalDialogueBox.Box.SetActive(true);
 	}
 
@@ -241,21 +251,21 @@ public class CutsceneManager : MonoBehaviour
 		_normalDialogueBox.Image.sprite = null;
 
 		// Use Actor Data
-		if (_cutsceneData.DialogueData.Conversation[_dialogueCounter].Actor != null)
+		if (_cutsceneData.DialogueData.Conversation[DialogueCounter].Actor != null)
 		{ 
-			_normalDialogueBox.Name.text = _cutsceneData.DialogueData.Conversation[_dialogueCounter].Actor.ActorName;
-			_normalDialogueBox.Image.sprite = _cutsceneData.DialogueData.Conversation[_dialogueCounter].Actor.Face; 
+			_normalDialogueBox.Name.text = _cutsceneData.DialogueData.Conversation[DialogueCounter].Actor.ActorName;
+			_normalDialogueBox.Image.sprite = _cutsceneData.DialogueData.Conversation[DialogueCounter].Actor.Face; 
 		} 
 
 		// Override
-		if (_cutsceneData.DialogueData.Conversation[_dialogueCounter].NameOverride != String.Empty)
+		if (_cutsceneData.DialogueData.Conversation[DialogueCounter].NameOverride != String.Empty)
 		{
-			_normalDialogueBox.Name.text = _cutsceneData.DialogueData.Conversation[_dialogueCounter].NameOverride;
+			_normalDialogueBox.Name.text = _cutsceneData.DialogueData.Conversation[DialogueCounter].NameOverride;
 		}
 
-		if (_cutsceneData.DialogueData.Conversation[_dialogueCounter].FigureOverride != null)
+		if (_cutsceneData.DialogueData.Conversation[DialogueCounter].FigureOverride != null)
 		{
-			_normalDialogueBox.Image.sprite = _cutsceneData.DialogueData.Conversation[_dialogueCounter].FigureOverride;
+			_normalDialogueBox.Image.sprite = _cutsceneData.DialogueData.Conversation[DialogueCounter].FigureOverride;
 		}
 
 		// Disable figure if sprite is null

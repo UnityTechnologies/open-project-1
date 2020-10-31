@@ -1,18 +1,23 @@
 ﻿using UnityEngine;
 
+/// <summary>
+/// Class to trigger a cutscene.
+/// </summary>
+
 public class CutsceneTrigger : MonoBehaviour
 {
 	[SerializeField] private CutsceneData CutsceneData;
 	[Tooltip("Play the cutscene on the Start, otherwise the cutscene will be triggered by colider. Make sure no overlap")]
-	[SerializeField] private bool PlayOnStart;
-	[SerializeField] private bool NeedToPressButton;
+	[SerializeField] private bool _playOnStart;
+	[SerializeField] private bool _needToPressButton;
 	[Tooltip("Only once only work if NeedToPressButton false")]
-	[SerializeField] private bool onlyOnce; 
+	[SerializeField] private bool _onlyOnce; 
 
 	#region Default transform
 	private Vector3 position;
 	private Quaternion rotation;
 	#endregion
+
 	private void Awake()
 	{
 		position = transform.position;
@@ -21,7 +26,7 @@ public class CutsceneTrigger : MonoBehaviour
 
 	private void Start()
 	{
-		if (PlayOnStart)
+		if (_playOnStart)
 		{ 
 			CutsceneManager.Instance.Play(CutsceneData);
 		}
@@ -29,11 +34,11 @@ public class CutsceneTrigger : MonoBehaviour
 
 	private void OnTriggerEnter(Collider other)
 	{ 
-		if (!NeedToPressButton)
+		if (!_needToPressButton)
 		{ 
 			CutsceneManager.Instance.Play(CutsceneData);
 
-			if (onlyOnce)
+			if (_onlyOnce)
 			{
 				Destroy(this);
 			}
@@ -43,10 +48,10 @@ public class CutsceneTrigger : MonoBehaviour
 
 	private void OnTriggerStay(Collider other)
 	{
-		if(NeedToPressButton)
+		if(_needToPressButton)
 			transform.LookAt(other.transform.position);
 
-		if (NeedToPressButton)
+		if (_needToPressButton)
 		{
 			if (!CutsceneManager.Instance.IsInteracting)
 			{
