@@ -227,10 +227,46 @@ public class CutsceneManager : MonoBehaviour
 
 	private void UpdateDialogueBox()
 	{
-		_normalDialogueBox.Name.text = _cutsceneData.DialogueData.Conversation[_dialogueCounter].Actor.ActorName;
+		DetermineWhichNameAndFaceShouldBeUsed();
 		_normalDialogueBox.Message.text = _cutsceneData.DialogueData.Conversation[_dialogueCounter].Sentence;
-		_normalDialogueBox.Image.sprite = _cutsceneData.DialogueData.Conversation[_dialogueCounter].Actor.Face;
 		_normalDialogueBox.Box.SetActive(true);
+	}
+
+	/// <summary>
+	/// Determine whether to use the actor data or the override data.
+	/// </summary>
+	private void DetermineWhichNameAndFaceShouldBeUsed()
+	{
+		// Reset sprite
+		_normalDialogueBox.Image.sprite = null;
+
+		// Use Actor Data
+		if (_cutsceneData.DialogueData.Conversation[_dialogueCounter].Actor != null)
+		{ 
+			_normalDialogueBox.Name.text = _cutsceneData.DialogueData.Conversation[_dialogueCounter].Actor.ActorName;
+			_normalDialogueBox.Image.sprite = _cutsceneData.DialogueData.Conversation[_dialogueCounter].Actor.Face; 
+		} 
+
+		// Override
+		if (_cutsceneData.DialogueData.Conversation[_dialogueCounter].NameOverride != String.Empty)
+		{
+			_normalDialogueBox.Name.text = _cutsceneData.DialogueData.Conversation[_dialogueCounter].NameOverride;
+		}
+
+		if (_cutsceneData.DialogueData.Conversation[_dialogueCounter].FigureOverride != null)
+		{
+			_normalDialogueBox.Image.sprite = _cutsceneData.DialogueData.Conversation[_dialogueCounter].FigureOverride;
+		}
+
+		// Disable figure if sprite is null
+		if(_normalDialogueBox.Image.sprite == null)
+		{
+			_normalDialogueBox.Image.gameObject.SetActive(false);
+		}
+		else
+		{
+			_normalDialogueBox.Image.gameObject.SetActive(true);
+		}
 	}
 	#endregion
 }
