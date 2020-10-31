@@ -6,7 +6,8 @@ public class CutsceneTrigger : MonoBehaviour
 	[Tooltip("Play the cutscene on the Start, otherwise the cutscene will be triggered by colider. Make sure no overlap")]
 	[SerializeField] private bool PlayOnStart;
 	[SerializeField] private bool NeedToPressButton;
-	[SerializeField] private bool onlyOnce;
+	[Tooltip("Only once only work if NeedToPressButton false")]
+	[SerializeField] private bool onlyOnce; 
 
 	#region Default transform
 	private Vector3 position;
@@ -27,16 +28,23 @@ public class CutsceneTrigger : MonoBehaviour
 	}
 
 	private void OnTriggerEnter(Collider other)
-	{
+	{ 
 		if (!NeedToPressButton)
 		{ 
 			CutsceneManager.Instance.Play(CutsceneData);
+
+			if (onlyOnce)
+			{
+				Destroy(this);
+			}
 		}
+
 	}
 
 	private void OnTriggerStay(Collider other)
-	{ 
-		transform.LookAt(other.transform.position);
+	{
+		if(NeedToPressButton)
+			transform.LookAt(other.transform.position);
 
 		if (NeedToPressButton)
 		{
