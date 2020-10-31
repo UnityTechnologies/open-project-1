@@ -93,7 +93,7 @@ public class CutsceneManager : MonoBehaviour
 	/// Show interaction box
 	/// Enable Menus input.
 	/// </summary>
-	/// <param name="posInWorld"></param>
+	/// <param name="posInWorld">Where interaction box should be drawed.</param>
 	public void AbleToInteract(Vector3 posInWorld, CutsceneData cutsceneData)
 	{
 		IsInteracting = true;
@@ -102,6 +102,11 @@ public class CutsceneManager : MonoBehaviour
 		_cutsceneData = cutsceneData;
 	}
 
+	/// <summary>
+	/// When player not able / stop interacting with something in the world.
+	/// Hide interaction box
+	/// Enable Gameplay input.
+	/// </summary> 
 	public void NotAbleToInteract()
 	{
 		director.Stop();
@@ -114,16 +119,26 @@ public class CutsceneManager : MonoBehaviour
 
 	/// <summary>
 	/// When player is interacting with cutscene.
-	/// Disable interaction box.
-	/// Disable gameplay input.
+	/// <list type="bullet">
+	///<item>Disable interaction box.</item>
+	///<item>Disable gameplay input</item>
+	/// </list> 
 	/// </summary>
 	public void Interacting()
 	{
 		DisableInteractionBox();
 
 		DisableGameplayInput(); 
-	} 
+	}
 
+	/// <summary>
+	/// When advance button clicked.
+	/// <list type="bullet">
+	///<item>Show dialogue box if counter is 0.</item>
+	///<item>Otherwise Increment dialogue counter.</item>
+	///<item>Stop interacting </item>
+	/// </list>
+	/// </summary>
 	private void OnAdvance()
 	{
 		if(_dialogueCounter == 0)
@@ -212,9 +227,9 @@ public class CutsceneManager : MonoBehaviour
 
 	private void UpdateDialogueBox()
 	{
-		_normalDialogueBox.Name.text = _cutsceneData.DialogueData.Conversation[_dialogueCounter].ActorName;
+		_normalDialogueBox.Name.text = _cutsceneData.DialogueData.Conversation[_dialogueCounter].Actor.ActorName;
 		_normalDialogueBox.Message.text = _cutsceneData.DialogueData.Conversation[_dialogueCounter].Sentence;
-		_normalDialogueBox.Image.sprite = _cutsceneData.DialogueData.Conversation[_dialogueCounter].Figure;
+		_normalDialogueBox.Image.sprite = _cutsceneData.DialogueData.Conversation[_dialogueCounter].Actor.Face;
 		_normalDialogueBox.Box.SetActive(true);
 	}
 	#endregion
