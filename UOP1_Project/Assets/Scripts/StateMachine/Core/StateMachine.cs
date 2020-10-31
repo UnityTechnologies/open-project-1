@@ -23,7 +23,7 @@ namespace UOP1.StateMachine
 			_currentState = _initialStateSO.GetState(this);
 			_currentState.OnStateEnter();
 #if UNITY_EDITOR
-			_debugger.Awake(this, _currentState.Name);
+			_debugger.Awake(this, _currentState._originSO.name);
 #endif
 		}
 

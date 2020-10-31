@@ -4,25 +4,40 @@ using UnityEngine;
 
 namespace UOP1.StateMachine
 {
+	/// <summary>
+	/// Class specialized in debugging the state transitions, should only be used while in editor mode.
+	/// </summary>
 	[Serializable]
 	internal class StateMachineDebugger
 	{
 		[SerializeField]
+		[Tooltip("Issues a debug log when a state transition is triggered")]
 		internal bool debugTransitions = false;
 
 		[SerializeField]
+		[Tooltip("List all conditions evaluated, the result is read: ConditionName == BooleanResult [PassedTest]")]
 		internal bool appendConditionsInfo = true;
 
 		[SerializeField]
+		[Tooltip("List all actions activated by the new State")]
 		internal bool appendActionsInfo = true;
 
 		[SerializeField]
+		[Tooltip("The current State name [Readonly]")]
 		internal string currentState;
 
 		private StateMachine _stateMachine;
 		private StringBuilder _logBuilder;
 		private string _targetState = string.Empty;
 
+		private const string CHECK_MARK = "\u2714";
+		private const string UNCHECK_MARK = "\u2718";
+		private const string THICK_ARROW = "\u279C";
+		private const string SHARP_ARROW = "\u27A4";
+
+		/// <summary>
+		/// Must be called together with <c>StateMachine.Awake()</c>
+		/// </summary>
 		internal void Awake(StateMachine stateMachine, string initialState)
 		{
 			_stateMachine = stateMachine;
@@ -31,7 +46,7 @@ namespace UOP1.StateMachine
 			currentState = initialState;
 		}
 
-		internal void TransitionEvaluationBegin(string transitionName, string targetState)
+		internal void TransitionEvaluationBegin(string targetState)
 		{
 			_targetState = targetState;
 
@@ -40,12 +55,12 @@ namespace UOP1.StateMachine
 
 			_logBuilder.Clear();
 			_logBuilder.AppendLine($"{_stateMachine.gameObject.name} state changed");
-			_logBuilder.AppendLine($"{currentState}  >>>  {_targetState}");
+			_logBuilder.AppendLine($"{currentState}  {SHARP_ARROW}  {_targetState}");
 			
 			if (appendConditionsInfo)
 			{
 				_logBuilder.AppendLine();
-				_logBuilder.AppendLine($"Transition: {transitionName}");
+				_logBuilder.AppendLine($"Transition Conditions:");
 			}
 		}
 
@@ -54,12 +69,12 @@ namespace UOP1.StateMachine
 			if (!debugTransitions || _logBuilder.Length == 0 || !appendConditionsInfo)
 				return;
 
-			_logBuilder.Append($"    \u279C {conditionName} == {result}");
+			_logBuilder.Append($"    {THICK_ARROW} {conditionName} == {result}");
 
-			if (isMet) //Unicode checked and Unchecked marks
-				_logBuilder.AppendLine(" [\u2714]");
+			if (isMet)
+				_logBuilder.AppendLine($" [{CHECK_MARK}]");
 			else
-				_logBuilder.AppendLine(" [\u2718]");
+				_logBuilder.AppendLine($" [{UNCHECK_MARK}]");
 		}
 
 		internal void TransitionEvaluationEnd(bool passed, StateAction[] actions)
@@ -89,7 +104,7 @@ namespace UOP1.StateMachine
 
 			foreach (StateAction action in actions)
 			{
-				_logBuilder.AppendLine($"    \u279C {action._originSO.name}");
+				_logBuilder.AppendLine($"    {THICK_ARROW} {action._originSO.name}");
 			}
 		}
 

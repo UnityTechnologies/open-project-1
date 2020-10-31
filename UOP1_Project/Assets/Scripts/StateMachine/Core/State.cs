@@ -1,9 +1,10 @@
-﻿namespace UOP1.StateMachine
+﻿using UnityEngine;
+
+namespace UOP1.StateMachine
 {
 	public class State
 	{
-		public string Name { get; internal set; }
-
+		internal ScriptableObject _originSO;
 		internal StateMachine _stateMachine;
 		internal StateTransition[] _transitions;
 		internal StateAction[] _actions;
@@ -11,10 +12,12 @@
 		internal State() { }
 
 		public State(
+			ScriptableObject originSO,
 			StateMachine stateMachine,
 			StateTransition[] transitions,
 			StateAction[] actions)
 		{
+			_originSO = originSO;
 			_stateMachine = stateMachine;
 			_transitions = transitions;
 			_actions = actions;
