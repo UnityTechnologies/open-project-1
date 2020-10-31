@@ -42,7 +42,12 @@ public class CutsceneManager : MonoBehaviour
 		{
 			Destroy(this);
 		}
-	} 
+	}
+
+	public int GetDialogueLength()
+	{
+		return _cutsceneData.DialogueData.Conversation.Count;
+	}
 
 	/// <summary>
 	/// Disable gameplay input.
@@ -99,6 +104,7 @@ public class CutsceneManager : MonoBehaviour
 
 	public void NotAbleToInteract()
 	{
+		director.Stop();
 		EnableGameplayInput();
 		CloseDialogueBox();
 		IsInteracting = false;

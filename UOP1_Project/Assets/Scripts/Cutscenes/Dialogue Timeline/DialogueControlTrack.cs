@@ -9,9 +9,9 @@ public class DialogueControlTrack : PlayableTrack
 {  
     public override Playable CreateTrackMixer(PlayableGraph graph, GameObject go, int inputCount)
     {
-        var scriptPlayable = ScriptPlayable<DialogueControlMix>.Create(graph, inputCount);
-
+        var scriptPlayable = ScriptPlayable<DialogueControlMix>.Create(graph, inputCount); 
         DialogueControlMix behaviour = scriptPlayable.GetBehaviour();
+
         behaviour.ClipsEndTime = new List<double>();
         behaviour.ClipsStartTime = new List<double>();
 
@@ -21,9 +21,7 @@ public class DialogueControlTrack : PlayableTrack
             if(behaviour.ClipsEndTime.Contains(clip.end) == false)
                 behaviour.ClipsEndTime.Add(clip.end);  // Save them in DialogueControlMix 
             if (behaviour.ClipsStartTime.Contains(clip.start) == false)
-                behaviour.ClipsStartTime.Add(clip.start);
-
-            
+                behaviour.ClipsStartTime.Add(clip.start); 
         }  
 
         return scriptPlayable;

@@ -4,5 +4,5 @@ using UnityEngine.Playables;
 [Serializable]
 public class DialogueControlBehaviour : PlayableBehaviour
 {
-    public int waitUntil; 
+    public int WaitUntil; 
 }

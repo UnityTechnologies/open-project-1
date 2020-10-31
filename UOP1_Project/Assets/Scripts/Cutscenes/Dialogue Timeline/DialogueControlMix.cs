@@ -24,6 +24,7 @@ public class DialogueControlMix : PlayableBehaviour
 			_showDialogueBox = false;
 
 			_inputCount = playable.GetInputCount();
+
 			for (int i = 0; i < _inputCount; i++)
 			{
 				float inputWeight = playable.GetInputWeight(i);
@@ -35,12 +36,12 @@ public class DialogueControlMix : PlayableBehaviour
 
 					_showDialogueBox = true; 
 
-					if (_cutsceneManager._dialogueCounter < behaviour.waitUntil)
+					if (_cutsceneManager._dialogueCounter <= behaviour.WaitUntil)
 					{
 						// If we reached end of clip before wait id.
 						if (playable.GetTime() >= ClipsEndTime[i] - PauseThreshold)
 						{
-							_cutsceneManager.PauseTimeline(); 
+							_cutsceneManager.PauseTimeline();
 						}
 					}
 					else
