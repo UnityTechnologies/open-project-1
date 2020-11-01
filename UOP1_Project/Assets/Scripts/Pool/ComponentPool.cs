@@ -17,7 +17,7 @@ namespace OP1.Pool
 			DontDestroyOnLoad(_poolRootObject);
 			for (int i = 0; i < InitialPoolSize; i++)
 			{
-				_available.Push(Add());
+				_available.Push(Create());
 			}
 		}
 
@@ -39,9 +39,9 @@ namespace OP1.Pool
 			base.Return(member);
 		}
 
-		public override T Add()
+		protected override T Create()
 		{
-			T newMember = base.Add();
+			T newMember = base.Create();
 			newMember.transform.SetParent(_poolRootObject.transform);
 			return newMember;
 		}
@@ -49,7 +49,11 @@ namespace OP1.Pool
 		public override void OnDisable()
 		{
 			base.OnDisable();
+#if UNITY_EDITOR
 			DestroyImmediate(_poolRootObject);
+#else
+			Destroy(_poolRootObject);
+#endif
 		}
 	}
 }

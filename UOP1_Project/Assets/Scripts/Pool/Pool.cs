@@ -13,25 +13,21 @@ namespace OP1.Pool
 		protected readonly Stack<T> _available = new Stack<T>();
 		public abstract IFactory<T> Factory { get; set; }
 
-		public virtual T Add()
+		protected virtual T Create()
 		{
 			return Factory.Create();
 		}
 
 		public virtual T Request()
 		{
-			if (_available.Count <= 0)
-			{
-				_available.Push(Add());
-			}
-			T member = _available.Pop();
+			T member = _available.Count > 0 ? _available.Pop() : Create();
 			member.Initialize();
 			return member;
 		}
 
 		public virtual IEnumerable<T> Request(int num = 1)
 		{
-			List<T> members = new List<T>();
+			List<T> members = new List<T>(num);
 			for (int i = 0; i < num; i++)
 			{
 				members.Add(Request());
