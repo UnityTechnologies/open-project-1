@@ -1,15 +1,16 @@
-﻿namespace OP1.Factory
+﻿using UnityEngine;
+
+namespace OP1.Factory
 {
 	/// <summary>
 	/// Implements the IFactory interface for non-abstract types.
 	/// </summary>
 	/// <typeparam name="T">Specifies the non-abstract type to create.</typeparam>
-	public class Factory<T> : IFactory<T> where T : new()
+	public abstract class Factory<T> : ScriptableObject, IFactory<T> where T : new()
 	{
-		public T Create()
+		public virtual T Create()
 		{
 			return new T();
 		}
-
-	} 
+	}
 }

@@ -1,41 +1,35 @@
-﻿using System.Collections.Generic;
-using OP1.Factory;
+﻿using OP1.Factory;
+using System.Collections.Generic;
+using UnityEngine;
 
 namespace OP1.Pool
 {
 	/// <summary>
 	/// A generic pool that generates members of type T on-demand via a factory.
 	/// </summary>
-	/// <typeparam name="T">Specifies the type of elements in the pool.</typeparam>
-	public class Pool<T> : IPool<T> where T : IPoolable
+	/// <typeparam name="T">Specifies the type of elements to pool.</typeparam>
+	public abstract class Pool<T> : ScriptableObject, IPool<T> where T : IPoolable
 	{
-		private readonly Stack<T> _available = new Stack<T>();
-		private readonly IFactory<T> _factory;
+		protected readonly Stack<T> _available = new Stack<T>();
+		public abstract IFactory<T> Factory { get; set; }
 
-		public Pool(IFactory<T> factory) : this(factory, 0) { }
-
-		public Pool(IFactory<T> factory, int initialPoolSize)
+		public virtual T Add()
 		{
-			this._factory = factory;
-
-			for (int i = 0; i < initialPoolSize; i++)
-			{
-				_available.Push(_factory.Create());
-			}
+			return Factory.Create();
 		}
 
-		public T Request()
+		public virtual T Request()
 		{
 			if (_available.Count <= 0)
 			{
-				_available.Push(_factory.Create());
+				_available.Push(Add());
 			}
 			T member = _available.Pop();
 			member.Initialize();
 			return member;
 		}
 
-		public IEnumerable<T> Request(int num=1)
+		public virtual IEnumerable<T> Request(int num = 1)
 		{
 			List<T> members = new List<T>();
 			for (int i = 0; i < num; i++)
@@ -45,7 +39,7 @@ namespace OP1.Pool
 			return members;
 		}
 
-		public void Return(T member)
+		public virtual void Return(T member)
 		{
 			member.Reset(() =>
 			{
@@ -53,14 +47,17 @@ namespace OP1.Pool
 			});
 		}
 
-		public void Return(IEnumerable<T> members)
+		public virtual void Return(IEnumerable<T> members)
 		{
-			foreach(T member in members)
+			foreach (T member in members)
 			{
 				Return(member);
 			}
 		}
 
-	} 
+		public virtual void OnDisable()
+		{
+			_available.Clear();
+		}
+	}
 }
-

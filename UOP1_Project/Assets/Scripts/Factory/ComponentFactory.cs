@@ -6,18 +6,18 @@ namespace OP1.Factory
 	/// Implements the IFactory interface for Component types.
 	/// </summary>
 	/// <typeparam name="T">Specifies the component to create.</typeparam>
-	public class ComponentFactory<T> : IFactory<T> where T : Component
+	public abstract class ComponentFactory<T> : ScriptableObject,IFactory<T> where T : Component
 	{
-		public T Prefab { get; }
-
-		public ComponentFactory(T prefab)
+		public abstract T Prefab
 		{
-			Prefab = prefab;
+			get;
+			set;
 		}
 
-		public T Create()
+		public virtual T Create()
 		{
-			return GameObject.Instantiate(Prefab);
+			return Instantiate(Prefab);
 		}
+
 	} 
 }
