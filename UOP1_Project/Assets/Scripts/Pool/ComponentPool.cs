@@ -10,19 +10,33 @@ namespace OP1.Pool
 	{
 		public abstract int InitialPoolSize { get; set; }
 		private GameObject _poolRootObject;
-		
+
+		private void InitializePool()
+		{
+			_poolRootObject = new GameObject(name);
+			DontDestroyOnLoad(_poolRootObject);
+			for (int i = 0; i < InitialPoolSize; i++)
+			{
+				_available.Push(Add());
+			}
+		}
+
 		public override T Request()
 		{
 			if (_poolRootObject == null)
 			{
-				_poolRootObject = new GameObject(name);
-				DontDestroyOnLoad(_poolRootObject);
-				for (int i = 0; i < InitialPoolSize; i++)
-				{
-					_available.Push(Add());
-				}
+				InitializePool();
 			}
 			return base.Request();
+		}
+
+		public override void Return(T member)
+		{
+			if (_poolRootObject == null)
+			{
+				InitializePool();
+			}
+			base.Return(member);
 		}
 
 		public override T Add()
