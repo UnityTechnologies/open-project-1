@@ -91,6 +91,7 @@ public class LocationLoader : MonoBehaviour
 	{
 		SceneManager.SetActiveScene(SceneManager.GetSceneByName(_activeScene.sceneName));
 	}
+
 	public void AddScenesToUnload()
 	{
 		for (int i = 0; i < SceneManager.sceneCount; ++i)
@@ -119,7 +120,6 @@ public class LocationLoader : MonoBehaviour
 	}
 
 	/// <summary> This function checks if a scene is already loaded </summary>
-
 	public bool CheckLoadState(String sceneName)
 	{
 		for (int i = 0; i < SceneManager.sceneCount; ++i)
@@ -133,8 +133,7 @@ public class LocationLoader : MonoBehaviour
 		return false;
 	}
 
-	/// <summary> This function update loading progress </summary>
-
+	/// <summary> This function updates the loading progress once per frame until loading is complete </summary>
 	IEnumerator TrackLoadingProgress()
 	{
 		float totalProgress = 0;
@@ -152,7 +151,7 @@ public class LocationLoader : MonoBehaviour
 				//Adding the scene progress to the total progress
 				totalProgress += _scenesToLoadAsyncOperations[i].progress;
 			}
-			//the fillAmount for all scenes, so we devide the progress by the number of scenes to load
+			//The fillAmount for all scenes, so we devide the progress by the number of scenes to load
 			loadingProgressBar.fillAmount = totalProgress / _scenesToLoadAsyncOperations.Count;
 			Debug.Log("progress bar" + loadingProgressBar.fillAmount + "and value =" + totalProgress / _scenesToLoadAsyncOperations.Count);
 

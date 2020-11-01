@@ -31,6 +31,9 @@ public class SpawnSystem : MonoBehaviour
 		AutoFill();
 	}
 
+	/// <summary>
+	/// This function tries to autofill some of the parameters of the component, so it's easy to drop in a new scene
+	/// </summary>
 	[ContextMenu("Attempt Auto Fill")]
 	private void AutoFill()
 	{
