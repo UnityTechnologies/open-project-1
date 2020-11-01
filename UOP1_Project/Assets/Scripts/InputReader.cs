@@ -11,6 +11,7 @@ public class InputReader : ScriptableObject, GameInput.IGameplayActions
 	public UnityAction interactEvent;
 	public UnityAction extraActionEvent;
 	public UnityAction pauseEvent;
+	public UnityAction testEvent;
 	public UnityAction<Vector2> moveEvent;
 	public UnityAction<Vector2> cameraMoveEvent;
 
@@ -83,6 +84,15 @@ public class InputReader : ScriptableObject, GameInput.IGameplayActions
 		if (cameraMoveEvent != null)
 		{
 			cameraMoveEvent.Invoke(context.ReadValue<Vector2>());
+		}
+	}
+
+	public void OnTest(InputAction.CallbackContext context) 
+	{
+		if(testEvent != null
+			&& context.phase == InputActionPhase.Started) 
+		{
+			testEvent.Invoke();
 		}
 	}
 }
