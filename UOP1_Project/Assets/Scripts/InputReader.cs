@@ -5,14 +5,14 @@ using UnityEngine.Events;
 [CreateAssetMenu(fileName = "Input Reader", menuName = "Game/Input Reader")]
 public class InputReader : ScriptableObject, GameInput.IGameplayActions
 {
-	public UnityAction jumpEvent;
-	public UnityAction jumpCanceledEvent;
-	public UnityAction attackEvent;
-	public UnityAction interactEvent;
-	public UnityAction extraActionEvent;
-	public UnityAction pauseEvent;
-	public UnityAction<Vector2> moveEvent;
-	public UnityAction<Vector2> cameraMoveEvent;
+	public event UnityAction jumpEvent;
+	public event UnityAction jumpCanceledEvent;
+	public event UnityAction attackEvent;
+	public event UnityAction interactEvent;
+	public event UnityAction extraActionEvent;
+	public event UnityAction pauseEvent;
+	public event UnityAction<Vector2> moveEvent;
+	public event UnityAction<Vector2> cameraMoveEvent;
 
 	GameInput gameInput;
 
