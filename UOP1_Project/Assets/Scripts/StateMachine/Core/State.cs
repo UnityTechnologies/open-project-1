@@ -53,12 +53,16 @@ namespace UOP1.StateMachine
 
 		public bool TryGetTransition(out State state)
 		{
+			state = null;
+
 			for (int i = 0; i < _transitions.Length; i++)
 				if (_transitions[i].TryGetTransiton(out state))
-					return true;
+					break;
 
-			state = null;
-			return false;
+			for (int i = 0; i < _transitions.Length; i++)
+				_transitions[i].ClearConditionsCache();
+
+			return state != null;
 		}
 	}
 }

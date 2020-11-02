@@ -10,23 +10,25 @@ namespace UOP1.StateMachine.ScriptableObjects
 		[SerializeField] private StateSO _targetState = null;
 		[SerializeField] private ConditionUsage[] _conditions = default;
 
-		internal StateTransition GetTransition(StateMachine stateMachine, Dictionary<ScriptableObject, object> createdInstances)
+		/// <summary>
+		/// Will create a new custom <see cref="StateTransition"/> or return an existing one inside the <paramref name="stateMachine"/>
+		/// </summary>
+		internal StateTransition GetTransition(StateMachine stateMachine)
 		{
-			if (createdInstances.TryGetValue(this, out var obj))
+			if (stateMachine.createdInstances.TryGetValue(this, out var obj))
 				return (StateTransition)obj;
 
-			var state = _targetState.GetState(stateMachine, createdInstances);
-			ProcessConditionUsages(stateMachine, _conditions, createdInstances, out var conditions, out var resultGroups);
+			var state = _targetState.GetState(stateMachine);
+			ProcessConditionUsages(stateMachine, _conditions, out var conditions, out var resultGroups);
 
 			var transition = new StateTransition(state, conditions, resultGroups);
-			createdInstances.Add(this, transition);
+			stateMachine.createdInstances.Add(this, transition);
 			return transition;
 		}
 
 		private static void ProcessConditionUsages(
 			StateMachine stateMachine,
 			ConditionUsage[] conditionUsages,
-			Dictionary<ScriptableObject, object> createdInstances,
 			out StateCondition[] conditions,
 			out int[] resultGroups)
 		{
@@ -34,7 +36,7 @@ namespace UOP1.StateMachine.ScriptableObjects
 			conditions = new StateCondition[count];
 			for (int i = 0; i < count; i++)
 				conditions[i] = conditionUsages[i].Condition.GetCondition(
-					stateMachine, conditionUsages[i].ExpectedResult == Result.True, createdInstances);
+					stateMachine, conditionUsages[i].ExpectedResult == Result.True);
 
 
 			List<int> resultGroupsList = new List<int>();

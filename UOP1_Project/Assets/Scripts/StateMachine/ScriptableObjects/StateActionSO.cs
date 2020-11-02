@@ -1,17 +1,19 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace UOP1.StateMachine.ScriptableObjects
 {
 	public abstract class StateActionSO : ScriptableObject
 	{
-		internal StateAction GetAction(StateMachine stateMachine, Dictionary<ScriptableObject, object> createdInstances)
+		/// <summary>
+		/// Will create a new custom <see cref="StateAction"/> or return an existing one inside the <paramref name="stateMachine"/>
+		/// </summary>
+		internal StateAction GetAction(StateMachine stateMachine)
 		{
-			if (createdInstances.TryGetValue(this, out var obj))
+			if (stateMachine.createdInstances.TryGetValue(this, out var obj))
 				return (StateAction)obj;
 
 			var action = CreateAction();
-			createdInstances.Add(this, action);
+			stateMachine.createdInstances.Add(this, action);
 			action._originSO = this;
 			action.Awake(stateMachine);
 			return action;

@@ -18,6 +18,8 @@ namespace UOP1.StateMachine
 		private readonly Dictionary<Type, Component> _cachedComponents = new Dictionary<Type, Component>();
 		private State _currentState;
 
+		internal readonly Dictionary<ScriptableObject, object> createdInstances = new Dictionary<ScriptableObject, object>();
+
 		private void Awake()
 		{
 			_currentState = _initialStateSO.GetState(this);

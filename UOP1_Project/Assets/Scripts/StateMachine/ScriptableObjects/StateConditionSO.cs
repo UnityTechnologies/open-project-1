@@ -1,17 +1,23 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace UOP1.StateMachine.ScriptableObjects
 {
 	public abstract class StateConditionSO : ScriptableObject
 	{
-		internal StateCondition GetCondition(StateMachine stateMachine, bool expectedResult, Dictionary<ScriptableObject, object> createdInstances)
+		[SerializeField]
+		[Tooltip("The condition will only be evaluated once each frame and cached for subsequent uses.\r\nThe cache is based on each instance of the State Machine and of this Scriptable Object.")]
+		internal bool cacheResult = true;
+
+		/// <summary>
+		/// Will create a new custom <see cref="Condition"/> or use an existing one inside the <paramref name="stateMachine"/>.
+		/// </summary>
+		internal StateCondition GetCondition(StateMachine stateMachine, bool expectedResult)
 		{
-			if (createdInstances.TryGetValue(this, out var cond))
+			if (stateMachine.createdInstances.TryGetValue(this, out var cond))
 				return new StateCondition(this, stateMachine, (Condition)cond, expectedResult);
 
 			var condition = new StateCondition(this, stateMachine, CreateCondition(), expectedResult);
-			createdInstances.Add(this, condition._condition);
+			stateMachine.createdInstances.Add(this, condition._condition);
 			condition._condition.Awake(stateMachine);
 			return condition;
 		}
