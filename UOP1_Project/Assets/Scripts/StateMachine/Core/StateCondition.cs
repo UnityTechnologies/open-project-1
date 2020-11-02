@@ -23,7 +23,7 @@ namespace UOP1.StateMachine
 		{
 			bool returnValue;
 
-			if(_originSO.cacheResult && _isCached)
+			if (_originSO.cacheResult && _isCached)
 				returnValue = _cachedStatement;
 			else
 			{
