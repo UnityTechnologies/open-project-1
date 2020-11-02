@@ -32,7 +32,6 @@ namespace UOP1.StateMachine.Editor
 		{
 			_addTransitionHelper = new AddTransitionHelper(this);
 			Undo.undoRedoPerformed += ResetIfRequired;
-			_transitions = serializedObject.FindProperty("_transitions");
 			Reset();
 		}
 
@@ -43,10 +42,11 @@ namespace UOP1.StateMachine.Editor
 		}
 
 		/// <summary>
-		/// Method to fully reset the editor. Should be used whenever adding, removing and reordering transitions.
+		/// Method to fully reset the editor. Used whenever adding, removing and reordering transitions.
 		/// </summary>
 		internal void Reset()
 		{
+			_transitions = serializedObject.FindProperty("_transitions");
 			GroupByFromState();
 			_toggles = new bool[_fromStates.Count];
 		}
@@ -95,7 +95,7 @@ namespace UOP1.StateMachine.Editor
 					Separator();
 					EndVertical();
 
-					// Buttons
+					// State Header Buttons
 					{
 						bool Button(string icon) => GUILayout.Button(EditorGUIUtility.IconContent(icon), GUILayout.Width(35), GUILayout.Height(20));
 
