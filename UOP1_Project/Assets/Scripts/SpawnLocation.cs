@@ -6,7 +6,7 @@ public class SpawnLocation : MonoBehaviour
 {
 	[Tooltip("distance above clicked point")]
 	[SerializeField] float _verticalOffset = 0.2f;
-	[Tooltip("align spawn location with scene viewport rotation")]
+	//[Tooltip("align spawn location with scene viewport rotation")]
 	//[SerializeField] bool _rotateToView = true;
 
 	private Vector3 _spawnPosition;
