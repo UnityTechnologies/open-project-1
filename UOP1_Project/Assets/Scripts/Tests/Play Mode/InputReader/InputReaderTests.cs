@@ -146,7 +146,7 @@ namespace Tests.Play_Mode.InputReader
 
 					// grab the events from the trace
 					var actions = trace.ToArray();
-					LogActionsPerformed(actions);
+					// LogActionsPerformed(actions);
 
 					Assert.That(actions.Length, Is.EqualTo(6));
 				}
