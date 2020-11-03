@@ -14,21 +14,21 @@ public class InputReader : ScriptableObject, GameInput.IGameplayActions
 	public event UnityAction<Vector2> moveEvent;
 	public event UnityAction<Vector2> cameraMoveEvent;
 
-	GameInput gameInput;
+	public GameInput GameInput { get; private set; }
 
 	private void OnEnable()
 	{
-		if (gameInput == null)
+		if (GameInput == null)
 		{
-			gameInput = new GameInput();
-			gameInput.Gameplay.SetCallbacks(this);
+			GameInput = new GameInput();
+			GameInput.Gameplay.SetCallbacks(this);
 		}
-		gameInput.Gameplay.Enable();
+		GameInput.Gameplay.Enable();
 	}
 
 	private void OnDisable()
 	{
-		gameInput.Gameplay.Disable();
+		GameInput.Gameplay.Disable();
 	}
 
 	public void OnAttack(InputAction.CallbackContext context)
