@@ -16,26 +16,43 @@ public class DissolveHelper : MonoBehaviour
     MaterialPropertyBlock materialPropertyBlock;
 
     void Start() {
-        if (materialPropertyBlock == null) {
+        if (materialPropertyBlock == null) 
+        {
             materialPropertyBlock = new MaterialPropertyBlock();
         }
+        setParticleSystem();
     }
 
-    public void triggerDissolve() {
+    public void triggerDissolve() 
+    {
         StartCoroutine(DissolveCoroutine());
     }
 
-    public IEnumerator DissolveCoroutine() {
+    void OnValidate() 
+    {
+        setParticleSystem();
+    }
+
+    void setParticleSystem()
+    {
+        var mainModule = _dissolveParticles.main;
+        mainModule.duration = dissolveTime - 0.3f;
+    }
+
+    public IEnumerator DissolveCoroutine() 
+    {
         float normalizedDeltaTime = 0;
 
         _dissolveParticles.Play();
-        while(normalizedDeltaTime < dissolveTime) {
-
-            // dissolve logic            
-            materialPropertyBlock.SetFloat("_Dissolve", normalizedDeltaTime);
-            _renderer.SetPropertyBlock(materialPropertyBlock);            
-            
+        while(normalizedDeltaTime < dissolveTime) 
+        {
+            // dissolve logic
             normalizedDeltaTime += Time.deltaTime;
+            Debug.Log("Normalized Delta Time: " + normalizedDeltaTime);
+            float remappedValue = VFXUtil.RemapValue(normalizedDeltaTime, 0, dissolveTime, 0, 1);
+            Debug.Log("Remapped value: " + remappedValue);
+            materialPropertyBlock.SetFloat("_Dissolve", remappedValue);
+            _renderer.SetPropertyBlock(materialPropertyBlock);
             yield return null;
         }
     }
