@@ -9,8 +9,6 @@ namespace OP1.Pool
 	public interface IPool<T>
 	{
 		T Request();
-		IEnumerable<T> Request(int num);
 		void Return(T member);
-		void Return(IEnumerable<T> members);
 	}
 }

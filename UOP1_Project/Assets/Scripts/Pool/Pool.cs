@@ -21,7 +21,7 @@ namespace OP1.Pool
 		public virtual T Request()
 		{
 			T member = _available.Count > 0 ? _available.Pop() : Create();
-			member.Initialize();
+			member.OnRequest();
 			return member;
 		}
 
@@ -37,7 +37,7 @@ namespace OP1.Pool
 
 		public virtual void Return(T member)
 		{
-			member.Reset(() =>
+			member.OnReturn(() =>
 			{
 				_available.Push(member);
 			});
