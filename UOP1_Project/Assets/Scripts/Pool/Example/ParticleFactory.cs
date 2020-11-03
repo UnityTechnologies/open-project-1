@@ -5,7 +5,8 @@ using OP1.Factory;
 public class ParticleFactory : ComponentFactory<PoolableParticle>
 {
 	[SerializeField]
-	PoolableParticle _prefab = default;
+	private PoolableParticle _prefab = default;
+
 	public override PoolableParticle Prefab {
 		get
 		{

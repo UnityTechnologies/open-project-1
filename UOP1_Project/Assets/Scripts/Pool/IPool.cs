@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace OP1.Pool
+﻿namespace OP1.Pool
 {
 	/// <summary>
 	/// Represents a collection that pools objects of T.

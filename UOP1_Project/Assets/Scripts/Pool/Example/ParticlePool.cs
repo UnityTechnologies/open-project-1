@@ -33,6 +33,5 @@ public class ParticlePool : ComponentPool<PoolableParticle>
 			_initialPoolSize = value;
 		}
 	}
-
 }
 

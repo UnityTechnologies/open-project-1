@@ -6,9 +6,9 @@ using UnityEngine;
 public class PoolableParticle : MonoBehaviour, IPoolable
 {
 	[SerializeField]
-	ParticleSystem _particleSystem = default;
+	private ParticleSystem _particleSystem = default;
 
-	public void Initialize()
+	public void OnRequest()
 	{
 		gameObject.SetActive(true);
 	}
@@ -18,12 +18,12 @@ public class PoolableParticle : MonoBehaviour, IPoolable
 		_particleSystem.Play();
 	}
 
-	public void Reset(Action onReset)
+	public void OnReturn(Action onReturned)
 	{
-		StartCoroutine(DoReset(onReset));
+		StartCoroutine(DoReturn(onReturned));
 	}
 
-	IEnumerator DoReset(Action onReset)
+	IEnumerator DoReturn(Action onReturned)
 	{
 		if (_particleSystem.isPlaying)
 		{
@@ -31,9 +31,7 @@ public class PoolableParticle : MonoBehaviour, IPoolable
 			_particleSystem.Stop();
 		}
 		yield return new WaitUntil(() => _particleSystem.particleCount == 0);
-		onReset.Invoke();
+		onReturned.Invoke();
 		gameObject.SetActive(false);
 	}
-
-
 }

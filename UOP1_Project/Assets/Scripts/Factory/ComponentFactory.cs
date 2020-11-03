@@ -18,6 +18,5 @@ namespace OP1.Factory
 		{
 			return Instantiate(Prefab);
 		}
-
 	} 
 }
