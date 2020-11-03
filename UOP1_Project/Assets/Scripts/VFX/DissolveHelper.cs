@@ -48,9 +48,7 @@ public class DissolveHelper : MonoBehaviour
         {
             // dissolve logic
             normalizedDeltaTime += Time.deltaTime;
-            Debug.Log("Normalized Delta Time: " + normalizedDeltaTime);
             float remappedValue = VFXUtil.RemapValue(normalizedDeltaTime, 0, dissolveTime, 0, 1);
-            Debug.Log("Remapped value: " + remappedValue);
             materialPropertyBlock.SetFloat("_Dissolve", remappedValue);
             _renderer.SetPropertyBlock(materialPropertyBlock);
             yield return null;
