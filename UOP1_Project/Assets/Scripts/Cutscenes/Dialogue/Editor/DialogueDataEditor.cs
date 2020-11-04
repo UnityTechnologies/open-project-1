@@ -1,34 +1,33 @@
-﻿using System;
+﻿/*
+
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 
 /// <summary>
-/// <see cref="DialogueData"/> editor that draw default inspector except:
+/// <see cref="DialogueDataSO"/> editor that draw default inspector except:
 /// <list type="bullet">
-/// <item><see cref="DialogueData.Conversation"/></item>.
+/// <item><see cref="DialogueDataSO.Conversation"/></item>.
 /// </list>
 /// </summary>
 
-[CustomEditor(typeof(DialogueData))]
+[CustomEditor(typeof(DialogueDataSO))]
 public class DialogueDataEditor : Editor
 {
-	private readonly Type _dialogueData = typeof(DialogueData);
+	private readonly Type _dialogueData = typeof(DialogueDataSO);
 
 	/// <summary>
-	/// All serialized fields in <see cref="DialogueData"/>
+	/// All serialized fields in <see cref="DialogueDataSO"/>
 	/// </summary>
 	private readonly List<SerializedProperty> _serializedFields = new List<SerializedProperty>();
-
-	#region Dialogue Data
-	private ReorderableList dialogueList;
-	#endregion
+	private ReorderableList _dialogueList;
 
 
 	private void OnEnable()
 	{
-		PrepareSerializedProperty();
+		PrepareSerializedProperties();
 	}
 
 	public override void OnInspectorGUI()
@@ -36,16 +35,14 @@ public class DialogueDataEditor : Editor
 		DrawCustomInspector();
 	}
 
-	/// <summary>
-	/// Determines how the new custom inspector will be displayed.
-	/// </summary>
+
 	private void DrawCustomInspector()
 	{
 		// Make GUI not changeable.
 		GUI.enabled = false;
 
 		// Draw reference information about script being edited.
-		EditorGUILayout.ObjectField("Script", MonoScript.FromScriptableObject((DialogueData)target), typeof(DialogueData), false);
+		EditorGUILayout.ObjectField("Script", MonoScript.FromScriptableObject((DialogueDataSO)target), typeof(DialogueDataSO), false);
 
 		// Make GUI changeable
 		GUI.enabled = true;
@@ -53,13 +50,13 @@ public class DialogueDataEditor : Editor
 		serializedObject.Update();
 
 		// Draw field to display
-		foreach (SerializedProperty field in this._serializedFields)
+		foreach (SerializedProperty field in _serializedFields)
 		{
 			if (field != null)
 			{
-				if (field.name == nameof(DialogueData.Conversation))
+				if (field.name == nameof(DialogueDataSO.Conversation))
 				{
-					dialogueList.DoLayoutList();
+					_dialogueList.DoLayoutList();
 				}
 				else  // Draw Default property fields.
 				{
@@ -72,23 +69,25 @@ public class DialogueDataEditor : Editor
 	}
 
 	/// <summary>
-	/// Identify all serialized property from selected <see cref="DialogueData"/>
+	/// Identify all serialized property from selected <see cref="DialogueDataSO"/>
 	/// </summary>
-	private void PrepareSerializedProperty()
+	private void PrepareSerializedProperties()
 	{
 		// Prepare serialized property.
-		FieldInfo[] fields = this._dialogueData.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+		FieldInfo[] fields = _dialogueData.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
 
 		foreach (FieldInfo field in fields)
 		{
-			SerializedProperty serializedProperty = this.serializedObject.FindProperty(field.Name);
+			SerializedProperty serializedProperty = serializedObject.FindProperty(field.Name);
 
-			this._serializedFields.Add(serializedProperty);
+			_serializedFields.Add(serializedProperty);
 
-			if (field.Name == nameof(DialogueData.Conversation))
+			if (field.Name == nameof(DialogueDataSO.Conversation))
 			{
-				dialogueList = new ReorderableList(serializedProperty);
+				_dialogueList = new ReorderableList(serializedProperty);
 			}
 		}
 	}
 }
+
+*/

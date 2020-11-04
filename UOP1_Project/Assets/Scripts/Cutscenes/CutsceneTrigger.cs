@@ -13,10 +13,8 @@ public class CutsceneTrigger : MonoBehaviour
 	[Tooltip("Only once only work if NeedToPressButton false")]
 	[SerializeField] private bool _onlyOnce; 
 
-	#region Default transform
 	private Vector3 position;
 	private Quaternion rotation;
-	#endregion
 
 	private void Awake()
 	{

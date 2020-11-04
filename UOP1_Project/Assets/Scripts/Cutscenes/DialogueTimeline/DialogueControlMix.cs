@@ -9,9 +9,8 @@ public class DialogueControlMix : PlayableBehaviour
     public List<double> ClipsEndTime;
     public List<double> ClipsStartTime;
 
-    // Temp data. 
+    // Temp data
     private CutsceneManager _cutsceneManager; 
-    private bool _showDialogueBox;
     private int _inputCount; 
 
     public override void ProcessFrame(Playable playable, FrameData info, object playerData)
@@ -21,7 +20,6 @@ public class DialogueControlMix : PlayableBehaviour
 			// Default state
 			_cutsceneManager = playerData as CutsceneManager;
 
-			_showDialogueBox = false;
 
 			_inputCount = playable.GetInputCount();
 
@@ -34,11 +32,9 @@ public class DialogueControlMix : PlayableBehaviour
 					ScriptPlayable<DialogueControlBehaviour> inputPlayable = (ScriptPlayable<DialogueControlBehaviour>)playable.GetInput(i);
 					DialogueControlBehaviour behaviour = inputPlayable.GetBehaviour();
 
-					_showDialogueBox = true; 
-
 					if (_cutsceneManager.DialogueCounter <= behaviour.WaitUntil)
 					{
-						// If we reached end of clip before wait id.
+						// If we reached end of clip before wait id
 						if (playable.GetTime() >= ClipsEndTime[i] - PauseThreshold)
 						{
 							_cutsceneManager.PauseTimeline();
@@ -47,13 +43,10 @@ public class DialogueControlMix : PlayableBehaviour
 					else
 					{
 						// playable.SetTime(ClipsEndTime[i] + PauseThreshold);  // Not working...?
-						_showDialogueBox = false;	
 						_cutsceneManager.Director.time = ClipsEndTime[i] + PauseThreshold;
 						_cutsceneManager.ResumeTimeline(); 
 					}
 				}
-
-				_cutsceneManager.SetDialogueBox(_showDialogueBox);
 			}
 		}
          

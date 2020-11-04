@@ -4,16 +4,6 @@ using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.UI;
 
-/// <summary>
-/// Manager to control cutscene.
-/// Has direct access to:
-/// <list type="bullet">
-///<item>Dialogue Box</item>
-///<item>Interaction Box</item>
-///<item>Playable director</item> 
-/// </list>
-/// </summary>
-
 [RequireComponent(typeof(PlayableDirector))]
 public class CutsceneManager : MonoBehaviour
 {
@@ -21,24 +11,13 @@ public class CutsceneManager : MonoBehaviour
 	private static CutsceneManager _instance;
 	public static CutsceneManager Instance { get => _instance; }
 
-	#region Properties
 	public bool IsInteracting { get; private set; }
 	public int DialogueCounter { get; private set; } 
 	public PlayableDirector Director { get; private set; }
-	#endregion
 
-	#region UI Related
-	[SerializeField] private DialogueBox _normalDialogueBox;
-	[SerializeField] private GameObject _interactionBox;
-	[SerializeField] private Image _image;   // To fade in or fade out screen.
-	#endregion
-
-	#region Fields
 	private CutsceneData _cutsceneData; 
-	[SerializeField] private InputReader _inputReader;
-	#endregion
+	[SerializeField] private InputReader _inputReader = default;
 
-	// Singleton DP
 	private void Awake()
 	{ 
 		if(Instance == null)
@@ -55,12 +34,10 @@ public class CutsceneManager : MonoBehaviour
 		}
 	}
 
-	#region Public methods
 	public int GetDialogueLength()
 	{
 		return _cutsceneData.DialogueData.Conversation.Count;
 	}
-	#endregion
 
 	/// <summary>
 	/// Disable gameplay input.
@@ -83,10 +60,6 @@ public class CutsceneManager : MonoBehaviour
 				Director.stopped += ctx => NotAbleToInteract();
 			}
 		}
-		else
-		{
-			SetDialogueBox(true);
-		}
 
 		Interacting(); 
 	}
@@ -100,7 +73,6 @@ public class CutsceneManager : MonoBehaviour
 	public void AbleToInteract(Vector3 posInWorld, CutsceneData cutsceneData)
 	{
 		IsInteracting = true;
-		ShowInteractionBox(posInWorld);
 		EnableInteractionInput();
 		_cutsceneData = cutsceneData;
 	}
@@ -114,30 +86,24 @@ public class CutsceneManager : MonoBehaviour
 	{
 		Director.Stop();
 		EnableGameplayInput();
-		SetDialogueBox(false);
 		IsInteracting = false;
 		DialogueCounter = 0;
-		DisableInteractionBox();
 	}
 
 	/// <summary>
 	/// When player is interacting with cutscene.
 	/// <list type="bullet">
-	///<item>Disable interaction box.</item>
 	///<item>Disable gameplay input</item>
 	/// </list> 
 	/// </summary>
 	public void Interacting()
 	{
-		DisableInteractionBox();
-
 		DisableGameplayInput(); 
 	}
 
 	/// <summary>
 	/// When advance button clicked.
 	/// <list type="bullet">
-	///<item>Show dialogue box if counter is 0.</item>
 	///<item>Otherwise Increment dialogue counter.</item>
 	///<item>Stop interacting </item>
 	/// </list>
@@ -148,21 +114,8 @@ public class CutsceneManager : MonoBehaviour
 		{
 			Play(_cutsceneData);
 		}
-
-		if (_normalDialogueBox.Box.activeInHierarchy)
-		{
-			if (DialogueCounter < _cutsceneData.DialogueData.Conversation.Count - 1)
-			{
-				AdvanceDialogueBox();
-			}
-			else
-			{
-				NotAbleToInteract();
-			}
-		}
 	}
 
-	#region Director
 	public void PauseTimeline()
 	{
 		Director.playableGraph.GetRootPlayable(0).SetSpeed(0);
@@ -172,9 +125,7 @@ public class CutsceneManager : MonoBehaviour
 	{
 		Director.playableGraph.GetRootPlayable(0).SetSpeed(1);
 	}
-	#endregion
 
-	#region Input related methods.
 	/// <summary>
 	/// Enable Menus input.
 	/// Disable Gameplay.Jump since it's overlapping with Menus.Advance.
@@ -202,90 +153,4 @@ public class CutsceneManager : MonoBehaviour
 		_inputReader.GameInput.Menus.Disable();
 		_inputReader.GameInput.Gameplay.Enable();
 	}
-	#endregion
-
-	#region InteractionBox methods.
-	/// <summary>
-	/// Show small box indicating that player can interact
-	/// </summary>
-	private void ShowInteractionBox(Vector3 posInWorld)
-	{
-		_interactionBox.transform.position = Camera.main.WorldToScreenPoint(posInWorld);
-		_interactionBox.SetActive(true);
-	}
-
-	private void DisableInteractionBox()
-	{
-		_interactionBox.SetActive(false);
-	}
-	#endregion
-
-	#region DialogueBox methods.
-	public void SetDialogueBox(bool condition)
-	{
-		if (condition)
-			UpdateDialogueBox();
-		else 
-			_normalDialogueBox.Box.SetActive(false);
-	}
-
-	private void AdvanceDialogueBox()
-	{
-		DialogueCounter++;
-		UpdateDialogueBox();
-	} 
-
-	private void UpdateDialogueBox()
-	{
-		DetermineWhichNameAndFaceShouldBeUsed();
-		_normalDialogueBox.Message.text = _cutsceneData.DialogueData.Conversation[DialogueCounter].Sentence;
-		_normalDialogueBox.Box.SetActive(true);
-	}
-
-	/// <summary>
-	/// Determine whether to use the actor data or the override data.
-	/// </summary>
-	private void DetermineWhichNameAndFaceShouldBeUsed()
-	{
-		// Reset sprite
-		_normalDialogueBox.Image.sprite = null;
-
-		// Use Actor Data
-		if (_cutsceneData.DialogueData.Conversation[DialogueCounter].Actor != null)
-		{ 
-			_normalDialogueBox.Name.text = _cutsceneData.DialogueData.Conversation[DialogueCounter].Actor.ActorName;
-			_normalDialogueBox.Image.sprite = _cutsceneData.DialogueData.Conversation[DialogueCounter].Actor.Face; 
-		} 
-
-		// Override
-		if (_cutsceneData.DialogueData.Conversation[DialogueCounter].NameOverride != String.Empty)
-		{
-			_normalDialogueBox.Name.text = _cutsceneData.DialogueData.Conversation[DialogueCounter].NameOverride;
-		}
-
-		if (_cutsceneData.DialogueData.Conversation[DialogueCounter].FigureOverride != null)
-		{
-			_normalDialogueBox.Image.sprite = _cutsceneData.DialogueData.Conversation[DialogueCounter].FigureOverride;
-		}
-
-		// Disable figure if sprite is null
-		if(_normalDialogueBox.Image.sprite == null)
-		{
-			_normalDialogueBox.Image.gameObject.SetActive(false);
-		}
-		else
-		{
-			_normalDialogueBox.Image.gameObject.SetActive(true);
-		}
-	}
-	#endregion
-}
-
-[Serializable]
-public class DialogueBox
-{
-	public GameObject Box;
-	public TMP_Text Name;
-	public TMP_Text Message;
-	public Image Image;
 }
