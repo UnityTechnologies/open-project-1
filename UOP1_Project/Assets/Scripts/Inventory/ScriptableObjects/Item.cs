@@ -7,25 +7,25 @@ public class Item : ScriptableObject
 {
 	[Tooltip("The name of the item")]
 	[SerializeField]
-	private string _name;
+	private string _name = default;
 
 	[Tooltip("A preview image for the item")]
 	[SerializeField]
-	private Sprite _previewImage;
+	private Sprite _previewImage = default;
 
 	[Tooltip("A description of the item")]
 	[SerializeField]
 	[Multiline]
-	private string _description;
+	private string _description = default;
 
 
 	[Tooltip("The type of item")]
 	[SerializeField]
-	private ItemType _itemType;
+	private ItemType _itemType = default;
 
 	[Tooltip("A prefab reference for the model of the item")]
 	[SerializeField]
-	private GameObject _prefab;
+	private GameObject _prefab = default;
 
 	public string Name => _name;
 	public Sprite PreviewImage => _previewImage;
