@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
-using OP1.Factory;
+using UOP1.Factory;
 
-[CreateAssetMenu(fileName = "New Particle Factory", menuName = "Factory/Particle Factory")]
-public class ParticleFactory : ComponentFactory<PoolableParticle>
+[CreateAssetMenu(fileName = "NewParticleFactory", menuName = "Factory/Particle Factory")]
+public class ParticleFactorySO : ComponentFactorySO<PoolableParticle>
 {
 	[SerializeField]
 	private PoolableParticle _prefab = default;

@@ -1,4 +1,4 @@
-﻿namespace OP1.Pool
+﻿namespace UOP1.Pool
 {
 	/// <summary>
 	/// Represents a collection that pools objects of T.

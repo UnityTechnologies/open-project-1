@@ -1,14 +1,14 @@
-﻿using OP1.Factory;
+﻿using UOP1.Factory;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace OP1.Pool
+namespace UOP1.Pool
 {
 	/// <summary>
 	/// A generic pool that generates members of type T on-demand via a factory.
 	/// </summary>
 	/// <typeparam name="T">Specifies the type of elements to pool.</typeparam>
-	public abstract class Pool<T> : ScriptableObject, IPool<T> where T : IPoolable
+	public abstract class PoolSO<T> : ScriptableObject, IPool<T> where T : IPoolable
 	{
 		protected readonly Stack<T> _available = new Stack<T>();
 		public abstract IFactory<T> Factory { get; set; }

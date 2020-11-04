@@ -1,12 +1,12 @@
 ﻿using UnityEngine;
 
-namespace OP1.Pool
+namespace UOP1.Pool
 {
 	/// <summary>
 	/// Implements a Pool for Component types.
 	/// </summary>
 	/// <typeparam name="T">Specifies the component to pool.</typeparam>
-	public abstract class ComponentPool<T> : Pool<T> where T : Component, IPoolable
+	public abstract class ComponentPool<T> : PoolSO<T> where T : Component, IPoolable
 	{
 		public abstract int InitialPoolSize { get; set; }
 		private GameObject _poolRootObject;

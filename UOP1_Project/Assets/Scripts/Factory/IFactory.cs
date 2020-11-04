@@ -1,4 +1,4 @@
-﻿namespace OP1.Factory
+﻿namespace UOP1.Factory
 {
 	/// <summary>
 	/// Represents a factory.

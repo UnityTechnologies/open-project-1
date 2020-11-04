@@ -1,12 +1,12 @@
 ﻿using UnityEngine;
-using OP1.Pool;
-using OP1.Factory;
+using UOP1.Pool;
+using UOP1.Factory;
 
-[CreateAssetMenu(fileName = "New Particle Pool", menuName = "Pool/Particle Pool")]
-public class ParticlePool : ComponentPool<PoolableParticle>
+[CreateAssetMenu(fileName = "NewParticlePool", menuName = "Pool/Particle Pool")]
+public class ParticlePoolSO : ComponentPool<PoolableParticle>
 {
 	[SerializeField]
-	private ParticleFactory _factory;
+	private ParticleFactorySO _factory;
 	[SerializeField]
 	private int _initialPoolSize;
 
@@ -18,7 +18,7 @@ public class ParticlePool : ComponentPool<PoolableParticle>
 		}
 		set
 		{
-			_factory = value as ParticleFactory;
+			_factory = value as ParticleFactorySO;
 		}
 	}
 

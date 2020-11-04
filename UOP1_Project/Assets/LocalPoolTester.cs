@@ -9,14 +9,14 @@ public class LocalPoolTester : MonoBehaviour
 	[SerializeField]
 	private int _initialPoolSize = 5;
 
-	private ParticlePool _pool;
-	private ParticleFactory _factory;
+	private ParticlePoolSO _pool;
+	private ParticleFactorySO _factory;
 
 	private IEnumerator Start()
     {
-		_factory = ScriptableObject.CreateInstance<ParticleFactory>();
+		_factory = ScriptableObject.CreateInstance<ParticleFactorySO>();
 		_factory.Prefab = _prefab;
-		_pool = ScriptableObject.CreateInstance<ParticlePool>();
+		_pool = ScriptableObject.CreateInstance<ParticlePoolSO>();
 		_pool.name = gameObject.name;
 		_pool.Factory = _factory;
 		_pool.InitialPoolSize = _initialPoolSize;

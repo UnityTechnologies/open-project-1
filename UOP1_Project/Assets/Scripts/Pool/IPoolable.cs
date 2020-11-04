@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace OP1.Pool
+namespace UOP1.Pool
 {
 	/// <summary>
 	/// Represents an object that can be pooled.

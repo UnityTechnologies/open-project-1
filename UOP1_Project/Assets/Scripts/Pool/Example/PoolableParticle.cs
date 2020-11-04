@@ -1,4 +1,4 @@
-﻿using OP1.Pool;
+﻿using UOP1.Pool;
 using System;
 using System.Collections;
 using UnityEngine;
@@ -27,7 +27,7 @@ public class PoolableParticle : MonoBehaviour, IPoolable
 	{
 		if (_particleSystem.isPlaying)
 		{
-			yield return new WaitForSecondsRealtime(_particleSystem.main.duration - (_particleSystem.time % _particleSystem.main.duration));
+			yield return new WaitForSeconds(_particleSystem.main.duration - (_particleSystem.time % _particleSystem.main.duration));
 			_particleSystem.Stop();
 		}
 		yield return new WaitUntil(() => _particleSystem.particleCount == 0);

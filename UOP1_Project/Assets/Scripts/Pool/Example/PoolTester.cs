@@ -5,7 +5,7 @@ using UnityEngine;
 public class PoolTester : MonoBehaviour
 {
 	[SerializeField]
-	private ParticlePool _pool = default;
+	private ParticlePoolSO _pool = default;
 
 	private IEnumerator Start()
 	{
@@ -15,7 +15,7 @@ public class PoolTester : MonoBehaviour
 			particle.transform.position = Random.insideUnitSphere * 5f;
 			particle.Play();
 		}
-		yield return new WaitForSecondsRealtime(5f);
+		yield return new WaitForSeconds(5f);
 		_pool.Return(particles);
 	}
 }
