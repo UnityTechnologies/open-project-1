@@ -7,7 +7,8 @@ public class ParticleFactorySO : ComponentFactorySO<PoolableParticle>
 	[SerializeField]
 	private PoolableParticle _prefab = default;
 
-	public override PoolableParticle Prefab {
+	public override PoolableParticle Prefab
+	{
 		get
 		{
 			return _prefab;

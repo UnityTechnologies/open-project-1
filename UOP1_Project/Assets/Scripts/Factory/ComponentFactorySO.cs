@@ -18,5 +18,5 @@ namespace UOP1.Factory
 		{
 			return Instantiate(Prefab);
 		}
-	} 
+	}
 }

@@ -9,5 +9,5 @@ namespace UOP1.Pool
 	{
 		void OnRequest();
 		void OnReturn(Action onReturned);
-	} 
+	}
 }

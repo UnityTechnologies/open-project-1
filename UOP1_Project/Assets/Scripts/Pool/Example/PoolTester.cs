@@ -10,7 +10,7 @@ public class PoolTester : MonoBehaviour
 	private IEnumerator Start()
 	{
 		List<PoolableParticle> particles = _pool.Request(10) as List<PoolableParticle>;
-		foreach(PoolableParticle particle in particles)
+		foreach (PoolableParticle particle in particles)
 		{
 			particle.transform.position = Random.insideUnitSphere * 5f;
 			particle.Play();
