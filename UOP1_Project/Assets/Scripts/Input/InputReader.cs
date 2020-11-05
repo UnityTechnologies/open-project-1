@@ -85,7 +85,7 @@ public class InputReader : ScriptableObject, GameInput.IGameplayActions
 	{
 		if (cameraMoveEvent != null)
 		{
-			cameraMoveEvent.Invoke(context.ReadValue<Vector2>(), IsMouseInput(context));
+			cameraMoveEvent.Invoke(context.ReadValue<Vector2>(), IsDeviceMouse(context));
 		}
 	}
 
@@ -96,8 +96,9 @@ public class InputReader : ScriptableObject, GameInput.IGameplayActions
 
 		if (context.phase == InputActionPhase.Canceled)
 			disableMouseControlCameraEvent?.Invoke();
+		
 	}
 
-	private bool IsMouseInput(InputAction.CallbackContext context) => context.control.device.name == "Mouse";
-
+	private bool IsDeviceMouse(InputAction.CallbackContext context) => context.control.device.name == "Mouse";
+	
 }
