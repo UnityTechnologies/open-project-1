@@ -360,14 +360,14 @@ public class @GameInput : IInputActionCollection, IDisposable
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": ""Gamepad Right Stick"",
-                    ""id"": ""e79b614b-8728-470d-91bc-53102c8434f5"",
-                    ""path"": ""2DVector(mode=2)"",
+                    ""name"": """",
+                    ""id"": ""2b832572-50ef-4dba-aaeb-964ed1c854bb"",
+                    ""path"": ""<Gamepad>/rightStick"",
                     ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
+                    ""processors"": ""ScaleVector2(x=3,y=3)"",
+                    ""groups"": ""KeyboardOrGamepad"",
                     ""action"": ""RotateCamera"",
-                    ""isComposite"": true,
+                    ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
@@ -375,7 +375,7 @@ public class @GameInput : IInputActionCollection, IDisposable
                     ""id"": ""8e17360e-f036-4963-93f6-05d14787dfb5"",
                     ""path"": ""2DVector"",
                     ""interactions"": """",
-                    ""processors"": """",
+                    ""processors"": ""ScaleVector2(x=3,y=3)"",
                     ""groups"": """",
                     ""action"": ""RotateCamera"",
                     ""isComposite"": true,
