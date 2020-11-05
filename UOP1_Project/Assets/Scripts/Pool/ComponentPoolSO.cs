@@ -6,7 +6,7 @@ namespace UOP1.Pool
 	/// Implements a Pool for Component types.
 	/// </summary>
 	/// <typeparam name="T">Specifies the component to pool.</typeparam>
-	public abstract class ComponentPool<T> : PoolSO<T> where T : Component, IPoolable
+	public abstract class ComponentPoolSO<T> : PoolSO<T> where T : Component, IPoolable
 	{
 		public abstract int InitialPoolSize { get; set; }
 		private GameObject _poolRootObject;
