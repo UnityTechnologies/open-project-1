@@ -26,7 +26,7 @@ public class CutsceneTrigger : MonoBehaviour
 	{
 		if (_playOnStart)
 		{ 
-			CutsceneManager.Instance.Play(CutsceneData);
+			//CutsceneManager.Instance.Play(CutsceneData);
 		}
 	}
 
@@ -34,7 +34,7 @@ public class CutsceneTrigger : MonoBehaviour
 	{ 
 		if (!_needToPressButton)
 		{ 
-			CutsceneManager.Instance.Play(CutsceneData);
+			//CutsceneManager.Instance.Play(CutsceneData);
 
 			if (_onlyOnce)
 			{
@@ -51,16 +51,16 @@ public class CutsceneTrigger : MonoBehaviour
 
 		if (_needToPressButton)
 		{
-			if (!CutsceneManager.Instance.IsInteracting)
+			/*if (!CutsceneManager.Instance.IsInteracting)
 			{
 				CutsceneManager.Instance.AbleToInteract(other.transform.position, CutsceneData);
-			}
+			}*/
 		}
 	}
 
 	private void OnTriggerExit(Collider other)
 	{
-		CutsceneManager.Instance.NotAbleToInteract();
+		//CutsceneManager.Instance.NotAbleToInteract();
 		transform.position = position;
 		transform.rotation = rotation;
 	}

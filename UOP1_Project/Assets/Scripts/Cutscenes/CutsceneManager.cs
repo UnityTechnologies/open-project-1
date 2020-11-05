@@ -8,8 +8,6 @@ using UnityEngine.UI;
 public class CutsceneManager : MonoBehaviour
 {
 	// Singleton
-	private static CutsceneManager _instance;
-	public static CutsceneManager Instance { get => _instance; }
 
 	public bool IsInteracting { get; private set; }
 	public int DialogueCounter { get; private set; } 
@@ -20,23 +18,9 @@ public class CutsceneManager : MonoBehaviour
 
 	private void Awake()
 	{ 
-		if(Instance == null)
-		{
-			_instance = this;
-
 			// Initialize CutsceneManager.
 			Director = gameObject.GetComponent<PlayableDirector>();
 			_inputReader.GameInput.Menus.Advance.performed += ctx => OnAdvance();
-		}
-		else
-		{
-			Destroy(this);
-		}
-	}
-
-	public int GetDialogueLength()
-	{
-		return _cutsceneData.DialogueData.Conversation.Count;
 	}
 
 	/// <summary>
@@ -51,11 +35,11 @@ public class CutsceneManager : MonoBehaviour
 
 		_cutsceneData = cutsceneData;
 
-		if(cutsceneData.DialogueData.TimelineAsset != null)
+		if(true)
 		{
 			if(Director.state != PlayState.Playing)
 			{
-				Director.playableAsset = cutsceneData.DialogueData.TimelineAsset;
+				//Director.playableAsset = cutsceneData.DialogueData.TimelineAsset;
 				Director.Play();
 				Director.stopped += ctx => NotAbleToInteract();
 			}
