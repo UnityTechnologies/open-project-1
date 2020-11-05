@@ -13,7 +13,7 @@ public class CutsceneManager : MonoBehaviour
 
 	private void Awake()
 	{ 
-			_inputReader.GameInput.Menus.Advance.performed += ctx => OnAdvance();
+			_inputReader.gameInput.Menus.Advance.performed += ctx => OnAdvance();
 	}
 
 	public void Play(PlayableDirector activePlayableDirector)
@@ -48,13 +48,13 @@ public class CutsceneManager : MonoBehaviour
 
 	private void EnableGameplayInput()
 	{
-		_inputReader.GameInput.Gameplay.Enable();
-		_inputReader.GameInput.Menus.Disable();
+		_inputReader.gameInput.Gameplay.Enable();
+		_inputReader.gameInput.Menus.Disable();
 	}
 
 	private void DisableGameplayInput()
 	{
-		_inputReader.GameInput.Menus.Enable();
-		_inputReader.GameInput.Gameplay.Disable();
+		_inputReader.gameInput.Menus.Enable();
+		_inputReader.gameInput.Gameplay.Disable();
 	}
 }

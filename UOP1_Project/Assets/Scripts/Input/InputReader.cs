@@ -2,7 +2,7 @@
 using UnityEngine.InputSystem;
 using UnityEngine.Events;
 
-[CreateAssetMenu(fileName = "Input Reader", menuName = "Game/Input Reader")]
+[CreateAssetMenu(fileName = "InputReader", menuName = "Game/Input Reader")]
 public class InputReader : ScriptableObject, GameInput.IGameplayActions
 {
 	public event UnityAction jumpEvent;
@@ -12,23 +12,26 @@ public class InputReader : ScriptableObject, GameInput.IGameplayActions
 	public event UnityAction extraActionEvent;
 	public event UnityAction pauseEvent;
 	public event UnityAction<Vector2> moveEvent;
-	public event UnityAction<Vector2> cameraMoveEvent;
+	public event UnityAction<Vector2, bool> cameraMoveEvent;
+	public event UnityAction enableMouseControlCameraEvent;
+	public event UnityAction disableMouseControlCameraEvent;
 
-	public GameInput GameInput { get; set; }
+	public GameInput gameInput;
 
 	private void OnEnable()
 	{
-		if (GameInput == null)
+		if (gameInput == null)
 		{
-			GameInput = new GameInput();
-			GameInput.Gameplay.SetCallbacks(this);
+			gameInput = new GameInput();
+			gameInput.Gameplay.SetCallbacks(this);
 		}
-		GameInput.Gameplay.Enable();
+
+		gameInput.Gameplay.Enable();
 	}
 
 	private void OnDisable()
 	{
-		GameInput.Gameplay.Disable();
+		gameInput.Gameplay.Disable();
 	}
 
 	public void OnAttack(InputAction.CallbackContext context)
@@ -82,7 +85,20 @@ public class InputReader : ScriptableObject, GameInput.IGameplayActions
 	{
 		if (cameraMoveEvent != null)
 		{
-			cameraMoveEvent.Invoke(context.ReadValue<Vector2>());
+			cameraMoveEvent.Invoke(context.ReadValue<Vector2>(), IsDeviceMouse(context));
 		}
 	}
+
+	public void OnMouseControlCamera(InputAction.CallbackContext context)
+	{
+		if (context.phase == InputActionPhase.Performed)
+			enableMouseControlCameraEvent?.Invoke();
+
+		if (context.phase == InputActionPhase.Canceled)
+			disableMouseControlCameraEvent?.Invoke();
+
+	}
+
+	private bool IsDeviceMouse(InputAction.CallbackContext context) => context.control.device.name == "Mouse";
+
 }

@@ -12,7 +12,7 @@ public class DialogueManager : MonoBehaviour
 
 	public void BeginDialogue(DialogueLineSO firstLine)
 	{
-		_inputReader.GameInput.Menus.Enable();
+		_inputReader.gameInput.Menus.Enable();
 
 		DisplayDialogueLine(firstLine);
 	}
