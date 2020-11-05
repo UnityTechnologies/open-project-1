@@ -1,11 +1,10 @@
 ﻿using System; 
 using UnityEngine;
+using UnityEngine.Events;
 
 [Serializable]
 public class CutsceneData
 {
-	// We can make this a list
-	public DialogueDataSO DialogueData;
-	[Tooltip("Event placeholder that will be called after DialogueData reached its end.")]
-	public string Event; 
+	[Tooltip("Event that is called after the Cutscene reached its end")]
+	public UnityEvent Event;
 }
