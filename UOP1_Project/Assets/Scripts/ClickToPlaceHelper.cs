@@ -49,7 +49,7 @@ public class ClickToPlaceHelper : MonoBehaviour
 			}
 		}
 	}
-	
+
 	public void SetSpawnLocationAtCursor()
 	{
 		Debug.Log("Use the LMB to position this object");
