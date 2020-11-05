@@ -13,8 +13,8 @@ public class InputReader : ScriptableObject, GameInput.IGameplayActions
 	public event UnityAction pauseEvent;
 	public event UnityAction<Vector2> moveEvent;
 	public event UnityAction<Vector2, bool> cameraMoveEvent;
-	public event UnityAction mouseCamEnabledEvent;
-	public event UnityAction mouseCamDisabledEvent;
+	public event UnityAction mouseControlCameraEnableEvent;
+	public event UnityAction mouseControlCameraDisableEvent;
 
 	GameInput gameInput;
 
@@ -85,18 +85,19 @@ public class InputReader : ScriptableObject, GameInput.IGameplayActions
 	{
 		if (cameraMoveEvent != null)
 		{
-			cameraMoveEvent.Invoke(context.ReadValue<Vector2>(), context.control.device.name == "Mouse");
+			cameraMoveEvent.Invoke(context.ReadValue<Vector2>(), IsMouseInput(context));
 		}
 	}
 
-	private bool mouseCameraRotationEnabled;
-
-	public void OnEnableMouseCameraRotation(InputAction.CallbackContext context)
+	public void OnMouseControlCamera(InputAction.CallbackContext context)
 	{
 		if (context.phase == InputActionPhase.Performed)
-			mouseCamEnabledEvent?.Invoke();
+			mouseControlCameraEnableEvent?.Invoke();
 
 		if (context.phase == InputActionPhase.Canceled)
-			mouseCamDisabledEvent?.Invoke();
+			mouseControlCameraDisableEvent?.Invoke();
 	}
+
+	private bool IsMouseInput(InputAction.CallbackContext context) => context.control.device.name == "Mouse";
+
 }

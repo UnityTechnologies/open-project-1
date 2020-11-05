@@ -75,7 +75,7 @@ public class @GameInput : IInputActionCollection, IDisposable
                     ""interactions"": """"
                 },
                 {
-                    ""name"": ""EnableMouseCameraRotation"",
+                    ""name"": ""MouseControlCamera"",
                     ""type"": ""Button"",
                     ""id"": ""3172ea7f-84a3-4236-b03d-2beae11fa2e0"",
                     ""expectedControlType"": ""Button"",
@@ -364,7 +364,7 @@ public class @GameInput : IInputActionCollection, IDisposable
                     ""id"": ""2b832572-50ef-4dba-aaeb-964ed1c854bb"",
                     ""path"": ""<Gamepad>/rightStick"",
                     ""interactions"": """",
-                    ""processors"": ""ScaleVector2(x=3,y=3)"",
+                    ""processors"": ""ScaleVector2(x=2,y=2)"",
                     ""groups"": ""KeyboardOrGamepad"",
                     ""action"": ""RotateCamera"",
                     ""isComposite"": false,
@@ -375,7 +375,7 @@ public class @GameInput : IInputActionCollection, IDisposable
                     ""id"": ""8e17360e-f036-4963-93f6-05d14787dfb5"",
                     ""path"": ""2DVector"",
                     ""interactions"": """",
-                    ""processors"": ""ScaleVector2(x=3,y=3)"",
+                    ""processors"": ""ScaleVector2(x=2,y=2)"",
                     ""groups"": """",
                     ""action"": ""RotateCamera"",
                     ""isComposite"": true,
@@ -454,7 +454,7 @@ public class @GameInput : IInputActionCollection, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""KeyboardOrGamepad"",
-                    ""action"": ""EnableMouseCameraRotation"",
+                    ""action"": ""MouseControlCamera"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -495,7 +495,7 @@ public class @GameInput : IInputActionCollection, IDisposable
         m_Gameplay_Pause = m_Gameplay.FindAction("Pause", throwIfNotFound: true);
         m_Gameplay_ExtraAction = m_Gameplay.FindAction("ExtraAction", throwIfNotFound: true);
         m_Gameplay_RotateCamera = m_Gameplay.FindAction("RotateCamera", throwIfNotFound: true);
-        m_Gameplay_EnableMouseCameraRotation = m_Gameplay.FindAction("EnableMouseCameraRotation", throwIfNotFound: true);
+        m_Gameplay_MouseControlCamera = m_Gameplay.FindAction("MouseControlCamera", throwIfNotFound: true);
         // Menus
         m_Menus = asset.FindActionMap("Menus", throwIfNotFound: true);
     }
@@ -554,7 +554,7 @@ public class @GameInput : IInputActionCollection, IDisposable
     private readonly InputAction m_Gameplay_Pause;
     private readonly InputAction m_Gameplay_ExtraAction;
     private readonly InputAction m_Gameplay_RotateCamera;
-    private readonly InputAction m_Gameplay_EnableMouseCameraRotation;
+    private readonly InputAction m_Gameplay_MouseControlCamera;
     public struct GameplayActions
     {
         private @GameInput m_Wrapper;
@@ -566,7 +566,7 @@ public class @GameInput : IInputActionCollection, IDisposable
         public InputAction @Pause => m_Wrapper.m_Gameplay_Pause;
         public InputAction @ExtraAction => m_Wrapper.m_Gameplay_ExtraAction;
         public InputAction @RotateCamera => m_Wrapper.m_Gameplay_RotateCamera;
-        public InputAction @EnableMouseCameraRotation => m_Wrapper.m_Gameplay_EnableMouseCameraRotation;
+        public InputAction @MouseControlCamera => m_Wrapper.m_Gameplay_MouseControlCamera;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -597,9 +597,9 @@ public class @GameInput : IInputActionCollection, IDisposable
                 @RotateCamera.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnRotateCamera;
                 @RotateCamera.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnRotateCamera;
                 @RotateCamera.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnRotateCamera;
-                @EnableMouseCameraRotation.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnEnableMouseCameraRotation;
-                @EnableMouseCameraRotation.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnEnableMouseCameraRotation;
-                @EnableMouseCameraRotation.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnEnableMouseCameraRotation;
+                @MouseControlCamera.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnMouseControlCamera;
+                @MouseControlCamera.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnMouseControlCamera;
+                @MouseControlCamera.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnMouseControlCamera;
             }
             m_Wrapper.m_GameplayActionsCallbackInterface = instance;
             if (instance != null)
@@ -625,9 +625,9 @@ public class @GameInput : IInputActionCollection, IDisposable
                 @RotateCamera.started += instance.OnRotateCamera;
                 @RotateCamera.performed += instance.OnRotateCamera;
                 @RotateCamera.canceled += instance.OnRotateCamera;
-                @EnableMouseCameraRotation.started += instance.OnEnableMouseCameraRotation;
-                @EnableMouseCameraRotation.performed += instance.OnEnableMouseCameraRotation;
-                @EnableMouseCameraRotation.canceled += instance.OnEnableMouseCameraRotation;
+                @MouseControlCamera.started += instance.OnMouseControlCamera;
+                @MouseControlCamera.performed += instance.OnMouseControlCamera;
+                @MouseControlCamera.canceled += instance.OnMouseControlCamera;
             }
         }
     }
@@ -675,7 +675,7 @@ public class @GameInput : IInputActionCollection, IDisposable
         void OnPause(InputAction.CallbackContext context);
         void OnExtraAction(InputAction.CallbackContext context);
         void OnRotateCamera(InputAction.CallbackContext context);
-        void OnEnableMouseCameraRotation(InputAction.CallbackContext context);
+        void OnMouseControlCamera(InputAction.CallbackContext context);
     }
     public interface IMenusActions
     {
