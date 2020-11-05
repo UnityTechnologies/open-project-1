@@ -1,16 +1,16 @@
 ﻿using UnityEditor;
 using UnityEngine;
 
-[CustomEditor(typeof(SpawnLocation))]
-public class SpawnLocationEditor : Editor
+[CustomEditor(typeof(ClickToPlaceHelper))]
+public class ClickToPlaceHelperEditor : Editor
 {
 	public override void OnInspectorGUI()
 	{
 		base.OnInspectorGUI();
 
-		SpawnLocation myTarget = target as SpawnLocation;
+		ClickToPlaceHelper myTarget = target as ClickToPlaceHelper;
 
-		if (GUILayout.Button("Place at Cursor"))
+		if (GUILayout.Button("Place at Mouse cursor"))
 		{
 			myTarget.SetSpawnLocationAtCursor();
 		}
