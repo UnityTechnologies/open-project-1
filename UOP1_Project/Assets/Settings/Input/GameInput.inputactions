@@ -60,6 +60,14 @@
                     "expectedControlType": "Vector2",
                     "processors": "",
                     "interactions": ""
+                },
+                {
+                    "name": "EnableMouseCameraRotation",
+                    "type": "Button",
+                    "id": "3172ea7f-84a3-4236-b03d-2beae11fa2e0",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
                 }
             ],
             "bindings": [
@@ -350,50 +358,6 @@
                     "isPartOfComposite": false
                 },
                 {
-                    "name": "up",
-                    "id": "4e483eb2-4460-4dc1-af9f-9bcb31ebe837",
-                    "path": "<Gamepad>/rightStick/up",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "KeyboardOrGamepad",
-                    "action": "RotateCamera",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "down",
-                    "id": "edb40e4a-ef86-4338-904b-522590bc3cb0",
-                    "path": "<Gamepad>/rightStick/down",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "KeyboardOrGamepad",
-                    "action": "RotateCamera",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "left",
-                    "id": "398710b9-e1a8-4e26-8651-8e3ae6eb3b6e",
-                    "path": "<Gamepad>/rightStick/left",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "KeyboardOrGamepad",
-                    "action": "RotateCamera",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "right",
-                    "id": "597d020e-c169-4232-a603-7e5e35ce0c55",
-                    "path": "<Gamepad>/rightStick/right",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "KeyboardOrGamepad",
-                    "action": "RotateCamera",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
                     "name": "Keyboard TFGH",
                     "id": "8e17360e-f036-4963-93f6-05d14787dfb5",
                     "path": "2DVector",
@@ -447,6 +411,39 @@
                     "action": "RotateCamera",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "up",
+                    "id": "4e483eb2-4460-4dc1-af9f-9bcb31ebe837",
+                    "path": "<Gamepad>/rightStick/up",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardOrGamepad",
+                    "action": "RotateCamera",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "88e5a69d-cf1d-43ce-b5ab-9db67f819255",
+                    "path": "<Mouse>/delta",
+                    "interactions": "",
+                    "processors": "ScaleVector2",
+                    "groups": "KeyboardOrGamepad",
+                    "action": "RotateCamera",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "55713f13-8452-439f-b87e-76d9f2839d7e",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardOrGamepad",
+                    "action": "EnableMouseCameraRotation",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },

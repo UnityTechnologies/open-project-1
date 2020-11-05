@@ -6,6 +6,7 @@ public class CameraManager : MonoBehaviour
 	public InputReader inputReader;
 	public Camera mainCamera;
 	public CinemachineFreeLook freeLookVCam;
+	private bool mouseCamEnabled;
 
 	public void SetupProtagonistVirtualCamera(Transform target)
 	{
@@ -16,15 +17,28 @@ public class CameraManager : MonoBehaviour
 	private void OnEnable()
 	{
 		inputReader.cameraMoveEvent += OnCameraMove;
+		inputReader.mouseCamEnabledEvent += OnMouseCamEnabled;
+		inputReader.mouseCamDisabledEvent += OnMouseCamDisabled;
 	}
+
+	private void OnMouseCamDisabled()
+	{
+		mouseCamEnabled = false;
+		freeLookVCam.m_XAxis.m_InputAxisValue = 0;
+		freeLookVCam.m_YAxis.m_InputAxisValue = 0;
+	}
+
+	private void OnMouseCamEnabled() => mouseCamEnabled = true;
 
 	private void OnDisable()
 	{
 		inputReader.cameraMoveEvent -= OnCameraMove;
 	}
 
-	private void OnCameraMove(Vector2 cameraMovement)
+	private void OnCameraMove(Vector2 cameraMovement, bool mouseMovement)
 	{
+		if (mouseMovement && !mouseCamEnabled) return;
+
 		freeLookVCam.m_XAxis.m_InputAxisValue = cameraMovement.x * Time.smoothDeltaTime;
 		freeLookVCam.m_YAxis.m_InputAxisValue = cameraMovement.y * Time.smoothDeltaTime;
 	}
