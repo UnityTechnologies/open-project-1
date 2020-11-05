@@ -21,18 +21,18 @@ public class CameraManager : MonoBehaviour
 	private void OnEnable()
 	{
 		inputReader.cameraMoveEvent += OnCameraMove;
-		inputReader.mouseControlCameraEnableEvent += OnMouseControlCameraEnable;
-		inputReader.mouseControlCameraDisableEvent += OnMouseControlCameraDisable;
+		inputReader.enableMouseControlCameraEvent += OnEnableMouseControlCamera;
+		inputReader.disableMouseControlCameraEvent += OnDisableMouseControlCamera;
 	}
 
 	private void OnDisable()
 	{
 		inputReader.cameraMoveEvent -= OnCameraMove;
-		inputReader.mouseControlCameraEnableEvent -= OnMouseControlCameraEnable;
-		inputReader.mouseControlCameraDisableEvent -= OnMouseControlCameraDisable;
+		inputReader.enableMouseControlCameraEvent -= OnEnableMouseControlCamera;
+		inputReader.disableMouseControlCameraEvent -= OnDisableMouseControlCamera;
 	}
 
-	private void OnMouseControlCameraDisable()
+	private void OnDisableMouseControlCamera()
 	{
 		isMouseControlled = false;
 
@@ -45,7 +45,7 @@ public class CameraManager : MonoBehaviour
 		freeLookVCam.m_YAxis.m_InputAxisValue = 0;
 	}
 
-	private void OnMouseControlCameraEnable()
+	private void OnEnableMouseControlCamera()
 	{
 		isMouseControlled = true;
 
