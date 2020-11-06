@@ -9,5 +9,5 @@ public class ActorSO : ScriptableObject
 {
 	public string ActorName { get => _actorName; }
 
-	[SerializeField] private string _actorName;
+	[SerializeField] private string _actorName = default;
 }

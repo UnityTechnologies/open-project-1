@@ -7,20 +7,20 @@ using UnityEngine.Playables;
 
 public class CutsceneTrigger : MonoBehaviour
 {
-	[SerializeField] private CutsceneManager _cutSceneManager;
-	[SerializeField] private PlayableDirector _playableDirector;
-	[SerializeField] private bool _playOnStart;
-	[SerializeField] private bool _playOnce;
+	[SerializeField] private CutsceneManager _cutsceneManager = default;
+	[SerializeField] private PlayableDirector _playableDirector = default;
+	[SerializeField] private bool _playOnStart = default;
+	[SerializeField] private bool _playOnce = default;
 
 	private void Start()
 	{
 		if(_playOnStart)
-			_cutSceneManager.Play(_playableDirector);
+			_cutsceneManager.PlayCutscene(_playableDirector);
 	}
 
 	private void OnTriggerEnter(Collider other)
 	{
-		_cutSceneManager.Play(_playableDirector);
+		_cutsceneManager.PlayCutscene(_playableDirector);
 
 		if(_playOnce)
 			Destroy(this);

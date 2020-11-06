@@ -1,29 +1,36 @@
-using System;
-using TMPro;
 using UnityEngine;
 using UnityEngine.Playables;
-using UnityEngine.UI;
 
 public class CutsceneManager : MonoBehaviour
 {
 
 	[SerializeField] private InputReader _inputReader = default;
+	[SerializeField] private DialogueManager _dialogueManager = default;
 
 	private PlayableDirector _activePlayableDirector;
+	private bool _isPaused;
 
-	private void Awake()
-	{ 
-			_inputReader.gameInput.Menus.Advance.performed += ctx => OnAdvance();
+	public bool IsCutscenePlaying => _activePlayableDirector.playableGraph.GetRootPlayable(0).GetSpeed() != 0d;
+
+	private void OnEnable()
+	{
+		_inputReader.gameInput.Dialogues.AdvanceDialogue.performed += ctx => OnAdvance();
 	}
 
-	public void Play(PlayableDirector activePlayableDirector)
+	private void OnDisable()
+	{
+		_inputReader.gameInput.Dialogues.AdvanceDialogue.performed -= ctx => OnAdvance();
+	}
+
+	public void PlayCutscene(PlayableDirector activePlayableDirector)
 	{
 		_activePlayableDirector = activePlayableDirector;
 
+		_isPaused = false;
 		_activePlayableDirector.Play();
 		_activePlayableDirector.stopped += ctx => CutsceneEnded();
 
-		DisableGameplayInput(); 
+		EnableDialogueInput();
 	}
 
 	public void CutsceneEnded()
@@ -31,30 +38,44 @@ public class CutsceneManager : MonoBehaviour
 		EnableGameplayInput();
 	}
 
-	private void OnAdvance()
+	public void PlayDialogueFromClip(DialogueLineSO dialogueLine)
 	{
-		
+		_dialogueManager.DisplayDialogueLine(dialogueLine);
 	}
 
+	/// <summary>
+	/// This callback is executed when the player presses the button to advance dialogues. If the Timeline is currently paused due to a <c>DialogueControlClip</c>, it will resume its playback.
+	/// </summary>
+	private void OnAdvance()
+	{
+		if (_isPaused)
+			ResumeTimeline();
+	}
+
+	/// <summary>
+	/// Called by <c>DialogueControlClip</c> on the Timeline.
+	/// </summary>
 	public void PauseTimeline()
 	{
+		_isPaused = true;
 		_activePlayableDirector.playableGraph.GetRootPlayable(0).SetSpeed(0);
 	}
 
 	public void ResumeTimeline()
 	{
+		_isPaused = false;
 		_activePlayableDirector.playableGraph.GetRootPlayable(0).SetSpeed(1);
+	}
+
+	private void EnableDialogueInput()
+	{
+		_inputReader.gameInput.Dialogues.Enable();
+		_inputReader.gameInput.Gameplay.Disable();
 	}
 
 	private void EnableGameplayInput()
 	{
 		_inputReader.gameInput.Gameplay.Enable();
-		_inputReader.gameInput.Menus.Disable();
-	}
-
-	private void DisableGameplayInput()
-	{
-		_inputReader.gameInput.Menus.Enable();
-		_inputReader.gameInput.Gameplay.Disable();
+		_inputReader.gameInput.Dialogues.Disable();
 	}
 }
