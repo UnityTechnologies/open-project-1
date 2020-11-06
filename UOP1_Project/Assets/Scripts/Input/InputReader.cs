@@ -2,7 +2,7 @@
 using UnityEngine.InputSystem;
 using UnityEngine.Events;
 
-[CreateAssetMenu(fileName = "Input Reader", menuName = "Game/Input Reader")]
+[CreateAssetMenu(fileName = "InputReader", menuName = "Game/Input Reader")]
 public class InputReader : ScriptableObject, GameInput.IGameplayActions
 {
 	public event UnityAction jumpEvent;
@@ -16,7 +16,7 @@ public class InputReader : ScriptableObject, GameInput.IGameplayActions
 	public event UnityAction enableMouseControlCameraEvent;
 	public event UnityAction disableMouseControlCameraEvent;
 
-	GameInput gameInput;
+	public GameInput gameInput;
 
 	private void OnEnable()
 	{

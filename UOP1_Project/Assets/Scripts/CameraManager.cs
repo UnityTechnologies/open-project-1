@@ -10,7 +10,7 @@ public class CameraManager : MonoBehaviour
 	private bool _isRMBPressed;
 
 	[SerializeField, Range(1f, 5f)]
-	private float speed;
+	private float speed = default;
 
 	public void SetupProtagonistVirtualCamera(Transform target)
 	{
