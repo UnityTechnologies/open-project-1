@@ -14,7 +14,7 @@ public class CutsceneTrigger : MonoBehaviour
 
 	private void Start()
 	{
-		if(_playOnStart)
+		if (_playOnStart)
 			_cutsceneManager.PlayCutscene(_playableDirector);
 	}
 
@@ -22,7 +22,7 @@ public class CutsceneTrigger : MonoBehaviour
 	{
 		_cutsceneManager.PlayCutscene(_playableDirector);
 
-		if(_playOnce)
+		if (_playOnce)
 			Destroy(this);
 	}
 }

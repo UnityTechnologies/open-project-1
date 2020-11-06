@@ -186,7 +186,7 @@ public class ReorderableList
 #if UNITY_5_6_OR_NEWER
 		verticalSpacing = EditorGUIUtility.standardVerticalSpacing;
 #else
-			verticalSpacing = 2f;
+		verticalSpacing = 2f;
 #endif
 		headerHeight = 18f;
 		footerHeight = 13f;
@@ -823,7 +823,8 @@ public class ReorderableList
 			while (property.NextVisible(enterChildren) && !SerializedProperty.EqualContents(property, end))
 			{
 
-				menu.AddItem(new GUIContent(property.name), false, userData => {
+				menu.AddItem(new GUIContent(property.name), false, userData =>
+				{
 
 					//sort based on the property selected then apply the changes
 
@@ -1945,7 +1946,8 @@ public class ReorderableList
 			sortList();
 		}
 
-		selection.Sort((a, b) => {
+		selection.Sort((a, b) =>
+		{
 
 			int d1 = dragList.GetIndexFromSelection(a);
 			int d2 = dragList.GetIndexFromSelection(b);
@@ -2121,7 +2123,7 @@ public class ReorderableList
 #if UNITY_2018_3_OR_NEWER
 			iconPagePopup = EditorGUIUtility.IconContent("ShurikenPopup", "Select page");
 #else
-				iconPagePopup = EditorGUIUtility.IconContent("MiniPopupNoBg", "Select page");
+			iconPagePopup = EditorGUIUtility.IconContent("MiniPopupNoBg", "Select page");
 #endif
 			paginationText = new GUIStyle();
 			paginationText.margin = new RectOffset(2, 2, 0, 0);
@@ -2237,7 +2239,8 @@ public class ReorderableList
 		internal void SortByIndex()
 		{
 
-			System.Array.Sort(elements, (a, b) => {
+			System.Array.Sort(elements, (a, b) =>
+			{
 
 				if (b.selected)
 				{
@@ -2327,7 +2330,8 @@ public class ReorderableList
 			states = new Dictionary<int, bool>();
 			isExpanded = property.isExpanded;
 
-			Iterate(this, property, (DragElement e, SerializedProperty p, int index) => {
+			Iterate(this, property, (DragElement e, SerializedProperty p, int index) =>
+			{
 
 				e.states[index] = p.isExpanded;
 			});
@@ -2338,7 +2342,8 @@ public class ReorderableList
 
 			property.isExpanded = isExpanded;
 
-			Iterate(this, property, (DragElement e, SerializedProperty p, int index) => {
+			Iterate(this, property, (DragElement e, SerializedProperty p, int index) =>
+			{
 
 				p.isExpanded = e.states[index];
 			});
@@ -2844,7 +2849,8 @@ public class ReorderableList
 		internal static void SortOnProperty(SerializedProperty list, int length, bool descending, string propertyName)
 		{
 
-			BubbleSort(list, length, (p1, p2) => {
+			BubbleSort(list, length, (p1, p2) =>
+			{
 
 				SerializedProperty a = p1.FindPropertyRelative(propertyName);
 				SerializedProperty b = p2.FindPropertyRelative(propertyName);
@@ -2864,7 +2870,8 @@ public class ReorderableList
 		internal static void SortOnType(SerializedProperty list, int length, bool descending, SerializedPropertyType type)
 		{
 
-			BubbleSort(list, length, (p1, p2) => {
+			BubbleSort(list, length, (p1, p2) =>
+			{
 
 				int comparision = Compare(p1, p2, descending, type);
 
@@ -3059,10 +3066,10 @@ public class ReorderableList
 			dragDropValidationParams[2] = property;
 			dragDropValidationParams[3] = exactType ? 1 : 0;
 #else
-				dragDropValidationParams = GetParams(ref dragDropValidationParams, 3);
-				dragDropValidationParams[0] = references;
-				dragDropValidationParams[1] = type;
-				dragDropValidationParams[2] = property;
+			dragDropValidationParams = GetParams(ref dragDropValidationParams, 3);
+			dragDropValidationParams[0] = references;
+			dragDropValidationParams[1] = type;
+			dragDropValidationParams[2] = property;
 #endif
 			return dragDropValidation.Invoke(null, dragDropValidationParams) as Object;
 		}

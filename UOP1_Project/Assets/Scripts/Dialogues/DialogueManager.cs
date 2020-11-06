@@ -26,7 +26,7 @@ public class DialogueManager : MonoBehaviour
 	/// This function is also called by <c>DialogueBehaviour</c> from clips on Timeline during cutscenes.
 	/// </summary>
 	/// <param name="dialogueLine"></param>
-    public void DisplayDialogueLine(DialogueLineSO dialogueLine)
+	public void DisplayDialogueLine(DialogueLineSO dialogueLine)
 	{
 		//TODO: Interface with a UIManager to allow displayal of the line of dialogue in the UI
 		Debug.Log("A line of dialogue has been spoken: \"" + dialogueLine.Sentence + "\" by " + dialogueLine.Actor.ActorName);
