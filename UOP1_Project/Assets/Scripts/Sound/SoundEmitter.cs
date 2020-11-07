@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
+using UOP1.Pool;
+using System;
 
 [RequireComponent (typeof(AudioSource))]
-public class SoundEmitter : MonoBehaviour
+public class SoundEmitter : MonoBehaviour, IPoolable
 {
 	private AudioSource _audioSource;
-
-	public bool initialPool = false;
 
 	private float _lastUseTimestamp = 0;
 
@@ -24,6 +24,17 @@ public class SoundEmitter : MonoBehaviour
 		_audioSource.playOnAwake = false;
     }
 
+	public void OnRequest()
+	{
+		gameObject.SetActive(true);
+	}
+
+	public void OnReturn(Action onReturned)
+	{
+		StopSound();
+		gameObject.SetActive(false);
+	}
+
 	public void PlaySound(AudioClip clip, SoundEmitterSettings settings, Vector3 position = default)
 	{
 		_audioSource.clip = clip;
@@ -31,6 +42,11 @@ public class SoundEmitter : MonoBehaviour
 		_audioSource.transform.position = position;
 		_lastUseTimestamp = settings.Loop ? Mathf.Infinity : Time.realtimeSinceStartup + clip.length;
 		_audioSource.Play();
+
+		if (!settings.Loop)
+		{
+			StartCoroutine(FinishedPlaying(clip.length));
+		}
 	}
 
 	private void ApplySettings(AudioSource source, SoundEmitterSettings settings)
@@ -75,5 +91,11 @@ public class SoundEmitter : MonoBehaviour
 	public float LastUseTimestamp()
 	{
 		return _lastUseTimestamp;
+	}
+
+	IEnumerator FinishedPlaying(float clipLength)
+	{
+		yield return new WaitForSeconds(clipLength);
+		SoundManager.Instance.Pool.Return(this);
 	}
 }
