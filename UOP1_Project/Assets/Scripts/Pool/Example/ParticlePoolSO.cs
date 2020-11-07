@@ -3,7 +3,7 @@ using UOP1.Pool;
 using UOP1.Factory;
 
 [CreateAssetMenu(fileName = "NewParticlePool", menuName = "Pool/Particle Pool")]
-public class ParticlePoolSO : ComponentPool<PoolableParticle>
+public class ParticlePoolSO : ComponentPoolSO<PoolableParticle>
 {
 	[SerializeField]
 	private ParticleFactorySO _factory;

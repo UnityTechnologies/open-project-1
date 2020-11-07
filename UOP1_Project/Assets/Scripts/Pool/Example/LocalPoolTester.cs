@@ -13,7 +13,7 @@ public class LocalPoolTester : MonoBehaviour
 	private ParticleFactorySO _factory;
 
 	private IEnumerator Start()
-    {
+	{
 		_factory = ScriptableObject.CreateInstance<ParticleFactorySO>();
 		_factory.Prefab = _prefab;
 		_pool = ScriptableObject.CreateInstance<ParticlePoolSO>();
