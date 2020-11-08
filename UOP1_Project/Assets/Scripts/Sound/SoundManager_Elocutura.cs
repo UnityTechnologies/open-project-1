@@ -82,7 +82,7 @@ public class SoundManager_Elocutura : MonoBehaviour
 	#endregion
 
 	#region play sounds functions
-	public SoundEmitter PlaySound(AudioClip clip, SoundEmitterSettings settings, Vector3 position = default)
+	public SoundEmitter PlaySound(AudioClip clip, AudioConfigurationSO settings, Vector3 position = default)
 	{
 		SoundEmitter soundEmitter = _pool.Request();
 		if (soundEmitter != null)

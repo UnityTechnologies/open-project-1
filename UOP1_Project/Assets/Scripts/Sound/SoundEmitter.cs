@@ -35,28 +35,27 @@ public class SoundEmitter : MonoBehaviour, IPoolable
 		gameObject.SetActive(false);
 	}
 
-	public void PlaySound(AudioClip clip, SoundEmitterSettings settings, Vector3 position = default)
+	public void PlaySound(AudioClip clip, AudioConfigurationSO settings, Vector3 position = default)
 	{
 		_audioSource.clip = clip;
 		ApplySettings(_audioSource, settings);
 		_audioSource.transform.position = position;
-		_lastUseTimestamp = settings.Loop ? Mathf.Infinity : Time.realtimeSinceStartup + clip.length;
+		//_lastUseTimestamp = settings.Loop ? Mathf.Infinity : Time.realtimeSinceStartup + clip.length;
 		_audioSource.Play();
 
-		if (!settings.Loop)
-		{
-			StartCoroutine(FinishedPlaying(clip.length));
-		}
+		//if (!settings.Loop)
+		//{
+		//	StartCoroutine(FinishedPlaying(clip.length));
+		//}
 	}
 
-	private void ApplySettings(AudioSource source, SoundEmitterSettings settings)
+	private void ApplySettings(AudioSource source, AudioConfigurationSO settings)
 	{
 		source.outputAudioMixerGroup = settings.OutputAudioMixerGroup;
 		source.mute = settings.Mute;
 		source.bypassEffects = settings.BypassEffects;
 		source.bypassListenerEffects = settings.BypassListenerEffects;
 		source.bypassReverbZones = settings.BypassReverbZones;
-		source.loop = settings.Loop;
 		source.priority = settings.Priority;
 		source.volume = settings.Volume;
 		source.pitch = settings.Pitch;

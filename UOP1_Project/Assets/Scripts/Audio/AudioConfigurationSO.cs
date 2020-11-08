@@ -1,15 +1,14 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Audio;
 
-public class SoundEmitterSettings
+[CreateAssetMenu(menuName = "Audio/Audio Configuration")]
+public class AudioConfigurationSO : ScriptableObject
 {
 	public AudioMixerGroup OutputAudioMixerGroup = null;
 	public bool Mute = false;
 	public bool BypassEffects = false;
 	public bool BypassListenerEffects = false;
 	public bool BypassReverbZones = false;
-	public bool Loop = false;
 	public int Priority = 128;
 	public float Volume = 1f;
 	public float Pitch = 1f;
