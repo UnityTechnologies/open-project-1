@@ -10,15 +10,14 @@ namespace UOP1.StateMachine
 		public string CurrentState;
 		public bool debug;
 #endif
-		[Tooltip("Set the initial state of this StateMachine")]
-		[SerializeField] private ScriptableObjects.StateSO _initialStateSO = null;
+		[SerializeField] private ScriptableObjects.TransitionTableSO _transitionTableSO = default;
 
 		private readonly Dictionary<Type, Component> _cachedComponents = new Dictionary<Type, Component>();
 		private State _currentState;
 
 		private void Awake()
 		{
-			_currentState = _initialStateSO.GetState(this);
+			_currentState = _transitionTableSO.GetInitialState(this);
 			_currentState.OnStateEnter();
 #if UNITY_EDITOR
 			CurrentState = _currentState.Name;
