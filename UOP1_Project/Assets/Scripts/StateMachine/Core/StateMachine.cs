@@ -7,7 +7,7 @@ namespace UOP1.StateMachine
 	public class StateMachine : MonoBehaviour
 	{
 		[Tooltip("Set the initial state of this StateMachine")]
-		[SerializeField] private ScriptableObjects.StateSO _initialStateSO = null;
+		[SerializeField] private ScriptableObjects.TransitionTableSO _transitionTableSO = default;
 
 #if UNITY_EDITOR
 		[Space]
@@ -20,7 +20,7 @@ namespace UOP1.StateMachine
 
 		private void Awake()
 		{
-			_currentState = _initialStateSO.GetState(this);
+			_currentState = _transitionTableSO.GetInitialState(this);
 			_currentState.OnStateEnter();
 #if UNITY_EDITOR
 			_debugger.Awake(this, _currentState._originSO.name);
