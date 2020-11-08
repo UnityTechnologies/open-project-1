@@ -16,7 +16,7 @@ namespace UOP1.StateMachine.ScriptableObjects
 			var state = new State();
 			createdInstances.Add(this, state);
 
-			state.Name = name;
+			state._originSO = this;
 			state._stateMachine = stateMachine;
 			state._transitions = new StateTransition[0];
 			state._actions = GetActions(_actions, stateMachine, createdInstances);

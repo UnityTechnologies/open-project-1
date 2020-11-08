@@ -12,6 +12,7 @@ namespace UOP1.StateMachine.ScriptableObjects
 
 			var action = CreateAction();
 			createdInstances.Add(this, action);
+			action._originSO = this;
 			action.Awake(stateMachine);
 			return action;
 		}
