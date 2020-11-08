@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Random = UnityEngine.Random;
 
-public class AudioSystem : MonoBehaviour
+public class AudioSystem__RKS13D : MonoBehaviour
 {
 
 	private bool _sfxMute;

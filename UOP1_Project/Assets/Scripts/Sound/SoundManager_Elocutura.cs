@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
 
-public class SoundManager : MonoBehaviour
+public class SoundManager_Elocutura : MonoBehaviour
 {
-	public static SoundManager Instance;
+	public static SoundManager_Elocutura Instance;
 
 	[Header ("Init Variables")]
 	[Tooltip ("Amount of sound emitters created on Start")]
@@ -27,7 +27,7 @@ public class SoundManager : MonoBehaviour
 
 	private void Awake()
 	{
-		if (SoundManager.Instance)
+		if (SoundManager_Elocutura.Instance)
 		{
 			Debug.LogWarning($"One sound manager already present in the game, destroying {name}.");
 			Destroy(this);

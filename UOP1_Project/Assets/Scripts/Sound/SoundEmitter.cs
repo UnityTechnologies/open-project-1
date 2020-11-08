@@ -96,6 +96,6 @@ public class SoundEmitter : MonoBehaviour, IPoolable
 	IEnumerator FinishedPlaying(float clipLength)
 	{
 		yield return new WaitForSeconds(clipLength);
-		SoundManager.Instance.Pool.Return(this);
+		SoundManager_Elocutura.Instance.Pool.Return(this);
 	}
 }
