@@ -4,39 +4,35 @@ using UnityEngine;
 
 public class DissolveHelper : MonoBehaviour
 {
-    [SerializeField]
-    ParticleSystem _dissolveParticles;
-    [SerializeField]
-    MeshRenderer _renderer;
-    [SerializeField]
-    float dissolveTime = 1;
+    [SerializeField] ParticleSystem _dissolveParticles;
+    [SerializeField] MeshRenderer _renderer;
+    [SerializeField] float _dissolveTime = 1f;
 
-    public InputReader inputReader;
+    private MaterialPropertyBlock _materialPropertyBlock;
 
-    MaterialPropertyBlock materialPropertyBlock;
-
-    void Start() {
-        if (materialPropertyBlock == null) 
+	private void Start() {
+        if (_materialPropertyBlock == null) 
         {
-            materialPropertyBlock = new MaterialPropertyBlock();
+            _materialPropertyBlock = new MaterialPropertyBlock();
         }
-        setParticleSystem();
+
+        SetParticleSystemDuration();
     }
 
-    public void triggerDissolve() 
+    public void TriggerDissolve()
     {
         StartCoroutine(DissolveCoroutine());
     }
 
-    void OnValidate() 
+	private void OnValidate() 
     {
-        setParticleSystem();
+        SetParticleSystemDuration();
     }
 
-    void setParticleSystem()
+	private void SetParticleSystemDuration()
     {
-        var mainModule = _dissolveParticles.main;
-        mainModule.duration = dissolveTime - 0.3f;
+        ParticleSystem.MainModule mainModule = _dissolveParticles.main;
+        mainModule.duration = _dissolveTime - 0.3f;
     }
 
     public IEnumerator DissolveCoroutine() 
@@ -44,13 +40,14 @@ public class DissolveHelper : MonoBehaviour
         float normalizedDeltaTime = 0;
 
         _dissolveParticles.Play();
-        while(normalizedDeltaTime < dissolveTime) 
+
+        while(normalizedDeltaTime < _dissolveTime) 
         {
-            // dissolve logic
             normalizedDeltaTime += Time.deltaTime;
-            float remappedValue = VFXUtil.RemapValue(normalizedDeltaTime, 0, dissolveTime, 0, 1);
-            materialPropertyBlock.SetFloat("_Dissolve", remappedValue);
-            _renderer.SetPropertyBlock(materialPropertyBlock);
+            float remappedValue = VFXUtil.RemapValue(normalizedDeltaTime, 0, _dissolveTime, 0, 1);
+            _materialPropertyBlock.SetFloat("_Dissolve", remappedValue);
+            _renderer.SetPropertyBlock(_materialPropertyBlock);
+
             yield return null;
         }
     }
