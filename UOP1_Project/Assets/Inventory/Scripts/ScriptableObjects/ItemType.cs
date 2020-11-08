@@ -7,7 +7,7 @@ public class ItemType : ScriptableObject
 {
 	[Tooltip("The action associated with the item type")]
 	[SerializeField]
-	private string _actionName;
+	private string _actionName = default;
 
 	[Tooltip("The Item's background color in the UI")]
 	[SerializeField] private Color _backgroundColor;
