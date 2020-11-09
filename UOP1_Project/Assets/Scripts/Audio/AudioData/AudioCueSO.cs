@@ -8,7 +8,7 @@ using UnityEngine;
 public class AudioCueSO : ScriptableObject
 {
 	public bool looping = false;
-    [SerializeField] private AudioClipsGroup[] _audioClipGroups = default;
+	[SerializeField] private AudioClipsGroup[] _audioClipGroups = default;
 
 	public AudioClip[] GetClips()
 	{
@@ -44,10 +44,10 @@ public class AudioClipsGroup
 	public AudioClip GetNextClip()
 	{
 		// Fast out if there is only one clip to play
-		if(audioClips.Length == 1)
+		if (audioClips.Length == 1)
 			return audioClips[0];
 
-		if(_nextClipToPlay == -1)
+		if (_nextClipToPlay == -1)
 		{
 			// Index needs to be initialised: 0 if Sequential, random if otherwise
 			_nextClipToPlay = (sequenceMode == SequenceMode.Sequential) ? 0 : UnityEngine.Random.Range(0, audioClips.Length);

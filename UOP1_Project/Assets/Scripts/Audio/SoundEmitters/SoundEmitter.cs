@@ -6,7 +6,7 @@ using UOP1.Pool;
 using System;
 using UnityEngine.Events;
 
-[RequireComponent (typeof(AudioSource))]
+[RequireComponent(typeof(AudioSource))]
 public class SoundEmitter : MonoBehaviour, IPoolable
 {
 	private AudioSource _audioSource;
