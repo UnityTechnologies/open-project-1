@@ -35,6 +35,7 @@ public class CutsceneManager : MonoBehaviour
 
 	public void CutsceneEnded()
 	{
+		UIManager.Instance.CloseUIDialogue();
 		EnableGameplayInput();
 	}
 
