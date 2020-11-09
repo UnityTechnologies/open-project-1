@@ -6,7 +6,7 @@ using UnityEngine.Audio;
 
 public class AudioManager : MonoBehaviour
 {
-	[Tooltip ("Amount of sound emitters created on Start")]
+	[Tooltip("Amount of sound emitters created on Start")]
 	[SerializeField] private int _initialPoolSize = 1;
 	[SerializeField] private SoundEmitter _soundEmitterPrefab = default;
 	[Tooltip("The SoundManager listens to this event, fired by objects in any scene, to play SFXs")]
@@ -40,21 +40,22 @@ public class AudioManager : MonoBehaviour
 	{
 		return group.audioMixer.SetFloat("Volume", NormalizedToMixerValue(volume));
 	}
-	
+
 	public static bool GetGroupVolume(AudioMixerGroup group, out float volume)
 	{
-	        if(group.audioMixer.GetFloat("Volume", out float rawVolume)){
-	                volume = MixerValueNormalized(rawVolume);
-	                return true;
-	        }
-	        volume = default;
-	        return false;
+		if (group.audioMixer.GetFloat("Volume", out float rawVolume))
+		{
+			volume = MixerValueNormalized(rawVolume);
+			return true;
+		}
+		volume = default;
+		return false;
 	}
 
 	// Both MixerValueNormalized and NormalizedToMixerValue functions are used for easier transformations when using UI sliders normalized format
 	private static float MixerValueNormalized(float value)
 	{
-		return  (-(value - 80) / 80) - 1;
+		return (-(value - 80) / 80) - 1;
 	}
 	private static float NormalizedToMixerValue(float normalizedValue)
 	{
@@ -75,7 +76,7 @@ public class AudioManager : MonoBehaviour
 			if (soundEmitter != null)
 			{
 				soundEmitter.PlaySound(clipsToPlay[i], settings, audioCue.looping, position);
-				if(audioCue.looping)
+				if (audioCue.looping)
 					soundEmitter.OnSoundFinishedPlaying += OnSoundEmitterFinishedPlaying;
 			}
 		}

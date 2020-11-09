@@ -7,7 +7,8 @@ public class SoundEmitterFactorySO : ComponentFactorySO<SoundEmitter>
 	[SerializeField]
 	private SoundEmitter _prefab = default;
 
-	public override SoundEmitter Prefab {
+	public override SoundEmitter Prefab
+	{
 		get
 		{
 			return _prefab;
