@@ -10,16 +10,17 @@ public class UIManager : MonoBehaviour
 	private void Start()
 	{
 		Instance = this;
-		CloseUIDialogue(); 
+		CloseUIDialogue();
 	}
 
 	[SerializeField]
 	DialogueUIController dialogueController;
 
-	public void OpenUIDialogue(DialogueLineSO dialogueLine) {
+	public void OpenUIDialogue(DialogueLineSO dialogueLine)
+	{
 
 		dialogueController.gameObject.SetActive(true);
-		dialogueController.SetDialogue( dialogueLine); 
+		dialogueController.SetDialogue(dialogueLine);
 
 	}
 	public void CloseUIDialogue()

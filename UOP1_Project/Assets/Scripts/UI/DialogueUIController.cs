@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using TMPro; 
+using TMPro;
 
 public class DialogueUIController : MonoBehaviour
 {
@@ -10,10 +10,11 @@ public class DialogueUIController : MonoBehaviour
 
 	[SerializeField]
 	TextMeshProUGUI actorNameText;
-	public void SetDialogue(DialogueLineSO dialogueLine) {
-	
+	public void SetDialogue(DialogueLineSO dialogueLine)
+	{
+
 		lineText.text = dialogueLine.Sentence;
-		actorNameText.text = dialogueLine.Actor.ActorName; 
+		actorNameText.text = dialogueLine.Actor.ActorName;
 
 
 	}

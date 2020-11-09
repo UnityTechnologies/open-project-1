@@ -12,7 +12,7 @@ public class LocalizeSceneNameFromSO : MonoBehaviour
 
 	private void Start()
 	{
-		localizationEvent.StringReference = SO.locationName; 
+		localizationEvent.StringReference = SO.locationName;
 
 	}
 
