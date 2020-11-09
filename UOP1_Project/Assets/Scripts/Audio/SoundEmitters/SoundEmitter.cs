@@ -4,49 +4,48 @@ using UnityEngine;
 using UnityEngine.Audio;
 using UOP1.Pool;
 using System;
+using UnityEngine.Events;
 
 [RequireComponent (typeof(AudioSource))]
 public class SoundEmitter : MonoBehaviour, IPoolable
 {
 	private AudioSource _audioSource;
-
 	private float _lastUseTimestamp = 0;
+
+	public event UnityAction<SoundEmitter> OnSoundFinishedPlaying;
 
 	private void Awake()
 	{
-		DontDestroyOnLoad(this);
 		_audioSource = this.GetComponent<AudioSource>();
-	}
-
-	// Start is called before the first frame update
-	void Start()
-    {
 		_audioSource.playOnAwake = false;
-    }
-
-	public void OnRequest()
-	{
-		gameObject.SetActive(true);
 	}
+
+	public void OnRequest() { }
 
 	public void OnReturn(Action onReturned)
 	{
 		StopSound();
-		gameObject.SetActive(false);
 	}
 
-	public void PlaySound(AudioClip clip, AudioConfigurationSO settings, Vector3 position = default)
+	/// <summary>
+	/// Instructs the AudioSource to play a single clip, with optional looping, in a position in 3D space.
+	/// </summary>
+	/// <param name="clip"></param>
+	/// <param name="settings"></param>
+	/// <param name="hasToLoop"></param>
+	/// <param name="position"></param>
+	public void PlaySound(AudioClip clip, AudioConfigurationSO settings, bool hasToLoop, Vector3 position = default)
 	{
 		_audioSource.clip = clip;
 		ApplySettings(_audioSource, settings);
 		_audioSource.transform.position = position;
-		//_lastUseTimestamp = settings.Loop ? Mathf.Infinity : Time.realtimeSinceStartup + clip.length;
+		_audioSource.loop = hasToLoop;
 		_audioSource.Play();
 
-		//if (!settings.Loop)
-		//{
-		//	StartCoroutine(FinishedPlaying(clip.length));
-		//}
+		if (!hasToLoop)
+		{
+			StartCoroutine(FinishedPlaying(clip.length));
+		}
 	}
 
 	private void ApplySettings(AudioSource source, AudioConfigurationSO settings)
@@ -95,6 +94,7 @@ public class SoundEmitter : MonoBehaviour, IPoolable
 	IEnumerator FinishedPlaying(float clipLength)
 	{
 		yield return new WaitForSeconds(clipLength);
-		SoundManager_Elocutura.Instance.Pool.Return(this);
+
+		OnSoundFinishedPlaying.Invoke(this); // The AudioManager will pick this up
 	}
 }

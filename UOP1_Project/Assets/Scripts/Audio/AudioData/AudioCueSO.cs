@@ -7,8 +7,8 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "newAudioCue", menuName = "Audio/Audio Cue")]
 public class AudioCueSO : ScriptableObject
 {
-	[SerializeField] private bool _looping = false;
-    [SerializeField] private AudioClipsGroup[] _audioClipGroups;
+	public bool looping = false;
+    [SerializeField] private AudioClipsGroup[] _audioClipGroups = default;
 
 	public AudioClip[] GetClips()
 	{
