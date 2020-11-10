@@ -1,4 +1,6 @@
+using System;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.Playables;
 
 public class CutsceneManager : MonoBehaviour
@@ -11,15 +13,14 @@ public class CutsceneManager : MonoBehaviour
 	private bool _isPaused;
 
 	public bool IsCutscenePlaying => _activePlayableDirector.playableGraph.GetRootPlayable(0).GetSpeed() != 0d;
-
 	private void OnEnable()
 	{
-		_inputReader.gameInput.Dialogues.AdvanceDialogue.performed += ctx => OnAdvance();
+		_inputReader.GameInput.Dialogues.AdvanceDialogue.performed += HandleOnAdvanceInput;
 	}
 
 	private void OnDisable()
 	{
-		_inputReader.gameInput.Dialogues.AdvanceDialogue.performed -= ctx => OnAdvance();
+		_inputReader.GameInput.Dialogues.AdvanceDialogue.performed -= HandleOnAdvanceInput;
 	}
 
 	public void PlayCutscene(PlayableDirector activePlayableDirector)
@@ -28,10 +29,12 @@ public class CutsceneManager : MonoBehaviour
 
 		_isPaused = false;
 		_activePlayableDirector.Play();
-		_activePlayableDirector.stopped += ctx => CutsceneEnded();
+		_activePlayableDirector.stopped += HandlePlayableDirectorStop;
 
 		EnableDialogueInput();
 	}
+
+	private void HandlePlayableDirectorStop(PlayableDirector director) => CutsceneEnded();
 
 	public void CutsceneEnded()
 	{
@@ -42,6 +45,8 @@ public class CutsceneManager : MonoBehaviour
 	{
 		_dialogueManager.DisplayDialogueLine(dialogueLine);
 	}
+
+	private void HandleOnAdvanceInput(InputAction.CallbackContext ctx) => OnAdvance();
 
 	/// <summary>
 	/// This callback is executed when the player presses the button to advance dialogues. If the Timeline is currently paused due to a <c>DialogueControlClip</c>, it will resume its playback.
@@ -69,13 +74,13 @@ public class CutsceneManager : MonoBehaviour
 
 	private void EnableDialogueInput()
 	{
-		_inputReader.gameInput.Dialogues.Enable();
-		_inputReader.gameInput.Gameplay.Disable();
+		_inputReader.GameInput.Dialogues.Enable();
+		_inputReader.GameInput.Gameplay.Disable();
 	}
 
 	private void EnableGameplayInput()
 	{
-		_inputReader.gameInput.Gameplay.Enable();
-		_inputReader.gameInput.Dialogues.Disable();
+		_inputReader.GameInput.Gameplay.Enable();
+		_inputReader.GameInput.Dialogues.Disable();
 	}
 }
