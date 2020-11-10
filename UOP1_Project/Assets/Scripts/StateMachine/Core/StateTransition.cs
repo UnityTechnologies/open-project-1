@@ -2,12 +2,18 @@
 {
 	public class StateTransition : IStateComponent
 	{
-		private readonly State _targetState;
-		private readonly StateCondition[] _conditions;
-		private readonly int[] _resultGroups;
-		private readonly bool[] _results;
+		private State _targetState;
+		private StateCondition[] _conditions;
+		private int[] _resultGroups;
+		private bool[] _results;
 
+		internal StateTransition() { }
 		public StateTransition(State targetState, StateCondition[] conditions, int[] resultGroups = null)
+		{
+			Init(targetState, conditions, resultGroups);
+		}
+
+		internal void Init(State targetState, StateCondition[] conditions, int[] resultGroups = null)
 		{
 			_targetState = targetState;
 			_conditions = conditions;
