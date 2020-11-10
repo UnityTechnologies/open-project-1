@@ -38,6 +38,10 @@ public class ClickToPlaceHelper : MonoBehaviour
 		{
 			_spawnPosition = hit.point + Vector3.up * _verticalOffset;
 
+			if (currentGUIEvent.type == EventType.MouseMove)
+			{
+				HandleUtility.Repaint();
+			}
 			if (currentGUIEvent.type == EventType.MouseDown
 				&& currentGUIEvent.button == 0) // Wait for Left mouse button down
 			{
