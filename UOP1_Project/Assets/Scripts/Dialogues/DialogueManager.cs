@@ -16,7 +16,7 @@ public class DialogueManager : MonoBehaviour
 	/// <param name="firstLine"></param>
 	public void BeginDialogue(DialogueLineSO firstLine)
 	{
-		_inputReader.gameInput.Dialogues.Enable();
+		_inputReader.EnableDialogueInput();
 
 		DisplayDialogueLine(firstLine);
 	}
