@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+﻿using UOP1.StateMachine.ScriptableObjects;
 
 namespace UOP1.StateMachine
 {
@@ -7,7 +7,7 @@ namespace UOP1.StateMachine
 	/// </summary>
 	public abstract class StateAction : IStateComponent
 	{
-		internal ScriptableObject _originSO;
+		internal StateActionSO _originSO;
 
 		/// <summary>
 		/// Called every frame the <see cref="StateMachine"/> is in a <see cref="State"/> with this <see cref="StateAction"/>.

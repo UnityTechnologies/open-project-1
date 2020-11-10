@@ -5,6 +5,13 @@ namespace UOP1.StateMachine.ScriptableObjects
 {
 	public abstract class StateConditionSO : ScriptableObject
 	{
+		[SerializeField]
+		[Tooltip("The condition will only be evaluated once each frame and cached for subsequent uses.\r\n\r\nThe caching is based on each instance of the State Machine and of this Scriptable Object.")]
+		internal bool cacheResult = true;
+
+		/// <summary>
+		/// Will create a new custom <see cref="Condition"/> or use an existing one inside <paramref name="createdInstances"/>.
+		/// </summary>
 		internal StateCondition GetCondition(StateMachine stateMachine, bool expectedResult, Dictionary<ScriptableObject, object> createdInstances)
 		{
 			if (createdInstances.TryGetValue(this, out var cond))

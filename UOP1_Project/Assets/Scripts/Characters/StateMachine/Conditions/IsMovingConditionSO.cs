@@ -25,7 +25,7 @@ public class IsMovingCondition : Condition
 		_treshold = treshold;
 	}
 
-	public override bool Statement()
+	protected override bool Statement()
 	{
 		Vector3 movementVector = _characterScript.movementInput;
 		movementVector.y = 0f;
