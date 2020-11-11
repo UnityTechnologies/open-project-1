@@ -18,13 +18,13 @@ void MainLight_float(float3 WorldPos, out float3 Direction, out float3 Color, ou
 
 	#if !defined(_MAIN_LIGHT_SHADOWS) || defined(_RECEIVE_SHADOWS_OFF)
 		ShadowAtten = 1.0h;
-	#endif
-
-	ShadowSamplingData shadowSamplingData = GetMainLightShadowSamplingData();
-	float shadowStrength = GetMainLightShadowStrength();
-	ShadowAtten = SampleShadowmap(shadowCoord, TEXTURE2D_ARGS(_MainLightShadowmapTexture,
-	sampler_MainLightShadowmapTexture),
-	shadowSamplingData, shadowStrength, false);
+	#else
+        ShadowSamplingData shadowSamplingData = GetMainLightShadowSamplingData();
+        float shadowStrength = GetMainLightShadowStrength();
+        ShadowAtten = SampleShadowmap(shadowCoord, TEXTURE2D_ARGS(_MainLightShadowmapTexture,
+        sampler_MainLightShadowmapTexture),
+        shadowSamplingData, shadowStrength, false);
+    #endif
 #endif
 }
 
