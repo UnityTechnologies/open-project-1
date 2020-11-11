@@ -1,25 +1,24 @@
 ![Unity Open Projects](https://imgur.com/Y0svl0w.png)
-# Unity Open Project #1
+### Unity Open Project #1: Chop Chop
+# Devlog 1: The toon shader
 
-Welcome! This is the repository for the first Unity **Open Project**, an initiative where Unity and the community collaborate together to create **a small game**, in an open source way. As of now the game is still unnamed so we just refer to it as *Open Project #1*.
+You've landed on the repository for the first Unity **Open Project**, an initiative where Unity and the community collaborate together to create a small **open-source game demo**.
 
-## Follow the progress
-The [dedicated sub-forum](https://forum.unity.com/forums/open-projects.531/) on the Unity Forums is where the Unity team and the whole community discuss and brainstorm ideas.
+This branch in particular contains the **demo assets** associated with the first "devlog" video, which takes an in-depth look at **the toon shading** created for the game. To watch the video, go to [insert link].
 
-The [public roadmap](https://open.codecks.io/unity-open-project-1) is the central location to know what's coming to the game. Also a great way to find something to contribute on!  
+**Note:** This branch (`devlog-1-toon-shader`) doesn't contain the full project, but a trimmed-down version which focuses specifically on the toon shading and its components. We did it so it's faster for you to import, and easier to explore and learn from. We also updated it to a newer Unity version (see below) so you can take its learnings and apply them to the games you are developing now. In time, we will make small updates to this branch or backport fixes when needed, but don't expect it to be updated with new features and to stay in sync with `main`.
+
+To find the full project and contribute to it, go to the [main branch](https://github.com/UnityTechnologies/open-project-1).
+
+## Unity version
+Normally, the development of the game takes place in Unity 2019.4 LTS. However for this video we branched off and **upgraded it to 2020.2**. On the [main branch](https://github.com/UnityTechnologies/open-project-1) development continues on 2019.4 LTS as usual.
+
+## License
+The assets contained in this branch are covered by the same open-source license that covers the rest of the game ([Apache License 2.0](https://github.com/UnityTechnologies/open-project-1/blob/main/LICENSE)), so you are free to use them for your own projects.
 
 ## Contribute
-We would love to get your contributions into the game! Whether you create code, art, narrative, sounds; whether you feel you are experienced enough or not; there is probably something you can add to it.
-
-To learn all about contributing, head to the [Contribution Guidelines](https://docs.google.com/document/d/1PwBF4yQl69RxvVHZ2m2iiy5pYjd9QO-VcuXWDjB7QwA/edit#).  
-⚠ Please **create a thread [on the forum](https://forum.unity.com/forums/open-projects.531/) there before starting to work on big contributions!** 
-
-If you feel like taking on some **bugs**, check out the [Issues page](https://github.com/UnityTechnologies/open-project-1/issues) on this very repo. In fact, another thing you could help with is by doing some **QA testing**: download the [latest release](https://github.com/UnityTechnologies/open-project-1/releases) of the game, play it, and report issues in the appropriate page. That's also a great way to be part of this project!
-
-This project is built on **Unity 2019.4 LTS**, whatever latest patch is available.
-
-## Play the game
-Just want to try the game out? Head to the [release page](https://github.com/UnityTechnologies/open-project-1/releases) and grab the latest version.
+Open Projects is an open-source game, so we'd love your contributions! However, we don't take contributions on this branch so please don't open PRs against it.
+To take part in the development, go to [the main branch](https://github.com/UnityTechnologies/open-project-1) and find all the instructions on how to contribute in its [Readme](https://github.com/UnityTechnologies/open-project-1/blob/main/README.md).
 
 ##
 
