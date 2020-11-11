@@ -1,5 +1,4 @@
-﻿using UnityEditor;
-using UnityEngine;
+﻿using UnityEngine;
 
 [ExecuteInEditMode]
 [AddComponentMenu("UOP1/Tools/Click to Place")]
@@ -9,13 +8,12 @@ public class ClickToPlaceHelper : MonoBehaviour
 	[SerializeField] private float _verticalOffset = 0.1f;
 
 	private Vector3 _targetPosition;
-	private bool _targeting = false;
 
-	public bool targeting => _targeting;
+	public bool IsTargeting { get; private set; }
 
 	private void OnDrawGizmos()
 	{
-		if (_targeting)
+		if (IsTargeting)
 		{
 			Gizmos.color = Color.green;
 			Gizmos.DrawCube(_targetPosition, Vector3.one * 0.3f);
@@ -24,7 +22,7 @@ public class ClickToPlaceHelper : MonoBehaviour
 
 	public void BeginTargeting()
 	{
-		_targeting = true;
+		IsTargeting = true;
 		_targetPosition = transform.position;
 	}
 
@@ -35,7 +33,7 @@ public class ClickToPlaceHelper : MonoBehaviour
 
 	public void EndTargeting()
 	{
-		_targeting = false;
+		IsTargeting = false;
 		transform.position = _targetPosition;
 	}
 }

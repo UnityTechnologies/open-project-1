@@ -4,15 +4,15 @@ using UnityEngine;
 [CustomEditor(typeof(ClickToPlaceHelper))]
 public class ClickToPlaceHelperEditor : Editor
 {
-	private ClickToPlaceHelper helper => target as ClickToPlaceHelper;
+	private ClickToPlaceHelper _clickHelper => target as ClickToPlaceHelper;
 
 	public override void OnInspectorGUI()
 	{
 		base.OnInspectorGUI();
 
-		if (GUILayout.Button("Place at Mouse cursor") && !helper.targeting)
+		if (GUILayout.Button("Place at Mouse cursor") && !_clickHelper.IsTargeting)
 		{
-			helper.BeginTargeting();
+			_clickHelper.BeginTargeting();
 			SceneView.duringSceneGui += DuringSceneGui;
 		}
 	}
@@ -30,7 +30,7 @@ public class ClickToPlaceHelperEditor : Editor
 
 		if (Physics.Raycast(ray, out RaycastHit hit))
 		{
-			helper.UpdateTargeting(hit.point);
+			_clickHelper.UpdateTargeting(hit.point);
 		}
 
 		switch (currentGUIEvent.type)
@@ -41,7 +41,7 @@ public class ClickToPlaceHelperEditor : Editor
 			case EventType.MouseDown:
 				if (currentGUIEvent.button == 0) // Wait for Left mouse button down
 				{
-					helper.EndTargeting();
+					_clickHelper.EndTargeting();
 					SceneView.duringSceneGui -= DuringSceneGui;
 					currentGUIEvent.Use(); // This consumes the event, so that other controls/buttons won't be able to use it
 				}
