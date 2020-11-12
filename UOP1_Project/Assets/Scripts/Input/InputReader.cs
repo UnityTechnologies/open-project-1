@@ -37,7 +37,7 @@ public class InputReader : ScriptableObject, GameInput.IGameplayActions, GameInp
 
 	private void OnDisable()
 	{
-		DisableControls();
+		DisableAllInput();
 	}
 
 	public void OnAttack(InputAction.CallbackContext context)
@@ -131,7 +131,7 @@ public class InputReader : ScriptableObject, GameInput.IGameplayActions, GameInp
 		gameInput.Dialogues.Disable();
 	}
 
-	public void DisableControls()
+	public void DisableAllInput()
 	{
 		gameInput.Gameplay.Disable();
 		gameInput.Dialogues.Disable();
