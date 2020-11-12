@@ -35,5 +35,5 @@ public class AnimatorParameterAction : StateAction
 		_animator.SetBool(_parameterHash, _newValue);
 	}
 
-	public override void OnUpdate()	{ }
+	public override void OnUpdate() { }
 }
