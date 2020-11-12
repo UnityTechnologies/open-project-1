@@ -17,22 +17,24 @@ public class DialogueBehaviour : PlayableBehaviour
 	/// </summary>
 	public override void ProcessFrame(Playable playable, FrameData info, object playerData)
 	{
-		if (_dialoguePlayed)
-			return;
-
-		// Need to ask the CutsceneManager if the cutscene is playing, since the graph is not actually stopped/paused: it's just going at speed 0.
-		if (playable.GetGraph().IsPlaying()
-			&& cutsceneManager.IsCutscenePlaying)
+		if (Application.isPlaying)  //TODO: Find a way to "play" dialogue lines even when scrubbing the Timeline not in Play Mode
 		{
-			//TODO: Find a way to "play" dialogue lines even when scrubbing the Timeline not in Play Mode
-			if (_dialogueLine != null)
+			if (_dialoguePlayed)
+				return;
+
+			// Need to ask the CutsceneManager if the cutscene is playing, since the graph is not actually stopped/paused: it's just going at speed 0.
+			if (playable.GetGraph().IsPlaying()
+				&& cutsceneManager.IsCutscenePlaying)
 			{
-				cutsceneManager.PlayDialogueFromClip(_dialogueLine);
-				_dialoguePlayed = true;
-			}
-			else
-			{
-				Debug.LogWarning("This clip contains no DialogueLine");
+				if (_dialogueLine != null)
+				{
+					cutsceneManager.PlayDialogueFromClip(_dialogueLine);
+					_dialoguePlayed = true;
+				}
+				else
+				{
+					Debug.LogWarning("This clip contains no DialogueLine");
+				}
 			}
 		}
 	}
