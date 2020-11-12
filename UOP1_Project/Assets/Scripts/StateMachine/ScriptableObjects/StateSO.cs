@@ -8,6 +8,9 @@ namespace UOP1.StateMachine.ScriptableObjects
 	{
 		[SerializeField] private StateActionSO[] _actions = null;
 
+		/// <summary>
+		/// Will create a new state or return an existing one inside <paramref name="createdInstances"/>.
+		/// </summary>
 		internal State GetState(StateMachine stateMachine, Dictionary<ScriptableObject, object> createdInstances)
 		{
 			if (createdInstances.TryGetValue(this, out var obj))

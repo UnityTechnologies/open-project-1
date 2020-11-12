@@ -10,7 +10,10 @@ namespace UOP1.StateMachine.ScriptableObjects
 	{
 		[SerializeField] private TransitionItem[] _transitions = default;
 
-		public State GetInitialState(StateMachine stateMachine)
+		/// <summary>
+		/// Will get the initial state and instantiate all subsequent states, transitions, actions and conditions.
+		/// </summary>
+		internal State GetInitialState(StateMachine stateMachine)
 		{
 			var states = new List<State>();
 			var transitions = new List<StateTransition>();
