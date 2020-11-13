@@ -3,7 +3,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.Events;
 
 [CreateAssetMenu(fileName = "InputReader", menuName = "Game/Input Reader")]
-public class InputReader : ScriptableObject, GameInput.IGameplayActions
+public class InputReader : ScriptableObject, GameInput.IGameplayActions, GameInput.IMenusActions
 {
 	public event UnityAction jumpEvent;
 	public event UnityAction jumpCanceledEvent;
@@ -16,6 +16,14 @@ public class InputReader : ScriptableObject, GameInput.IGameplayActions
 	public event UnityAction enableMouseControlCameraEvent;
 	public event UnityAction disableMouseControlCameraEvent;
 
+	// MenuEvents
+	public event UnityAction<Vector2> MoveSelectionMenuEvent = delegate { };
+	public event UnityAction MouseMoveMenuEvent = delegate { };
+	public event UnityAction ConfirmMenuEvent = delegate { };
+	public event UnityAction CancelMenuEvent = delegate { };
+	public event UnityAction CloseMenuEvent = delegate { };
+
+
 	public GameInput gameInput;
 
 	private void OnEnable()
@@ -24,14 +32,15 @@ public class InputReader : ScriptableObject, GameInput.IGameplayActions
 		{
 			gameInput = new GameInput();
 			gameInput.Gameplay.SetCallbacks(this);
+			gameInput.Menus.SetCallbacks(this);
 		}
 
-		gameInput.Gameplay.Enable();
+		EnableGameplayInput();
 	}
 
 	private void OnDisable()
 	{
-		gameInput.Gameplay.Disable();
+		DisableControls();
 	}
 
 	public void OnAttack(InputAction.CallbackContext context)
@@ -101,4 +110,50 @@ public class InputReader : ScriptableObject, GameInput.IGameplayActions
 
 	private bool IsDeviceMouse(InputAction.CallbackContext context) => context.control.device.name == "Mouse";
 
+	public void OnMoveSelection(InputAction.CallbackContext context)
+	{
+		if (context.phase == InputActionPhase.Performed)
+			MoveSelectionMenuEvent(context.ReadValue<Vector2>());
+	}
+
+	public void OnConfirm(InputAction.CallbackContext context)
+	{
+		if (context.phase == InputActionPhase.Performed)
+			ConfirmMenuEvent();
+	}
+
+	public void OnCancel(InputAction.CallbackContext context)
+	{
+		if (context.phase == InputActionPhase.Performed)
+			CancelMenuEvent();
+	}
+
+	public void OnMouseMove(InputAction.CallbackContext context)
+	{
+		if (context.phase == InputActionPhase.Performed)
+			MouseMoveMenuEvent();
+	}
+
+	public void OnCloseMenu(InputAction.CallbackContext context)
+	{
+		if (context.phase == InputActionPhase.Performed)
+			CloseMenuEvent();
+	}
+
+	public void EnableMenuInput()
+	{
+		gameInput.Gameplay.Disable();
+		gameInput.Menus.Enable();
+	}
+	public void EnableGameplayInput()
+	{
+		gameInput.Gameplay.Enable();
+		gameInput.Menus.Disable();
+	}
+
+	public void DisableControls()
+	{
+		gameInput.Gameplay.Disable();
+		gameInput.Menus.Disable();
+	}
 }
