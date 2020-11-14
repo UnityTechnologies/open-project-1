@@ -2,6 +2,7 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
+[AddComponentMenu("UI/SelectableUIElement")]
 public class SelectableUIElement : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, ISelectHandler
 {
 	private MenuInput _menuInput;

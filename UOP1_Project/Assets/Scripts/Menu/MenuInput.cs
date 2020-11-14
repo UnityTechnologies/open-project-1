@@ -4,8 +4,8 @@ using UnityEngine.EventSystems;
 
 public class MenuInput : MonoBehaviour
 {
-	[SerializeField] private GameObject _currentSelection;
-	[SerializeField] private GameObject _mouseSelection;
+	private GameObject _currentSelection;
+	private GameObject _mouseSelection;
 	[SerializeField] private InputReader _inputReader;
 
 	private void OnEnable()
@@ -81,9 +81,10 @@ public class MenuInput : MonoBehaviour
 	/// <param name="uiElement"></param>
 	public void UpdateSelection(GameObject uiElement) => _currentSelection = uiElement;
 
-	private void OnGUI()
-	{
-		GUILayout.Box($"_currentSelection: {(_currentSelection != null ? _currentSelection.name : "null")}");
-		GUILayout.Box($"_mouseSelection: {(_mouseSelection != null ? _mouseSelection.name : "null")}");
-	}
+	// debug
+	// private void OnGUI()
+	// {
+	// 	GUILayout.Box($"_currentSelection: {(_currentSelection != null ? _currentSelection.name : "null")}");
+	// 	GUILayout.Box($"_mouseSelection: {(_mouseSelection != null ? _mouseSelection.name : "null")}");
+	// }
 }
