@@ -12,17 +12,17 @@ public class MenuInput : MonoBehaviour
 	public bool IsMouseActive { get; private set; }
 	private void OnEnable()
 	{
-		_inputReader.MouseMoveMenuEvent += HandleMoveCursor;
-		_inputReader.MoveSelectionMenuEvent += HandleMoveSelection;
+		_inputReader.Menu.MouseMoveMenuEvent += HandleMoveCursor;
+		_inputReader.Menu.MoveSelectionMenuEvent += HandleMoveSelection;
 	}
 
 	private void OnDisable()
 	{
-		_inputReader.MouseMoveMenuEvent -= HandleMoveCursor;
-		_inputReader.MoveSelectionMenuEvent -= HandleMoveSelection;
+		_inputReader.Menu.MouseMoveMenuEvent -= HandleMoveCursor;
+		_inputReader.Menu.MoveSelectionMenuEvent -= HandleMoveSelection;
 	}
 
-	private void HandleMoveSelection(Vector2 dir)
+	private void HandleMoveSelection()
 	{
 		DisableCursor();
 

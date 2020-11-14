@@ -3,7 +3,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.Events;
 
 [CreateAssetMenu(fileName = "InputReader", menuName = "Game/Input Reader")]
-public class InputReader : ScriptableObject, GameInput.IGameplayActions, GameInput.IMenusActions
+public class InputReader : ScriptableObject, GameInput.IGameplayActions
 {
 	public event UnityAction jumpEvent;
 	public event UnityAction jumpCanceledEvent;
@@ -16,23 +16,16 @@ public class InputReader : ScriptableObject, GameInput.IGameplayActions, GameInp
 	public event UnityAction enableMouseControlCameraEvent;
 	public event UnityAction disableMouseControlCameraEvent;
 
-	// MenuEvents
-	public event UnityAction<Vector2> MoveSelectionMenuEvent = delegate { };
-	public event UnityAction MouseMoveMenuEvent = delegate { };
-	public event UnityAction ConfirmMenuEvent = delegate { };
-	public event UnityAction CancelMenuEvent = delegate { };
-	public event UnityAction CloseMenuEvent = delegate { };
-
-
 	public GameInput gameInput;
+	public MenuInputReader Menu { get; private set; }
 
 	private void OnEnable()
 	{
 		if (gameInput == null)
 		{
 			gameInput = new GameInput();
+			Menu = new MenuInputReader(gameInput);
 			gameInput.Gameplay.SetCallbacks(this);
-			gameInput.Menus.SetCallbacks(this);
 		}
 
 		EnableGameplayInput();
@@ -109,36 +102,6 @@ public class InputReader : ScriptableObject, GameInput.IGameplayActions, GameInp
 	}
 
 	private bool IsDeviceMouse(InputAction.CallbackContext context) => context.control.device.name == "Mouse";
-
-	public void OnMoveSelection(InputAction.CallbackContext context)
-	{
-		if (context.phase == InputActionPhase.Performed)
-			MoveSelectionMenuEvent(context.ReadValue<Vector2>());
-	}
-
-	public void OnConfirm(InputAction.CallbackContext context)
-	{
-		if (context.phase == InputActionPhase.Performed)
-			ConfirmMenuEvent();
-	}
-
-	public void OnCancel(InputAction.CallbackContext context)
-	{
-		if (context.phase == InputActionPhase.Performed)
-			CancelMenuEvent();
-	}
-
-	public void OnMouseMove(InputAction.CallbackContext context)
-	{
-		if (context.phase == InputActionPhase.Performed)
-			MouseMoveMenuEvent();
-	}
-
-	public void OnCloseMenu(InputAction.CallbackContext context)
-	{
-		if (context.phase == InputActionPhase.Performed)
-			CloseMenuEvent();
-	}
 
 	public void EnableMenuInput()
 	{

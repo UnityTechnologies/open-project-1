@@ -2,41 +2,22 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace Menus
+public class SelectableUIElement : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-	public class SelectableUIElement : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+	private MenuInput _menuInput;
+
+	private void Awake()
 	{
-		private MenuInput _menuInput;
-		[SerializeField] private InputReader _inputReader;
+		_menuInput = transform.root.gameObject.GetComponentInChildren<MenuInput>();
+	}
 
-		private void Awake()
-		{
-			_menuInput = transform.root.gameObject.GetComponentInChildren<MenuInput>();
-		}
+	public void OnPointerEnter(PointerEventData eventData)
+	{
+		_menuInput.HandleMouseEnter(gameObject);
+	}
 
-		private void OnEnable()
-		{
-			// _inputReader.MoveSelectionMenuEvent += InputReaderOnMoveSelectionMenuEvent;
-		}
-
-		private void OnDisable()
-		{
-			// _inputReader.MoveSelectionMenuEvent -= InputReaderOnMoveSelectionMenuEvent;
-		}
-
-		private void InputReaderOnMoveSelectionMenuEvent(Vector2 arg0)
-		{
-			_menuInput.HandleMouseExit(gameObject);
-		}
-
-		public void OnPointerEnter(PointerEventData eventData)
-		{
-			_menuInput.HandleMouseEnter(gameObject);
-		}
-
-		public void OnPointerExit(PointerEventData eventData)
-		{
-			_menuInput.HandleMouseExit(gameObject);
-		}
+	public void OnPointerExit(PointerEventData eventData)
+	{
+		_menuInput.HandleMouseExit(gameObject);
 	}
 }
