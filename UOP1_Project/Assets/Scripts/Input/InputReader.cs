@@ -145,4 +145,6 @@ public class InputReader : ScriptableObject, GameInput.IGameplayActions, GameInp
 		gameInput.Gameplay.Disable();
 		gameInput.Menus.Enable();
 	}
+
+	public bool LeftMouseDown() => Mouse.current.leftButton.isPressed;
 }

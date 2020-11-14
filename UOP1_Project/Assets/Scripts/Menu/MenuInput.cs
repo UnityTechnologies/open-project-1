@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 
 public class MenuInput : MonoBehaviour
 {
@@ -73,6 +74,19 @@ public class MenuInput : MonoBehaviour
 		// deselect UI element if mouse moves away from it
 		_mouseSelection = null;
 		EventSystem.current.SetSelectedGameObject(null);
+	}
+
+	/// <summary>
+	/// Method interactable UI elements should call on Submit interaction to determine whether to continue or not.
+	/// </summary>
+	/// <param name="o"></param>
+	/// <returns></returns>
+	public bool AllowsSubmitOccurance(GameObject o)
+	{
+				// if LMB is not down, there is no edge case to handle, allow the event to continue
+		return !_inputReader.LeftMouseDown()
+				// if we know mouse & keyboard are on different elements, do not allow interaction to continue
+		       || _mouseSelection != null && _mouseSelection == _currentSelection;
 	}
 
 	/// <summary>
