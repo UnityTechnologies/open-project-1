@@ -10,4 +10,3 @@ SelectableUIELement send messages to the MenuInput when a mouse is over them
 
 ##TODO
 - mouse click activates the currently selected UI element (even if the mouse is not over it)
-- if the keyboard or gamepad navigates the selection away from a UI element which the mouse is over, you must move the mouse out of the game object's bounds and re-enter to select it again.

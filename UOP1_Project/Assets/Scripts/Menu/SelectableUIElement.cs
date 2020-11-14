@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class SelectableUIElement : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+public class SelectableUIElement : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, ISelectHandler
 {
 	private MenuInput _menuInput;
 
@@ -19,5 +19,10 @@ public class SelectableUIElement : MonoBehaviour, IPointerEnterHandler, IPointer
 	public void OnPointerExit(PointerEventData eventData)
 	{
 		_menuInput.HandleMouseExit(gameObject);
+	}
+
+	public void OnSelect(BaseEventData eventData)
+	{
+		_menuInput.UpdateSelection(gameObject);
 	}
 }
