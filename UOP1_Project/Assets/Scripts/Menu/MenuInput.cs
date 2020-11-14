@@ -6,7 +6,6 @@ public class MenuInput : MonoBehaviour
 	private GameObject _currentSelection;
 	private GameObject _mouseSelection;
 	[SerializeField] private InputReader _inputReader;
-	public bool IsMouseActive { get; private set; }
 	private void OnEnable()
 	{
 		_inputReader.Menu.MouseMoveMenuEvent += HandleMoveCursor;
@@ -44,7 +43,6 @@ public class MenuInput : MonoBehaviour
 	private void DisableCursor()
 	{
 		Cursor.visible = false;
-		IsMouseActive = false;
 	}
 
 	private void HandleMoveCursor()
@@ -55,7 +53,6 @@ public class MenuInput : MonoBehaviour
 	private void EnableCursor()
 	{
 		Cursor.visible = true;
-		IsMouseActive = true;
 	}
 
 	private void StoreSelection(GameObject uiElement)
