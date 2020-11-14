@@ -551,6 +551,17 @@ public class @GameInput : IInputActionCollection, IDisposable
                     ""isPartOfComposite"": false
                 },
                 {
+                    ""name"": """",
+                    ""id"": ""b03f649e-d5ec-4fad-8614-6a69620c5345"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardOrGamepad"",
+                    ""action"": ""Confirm"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
                     ""name"": ""Gamepad Left Stick"",
                     ""id"": ""abfca31e-4360-48f9-89ac-897570e32b3c"",
                     ""path"": ""2DVector(mode=1)"",

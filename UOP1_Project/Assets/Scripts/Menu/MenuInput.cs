@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class MenuInput : MonoBehaviour
@@ -24,18 +21,22 @@ public class MenuInput : MonoBehaviour
 
 	private void HandleMoveSelection()
 	{
+		// _currentSelection will be the start UI element, destination is taken care of by the EventSystem for us
+
 		DisableCursor();
 
 		// occurs when mouse is on top of some button, and we hit a gamepad or keyboard key to change the selection
-		var exitingMouseMode = EventSystem.current.currentSelectedGameObject == _currentSelection;
+		var mouseIsOverSelectionStart = _mouseSelection == _currentSelection;
 
-		if (exitingMouseMode)
+		if (mouseIsOverSelectionStart)
 		{
+			// fire pointer exit event because we don't want the button to be in the 'highlighted' state
 			ExecuteEvents.Execute(EventSystem.current.currentSelectedGameObject, new PointerEventData(EventSystem.current),
 				ExecuteEvents.pointerExitHandler);
-			EventSystem.current.SetSelectedGameObject(_currentSelection);
 		}
 
+		// if mouse has moved from a button to empty space we store its last interactable
+		// if we receive a move command, we use that stored position to recenter focus before the move is executed
 		if (EventSystem.current.currentSelectedGameObject == null)
 			EventSystem.current.SetSelectedGameObject(_mouseSelection);
 	}
@@ -61,17 +62,19 @@ public class MenuInput : MonoBehaviour
 	{
 		EventSystem.current.SetSelectedGameObject(uiElement);
 		_currentSelection = uiElement;
+		_mouseSelection = uiElement;
 	}
 
 	public void HandleMouseEnter(GameObject uiElement)
 	{
 		StoreSelection(uiElement);
 	}
+
 	public void HandleMouseExit(GameObject uiElement)
 	{
+		// deselect UI element if mouse moves away from it
 		if (EventSystem.current.currentSelectedGameObject == uiElement)
 		{
-			_mouseSelection = uiElement;
 			EventSystem.current.SetSelectedGameObject(null);
 		}
 	}
