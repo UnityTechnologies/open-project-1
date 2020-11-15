@@ -1,12 +1,18 @@
 ![Unity Open Projects](https://imgur.com/Y0svl0w.png)
-# Unity Open Project #1
+# Unity Open Project #1: Chop Chop
 
-Welcome! This is the repository for the first Unity **Open Project**, an initiative where Unity and the community collaborate together to create **a small game**, in an open source way. As of now the game is still unnamed so we just refer to it as *Open Project #1*.
+Welcome! This is the repository for the first Unity **Open Project**, an initiative where Unity and the community collaborate together to create a small **open-source game demo**.
+
+The first game, which is currently under development, is an action-adventure titled _Chop Chop_ ([more info](https://open.codecks.io/unity-open-project-1/decks/32/card/126-what-is-this)).
+
+![OP1 WIP Screenshot](https://imgur.com/eK7l8TG.png)
+_A work in progress screenshot of the main character_
 
 ## Follow the progress
-The [dedicated sub-forum](https://forum.unity.com/forums/open-projects.531/) on the Unity Forums is where the Unity team and the whole community discuss and brainstorm ideas.  
-The [public roadmap](https://open.codecks.io/unity-open-project-1) is the central location to know what's coming to the game. Also a great way to find something to contribute on!  
-The [#open-projects channel](https://discord.gg/EZBXA4V) on the Official Unity Discord is where collaborators can meet for quick feedback and non-threaded discussion.
+✍🏻 The [dedicated sub-forum](https://forum.unity.com/forums/open-projects.531/) on the Unity forums is where the Unity team and the whole community discuss and brainstorm ideas.  
+🗺 The [roadmap](https://open.codecks.io/unity-open-project-1) is the central location to know what's coming to the game. Also a great way to find tasks to contribute on!  
+🎬 The Unity team does bi-weekly livestreams on Unity's [YouTube channel](https://www.youtube.com/c/unity/) (subscribe to be notified). Find the past ones [in this playlist](https://www.youtube.com/playlist?list=PLX2vGYjWbI0S6CnkDm0AwVgA6E6L_vJNf).  
+💬 The [#open-projects channel](https://discord.gg/EZBXA4V) on the Official Unity Discord is where collaborators can meet for a quick chat and non-threaded discussion.
 
 ## Contribute
 We would love to get your contributions into the game! Whether you create code, art, narrative, sounds; whether you feel you are experienced enough or not; there is probably something you can add to it.
