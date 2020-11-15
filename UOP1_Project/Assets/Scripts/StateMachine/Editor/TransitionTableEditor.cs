@@ -70,6 +70,10 @@ namespace UOP1.StateMachine.Editor
 
 		private void TransitionTableGUI()
 		{
+			Separator();
+			EditorGUILayout.HelpBox("Click on any State's name to see the Transitions it contains, or click the Pencil/Wrench icon to see its Actions.", MessageType.Info);
+			Separator();
+
 			serializedObject.UpdateIfRequiredOrScript();
 
 			// For each fromState
@@ -144,8 +148,7 @@ namespace UOP1.StateMachine.Editor
 
 				EndFoldoutHeaderGroup();
 				EndVertical();
-				GUILayout.HorizontalSlider(0, 0, 0);
-				Separator();
+				//GUILayout.HorizontalSlider(0, 0, 0);
 				Separator();
 			}
 

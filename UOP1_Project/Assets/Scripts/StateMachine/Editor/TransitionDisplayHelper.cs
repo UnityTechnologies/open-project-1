@@ -21,26 +21,30 @@ namespace UOP1.StateMachine.Editor
 		internal bool Display()
 		{
 			// Transition Header
-			EditorGUI.DrawRect(EditorGUILayout.BeginHorizontal(), ContentStyle.DarkGray);
+			EditorGUI.DrawRect(EditorGUILayout.BeginHorizontal(GUILayout.Height(24)), ContentStyle.DarkGray);
 			{
 				// Target state
+				EditorGUILayout.Space(3f, false);
 				EditorGUILayout.LabelField("To", GUILayout.Width(20));
 				EditorGUILayout.LabelField(SerializedTransition.ToState.objectReferenceValue.name, EditorStyles.boldLabel);
 
+				// TODO: Fix the space in between the labels above and the buttons below
+				// Right now the buttons disappear to the right if the Inspector is made too narrow
+
 				// Move transition up
-				if (GUILayout.Button(EditorGUIUtility.IconContent("scrollup"), GUILayout.Width(35), GUILayout.Height(16)))
+				if (GUILayout.Button(EditorGUIUtility.IconContent("scrollup"), GUILayout.Width(30), GUILayout.Height(18)))
 				{
 					if (_editor.ReorderTransition(SerializedTransition, true))
 						return true;
 				}
 				// Move transition down
-				if (GUILayout.Button(EditorGUIUtility.IconContent("scrolldown"), GUILayout.Width(35), GUILayout.Height(16)))
+				if (GUILayout.Button(EditorGUIUtility.IconContent("scrolldown"), GUILayout.Width(30), GUILayout.Height(18)))
 				{
 					if (_editor.ReorderTransition(SerializedTransition, false))
 						return true;
 				}
 				// Remove transition
-				if (GUILayout.Button(EditorGUIUtility.IconContent("Toolbar Minus"), GUILayout.Width(35), GUILayout.Height(16)))
+				if (GUILayout.Button(EditorGUIUtility.IconContent("Toolbar Minus"), GUILayout.Width(30), GUILayout.Height(18)))
 				{
 					_editor.RemoveTransition(SerializedTransition.Index);
 					return true;
@@ -89,9 +93,12 @@ namespace UOP1.StateMachine.Editor
 				{
 					EditorGUI.PropertyField(new Rect(rect.x, rect.y, 150, rect.height), condition, GUIContent.none);
 				}
-				EditorGUI.LabelField(new Rect(rect.x + rect.width - 120, rect.y, 20, rect.height), "Is");
+				EditorGUI.LabelField(new Rect(rect.x + rect.width - 80, rect.y, 20, rect.height), "Is");
 				EditorGUI.PropertyField(new Rect(rect.x + rect.width - 60, rect.y, 60, rect.height), prop.FindPropertyRelative("ExpectedResult"), GUIContent.none);
-				EditorGUI.PropertyField(new Rect(rect.x + 20, rect.y + EditorGUIUtility.singleLineHeight + 5, 60, rect.height), prop.FindPropertyRelative("Operator"), GUIContent.none);
+
+				// Only display the logic condition if there's another one after this
+				if(index < reorderableList.count - 1)
+					EditorGUI.PropertyField(new Rect(rect.x + 20, rect.y + EditorGUIUtility.singleLineHeight + 5, 60, rect.height), prop.FindPropertyRelative("Operator"), GUIContent.none);
 			};
 
 			reorderableList.onChangedCallback += list => list.serializedProperty.serializedObject.ApplyModifiedProperties();
