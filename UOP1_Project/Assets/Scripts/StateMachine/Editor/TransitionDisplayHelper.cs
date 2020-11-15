@@ -77,22 +77,26 @@ namespace UOP1.StateMachine.Editor
 				var prop = reorderableList.serializedProperty.GetArrayElementAtIndex(index);
 				rect = new Rect(rect.x, rect.y + 2.5f, rect.width, EditorGUIUtility.singleLineHeight);
 				var condition = prop.FindPropertyRelative("Condition");
+
+				// Draw the picker for the Condition SO
 				if (condition.objectReferenceValue != null)
 				{
 					string label = condition.objectReferenceValue.name;
 					GUI.Label(rect, "If");
 					var r = rect;
 					r.x += 20;
-					r.width = 20;
+					r.width = 35;
 					EditorGUI.PropertyField(r, condition, GUIContent.none);
-					r.x += 25;
-					r.width = rect.width;
+					r.x += 40;
+					r.width = rect.width - 120;
 					GUI.Label(r, label, EditorStyles.boldLabel);
 				}
 				else
 				{
 					EditorGUI.PropertyField(new Rect(rect.x, rect.y, 150, rect.height), condition, GUIContent.none);
 				}
+
+				// Draw the boolean value expected by the condition (i.e. "Is True", "Is False")
 				EditorGUI.LabelField(new Rect(rect.x + rect.width - 80, rect.y, 20, rect.height), "Is");
 				EditorGUI.PropertyField(new Rect(rect.x + rect.width - 60, rect.y, 60, rect.height), prop.FindPropertyRelative("ExpectedResult"), GUIContent.none);
 

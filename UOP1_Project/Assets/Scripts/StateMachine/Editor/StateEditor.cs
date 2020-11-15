@@ -57,10 +57,10 @@ namespace UOP1.StateMachine.Editor
 				if (prop.objectReferenceValue != null)
 				{
 					var label = prop.objectReferenceValue.name;
-					r.width = 20;
+					r.width = 35;
 					EditorGUI.PropertyField(r, prop, GUIContent.none);
 					r.width = rect.width - 50;
-					r.x += 25;
+					r.x += 42;
 					GUI.Label(r, label, EditorStyles.boldLabel);
 				}
 				else

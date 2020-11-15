@@ -61,10 +61,20 @@ namespace UOP1.StateMachine.Editor
 
 		private void StateEditorGUI()
 		{
+			Separator();
+
+			// Back button
 			if (GUILayout.Button(EditorGUIUtility.IconContent("scrollleft"), GUILayout.Width(35), GUILayout.Height(20)))
 				_displayStateEditor = false;
 
+
+			Separator();
+			EditorGUILayout.HelpBox("Edit the Actions that a State performs per frame. The order represent the order of execution.", MessageType.Info);
+			Separator();
+
+			// State name
 			EditorGUILayout.LabelField(_cachedStateEditor.target.name, EditorStyles.boldLabel);
+			Separator();
 			_cachedStateEditor.OnInspectorGUI();
 		}
 
