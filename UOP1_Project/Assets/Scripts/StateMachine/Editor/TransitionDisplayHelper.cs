@@ -97,7 +97,7 @@ namespace UOP1.StateMachine.Editor
 				EditorGUI.PropertyField(new Rect(rect.x + rect.width - 60, rect.y, 60, rect.height), prop.FindPropertyRelative("ExpectedResult"), GUIContent.none);
 
 				// Only display the logic condition if there's another one after this
-				if(index < reorderableList.count - 1)
+				if (index < reorderableList.count - 1)
 					EditorGUI.PropertyField(new Rect(rect.x + 20, rect.y + EditorGUIUtility.singleLineHeight + 5, 60, rect.height), prop.FindPropertyRelative("Operator"), GUIContent.none);
 			};
 
