@@ -49,61 +49,61 @@ public class ReplaceTool : EditorWindow
 	{
 		InitDataIfNeeded();
 		EditorGUILayout.Separator();
-        EditorGUILayout.PropertyField(replaceObjectField);
-        EditorGUILayout.Separator();
+		EditorGUILayout.PropertyField(replaceObjectField);
+		EditorGUILayout.Separator();
 
-        EditorGUILayout.LabelField("Selected objects to replace", EditorStyles.boldLabel);
-        EditorGUILayout.Separator();
+		EditorGUILayout.LabelField("Selected objects to replace", EditorStyles.boldLabel);
+		EditorGUILayout.Separator();
 
-        // Saving number of objects to replace.
-        int objectToReplaceCount = data.objectsToReplace != null ? data.objectsToReplace.Length : 0;
-        EditorGUILayout.IntField("Object count", objectToReplaceCount);
-        EditorGUI.indentLevel++;
+		// Saving number of objects to replace.
+		int objectToReplaceCount = data.objectsToReplace != null ? data.objectsToReplace.Length : 0;
+		EditorGUILayout.IntField("Object count", objectToReplaceCount);
+		EditorGUI.indentLevel++;
 
 		// Printing information when no object is selected on scene.
-        if (objectToReplaceCount == 0)
-        {
-            EditorGUILayout.Separator();
-            EditorGUILayout.LabelField("Select objects in the hierarchy to replace them", EditorStyles.wordWrappedLabel);
-        }
+		if (objectToReplaceCount == 0)
+		{
+			EditorGUILayout.Separator();
+			EditorGUILayout.LabelField("Select objects in the hierarchy to replace them", EditorStyles.wordWrappedLabel);
+		}
 
-        // Read-only scroll view with selected game objects.
-        selectObjectScrollPosition = EditorGUILayout.BeginScrollView(selectObjectScrollPosition);
+		// Read-only scroll view with selected game objects.
+		selectObjectScrollPosition = EditorGUILayout.BeginScrollView(selectObjectScrollPosition);
 
-        GUI.enabled = false;
-        if (data && data.objectsToReplace != null)
-        {
-            foreach (var go in data.objectsToReplace)
-            {
-                EditorGUILayout.ObjectField(go, typeof(GameObject), true);
-            }
-        }
-        GUI.enabled = true;
+		GUI.enabled = false;
+		if (data && data.objectsToReplace != null)
+		{
+			foreach (var go in data.objectsToReplace)
+			{
+				EditorGUILayout.ObjectField(go, typeof(GameObject), true);
+			}
+		}
+		GUI.enabled = true;
 
-        EditorGUILayout.EndScrollView();
-        EditorGUI.indentLevel--;
-        EditorGUILayout.Separator();
+		EditorGUILayout.EndScrollView();
+		EditorGUI.indentLevel--;
+		EditorGUILayout.Separator();
 
-        if (GUILayout.Button("Replace"))
-        {
-	        // Check if replace object is assigned.
-	        if (!replaceObjectField.objectReferenceValue)
-	        {
-		        Debug.LogErrorFormat("{0}", "No prefab to replace with!");
-		        return;
-	        }
-	        // Check if there are objects to replace.
-	        if (data.objectsToReplace.Length == 0)
-	        {
-		        Debug.LogErrorFormat("{0}", "No objects to replace!");
-		        return;
-	        }
-	        ReplaceSelectedObjects(data.objectsToReplace, data.replacementPrefab);
+		if (GUILayout.Button("Replace"))
+		{
+			// Check if replace object is assigned.
+			if (!replaceObjectField.objectReferenceValue)
+			{
+				Debug.LogErrorFormat("{0}", "No prefab to replace with!");
+				return;
+			}
+			// Check if there are objects to replace.
+			if (data.objectsToReplace.Length == 0)
+			{
+				Debug.LogErrorFormat("{0}", "No objects to replace!");
+				return;
+			}
+			ReplaceSelectedObjects(data.objectsToReplace, data.replacementPrefab);
 
-        }
+		}
 
-        EditorGUILayout.Separator();
-        serializedData.ApplyModifiedProperties();
+		EditorGUILayout.Separator();
+		serializedData.ApplyModifiedProperties();
 
 	}
 	private void OnInspectorUpdate()
