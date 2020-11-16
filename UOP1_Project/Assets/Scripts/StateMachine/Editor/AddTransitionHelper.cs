@@ -3,7 +3,7 @@ using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
 using UOP1.StateMachine.ScriptableObjects;
-using static UnityEditor.EditorGUILayout;
+using static UnityEditor.EditorGUI;
 
 namespace UOP1.StateMachine.Editor
 {
@@ -24,56 +24,62 @@ namespace UOP1.StateMachine.Editor
 			SetupConditionsList(_list);
 		}
 
-		internal void Display()
+		internal void Display(Rect position)
 		{
+			var rect = position;
+			float listHeight = _list.GetHeight();
+			float singleLineHeight = EditorGUIUtility.singleLineHeight;
+
 			// Display add button only if not already adding a transition
 			if (!_toggle)
 			{
-				if (GUILayout.Button(EditorGUIUtility.IconContent("Toolbar Plus"), GUILayout.Width(35)))
+				position.height = singleLineHeight;
+
+				// Reserve space
+				GUILayoutUtility.GetRect(position.width, position.height);
+
+				if (GUI.Button(position, "Add Transition"))
 				{
 					_toggle = true;
 					SerializedTransition.ClearProperties();
 				}
 
-				if (!_toggle)
-					return;
+				return;
 			}
 
-			var rect = BeginVertical();
-			rect.x += 45;
-			rect.width -= 40;
-			EditorGUI.DrawRect(rect, ContentStyle.LightGray);
-			Separator();
+			// Background
+			{
+				position.height = listHeight + singleLineHeight * 4;
+				DrawRect(position, ContentStyle.LightGray);
+			}
+
+			// Reserve space
+			GUILayoutUtility.GetRect(position.width, position.height);
 
 			// State Fields
-			BeginHorizontal();
 			{
-				Space(50, false);
-
-				StatePropField("From", SerializedTransition.FromState);
-				Space(10, false);
-				StatePropField("To", SerializedTransition.ToState);
+				position.y += 10;
+				position.x += 25;
+				StatePropField(position, "From", SerializedTransition.FromState);
+				position.x = rect.width / 2 + 25;
+				StatePropField(position, "To", SerializedTransition.ToState);
 			}
-			EndHorizontal();
 
 			// Conditions List
-			BeginHorizontal();
 			{
-				Space(50, false);
-				BeginVertical();
-				_list.DoLayoutList();
-				EndVertical();
+				position.y += 30;
+				position.x = rect.x + 10;
+				position.height = listHeight;
+				position.width -= 20;
+				_list.DoList(position);
 			}
-			EndHorizontal();
-
-			Separator();
 
 			// Add and cancel buttons
-			BeginHorizontal();
 			{
-				Space(50, false);
-
-				if (GUILayout.Button("Add Transition"))
+				position.y += position.height + 5;
+				position.height = singleLineHeight;
+				position.width = rect.width / 2 - 20;
+				if (GUI.Button(position, "Add Transition"))
 				{
 					if (SerializedTransition.FromState.objectReferenceValue == null)
 						Debug.LogException(new ArgumentNullException("FromState"));
@@ -87,23 +93,20 @@ namespace UOP1.StateMachine.Editor
 						_toggle = false;
 					}
 				}
-				else if (GUILayout.Button("Cancel"))
+				position.x += rect.width / 2;
+				if (GUI.Button(position, "Cancel"))
 				{
 					_toggle = false;
 				}
 			}
-			EndHorizontal();
-			EndVertical();
 
-			void StatePropField(string label, SerializedProperty prop)
+			void StatePropField(Rect pos, string label, SerializedProperty prop)
 			{
-				BeginVertical();
-				LabelField(label);
-				BeginHorizontal();
-				Space(20, false);
-				PropertyField(prop, GUIContent.none, GUILayout.MaxWidth(180));
-				EndHorizontal();
-				EndVertical();
+				pos.height = singleLineHeight;
+				LabelField(pos, label);
+				pos.x += 40;
+				pos.width /= 4;
+				PropertyField(pos, prop, GUIContent.none);
 			}
 		}
 

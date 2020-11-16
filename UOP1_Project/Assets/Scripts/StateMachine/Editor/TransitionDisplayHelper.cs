@@ -1,6 +1,7 @@
 ﻿using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
+using static UnityEditor.EditorGUI;
 
 namespace UOP1.StateMachine.Editor
 {
@@ -18,42 +19,77 @@ namespace UOP1.StateMachine.Editor
 			_editor = editor;
 		}
 
-		internal bool Display()
+		internal bool Display(ref Rect position)
 		{
-			// Transition Header
-			EditorGUI.DrawRect(EditorGUILayout.BeginHorizontal(GUILayout.Height(24)), ContentStyle.DarkGray);
-			{
-				// Target state
-				EditorGUILayout.Space(3f, false);
-				EditorGUILayout.LabelField("To", GUILayout.Width(20));
-				EditorGUILayout.LabelField(SerializedTransition.ToState.objectReferenceValue.name, EditorStyles.boldLabel);
+			var rect = position;
+			float listHeight = _reorderableList.GetHeight();
+			float singleLineHeight = EditorGUIUtility.singleLineHeight;
 
-				// TODO: Fix the space in between the labels above and the buttons below
-				// Right now the buttons disappear to the right if the Inspector is made too narrow
+			// Reserve space
+			{
+				rect.height = singleLineHeight + 10 + listHeight;
+				GUILayoutUtility.GetRect(rect.width, rect.height);
+				position.y += rect.height + 5;
+			}
+
+			// Background
+			{
+				rect.x += 5;
+				rect.width -= 10;
+				rect.height -= listHeight;
+				DrawRect(rect, ContentStyle.DarkGray);
+			}
+
+			// Transition Header
+			{
+				rect.x += 3;
+				LabelField(rect, "To");
+
+				rect.x += 20;
+				LabelField(rect, SerializedTransition.ToState.objectReferenceValue.name, EditorStyles.boldLabel);
+			}
+
+
+			// Buttons
+			{
+				bool Button(Rect pos, string icon) => GUI.Button(pos, EditorGUIUtility.IconContent(icon));
+
+				var buttonRect = new Rect(
+					x: rect.width - 90,
+					y: rect.y + 5,
+					width: 30,
+					height: 18);
 
 				// Move transition up
-				if (GUILayout.Button(EditorGUIUtility.IconContent("scrollup"), GUILayout.Width(30), GUILayout.Height(18)))
-				{
+				if (Button(buttonRect, "scrollup"))
 					if (_editor.ReorderTransition(SerializedTransition, true))
 						return true;
-				}
+
+				buttonRect.x += 35;
+
 				// Move transition down
-				if (GUILayout.Button(EditorGUIUtility.IconContent("scrolldown"), GUILayout.Width(30), GUILayout.Height(18)))
-				{
+				if (Button(buttonRect, "scrolldown"))
 					if (_editor.ReorderTransition(SerializedTransition, false))
 						return true;
-				}
+
+				buttonRect.x += 35;
+
 				// Remove transition
-				if (GUILayout.Button(EditorGUIUtility.IconContent("Toolbar Minus"), GUILayout.Width(30), GUILayout.Height(18)))
+				if (Button(buttonRect, "Toolbar Minus"))
 				{
 					_editor.RemoveTransition(SerializedTransition.Index);
 					return true;
 				}
 			}
-			EditorGUILayout.EndHorizontal();
 
-			// Conditions
-			_reorderableList.DoLayoutList();
+
+			rect.x = position.x + 5;
+			rect.y += rect.height;
+			rect.width = position.width - 10;
+			rect.height = listHeight;
+
+			// Display conditions
+			_reorderableList.DoList(rect);
 
 			return false;
 		}
