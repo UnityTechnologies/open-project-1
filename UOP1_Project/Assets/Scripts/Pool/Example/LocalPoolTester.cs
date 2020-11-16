@@ -30,7 +30,7 @@ public class LocalPoolTester : MonoBehaviour
 		particle.Play();
 		yield return new WaitForSeconds(particle.main.duration);
 		particle.Stop(true, ParticleSystemStopBehavior.StopEmitting);
-		yield return new WaitUntil(()=>particle.particleCount==0);
+		yield return new WaitUntil(()=> particle.particleCount == 0);
 		_pool.Return(particle);
 	}
 

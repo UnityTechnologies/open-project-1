@@ -7,7 +7,7 @@ using System;
 using UnityEngine.Events;
 
 [RequireComponent(typeof(AudioSource))]
-public class SoundEmitter : MonoBehaviour, IPoolable
+public class SoundEmitter : MonoBehaviour
 {
 	private AudioSource _audioSource;
 	private float _lastUseTimestamp = 0;
@@ -18,13 +18,6 @@ public class SoundEmitter : MonoBehaviour, IPoolable
 	{
 		_audioSource = this.GetComponent<AudioSource>();
 		_audioSource.playOnAwake = false;
-	}
-
-	public void OnRequest() { }
-
-	public void OnReturn(Action onReturned)
-	{
-		StopSound();
 	}
 
 	/// <summary>
