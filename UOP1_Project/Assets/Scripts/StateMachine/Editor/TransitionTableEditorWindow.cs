@@ -51,7 +51,8 @@ namespace UOP1.StateMachine.Editor
 
 		private void Update()
 		{
-			if (!_doRefresh) return;
+			if (!_doRefresh)
+				return;
 
 			CreateListView();
 			_doRefresh = false;
