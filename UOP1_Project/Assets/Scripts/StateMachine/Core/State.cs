@@ -1,9 +1,10 @@
-﻿namespace UOP1.StateMachine
+﻿using UOP1.StateMachine.ScriptableObjects;
+
+namespace UOP1.StateMachine
 {
 	public class State
 	{
-		public string Name { get; internal set; }
-
+		internal StateSO _originSO;
 		internal StateMachine _stateMachine;
 		internal StateTransition[] _transitions;
 		internal StateAction[] _actions;
@@ -11,10 +12,12 @@
 		internal State() { }
 
 		public State(
+			StateSO originSO,
 			StateMachine stateMachine,
 			StateTransition[] transitions,
 			StateAction[] actions)
 		{
+			_originSO = originSO;
 			_stateMachine = stateMachine;
 			_transitions = transitions;
 			_actions = actions;
@@ -50,12 +53,16 @@
 
 		public bool TryGetTransition(out State state)
 		{
+			state = null;
+
 			for (int i = 0; i < _transitions.Length; i++)
 				if (_transitions[i].TryGetTransiton(out state))
-					return true;
+					break;
 
-			state = null;
-			return false;
+			for (int i = 0; i < _transitions.Length; i++)
+				_transitions[i].ClearConditionsCache();
+
+			return state != null;
 		}
 	}
 }
