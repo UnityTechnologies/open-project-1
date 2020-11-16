@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<engine:UXML
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:engine="UnityEngine.UIElements"
+    xmlns:editor="UnityEditor.UIElements"
+    xsi:noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd">
+
+	<engine:VisualElement class="root-container">
+
+		<engine:VisualElement class="table-list-container">
+			<engine:Label class="table-list-title" text="Transition Tables" />
+			<engine:ListView class="table-list" />
+		</engine:VisualElement>
+		
+		<engine:ScrollView class="table-editor-container">
+			<engine:IMGUIContainer class="table-editor" />
+		</engine:ScrollView>
+		
+	</engine:VisualElement>
+	
+</engine:UXML>

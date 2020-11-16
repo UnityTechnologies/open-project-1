@@ -89,32 +89,48 @@ namespace UOP1.StateMachine.Editor
 			// For each fromState
 			for (int i = 0; i < _fromStates.Count; i++)
 			{
-				EditorGUI.DrawRect(BeginVertical(ContentStyle.WithPaddingAndMargins), ContentStyle.LightGray);
+				var stateRect = BeginVertical(ContentStyle.WithPaddingAndMargins);
+				EditorGUI.DrawRect(stateRect, ContentStyle.LightGray);
 
 				var transitions = _transitionsByFromStates[i];
 
 				// State Header
-				BeginHorizontal();
+				var headerRect = BeginHorizontal();
 				{
 					BeginVertical();
 					string label = transitions[0].SerializedTransition.FromState.objectReferenceValue.name;
 					if (i == 0)
 						label += " (Initial State)";
 
-					// State toggle
-					_toggles[i] = BeginFoldoutHeaderGroup(
-						foldout: _toggles[i],
-						content: label,
-						style: ContentStyle.StateListStyle);
+					headerRect.height = EditorGUIUtility.singleLineHeight;
+					GUILayoutUtility.GetRect(headerRect.width, headerRect.height);
+					headerRect.x += 5;
+
+					// Toggle
+					{
+						var toggleRect = headerRect;
+						toggleRect.width -= 140;
+						_toggles[i] = EditorGUI.BeginFoldoutHeaderGroup(toggleRect,
+							foldout: _toggles[i],
+							content: label,
+							style: ContentStyle.StateListStyle);
+					}
+
 					Separator();
 					EndVertical();
 
 					// State Header Buttons
 					{
-						bool Button(string icon) => GUILayout.Button(EditorGUIUtility.IconContent(icon), GUILayout.Width(35), GUILayout.Height(20));
+						bool Button(Rect position, string icon) => GUI.Button(position, EditorGUIUtility.IconContent(icon));
+
+						var buttonRect = new Rect(
+						x: headerRect.width - 105,
+						y: headerRect.y,
+						width: 35,
+						height: 20);
 
 						// Switch to state editor
-						if (Button("SceneViewTools"))
+						if (Button(buttonRect, "SceneViewTools"))
 						{
 							if (_cachedStateEditor == null)
 								_cachedStateEditor = CreateEditor(transitions[0].SerializedTransition.FromState.objectReferenceValue, typeof(StateEditor));
@@ -124,14 +140,18 @@ namespace UOP1.StateMachine.Editor
 							_displayStateEditor = true;
 							return;
 						}
+
+						buttonRect.x += 40;
 						// Move state up
-						if (Button("scrollup"))
+						if (Button(buttonRect, "scrollup"))
 						{
 							if (ReorderState(i, true))
 								return;
 						}
+
+						buttonRect.x += 40;
 						// Move state down
-						if (Button("scrolldown"))
+						if (Button(buttonRect, "scrolldown"))
 						{
 							if (ReorderState(i, false))
 								return;
@@ -145,10 +165,12 @@ namespace UOP1.StateMachine.Editor
 				{
 					DisableAllStateTogglesExcept(i);
 					EditorGUI.BeginChangeCheck();
+
+					stateRect.y += EditorGUIUtility.singleLineHeight * 2;
 					// Display all the transitions in the state
 					foreach (var transition in transitions)
 					{
-						if (transition.Display())
+						if (transition.Display(ref stateRect))
 							return;
 						Separator();
 					}
@@ -166,7 +188,7 @@ namespace UOP1.StateMachine.Editor
 			Space(rect.width - 55);
 
 			// Display add transition button
-			_addTransitionHelper.Display();
+			_addTransitionHelper.Display(rect);
 
 			EndHorizontal();
 		}
