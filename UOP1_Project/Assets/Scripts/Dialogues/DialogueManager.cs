@@ -10,13 +10,46 @@ using UnityEngine.UI;
 /// </summary>
 public class DialogueManager : MonoBehaviour
 { 
-	[SerializeField] private ChoiceBox _choiceBox; // TODO: Remove. // Demonstration purpose only. Delete later. 
+	[SerializeField] private ChoiceBox _choiceBox; // TODO: Demonstration purpose only. Remove or adjust later.
 
 	[SerializeField] private InputReader _inputReader = default;
 
 	private DialogueDataSO _currentDialogueDataSO;
 	private int _counter;
 	private bool _reachedEndOfDialogue { get => _counter >= _currentDialogueDataSO.dialogueLines.Count; }
+
+	/// <summary>
+	/// Displays DialogueData in the UI, one by one.
+	/// </summary>
+	/// <param name="dialogueDataSO"></param>
+	public void DisplayDialogueData(DialogueDataSO dialogueDataSO)
+	{
+		BeginDialogueData(dialogueDataSO);
+
+		DisplayDialogueLine(_currentDialogueDataSO.dialogueLines[_counter]);
+	}
+
+	/// <summary>
+	/// Prepare DialogueManager when first time displaying DialogueData. 
+	/// <param name="dialogueDataSO"></param>
+	private void BeginDialogueData(DialogueDataSO dialogueDataSO)
+	{
+		_counter = 0;
+		_inputReader.EnableDialogueInput();
+		_inputReader.advanceDialogueEvent += OnAdvance;
+		_currentDialogueDataSO = dialogueDataSO;
+	}
+
+	/// <summary>
+	/// Displays a line of dialogue in the UI, by requesting it to the <c>DialogueManager</c>.
+	/// This function is also called by <c>DialogueBehaviour</c> from clips on Timeline during cutscenes.
+	/// </summary>
+	/// <param name="dialogueLine"></param>
+	public void DisplayDialogueLine(DialogueLineSO dialogueLine)
+	{
+		//TODO: Interface with a UIManager to allow displayal of the line of dialogue in the UI
+		Debug.Log("A line of dialogue has been spoken: \"" + dialogueLine.Sentence + "\" by " + dialogueLine.Actor.ActorName);
+	}
 
 	private void OnAdvance()
 	{ 
@@ -39,51 +72,25 @@ public class DialogueManager : MonoBehaviour
 		}
 	}
 
+	private void DisplayChoices(List<Choice> choices)
+	{
+		_inputReader.advanceDialogueEvent -= OnAdvance;
+
+		// TODO: Demonstration purpose only. Remove or adjust later.
+		_choiceBox.Show(_currentDialogueDataSO.Choices, this);
+	}
+
 	public void DialogueEnded()
 	{
 		// TODO: Disable dialogue box.
+
 		Debug.Log("Dialogue Ended");
 		_inputReader.advanceDialogueEvent -= OnAdvance;
 		_inputReader.EnableGameplayInput();
 	}
-
-	private void DisplayChoices(List<Choice> choices)
-	{ 
-		_inputReader.advanceDialogueEvent -= OnAdvance;
-
-		// Demonstration purpose only. Delete later.
-		_choiceBox.Show(_currentDialogueDataSO.Choices, this);
-	}
-
-	public void DisplayDialogueData(DialogueDataSO dialogueDataSO)
-	{
-		BeginDialogueData(dialogueDataSO);
-
-		DisplayDialogueLine(_currentDialogueDataSO.dialogueLines[_counter]); 
-	} 
-
-	private void BeginDialogueData(DialogueDataSO dialogueDataSO)
-	{
-		_counter = 0;
-		_inputReader.EnableDialogueInput();
-		_inputReader.advanceDialogueEvent += OnAdvance;
-		_currentDialogueDataSO = dialogueDataSO;
-	}
-
-	/// <summary>
-	/// Displays a line of dialogue in the UI, by requesting it to the <c>DialogueManager</c>.
-	/// This function is also called by <c>DialogueBehaviour</c> from clips on Timeline during cutscenes.
-	/// </summary>
-	/// <param name="dialogueLine"></param>
-	public void DisplayDialogueLine(DialogueLineSO dialogueLine)
-	{
-		//TODO: Interface with a UIManager to allow displayal of the line of dialogue in the UI
-		Debug.Log("A line of dialogue has been spoken: \"" + dialogueLine.Sentence + "\" by " + dialogueLine.Actor.ActorName);
-	}
 }
 
-// Demonstration purpose only. Delete later.
-// TODO: Remove.
+// TODO: Demonstration purpose only. Remove or adjust later.
 [Serializable]
 public class ChoiceBox	
 {
