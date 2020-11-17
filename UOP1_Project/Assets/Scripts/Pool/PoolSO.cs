@@ -8,7 +8,7 @@ namespace UOP1.Pool
 	/// A generic pool that generates members of type T on-demand via a factory.
 	/// </summary>
 	/// <typeparam name="T">Specifies the type of elements to pool.</typeparam>
-	public abstract class PoolSO<T> : ScriptableObject, IPool<T> where T : IPoolable
+	public abstract class PoolSO<T> : ScriptableObject, IPool<T>
 	{
 		protected readonly Stack<T> _available = new Stack<T>();
 		public abstract IFactory<T> Factory { get; set; }
@@ -20,9 +20,7 @@ namespace UOP1.Pool
 
 		public virtual T Request()
 		{
-			T member = _available.Count > 0 ? _available.Pop() : Create();
-			member.OnRequest();
-			return member;
+			return _available.Count > 0 ? _available.Pop() : Create();
 		}
 
 		public virtual IEnumerable<T> Request(int num = 1)
@@ -37,10 +35,7 @@ namespace UOP1.Pool
 
 		public virtual void Return(T member)
 		{
-			member.OnReturn(() =>
-			{
-				_available.Push(member);
-			});
+			_available.Push(member);
 		}
 
 		public virtual void Return(IEnumerable<T> members)

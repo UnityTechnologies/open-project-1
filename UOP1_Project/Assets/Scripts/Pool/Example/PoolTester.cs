@@ -7,15 +7,22 @@ public class PoolTester : MonoBehaviour
 	[SerializeField]
 	private ParticlePoolSO _pool = default;
 
-	private IEnumerator Start()
+	private void Start()
 	{
-		List<PoolableParticle> particles = _pool.Request(10) as List<PoolableParticle>;
-		foreach (PoolableParticle particle in particles)
+		List<ParticleSystem> particles = _pool.Request(10) as List<ParticleSystem>;
+		foreach (ParticleSystem particle in particles)
 		{
-			particle.transform.position = Random.insideUnitSphere * 5f;
-			particle.Play();
+			StartCoroutine(DoParticleBehaviour(particle));
 		}
-		yield return new WaitForSeconds(5f);
-		_pool.Return(particles);
+	}
+
+	private IEnumerator DoParticleBehaviour(ParticleSystem particle)
+	{
+		particle.transform.position = Random.insideUnitSphere * 5f;
+		particle.Play();
+		yield return new WaitForSeconds(particle.main.duration);
+		particle.Stop(true, ParticleSystemStopBehavior.StopEmitting);
+		yield return new WaitUntil(() => particle.particleCount == 0);
+		_pool.Return(particle);
 	}
 }
