@@ -17,3 +17,9 @@ Scenario goes as follows:
 - keyboard moves selection to button two
 - user hits left mouse button without moving the mouse
 - - without custom handling, system would submit on button two, which is not good.  custom handling stops the submit action before it hits the button's onClick list.
+
+## Setup
+
+- add MenuSystem prefab to scene if not already present
+    - assign references if they are not assigned
+- hit escape to open and close menu
