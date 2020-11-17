@@ -16,7 +16,7 @@ public class IsSlidingCondition : Condition
 		_characterScript = stateMachine.GetComponent<Character>();
 	}
 
-	public override bool Statement()
+	protected override bool Statement()
 	{
 		if (_characterScript.lastHit == null)
 			return false;

@@ -2,21 +2,11 @@
 using UOP1.Factory;
 
 [CreateAssetMenu(fileName = "NewParticleFactory", menuName = "Factory/Particle Factory")]
-public class ParticleFactorySO : ComponentFactorySO<PoolableParticle>
+public class ParticleFactorySO : FactorySO<ParticleSystem>
 {
-	[SerializeField]
-	private PoolableParticle _prefab = default;
-
-	public override PoolableParticle Prefab
+	public override ParticleSystem Create()
 	{
-		get
-		{
-			return _prefab;
-		}
-		set
-		{
-			_prefab = value;
-		}
+		return new GameObject("ParticleSystem").AddComponent<ParticleSystem>();
 	}
 }
 

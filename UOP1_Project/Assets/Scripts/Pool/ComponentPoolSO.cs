@@ -6,7 +6,7 @@ namespace UOP1.Pool
 	/// Implements a Pool for Component types.
 	/// </summary>
 	/// <typeparam name="T">Specifies the component to pool.</typeparam>
-	public abstract class ComponentPoolSO<T> : PoolSO<T> where T : Component, IPoolable
+	public abstract class ComponentPoolSO<T> : PoolSO<T> where T : Component
 	{
 		public abstract int InitialPoolSize { get; set; }
 		private GameObject _poolRootObject;
@@ -27,7 +27,9 @@ namespace UOP1.Pool
 			{
 				InitializePool();
 			}
-			return base.Request();
+			T member = base.Request();
+			member.gameObject.SetActive(true);
+			return member;
 		}
 
 		public override void Return(T member)
@@ -36,6 +38,8 @@ namespace UOP1.Pool
 			{
 				InitializePool();
 			}
+			member.transform.SetParent(_poolRootObject.transform);
+			member.gameObject.SetActive(false);
 			base.Return(member);
 		}
 
@@ -43,6 +47,7 @@ namespace UOP1.Pool
 		{
 			T newMember = base.Create();
 			newMember.transform.SetParent(_poolRootObject.transform);
+			newMember.gameObject.SetActive(false);
 			return newMember;
 		}
 

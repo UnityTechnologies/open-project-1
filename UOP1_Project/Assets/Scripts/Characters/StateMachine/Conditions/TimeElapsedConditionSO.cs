@@ -24,5 +24,5 @@ public class TimeElapsedCondition : Condition
 		_timerLength = timerLength;
 	}
 
-	public override bool Statement() => Time.time >= _startTime + _timerLength;
+	protected override bool Statement() => Time.time >= _startTime + _timerLength;
 }
