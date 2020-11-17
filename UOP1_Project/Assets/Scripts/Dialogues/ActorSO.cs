@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using UnityEngine.Localization;
+using UnityEngine.Localization; 
 /// <summary>
 /// Scriptable Object that represents an "Actor", that is the protagonist of a Dialogue
 /// </summary>
