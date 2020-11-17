@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.Playables;
 
 public class CutsceneManager : MonoBehaviour
@@ -15,34 +14,30 @@ public class CutsceneManager : MonoBehaviour
 
 	private void OnEnable()
 	{
-		_inputReader.advanceDialogueEvent += OnAdvance;
+		_inputReader.gameInput.Dialogues.AdvanceDialogue.performed += ctx => OnAdvance();
 	}
 
 	private void OnDisable()
 	{
-		_inputReader.advanceDialogueEvent -= OnAdvance;
+		_inputReader.gameInput.Dialogues.AdvanceDialogue.performed -= ctx => OnAdvance();
 	}
 
 	public void PlayCutscene(PlayableDirector activePlayableDirector)
 	{
-		_inputReader.EnableDialogueInput();
-
 		_activePlayableDirector = activePlayableDirector;
 
 		_isPaused = false;
 		_activePlayableDirector.Play();
-		_activePlayableDirector.stopped += HandleDirectorStopped;
+		_activePlayableDirector.stopped += ctx => CutsceneEnded();
+
+		EnableDialogueInput();
 	}
 
 	public void CutsceneEnded()
 	{
-		if (_activePlayableDirector != null)
-			_activePlayableDirector.stopped -= HandleDirectorStopped;
-
-		_inputReader.EnableGameplayInput();
+		UIManager.Instance.CloseUIDialogue();
+		EnableGameplayInput();
 	}
-
-	private void HandleDirectorStopped(PlayableDirector director) => CutsceneEnded();
 
 	public void PlayDialogueFromClip(DialogueLineSO dialogueLine)
 	{
@@ -71,5 +66,17 @@ public class CutsceneManager : MonoBehaviour
 	{
 		_isPaused = false;
 		_activePlayableDirector.playableGraph.GetRootPlayable(0).SetSpeed(1);
+	}
+
+	private void EnableDialogueInput()
+	{
+		_inputReader.gameInput.Dialogues.Enable();
+		_inputReader.gameInput.Gameplay.Disable();
+	}
+
+	private void EnableGameplayInput()
+	{
+		_inputReader.gameInput.Gameplay.Enable();
+		_inputReader.gameInput.Dialogues.Disable();
 	}
 }
