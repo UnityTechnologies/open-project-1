@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-public class MenuInputController : MonoBehaviour
+public class MenuController : MonoBehaviour
 {
 	[SerializeField] private GameObject _menuPrefab;
 	private GameObject _menuInstance;
