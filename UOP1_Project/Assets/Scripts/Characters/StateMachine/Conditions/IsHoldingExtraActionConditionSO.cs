@@ -17,7 +17,7 @@ public class IsHoldingExtraActionCondition : Condition
 
 	protected override bool Statement()
 	{
-		if(_protagonistScript.extraActionInput)
+		if (_protagonistScript.extraActionInput)
 		{
 			// Consume the input
 			_protagonistScript.extraActionInput = false;
@@ -27,6 +27,6 @@ public class IsHoldingExtraActionCondition : Condition
 		else
 		{
 			return false;
-		}	
+		}
 	}
 }
