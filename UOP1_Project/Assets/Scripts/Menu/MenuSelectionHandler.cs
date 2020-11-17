@@ -3,22 +3,22 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
-public class MenuInput : MonoBehaviour
+public class MenuSelectionHandler : MonoBehaviour
 {
-	private GameObject _currentSelection;
-	private GameObject _mouseSelection;
+	public GameObject _currentSelection;
+	public GameObject _mouseSelection;
 	[SerializeField] private InputReader _inputReader;
 
 	private void OnEnable()
 	{
-		_inputReader.Menu.MouseMoveMenuEvent += HandleMoveCursor;
-		_inputReader.Menu.MoveSelectionMenuEvent += HandleMoveSelection;
+		_inputReader.MouseMoveMenuEvent += HandleMoveCursor;
+		_inputReader.MoveSelectionMenuEvent += HandleMoveSelection;
 	}
 
 	private void OnDisable()
 	{
-		_inputReader.Menu.MouseMoveMenuEvent -= HandleMoveCursor;
-		_inputReader.Menu.MoveSelectionMenuEvent -= HandleMoveSelection;
+		_inputReader.MouseMoveMenuEvent -= HandleMoveCursor;
+		_inputReader.MoveSelectionMenuEvent -= HandleMoveSelection;
 	}
 
 	/// <summary>
@@ -79,9 +79,8 @@ public class MenuInput : MonoBehaviour
 	/// <summary>
 	/// Method interactable UI elements should call on Submit interaction to determine whether to continue or not.
 	/// </summary>
-	/// <param name="o"></param>
 	/// <returns></returns>
-	public bool AllowsSubmitOccurance(GameObject o)
+	public bool AllowsSubmitOccurance()
 	{
 				// if LMB is not down, there is no edge case to handle, allow the event to continue
 		return !_inputReader.LeftMouseDown()

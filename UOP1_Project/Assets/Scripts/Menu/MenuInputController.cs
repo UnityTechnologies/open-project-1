@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-public class DebugMenu : MonoBehaviour
+public class MenuInputController : MonoBehaviour
 {
 	[SerializeField] private GameObject _menuPrefab;
 	private GameObject _menuInstance;
@@ -9,13 +9,13 @@ public class DebugMenu : MonoBehaviour
 	private void OnEnable()
 	{
 		_inputReader.pauseEvent += OpenMenu;
-		_inputReader.Menu.CloseMenuEvent += CloseMenu;
+		_inputReader.UnpauseMenuEvent += UnpauseMenu;
 	}
 
 	private void OnDisable()
 	{
 		_inputReader.pauseEvent -= OpenMenu;
-		_inputReader.Menu.CloseMenuEvent -= CloseMenu;
+		_inputReader.UnpauseMenuEvent -= UnpauseMenu;
 	}
 
 	private void OpenMenu()
@@ -25,7 +25,7 @@ public class DebugMenu : MonoBehaviour
 		_inputReader.EnableMenuInput();
 	}
 
-	private void CloseMenu()
+	private void UnpauseMenu()
 	{
 		_menuInstance.SetActive(false);
 		_inputReader.EnableGameplayInput();

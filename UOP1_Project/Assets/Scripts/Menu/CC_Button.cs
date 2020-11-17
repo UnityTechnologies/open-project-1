@@ -4,34 +4,34 @@ using UnityEngine.UI;
 // Chop Chop button
 public class CC_Button : Button
 {
-	private MenuInput _menuInput;
+	private MenuSelectionHandler _menuSelectionHandler;
 
 	private void Awake()
 	{
-		_menuInput = transform.root.gameObject.GetComponentInChildren<MenuInput>();
+		_menuSelectionHandler = transform.root.gameObject.GetComponentInChildren<MenuSelectionHandler>();
 	}
 
 	public override void OnPointerEnter(PointerEventData eventData)
 	{
-		_menuInput.HandleMouseEnter(gameObject);
+		_menuSelectionHandler.HandleMouseEnter(gameObject);
 		base.OnPointerEnter(eventData);
 	}
 
 	public override void OnPointerExit(PointerEventData eventData)
 	{
-		_menuInput.HandleMouseExit(gameObject);
+		_menuSelectionHandler.HandleMouseExit(gameObject);
 		base.OnPointerExit(eventData);
 	}
 
 	public override void OnSelect(BaseEventData eventData)
 	{
-		_menuInput.UpdateSelection(gameObject);
+		_menuSelectionHandler.UpdateSelection(gameObject);
 		base.OnSelect(eventData);
 	}
 
 	public override void OnSubmit(BaseEventData eventData)
 	{
-		if (_menuInput.AllowsSubmitOccurance(gameObject))
+		if (_menuSelectionHandler.AllowsSubmitOccurance())
 			base.OnSubmit(eventData);
 	}
 }

@@ -465,7 +465,7 @@ public class @GameInput : IInputActionCollection, IDisposable
             ""id"": ""a6b0dc37-2ef3-420d-990a-eef5df26ae21"",
             ""actions"": [
                 {
-                    ""name"": ""MoveSelection"",
+                    ""name"": ""MoveMenuSelection"",
                     ""type"": ""Value"",
                     ""id"": ""ca8fee63-58a3-49c0-9b34-e74351e25113"",
                     ""expectedControlType"": ""Vector2"",
@@ -497,7 +497,7 @@ public class @GameInput : IInputActionCollection, IDisposable
                     ""interactions"": """"
                 },
                 {
-                    ""name"": ""CloseMenu"",
+                    ""name"": ""Unpause"",
                     ""type"": ""Button"",
                     ""id"": ""a33f8309-65f3-4f8a-8671-c7cb90ef798e"",
                     ""expectedControlType"": ""Button"",
@@ -568,7 +568,7 @@ public class @GameInput : IInputActionCollection, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""MoveSelection"",
+                    ""action"": ""MoveMenuSelection"",
                     ""isComposite"": true,
                     ""isPartOfComposite"": false
                 },
@@ -579,7 +579,7 @@ public class @GameInput : IInputActionCollection, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""KeyboardOrGamepad"",
-                    ""action"": ""MoveSelection"",
+                    ""action"": ""MoveMenuSelection"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -590,7 +590,7 @@ public class @GameInput : IInputActionCollection, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""KeyboardOrGamepad"",
-                    ""action"": ""MoveSelection"",
+                    ""action"": ""MoveMenuSelection"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -601,7 +601,7 @@ public class @GameInput : IInputActionCollection, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""KeyboardOrGamepad"",
-                    ""action"": ""MoveSelection"",
+                    ""action"": ""MoveMenuSelection"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -612,7 +612,7 @@ public class @GameInput : IInputActionCollection, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""KeyboardOrGamepad"",
-                    ""action"": ""MoveSelection"",
+                    ""action"": ""MoveMenuSelection"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -623,7 +623,7 @@ public class @GameInput : IInputActionCollection, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""MoveSelection"",
+                    ""action"": ""MoveMenuSelection"",
                     ""isComposite"": true,
                     ""isPartOfComposite"": false
                 },
@@ -634,7 +634,7 @@ public class @GameInput : IInputActionCollection, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""KeyboardOrGamepad"",
-                    ""action"": ""MoveSelection"",
+                    ""action"": ""MoveMenuSelection"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -645,7 +645,7 @@ public class @GameInput : IInputActionCollection, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""KeyboardOrGamepad"",
-                    ""action"": ""MoveSelection"",
+                    ""action"": ""MoveMenuSelection"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -656,7 +656,7 @@ public class @GameInput : IInputActionCollection, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""KeyboardOrGamepad"",
-                    ""action"": ""MoveSelection"",
+                    ""action"": ""MoveMenuSelection"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -667,7 +667,7 @@ public class @GameInput : IInputActionCollection, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""KeyboardOrGamepad"",
-                    ""action"": ""MoveSelection"",
+                    ""action"": ""MoveMenuSelection"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -678,7 +678,7 @@ public class @GameInput : IInputActionCollection, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""MoveSelection"",
+                    ""action"": ""MoveMenuSelection"",
                     ""isComposite"": true,
                     ""isPartOfComposite"": false
                 },
@@ -689,7 +689,7 @@ public class @GameInput : IInputActionCollection, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""KeyboardOrGamepad"",
-                    ""action"": ""MoveSelection"",
+                    ""action"": ""MoveMenuSelection"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -700,7 +700,7 @@ public class @GameInput : IInputActionCollection, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""KeyboardOrGamepad"",
-                    ""action"": ""MoveSelection"",
+                    ""action"": ""MoveMenuSelection"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -711,7 +711,7 @@ public class @GameInput : IInputActionCollection, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""KeyboardOrGamepad"",
-                    ""action"": ""MoveSelection"",
+                    ""action"": ""MoveMenuSelection"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -722,7 +722,7 @@ public class @GameInput : IInputActionCollection, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""KeyboardOrGamepad"",
-                    ""action"": ""MoveSelection"",
+                    ""action"": ""MoveMenuSelection"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -733,7 +733,7 @@ public class @GameInput : IInputActionCollection, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""MoveSelection"",
+                    ""action"": ""MoveMenuSelection"",
                     ""isComposite"": true,
                     ""isPartOfComposite"": false
                 },
@@ -744,7 +744,7 @@ public class @GameInput : IInputActionCollection, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""KeyboardOrGamepad"",
-                    ""action"": ""MoveSelection"",
+                    ""action"": ""MoveMenuSelection"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -755,7 +755,7 @@ public class @GameInput : IInputActionCollection, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""KeyboardOrGamepad"",
-                    ""action"": ""MoveSelection"",
+                    ""action"": ""MoveMenuSelection"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -766,7 +766,7 @@ public class @GameInput : IInputActionCollection, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""KeyboardOrGamepad"",
-                    ""action"": ""MoveSelection"",
+                    ""action"": ""MoveMenuSelection"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -777,7 +777,7 @@ public class @GameInput : IInputActionCollection, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""KeyboardOrGamepad"",
-                    ""action"": ""MoveSelection"",
+                    ""action"": ""MoveMenuSelection"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -810,7 +810,7 @@ public class @GameInput : IInputActionCollection, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""KeyboardOrGamepad"",
-                    ""action"": ""CloseMenu"",
+                    ""action"": ""Unpause"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -821,7 +821,7 @@ public class @GameInput : IInputActionCollection, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""KeyboardOrGamepad"",
-                    ""action"": ""CloseMenu"",
+                    ""action"": ""Unpause"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -1147,11 +1147,11 @@ public class @GameInput : IInputActionCollection, IDisposable
         m_Gameplay_MouseControlCamera = m_Gameplay.FindAction("MouseControlCamera", throwIfNotFound: true);
         // Menus
         m_Menus = asset.FindActionMap("Menus", throwIfNotFound: true);
-        m_Menus_MoveSelection = m_Menus.FindAction("MoveSelection", throwIfNotFound: true);
+        m_Menus_MoveMenuSelection = m_Menus.FindAction("MoveMenuSelection", throwIfNotFound: true);
         m_Menus_Confirm = m_Menus.FindAction("Confirm", throwIfNotFound: true);
         m_Menus_Cancel = m_Menus.FindAction("Cancel", throwIfNotFound: true);
         m_Menus_MouseMove = m_Menus.FindAction("MouseMove", throwIfNotFound: true);
-        m_Menus_CloseMenu = m_Menus.FindAction("CloseMenu", throwIfNotFound: true);
+        m_Menus_Unpause = m_Menus.FindAction("Unpause", throwIfNotFound: true);
         // Dialogues
         m_Dialogues = asset.FindActionMap("Dialogues", throwIfNotFound: true);
         m_Dialogues_MoveSelection = m_Dialogues.FindAction("MoveSelection", throwIfNotFound: true);
@@ -1294,20 +1294,20 @@ public class @GameInput : IInputActionCollection, IDisposable
     // Menus
     private readonly InputActionMap m_Menus;
     private IMenusActions m_MenusActionsCallbackInterface;
-    private readonly InputAction m_Menus_MoveSelection;
+    private readonly InputAction m_Menus_MoveMenuSelection;
     private readonly InputAction m_Menus_Confirm;
     private readonly InputAction m_Menus_Cancel;
     private readonly InputAction m_Menus_MouseMove;
-    private readonly InputAction m_Menus_CloseMenu;
+    private readonly InputAction m_Menus_Unpause;
     public struct MenusActions
     {
         private @GameInput m_Wrapper;
         public MenusActions(@GameInput wrapper) { m_Wrapper = wrapper; }
-        public InputAction @MoveSelection => m_Wrapper.m_Menus_MoveSelection;
+        public InputAction @MoveMenuSelection => m_Wrapper.m_Menus_MoveMenuSelection;
         public InputAction @Confirm => m_Wrapper.m_Menus_Confirm;
         public InputAction @Cancel => m_Wrapper.m_Menus_Cancel;
         public InputAction @MouseMove => m_Wrapper.m_Menus_MouseMove;
-        public InputAction @CloseMenu => m_Wrapper.m_Menus_CloseMenu;
+        public InputAction @Unpause => m_Wrapper.m_Menus_Unpause;
         public InputActionMap Get() { return m_Wrapper.m_Menus; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1317,9 +1317,9 @@ public class @GameInput : IInputActionCollection, IDisposable
         {
             if (m_Wrapper.m_MenusActionsCallbackInterface != null)
             {
-                @MoveSelection.started -= m_Wrapper.m_MenusActionsCallbackInterface.OnMoveSelection;
-                @MoveSelection.performed -= m_Wrapper.m_MenusActionsCallbackInterface.OnMoveSelection;
-                @MoveSelection.canceled -= m_Wrapper.m_MenusActionsCallbackInterface.OnMoveSelection;
+                @MoveMenuSelection.started -= m_Wrapper.m_MenusActionsCallbackInterface.OnMoveMenuSelection;
+                @MoveMenuSelection.performed -= m_Wrapper.m_MenusActionsCallbackInterface.OnMoveMenuSelection;
+                @MoveMenuSelection.canceled -= m_Wrapper.m_MenusActionsCallbackInterface.OnMoveMenuSelection;
                 @Confirm.started -= m_Wrapper.m_MenusActionsCallbackInterface.OnConfirm;
                 @Confirm.performed -= m_Wrapper.m_MenusActionsCallbackInterface.OnConfirm;
                 @Confirm.canceled -= m_Wrapper.m_MenusActionsCallbackInterface.OnConfirm;
@@ -1329,16 +1329,16 @@ public class @GameInput : IInputActionCollection, IDisposable
                 @MouseMove.started -= m_Wrapper.m_MenusActionsCallbackInterface.OnMouseMove;
                 @MouseMove.performed -= m_Wrapper.m_MenusActionsCallbackInterface.OnMouseMove;
                 @MouseMove.canceled -= m_Wrapper.m_MenusActionsCallbackInterface.OnMouseMove;
-                @CloseMenu.started -= m_Wrapper.m_MenusActionsCallbackInterface.OnCloseMenu;
-                @CloseMenu.performed -= m_Wrapper.m_MenusActionsCallbackInterface.OnCloseMenu;
-                @CloseMenu.canceled -= m_Wrapper.m_MenusActionsCallbackInterface.OnCloseMenu;
+                @Unpause.started -= m_Wrapper.m_MenusActionsCallbackInterface.OnUnpause;
+                @Unpause.performed -= m_Wrapper.m_MenusActionsCallbackInterface.OnUnpause;
+                @Unpause.canceled -= m_Wrapper.m_MenusActionsCallbackInterface.OnUnpause;
             }
             m_Wrapper.m_MenusActionsCallbackInterface = instance;
             if (instance != null)
             {
-                @MoveSelection.started += instance.OnMoveSelection;
-                @MoveSelection.performed += instance.OnMoveSelection;
-                @MoveSelection.canceled += instance.OnMoveSelection;
+                @MoveMenuSelection.started += instance.OnMoveMenuSelection;
+                @MoveMenuSelection.performed += instance.OnMoveMenuSelection;
+                @MoveMenuSelection.canceled += instance.OnMoveMenuSelection;
                 @Confirm.started += instance.OnConfirm;
                 @Confirm.performed += instance.OnConfirm;
                 @Confirm.canceled += instance.OnConfirm;
@@ -1348,9 +1348,9 @@ public class @GameInput : IInputActionCollection, IDisposable
                 @MouseMove.started += instance.OnMouseMove;
                 @MouseMove.performed += instance.OnMouseMove;
                 @MouseMove.canceled += instance.OnMouseMove;
-                @CloseMenu.started += instance.OnCloseMenu;
-                @CloseMenu.performed += instance.OnCloseMenu;
-                @CloseMenu.canceled += instance.OnCloseMenu;
+                @Unpause.started += instance.OnUnpause;
+                @Unpause.performed += instance.OnUnpause;
+                @Unpause.canceled += instance.OnUnpause;
             }
         }
     }
@@ -1418,11 +1418,11 @@ public class @GameInput : IInputActionCollection, IDisposable
     }
     public interface IMenusActions
     {
-        void OnMoveSelection(InputAction.CallbackContext context);
+        void OnMoveMenuSelection(InputAction.CallbackContext context);
         void OnConfirm(InputAction.CallbackContext context);
         void OnCancel(InputAction.CallbackContext context);
         void OnMouseMove(InputAction.CallbackContext context);
-        void OnCloseMenu(InputAction.CallbackContext context);
+        void OnUnpause(InputAction.CallbackContext context);
     }
     public interface IDialoguesActions
     {
