@@ -18,10 +18,8 @@ public class UIManager : MonoBehaviour
 
 	public void OpenUIDialogue(DialogueLineSO dialogueLine)
 	{
-
-		dialogueController.gameObject.SetActive(true);
 		dialogueController.SetDialogue(dialogueLine);
-
+		dialogueController.gameObject.SetActive(true);
 	}
 	public void CloseUIDialogue()
 	{

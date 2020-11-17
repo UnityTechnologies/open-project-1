@@ -2,19 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-
+using UnityEngine.Localization.Components; 
 public class DialogueUIController : MonoBehaviour
 {
 	[SerializeField]
-	TextMeshProUGUI lineText;
+	LocalizeStringEvent lineText;
 
 	[SerializeField]
-	TextMeshProUGUI actorNameText;
+	LocalizeStringEvent actorNameText;
 	public void SetDialogue(DialogueLineSO dialogueLine)
 	{
 
-		lineText.text = dialogueLine.Sentence;
-		actorNameText.text = dialogueLine.Actor.ActorName;
+		lineText.StringReference = dialogueLine.Sentence;
+		actorNameText.StringReference = dialogueLine.Actor.ActorName;
 
 
 	}
