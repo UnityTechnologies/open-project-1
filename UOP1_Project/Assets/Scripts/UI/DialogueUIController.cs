@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-using UnityEngine.Localization.Components; 
+using UnityEngine.Localization.Components;
 public class DialogueUIController : MonoBehaviour
 {
 	[SerializeField]
