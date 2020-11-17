@@ -13,11 +13,11 @@ public class IsMovingConditionSO : StateConditionSO
 public class IsMovingCondition : Condition
 {
 	private float _treshold;
-	private Protagonist _characterScript;
+	private Protagonist _protagonistScript;
 
 	public override void Awake(StateMachine stateMachine)
 	{
-		_characterScript = stateMachine.GetComponent<Protagonist>();
+		_protagonistScript = stateMachine.GetComponent<Protagonist>();
 	}
 
 	public IsMovingCondition(float treshold)
@@ -27,13 +27,13 @@ public class IsMovingCondition : Condition
 
 	protected override bool Statement()
 	{
-		Vector3 movementVector = _characterScript.movementInput;
+		Vector3 movementVector = _protagonistScript.movementInput;
 		movementVector.y = 0f;
 		return movementVector.sqrMagnitude > _treshold;
 	}
 
 	public override void OnStateExit()
 	{
-		_characterScript.movementVector = Vector3.zero;
+		_protagonistScript.movementVector = Vector3.zero;
 	}
 }

@@ -8,20 +8,20 @@ public class IsSlidingConditionSO : StateConditionSO<IsSlidingCondition> { }
 public class IsSlidingCondition : Condition
 {
 	private CharacterController _characterController;
-	private Protagonist _characterScript;
+	private Protagonist _protagonistScript;
 
 	public override void Awake(StateMachine stateMachine)
 	{
 		_characterController = stateMachine.GetComponent<CharacterController>();
-		_characterScript = stateMachine.GetComponent<Protagonist>();
+		_protagonistScript = stateMachine.GetComponent<Protagonist>();
 	}
 
 	protected override bool Statement()
 	{
-		if (_characterScript.lastHit == null)
+		if (_protagonistScript.lastHit == null)
 			return false;
 
-		float currentSlope = Vector3.Angle(Vector3.up, _characterScript.lastHit.normal);
+		float currentSlope = Vector3.Angle(Vector3.up, _protagonistScript.lastHit.normal);
 		return (currentSlope >= _characterController.slopeLimit);
 	}
 }

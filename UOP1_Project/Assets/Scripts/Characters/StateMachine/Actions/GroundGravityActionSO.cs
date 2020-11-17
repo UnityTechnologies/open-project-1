@@ -14,7 +14,7 @@ public class GroundGravityActionSO : StateActionSO
 public class GroundGravityAction : StateAction
 {
 	//Component references
-	private Protagonist _characterScript;
+	private Protagonist _protagonistScript;
 
 	private float _verticalPull;
 
@@ -25,11 +25,11 @@ public class GroundGravityAction : StateAction
 
 	public override void Awake(StateMachine stateMachine)
 	{
-		_characterScript = stateMachine.GetComponent<Protagonist>();
+		_protagonistScript = stateMachine.GetComponent<Protagonist>();
 	}
 
 	public override void OnUpdate()
 	{
-		_characterScript.movementVector.y = _verticalPull;
+		_protagonistScript.movementVector.y = _verticalPull;
 	}
 }
