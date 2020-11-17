@@ -12,7 +12,7 @@ public class RotateActionSO : StateActionSO
 public class RotateAction : StateAction
 {
 	//Component references
-	private Character _characterScript;
+	private Protagonist _characterScript;
 	private Transform _transform;
 
 	private float _turnSmoothTime;
@@ -26,7 +26,7 @@ public class RotateAction : StateAction
 
 	public override void Awake(StateMachine stateMachine)
 	{
-		_characterScript = stateMachine.GetComponent<Character>();
+		_characterScript = stateMachine.GetComponent<Protagonist>();
 		_transform = stateMachine.GetComponent<Transform>();
 	}
 

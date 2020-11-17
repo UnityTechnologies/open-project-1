@@ -8,12 +8,12 @@ public class IsSlidingConditionSO : StateConditionSO<IsSlidingCondition> { }
 public class IsSlidingCondition : Condition
 {
 	private CharacterController _characterController;
-	private Character _characterScript;
+	private Protagonist _characterScript;
 
 	public override void Awake(StateMachine stateMachine)
 	{
 		_characterController = stateMachine.GetComponent<CharacterController>();
-		_characterScript = stateMachine.GetComponent<Character>();
+		_characterScript = stateMachine.GetComponent<Protagonist>();
 	}
 
 	protected override bool Statement()

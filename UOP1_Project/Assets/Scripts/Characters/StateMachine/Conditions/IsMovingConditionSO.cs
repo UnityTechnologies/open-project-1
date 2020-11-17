@@ -13,11 +13,11 @@ public class IsMovingConditionSO : StateConditionSO
 public class IsMovingCondition : Condition
 {
 	private float _treshold;
-	private Character _characterScript;
+	private Protagonist _characterScript;
 
 	public override void Awake(StateMachine stateMachine)
 	{
-		_characterScript = stateMachine.GetComponent<Character>();
+		_characterScript = stateMachine.GetComponent<Protagonist>();
 	}
 
 	public IsMovingCondition(float treshold)

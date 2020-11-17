@@ -8,11 +8,11 @@ public class IsHoldingJumpConditionSO : StateConditionSO<IsHoldingJumpCondition>
 public class IsHoldingJumpCondition : Condition
 {
 	//Component references
-	private Character _characterScript;
+	private Protagonist _characterScript;
 
 	public override void Awake(StateMachine stateMachine)
 	{
-		_characterScript = stateMachine.GetComponent<Character>();
+		_characterScript = stateMachine.GetComponent<Protagonist>();
 	}
 
 	protected override bool Statement() => _characterScript.jumpInput;

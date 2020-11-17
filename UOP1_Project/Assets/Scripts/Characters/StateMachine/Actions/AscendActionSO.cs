@@ -14,7 +14,7 @@ public class AscendActionSO : StateActionSO
 public class AscendAction : StateAction
 {
 	//Component references
-	private Character _characterScript;
+	private Protagonist _characterScript;
 
 	private float _verticalMovement;
 	private float _gravityContributionMultiplier;
@@ -25,7 +25,7 @@ public class AscendAction : StateAction
 
 	public override void Awake(StateMachine stateMachine)
 	{
-		_characterScript = stateMachine.GetComponent<Character>();
+		_characterScript = stateMachine.GetComponent<Protagonist>();
 	}
 
 	public AscendAction(float initialJumpForce)

@@ -8,12 +8,12 @@ public class ApplyMovementVectorActionSO : StateActionSO<ApplyMovementVectorActi
 public class ApplyMovementVectorAction : StateAction
 {
 	//Component references
-	private Character _characterScript;
+	private Protagonist _characterScript;
 	private CharacterController _characterController;
 
 	public override void Awake(StateMachine stateMachine)
 	{
-		_characterScript = stateMachine.GetComponent<Character>();
+		_characterScript = stateMachine.GetComponent<Protagonist>();
 		_characterController = stateMachine.GetComponent<CharacterController>();
 	}
 

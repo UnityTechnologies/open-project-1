@@ -14,7 +14,7 @@ CharacterController:
   m_Height: 1.3
   m_Radius: 0.3
   m_SlopeLimit: 45
-  m_StepOffset: 0.5
+  m_StepOffset: 0.05
   m_SkinWidth: 0.02
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0.65, z: 0}
@@ -55,21 +55,6 @@ MonoBehaviour:
     appendConditionsInfo: 1
     appendActionsInfo: 1
     currentState: 
---- !u!114 &3722006066079062647
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 309633228405838073}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4eb0e4f8f5e39624ea81504bf968dcce, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  jumpInput: 0
-  movementInput: {x: 0, y: 0, z: 0}
-  movementVector: {x: 0, y: 0, z: 0}
 --- !u!114 &5557640735889932260
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -84,6 +69,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _inputReader: {fileID: 11400000, guid: 945ec0365077176418488737deed54be, type: 2}
   gameplayCamera: {fileID: 0}
+  jumpInput: 0
+  movementInput: {x: 0, y: 0, z: 0}
+  movementVector: {x: 0, y: 0, z: 0}
 --- !u!1001 &616254372594363816
 PrefabInstance:
   m_ObjectHideFlags: 0

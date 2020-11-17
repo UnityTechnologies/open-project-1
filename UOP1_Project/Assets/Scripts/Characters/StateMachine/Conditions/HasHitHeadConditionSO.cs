@@ -8,14 +8,14 @@ public class HasHitHeadConditionSO : StateConditionSO<HasHitHeadCondition> { }
 public class HasHitHeadCondition : Condition
 {
 	//Component references
-	private Character _characterScript;
+	private Protagonist _characterScript;
 	private CharacterController _characterController;
 	private Transform _transform;
 
 	public override void Awake(StateMachine stateMachine)
 	{
 		_transform = stateMachine.GetComponent<Transform>();
-		_characterScript = stateMachine.GetComponent<Character>();
+		_characterScript = stateMachine.GetComponent<Protagonist>();
 		_characterController = stateMachine.GetComponent<CharacterController>();
 	}
 

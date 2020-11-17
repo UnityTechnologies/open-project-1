@@ -14,7 +14,7 @@ public class SlideActionSO : StateActionSO
 public class SlideAction : StateAction
 {
 	//Component references
-	private Character _characterScript;
+	private Protagonist _characterScript;
 
 	private float _slideSpeed;
 
@@ -25,7 +25,7 @@ public class SlideAction : StateAction
 
 	public override void Awake(StateMachine stateMachine)
 	{
-		_characterScript = stateMachine.GetComponent<Character>();
+		_characterScript = stateMachine.GetComponent<Protagonist>();
 	}
 
 	public override void OnUpdate()

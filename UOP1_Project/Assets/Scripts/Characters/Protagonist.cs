@@ -8,12 +8,23 @@ public class Protagonist : MonoBehaviour
 	[SerializeField] private InputReader _inputReader = default;
 	public Transform gameplayCamera;
 
-	private Character _charScript;
+	private Protagonist _charScript;
 	private Vector2 _previousMovementInput;
+
+	//These fields are manipulated by the StateMachine actions
+	[HideInInspector] public bool jumpInput;
+	[HideInInspector] public Vector3 movementInput; //Initial input coming from the Protagonist script
+	[HideInInspector] public Vector3 movementVector; //Final movement vector, manipulated by the StateMachine actions
+	[HideInInspector] public ControllerColliderHit lastHit;
 
 	private void Awake()
 	{
-		_charScript = GetComponent<Character>();
+		_charScript = GetComponent<Protagonist>();
+	}
+
+	private void OnControllerColliderHit(ControllerColliderHit hit)
+	{
+		lastHit = hit;
 	}
 
 	//Adds listeners for events being triggered in the InputReader script
@@ -51,7 +62,7 @@ public class Protagonist : MonoBehaviour
 		Vector3 adjustedMovement = cameraRight.normalized * _previousMovementInput.x +
 			cameraForward.normalized * _previousMovementInput.y;
 
-		_charScript.Move(Vector3.ClampMagnitude(adjustedMovement, 1f));
+		movementInput = Vector3.ClampMagnitude(adjustedMovement, 1f);
 	}
 
 	//---- EVENT LISTENERS ----
@@ -63,11 +74,11 @@ public class Protagonist : MonoBehaviour
 
 	private void OnJumpInitiated()
 	{
-		_charScript.Jump();
+		jumpInput = true;
 	}
 
 	private void OnJumpCanceled()
 	{
-		_charScript.CancelJump();
+		jumpInput = false;
 	}
 }

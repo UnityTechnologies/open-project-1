@@ -11,7 +11,7 @@ public class DescendActionSO : StateActionSO
 public class DescendAction : StateAction
 {
 	//Component references
-	private Character _characterScript;
+	private Protagonist _characterScript;
 
 	private float _verticalMovement;
 	private const float GRAVITY_MULTIPLIER = 5f;
@@ -20,7 +20,7 @@ public class DescendAction : StateAction
 
 	public override void Awake(StateMachine stateMachine)
 	{
-		_characterScript = stateMachine.GetComponent<Character>();
+		_characterScript = stateMachine.GetComponent<Protagonist>();
 	}
 
 	public override void OnStateEnter()
