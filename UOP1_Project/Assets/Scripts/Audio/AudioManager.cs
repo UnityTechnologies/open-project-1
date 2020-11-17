@@ -28,8 +28,7 @@ public class AudioManager : MonoBehaviour
 	private void InitPool()
 	{
 		_factory = ScriptableObject.CreateInstance<SoundEmitterFactorySO>();
-		_factory.Prefab = _soundEmitterPrefab;
-		_factory.Prefab.name = "SoundEmitter Factory";
+		_factory.prefab = _soundEmitterPrefab;
 		_pool = ScriptableObject.CreateInstance<SoundEmitterPoolSO>();
 		_pool.name = "SoundEmitter Pool";
 		_pool.Factory = _factory;
@@ -87,6 +86,7 @@ public class AudioManager : MonoBehaviour
 	private void OnSoundEmitterFinishedPlaying(SoundEmitter soundEmitter)
 	{
 		soundEmitter.OnSoundFinishedPlaying -= OnSoundEmitterFinishedPlaying;
+		soundEmitter.StopSound();
 		Pool.Return(soundEmitter);
 	}
 

@@ -1,10 +1,14 @@
-﻿namespace UOP1.StateMachine
+﻿using UOP1.StateMachine.ScriptableObjects;
+
+namespace UOP1.StateMachine
 {
 	/// <summary>
 	/// An object representing an action.
 	/// </summary>
 	public abstract class StateAction : IStateComponent
 	{
+		internal StateActionSO _originSO;
+
 		/// <summary>
 		/// Called every frame the <see cref="StateMachine"/> is in a <see cref="State"/> with this <see cref="StateAction"/>.
 		/// </summary>

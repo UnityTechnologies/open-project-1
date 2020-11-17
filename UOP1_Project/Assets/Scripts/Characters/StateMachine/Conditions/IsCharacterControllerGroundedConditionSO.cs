@@ -14,5 +14,5 @@ public class IsCharacterControllerGroundedCondition : Condition
 		_characterController = stateMachine.GetComponent<CharacterController>();
 	}
 
-	public override bool Statement() => _characterController.isGrounded;
+	protected override bool Statement() => _characterController.isGrounded;
 }
