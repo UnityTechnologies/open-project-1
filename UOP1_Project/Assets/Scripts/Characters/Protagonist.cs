@@ -1,26 +1,22 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 /// <summary>
-/// <para>This class listens to the input and it deposits it on the <c>Character</c> component, ready to be used by the <c>StateMachine</c></para>
+/// <para>This component consumes input on the InputReader and stores its values. The input is then read, and manipulated, by the StateMachines's Actions.</para>
 /// </summary>
 public class Protagonist : MonoBehaviour
 {
 	[SerializeField] private InputReader _inputReader = default;
 	public Transform gameplayCamera;
 
-	private Protagonist _charScript;
 	private Vector2 _previousMovementInput;
 
-	//These fields are manipulated by the StateMachine actions
+	//These fields are read and manipulated by the StateMachine actions
 	[HideInInspector] public bool jumpInput;
+	[HideInInspector] public bool extraActionInput;
 	[HideInInspector] public Vector3 movementInput; //Initial input coming from the Protagonist script
 	[HideInInspector] public Vector3 movementVector; //Final movement vector, manipulated by the StateMachine actions
 	[HideInInspector] public ControllerColliderHit lastHit;
-
-	private void Awake()
-	{
-		_charScript = GetComponent<Protagonist>();
-	}
 
 	private void OnControllerColliderHit(ControllerColliderHit hit)
 	{
@@ -33,6 +29,7 @@ public class Protagonist : MonoBehaviour
 		_inputReader.jumpEvent += OnJumpInitiated;
 		_inputReader.jumpCanceledEvent += OnJumpCanceled;
 		_inputReader.moveEvent += OnMove;
+		_inputReader.extraActionEvent += OnExtraAction;
 		//...
 	}
 
@@ -42,6 +39,7 @@ public class Protagonist : MonoBehaviour
 		_inputReader.jumpEvent -= OnJumpInitiated;
 		_inputReader.jumpCanceledEvent -= OnJumpCanceled;
 		_inputReader.moveEvent -= OnMove;
+		_inputReader.extraActionEvent -= OnExtraAction;
 		//...
 	}
 
@@ -80,5 +78,11 @@ public class Protagonist : MonoBehaviour
 	private void OnJumpCanceled()
 	{
 		jumpInput = false;
+	}
+
+	// This handler is just used for debug, for now
+	private void OnExtraAction()
+	{
+		extraActionInput = true;
 	}
 }
