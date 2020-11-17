@@ -109,13 +109,13 @@ public class InputReader : ScriptableObject, GameInput.IGameplayActions, GameInp
 	public void OnMoveSelection(InputAction.CallbackContext context)
 	{
 		if (context.phase == InputActionPhase.Performed)
-			onMoveSelectionEvent();
+			onMoveSelectionEvent?.Invoke();
 	}
 
 	public void OnAdvanceDialogue(InputAction.CallbackContext context)
 	{
 		if (context.phase == InputActionPhase.Performed)
-			advanceDialogueEvent();
+			advanceDialogueEvent?.Invoke();
 	}
 
 
