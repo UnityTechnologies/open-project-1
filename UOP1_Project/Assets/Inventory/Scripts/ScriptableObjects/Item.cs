@@ -32,5 +32,4 @@ public class Item : ScriptableObject
 	public string Description => _description;
 	public ItemType ItemType => _itemType;
 	public GameObject Prefab => _prefab;
-
 }

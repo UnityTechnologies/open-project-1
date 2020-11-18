@@ -9,5 +9,9 @@ public class ItemType : ScriptableObject
 	[SerializeField]
 	private string _actionName = default;
 
+	[Tooltip("The Item's background color in the UI")]
+	[SerializeField] private Color _backgroundColor;
+
 	public string ActionName => _actionName;
+	public Color BackgroundColor => _backgroundColor;
 }

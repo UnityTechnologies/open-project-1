@@ -12,7 +12,7 @@ public class InventoryController : MonoBehaviour
 		if (other.TryGetComponent<ItemInstance>(out ItemInstance itemInstance))
 		{
 			_inventory.Add(itemInstance.Item);
-			Destroy(itemInstance);
+			Destroy(itemInstance.gameObject);
 		}
 	}
 }
