@@ -8,20 +8,19 @@ using UnityEngine.UI;
 /// <summary>
 /// This class manages the scenes loading and unloading
 /// </summary>
-
 public class LocationLoader : MonoBehaviour
 {
 	[Header("Initialization Scene")]
-	public GameSceneSO initializationScene;
+	[SerializeField] private GameSceneSO _initializationScene = default;
 	[Header("Load on start")]
-	public GameSceneSO[] mainMenuScenes;
+	[SerializeField] private GameSceneSO[] _mainMenuScenes = default;
 	[Header("Loading Screen")]
-	public GameObject loadingInterface;
-	public Image loadingProgressBar;
+	[SerializeField] private GameObject _loadingInterface = default;
+	[SerializeField] private Image _loadingProgressBar = default;
 
 	[Header("Load Event")]
 	//The load event we are listening to
-	[SerializeField] private LoadEvent _loadEvent = default;
+	[SerializeField] private LoadEventChannelSO _loadEventChannel = default;
 
 	//List of the scenes to load and track progress
 	private List<AsyncOperation> _scenesToLoadAsyncOperations = new List<AsyncOperation>();
@@ -32,17 +31,17 @@ public class LocationLoader : MonoBehaviour
 
 	private void OnEnable()
 	{
-		_loadEvent.loadEvent += LoadScenes;
+		_loadEventChannel.OnLoadingRequested += LoadScenes;
 	}
 
 	private void OnDisable()
 	{
-		_loadEvent.loadEvent -= LoadScenes;
+		_loadEventChannel.OnLoadingRequested -= LoadScenes;
 	}
 
 	private void Start()
 	{
-		if (SceneManager.GetActiveScene().name == initializationScene.sceneName)
+		if (SceneManager.GetActiveScene().name == _initializationScene.sceneName)
 		{
 			LoadMainMenu();
 		}
@@ -50,11 +49,11 @@ public class LocationLoader : MonoBehaviour
 
 	private void LoadMainMenu()
 	{
-		LoadScenes(mainMenuScenes, false);
+		LoadScenes(_mainMenuScenes, false);
 	}
 
 	/// <summary> This function loads the scenes passed as array parameter </summary>
-	public void LoadScenes(GameSceneSO[] locationsToLoad, bool showLoadingScreen)
+	private void LoadScenes(GameSceneSO[] locationsToLoad, bool showLoadingScreen)
 	{
 		//Add all current open scenes to unload list
 		AddScenesToUnload();
@@ -74,7 +73,7 @@ public class LocationLoader : MonoBehaviour
 		if (showLoadingScreen)
 		{
 			//Show the progress bar and track progress if loadScreen is true
-			loadingInterface.SetActive(true);
+			_loadingInterface.SetActive(true);
 			StartCoroutine(TrackLoadingProgress());
 		}
 		else
@@ -92,12 +91,12 @@ public class LocationLoader : MonoBehaviour
 		SceneManager.SetActiveScene(SceneManager.GetSceneByName(_activeScene.sceneName));
 	}
 
-	public void AddScenesToUnload()
+	private void AddScenesToUnload()
 	{
 		for (int i = 0; i < SceneManager.sceneCount; ++i)
 		{
 			Scene scene = SceneManager.GetSceneAt(i);
-			if (scene.name != initializationScene.sceneName)
+			if (scene.name != _initializationScene.sceneName)
 			{
 				Debug.Log("Added scene to unload = " + scene.name);
 				//Add the scene to the list of the scenes to unload
@@ -106,7 +105,7 @@ public class LocationLoader : MonoBehaviour
 		}
 	}
 
-	public void UnloadScenes()
+	private void UnloadScenes()
 	{
 		if (_ScenesToUnload != null)
 		{
@@ -120,7 +119,7 @@ public class LocationLoader : MonoBehaviour
 	}
 
 	/// <summary> This function checks if a scene is already loaded </summary>
-	public bool CheckLoadState(String sceneName)
+	private bool CheckLoadState(String sceneName)
 	{
 		for (int i = 0; i < SceneManager.sceneCount; ++i)
 		{
@@ -134,7 +133,7 @@ public class LocationLoader : MonoBehaviour
 	}
 
 	/// <summary> This function updates the loading progress once per frame until loading is complete </summary>
-	IEnumerator TrackLoadingProgress()
+	private IEnumerator TrackLoadingProgress()
 	{
 		float totalProgress = 0;
 		//When the scene reaches 0.9f, it means that it is loaded
@@ -152,8 +151,8 @@ public class LocationLoader : MonoBehaviour
 				totalProgress += _scenesToLoadAsyncOperations[i].progress;
 			}
 			//The fillAmount for all scenes, so we devide the progress by the number of scenes to load
-			loadingProgressBar.fillAmount = totalProgress / _scenesToLoadAsyncOperations.Count;
-			Debug.Log("progress bar" + loadingProgressBar.fillAmount + "and value =" + totalProgress / _scenesToLoadAsyncOperations.Count);
+			_loadingProgressBar.fillAmount = totalProgress / _scenesToLoadAsyncOperations.Count;
+			Debug.Log("progress bar" + _loadingProgressBar.fillAmount + "and value =" + totalProgress / _scenesToLoadAsyncOperations.Count);
 
 			yield return null;
 		}
@@ -162,10 +161,10 @@ public class LocationLoader : MonoBehaviour
 		_scenesToLoadAsyncOperations.Clear();
 
 		//Hide progress bar when loading is done
-		loadingInterface.SetActive(false);
+		_loadingInterface.SetActive(false);
 	}
 
-	public void ExitGame()
+	private void ExitGame()
 	{
 		Application.Quit();
 		Debug.Log("Exit!");

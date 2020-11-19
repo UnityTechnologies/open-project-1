@@ -9,11 +9,11 @@ using UnityEngine;
 public class AudioCue : MonoBehaviour
 {
 	[SerializeField] private AudioCueSO _audioCue = default;
-	[SerializeField] private AudioCueEventSO _audioCueEventChannel = default;
+	[SerializeField] private AudioCueEventChannelSO _audioCueEventChannel = default;
 	[SerializeField] private AudioConfigurationSO _audioConfiguration = default;
 
 	public void PlayAudioCue()
 	{
-		_audioCueEventChannel.Raise(_audioCue, _audioConfiguration, transform.position);
+		_audioCueEventChannel.RaiseEvent(_audioCue, _audioConfiguration, transform.position);
 	}
 }

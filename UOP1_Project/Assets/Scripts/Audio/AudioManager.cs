@@ -10,9 +10,9 @@ public class AudioManager : MonoBehaviour
 	[SerializeField] private int _initialPoolSize = 1;
 	[SerializeField] private SoundEmitter _soundEmitterPrefab = default;
 	[Tooltip("The SoundManager listens to this event, fired by objects in any scene, to play SFXs")]
-	[SerializeField] private AudioCueEventSO _SFXEvent = default;
+	[SerializeField] private AudioCueEventChannelSO _SFXEvent = default;
 	[Tooltip("The SoundManager listens to this event, fired by objects in any scene, to play Music")]
-	[SerializeField] private AudioCueEventSO _musicEvent = default;
+	[SerializeField] private AudioCueEventChannelSO _musicEvent = default;
 
 	private SoundEmitterFactorySO _factory;
 	private SoundEmitterPoolSO _pool;
@@ -22,7 +22,7 @@ public class AudioManager : MonoBehaviour
 	{
 		InitPool();
 
-		_SFXEvent.eventRaised += PlayAudioCue;
+		_SFXEvent.OnAudioCueRequested += PlayAudioCue;
 	}
 
 	private void InitPool()

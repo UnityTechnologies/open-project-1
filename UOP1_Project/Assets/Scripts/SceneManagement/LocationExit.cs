@@ -6,15 +6,15 @@
 
 public class LocationExit : MonoBehaviour
 {
-	public LoadEvent onLocationExit;
-	public GameSceneSO[] locationsToLoad;
-	public bool showLoadScreen;
+	[SerializeField] private LoadEventChannelSO _onLocationExit = default;
+	[SerializeField] private GameSceneSO[] _locationsToLoad = default;
+	[SerializeField] private bool _showLoadScreen = default;
 
 	private void OnTriggerEnter(Collider other)
 	{
 		if (other.CompareTag("Player"))
 		{
-			onLocationExit.Raise(locationsToLoad, showLoadScreen);
+			_onLocationExit.RaiseEvent(_locationsToLoad, _showLoadScreen);
 		}
 	}
 }
