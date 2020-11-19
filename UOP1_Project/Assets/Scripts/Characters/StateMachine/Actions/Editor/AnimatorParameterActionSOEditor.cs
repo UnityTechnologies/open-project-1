@@ -5,9 +5,6 @@ using UOP1.StateMachine;
 [CustomEditor(typeof(AnimatorParameterActionSO)), CanEditMultipleObjects]
 public class AnimatorParameterActionSOEditor : UnityEditor.Editor
 {
-	private bool _boolValue = default;
-
-
 	public override void OnInspectorGUI()
 	{
 		serializedObject.Update();
