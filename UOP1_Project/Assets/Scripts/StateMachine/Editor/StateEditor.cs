@@ -27,6 +27,8 @@ namespace UOP1.StateMachine.Editor
 		public override void OnInspectorGUI()
 		{
 			_list.DoLayoutList();
+
+			serializedObject.ApplyModifiedProperties();
 		}
 
 		private void DoUndo()
