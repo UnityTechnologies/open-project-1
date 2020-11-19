@@ -63,7 +63,7 @@ public class AnimatorParameterAction : StateAction
 
 	public override void OnStateEnter()
 	{
-		if(_whenToRun == SpecificMoment.OnStateEnter)
+		if (_whenToRun == SpecificMoment.OnStateEnter)
 			SetParameter();
 	}
 
@@ -77,10 +77,18 @@ public class AnimatorParameterAction : StateAction
 	{
 		switch (_parameterType)
 		{
-			case AnimatorParameterActionSO.ParameterType.Bool: _animator.SetBool(_parameterHash, _boolValue); break;
-			case AnimatorParameterActionSO.ParameterType.Int: _animator.SetInteger(_parameterHash, _intValue); break;
-			case AnimatorParameterActionSO.ParameterType.Float: _animator.SetFloat(_parameterHash, _floatValue); break;
-			case AnimatorParameterActionSO.ParameterType.Trigger: _animator.SetTrigger(_parameterHash); break;
+			case AnimatorParameterActionSO.ParameterType.Bool:
+				_animator.SetBool(_parameterHash, _boolValue);
+				break;
+			case AnimatorParameterActionSO.ParameterType.Int:
+				_animator.SetInteger(_parameterHash, _intValue);
+				break;
+			case AnimatorParameterActionSO.ParameterType.Float:
+				_animator.SetFloat(_parameterHash, _floatValue);
+				break;
+			case AnimatorParameterActionSO.ParameterType.Trigger:
+				_animator.SetTrigger(_parameterHash);
+				break;
 		}
 	}
 
