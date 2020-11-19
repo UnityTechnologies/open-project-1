@@ -12,7 +12,7 @@ public class RotateActionSO : StateActionSO
 public class RotateAction : StateAction
 {
 	//Component references
-	private Character _characterScript;
+	private Protagonist _protagonistScript;
 	private Transform _transform;
 
 	private float _turnSmoothTime;
@@ -26,18 +26,18 @@ public class RotateAction : StateAction
 
 	public override void Awake(StateMachine stateMachine)
 	{
-		_characterScript = stateMachine.GetComponent<Character>();
+		_protagonistScript = stateMachine.GetComponent<Protagonist>();
 		_transform = stateMachine.GetComponent<Transform>();
 	}
 
 	public override void OnUpdate()
 	{
-		Vector3 horizontalMovement = _characterScript.movementVector;
+		Vector3 horizontalMovement = _protagonistScript.movementVector;
 		horizontalMovement.y = 0f;
 
 		if (horizontalMovement.sqrMagnitude >= ROTATION_TRESHOLD)
 		{
-			float targetRotation = Mathf.Atan2(_characterScript.movementVector.x, _characterScript.movementVector.z) * Mathf.Rad2Deg;
+			float targetRotation = Mathf.Atan2(_protagonistScript.movementVector.x, _protagonistScript.movementVector.z) * Mathf.Rad2Deg;
 			_transform.eulerAngles = Vector3.up * Mathf.SmoothDampAngle(
 				_transform.eulerAngles.y,
 				targetRotation,
