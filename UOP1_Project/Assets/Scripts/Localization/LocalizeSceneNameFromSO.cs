@@ -4,16 +4,12 @@ using UnityEngine;
 using UnityEngine.Localization.Components;
 public class LocalizeSceneNameFromSO : MonoBehaviour
 {
-	[SerializeField]
-	LocalizeStringEvent localizationEvent;
+	[SerializeField] LocalizeStringEvent localizationEvent = default;
 
-	[SerializeField]
-	LocationSO SO;
+	[SerializeField] LocationSO SO = default;
 
 	private void Start()
 	{
 		localizationEvent.StringReference = SO.locationName;
-
 	}
-
 }

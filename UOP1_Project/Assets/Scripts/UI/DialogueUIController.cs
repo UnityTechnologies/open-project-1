@@ -5,11 +5,9 @@ using TMPro;
 using UnityEngine.Localization.Components;
 public class DialogueUIController : MonoBehaviour
 {
-	[SerializeField]
-	LocalizeStringEvent lineText;
+	[SerializeField] LocalizeStringEvent lineText = default;
 
-	[SerializeField]
-	LocalizeStringEvent actorNameText;
+	[SerializeField] LocalizeStringEvent actorNameText = default;
 	public void SetDialogue(DialogueLineSO dialogueLine)
 	{
 

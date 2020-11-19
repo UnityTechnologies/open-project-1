@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class UIManager : MonoBehaviour
 {
-
+	//TODO: Remove Singleton
 	public static UIManager Instance;
 
 	private void Start()
@@ -13,8 +13,7 @@ public class UIManager : MonoBehaviour
 		CloseUIDialogue();
 	}
 
-	[SerializeField]
-	DialogueUIController dialogueController;
+	[SerializeField] DialogueUIController dialogueController = default;
 
 	public void OpenUIDialogue(DialogueLineSO dialogueLine)
 	{
