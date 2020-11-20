@@ -8,6 +8,6 @@ public class SoundEmitterFactorySO : FactorySO<SoundEmitter>
 
 	public override SoundEmitter Create()
 	{
-		return prefab;
+		return Instantiate(prefab);
 	}
 }

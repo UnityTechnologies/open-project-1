@@ -8,9 +8,24 @@ using UnityEngine;
 /// </summary>
 public class AudioCue : MonoBehaviour
 {
+	[Header("Sound definition")]
 	[SerializeField] private AudioCueSO _audioCue = default;
+	[SerializeField] private bool _playOnAwake = false;
+
+	[Header("Configuration")]
 	[SerializeField] private AudioCueEventChannelSO _audioCueEventChannel = default;
 	[SerializeField] private AudioConfigurationSO _audioConfiguration = default;
+
+	private void Awake()
+	{
+		if (_playOnAwake)
+			PlayAudioCue();
+	}
+
+	private void OnTriggerEnter(Collider other)
+	{
+		PlayAudioCue();
+	}
 
 	public void PlayAudioCue()
 	{

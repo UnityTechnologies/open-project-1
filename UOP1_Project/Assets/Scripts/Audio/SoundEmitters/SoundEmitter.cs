@@ -1,16 +1,11 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Audio;
-using UOP1.Pool;
-using System;
 using UnityEngine.Events;
 
 [RequireComponent(typeof(AudioSource))]
 public class SoundEmitter : MonoBehaviour
 {
 	private AudioSource _audioSource;
-	private float _lastUseTimestamp = 0;
 
 	public event UnityAction<SoundEmitter> OnSoundFinishedPlaying;
 
@@ -27,7 +22,7 @@ public class SoundEmitter : MonoBehaviour
 	/// <param name="settings"></param>
 	/// <param name="hasToLoop"></param>
 	/// <param name="position"></param>
-	public void PlaySound(AudioClip clip, AudioConfigurationSO settings, bool hasToLoop, Vector3 position = default)
+	public void PlayAudioClip(AudioClip clip, AudioConfigurationSO settings, bool hasToLoop, Vector3 position = default)
 	{
 		_audioSource.clip = clip;
 		ApplySettings(_audioSource, settings);
@@ -63,9 +58,27 @@ public class SoundEmitter : MonoBehaviour
 		source.ignoreListenerPause = settings.IgnoreListenerPause;
 	}
 
-	public void StopSound()
+	/// <summary>
+	/// Used when the game is unpaused, to pick up SFX from where they left.
+	/// </summary>
+	public void Resume()
 	{
-		_lastUseTimestamp = Time.realtimeSinceStartup;
+		_audioSource.Play();
+	}
+
+	/// <summary>
+	/// Used when the game is paused.
+	/// </summary>
+	public void Pause()
+	{
+		_audioSource.Pause();
+	}
+
+	/// <summary>
+	/// Used when the SFX finished playing. Called by the <c>AudioManager</c>.
+	/// </summary>
+	public void Stop() // Redundant?
+	{
 		_audioSource.Stop();
 	}
 
@@ -77,11 +90,6 @@ public class SoundEmitter : MonoBehaviour
 	public bool IsLooping()
 	{
 		return _audioSource.loop;
-	}
-
-	public float LastUseTimestamp()
-	{
-		return _lastUseTimestamp;
 	}
 
 	IEnumerator FinishedPlaying(float clipLength)

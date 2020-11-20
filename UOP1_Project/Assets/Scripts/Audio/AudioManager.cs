@@ -6,33 +6,20 @@ using UnityEngine.Audio;
 
 public class AudioManager : MonoBehaviour
 {
-	[Tooltip("Amount of sound emitters created on Start")]
-	[SerializeField] private int _initialPoolSize = 1;
-	[SerializeField] private SoundEmitter _soundEmitterPrefab = default;
-	[Tooltip("The SoundManager listens to this event, fired by objects in any scene, to play SFXs")]
-	[SerializeField] private AudioCueEventChannelSO _SFXEvent = default;
-	[Tooltip("The SoundManager listens to this event, fired by objects in any scene, to play Music")]
-	[SerializeField] private AudioCueEventChannelSO _musicEvent = default;
+	[Header("SoundEmitters pool")]
+	[SerializeField] private SoundEmitterFactorySO _factory;
+	[SerializeField] private SoundEmitterPoolSO _pool;
 
-	private SoundEmitterFactorySO _factory;
-	private SoundEmitterPoolSO _pool;
+	[Header("Listening on channels")]
+	[Tooltip("The SoundManager listens to this event, fired by objects in any scene, to play SFXs")]
+	[SerializeField] private AudioCueEventChannelSO _SFXEventChannel = default;
+	[Tooltip("The SoundManager listens to this event, fired by objects in any scene, to play Music")]
+	[SerializeField] private AudioCueEventChannelSO _musicEventChannel = default;
 	public SoundEmitterPoolSO Pool { get { return _pool; } }
 
 	private void Awake()
 	{
-		InitPool();
-
-		_SFXEvent.OnAudioCueRequested += PlayAudioCue;
-	}
-
-	private void InitPool()
-	{
-		_factory = ScriptableObject.CreateInstance<SoundEmitterFactorySO>();
-		_factory.prefab = _soundEmitterPrefab;
-		_pool = ScriptableObject.CreateInstance<SoundEmitterPoolSO>();
-		_pool.name = "SoundEmitter Pool";
-		_pool.Factory = _factory;
-		_pool.InitialPoolSize = _initialPoolSize;
+		_SFXEventChannel.OnAudioCueRequested += PlayAudioCue;
 	}
 
 	public static bool SetGroupVolume(AudioMixerGroup group, float volume)
@@ -74,8 +61,8 @@ public class AudioManager : MonoBehaviour
 			SoundEmitter soundEmitter = _pool.Request();
 			if (soundEmitter != null)
 			{
-				soundEmitter.PlaySound(clipsToPlay[i], settings, audioCue.looping, position);
-				if (audioCue.looping)
+				soundEmitter.PlayAudioClip(clipsToPlay[i], settings, audioCue.looping, position);
+				if(!audioCue.looping)
 					soundEmitter.OnSoundFinishedPlaying += OnSoundEmitterFinishedPlaying;
 			}
 		}
@@ -86,7 +73,7 @@ public class AudioManager : MonoBehaviour
 	private void OnSoundEmitterFinishedPlaying(SoundEmitter soundEmitter)
 	{
 		soundEmitter.OnSoundFinishedPlaying -= OnSoundEmitterFinishedPlaying;
-		soundEmitter.StopSound();
+		soundEmitter.Stop();
 		Pool.Return(soundEmitter);
 	}
 
