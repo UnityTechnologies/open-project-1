@@ -12,10 +12,25 @@ namespace UOP1.Pool
 	{
 		protected readonly Stack<T> _available = new Stack<T>();
 		public abstract IFactory<T> Factory { get; set; }
+		protected bool HasBeenPrewarmed { get; set; }
 
 		protected virtual T Create()
 		{
 			return Factory.Create();
+		}
+
+		public virtual void Prewarm(int num)
+		{
+			if (HasBeenPrewarmed)
+			{
+				Debug.LogWarning($"Pool {name} has already been prewarmed.");
+				return;
+			}
+			for (int i = 0; i < num; i++)
+			{
+				_available.Push(Create());
+			}
+			HasBeenPrewarmed = true;
 		}
 
 		public virtual T Request()

@@ -8,25 +8,25 @@ namespace UOP1.Pool
 	/// <typeparam name="T">Specifies the component to pool.</typeparam>
 	public abstract class ComponentPoolSO<T> : PoolSO<T> where T : Component
 	{
-		public abstract int InitialPoolSize { get; set; }
 		private GameObject _poolRootObject;
-
-		private void InitializePool()
-		{
-			_poolRootObject = new GameObject(name);
-			DontDestroyOnLoad(_poolRootObject);
-			for (int i = 0; i < InitialPoolSize; i++)
+		private GameObject PoolRootObject {
+			get
 			{
-				_available.Push(Create());
+				if (!Application.isPlaying)
+				{
+					return null;
+				}
+				if (_poolRootObject == null)
+				{
+					_poolRootObject = new GameObject(name);
+					DontDestroyOnLoad(_poolRootObject);
+				}
+				return _poolRootObject;
 			}
 		}
 
 		public override T Request()
 		{
-			if (_poolRootObject == null)
-			{
-				InitializePool();
-			}
 			T member = base.Request();
 			member.gameObject.SetActive(true);
 			return member;
@@ -34,11 +34,7 @@ namespace UOP1.Pool
 
 		public override void Return(T member)
 		{
-			if (_poolRootObject == null)
-			{
-				InitializePool();
-			}
-			member.transform.SetParent(_poolRootObject.transform);
+			member.transform.SetParent(PoolRootObject.transform);
 			member.gameObject.SetActive(false);
 			base.Return(member);
 		}
@@ -46,7 +42,7 @@ namespace UOP1.Pool
 		protected override T Create()
 		{
 			T newMember = base.Create();
-			newMember.transform.SetParent(_poolRootObject.transform);
+			newMember.transform.SetParent(PoolRootObject.transform);
 			newMember.gameObject.SetActive(false);
 			return newMember;
 		}
@@ -55,9 +51,9 @@ namespace UOP1.Pool
 		{
 			base.OnDisable();
 #if UNITY_EDITOR
-			DestroyImmediate(_poolRootObject);
+			DestroyImmediate(PoolRootObject);
 #else
-			Destroy(_poolRootObject);
+			Destroy(PoolRootObject);
 #endif
 		}
 	}

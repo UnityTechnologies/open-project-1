@@ -32,7 +32,7 @@ public class AudioManager : MonoBehaviour
 		_pool = ScriptableObject.CreateInstance<SoundEmitterPoolSO>();
 		_pool.name = "SoundEmitter Pool";
 		_pool.Factory = _factory;
-		_pool.InitialPoolSize = _initialPoolSize;
+		_pool.Prewarm(_initialPoolSize);
 	}
 
 	public static bool SetGroupVolume(AudioMixerGroup group, float volume)
