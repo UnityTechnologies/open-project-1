@@ -9,7 +9,7 @@ public class EditorInitialisationLoader : MonoBehaviour
 #if UNITY_EDITOR
 	public GameSceneSO initializationScene;
 
-	void Start()
+	private void Awake()
 	{
 		for (int i = 0; i < SceneManager.sceneCount; ++i)
 		{
