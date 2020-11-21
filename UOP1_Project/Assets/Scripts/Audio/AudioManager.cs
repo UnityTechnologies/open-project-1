@@ -64,7 +64,7 @@ public class AudioManager : MonoBehaviour
 			if (soundEmitter != null)
 			{
 				soundEmitter.PlayAudioClip(clipsToPlay[i], settings, audioCue.looping, position);
-				if(!audioCue.looping)
+				if (!audioCue.looping)
 					soundEmitter.OnSoundFinishedPlaying += OnSoundEmitterFinishedPlaying;
 			}
 		}

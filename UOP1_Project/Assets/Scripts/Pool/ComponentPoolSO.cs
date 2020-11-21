@@ -9,7 +9,8 @@ namespace UOP1.Pool
 	public abstract class ComponentPoolSO<T> : PoolSO<T> where T : Component
 	{
 		private GameObject _poolRootObject;
-		private GameObject PoolRootObject {
+		private GameObject PoolRootObject
+		{
 			get
 			{
 				if (!Application.isPlaying)
