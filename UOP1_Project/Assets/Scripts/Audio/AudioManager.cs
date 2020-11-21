@@ -9,6 +9,7 @@ public class AudioManager : MonoBehaviour
 	[Header("SoundEmitters pool")]
 	[SerializeField] private SoundEmitterFactorySO _factory;
 	[SerializeField] private SoundEmitterPoolSO _pool;
+	[SerializeField] private int _initialSize = 10;
 
 	[Header("Listening on channels")]
 	[Tooltip("The SoundManager listens to this event, fired by objects in any scene, to play SFXs")]
@@ -20,6 +21,7 @@ public class AudioManager : MonoBehaviour
 	private void Awake()
 	{
 		_SFXEventChannel.OnAudioCueRequested += PlayAudioCue;
+		Pool.Prewarm(_initialSize);
 	}
 
 	public static bool SetGroupVolume(AudioMixerGroup group, float volume)

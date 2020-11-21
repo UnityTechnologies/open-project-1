@@ -7,8 +7,6 @@ public class ParticlePoolSO : ComponentPoolSO<ParticleSystem>
 {
 	[SerializeField]
 	private ParticleFactorySO _factory;
-	[SerializeField]
-	private int _initialPoolSize;
 
 	public override IFactory<ParticleSystem> Factory
 	{
@@ -19,18 +17,6 @@ public class ParticlePoolSO : ComponentPoolSO<ParticleSystem>
 		set
 		{
 			_factory = value as ParticleFactorySO;
-		}
-	}
-
-	public override int InitialPoolSize
-	{
-		get
-		{
-			return _initialPoolSize;
-		}
-		set
-		{
-			_initialPoolSize = value;
 		}
 	}
 }

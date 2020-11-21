@@ -16,8 +16,8 @@ public class LocalPoolTester : MonoBehaviour
 		_pool = ScriptableObject.CreateInstance<ParticlePoolSO>();
 		_pool.name = gameObject.name;
 		_pool.Factory = _factory;
-		_pool.InitialPoolSize = _initialPoolSize;
-		List<ParticleSystem> particles = _pool.Request(10) as List<ParticleSystem>;
+		_pool.Prewarm(_initialPoolSize);
+		List<ParticleSystem> particles = _pool.Request(2) as List<ParticleSystem>;
 		foreach (ParticleSystem particle in particles)
 		{
 			StartCoroutine(DoParticleBehaviour(particle));
