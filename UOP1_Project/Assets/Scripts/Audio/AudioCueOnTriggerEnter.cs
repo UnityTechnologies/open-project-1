@@ -13,7 +13,7 @@ namespace Assets.Scripts.Audio
 		[SerializeField] private string _tagToDetect = "Player";
 		private void OnTriggerEnter(Collider other)
 		{
-			if(other.gameObject.CompareTag(_tagToDetect))
+			if (other.gameObject.CompareTag(_tagToDetect))
 				GetComponent<AudioCue>().PlayAudioCue();
 		}
 	}
