@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -49,6 +50,12 @@ namespace UOP1.StateMachine.Editor
 				_doRefresh = true;
 		}
 
+		private void OnLostFocus()
+		{
+			ListView listView = rootVisualElement.Q<ListView>(className: "table-list");
+			listView.onSelectionChanged -= OnListSelectionChanged;
+		}
+
 		private void Update()
 		{
 			if (!_doRefresh)
@@ -78,46 +85,50 @@ namespace UOP1.StateMachine.Editor
 			listView.bindItem = (element, i) => ((Label)element).text = assets[i].name;
 			listView.selectionType = SelectionType.Single;
 
-			listView.onSelectionChanged += enumerable =>
+			listView.onSelectionChanged += OnListSelectionChanged;
+		}
+
+		private void OnListSelectionChanged(List<object> list)
+		{
+			IMGUIContainer editor = rootVisualElement.Q<IMGUIContainer>(className: "table-editor");
+			editor.onGUIHandler = null;
+
+			if (list.Count == 0)
+				return;
+
+			var table = (TransitionTableSO)list[0];
+			if (table == null)
+				return;
+
+			if (_transitionTableEditor == null)
+				_transitionTableEditor = UnityEditor.Editor.CreateEditor(table, typeof(TransitionTableEditor));
+			else
+				UnityEditor.Editor.CreateCachedEditor(table, typeof(TransitionTableEditor), ref _transitionTableEditor);
+
+			editor.onGUIHandler = () =>
 			{
-				IMGUIContainer editor = rootVisualElement.Q<IMGUIContainer>(className: "table-editor");
-				editor.onGUIHandler = null;
-
-				if (enumerable.Count == 0)
-					return;
-
-				var table = (TransitionTableSO)enumerable[0];
-				if (table == null)
-					return;
-
-				if (_transitionTableEditor == null)
-					_transitionTableEditor = UnityEditor.Editor.CreateEditor(table, typeof(TransitionTableEditor));
-				else
-					UnityEditor.Editor.CreateCachedEditor(table, typeof(TransitionTableEditor), ref _transitionTableEditor);
-
-				editor.onGUIHandler = () =>
+				if (!_transitionTableEditor.target)
 				{
-					if (!_transitionTableEditor.target)
+					editor.onGUIHandler = null;
+					return;
+				}
+
+				ListView listView = rootVisualElement.Q<ListView>(className: "table-list");
+				if ((Object)listView.selectedItem != _transitionTableEditor.target)
+				{
+					var i = listView.itemsSource.IndexOf(_transitionTableEditor.target);
+					listView.selectedIndex = i;
+					if (i < 0)
 					{
 						editor.onGUIHandler = null;
 						return;
 					}
+				}
 
-					if ((Object)listView.selectedItem != _transitionTableEditor.target)
-					{
-						var i = listView.itemsSource.IndexOf(_transitionTableEditor.target);
-						listView.selectedIndex = i;
-						if (i < 0)
-						{
-							editor.onGUIHandler = null;
-							return;
-						}
-					}
-
-					_transitionTableEditor.OnInspectorGUI();
-				};
+				_transitionTableEditor.OnInspectorGUI();
 			};
 		}
+
 
 		private TransitionTableSO[] FindAssets()
 		{
