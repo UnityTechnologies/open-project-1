@@ -43,7 +43,7 @@ public class AudioManager : MonoBehaviour
 	/// </summary>
 	void OnValidate()
 	{
-		if(Application.isPlaying)
+		if (Application.isPlaying)
 		{
 			SetGroupVolume("MasterVolume", _masterVolume);
 			SetGroupVolume("MusicVolume", _musicVolume);
