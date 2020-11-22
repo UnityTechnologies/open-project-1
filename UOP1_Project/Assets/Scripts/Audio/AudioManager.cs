@@ -16,38 +16,73 @@ public class AudioManager : MonoBehaviour
 	[SerializeField] private AudioCueEventChannelSO _SFXEventChannel = default;
 	[Tooltip("The SoundManager listens to this event, fired by objects in any scene, to play Music")]
 	[SerializeField] private AudioCueEventChannelSO _musicEventChannel = default;
-	public SoundEmitterPoolSO Pool { get { return _pool; } }
+
+
+	[Header("Audio control")]
+	[SerializeField] private AudioMixer audioMixer;
+	[Range(0f, 1f)]
+	[SerializeField] private float _masterVolume = 1f;
+	[Range(0f, 1f)]
+	[SerializeField] private float _musicVolume = 1f;
+	[Range(0f, 1f)]
+	[SerializeField] private float _sfxVolume = 1f;
 
 	private void Awake()
 	{
+		//TODO: Get the initial volume levels from the settings
+
 		_SFXEventChannel.OnAudioCueRequested += PlayAudioCue;
-		Pool.Prewarm(_initialSize);
+		_musicEventChannel.OnAudioCueRequested += PlayAudioCue; //TODO: Treat music requests differently?
+
+		_pool.Prewarm(_initialSize);
 	}
 
-	public static bool SetGroupVolume(AudioMixerGroup group, float volume)
+	/// <summary>
+	/// This is only used in the Editor, to debug volumes.
+	/// It is called when any of the variables is changed, and will directly change the value of the volumes on the AudioMixer.
+	/// </summary>
+	void OnValidate()
 	{
-		return group.audioMixer.SetFloat("Volume", NormalizedToMixerValue(volume));
-	}
-
-	public static bool GetGroupVolume(AudioMixerGroup group, out float volume)
-	{
-		if (group.audioMixer.GetFloat("Volume", out float rawVolume))
+		if(Application.isPlaying)
 		{
-			volume = MixerValueNormalized(rawVolume);
-			return true;
+			SetGroupVolume("MasterVolume", _masterVolume);
+			SetGroupVolume("MusicVolume", _musicVolume);
+			SetGroupVolume("SFXVolume", _sfxVolume);
 		}
-		volume = default;
-		return false;
 	}
 
-	// Both MixerValueNormalized and NormalizedToMixerValue functions are used for easier transformations when using UI sliders normalized format
-	private static float MixerValueNormalized(float value)
+	public void SetGroupVolume(string parameterName, float normalizedVolume)
 	{
-		return (-(value - 80) / 80) - 1;
+		bool volumeSet = audioMixer.SetFloat(parameterName, NormalizedToMixerValue(normalizedVolume));
+		if (!volumeSet)
+			Debug.LogError("The AudioMixer parameter was not found");
 	}
-	private static float NormalizedToMixerValue(float normalizedValue)
+
+	public float GetGroupVolume(string parameterName)
 	{
-		return -80 + (normalizedValue * 80);
+		if (audioMixer.GetFloat(parameterName, out float rawVolume))
+		{
+			return MixerValueToNormalized(rawVolume);
+		}
+		else
+		{
+			Debug.LogError("The AudioMixer parameter was not found");
+			return 0f;
+		}
+	}
+
+	// Both MixerValueNormalized and NormalizedToMixerValue functions are used for easier transformations
+	/// when using UI sliders normalized format
+	private float MixerValueToNormalized(float mixerValue)
+	{
+		// We're assuming the range [-80dB to 0dB] becomes [0 to 1]
+		return 1f + (mixerValue / 80f);
+	}
+	private float NormalizedToMixerValue(float normalizedValue)
+	{
+		// We're assuming the range [0 to 1] becomes [-80dB to 0dB]
+		// This doesn't allow values over 0dB
+		return (normalizedValue - 1f) * 80f;
 	}
 
 	/// <summary>
@@ -76,7 +111,7 @@ public class AudioManager : MonoBehaviour
 	{
 		soundEmitter.OnSoundFinishedPlaying -= OnSoundEmitterFinishedPlaying;
 		soundEmitter.Stop();
-		Pool.Return(soundEmitter);
+		_pool.Return(soundEmitter);
 	}
 
 	//TODO: Add methods to play and cross-fade music, or to play individual sounds?

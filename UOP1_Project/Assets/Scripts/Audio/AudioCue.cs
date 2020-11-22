@@ -22,11 +22,6 @@ public class AudioCue : MonoBehaviour
 			PlayAudioCue();
 	}
 
-	private void OnTriggerEnter(Collider other)
-	{
-		PlayAudioCue();
-	}
-
 	public void PlayAudioCue()
 	{
 		_audioCueEventChannel.RaiseEvent(_audioCue, _audioConfiguration, transform.position);

@@ -20,7 +20,7 @@ namespace UOP1.Pool
 				if (_poolRootObject == null)
 				{
 					_poolRootObject = new GameObject(name);
-					DontDestroyOnLoad(_poolRootObject);
+					//DontDestroyOnLoad(_poolRootObject);
 				}
 				return _poolRootObject;
 			}
