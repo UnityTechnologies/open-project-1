@@ -9,7 +9,8 @@ public class AudioConfigurationSO : ScriptableObject
 
 	// Simplified management of priority levels (values are counterintuitive, see enum below)
 	[SerializeField] private PriorityLevel _priorityLevel = PriorityLevel.Standard;
-	[HideInInspector] public int Priority
+	[HideInInspector]
+	public int Priority
 	{
 		get { return (int)_priorityLevel; }
 		set { _priorityLevel = (PriorityLevel)value; }
