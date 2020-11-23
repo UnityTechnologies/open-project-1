@@ -222,7 +222,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ba826e9d52310a43b98dffc289c71b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  voidGameEvent: {fileID: 11400000, guid: c499d87f35465124f8fb2751b150430d, type: 2}
+  _channel: {fileID: 11400000, guid: c499d87f35465124f8fb2751b150430d, type: 2}
   OnEventRaised:
     m_PersistentCalls:
       m_Calls:
@@ -249,8 +249,60 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &610459580
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 610459581}
+  - component: {fileID: 610459582}
+  m_Layer: 0
+  m_Name: AudioManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &610459581
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 610459580}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &610459582
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 610459580}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7dcf69f82f8783049ab749ba8f527f89, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _factory: {fileID: 11400000, guid: 0f82d558a11c88d458625502b6708251, type: 2}
+  _pool: {fileID: 11400000, guid: 4b2ed98efabac4446a90c61932acf933, type: 2}
+  _initialSize: 10
+  _SFXEventChannel: {fileID: 11400000, guid: c3c796b7c31ad3647a3fbae42e74764e, type: 2}
+  _musicEventChannel: {fileID: 11400000, guid: 51854f522e1d88442a90b878b27ea839, type: 2}
+  audioMixer: {fileID: 24100000, guid: 548a7f001ca6d3d4cb67c8edf84f62a3, type: 2}
+  _masterVolume: 1
+  _musicVolume: 1
+  _sfxVolume: 1
 --- !u!1 &841012433
 GameObject:
   m_ObjectHideFlags: 0
@@ -354,13 +406,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6b928d1d6f59854499ed82bdeef2305, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  initializationScene: {fileID: 11400000, guid: c2119785ce96367428081d6eee0d932b,
+  _initializationScene: {fileID: 11400000, guid: c2119785ce96367428081d6eee0d932b,
     type: 2}
-  mainMenuScenes:
+  _mainMenuScenes:
   - {fileID: 11400000, guid: 431ff81b74b48fb4d9301fb76ca633dd, type: 2}
-  loadingInterface: {fileID: 363619424}
-  loadingProgressBar: {fileID: 841012435}
-  _loadEvent: {fileID: 11400000, guid: 00e3063edc5902e40832ea618644c597, type: 2}
+  _loadingInterface: {fileID: 363619424}
+  _loadingProgressBar: {fileID: 841012435}
+  _loadEventChannel: {fileID: 11400000, guid: 00e3063edc5902e40832ea618644c597, type: 2}
 --- !u!4 &1242953037
 Transform:
   m_ObjectHideFlags: 0
@@ -423,12 +475,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
+  m_ReferenceResolution: {x: 1920, y: 1080}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
+  m_MatchWidthOrHeight: 1
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96

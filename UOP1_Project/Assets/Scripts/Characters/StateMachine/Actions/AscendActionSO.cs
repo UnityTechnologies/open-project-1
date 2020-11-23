@@ -14,7 +14,7 @@ public class AscendActionSO : StateActionSO
 public class AscendAction : StateAction
 {
 	//Component references
-	private Character _characterScript;
+	private Protagonist _protagonistScript;
 
 	private float _verticalMovement;
 	private float _gravityContributionMultiplier;
@@ -25,7 +25,7 @@ public class AscendAction : StateAction
 
 	public override void Awake(StateMachine stateMachine)
 	{
-		_characterScript = stateMachine.GetComponent<Character>();
+		_protagonistScript = stateMachine.GetComponent<Protagonist>();
 	}
 
 	public AscendAction(float initialJumpForce)
@@ -45,6 +45,6 @@ public class AscendAction : StateAction
 		_verticalMovement += Physics.gravity.y * GRAVITY_MULTIPLIER * Time.deltaTime * _gravityContributionMultiplier;
 		//Note that even if it's added, the above value is negative due to Physics.gravity.y
 
-		_characterScript.movementVector.y = _verticalMovement;
+		_protagonistScript.movementVector.y = _verticalMovement;
 	}
 }

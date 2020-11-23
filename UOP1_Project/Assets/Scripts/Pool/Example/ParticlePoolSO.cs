@@ -3,14 +3,12 @@ using UOP1.Pool;
 using UOP1.Factory;
 
 [CreateAssetMenu(fileName = "NewParticlePool", menuName = "Pool/Particle Pool")]
-public class ParticlePoolSO : ComponentPoolSO<PoolableParticle>
+public class ParticlePoolSO : ComponentPoolSO<ParticleSystem>
 {
 	[SerializeField]
 	private ParticleFactorySO _factory;
-	[SerializeField]
-	private int _initialPoolSize;
 
-	public override IFactory<PoolableParticle> Factory
+	public override IFactory<ParticleSystem> Factory
 	{
 		get
 		{
@@ -19,18 +17,6 @@ public class ParticlePoolSO : ComponentPoolSO<PoolableParticle>
 		set
 		{
 			_factory = value as ParticleFactorySO;
-		}
-	}
-
-	public override int InitialPoolSize
-	{
-		get
-		{
-			return _initialPoolSize;
-		}
-		set
-		{
-			_initialPoolSize = value;
 		}
 	}
 }

@@ -17,7 +17,6 @@ public class DialogueManager : MonoBehaviour
 	public void BeginDialogue(DialogueLineSO firstLine)
 	{
 		_inputReader.EnableDialogueInput();
-
 		DisplayDialogueLine(firstLine);
 	}
 
@@ -29,6 +28,8 @@ public class DialogueManager : MonoBehaviour
 	public void DisplayDialogueLine(DialogueLineSO dialogueLine)
 	{
 		//TODO: Interface with a UIManager to allow displayal of the line of dialogue in the UI
-		Debug.Log("A line of dialogue has been spoken: \"" + dialogueLine.Sentence + "\" by " + dialogueLine.Actor.ActorName);
+		//Debug.Log("A line of dialogue has been spoken: \"" + dialogueLine.Sentence + "\" by " + dialogueLine.Actor.ActorName);
+		UIManager.Instance.OpenUIDialogue(dialogueLine);
+
 	}
 }

@@ -8,8 +8,6 @@ public class SoundEmitterPoolSO : ComponentPoolSO<SoundEmitter>
 {
 	[SerializeField]
 	private SoundEmitterFactorySO _factory;
-	[SerializeField]
-	private int _initialPoolSize;
 
 	public override IFactory<SoundEmitter> Factory
 	{
@@ -20,18 +18,6 @@ public class SoundEmitterPoolSO : ComponentPoolSO<SoundEmitter>
 		set
 		{
 			_factory = value as SoundEmitterFactorySO;
-		}
-	}
-
-	public override int InitialPoolSize
-	{
-		get
-		{
-			return _initialPoolSize;
-		}
-		set
-		{
-			_initialPoolSize = value;
 		}
 	}
 }
