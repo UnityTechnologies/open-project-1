@@ -140,8 +140,8 @@ public class ReplaceTool : EditorWindow
 			//var inst = Instantiate(replaceObject, go.transform.position, go.transform.rotation, go.transform.parent);
 			GameObject newPrefabObject = PrefabUtility.InstantiatePrefab(replaceObject, go.transform.parent) as GameObject;
 			newPrefabObject.name = replaceObject.name + " (" + (i + 1) + ")";
-			newPrefabObject.transform.position = go.transform.localPosition;
-			newPrefabObject.transform.rotation = go.transform.localRotation;
+			newPrefabObject.transform.localPosition = go.transform.localPosition;
+			newPrefabObject.transform.localRotation = go.transform.localRotation;
 			newPrefabObject.transform.localScale = go.transform.localScale;
 			newPrefabObject.transform.localScale = go.transform.localScale;
 			Undo.RegisterCreatedObjectUndo(newPrefabObject, "Replacement creation.");
