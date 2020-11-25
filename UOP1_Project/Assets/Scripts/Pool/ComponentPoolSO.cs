@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 namespace UOP1.Pool
 {
@@ -16,44 +16,24 @@ namespace UOP1.Pool
 				if (_poolRoot == null)
 				{
 					_poolRoot = new GameObject(name).transform;
+					_poolRoot.SetParent(_parent);
 				}
 				return _poolRoot;
 			}
 		}
 
 		private Transform _parent;
-		private Transform Parent
-		{
-			get
-			{
-				if (_parent == null)
-				{
-					_parent = PoolRoot;
-				}
-				return _parent;
-			}
-		}
 
+		/// <summary>
+		/// Parents the pool root transform to <paramref name="t"/>.
+		/// </summary>
+		/// <param name="t">The Transform to which this pool should become a child.</param>
+		/// <remarks>NOTE: Setting the parent to an object marked DontDestroyOnLoad will effectively make this pool DontDestroyOnLoad.<br/>
+		/// This can only be circumvented by manually destroying the object or its parent or by setting the parent to an object not marked DontDestroyOnLoad.</remarks>
 		public void SetParent(Transform t)
 		{
-			Transform newParent = t != null ? t : PoolRoot;
-			if (_parent != null && _parent != newParent)
-			{
-				foreach (T member in Available)
-				{
-					member.transform.SetParent(newParent);
-				}
-				CheckCleanPoolRoot();
-			}
-			_parent = newParent;
-		}
-
-		void CheckCleanPoolRoot()
-		{
-			if (_poolRoot != null && _poolRoot != _parent && _poolRoot.childCount == 0)
-			{
-				Destroy(_poolRoot.gameObject);
-			}
+			_parent = t;
+			PoolRoot.SetParent(_parent);
 		}
 
 		public override T Request()
@@ -65,16 +45,15 @@ namespace UOP1.Pool
 
 		public override void Return(T member)
 		{
-			member.transform.SetParent(Parent.transform);
+			member.transform.SetParent(PoolRoot.transform);
 			member.gameObject.SetActive(false);
-			CheckCleanPoolRoot();
 			base.Return(member);
 		}
 
 		protected override T Create()
 		{
 			T newMember = base.Create();
-			newMember.transform.SetParent(Parent.transform);
+			newMember.transform.SetParent(PoolRoot.transform);
 			newMember.gameObject.SetActive(false);
 			return newMember;
 		}
