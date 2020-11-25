@@ -18,7 +18,7 @@ public class AudioCueEventChannelSO : ScriptableObject
 		}
 		else
 		{
-			Debug.LogWarning("An AudioCue was requested, but nobody picked it up." +
+			Debug.LogWarning("An AudioCue was requested, but nobody picked it up. " +
 				"Check why there is no AudioManager already loaded, " +
 				"and make sure it's listening on this AudioCue Event channel.");
 		}
