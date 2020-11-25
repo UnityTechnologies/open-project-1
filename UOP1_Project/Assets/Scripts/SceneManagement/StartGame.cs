@@ -6,12 +6,12 @@
 
 public class StartGame : MonoBehaviour
 {
-	public LoadEvent onPlayButtonPress;
+	public LoadEventChannelSO onPlayButtonPress;
 	public GameSceneSO[] locationsToLoad;
 	public bool showLoadScreen;
 
 	public void OnPlayButtonPress()
 	{
-		onPlayButtonPress.Raise(locationsToLoad, showLoadScreen);
+		onPlayButtonPress.RaiseEvent(locationsToLoad, showLoadScreen);
 	}
 }

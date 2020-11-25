@@ -13,7 +13,7 @@ public class HorizontalMoveActionSO : StateActionSO
 public class WalkAction : StateAction
 {
 	//Component references
-	private Character _characterScript;
+	private Protagonist _protagonistScript;
 
 	private float _speed;
 
@@ -24,12 +24,12 @@ public class WalkAction : StateAction
 
 	public override void Awake(StateMachine stateMachine)
 	{
-		_characterScript = stateMachine.GetComponent<Character>();
+		_protagonistScript = stateMachine.GetComponent<Protagonist>();
 	}
 
 	public override void OnUpdate()
 	{
-		_characterScript.movementVector.x = _characterScript.movementInput.x * _speed;
-		_characterScript.movementVector.z = _characterScript.movementInput.z * _speed;
+		_protagonistScript.movementVector.x = _protagonistScript.movementInput.x * _speed;
+		_protagonistScript.movementVector.z = _protagonistScript.movementInput.z * _speed;
 	}
 }
