@@ -8,21 +8,51 @@ namespace UOP1.Pool
 	/// <typeparam name="T">Specifies the component to pool.</typeparam>
 	public abstract class ComponentPoolSO<T> : PoolSO<T> where T : Component
 	{
-		private GameObject _poolRootObject;
-		private GameObject PoolRootObject
+		private Transform _poolRoot;
+		private Transform PoolRoot
 		{
 			get
 			{
-				if (!Application.isPlaying)
+				if (_poolRoot == null)
 				{
-					return null;
+					_poolRoot = new GameObject(name).transform;
 				}
-				if (_poolRootObject == null)
+				return _poolRoot;
+			}
+		}
+
+		private Transform _parent;
+		private Transform Parent
+		{
+			get
+			{
+				if (_parent == null)
 				{
-					_poolRootObject = new GameObject(name);
-					DontDestroyOnLoad(_poolRootObject);
+					_parent = PoolRoot;
 				}
-				return _poolRootObject;
+				return _parent;
+			}
+		}
+
+		public void SetParent(Transform t)
+		{
+			Transform newParent = t != null ? t : PoolRoot;
+			if (_parent != null && _parent != newParent)
+			{
+				foreach (T member in Available)
+				{
+					member.transform.SetParent(newParent);
+				}
+				CheckCleanPoolRoot();
+			}
+			_parent = newParent;
+		}
+
+		void CheckCleanPoolRoot()
+		{
+			if (_poolRoot != null && _poolRoot != _parent && _poolRoot.childCount == 0)
+			{
+				Destroy(_poolRoot.gameObject);
 			}
 		}
 
@@ -35,15 +65,16 @@ namespace UOP1.Pool
 
 		public override void Return(T member)
 		{
-			member.transform.SetParent(PoolRootObject.transform);
+			member.transform.SetParent(Parent.transform);
 			member.gameObject.SetActive(false);
+			CheckCleanPoolRoot();
 			base.Return(member);
 		}
 
 		protected override T Create()
 		{
 			T newMember = base.Create();
-			newMember.transform.SetParent(PoolRootObject.transform);
+			newMember.transform.SetParent(Parent.transform);
 			newMember.gameObject.SetActive(false);
 			return newMember;
 		}
@@ -51,11 +82,14 @@ namespace UOP1.Pool
 		public override void OnDisable()
 		{
 			base.OnDisable();
+			if (_poolRoot != null)
+			{
 #if UNITY_EDITOR
-			DestroyImmediate(PoolRootObject);
+				DestroyImmediate(_poolRoot.gameObject);
 #else
-			Destroy(PoolRootObject);
+				Destroy(_poolRoot.gameObject);
 #endif
+			}
 		}
 	}
 }
