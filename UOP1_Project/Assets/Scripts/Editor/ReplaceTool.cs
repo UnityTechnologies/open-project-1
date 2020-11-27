@@ -130,9 +130,9 @@ public class ReplaceTool : EditorWindow
 	/// </summary>
 	/// <param name="objectToReplace">Game Objects to replace.</param>
 	/// <param name="replaceObject">Prefab that will be instantiated in place of the objects to replace.</param>
-	private void ReplaceSelectedObjects(GameObject[] objectToReplace, GameObject replaceObject)
+	internal static void ReplaceSelectedObjects(GameObject[] objectToReplace, GameObject replaceObject)
 	{
-		Debug.Log("[Replace Tool] Replace process");
+		//Debug.Log("[Replace Tool] Replace process");
 		for (int i = 0; i < objectToReplace.Length; i++)
 		{
 			var go = objectToReplace[i];
@@ -146,7 +146,7 @@ public class ReplaceTool : EditorWindow
 			}
 			Undo.DestroyObjectImmediate(go);
 		}
-		Debug.LogFormat("[Replace Tool] {0} objects replaced on scene with {1}", objectToReplace.Length, replaceObject.name);
+		//Debug.LogFormat("[Replace Tool] {0} objects replaced on scene with {1}", objectToReplace.Length, replaceObject.name);
 	}
 }
 
