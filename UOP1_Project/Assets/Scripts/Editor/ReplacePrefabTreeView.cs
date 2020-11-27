@@ -83,7 +83,7 @@ namespace UOP1.EditorTools.Replacer
 
 				if (!paths.Contains(split))
 				{
-					rows.Add(new TreeViewItem(split.GetHashCode(), i - 1, split) {icon = folderIcon});
+					rows.Add(new TreeViewItem(split.GetHashCode(), i - 1, split) { icon = folderIcon });
 					paths.Add(split);
 				}
 			}
