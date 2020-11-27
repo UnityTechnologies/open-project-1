@@ -49,7 +49,7 @@ internal class ScriptTemplates
 			for (int i = runtimeName.Length - 1; i > 0; i--)
 				if (char.IsUpper(runtimeName[i]) && char.IsLower(runtimeName[i - 1]))
 					runtimeName = runtimeName.Insert(i, " ");
-			
+
 			text = text.Replace("#RUNTIMENAME_WITH_SPACES#", runtimeName);
 
 			string fullPath = Path.GetFullPath(pathName);
