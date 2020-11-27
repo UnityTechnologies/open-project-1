@@ -11,11 +11,9 @@ namespace UOP1.EditorTools.Replacer
 		private static Type hierarchyType;
 
 		private static EditorWindow focusedWindow;
-		private static EditorWindow focusedHierarchy;
 		private static IMGUIContainer hierarchyGUI;
 
 		private static Vector2 mousePosition;
-		private static Dictionary<int, Rect> hierarchyRects = new Dictionary<int, Rect>();
 		private static bool hasExecuted;
 
 		[InitializeOnLoadMethod]
@@ -24,9 +22,6 @@ namespace UOP1.EditorTools.Replacer
 			hierarchyType = typeof(Editor).Assembly.GetType("UnityEditor.SceneHierarchyWindow");
 
 			EditorApplication.update += TrackFocusedHierarchy;
-
-			EditorApplication.hierarchyWindowItemOnGUI += OnHierarchyItemGUI;
-			EditorApplication.hierarchyChanged += hierarchyRects.Clear;
 		}
 
 		private static void TrackFocusedHierarchy()
@@ -37,8 +32,6 @@ namespace UOP1.EditorTools.Replacer
 
 				if (focusedWindow?.GetType() == hierarchyType)
 				{
-					focusedHierarchy = focusedWindow;
-
 					if (hierarchyGUI != null)
 						hierarchyGUI.onGUIHandler -= OnFocusedHierarchyGUI;
 
@@ -51,7 +44,7 @@ namespace UOP1.EditorTools.Replacer
 		private static void OnFocusedHierarchyGUI()
 		{
 			// As Event.current is null during context-menu callback, we need to track mouse position on hierarchy GUI
-			mousePosition = Event.current.mousePosition;
+			mousePosition = GUIUtility.GUIToScreenPoint(Event.current.mousePosition);
 		}
 
 		[MenuItem("GameObject/Replace", true, priority = 0)]
@@ -66,29 +59,11 @@ namespace UOP1.EditorTools.Replacer
 			if (hasExecuted)
 				return;
 
-			hierarchyRects.TryGetValue(Selection.activeInstanceID, out var rect);
+			var rect = new Rect(mousePosition, new Vector2(240, 320));
 
-			var size = new Vector2(240, 320);
-			var position = (focusedHierarchy ?? focusedWindow).position.position;
-
-			position.x = mousePosition.x;
-			position.y += rect.y + 20;
-
-			ReplacePrefabSearchPopup.Show(rect, position, size);
+			ReplacePrefabSearchPopup.Show(rect);
 
 			EditorApplication.delayCall += () => hasExecuted = false;
-		}
-
-		private static void OnHierarchyItemGUI(int instanceId, Rect selectionRect)
-		{
-			if (!hierarchyRects.ContainsKey(instanceId))
-			{
-				hierarchyRects.Add(instanceId, selectionRect);
-			}
-			else
-			{
-				hierarchyRects[instanceId] = selectionRect;
-			}
 		}
 	}
 }

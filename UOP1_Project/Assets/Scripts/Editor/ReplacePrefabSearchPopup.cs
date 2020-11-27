@@ -35,21 +35,20 @@ namespace UOP1.EditorTools.Replacer
 
 		private Vector2 startPos;
 		private Vector2 startSize;
-		private Rect itemRect;
 
 		private GameObjectPreview selectionPreview = new GameObjectPreview();
 
-		public static void Show(Rect itemRect, Vector2 position, Vector2 size)
+		public static void Show(Rect rect)
 		{
 			var windows = Resources.FindObjectsOfTypeAll<ReplacePrefabSearchPopup>();
 			window = windows.Length != 0 ? windows[0] : CreateInstance<ReplacePrefabSearchPopup>();
 
 			window.Init();
 
-			window.startPos = position;
-			window.startSize = size;
+			window.startPos = rect.position;
+			window.startSize = rect.size;
 
-			window.position = new Rect(position, size);
+			window.position = new Rect(rect.position, rect.size);
 			window.SetCorrectSize();
 			//window.ShowAsDropDown(new Rect(position, Vector2.zero), size);
 
@@ -57,7 +56,6 @@ namespace UOP1.EditorTools.Replacer
 			window.ShowPopup();
 
 			//onSelectEntry += _ => window.Close();
-			window.itemRect = itemRect;
 		}
 
 		private void Init()
@@ -124,11 +122,6 @@ namespace UOP1.EditorTools.Replacer
 			tree.searchString = searchField.OnToolbarGUI(tree.searchString);
 			GUILayout.Space(-2);
 
-			var headerRect = GUILayoutUtility.GetRect(0, itemRect.width, 0, itemRect.height);
-
-			if (Event.current.type == EventType.Repaint)
-				EditorGUI.DrawRect(headerRect, styles.headerColor);
-
 			GUILayout.Label("Replace With...", styles.headerLabel);
 		}
 
@@ -175,8 +168,6 @@ namespace UOP1.EditorTools.Replacer
 
 		private class Styles
 		{
-			public Color headerColor = isProSkin ? new Color32(77, 77, 77, 255) : new Color32(174, 174, 174, 255);
-
 			public GUIStyle header = new GUIStyle("AC BoldHeader")
 			{
 				fixedHeight = 0,
