@@ -2,39 +2,29 @@
 using UnityEngine.Events;
 
 /// <summary>
-/// This class is listener for Void Events
+/// A flexible handler for void events in the form of a MonoBehaviour. Responses can be connected directly from the Unity Inspector.
 /// </summary>
-
 public class VoidEventListener : MonoBehaviour
 {
-	public VoidGameEvent voidGameEvent;
+	[SerializeField] private VoidEventChannelSO _channel = default;
+
 	public UnityEvent OnEventRaised;
 
 	private void OnEnable()
 	{
-		//Check if the event exists to avoid errors
-		if (voidGameEvent == null)
-		{
-			return;
-		}
-		voidGameEvent.eventRaised += Respond;
+		if (_channel != null)
+			_channel.OnEventRaised += Respond;
 	}
 
 	private void OnDisable()
 	{
-		if (voidGameEvent == null)
-		{
-			return;
-		}
-		voidGameEvent.eventRaised -= Respond;
+		if (_channel != null)
+			_channel.OnEventRaised -= Respond;
 	}
 
-	public void Respond()
+	private void Respond()
 	{
-		if (OnEventRaised == null)
-		{
-			return;
-		}
-		OnEventRaised.Invoke();
+		if (OnEventRaised != null)
+			OnEventRaised.Invoke();
 	}
 }

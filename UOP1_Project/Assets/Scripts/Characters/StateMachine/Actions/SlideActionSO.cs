@@ -14,7 +14,7 @@ public class SlideActionSO : StateActionSO
 public class SlideAction : StateAction
 {
 	//Component references
-	private Character _characterScript;
+	private Protagonist _protagonistScript;
 
 	private float _slideSpeed;
 
@@ -25,18 +25,18 @@ public class SlideAction : StateAction
 
 	public override void Awake(StateMachine stateMachine)
 	{
-		_characterScript = stateMachine.GetComponent<Character>();
+		_protagonistScript = stateMachine.GetComponent<Protagonist>();
 	}
 
 	public override void OnUpdate()
 	{
-		Vector3 hitNormal = _characterScript.lastHit.normal;
-		_characterScript.movementVector.x = (1f - hitNormal.y) * hitNormal.x * _slideSpeed;
-		_characterScript.movementVector.z = (1f - hitNormal.y) * hitNormal.z * _slideSpeed;
+		Vector3 hitNormal = _protagonistScript.lastHit.normal;
+		_protagonistScript.movementVector.x = (1f - hitNormal.y) * hitNormal.x * _slideSpeed;
+		_protagonistScript.movementVector.z = (1f - hitNormal.y) * hitNormal.z * _slideSpeed;
 	}
 
 	public override void OnStateExit()
 	{
-		_characterScript.movementVector = Vector3.zero;
+		_protagonistScript.movementVector = Vector3.zero;
 	}
 }

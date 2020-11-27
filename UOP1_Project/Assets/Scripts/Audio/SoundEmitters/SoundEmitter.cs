@@ -1,16 +1,11 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Audio;
-using UOP1.Pool;
-using System;
 using UnityEngine.Events;
 
 [RequireComponent(typeof(AudioSource))]
-public class SoundEmitter : MonoBehaviour, IPoolable
+public class SoundEmitter : MonoBehaviour
 {
 	private AudioSource _audioSource;
-	private float _lastUseTimestamp = 0;
 
 	public event UnityAction<SoundEmitter> OnSoundFinishedPlaying;
 
@@ -20,13 +15,6 @@ public class SoundEmitter : MonoBehaviour, IPoolable
 		_audioSource.playOnAwake = false;
 	}
 
-	public void OnRequest() { }
-
-	public void OnReturn(Action onReturned)
-	{
-		StopSound();
-	}
-
 	/// <summary>
 	/// Instructs the AudioSource to play a single clip, with optional looping, in a position in 3D space.
 	/// </summary>
@@ -34,10 +22,10 @@ public class SoundEmitter : MonoBehaviour, IPoolable
 	/// <param name="settings"></param>
 	/// <param name="hasToLoop"></param>
 	/// <param name="position"></param>
-	public void PlaySound(AudioClip clip, AudioConfigurationSO settings, bool hasToLoop, Vector3 position = default)
+	public void PlayAudioClip(AudioClip clip, AudioConfigurationSO settings, bool hasToLoop, Vector3 position = default)
 	{
 		_audioSource.clip = clip;
-		ApplySettings(_audioSource, settings);
+		settings.ApplyTo(_audioSource);
 		_audioSource.transform.position = position;
 		_audioSource.loop = hasToLoop;
 		_audioSource.Play();
@@ -48,31 +36,27 @@ public class SoundEmitter : MonoBehaviour, IPoolable
 		}
 	}
 
-	private void ApplySettings(AudioSource source, AudioConfigurationSO settings)
+	/// <summary>
+	/// Used when the game is unpaused, to pick up SFX from where they left.
+	/// </summary>
+	public void Resume()
 	{
-		source.outputAudioMixerGroup = settings.OutputAudioMixerGroup;
-		source.mute = settings.Mute;
-		source.bypassEffects = settings.BypassEffects;
-		source.bypassListenerEffects = settings.BypassListenerEffects;
-		source.bypassReverbZones = settings.BypassReverbZones;
-		source.priority = settings.Priority;
-		source.volume = settings.Volume;
-		source.pitch = settings.Pitch;
-		source.panStereo = settings.PanStereo;
-		source.spatialBlend = settings.SpatialBlend;
-		source.reverbZoneMix = settings.ReverbZoneMix;
-		source.dopplerLevel = settings.DopplerLevel;
-		source.spread = settings.Spread;
-		source.rolloffMode = settings.RolloffMode;
-		source.minDistance = settings.MinDistance;
-		source.maxDistance = settings.MaxDistance;
-		source.ignoreListenerVolume = settings.IgnoreListenerVolume;
-		source.ignoreListenerPause = settings.IgnoreListenerPause;
+		_audioSource.Play();
 	}
 
-	public void StopSound()
+	/// <summary>
+	/// Used when the game is paused.
+	/// </summary>
+	public void Pause()
 	{
-		_lastUseTimestamp = Time.realtimeSinceStartup;
+		_audioSource.Pause();
+	}
+
+	/// <summary>
+	/// Used when the SFX finished playing. Called by the <c>AudioManager</c>.
+	/// </summary>
+	public void Stop() // Redundant?
+	{
 		_audioSource.Stop();
 	}
 
@@ -84,11 +68,6 @@ public class SoundEmitter : MonoBehaviour, IPoolable
 	public bool IsLooping()
 	{
 		return _audioSource.loop;
-	}
-
-	public float LastUseTimestamp()
-	{
-		return _lastUseTimestamp;
 	}
 
 	IEnumerator FinishedPlaying(float clipLength)

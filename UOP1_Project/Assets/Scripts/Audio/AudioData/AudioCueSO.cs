@@ -69,7 +69,7 @@ public class AudioClipsGroup
 					break;
 
 				case SequenceMode.Sequential:
-					_nextClipToPlay = (int)Mathf.Repeat(_nextClipToPlay++, audioClips.Length);
+					_nextClipToPlay = (int)Mathf.Repeat(++_nextClipToPlay, audioClips.Length);
 					break;
 			}
 		}

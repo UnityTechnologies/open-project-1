@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 
+using UnityEngine.Localization;
 /// <summary>
 /// This class contains Settings specific to Locations only
 /// </summary>
@@ -8,5 +9,6 @@
 public class LocationSO : GameSceneSO
 {
 	[Header("Location specific")]
+	public LocalizedString locationName;
 	public int enemiesCount; //Example variable, will change later
 }

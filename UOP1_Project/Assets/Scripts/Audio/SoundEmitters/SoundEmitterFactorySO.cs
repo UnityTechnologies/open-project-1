@@ -2,20 +2,12 @@
 using UOP1.Factory;
 
 [CreateAssetMenu(fileName = "NewSoundEmitterFactory", menuName = "Factory/SoundEmitter Factory")]
-public class SoundEmitterFactorySO : ComponentFactorySO<SoundEmitter>
+public class SoundEmitterFactorySO : FactorySO<SoundEmitter>
 {
-	[SerializeField]
-	private SoundEmitter _prefab = default;
+	public SoundEmitter prefab = default;
 
-	public override SoundEmitter Prefab
+	public override SoundEmitter Create()
 	{
-		get
-		{
-			return _prefab;
-		}
-		set
-		{
-			_prefab = value;
-		}
+		return Instantiate(prefab);
 	}
 }
