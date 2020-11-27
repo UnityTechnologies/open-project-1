@@ -11,6 +11,7 @@ namespace UOP1.StateMachine
 		private bool _isCached = false;
 		private bool _cachedStatement = default;
 		internal StateConditionSO _originSO;
+		protected StateConditionSO OriginSO => _originSO;
 
 		/// <summary>
 		/// Specify the statement to evaluate.
