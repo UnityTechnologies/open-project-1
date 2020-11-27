@@ -10,6 +10,8 @@ namespace UOP1.EditorTools.Replacer
 	{
 		private static Texture2D folderIcon = EditorGUIUtility.IconContent("Folder Icon").image as Texture2D;
 
+		public int RowsCount => rows.Count;
+
 		public Action<GameObject> onSelectEntry;
 
 		private List<TreeViewItem> rows = new List<TreeViewItem>();
@@ -52,11 +54,6 @@ namespace UOP1.EditorTools.Replacer
 			var root = new TreeViewItem(0, -1);
 			rows.Clear();
 			paths.Clear();
-
-			paths.Add("Prefabs");
-
-			var prefabs = new TreeViewItem(1, 0, "Prefabs");
-			rows.Add(prefabs);
 
 			foreach (var guid in AssetDatabase.FindAssets("t:Prefab"))
 			{

@@ -16,6 +16,7 @@ namespace UOP1.EditorTools.Replacer
 
 		private static Vector2 mousePosition;
 		private static Dictionary<int, Rect> hierarchyRects = new Dictionary<int, Rect>();
+		private static bool hasExecuted;
 
 		[InitializeOnLoadMethod]
 		private static void OnInitialize()
@@ -34,7 +35,7 @@ namespace UOP1.EditorTools.Replacer
 			{
 				focusedWindow = EditorWindow.focusedWindow;
 
-				if (focusedWindow.GetType() == hierarchyType)
+				if (focusedWindow?.GetType() == hierarchyType)
 				{
 					focusedHierarchy = focusedWindow;
 
@@ -53,21 +54,29 @@ namespace UOP1.EditorTools.Replacer
 			mousePosition = Event.current.mousePosition;
 		}
 
+		[MenuItem("GameObject/Replace", true, priority = 0)]
+		private static bool ReplaceSelectionValidate()
+		{
+			return Selection.gameObjects.Length > 0;
+		}
+
 		[MenuItem("GameObject/Replace", priority = 0)]
 		private static void ReplaceSelection()
 		{
+			if (hasExecuted)
+				return;
+
 			hierarchyRects.TryGetValue(Selection.activeInstanceID, out var rect);
 
 			var size = new Vector2(240, 320);
-			var position = focusedHierarchy.position.position;
+			var position = (focusedHierarchy ?? focusedWindow).position.position;
 
 			position.x = mousePosition.x;
 			position.y += rect.y + 20;
 
-			ReplacePrefabSearchPopup.Show(rect, position, size, prefab =>
-			{
-				ReplaceTool.ReplaceSelectedObjects(Selection.gameObjects, prefab);
-			});
+			ReplacePrefabSearchPopup.Show(rect, position, size);
+
+			EditorApplication.delayCall += () => hasExecuted = false;
 		}
 
 		private static void OnHierarchyItemGUI(int instanceId, Rect selectionRect)
