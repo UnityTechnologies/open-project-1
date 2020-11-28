@@ -11,7 +11,7 @@ public class LocalPoolTester : MonoBehaviour
 	private ParticleFactorySO _factory;
 
 	private void Awake()
-	{ 
+	{
 		DontDestroyOnLoad(this.gameObject);
 	}
 
