@@ -34,8 +34,15 @@ namespace UOP1.EditorTools
 
 		public void Cleanup()
 		{
-			if (cachedEditor)
-				Object.DestroyImmediate(cachedEditor);
+			try
+			{
+				if (cachedEditor)
+					Object.DestroyImmediate(cachedEditor);
+			}
+			catch
+			{
+				// ClearPreviewCache error
+			}
 		}
 
 		public void CreatePreviewForTarget(GameObject target)
