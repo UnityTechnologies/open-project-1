@@ -11,6 +11,9 @@ namespace UOP1.Pool
 	public abstract class PoolSO<T> : ScriptableObject, IPool<T>
 	{
 		protected readonly Stack<T> Available = new Stack<T>();
+		/// <summary>
+		/// The factory which will be used to create <typeparamref name="T"/> on demand.
+		/// </summary>
 		public abstract IFactory<T> Factory { get; set; }
 		protected bool HasBeenPrewarmed { get; set; }
 
@@ -19,6 +22,11 @@ namespace UOP1.Pool
 			return Factory.Create();
 		}
 
+		/// <summary>
+		/// Prewarms the pool with a <paramref name="num"/> of <typeparamref name="T"/>.
+		/// </summary>
+		/// <param name="num">The number of members to create as a part of this pool.</param>
+		/// <remarks>NOTE: This method can be called at any time, but only once for the lifetime of the pool.</remarks>
 		public virtual void Prewarm(int num)
 		{
 			if (HasBeenPrewarmed)
@@ -33,11 +41,19 @@ namespace UOP1.Pool
 			HasBeenPrewarmed = true;
 		}
 
+		/// <summary>
+		/// Requests a <typeparamref name="T"/> from this pool.
+		/// </summary>
+		/// <returns>The requested <typeparamref name="T"/>.</returns>
 		public virtual T Request()
 		{
 			return Available.Count > 0 ? Available.Pop() : Create();
 		}
 
+		/// <summary>
+		/// Batch requests a <typeparamref name="T"/> collection from this pool.
+		/// </summary>
+		/// <returns>A <typeparamref name="T"/> collection.</returns>
 		public virtual IEnumerable<T> Request(int num = 1)
 		{
 			List<T> members = new List<T>(num);
@@ -48,11 +64,19 @@ namespace UOP1.Pool
 			return members;
 		}
 
+		/// <summary>
+		/// Returns a <typeparamref name="T"/> to the pool.
+		/// </summary>
+		/// <param name="member">The <typeparamref name="T"/> to return.</param>
 		public virtual void Return(T member)
 		{
 			Available.Push(member);
 		}
 
+		/// <summary>
+		/// Returns a <typeparamref name="T"/> collection to the pool.
+		/// </summary>
+		/// <param name="members">The <typeparamref name="T"/> collection to return.</param>
 		public virtual void Return(IEnumerable<T> members)
 		{
 			foreach (T member in members)
