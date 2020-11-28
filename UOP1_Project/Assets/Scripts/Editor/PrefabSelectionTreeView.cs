@@ -12,10 +12,13 @@ namespace UOP1.EditorTools.Replacer
 		private static Texture2D prefabOnIcon = EditorGUIUtility.IconContent("Prefab On Icon").image as Texture2D;
 		private static Texture2D prefabVariantOnIcon = EditorGUIUtility.IconContent("PrefabVariant On Icon").image as Texture2D;
 		private static Texture2D folderIcon = EditorGUIUtility.IconContent("Folder Icon").image as Texture2D;
+		private static Texture2D folderOnIcon = EditorGUIUtility.IconContent("Folder On Icon").image as Texture2D;
 
 		private static GUIStyle whiteLabel;
+		private static GUIStyle foldout;
 
 		public int RowsCount => rows.Count;
+		private Event evt => Event.current;
 
 		public Action<GameObject> onSelectEntry;
 
@@ -27,12 +30,25 @@ namespace UOP1.EditorTools.Replacer
 
 		private GameObjectPreview itemPreview = new GameObjectPreview();
 		private GUIContent itemContent = new GUIContent();
+		private TreeViewItem lastItem;
 
 		private int selectedId;
 
 		public PrefabSelectionTreeView(TreeViewState state) : base(state)
 		{
+			foldoutOverride = FoldoutOverride;
 			Reload();
+		}
+
+		private bool FoldoutOverride(Rect position, bool expandedState, GUIStyle style)
+		{
+			position.width = Screen.width;
+			position.height = 20;
+			position.y -= 2;
+
+			expandedState = GUI.Toggle(position, expandedState, GUIContent.none, style);
+
+			return expandedState;
 		}
 
 		public void Cleanup()
@@ -79,11 +95,13 @@ namespace UOP1.EditorTools.Replacer
 		{
 			if (IsPrefabAsset(id, out var prefab))
 				onSelectEntry(prefab);
+			else
+				SetExpanded(id, !IsExpanded(id));
 		}
 
 		protected override void KeyEvent()
 		{
-			var key = Event.current.keyCode;
+			var key = evt.keyCode;
 			if (key == KeyCode.KeypadEnter || key == KeyCode.Return)
 				DoubleClickedItem(selectedId);
 		}
@@ -146,9 +164,19 @@ namespace UOP1.EditorTools.Replacer
 			var isSelected = IsSelected(item.id);
 			var isFocused = HasFocus() && isSelected;
 			var isPrefab = IsPrefabAsset(item.id, out var prefab);
+			var isFolder = !isPrefab;
 
-			if (!isPrefab && hasSearch)
+			if (isFolder && hasSearch)
 				return;
+
+			if (isFolder)
+			{
+				if (rect.Contains(evt.mousePosition) && evt.type == EventType.MouseUp)
+				{
+					SetSelection(new List<int> { item.id });
+					SetFocus();
+				}
+			}
 
 			var labelStyle = isFocused ? whiteLabel : EditorStyles.label;
 			var contentIndent = GetContentIndent(item);
@@ -205,7 +233,7 @@ namespace UOP1.EditorTools.Replacer
 			}
 			else
 			{
-				itemContent.image = folderIcon;
+				itemContent.image = isFocused ? folderOnIcon : folderIcon;
 				GUI.Label(rect, itemContent, labelStyle);
 			}
 		}
