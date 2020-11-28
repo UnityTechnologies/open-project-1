@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEditor;
 
-namespace ChopChop.EditorTools.jandd661
+namespace UOP1.EditorTools.SwapPrefabs
 {
     public class SwapPrefabs : EditorWindow
     {
