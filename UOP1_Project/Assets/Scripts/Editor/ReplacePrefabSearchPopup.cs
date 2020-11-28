@@ -87,7 +87,7 @@ namespace UOP1.EditorTools.Replacer
 
 		private void OnDisable()
 		{
-			GameObjectPreview.Cleanup();
+			selectionPreview.Cleanup();
 			tree.Cleanup();
 		}
 

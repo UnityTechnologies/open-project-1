@@ -39,6 +39,7 @@ namespace UOP1.EditorTools.Replacer
 		{
 			foreach (var texture in previewCache.Values)
 				Object.DestroyImmediate(texture);
+			itemPreview.Cleanup();
 		}
 
 		public bool IsRenderable(int id)

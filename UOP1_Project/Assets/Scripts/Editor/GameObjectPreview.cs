@@ -20,7 +20,6 @@ namespace UOP1.EditorTools
 
 		private Editor cachedEditor;
 
-		private static HashSet<Object> cachedTargets = new HashSet<Object>();
 		public RenderTexture outputTexture;
 
 		[InitializeOnLoadMethod]
@@ -33,22 +32,16 @@ namespace UOP1.EditorTools
 			renderUtilityField = previewDataType.GetField("renderUtility", BindingFlags.Public | BindingFlags.Instance);
 		}
 
-		public static void Cleanup()
+		public void Cleanup()
 		{
-			foreach (Editor editor in Resources.FindObjectsOfTypeAll(gameObjectInspectorType))
-			{
-				if (cachedTargets.Contains(editor.target))
-					Object.DestroyImmediate(editor);
-			}
+			if (cachedEditor)
+				Object.DestroyImmediate(cachedEditor);
 		}
 
 		public void CreatePreviewForTarget(GameObject target)
 		{
 			if (!cachedEditor || cachedEditor.target != target)
 			{
-				if (!cachedTargets.Contains(target))
-					cachedTargets.Add(target);
-
 				renderUtility = null;
 				// There is a bug that breaks previews and Prefab mode after creating too many editors.
 				// Simply using CreateCachedEditor is fixing that problem.
