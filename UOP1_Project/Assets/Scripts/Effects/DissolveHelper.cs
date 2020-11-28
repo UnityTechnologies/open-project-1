@@ -23,6 +23,13 @@ public class DissolveHelper : MonoBehaviour
 		StartCoroutine(DissolveCoroutine());
     }
 
+	[ContextMenu("Reset Dissolve")]
+	private void ResetDissolve()
+	{
+		_materialPropertyBlock.SetFloat("_Dissolve", 0);
+		_renderer.SetPropertyBlock(_materialPropertyBlock);
+	}
+
 	private void InitParticleSystem()
     {
 		_particules = GameObject.Instantiate(_dissolveParticlesPrefab, transform);
