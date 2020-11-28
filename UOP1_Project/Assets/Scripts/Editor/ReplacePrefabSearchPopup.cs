@@ -30,11 +30,12 @@ namespace UOP1.EditorTools.Replacer
 		private GameObject instance => EditorUtility.InstanceIDToObject(selectedId) as GameObject;
 
 		private SearchField searchField;
-		private ReplacePrefabTreeView tree;
+		private PrefabSelectionTreeView tree;
 		private ViewState viewState;
 
 		private Vector2 startPos;
 		private Vector2 startSize;
+		private Vector2 lastSize;
 
 		private GameObjectPreview selectionPreview = new GameObjectPreview();
 
@@ -49,8 +50,8 @@ namespace UOP1.EditorTools.Replacer
 			window.startSize = rect.size;
 
 			window.position = new Rect(rect.position, rect.size);
-			window.SetCorrectSize();
-			//window.ShowAsDropDown(new Rect(position, Vector2.zero), size);
+			// Need to predict start window size to avoid trash frame
+			window.SetInitialSize();
 
 			// This type of window supports resizing, but is also persistent, so we need to close it manually
 			window.ShowPopup();
@@ -65,7 +66,7 @@ namespace UOP1.EditorTools.Replacer
 			if (File.Exists(assetPath))
 				FromJsonOverwrite(File.ReadAllText(assetPath), viewState);
 
-			tree = new ReplacePrefabTreeView(viewState.treeViewState);
+			tree = new PrefabSelectionTreeView(viewState.treeViewState);
 			tree.onSelectEntry += OnSelectEntry;
 
 			AssetPreview.SetPreviewTextureCacheSize(tree.RowsCount);
@@ -144,10 +145,9 @@ namespace UOP1.EditorTools.Replacer
 
 		void DoSelectionPreview()
 		{
-			SetCorrectSize();
-
 			if (hasSelection && tree.IsRenderable(selectedId))
 			{
+				SetSize(startSize.x, startSize.y + previewHeight);
 				var previewRect = GUILayoutUtility.GetRect(position.width, previewHeight);
 
 				selectionPreview.CreatePreviewForTarget(instance);
@@ -155,9 +155,13 @@ namespace UOP1.EditorTools.Replacer
 
 				selectionPreview.DrawPreviewTexture(previewRect);
 			}
+			else
+			{
+				SetSize(startSize.x, startSize.y);
+			}
 		}
 
-		private void SetCorrectSize()
+		private void SetInitialSize()
 		{
 			if (hasSelection && tree.IsRenderable(selectedId))
 				SetSize(startSize.x, startSize.y + previewHeight);
@@ -167,18 +171,16 @@ namespace UOP1.EditorTools.Replacer
 
 		private void SetSize(float width, float height)
 		{
-			position = new Rect(startPos.x, startPos.y, width, height);
+			var newSize = new Vector2(width, height);
+			if (newSize != lastSize)
+			{
+				lastSize = newSize;
+				position = new Rect(position.x, position.y, width, height);
+			}
 		}
 
 		private class Styles
 		{
-			public GUIStyle header = new GUIStyle("AC BoldHeader")
-			{
-				fixedHeight = 0,
-				stretchWidth = true,
-				margin = new RectOffset(0, 0, 0, 0)
-			};
-
 			public GUIStyle headerLabel = new GUIStyle(EditorStyles.centeredGreyMiniLabel)
 			{
 				fontSize = 11,
