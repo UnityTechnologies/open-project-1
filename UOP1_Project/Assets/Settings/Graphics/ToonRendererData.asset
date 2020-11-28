@@ -39,6 +39,45 @@ MonoBehaviour:
       restoreCamera: 1
       offset: {x: 0, y: 0, z: 0, w: 0}
       cameraFieldOfView: 60
+--- !u!114 &-3777622620742823688
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b3d386ba5cd94485973aee1479b272e, type: 3}
+  m_Name: OccludingObjects
+  m_EditorClassIdentifier: 
+  m_Active: 1
+  settings:
+    passTag: OccludingObjects
+    Event: 300
+    filterSettings:
+      RenderQueueType: 0
+      LayerMask:
+        serializedVersion: 2
+        m_Bits: 2048
+      PassNames: []
+    overrideMaterial: {fileID: 0}
+    overrideMaterialPassIndex: 0
+    overrideDepthState: 0
+    depthCompareFunction: 4
+    enableWrite: 1
+    stencilSettings:
+      overrideStencilState: 1
+      stencilReference: 1
+      stencilCompareFunction: 8
+      passOperation: 2
+      failOperation: 0
+      zFailOperation: 0
+    cameraSettings:
+      overrideCamera: 0
+      restoreCamera: 1
+      offset: {x: 0, y: 0, z: 0, w: 0}
+      cameraFieldOfView: 60
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -52,13 +91,12 @@ MonoBehaviour:
   m_Name: ToonRendererData
   m_EditorClassIdentifier: 
   m_RendererFeatures:
+  - {fileID: -3777622620742823688}
   - {fileID: 3244698584681819116}
-  - {fileID: 5635291380013344654}
   - {fileID: 466668180145458491}
   - {fileID: -8170998572127264418}
-  - {fileID: 7533261282113794405}
   - {fileID: 6060256440939812884}
-  m_RendererFeatureMap: ec2b2cef2b7c072d8e27842fa793344e3b4d8cc13cf079065e61212817c89a8e65b1982039858b681498fdd91f5b1a54
+  m_RendererFeatureMap: f8d024bb3d3093cbec2b2cef2b7c072d3b4d8cc13cf079065e61212817c89a8e1498fdd91f5b1a54
   postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}
   shaders:
     blitPS: {fileID: 4800000, guid: c17132b1f77d20942aa75f8429c0f8bc, type: 3}
@@ -72,7 +110,7 @@ MonoBehaviour:
     m_Bits: 823
   m_TransparentLayerMask:
     serializedVersion: 2
-    m_Bits: 295
+    m_Bits: 807
   m_DefaultStencilState:
     overrideStencilState: 0
     stencilReference: 0
@@ -140,7 +178,7 @@ MonoBehaviour:
       RenderQueueType: 0
       LayerMask:
         serializedVersion: 2
-        m_Bits: 512
+        m_Bits: 4608
       PassNames: []
     overrideMaterial: {fileID: 2100000, guid: eb537407156894419a7c1586107ced36, type: 2}
     overrideMaterialPassIndex: 0
@@ -150,45 +188,6 @@ MonoBehaviour:
     stencilSettings:
       overrideStencilState: 1
       stencilReference: 1
-      stencilCompareFunction: 8
-      passOperation: 0
-      failOperation: 0
-      zFailOperation: 0
-    cameraSettings:
-      overrideCamera: 0
-      restoreCamera: 1
-      offset: {x: 0, y: 0, z: 0, w: 0}
-      cameraFieldOfView: 60
---- !u!114 &5635291380013344654
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6b3d386ba5cd94485973aee1479b272e, type: 3}
-  m_Name: CharacterUnobstructed
-  m_EditorClassIdentifier: 
-  m_Active: 1
-  settings:
-    passTag: CharacterUnobstructed
-    Event: 300
-    filterSettings:
-      RenderQueueType: 0
-      LayerMask:
-        serializedVersion: 2
-        m_Bits: 512
-      PassNames: []
-    overrideMaterial: {fileID: 0}
-    overrideMaterialPassIndex: 0
-    overrideDepthState: 0
-    depthCompareFunction: 4
-    enableWrite: 1
-    stencilSettings:
-      overrideStencilState: 1
-      stencilReference: 0
       stencilCompareFunction: 3
       passOperation: 0
       failOperation: 0
@@ -211,42 +210,3 @@ MonoBehaviour:
   m_Name: DepthNormalsFeature
   m_EditorClassIdentifier: 
   m_Active: 1
---- !u!114 &7533261282113794405
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6b3d386ba5cd94485973aee1479b272e, type: 3}
-  m_Name: CharacterUnobstructedTransp
-  m_EditorClassIdentifier: 
-  m_Active: 1
-  settings:
-    passTag: CharacterUnobstructedTransp
-    Event: 500
-    filterSettings:
-      RenderQueueType: 1
-      LayerMask:
-        serializedVersion: 2
-        m_Bits: 512
-      PassNames: []
-    overrideMaterial: {fileID: 0}
-    overrideMaterialPassIndex: 0
-    overrideDepthState: 0
-    depthCompareFunction: 4
-    enableWrite: 1
-    stencilSettings:
-      overrideStencilState: 1
-      stencilReference: 0
-      stencilCompareFunction: 8
-      passOperation: 0
-      failOperation: 0
-      zFailOperation: 0
-    cameraSettings:
-      overrideCamera: 0
-      restoreCamera: 1
-      offset: {x: 0, y: 0, z: 0, w: 0}
-      cameraFieldOfView: 60
