@@ -1,12 +1,15 @@
 using System;
+using System.Collections.Generic;
 using System.Reflection;
 using UnityEditor;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace UOP1.EditorTools
 {
 	internal class GameObjectPreview
 	{
+		private static Type gameObjectInspectorType;
 		private static MethodInfo getPreviewDataMethod;
 		private static FieldInfo renderUtilityField;
 
@@ -15,32 +18,41 @@ namespace UOP1.EditorTools
 		private Color light1Color;
 		private PreviewRenderUtility renderUtility;
 
-		private Editor dummyEditor;
 		private Editor cachedEditor;
 
+		private static HashSet<Object> cachedTargets = new HashSet<Object>();
 		public RenderTexture outputTexture;
 
 		[InitializeOnLoadMethod]
 		private static void OnInitialize()
 		{
-			var gameObjectInspectorType = typeof(Editor).Assembly.GetType("UnityEditor.GameObjectInspector");
+			gameObjectInspectorType = typeof(Editor).Assembly.GetType("UnityEditor.GameObjectInspector");
 			var previewDataType = gameObjectInspectorType.GetNestedType("PreviewData", BindingFlags.NonPublic);
 
 			getPreviewDataMethod = gameObjectInspectorType.GetMethod("GetPreviewData", BindingFlags.NonPublic | BindingFlags.Instance);
 			renderUtilityField = previewDataType.GetField("renderUtility", BindingFlags.Public | BindingFlags.Instance);
 		}
 
+		public static void Cleanup()
+		{
+			foreach (Editor editor in Resources.FindObjectsOfTypeAll(gameObjectInspectorType))
+			{
+				if (cachedTargets.Contains(editor.target))
+					Object.DestroyImmediate(editor);
+			}
+		}
+
 		public void CreatePreviewForTarget(GameObject target)
 		{
-			if (!dummyEditor)
-				dummyEditor = Editor.CreateEditor(target);
-
 			if (!cachedEditor || cachedEditor.target != target)
 			{
+				if (!cachedTargets.Contains(target))
+					cachedTargets.Add(target);
+
 				renderUtility = null;
 				// There is a bug that breaks previews and Prefab mode after creating too many editors.
 				// Simply using CreateCachedEditor is fixing that problem.
-				Editor.CreateCachedEditor(target, dummyEditor.GetType(), ref cachedEditor);
+				Editor.CreateCachedEditor(target, gameObjectInspectorType, ref cachedEditor);
 			}
 		}
 

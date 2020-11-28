@@ -46,7 +46,6 @@ namespace UOP1.EditorTools.Replacer
 			return renderableItems.Contains(id);
 		}
 
-
 		private void CachePreview(int itemId)
 		{
 			var copy = new RenderTexture(itemPreview.outputTexture);
@@ -90,7 +89,8 @@ namespace UOP1.EditorTools.Replacer
 
 		protected override void SelectionChanged(IList<int> selectedIds)
 		{
-			selectedId = selectedIds[0];
+			if (selectedIds.Count > 0)
+				selectedId = selectedIds[0];
 		}
 
 		protected override TreeViewItem BuildRoot()
@@ -169,7 +169,7 @@ namespace UOP1.EditorTools.Replacer
 
 				if (isRenderable)
 				{
-					var previewRect = new Rect(rect) {width = 32, height = 32};
+					var previewRect = new Rect(rect) { width = 32, height = 32 };
 
 					if (!previewCache.TryGetValue(item.id, out var previewTexture))
 					{
@@ -179,7 +179,7 @@ namespace UOP1.EditorTools.Replacer
 						if (itemPreview.outputTexture)
 							CachePreview(item.id);
 					}
-					
+
 					if (!previewTexture)
 						Repaint();
 

@@ -87,6 +87,7 @@ namespace UOP1.EditorTools.Replacer
 
 		private void OnDisable()
 		{
+			GameObjectPreview.Cleanup();
 			tree.Cleanup();
 		}
 
@@ -125,7 +126,6 @@ namespace UOP1.EditorTools.Replacer
 		void DoToolbar()
 		{
 			tree.searchString = searchField.OnToolbarGUI(tree.searchString);
-			GUILayout.Space(-2);
 
 			GUILayout.Label("Replace With...", styles.headerLabel);
 		}
@@ -151,7 +151,6 @@ namespace UOP1.EditorTools.Replacer
 				var previewRect = GUILayoutUtility.GetRect(position.width, previewHeight);
 
 				selectionPreview.CreatePreviewForTarget(instance);
-
 				selectionPreview.RenderInteractivePreview(previewRect);
 
 				selectionPreview.DrawPreviewTexture(previewRect);
