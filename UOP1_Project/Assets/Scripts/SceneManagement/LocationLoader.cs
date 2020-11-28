@@ -66,7 +66,7 @@ public class LocationLoader : MonoBehaviour
 			if (!CheckLoadState(currentSceneName))
 			{
 				//Add the scene to the list of scenes to load asynchronously in the background
-				_scenesToLoadAsyncOperations.Add(SceneManager.LoadSceneAsync(currentSceneName, LoadSceneMode.Single));
+				_scenesToLoadAsyncOperations.Add(SceneManager.LoadSceneAsync(currentSceneName, LoadSceneMode.Additive));
 			}
 		}
 		_scenesToLoadAsyncOperations[0].completed += SetActiveScene;
@@ -98,6 +98,7 @@ public class LocationLoader : MonoBehaviour
 			Scene scene = SceneManager.GetSceneAt(i);
 			if (scene.name != _initializationScene.sceneName)
 			{
+				Debug.Log("Added scene to unload = " + scene.name);
 				//Add the scene to the list of the scenes to unload
 				_ScenesToUnload.Add(scene);
 			}
@@ -113,8 +114,8 @@ public class LocationLoader : MonoBehaviour
 				//Unload the scene asynchronously in the background
 				SceneManager.UnloadSceneAsync(_ScenesToUnload[i]);
 			}
-			_ScenesToUnload.Clear();
 		}
+		_ScenesToUnload.Clear();
 	}
 
 	/// <summary> This function checks if a scene is already loaded </summary>
