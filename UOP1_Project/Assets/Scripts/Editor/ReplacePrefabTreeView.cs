@@ -131,7 +131,7 @@ namespace UOP1.EditorTools.Replacer
 		public override void OnGUI(Rect rect)
 		{
 			if (whiteLabel == null)
-				whiteLabel = new GUIStyle(EditorStyles.label) { normal = { textColor = EditorStyles.whiteLabel.normal.textColor }};
+				whiteLabel = new GUIStyle(EditorStyles.label) { normal = { textColor = EditorStyles.whiteLabel.normal.textColor } };
 
 			base.OnGUI(rect);
 		}
@@ -150,7 +150,7 @@ namespace UOP1.EditorTools.Replacer
 				return;
 
 			var labelStyle = isFocused ? whiteLabel : EditorStyles.label;
-			var contentIndent = GetContentIndent (item);
+			var contentIndent = GetContentIndent(item);
 
 			customFoldoutYOffset = 2;
 			itemContent.text = item.displayName;
