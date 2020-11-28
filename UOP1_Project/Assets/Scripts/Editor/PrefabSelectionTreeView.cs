@@ -7,7 +7,7 @@ using Object = UnityEngine.Object;
 
 namespace UOP1.EditorTools.Replacer
 {
-	internal class ReplacePrefabTreeView : TreeView
+	internal class PrefabSelectionTreeView : TreeView
 	{
 		private static Texture2D prefabOnIcon = EditorGUIUtility.IconContent("Prefab On Icon").image as Texture2D;
 		private static Texture2D prefabVariantOnIcon = EditorGUIUtility.IconContent("PrefabVariant On Icon").image as Texture2D;
@@ -30,7 +30,7 @@ namespace UOP1.EditorTools.Replacer
 
 		private int selectedId;
 
-		public ReplacePrefabTreeView(TreeViewState state) : base(state)
+		public PrefabSelectionTreeView(TreeViewState state) : base(state)
 		{
 			Reload();
 		}
@@ -183,8 +183,8 @@ namespace UOP1.EditorTools.Replacer
 
 					if (!previewTexture)
 						Repaint();
-
-					GUI.DrawTexture(iconRect, previewTexture, ScaleMode.ScaleAndCrop);
+					else
+						GUI.DrawTexture(iconRect, previewTexture, ScaleMode.ScaleAndCrop);
 
 					labelRect.x += iconRect.width;
 					labelRect.width -= iconRect.width + 24;
