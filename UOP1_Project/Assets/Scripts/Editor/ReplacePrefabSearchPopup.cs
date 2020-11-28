@@ -88,7 +88,6 @@ namespace UOP1.EditorTools.Replacer
 
 		private void OnDisable()
 		{
-			selectionPreview.Cleanup();
 			tree.Cleanup();
 		}
 

@@ -32,19 +32,6 @@ namespace UOP1.EditorTools
 			renderUtilityField = previewDataType.GetField("renderUtility", BindingFlags.Public | BindingFlags.Instance);
 		}
 
-		public void Cleanup()
-		{
-			try
-			{
-				if (cachedEditor)
-					Object.DestroyImmediate(cachedEditor);
-			}
-			catch
-			{
-				// ClearPreviewCache error
-			}
-		}
-
 		public void CreatePreviewForTarget(GameObject target)
 		{
 			if (!cachedEditor || cachedEditor.target != target)
