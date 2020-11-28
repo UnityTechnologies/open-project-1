@@ -110,11 +110,11 @@ namespace UOP1.EditorTools.Replacer
 				if (tree.hasSearch)
 					tree.searchString = "";
 				else
-					Close();
+					EditorApplication.delayCall += Close;
 			}
 
 			if (focusedWindow != this)
-				Close();
+				EditorApplication.delayCall += Close;
 
 			if (styles == null)
 				styles = new Styles();
