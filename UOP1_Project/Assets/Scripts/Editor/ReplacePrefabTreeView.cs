@@ -131,7 +131,7 @@ namespace UOP1.EditorTools.Replacer
 		public override void OnGUI(Rect rect)
 		{
 			if (whiteLabel == null)
-				whiteLabel = new GUIStyle(EditorStyles.label) { normal = { textColor = EditorStyles.whiteLabel.normal.textColor }};
+				whiteLabel = new GUIStyle(EditorStyles.label) { normal = { textColor = EditorStyles.whiteLabel.normal.textColor } };
 
 			base.OnGUI(rect);
 		}
@@ -150,7 +150,7 @@ namespace UOP1.EditorTools.Replacer
 				return;
 
 			var labelStyle = isFocused ? whiteLabel : EditorStyles.label;
-			var contentIndent = GetContentIndent (item);
+			var contentIndent = GetContentIndent(item);
 
 			customFoldoutYOffset = 2;
 			itemContent.text = item.displayName;
@@ -169,7 +169,7 @@ namespace UOP1.EditorTools.Replacer
 
 				if (isRenderable)
 				{
-					var previewRect = new Rect(rect) {width = 32, height = 32};
+					var previewRect = new Rect(rect) { width = 32, height = 32 };
 
 					if (!previewCache.TryGetValue(item.id, out var previewTexture))
 					{
@@ -179,7 +179,7 @@ namespace UOP1.EditorTools.Replacer
 						if (itemPreview.outputTexture)
 							CachePreview(item.id);
 					}
-					
+
 					if (!previewTexture)
 						Repaint();
 
