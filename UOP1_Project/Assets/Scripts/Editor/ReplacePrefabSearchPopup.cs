@@ -85,6 +85,11 @@ namespace UOP1.EditorTools.Replacer
 			Init();
 		}
 
+		private void OnDisable()
+		{
+			tree.Cleanup();
+		}
+
 		public new void Close()
 		{
 			SaveState();
@@ -141,7 +146,7 @@ namespace UOP1.EditorTools.Replacer
 		{
 			SetCorrectSize();
 
-			if (hasSelection && instance)
+			if (hasSelection && tree.IsRenderable(selectedId))
 			{
 				var previewRect = GUILayoutUtility.GetRect(position.width, previewHeight);
 
@@ -155,7 +160,7 @@ namespace UOP1.EditorTools.Replacer
 
 		private void SetCorrectSize()
 		{
-			if (hasSelection && instance)
+			if (hasSelection && tree.IsRenderable(selectedId))
 				SetSize(startSize.x, startSize.y + previewHeight);
 			else
 				SetSize(startSize.x, startSize.y);

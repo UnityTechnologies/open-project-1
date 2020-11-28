@@ -80,5 +80,35 @@ namespace UOP1.EditorTools
 		{
 			GUI.DrawTexture(rect, outputTexture, ScaleMode.ScaleToFit, true, 0);
 		}
+
+		public static bool HasRenderableParts(GameObject go)
+		{
+			var renderers = go.GetComponentsInChildren<Renderer>();
+			foreach (var renderer in renderers)
+			{
+				switch (renderer)
+				{
+					case MeshRenderer _:
+						var filter = renderer.gameObject.GetComponent<MeshFilter>();
+						if (filter && filter.sharedMesh)
+							return true;
+						break;
+					case SkinnedMeshRenderer skinnedMesh:
+						if (skinnedMesh.sharedMesh)
+							return true;
+						break;
+					case SpriteRenderer sprite:
+						if (sprite.sprite)
+							return true;
+						break;
+					case BillboardRenderer billboard:
+						if (billboard.billboard && billboard.sharedMaterial)
+							return true;
+						break;
+				}
+			}
+
+			return false;
+		}
 	}
 }

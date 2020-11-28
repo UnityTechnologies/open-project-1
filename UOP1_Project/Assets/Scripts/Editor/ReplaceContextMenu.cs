@@ -59,7 +59,7 @@ namespace UOP1.EditorTools.Replacer
 			if (hasExecuted)
 				return;
 
-			var rect = new Rect(mousePosition, new Vector2(240, 320));
+			var rect = new Rect(mousePosition, new Vector2(240, 360));
 
 			ReplacePrefabSearchPopup.Show(rect);
 
