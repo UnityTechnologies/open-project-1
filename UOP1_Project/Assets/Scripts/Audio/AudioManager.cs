@@ -7,8 +7,8 @@ using UnityEngine.Audio;
 public class AudioManager : MonoBehaviour
 {
 	[Header("SoundEmitters pool")]
-	[SerializeField] private SoundEmitterFactorySO _factory;
-	[SerializeField] private SoundEmitterPoolSO _pool;
+	[SerializeField] private SoundEmitterFactorySO _factory = default;
+	[SerializeField] private SoundEmitterPoolSO _pool = default;
 	[SerializeField] private int _initialSize = 10;
 
 	[Header("Listening on channels")]
@@ -19,7 +19,7 @@ public class AudioManager : MonoBehaviour
 
 
 	[Header("Audio control")]
-	[SerializeField] private AudioMixer audioMixer;
+	[SerializeField] private AudioMixer audioMixer = default;
 	[Range(0f, 1f)]
 	[SerializeField] private float _masterVolume = 1f;
 	[Range(0f, 1f)]
@@ -35,6 +35,7 @@ public class AudioManager : MonoBehaviour
 		_musicEventChannel.OnAudioCueRequested += PlayAudioCue; //TODO: Treat music requests differently?
 
 		_pool.Prewarm(_initialSize);
+		_pool.SetParent(this.transform);
 	}
 
 	/// <summary>

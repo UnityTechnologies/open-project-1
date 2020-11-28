@@ -10,18 +10,28 @@ public class LocalPoolTester : MonoBehaviour
 	private ParticlePoolSO _pool;
 	private ParticleFactorySO _factory;
 
-	private void Start()
+	private void Awake()
+	{
+		DontDestroyOnLoad(this.gameObject);
+	}
+
+	private IEnumerator Start()
 	{
 		_factory = ScriptableObject.CreateInstance<ParticleFactorySO>();
 		_pool = ScriptableObject.CreateInstance<ParticlePoolSO>();
 		_pool.name = gameObject.name;
 		_pool.Factory = _factory;
+		_pool.SetParent(this.transform);
 		_pool.Prewarm(_initialPoolSize);
 		List<ParticleSystem> particles = _pool.Request(2) as List<ParticleSystem>;
 		foreach (ParticleSystem particle in particles)
 		{
 			StartCoroutine(DoParticleBehaviour(particle));
 		}
+		yield return new WaitForSeconds(2);
+		_pool.SetParent(null);
+		yield return new WaitForSeconds(2);
+		_pool.SetParent(this.transform);
 	}
 
 	private IEnumerator DoParticleBehaviour(ParticleSystem particle)
