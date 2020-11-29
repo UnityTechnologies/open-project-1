@@ -5,7 +5,7 @@ using UOP1.StateMachine.ScriptableObjects;
 [CreateAssetMenu(fileName = "RotateAction", menuName = "State Machines/Actions/Rotate")]
 public class RotateActionSO : StateActionSO<RotateAction>
 {
-    [Tooltip("Smoothing for rotating the character to their movement direction")]
+	[Tooltip("Smoothing for rotating the character to their movement direction")]
 	public float turnSmoothTime = 0.2f;
 }
 
