@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// This class goes on a trigger which, when entered, sends the player to another Location
@@ -15,8 +16,9 @@ public class LocationExit : MonoBehaviour
 
 	private void OnTriggerEnter(Collider other)
 	{
-		if (other.CompareTag("Player"))
+		if (other.CompareTag("Player") && other.gameObject.scene == SceneManager.GetActiveScene())
 		{
+			Destroy(other.gameObject);
 			_locationExitLoadChannel.RaiseEvent(_locationsToLoad, _showLoadScreen);
 		}
 	}
