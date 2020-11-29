@@ -8,6 +8,7 @@ namespace UOP1.StateMachine
 	public abstract class StateAction : IStateComponent
 	{
 		internal StateActionSO _originSO;
+		protected StateActionSO OriginSO => _originSO;
 
 		/// <summary>
 		/// Called every frame the <see cref="StateMachine"/> is in a <see cref="State"/> with this <see cref="StateAction"/>.

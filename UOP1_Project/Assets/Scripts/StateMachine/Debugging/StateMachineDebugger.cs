@@ -1,8 +1,10 @@
-﻿using System;
+﻿#if UNITY_EDITOR
+
+using System;
 using System.Text;
 using UnityEngine;
 
-namespace UOP1.StateMachine
+namespace UOP1.StateMachine.Debugging
 {
 	/// <summary>
 	/// Class specialized in debugging the state transitions, should only be used while in editor mode.
@@ -38,12 +40,12 @@ namespace UOP1.StateMachine
 		/// <summary>
 		/// Must be called together with <c>StateMachine.Awake()</c>
 		/// </summary>
-		internal void Awake(StateMachine stateMachine, string initialState)
+		internal void Awake(StateMachine stateMachine)
 		{
 			_stateMachine = stateMachine;
 			_logBuilder = new StringBuilder();
 
-			currentState = initialState;
+			currentState = stateMachine._currentState._originSO.name;
 		}
 
 		internal void TransitionEvaluationBegin(string targetState)
@@ -54,7 +56,7 @@ namespace UOP1.StateMachine
 				return;
 
 			_logBuilder.Clear();
-			_logBuilder.AppendLine($"{_stateMachine.gameObject.name} state changed");
+			_logBuilder.AppendLine($"{_stateMachine.name} state changed");
 			_logBuilder.AppendLine($"{currentState}  {SHARP_ARROW}  {_targetState}");
 
 			if (appendConditionsInfo)
@@ -117,3 +119,5 @@ namespace UOP1.StateMachine
 		}
 	}
 }
+
+#endif

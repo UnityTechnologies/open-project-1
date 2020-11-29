@@ -1,0 +1,28 @@
+using UnityEngine;
+using UOP1.StateMachine;
+using UOP1.StateMachine.ScriptableObjects;
+
+[CreateAssetMenu(fileName = "#RUNTIMENAME#", menuName = "State Machines/Actions/#RUNTIMENAME_WITH_SPACES#")]
+public class #SCRIPTNAME# : StateActionSO
+{
+	protected override StateAction CreateAction() => new #RUNTIMENAME#();
+}
+
+public class #RUNTIMENAME# : StateAction
+{
+	public override void Awake(StateMachine stateMachine)
+	{
+	}
+		
+	public override void OnUpdate()
+	{
+	}
+	
+	// public override void OnStateEnter()
+	// {
+	// }
+	
+	// public override void OnStateExit()
+	// {
+	// }
+}
