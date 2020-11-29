@@ -58,18 +58,21 @@ public class LocationLoader : MonoBehaviour
 		//Add all current open scenes to unload list
 		AddScenesToUnload();
 
+		//Unload the scenes
+		UnloadScenes();
+
 		_activeScene = locationsToLoad[0];
 
 		for (int i = 0; i < locationsToLoad.Length; ++i)
 		{
-			String currentSceneName = locationsToLoad[i].sceneName;
+			string currentSceneName = locationsToLoad[i].sceneName;
 			if (!CheckLoadState(currentSceneName))
 			{
 				//Add the scene to the list of scenes to load asynchronously in the background
 				_scenesToLoadAsyncOperations.Add(SceneManager.LoadSceneAsync(currentSceneName, LoadSceneMode.Additive));
 			}
 		}
-		_scenesToLoadAsyncOperations[0].completed += SetActiveScene;
+
 		if (showLoadingScreen)
 		{
 			//Show the progress bar and track progress if loadScreen is true
@@ -78,12 +81,9 @@ public class LocationLoader : MonoBehaviour
 		}
 		else
 		{
-			//Clear the scenes to load
-			_scenesToLoadAsyncOperations.Clear();
+			//Clear the scenes to load and activate the first scene loaded
+			OnLoadingFinished();
 		}
-
-		//Unload the scenes
-		UnloadScenes();
 	}
 
 	private void SetActiveScene(AsyncOperation asyncOp)
@@ -119,7 +119,7 @@ public class LocationLoader : MonoBehaviour
 	}
 
 	/// <summary> This function checks if a scene is already loaded </summary>
-	private bool CheckLoadState(String sceneName)
+	private bool CheckLoadState(string sceneName)
 	{
 		for (int i = 0; i < SceneManager.sceneCount; ++i)
 		{
@@ -146,22 +146,28 @@ public class LocationLoader : MonoBehaviour
 			//Iterate through all the scenes to load
 			for (int i = 0; i < _scenesToLoadAsyncOperations.Count; ++i)
 			{
-				Debug.Log("Scene" + i + " :" + _scenesToLoadAsyncOperations[i].isDone + "progress = " + _scenesToLoadAsyncOperations[i].progress);
+				Debug.Log("Scene" + i + ": " + _scenesToLoadAsyncOperations[i].isDone + "\nprogress = " + _scenesToLoadAsyncOperations[i].progress);
 				//Adding the scene progress to the total progress
 				totalProgress += _scenesToLoadAsyncOperations[i].progress;
 			}
 			//The fillAmount for all scenes, so we devide the progress by the number of scenes to load
 			_loadingProgressBar.fillAmount = totalProgress / _scenesToLoadAsyncOperations.Count;
-			Debug.Log("progress bar" + _loadingProgressBar.fillAmount + "and value =" + totalProgress / _scenesToLoadAsyncOperations.Count);
+			Debug.Log("progress bar " + _loadingProgressBar.fillAmount + " and value = " + totalProgress / _scenesToLoadAsyncOperations.Count);
 
 			yield return null;
 		}
 
 		//Clear the scenes to load
-		_scenesToLoadAsyncOperations.Clear();
+		OnLoadingFinished();
 
 		//Hide progress bar when loading is done
 		_loadingInterface.SetActive(false);
+	}
+
+	private void OnLoadingFinished()
+	{
+		_scenesToLoadAsyncOperations[0].completed += SetActiveScene;
+		_scenesToLoadAsyncOperations.Clear();
 	}
 
 	private void ExitGame()
