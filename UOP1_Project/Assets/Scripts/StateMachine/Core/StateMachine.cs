@@ -12,18 +12,18 @@ namespace UOP1.StateMachine
 #if UNITY_EDITOR
 		[Space]
 		[SerializeField]
-		internal StateMachineDebugger _debugger = default;
+		internal Debugging.StateMachineDebugger _debugger = default;
 #endif
 
 		private readonly Dictionary<Type, Component> _cachedComponents = new Dictionary<Type, Component>();
-		private State _currentState;
+		internal State _currentState;
 
 		private void Awake()
 		{
 			_currentState = _transitionTableSO.GetInitialState(this);
 			_currentState.OnStateEnter();
 #if UNITY_EDITOR
-			_debugger.Awake(this, _currentState._originSO.name);
+			_debugger.Awake(this);
 #endif
 		}
 

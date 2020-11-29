@@ -8,11 +8,11 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Rock_Medium
-  m_Shader: {fileID: -6465566751694194690, guid: bf36778a400a0894b86a1f49c422fa62,
+  m_Shader: {fileID: -6465566751694194690, guid: 7fdaae2b9572343449616bd7b38bce5a,
     type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
-  m_EnableInstancingVariants: 0
+  m_EnableInstancingVariants: 1
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
   stringTagMap: {}
@@ -68,6 +68,8 @@ Material:
     - _Glossiness: 0
     - _GlossyReflections: 0
     - _LightProbeContribution: 2.79
+    - _LightProbeMultiplier: 1
+    - _MainTint_VariationIntensity: 1
     - _Metallic: 0
     - _OcclusionStrength: 1
     - _OutlineDepthSensitivity: 0
@@ -76,10 +78,15 @@ Material:
     - _QueueOffset: 0
     - _ReceiveShadows: 1
     - _Smoothness: 0
+    - _Smoothness1: 0.5
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _Surface: 0
+    - _Wind_Density: 0
+    - _Wind_Direction: 0
+    - _Wind_Speed: 0
+    - _Wind_Strength: 0
     - _WorkflowMode: 1
     - _ZWrite: 1
     m_Colors:
@@ -87,9 +94,11 @@ Material:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _MainColor: {r: 1, g: 1, b: 1, a: 0}
+    - _MainTint: {r: 0.9622642, g: 0.9622642, b: 0.9622642, a: 0}
     - _Offset: {r: 0, g: 0, b: 0, a: 0}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
-    - _SpecularColor: {r: 1, g: 1, b: 1, a: 0}
+    - _SpecularColor: {r: 0, g: 0, b: 0, a: 1}
+    - _SpecularColor1: {r: 0, g: 0, b: 0, a: 0}
     - _Tiling: {r: 1, g: 1, b: 0, a: 0}
 --- !u!114 &5036623952281789401
 MonoBehaviour:

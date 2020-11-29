@@ -1,5 +1,4 @@
-﻿using UnityEngine;
-using UOP1.StateMachine.ScriptableObjects;
+﻿using UOP1.StateMachine.ScriptableObjects;
 
 namespace UOP1.StateMachine
 {
@@ -11,6 +10,7 @@ namespace UOP1.StateMachine
 		private bool _isCached = false;
 		private bool _cachedStatement = default;
 		internal StateConditionSO _originSO;
+		protected StateConditionSO OriginSO => _originSO;
 
 		/// <summary>
 		/// Specify the statement to evaluate.
@@ -23,22 +23,16 @@ namespace UOP1.StateMachine
 		/// </summary>
 		internal bool GetStatement()
 		{
-			bool returnValue;
+			if (!_originSO.cacheResult)
+				return Statement();
 
-			if (_originSO.cacheResult && _isCached)
-				returnValue = _cachedStatement;
-			else
+			if (!_isCached)
 			{
-				returnValue = Statement();
-
-				if (_originSO.cacheResult)
-				{
-					_isCached = true;
-					_cachedStatement = returnValue;
-				}
+				_isCached = true;
+				_cachedStatement = Statement();
 			}
 
-			return returnValue;
+			return _cachedStatement;
 		}
 
 		internal void ClearStatementCache()
@@ -60,17 +54,14 @@ namespace UOP1.StateMachine
 	/// </summary>
 	public readonly struct StateCondition
 	{
-		internal readonly StateConditionSO _originSO;
 		internal readonly StateMachine _stateMachine;
 		internal readonly Condition _condition;
 		internal readonly bool _expectedResult;
 
-		public StateCondition(StateConditionSO originSO, StateMachine stateMachine, Condition condition, bool expectedResult)
+		public StateCondition(StateMachine stateMachine, Condition condition, bool expectedResult)
 		{
-			_originSO = originSO;
 			_stateMachine = stateMachine;
 			_condition = condition;
-			_condition._originSO = originSO;
 			_expectedResult = expectedResult;
 		}
 
@@ -80,7 +71,7 @@ namespace UOP1.StateMachine
 			bool isMet = statement == _expectedResult;
 
 #if UNITY_EDITOR
-			_stateMachine._debugger.TransitionConditionResult(_originSO.name, statement, isMet);
+			_stateMachine._debugger.TransitionConditionResult(_condition._originSO.name, statement, isMet);
 #endif
 			return isMet;
 		}

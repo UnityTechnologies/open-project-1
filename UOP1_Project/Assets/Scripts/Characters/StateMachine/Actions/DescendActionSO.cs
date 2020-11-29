@@ -2,11 +2,8 @@ using UnityEngine;
 using UOP1.StateMachine;
 using UOP1.StateMachine.ScriptableObjects;
 
-[CreateAssetMenu(fileName = "Descend", menuName = "State Machines/Actions/Descend")]
-public class DescendActionSO : StateActionSO
-{
-	protected override StateAction CreateAction() => new DescendAction();
-}
+[CreateAssetMenu(menuName = "State Machines/Actions/Descend")]
+public class DescendActionSO : StateActionSO<DescendAction> { }
 
 public class DescendAction : StateAction
 {
