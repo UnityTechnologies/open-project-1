@@ -2,7 +2,7 @@ using UnityEngine;
 using UOP1.StateMachine;
 using UOP1.StateMachine.ScriptableObjects;
 
-[CreateAssetMenu(fileName = "HasHitHead", menuName = "State Machines/Conditions/Has Hit the Head")]
+[CreateAssetMenu(menuName = "State Machines/Conditions/Has Hit the Head")]
 public class HasHitHeadConditionSO : StateConditionSO<HasHitHeadCondition> { }
 
 public class HasHitHeadCondition : Condition

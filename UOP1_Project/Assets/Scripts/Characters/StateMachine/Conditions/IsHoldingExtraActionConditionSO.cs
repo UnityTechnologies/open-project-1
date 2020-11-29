@@ -2,7 +2,7 @@
 using UOP1.StateMachine;
 using UOP1.StateMachine.ScriptableObjects;
 
-[CreateAssetMenu(fileName = "IsHoldingExtraAction", menuName = "State Machines/Conditions/Is Holding ExtraAction")]
+[CreateAssetMenu(menuName = "State Machines/Conditions/Is Holding ExtraAction")]
 public class IsHoldingExtraActionConditionSO : StateConditionSO<IsHoldingExtraActionCondition> { }
 
 public class IsHoldingExtraActionCondition : Condition

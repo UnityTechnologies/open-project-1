@@ -10,18 +10,16 @@ using Moment = UOP1.StateMachine.StateAction.SpecificMoment;
 [CreateAssetMenu(fileName = "AnimatorParameterAction", menuName = "State Machines/Actions/Set Animator Parameter")]
 public class AnimatorParameterActionSO : StateActionSO
 {
-	[SerializeField] private ParameterType _parameterType = default;
-	[SerializeField] private string _parameterName = default;
+	public ParameterType parameterType = default;
+	public string parameterName = default;
 
-	[SerializeField] private bool _boolValue = default;
-	[SerializeField] private int _intValue = default;
-	[SerializeField] private float _floatValue = default;
+	public bool boolValue = default;
+	public int intValue = default;
+	public float floatValue = default;
 
-	[SerializeField] private Moment _whenToRun = default; // Allows this StateActionSO type to be reused for all 3 state moments.
+	public Moment whenToRun = default; // Allows this StateActionSO type to be reused for all 3 state moments
 
-	// Bit of a waste to send all three parameters to the StateAction, but it's a small price to pay for a lot of convenience
-	protected override StateAction CreateAction() => new AnimatorParameterAction(_whenToRun, _parameterName, _parameterType,
-																				 _boolValue, _intValue, _floatValue);
+	protected override StateAction CreateAction() => new AnimatorParameterAction(Animator.StringToHash(parameterName));
 
 	public enum ParameterType
 	{
@@ -33,27 +31,12 @@ public class AnimatorParameterAction : StateAction
 {
 	//Component references
 	private Animator _animator;
-
+	private AnimatorParameterActionSO _originSO => (AnimatorParameterActionSO)base.OriginSO; // The SO this StateAction spawned from
 	private int _parameterHash;
-	private AnimatorParameterActionSO.ParameterType _parameterType;
 
-	private bool _boolValue;
-	private int _intValue;
-	private float _floatValue;
-
-	private SpecificMoment _whenToRun;
-
-	public AnimatorParameterAction(SpecificMoment whenToRun, string parameterName,
-								   AnimatorParameterActionSO.ParameterType parameterType,
-								   bool newBoolValue, int newIntValue, float newFloatValue)
+	public AnimatorParameterAction(int parameterHash)
 	{
-		_whenToRun = whenToRun;
-		_parameterHash = Animator.StringToHash(parameterName);
-		_parameterType = parameterType;
-
-		_boolValue = newBoolValue;
-		_intValue = newIntValue;
-		_floatValue = newFloatValue;
+		_parameterHash = parameterHash;
 	}
 
 	public override void Awake(StateMachine stateMachine)
@@ -63,28 +46,28 @@ public class AnimatorParameterAction : StateAction
 
 	public override void OnStateEnter()
 	{
-		if (_whenToRun == SpecificMoment.OnStateEnter)
+		if (_originSO.whenToRun == SpecificMoment.OnStateEnter)
 			SetParameter();
 	}
 
 	public override void OnStateExit()
 	{
-		if (_whenToRun == SpecificMoment.OnStateExit)
+		if (_originSO.whenToRun == SpecificMoment.OnStateExit)
 			SetParameter();
 	}
 
 	private void SetParameter()
 	{
-		switch (_parameterType)
+		switch (_originSO.parameterType)
 		{
 			case AnimatorParameterActionSO.ParameterType.Bool:
-				_animator.SetBool(_parameterHash, _boolValue);
+				_animator.SetBool(_parameterHash, _originSO.boolValue);
 				break;
 			case AnimatorParameterActionSO.ParameterType.Int:
-				_animator.SetInteger(_parameterHash, _intValue);
+				_animator.SetInteger(_parameterHash, _originSO.intValue);
 				break;
 			case AnimatorParameterActionSO.ParameterType.Float:
-				_animator.SetFloat(_parameterHash, _floatValue);
+				_animator.SetFloat(_parameterHash, _originSO.floatValue);
 				break;
 			case AnimatorParameterActionSO.ParameterType.Trigger:
 				_animator.SetTrigger(_parameterHash);
