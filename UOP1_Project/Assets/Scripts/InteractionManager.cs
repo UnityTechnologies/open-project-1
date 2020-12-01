@@ -2,7 +2,7 @@
 
 //Enum of the possible Interaction types, we can add later if needed
 //None is the default value as its value is '0'
-enum Interaction { None = 0,PickUp, Cook, Talk}; 
+enum Interaction { None = 0, PickUp, Cook, Talk };
 
 public class InteractionManager : MonoBehaviour
 {
@@ -20,7 +20,7 @@ public class InteractionManager : MonoBehaviour
 	[Header("Broadcasting on")]
 	[SerializeField] private GameObjectEventChannelSO _OnObjectPickUp = default;
 	//double check with the action name we will show on the UI (because we will not really starting cooking but showing the UI?)
-	[SerializeField] private VoidEventChannelSO _OnCookingStart = default; 
+	[SerializeField] private VoidEventChannelSO _OnCookingStart = default;
 	[SerializeField] private GameObjectEventChannelSO _StartTalking = default;
 
 
