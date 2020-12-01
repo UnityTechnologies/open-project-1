@@ -3,12 +3,10 @@ using UOP1.StateMachine;
 using UOP1.StateMachine.ScriptableObjects;
 
 [CreateAssetMenu(fileName = "GroundGravity", menuName = "State Machines/Actions/Ground Gravity")]
-public class GroundGravityActionSO : StateActionSO
+public class GroundGravityActionSO : StateActionSO<GroundGravityAction>
 {
 	[Tooltip("Vertical movement pulling down the player to keep it anchored to the ground.")]
-	[SerializeField] private float _verticalPull = -5f;
-
-	protected override StateAction CreateAction() => new GroundGravityAction(_verticalPull);
+	public float verticalPull = -5f;
 }
 
 public class GroundGravityAction : StateAction
@@ -16,12 +14,7 @@ public class GroundGravityAction : StateAction
 	//Component references
 	private Protagonist _protagonistScript;
 
-	private float _verticalPull;
-
-	public GroundGravityAction(float slideSpeed)
-	{
-		_verticalPull = slideSpeed;
-	}
+	private GroundGravityActionSO _originSO => (GroundGravityActionSO)base.OriginSO; // The SO this StateAction spawned from
 
 	public override void Awake(StateMachine stateMachine)
 	{
@@ -30,6 +23,6 @@ public class GroundGravityAction : StateAction
 
 	public override void OnUpdate()
 	{
-		_protagonistScript.movementVector.y = _verticalPull;
+		_protagonistScript.movementVector.y = _originSO.verticalPull;
 	}
 }
