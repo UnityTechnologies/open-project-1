@@ -1,4 +1,4 @@
-![Unity Open Projects](https://imgur.com/CNSq6ea.jpg)
+![Unity Open Projects](https://imgur.com/OrFbPwp.jpg)
 ### Unity Open Project #1: Chop Chop
 # Devlog 1: The toon shading
 
