@@ -60,14 +60,6 @@
                     "expectedControlType": "Vector2",
                     "processors": "",
                     "interactions": ""
-                },
-                {
-                    "name": "MouseControlCamera",
-                    "type": "Button",
-                    "id": "3172ea7f-84a3-4236-b03d-2beae11fa2e0",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": ""
                 }
             ],
             "bindings": [
@@ -424,26 +416,37 @@
                     "isPartOfComposite": true
                 },
                 {
-                    "name": "",
-                    "id": "88e5a69d-cf1d-43ce-b5ab-9db67f819255",
-                    "path": "<Mouse>/delta",
+                    "name": "Mouse Drag",
+                    "id": "df73705a-d548-4197-9d01-e23af37cfdb0",
+                    "path": "Drag",
                     "interactions": "",
-                    "processors": "ScaleVector2",
-                    "groups": "KeyboardOrGamepad",
+                    "processors": "",
+                    "groups": "",
                     "action": "RotateCamera",
-                    "isComposite": false,
+                    "isComposite": true,
                     "isPartOfComposite": false
                 },
                 {
-                    "name": "",
-                    "id": "55713f13-8452-439f-b87e-76d9f2839d7e",
+                    "name": "Trigger",
+                    "id": "f6ff3888-74e7-4fff-8def-7b9101e7fdb5",
                     "path": "<Mouse>/rightButton",
                     "interactions": "",
                     "processors": "",
-                    "groups": "KeyboardOrGamepad",
-                    "action": "MouseControlCamera",
+                    "groups": "",
+                    "action": "RotateCamera",
                     "isComposite": false,
-                    "isPartOfComposite": false
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "Delta",
+                    "id": "9357c36a-1a7c-498d-8215-d960ca191c5e",
+                    "path": "<Mouse>/delta",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "RotateCamera",
+                    "isComposite": false,
+                    "isPartOfComposite": true
                 }
             ]
         },

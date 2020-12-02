@@ -13,9 +13,7 @@ public class InputReader : ScriptableObject, GameInput.IGameplayActions, GameInp
 	public event UnityAction extraActionEvent; // Used to bring up the inventory
 	public event UnityAction pauseEvent;
 	public event UnityAction<Vector2> moveEvent;
-	public event UnityAction<Vector2, bool> cameraMoveEvent;
-	public event UnityAction enableMouseControlCameraEvent;
-	public event UnityAction disableMouseControlCameraEvent;
+	public event UnityAction<Vector2> cameraRotateEvent;
 
 	// Dialogue
 	public event UnityAction advanceDialogueEvent = delegate { };
@@ -89,22 +87,11 @@ public class InputReader : ScriptableObject, GameInput.IGameplayActions, GameInp
 
 	public void OnRotateCamera(InputAction.CallbackContext context)
 	{
-		if (cameraMoveEvent != null)
+		if (cameraRotateEvent != null)
 		{
-			cameraMoveEvent.Invoke(context.ReadValue<Vector2>(), IsDeviceMouse(context));
+			cameraRotateEvent.Invoke(context.ReadValue<Vector2>());
 		}
 	}
-
-	public void OnMouseControlCamera(InputAction.CallbackContext context)
-	{
-		if (context.phase == InputActionPhase.Performed)
-			enableMouseControlCameraEvent?.Invoke();
-
-		if (context.phase == InputActionPhase.Canceled)
-			disableMouseControlCameraEvent?.Invoke();
-	}
-
-	private bool IsDeviceMouse(InputAction.CallbackContext context) => context.control.device.name == "Mouse";
 
 	public void OnMoveSelection(InputAction.CallbackContext context)
 	{
