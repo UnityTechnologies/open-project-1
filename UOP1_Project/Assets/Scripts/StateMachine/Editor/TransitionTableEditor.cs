@@ -382,15 +382,15 @@ namespace UOP1.StateMachine.Editor
 				var serializedTransition = new SerializedTransition(_transitions, i);
 				if (serializedTransition.FromState.objectReferenceValue == null)
 				{
-					Debug.LogError("Transition with invalid state found in table " + serializedObject.targetObject.name + ", deleting...");
+					Debug.LogError("Transition with invalid \"From State\" found in table " + serializedObject.targetObject.name + ", deleting...");
 					_transitions.DeleteArrayElementAtIndex(i);
 					serializedObject.ApplyModifiedProperties();
 					Reset();
 					return;
 				}
-				if (serializedTransition.FromState.objectReferenceValue == null)
+				if (serializedTransition.ToState.objectReferenceValue == null)
 				{
-					Debug.LogError("Transition with invalid state found in table " + serializedObject.targetObject.name + ", deleting...");
+					Debug.LogError("Transition with invalid \"Target State\" found in table " + serializedObject.targetObject.name + ", deleting...");
 					_transitions.DeleteArrayElementAtIndex(i);
 					serializedObject.ApplyModifiedProperties();
 					Reset();
