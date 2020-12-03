@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Shell_bowl
-  m_Shader: {fileID: -6465566751694194690, guid: bf36778a400a0894b86a1f49c422fa62,
+  m_Name: SpectacleGlass
+  m_Shader: {fileID: -6465566751694194690, guid: 6308ea4821d1aeb4cbe77aa991079282,
     type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
@@ -16,7 +16,8 @@ Material:
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
   stringTagMap: {}
-  disabledShaderPasses: []
+  disabledShaderPasses:
+  - SHADOWCASTER
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -36,10 +37,6 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _MainTexture:
-        m_Texture: {fileID: 2800000, guid: a86f6717738c7d5488a7f834a78ddb29, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -52,46 +49,42 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _SpecularMap:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
     m_Floats:
+    - Light_Probe_Contribution: 2.5
+    - Vector1_398E6F7F: 0.5
+    - Vector1_495DBFDC: 0
+    - Vector1_93E6CC20: 0
+    - Vector1_CCBA7087: 0
     - _AlphaClip: 0
     - _Blend: 0
     - _BumpScale: 1
     - _Cull: 2
     - _Cutoff: 0.5
-    - _DstBlend: 0
+    - _DstBlend: 10
     - _EnvironmentReflections: 1
+    - _FresnelOpacity: 0.5
+    - _Fresnel_Power: 3
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
-    - _LightProbeContribution: 3.5
     - _Metallic: 0
     - _OcclusionStrength: 1
-    - _OutlineDepthSensitivity: 1
-    - _OutlineNormalsSensitivity: 1
-    - _OutlineThickness: 1
     - _QueueOffset: 0
     - _ReceiveShadows: 1
-    - _Smoothness: 0.5
+    - _Smoothness: 0.95
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
-    - _SrcBlend: 1
-    - _Surface: 0
+    - _SrcBlend: 5
+    - _Surface: 1
     - _WorkflowMode: 1
-    - _ZWrite: 1
+    - _ZWrite: 0
     m_Colors:
-    - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
+    - Color_9BF846A1: {r: 0.55998576, g: 0.8301887, b: 0.7961739, a: 0.11764706}
+    - _BaseColor: {r: 0, g: 0, b: 0, a: 0.078431375}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _MainColor: {r: 1, g: 1, b: 1, a: 0}
-    - _Offset: {r: 0, g: 0, b: 0, a: 0}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
-    - _SpecularColor: {r: 1, g: 1, b: 1, a: 0}
-    - _Tiling: {r: 1, g: 1, b: 0, a: 0}
---- !u!114 &714549086386427990
+--- !u!114 &3958996506883258858
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
