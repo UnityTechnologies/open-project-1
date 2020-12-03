@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using Cinemachine;
+using System.Collections;
 
 public class CameraManager : MonoBehaviour
 {
@@ -11,6 +12,8 @@ public class CameraManager : MonoBehaviour
 
 	[SerializeField, Range(1f, 5f)]
 	private float speed = default;
+
+	private bool cameraMovementLock = false;
 
 	public void SetupProtagonistVirtualCamera(Transform target)
 	{
@@ -38,6 +41,15 @@ public class CameraManager : MonoBehaviour
 
 		Cursor.lockState = CursorLockMode.Locked;
 		Cursor.visible = false;
+
+		StartCoroutine(DisableMouseControlForFrame());
+	}
+
+	IEnumerator DisableMouseControlForFrame()
+	{
+		cameraMovementLock = true;
+		yield return new WaitForSeconds(.1f);
+		cameraMovementLock = false;
 	}
 
 	private void OnDisableMouseControlCamera()
@@ -55,6 +67,9 @@ public class CameraManager : MonoBehaviour
 
 	private void OnCameraMove(Vector2 cameraMovement, bool isDeviceMouse)
 	{
+		if (cameraMovementLock)
+			return;
+
 		if (isDeviceMouse && !_isRMBPressed)
 			return;
 
