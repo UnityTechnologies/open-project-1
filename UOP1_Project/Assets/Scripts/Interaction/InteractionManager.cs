@@ -1,17 +1,14 @@
 ﻿using UnityEngine;
 
-//Enum of the possible Interaction types, we can add later if needed
-//None is the default value as its value is '0'
-enum Interaction { None = 0, PickUp, Cook, Talk };
+public enum Interaction { None = 0, PickUp, Cook, Talk };
 
 public class InteractionManager : MonoBehaviour
 {
-
+	public Interaction _interaction;
 	public InputReader inputReader;
-	private Interaction _interactionType;
 	//To store the object we are currently interacting with
 	GameObject currentInteractableObject;
-	//Or do we want to have stg specefic for every type of interaction like:
+	//Or do we want to have stg specific for every type of interaction like:
 	//Item for pickup?
 	//Character (or other relevant type) for talk?
 
@@ -22,6 +19,8 @@ public class InteractionManager : MonoBehaviour
 	//double check with the action name we will show on the UI (because we will not really starting cooking but showing the UI?)
 	[SerializeField] private VoidEventChannelSO _OnCookingStart = default;
 	[SerializeField] private GameObjectEventChannelSO _StartTalking = default;
+	//UI event
+	[SerializeField] private InteractionUIEventChannelSO _ToggleInteractionUI = default;
 
 
 	private void OnEnable()
@@ -36,12 +35,15 @@ public class InteractionManager : MonoBehaviour
 
 	void OnInteractionButtonPress()
 	{
-		switch (_interactionType)
+		switch (_interaction)
 		{
 			case Interaction.None:
 				return;
 			case Interaction.PickUp:
 				//Maybe better add check if gb not null here?
+				//pass the item SO to the UI
+				//destroy the GO
+				//Change the action map 
 				_OnObjectPickUp.RaiseEvent(currentInteractableObject);
 				Debug.Log("PickUp event raised");
 				break;
@@ -56,7 +58,7 @@ public class InteractionManager : MonoBehaviour
 			default:
 				break;
 		}
-		ResetInteraction();
+		//ResetInteraction();
 	}
 
 
@@ -64,20 +66,21 @@ public class InteractionManager : MonoBehaviour
 	{
 		if (other.CompareTag("Pickable"))
 		{
-			_interactionType = Interaction.PickUp;
+			_interaction = Interaction.PickUp;
 			currentInteractableObject = other.gameObject;
 			Debug.Log("I triggered a pickable object!");
-			//Raise event to display UI or have a ref de display it from here
+			//Raise event to display UI 
+			_ToggleInteractionUI.RaiseEvent(true, _interaction);
 		}
 		else if (other.CompareTag("CookingPot"))
 		{
-			_interactionType = Interaction.Cook;
+			_interaction = Interaction.Cook;
 			//Raise event to display UI or have a ref de display it from here
 			Debug.Log("I triggered a cooking pot!");
 		}
 		else if (other.CompareTag("NPC"))
 		{
-			_interactionType = Interaction.Talk;
+			_interaction = Interaction.Talk;
 			currentInteractableObject = other.gameObject;
 			//Raise event to display UI or have a ref de display it from here
 			Debug.Log("I triggered an NPC!");
@@ -91,7 +94,7 @@ public class InteractionManager : MonoBehaviour
 
 	private void ResetInteraction()
 	{
-		_interactionType = Interaction.None;
+		_interaction = Interaction.None;
 		currentInteractableObject = null;
 	}
 }
