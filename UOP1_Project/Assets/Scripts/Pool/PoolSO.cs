@@ -88,6 +88,7 @@ namespace UOP1.Pool
 		public virtual void OnDisable()
 		{
 			Available.Clear();
+			HasBeenPrewarmed = false;
 		}
 	}
 }
