@@ -12,6 +12,7 @@ public class GameObjectEventChannelSO : ScriptableObject
 	public UnityAction<GameObject> OnEventRaised;
 	public void RaiseEvent(GameObject value)
 	{
-		OnEventRaised.Invoke(value);
+		if (OnEventRaised != null)
+			OnEventRaised.Invoke(value);
 	}
 }
