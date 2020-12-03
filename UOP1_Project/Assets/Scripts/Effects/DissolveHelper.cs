@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class DissolveHelper : MonoBehaviour
 {
-    [SerializeField] ParticleSystem _dissolveParticlesPrefab;
+	[SerializeField] ParticleSystem _dissolveParticlesPrefab;
 	[SerializeField] float _dissolveDuration = 1f;
 
 	private MeshRenderer _renderer;
@@ -13,15 +13,15 @@ public class DissolveHelper : MonoBehaviour
 	private MaterialPropertyBlock _materialPropertyBlock;
 
 	[ContextMenu("Trigger Dissolve")]
-    public void TriggerDissolve()
-    {
+	public void TriggerDissolve()
+	{
 		if (_materialPropertyBlock == null)
 		{
 			_materialPropertyBlock = new MaterialPropertyBlock();
 		}
 		InitParticleSystem();
 		StartCoroutine(DissolveCoroutine());
-    }
+	}
 
 	[ContextMenu("Reset Dissolve")]
 	private void ResetDissolve()
@@ -31,7 +31,7 @@ public class DissolveHelper : MonoBehaviour
 	}
 
 	private void InitParticleSystem()
-    {
+	{
 		_particules = GameObject.Instantiate(_dissolveParticlesPrefab, transform);
 
 		_renderer = GetComponent<MeshRenderer>();
@@ -41,23 +41,23 @@ public class DissolveHelper : MonoBehaviour
 
 		ParticleSystem.MainModule mainModule = _particules.main;
 		mainModule.duration = _dissolveDuration;
-    }
+	}
 
-    public IEnumerator DissolveCoroutine() 
-    {
-        float normalizedDeltaTime = 0;
+	public IEnumerator DissolveCoroutine()
+	{
+		float normalizedDeltaTime = 0;
 
 		_particules.Play();
 
-        while(normalizedDeltaTime < _dissolveDuration) 
-        {
-            normalizedDeltaTime += Time.deltaTime;
-            float remappedValue = VFXUtil.RemapValue(normalizedDeltaTime, 0, _dissolveDuration, 0, 1);
-            _materialPropertyBlock.SetFloat("_Dissolve", remappedValue);
-            _renderer.SetPropertyBlock(_materialPropertyBlock);
+		while (normalizedDeltaTime < _dissolveDuration)
+		{
+			normalizedDeltaTime += Time.deltaTime;
+			float remappedValue = VFXUtil.RemapValue(normalizedDeltaTime, 0, _dissolveDuration, 0, 1);
+			_materialPropertyBlock.SetFloat("_Dissolve", remappedValue);
+			_renderer.SetPropertyBlock(_materialPropertyBlock);
 
-            yield return null;
-        }
+			yield return null;
+		}
 		GameObject.Destroy(_particules.gameObject);
-    }
+	}
 }
