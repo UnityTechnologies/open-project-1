@@ -15,7 +15,7 @@ public class InteractionUIEventChannelSO : ScriptableObject
 		if (OnEventRaised != null)
 			OnEventRaised.Invoke(state, interactionType);
 	}
-	
+
 }
 
 //maybe make a SO for the interaction type so we can access it from both the UI script
