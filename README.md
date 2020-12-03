@@ -1,12 +1,12 @@
-![Unity Open Projects](https://imgur.com/Y0svl0w.png)
+![Unity Open Projects](/Docs/ReadmeImages/Main_header.jpg)
 # Unity Open Project #1: Chop Chop
 
 Welcome! This is the repository for the first Unity **Open Project**, an initiative where Unity and the community collaborate together to create a small **open-source game demo**.
 
 The first game, which is currently under development, is an action-adventure titled _Chop Chop_ ([more info](https://open.codecks.io/unity-open-project-1/decks/32/card/126-what-is-this)).
 
-![OP1 WIP Screenshot](https://imgur.com/033Ucqz.png)
-_A work in progress screenshot
+![OP1 WIP Screenshot](/Docs/ReadmeImages/Jumping.png)
+_A work in progress screenshot_
 
 ## Follow the progress
 ✍🏻 The [dedicated sub-forum](https://forum.unity.com/forums/open-projects.531/) on the Unity forums is where the Unity team and the whole community discuss and brainstorm ideas.  
@@ -26,7 +26,7 @@ If you feel like taking on some **bugs**, check out the [Issues page](https://gi
 
 This project is built on **Unity 2019.4 LTS**, whatever latest patch is available.
 
-![OP1 WIP Screenshot](https://imgur.com/eK7l8TG.png)
+![OP1 WIP Screenshot](/Docs/ReadmeImages/Forest.png)
 _A work in progress screenshot of the main character_
 
 ## Play the game
