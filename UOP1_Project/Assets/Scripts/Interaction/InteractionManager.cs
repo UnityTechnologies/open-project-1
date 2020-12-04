@@ -61,7 +61,7 @@ public class InteractionManager : MonoBehaviour
 			case Interaction.None:
 				return;
 			case Interaction.PickUp:
-				if(_currentInteractableObject != null)
+				if (_currentInteractableObject != null)
 				{
 					//raise an event with an item as parameter (to add object to inventory)
 					//Item currentItem = currentInteractableObject.GetComponent<Pickable>.item;
@@ -122,7 +122,7 @@ public class InteractionManager : MonoBehaviour
 		_currentInteractableObject = other.gameObject;
 	}
 
-	private void DisplayInteractionUI ()
+	private void DisplayInteractionUI()
 	{
 		//Raise event to display UI
 		_toggleInteractionUI.RaiseEvent(true, _potentialInteraction);
