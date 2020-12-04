@@ -18,8 +18,3 @@ public class InteractionUIEventChannelSO : ScriptableObject
 
 }
 
-//maybe make a SO for the interaction type so we can access it from both the UI script
-//and the Interaction script
-//we have a field for the current interaction so no need to pass it as paramater
-//in the event...
-
