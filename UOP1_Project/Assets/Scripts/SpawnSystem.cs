@@ -11,8 +11,8 @@ public class SpawnSystem : MonoBehaviour
 	[SerializeField] private Protagonist _playerPrefab = null;
 
 	[Header("Scene References")]
-	[SerializeField] private CameraManager _cameraManager;
 	[SerializeField] private Transform[] _spawnLocations;
+	[SerializeField] private TransformEventChannelSO _frameObjectChannel;
 
 	void Start()
 	{
@@ -37,9 +37,6 @@ public class SpawnSystem : MonoBehaviour
 	[ContextMenu("Attempt Auto Fill")]
 	private void AutoFill()
 	{
-		if (_cameraManager == null)
-			_cameraManager = FindObjectOfType<CameraManager>();
-
 		if (_spawnLocations == null || _spawnLocations.Length == 0)
 			_spawnLocations = transform.GetComponentsInChildren<Transform>(true)
 								.Where(t => t != this.transform)
@@ -49,7 +46,7 @@ public class SpawnSystem : MonoBehaviour
 	private void Spawn(int spawnIndex)
 	{
 		Transform spawnLocation = GetSpawnLocation(spawnIndex, _spawnLocations);
-		Protagonist playerInstance = InstantiatePlayer(_playerPrefab, spawnLocation, _cameraManager);
+		Protagonist playerInstance = InstantiatePlayer(_playerPrefab, spawnLocation);
 		SetupCameras(playerInstance);
 	}
 
@@ -62,7 +59,7 @@ public class SpawnSystem : MonoBehaviour
 		return spawnLocations[index];
 	}
 
-	private Protagonist InstantiatePlayer(Protagonist playerPrefab, Transform spawnLocation, CameraManager _cameraManager)
+	private Protagonist InstantiatePlayer(Protagonist playerPrefab, Transform spawnLocation)
 	{
 		if (playerPrefab == null)
 			throw new Exception("Player Prefab can't be null.");
@@ -74,7 +71,8 @@ public class SpawnSystem : MonoBehaviour
 
 	private void SetupCameras(Protagonist player)
 	{
-		player.gameplayCamera = _cameraManager.mainCamera.transform;
-		_cameraManager.SetupProtagonistVirtualCamera(player.transform);
+		//TODO: update this hacky assignment of mainCamera
+		player.gameplayCamera = UnityEngine.Object.FindObjectOfType<CameraManager>().mainCamera.transform;
+		_frameObjectChannel.RaiseEvent(player.transform);
 	}
 }

@@ -12,6 +12,10 @@ public class CameraManager : MonoBehaviour
 	[SerializeField, Range(1f, 5f)]
 	private float speed = default;
 
+	[Header("Listening on channels")]
+	[Tooltip("The CameraManager listens to this event, fired by objects in any scene, to adapt camera position")]
+	[SerializeField] private TransformEventChannelSO _frameObjectChannel = default;
+
 	public void SetupProtagonistVirtualCamera(Transform target)
 	{
 		freeLookVCam.Follow = target;
@@ -23,6 +27,9 @@ public class CameraManager : MonoBehaviour
 		inputReader.cameraMoveEvent += OnCameraMove;
 		inputReader.enableMouseControlCameraEvent += OnEnableMouseControlCamera;
 		inputReader.disableMouseControlCameraEvent += OnDisableMouseControlCamera;
+
+		if(_frameObjectChannel != null)
+			_frameObjectChannel.OnEventRaised += OnFrameObjectEvent;
 	}
 
 	private void OnDisable()
@@ -30,6 +37,9 @@ public class CameraManager : MonoBehaviour
 		inputReader.cameraMoveEvent -= OnCameraMove;
 		inputReader.enableMouseControlCameraEvent -= OnEnableMouseControlCamera;
 		inputReader.disableMouseControlCameraEvent -= OnDisableMouseControlCamera;
+
+		if (_frameObjectChannel != null)
+			_frameObjectChannel.OnEventRaised -= OnFrameObjectEvent;
 	}
 
 	private void OnEnableMouseControlCamera()
@@ -60,5 +70,10 @@ public class CameraManager : MonoBehaviour
 
 		freeLookVCam.m_XAxis.m_InputAxisValue = cameraMovement.x * Time.smoothDeltaTime * speed;
 		freeLookVCam.m_YAxis.m_InputAxisValue = cameraMovement.y * Time.smoothDeltaTime * speed;
+	}
+
+	private void OnFrameObjectEvent(Transform value)
+	{
+		SetupProtagonistVirtualCamera(value);
 	}
 }
