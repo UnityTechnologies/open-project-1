@@ -44,8 +44,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.3, y: 0.3, z: 1}
-  m_Center: {x: 0, y: 0.3, z: 0}
+  m_Size: {x: 0.3, y: 1, z: 1}
+  m_Center: {x: 0, y: 0.5, z: 0.8}
 --- !u!114 &3466124848074566184
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -58,12 +58,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a40d14d4203a8e14e9cc748b46975252, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentInteraction: 0
   _inputReader: {fileID: 11400000, guid: 945ec0365077176418488737deed54be, type: 2}
-  _onObjectPickUp: {fileID: 0}
-  _onCookingStart: {fileID: 0}
-  _startTalking: {fileID: 0}
-  _toggleInteractionUI: {fileID: 0}
-  _onInteractionEnded: {fileID: 0}
+  _onObjectPickUp: {fileID: 11400000, guid: f3027c4528b8e794f940a4696506f0c3, type: 2}
+  _onCookingStart: {fileID: 11400000, guid: 146c579dca5c2f248a607ef66a36d765, type: 2}
+  _startTalking: {fileID: 11400000, guid: bff3df361fa61684386f84b5b062875a, type: 2}
+  _toggleInteractionUI: {fileID: 11400000, guid: 818cc55cb05226248bdb15ace58eab84,
+    type: 2}
+  _onInteractionEnded: {fileID: 11400000, guid: c499d87f35465124f8fb2751b150430d,
+    type: 2}
 --- !u!54 &1260543021480651504
 Rigidbody:
   m_ObjectHideFlags: 0
