@@ -7,7 +7,7 @@ public class InteractionManager : MonoBehaviour
 	public Interaction _interaction;
 	public InputReader inputReader;
 	//To store the object we are currently interacting with
-	GameObject currentInteractableObject;
+	GameObject currentInteractableObject = null;
 	//Or do we want to have stg specific for every type of interaction like:
 	//Item for pickup?
 	//Character (or other relevant type) for talk?
@@ -21,16 +21,40 @@ public class InteractionManager : MonoBehaviour
 	[SerializeField] private GameObjectEventChannelSO _StartTalking = default;
 	//UI event
 	[SerializeField] private InteractionUIEventChannelSO _ToggleInteractionUI = default;
-
+	//Check if the interaction ended
+	[SerializeField] private VoidEventChannelSO _InteractionEnded = default;
 
 	private void OnEnable()
 	{
 		inputReader.interactEvent += OnInteractionButtonPress;
+		_InteractionEnded.OnEventRaised += OnInteractionEnd;
 	}
 
 	private void OnDisable()
 	{
 		inputReader.interactEvent -= OnInteractionButtonPress;
+		_InteractionEnded.OnEventRaised -= OnInteractionEnd;
+	}
+
+	//When the interaction ends, we still want to display the interaction UI if we are still in the trigger zone
+	void OnInteractionEnd()
+	{
+		inputReader.EnableGameplayInput();
+		switch (_interaction)
+		{
+			//We don't show the interaction UI when we already picked up the object
+			case Interaction.None:
+			case Interaction.PickUp:
+				return;
+			//we show it after cooking or talking, in case player want to interact again
+			case Interaction.Cook:
+			case Interaction.Talk:
+				_ToggleInteractionUI.RaiseEvent(true, _interaction);
+				Debug.Log("Display interaction UI");
+				break;
+			default:
+				break;
+		}
 	}
 
 	void OnInteractionButtonPress()
@@ -40,51 +64,62 @@ public class InteractionManager : MonoBehaviour
 			case Interaction.None:
 				return;
 			case Interaction.PickUp:
-				//Maybe better add check if gb not null here?
-				//pass the item SO to the UI
+				if(currentInteractableObject != null)
+				{
+					//pass the item SO to the UI?
+					_OnObjectPickUp.RaiseEvent(currentInteractableObject);
+					Debug.Log("PickUp event raised");
+				}
+				
 				//destroy the GO
-				//Change the action map 
-				_OnObjectPickUp.RaiseEvent(currentInteractableObject);
-				Debug.Log("PickUp event raised");
 				break;
 			case Interaction.Cook:
 				_OnCookingStart.RaiseEvent();
 				Debug.Log("Cooking event raised");
+				//Change the action map
+				//inputReader.EnableUIInput();
 				break;
 			case Interaction.Talk:
-				_StartTalking.RaiseEvent(currentInteractableObject);
-				Debug.Log("talk event raised");
+				if (currentInteractableObject != null)
+				{
+					_StartTalking.RaiseEvent(currentInteractableObject);
+					Debug.Log("talk event raised");
+					//Change the action map
+					inputReader.EnableDialogueInput();
+				}
 				break;
 			default:
 				break;
 		}
-		//ResetInteraction();
 	}
-
 
 	private void OnTriggerEnter(Collider other)
 	{
 		if (other.CompareTag("Pickable"))
 		{
 			_interaction = Interaction.PickUp;
-			currentInteractableObject = other.gameObject;
 			Debug.Log("I triggered a pickable object!");
-			//Raise event to display UI 
-			_ToggleInteractionUI.RaiseEvent(true, _interaction);
+			DisplayInteractionUI();
 		}
 		else if (other.CompareTag("CookingPot"))
 		{
 			_interaction = Interaction.Cook;
-			//Raise event to display UI or have a ref de display it from here
 			Debug.Log("I triggered a cooking pot!");
+			DisplayInteractionUI();
 		}
 		else if (other.CompareTag("NPC"))
 		{
 			_interaction = Interaction.Talk;
-			currentInteractableObject = other.gameObject;
-			//Raise event to display UI or have a ref de display it from here
 			Debug.Log("I triggered an NPC!");
+			DisplayInteractionUI();
 		}
+		currentInteractableObject = other.gameObject;
+	}
+
+	private void DisplayInteractionUI ()
+	{
+		//Raise event to display UI
+		_ToggleInteractionUI.RaiseEvent(true, _interaction);
 	}
 
 	private void OnTriggerExit(Collider other)
@@ -98,3 +133,10 @@ public class InteractionManager : MonoBehaviour
 		currentInteractableObject = null;
 	}
 }
+
+
+//Do we need to detect the button press first of the trigger first
+//If we detect trigger first, to destroy the object later we need to keep a ref 
+
+
+//I think the dialogue and UI should switch the action maps? for now I do here but maybe to change later
