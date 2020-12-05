@@ -27,6 +27,6 @@ public class IsActuallyMovingCondition : Condition
 
 	protected override bool Statement()
 	{
-		return _characterController.velocity.sqrMagnitude > _treshold;
+		return _characterController.velocity.sqrMagnitude > _treshold * _treshold;
 	}
 }
