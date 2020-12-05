@@ -20,7 +20,7 @@ public class IsSlidingCondition : Condition
 	{
 		if (_protagonistScript.lastHit == null)
 			return false;
-		
+
 		float currentSlope = Vector3.Angle(Vector3.up, _protagonistScript.lastHit.normal);
 		return (currentSlope >= _characterController.slopeLimit);
 	}
