@@ -11,10 +11,12 @@ public class CameraManager : MonoBehaviour
 
 	[SerializeField, Range(1f, 5f)]
 	private float speed = default;
+	[SerializeField] private TransformAnchor _cameraTransformAnchor = default;
 
 	[Header("Listening on channels")]
 	[Tooltip("The CameraManager listens to this event, fired by objects in any scene, to adapt camera position")]
 	[SerializeField] private TransformEventChannelSO _frameObjectChannel = default;
+
 
 	public void SetupProtagonistVirtualCamera(Transform target)
 	{
@@ -30,6 +32,8 @@ public class CameraManager : MonoBehaviour
 
 		if(_frameObjectChannel != null)
 			_frameObjectChannel.OnEventRaised += OnFrameObjectEvent;
+
+		_cameraTransformAnchor.Transform = mainCamera.transform;
 	}
 
 	private void OnDisable()

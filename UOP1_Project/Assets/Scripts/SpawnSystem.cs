@@ -1,29 +1,23 @@
 ﻿using System;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class SpawnSystem : MonoBehaviour
 {
 	[Header("Settings")]
 	[SerializeField] private int _defaultSpawnIndex = 0;
 
-	[Header("Project References")]
-	[SerializeField] private Protagonist _playerPrefab = null;
+	[Header("Asset References")]
+	[SerializeField] private Protagonist _playerPrefab = default;
+	[SerializeField] private TransformEventChannelSO _playerInstantiatedChannel = default;
 
 	[Header("Scene References")]
 	[SerializeField] private Transform[] _spawnLocations;
-	[SerializeField] private TransformEventChannelSO _frameObjectChannel;
 
 	void Start()
 	{
-		try
-		{
-			Spawn(_defaultSpawnIndex);
-		}
-		catch (Exception e)
-		{
-			Debug.LogError($"[SpawnSystem] Failed to spawn player. {e.Message}");
-		}
+		Spawn(_defaultSpawnIndex);
 	}
 
 	void Reset()
@@ -47,7 +41,8 @@ public class SpawnSystem : MonoBehaviour
 	{
 		Transform spawnLocation = GetSpawnLocation(spawnIndex, _spawnLocations);
 		Protagonist playerInstance = InstantiatePlayer(_playerPrefab, spawnLocation);
-		SetupCameras(playerInstance);
+
+		_playerInstantiatedChannel.RaiseEvent(playerInstance.transform); // The CameraSystem will pick this up to frame the player
 	}
 
 	private Transform GetSpawnLocation(int index, Transform[] spawnLocations)
@@ -67,12 +62,5 @@ public class SpawnSystem : MonoBehaviour
 		Protagonist playerInstance = Instantiate(playerPrefab, spawnLocation.position, spawnLocation.rotation);
 
 		return playerInstance;
-	}
-
-	private void SetupCameras(Protagonist player)
-	{
-		//TODO: update this hacky assignment of mainCamera
-		player.gameplayCamera = UnityEngine.Object.FindObjectOfType<CameraManager>().mainCamera.transform;
-		_frameObjectChannel.RaiseEvent(player.transform);
 	}
 }
