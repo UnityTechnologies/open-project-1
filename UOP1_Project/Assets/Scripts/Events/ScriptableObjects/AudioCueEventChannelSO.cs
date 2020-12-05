@@ -6,7 +6,7 @@ using UnityEngine.Events;
 /// Event on which <c>AudioCue</c> components send a message to play SFX and music. <c>AudioManager</c> listens on these events, and actually plays the sound.
 /// </summary>
 [CreateAssetMenu(menuName = "Events/AudioCue Event Channel")]
-public class AudioCueEventChannelSO : ScriptableObject
+public class AudioCueEventChannelSO : EventChannelBaseSO
 {
 	public UnityAction<AudioCueSO, AudioConfigurationSO, Vector3> OnAudioCueRequested;
 

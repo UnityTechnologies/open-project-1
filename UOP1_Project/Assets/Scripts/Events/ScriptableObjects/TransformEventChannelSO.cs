@@ -7,11 +7,13 @@ using UnityEngine;
 /// </summary>
 
 [CreateAssetMenu(menuName = "Events/Transform Event Channel")]
-public class TransformEventChannelSO : ScriptableObject
+public class TransformEventChannelSO : EventChannelBaseSO
 {
 	public UnityAction<Transform> OnEventRaised;
+
 	public void RaiseEvent(Transform value)
 	{
-		OnEventRaised.Invoke(value);
+		if(OnEventRaised != null)
+			OnEventRaised.Invoke(value);
 	}
 }
