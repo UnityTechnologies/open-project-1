@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using Cinemachine;
+using System.Collections;
 
 public class CameraManager : MonoBehaviour
 {
@@ -17,6 +18,8 @@ public class CameraManager : MonoBehaviour
 	[Tooltip("The CameraManager listens to this event, fired by objects in any scene, to adapt camera position")]
 	[SerializeField] private TransformEventChannelSO _frameObjectChannel = default;
 
+
+	private bool cameraMovementLock = false;
 
 	public void SetupProtagonistVirtualCamera(Transform target)
 	{
@@ -52,6 +55,15 @@ public class CameraManager : MonoBehaviour
 
 		Cursor.lockState = CursorLockMode.Locked;
 		Cursor.visible = false;
+
+		StartCoroutine(DisableMouseControlForFrame());
+	}
+
+	IEnumerator DisableMouseControlForFrame()
+	{
+		cameraMovementLock = true;
+		yield return new WaitForSeconds(.1f);
+		cameraMovementLock = false;
 	}
 
 	private void OnDisableMouseControlCamera()
@@ -69,6 +81,9 @@ public class CameraManager : MonoBehaviour
 
 	private void OnCameraMove(Vector2 cameraMovement, bool isDeviceMouse)
 	{
+		if (cameraMovementLock)
+			return;
+
 		if (isDeviceMouse && !_isRMBPressed)
 			return;
 
