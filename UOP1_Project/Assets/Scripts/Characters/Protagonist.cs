@@ -50,7 +50,7 @@ public class Protagonist : MonoBehaviour
 
 	private void RecalculateMovement()
 	{
-		if(gameplayCameraTransform.isSet)
+		if (gameplayCameraTransform.isSet)
 		{
 			//Get the two axes from the camera and flatten them on the XZ plane
 			Vector3 cameraForward = gameplayCameraTransform.Transform.forward;

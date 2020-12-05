@@ -10,7 +10,8 @@ public class TransformAnchor : RuntimeAnchorBase
 	public Transform Transform
 	{
 		get { return _transform; }
-		set {
+		set
+		{
 			_transform = value;
 			isSet = _transform != null;
 		}

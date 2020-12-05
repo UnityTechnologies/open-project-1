@@ -13,7 +13,7 @@ public class TransformEventChannelSO : EventChannelBaseSO
 
 	public void RaiseEvent(Transform value)
 	{
-		if(OnEventRaised != null)
+		if (OnEventRaised != null)
 			OnEventRaised.Invoke(value);
 	}
 }
