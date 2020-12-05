@@ -62,7 +62,7 @@ public class CameraManager : MonoBehaviour
 	IEnumerator DisableMouseControlForFrame()
 	{
 		cameraMovementLock = true;
-		yield return new WaitForSeconds(.1f);
+		yield return new WaitForEndOfFrame();
 		cameraMovementLock = false;
 	}
 
