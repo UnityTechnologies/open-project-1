@@ -70,14 +70,14 @@ public class LocationLoader : MonoBehaviour
 			_loadingInterface.SetActive(true);
 		}
 
-		if(_scenesToLoadAsyncOperations.Count == 0)
+		if (_scenesToLoadAsyncOperations.Count == 0)
 		{
 			for (int i = 0; i < locationsToLoad.Length; i++)
 			{
 				string currentSceneName = locationsToLoad[i].sceneName;
 				if (IsSceneLoaded(currentSceneName) == false)
 				{
-					if(runningLoader == null)
+					if (runningLoader == null)
 					{
 						_scenesToLoadAsyncOperations.Add(SceneManager.LoadSceneAsync(currentSceneName, LoadSceneMode.Additive));
 						_scenesToLoadAsyncOperations[i].completed += SetActiveScene;
