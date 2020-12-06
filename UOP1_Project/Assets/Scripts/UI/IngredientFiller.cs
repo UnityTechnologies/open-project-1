@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Localization.Components;
-using TMPro; 
+using TMPro;
 public class IngredientFiller : MonoBehaviour
 {
 

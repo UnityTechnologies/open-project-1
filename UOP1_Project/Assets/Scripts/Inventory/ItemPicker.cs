@@ -10,7 +10,7 @@ public class ItemPicker : MonoBehaviour
 
 	public void PickItem(Item item)
 	{
-		if(AddItemEvent!=null)
-		AddItemEvent.Raise(item); 
+		if (AddItemEvent != null)
+			AddItemEvent.Raise(item);
 	}
 }

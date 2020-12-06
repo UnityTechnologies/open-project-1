@@ -55,16 +55,17 @@ public class UIManager : MonoBehaviour
 
 
 
-	public void OpenInventoryScreen() {
+	public void OpenInventoryScreen()
+	{
 		inventoryPanel.gameObject.SetActive(true);
 		inventoryPanel.FillInventory();
-	
+
 
 	}
-	
+
 	public void CloseInventoryScreen()
 	{
 		inventoryPanel.gameObject.SetActive(false);
-		
+
 	}
 }

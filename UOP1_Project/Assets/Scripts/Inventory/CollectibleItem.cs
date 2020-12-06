@@ -11,19 +11,21 @@ public class CollectibleItem : MonoBehaviour
 	private SpriteRenderer[] itemImages;
 	private void Start()
 	{
-		SetItem(); 
+		SetItem();
 	}
 
-	public void PickedItem() {
+	public void PickedItem()
+	{
 
 
 	}
 
 	//this function is only for testing 
-	public void SetItem() {
+	public void SetItem()
+	{
 		for (int i = 0; i < itemImages.Length; i++)
 		{
-			itemImages[i].sprite = currentItem.PreviewImage; 
+			itemImages[i].sprite = currentItem.PreviewImage;
 		}
 
 	}
@@ -34,7 +36,7 @@ public class CollectibleItem : MonoBehaviour
 			if (other.gameObject.GetComponent<ItemPicker>())
 			{
 
-				other.gameObject.GetComponent<ItemPicker>().PickItem(currentItem); 
+				other.gameObject.GetComponent<ItemPicker>().PickItem(currentItem);
 
 			}
 

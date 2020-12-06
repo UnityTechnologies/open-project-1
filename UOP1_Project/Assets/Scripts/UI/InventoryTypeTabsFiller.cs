@@ -30,9 +30,9 @@ public class InventoryTypeTabsFiller : MonoBehaviour
 				{
 					Debug.Log("Maximum tabs reached");
 				}
-				bool isSelected = typesList[i] == selectedType; 
+				bool isSelected = typesList[i] == selectedType;
 				//fill
-				instantiatedGameObjects[i].fillTab(typesList[i], isSelected, changeTabEvent); 
+				instantiatedGameObjects[i].fillTab(typesList[i], isSelected, changeTabEvent);
 				instantiatedGameObjects[i].gameObject.SetActive(true);
 
 			}

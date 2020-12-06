@@ -2,19 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.Localization.Components; 
+using UnityEngine.Localization.Components;
 
 public class InventoryButtonFiller : MonoBehaviour
 {
 
 	[SerializeField]
-	private LocalizeStringEvent buttonActionText ;
+	private LocalizeStringEvent buttonActionText;
 
 	[SerializeField]
 	private Button buttonAction;
 
 
-	public void FillInventoryButtons(ItemType itemType,   bool isInteractable=true) {
+	public void FillInventoryButtons(ItemType itemType, bool isInteractable = true)
+	{
 
 
 
@@ -23,12 +24,12 @@ public class InventoryButtonFiller : MonoBehaviour
 		buttonActionText.StringReference = itemType.ActionName;
 
 
-		
 
-		
-	
+
+
+
 	}
 
-	
+
 
 }

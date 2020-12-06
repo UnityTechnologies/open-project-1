@@ -10,13 +10,13 @@ public class SimpleInventoryInspectorFiller : MonoBehaviour
 	[SerializeField]
 	private InspectorDescriptionFiller inspectorDescriptionFiller;
 
-	
+
 	public void FillItemInspector(Item itemToInspect)
 	{
-		
-			inspectorPreviewFiller.FillPreview(itemToInspect);
-			inspectorDescriptionFiller.FillDescription(itemToInspect);
-	
+
+		inspectorPreviewFiller.FillPreview(itemToInspect);
+		inspectorDescriptionFiller.FillDescription(itemToInspect);
+
 
 
 	}

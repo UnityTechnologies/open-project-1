@@ -18,10 +18,10 @@ public class InventoryTypeTabFiller : MonoBehaviour
 
 		tabName.StringReference = tabType.TabName;
 		actionButton.interactable = !isSelected;
-		actionButton.onClick.RemoveAllListeners(); 
+		actionButton.onClick.RemoveAllListeners();
 		actionButton.onClick.AddListener(() => changeTabEvent.Raise(tabType));
 
 	}
 
-	
+
 }

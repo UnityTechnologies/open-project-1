@@ -1,14 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI; 
+using UnityEngine.UI;
 public class RecipeIngredientsFiller : MonoBehaviour
 {
 
 	[SerializeField]
 	private List<IngredientFiller> instantiatedGameObjects = new List<IngredientFiller>();
 
-	public void FillIngredients(List<ItemStack> listofIngredients , bool[] availabilityArray)
+	public void FillIngredients(List<ItemStack> listofIngredients, bool[] availabilityArray)
 	{
 
 		if (gameObject.GetComponent<VerticalLayoutGroup>() != null)
@@ -30,7 +30,7 @@ public class RecipeIngredientsFiller : MonoBehaviour
 				{
 					//fill
 					bool isAvailable = availabilityArray[i];
-					instantiatedGameObjects[i].FillIngredient(listofIngredients[i], isAvailable); 
+					instantiatedGameObjects[i].FillIngredient(listofIngredients[i], isAvailable);
 
 					instantiatedGameObjects[i].gameObject.SetActive(true);
 				}
@@ -44,13 +44,14 @@ public class RecipeIngredientsFiller : MonoBehaviour
 
 		}
 
-		StartCoroutine(waitBeforeDesactiveLayout()); 
+		StartCoroutine(waitBeforeDesactiveLayout());
 
 	}
-	IEnumerator waitBeforeDesactiveLayout() {
+	IEnumerator waitBeforeDesactiveLayout()
+	{
 
 
-		yield return new WaitForSeconds(1); 
+		yield return new WaitForSeconds(1);
 		//disable layout group after layout calculation
 		if (gameObject.GetComponent<VerticalLayoutGroup>() != null)
 			gameObject.GetComponent<VerticalLayoutGroup>().enabled = false;

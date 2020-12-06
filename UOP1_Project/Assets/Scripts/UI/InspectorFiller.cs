@@ -11,7 +11,7 @@ public class InspectorFiller : MonoBehaviour
 	[SerializeField]
 	private CookingInventoryInspectorFiller cookingInventoryInspector;
 
-	public void FillItemInspector(Item itemToInspect, bool[] availabilityArray =null)
+	public void FillItemInspector(Item itemToInspect, bool[] availabilityArray = null)
 	{
 		bool isForCooking = (itemToInspect.ItemType.ActionType == ItemInventoryActionType.cook);
 
@@ -21,17 +21,18 @@ public class InspectorFiller : MonoBehaviour
 		if (!isForCooking)
 		{
 
-			simpleInventoryInspector.FillItemInspector(itemToInspect); 
+			simpleInventoryInspector.FillItemInspector(itemToInspect);
 		}
 		else
 		{
-			cookingInventoryInspector.FillItemInspector(itemToInspect, availabilityArray); 
+			cookingInventoryInspector.FillItemInspector(itemToInspect, availabilityArray);
 		}
 
 
 	}
 
-	public void HideItemInspector() {
+	public void HideItemInspector()
+	{
 		simpleInventoryInspector.gameObject.SetActive(false);
 		cookingInventoryInspector.gameObject.SetActive(false);
 

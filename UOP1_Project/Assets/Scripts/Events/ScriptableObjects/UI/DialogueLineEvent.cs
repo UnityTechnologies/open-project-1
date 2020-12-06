@@ -7,11 +7,11 @@ using UnityEngine.Events;
 public class DialogueLineEvent : ScriptableObject
 {
 
-		public UnityAction<DialogueLineSO> eventRaised;
-		public void Raise(DialogueLineSO dialogueLine)
-		{
-			if (eventRaised != null)
-				eventRaised.Invoke(dialogueLine);
-		}
-	
+	public UnityAction<DialogueLineSO> eventRaised;
+	public void Raise(DialogueLineSO dialogueLine)
+	{
+		if (eventRaised != null)
+			eventRaised.Invoke(dialogueLine);
+	}
+
 }

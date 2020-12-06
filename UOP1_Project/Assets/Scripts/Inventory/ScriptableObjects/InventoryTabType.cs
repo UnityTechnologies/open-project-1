@@ -17,7 +17,7 @@ public class InventoryTabType : ScriptableObject
 	[SerializeField]
 	private LocalizedString _tabName;
 
-	
+
 	[Tooltip("The tab type used to reference the item")]
 	[SerializeField] private TabType _tabType;
 

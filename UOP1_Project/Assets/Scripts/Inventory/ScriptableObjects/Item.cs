@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Localization; 
+using UnityEngine.Localization;
 // Created with collaboration from:
 // https://forum.unity.com/threads/inventory-system.980646/
 [CreateAssetMenu(fileName = "Item", menuName = "Inventory/Item", order = 51)]
@@ -33,9 +33,9 @@ public class Item : ScriptableObject
 
 	[Tooltip("The resulting dish to the recipe")]
 	[SerializeField]
-	private Item _resultingDish; 
+	private Item _resultingDish;
 
-	
+
 
 	public LocalizedString Name => _name;
 	public Sprite PreviewImage => _previewImage;

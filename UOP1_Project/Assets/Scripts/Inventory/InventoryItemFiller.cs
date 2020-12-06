@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using UnityEngine.Localization.Components; 
+using UnityEngine.Localization.Components;
 public class InventoryItemFiller : MonoBehaviour
-{[SerializeField]
+{
+	[SerializeField]
 
 	private Image itemPreviewImage;
 	[SerializeField]
@@ -27,13 +28,14 @@ public class InventoryItemFiller : MonoBehaviour
 	[SerializeField]
 	private Button itemButton;
 
-	public void SetItem(ItemStack itemStack, bool isSelected, ItemEvent selectItemEvent) {
+	public void SetItem(ItemStack itemStack, bool isSelected, ItemEvent selectItemEvent)
+	{
 
-        UnhoverItem();
+		UnhoverItem();
 
 		currentItem = itemStack;
 
-		imgSelected.gameObject.SetActive(isSelected); 
+		imgSelected.gameObject.SetActive(isSelected);
 
 		itemPreviewImage.sprite = itemStack.Item.PreviewImage;
 		itemTitle.StringReference = itemStack.Item.Name;
@@ -41,20 +43,20 @@ public class InventoryItemFiller : MonoBehaviour
 		bgImage.color = itemStack.Item.ItemType.TypeColor;
 
 		itemButton.onClick.RemoveAllListeners();
-		
+
 		itemButton.onClick.AddListener(() =>
 		{
 			SelectItem();
 			UnhoverItem();
-			selectItemEvent.Raise(currentItem.Item); 
+			selectItemEvent.Raise(currentItem.Item);
 
-		}); 
+		});
 	}
 
-	
+
 	public void HoverItem()
 	{
-		imgHover.gameObject.SetActive(true); 
+		imgHover.gameObject.SetActive(true);
 
 
 	}

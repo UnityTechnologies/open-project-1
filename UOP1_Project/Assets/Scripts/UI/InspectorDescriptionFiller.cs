@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-using UnityEngine.Localization.Components; 
+using UnityEngine.Localization.Components;
 
 public class InspectorDescriptionFiller : MonoBehaviour
 {
@@ -14,13 +14,13 @@ public class InspectorDescriptionFiller : MonoBehaviour
 
 	public void FillDescription(Item itemToInspect)
 	{
-		textName.gameObject.SetActive(true); 
+		textName.gameObject.SetActive(true);
 		textDescription.gameObject.SetActive(true);
 
 
 		textName.StringReference = itemToInspect.Name;
 		textDescription.StringReference = itemToInspect.Description;
-		
+
 	}
 
 }

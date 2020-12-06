@@ -7,11 +7,11 @@ using UnityEngine.Events;
 public class ItemEvent : ScriptableObject
 {
 
-		public UnityAction<Item> eventRaised;
-		public void Raise(Item item)
-		{
-			if (eventRaised != null)
-				eventRaised.Invoke(item);
-		}
-	
+	public UnityAction<Item> eventRaised;
+	public void Raise(Item item)
+	{
+		if (eventRaised != null)
+			eventRaised.Invoke(item);
+	}
+
 }

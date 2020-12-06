@@ -9,7 +9,7 @@ public enum itemInventoryType
 	utensil,
 	ingredient,
 	customisation,
-	dish, 
+	dish,
 
 }
 public enum ItemInventoryActionType

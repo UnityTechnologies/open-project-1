@@ -23,7 +23,7 @@ public class InventoryFiller : MonoBehaviour
 	[SerializeField]
 	List<InventoryTabType> tabTypesList = new List<InventoryTabType>();
 
-	private int selectedItemId = -1; 
+	private int selectedItemId = -1;
 
 	private List<InventoryItemFiller> instantiatedGameObjects;
 
@@ -51,7 +51,7 @@ public class InventoryFiller : MonoBehaviour
 		}
 		if (SelectItemEvent != null)
 		{
-			SelectItemEvent.eventRaised += InspectItem ;
+			SelectItemEvent.eventRaised += InspectItem;
 		}
 	}
 
@@ -71,12 +71,13 @@ public class InventoryFiller : MonoBehaviour
 		}
 	}
 
-	
 
-	
-	public void FillInventory(InventoryTabType _selectedTabType = null) {
 
-		
+
+	public void FillInventory(InventoryTabType _selectedTabType = null)
+	{
+
+
 		if (_selectedTabType != null)
 		{
 			selectedTabType = _selectedTabType;
@@ -93,29 +94,30 @@ public class InventoryFiller : MonoBehaviour
 
 		}
 
-		
+
 		if (selectedTabType != null)
 		{
 			FillTypeTabs(tabTypesList, selectedTabType);
-			Debug.Log("Is changing tab"); 
+			Debug.Log("Is changing tab");
 			List<ItemStack> listItemsToShow = currentInventory.Items.FindAll(o => o.Item.ItemType.TabType == selectedTabType);
 			FillItems(listItemsToShow);
 		}
 		else
 		{
 
-			Debug.Log("There's no item tab type "); 
+			Debug.Log("There's no item tab type ");
 
 		}
 	}
 
-	void FillTypeTabs(List<InventoryTabType> typesList, InventoryTabType selectedType) {
+	void FillTypeTabs(List<InventoryTabType> typesList, InventoryTabType selectedType)
+	{
 
-		tabFiller.FillTabs(typesList, selectedType, ChangeTabEvent); 
+		tabFiller.FillTabs(typesList, selectedType, ChangeTabEvent);
 
 
 	}
-	 void FillItems(List<ItemStack> listItemsToShow)
+	void FillItems(List<ItemStack> listItemsToShow)
 	{
 
 		if (instantiatedGameObjects == null)
@@ -153,7 +155,7 @@ public class InventoryFiller : MonoBehaviour
 		if (selectedItemId >= 0)
 		{
 			UnselectItem(selectedItemId);
-			selectedItemId = -1; 
+			selectedItemId = -1;
 		}
 	}
 	public void UpdateOnItemInInventory(ItemStack itemToUpdate, bool removeItem)
@@ -163,11 +165,11 @@ public class InventoryFiller : MonoBehaviour
 
 		if (removeItem)
 		{
-			if( instantiatedGameObjects.Exists(o=>o.currentItem==itemToUpdate))
-		    {
+			if (instantiatedGameObjects.Exists(o => o.currentItem == itemToUpdate))
+			{
 
-			int index=	instantiatedGameObjects.FindIndex(o => o.currentItem == itemToUpdate);
-			instantiatedGameObjects[index].gameObject.SetActive(false);
+				int index = instantiatedGameObjects.FindIndex(o => o.currentItem == itemToUpdate);
+				instantiatedGameObjects[index].gameObject.SetActive(false);
 
 			}
 
@@ -180,7 +182,7 @@ public class InventoryFiller : MonoBehaviour
 			{
 
 				index = instantiatedGameObjects.FindIndex(o => o.currentItem == itemToUpdate);
-			
+
 
 			}
 			//if the item needs to be created
@@ -202,7 +204,7 @@ public class InventoryFiller : MonoBehaviour
 			}
 
 			//set item
-			bool isSelected = selectedItemId==index; 
+			bool isSelected = selectedItemId == index;
 			instantiatedGameObjects[index].SetItem(itemToUpdate, isSelected, SelectItemEvent);
 
 			instantiatedGameObjects[index].gameObject.SetActive(true);
@@ -212,17 +214,17 @@ public class InventoryFiller : MonoBehaviour
 
 	}
 
-	
+
 
 	public void InspectItem(Item itemToInspect)
 	{
-		if(instantiatedGameObjects.Exists(o => o.currentItem.Item == itemToInspect))
+		if (instantiatedGameObjects.Exists(o => o.currentItem.Item == itemToInspect))
 		{
-			int itemIndex = instantiatedGameObjects.FindIndex(o => o.currentItem.Item == itemToInspect); 
+			int itemIndex = instantiatedGameObjects.FindIndex(o => o.currentItem.Item == itemToInspect);
 
-		
+
 			//unselect selected Item
-			if (selectedItemId >= 0 && selectedItemId!=itemIndex)
+			if (selectedItemId >= 0 && selectedItemId != itemIndex)
 				UnselectItem(selectedItemId);
 
 			//change Selected ID 
@@ -240,7 +242,7 @@ public class InventoryFiller : MonoBehaviour
 			}
 			else if (itemToInspect.ItemType.ActionType == ItemInventoryActionType.doNothing)
 			{
-				isInteractable = false; 
+				isInteractable = false;
 
 			}
 
@@ -251,31 +253,34 @@ public class InventoryFiller : MonoBehaviour
 
 	}
 
-     void ShowItemInformation(Item item) {
+	void ShowItemInformation(Item item)
+	{
 
-		bool[] availabilityArray = currentInventory.IngredietsAvailability(item.IngredientsList); 
+		bool[] availabilityArray = currentInventory.IngredietsAvailability(item.IngredientsList);
 
 		inspectorFiller.FillItemInspector(item, availabilityArray);
-	
+
 
 	}
-	void HideItemInformation() {
+	void HideItemInformation()
+	{
 
-		inspectorFiller.HideItemInspector(); 
+		inspectorFiller.HideItemInspector();
 
 	}
 
-	
-	 void UnselectItem(int itemIndex) {
+
+	void UnselectItem(int itemIndex)
+	{
 
 		if (instantiatedGameObjects.Count > itemIndex)
 		{
-			instantiatedGameObjects[itemIndex].UnselectItem(); 
+			instantiatedGameObjects[itemIndex].UnselectItem();
 
 		}
 	}
 
-	 void ActionButtonEventRaised()
+	void ActionButtonEventRaised()
 	{
 		if (ActionButtonClicked != null)
 		{
@@ -340,9 +345,10 @@ public class InventoryFiller : MonoBehaviour
 
 	}
 
-	void ChangeTabEventRaised(InventoryTabType tabType) {
+	void ChangeTabEventRaised(InventoryTabType tabType)
+	{
 
-		FillInventory(tabType); 
+		FillInventory(tabType);
 
 	}
 

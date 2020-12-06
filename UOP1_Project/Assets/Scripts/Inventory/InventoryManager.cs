@@ -74,13 +74,14 @@ public class InventoryManager : MonoBehaviour
 
 
 
-	 void AddItemWithUIUpdate(Item item) {
-		
+	void AddItemWithUIUpdate(Item item)
+	{
+
 		currentInventory.Add(item);
 		if (currentInventory.Contains(item))
 		{
 			ItemStack itemToUpdate = currentInventory.Items.Find(o => o.Item == item);
-		//	UIManager.Instance.UpdateInventoryScreen(itemToUpdate, false);
+			//	UIManager.Instance.UpdateInventoryScreen(itemToUpdate, false);
 		}
 	}
 
@@ -96,15 +97,15 @@ public class InventoryManager : MonoBehaviour
 		currentInventory.Remove(item);
 
 		bool removeItem = currentInventory.Contains(item);
-	//	UIManager.Instance.UpdateInventoryScreen(itemToUpdate, removeItem);
+		//	UIManager.Instance.UpdateInventoryScreen(itemToUpdate, removeItem);
 
 	}
-	 void AddItem(Item item)
+	void AddItem(Item item)
 	{
 		currentInventory.Add(item);
-		
+
 	}
-	 void RemoveItem(Item item)
+	void RemoveItem(Item item)
 	{
 		currentInventory.Remove(item);
 

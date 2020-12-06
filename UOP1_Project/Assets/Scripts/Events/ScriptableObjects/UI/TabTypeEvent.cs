@@ -7,11 +7,11 @@ using UnityEngine.Events;
 public class TabTypeEvent : ScriptableObject
 {
 
-		public UnityAction<InventoryTabType> eventRaised;
-		public void Raise(InventoryTabType tabType)
-		{
-			if (eventRaised != null)
-				eventRaised.Invoke(tabType);
-		}
-	
+	public UnityAction<InventoryTabType> eventRaised;
+	public void Raise(InventoryTabType tabType)
+	{
+		if (eventRaised != null)
+			eventRaised.Invoke(tabType);
+	}
+
 }

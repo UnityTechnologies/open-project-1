@@ -11,7 +11,7 @@ public class CookingInventoryInspectorFiller : MonoBehaviour
 	private InspectorDescriptionFiller inspectorDescriptionFiller;
 
 	[SerializeField]
-	private  RecipeIngredientsFiller recipeIngredientsFiller;
+	private RecipeIngredientsFiller recipeIngredientsFiller;
 
 
 
