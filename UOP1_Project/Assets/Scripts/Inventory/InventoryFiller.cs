@@ -19,7 +19,7 @@ public class InventoryFiller : MonoBehaviour
 	[SerializeField]
 	private InventoryButtonFiller buttonFiller;
 
-	InventoryTabType selectedTabType;
+	InventoryTabType selectedTab;
 	[SerializeField]
 	List<InventoryTabType> tabTypesList = new List<InventoryTabType>();
 
@@ -74,13 +74,13 @@ public class InventoryFiller : MonoBehaviour
 
 
 
-	public void FillInventory(InventoryTabType _selectedTabType = null)
+	public void FillInventory(TabType _selectedTabType = TabType.none)
 	{
 
 
-		if (_selectedTabType != null)
+		if ((_selectedTabType != TabType.none) && (tabTypesList.Exists(o => o.TabType == _selectedTabType)))
 		{
-			selectedTabType = _selectedTabType;
+			selectedTab = tabTypesList.Find(o=>o.TabType == _selectedTabType);
 		}
 		else
 		{
@@ -88,18 +88,17 @@ public class InventoryFiller : MonoBehaviour
 			{
 				if (tabTypesList.Count > 0)
 				{
-					selectedTabType = tabTypesList[0];
+					selectedTab = tabTypesList[0];
 				}
 			}
 
 		}
 
 
-		if (selectedTabType != null)
+		if (selectedTab != null)
 		{
-			FillTypeTabs(tabTypesList, selectedTabType);
-			Debug.Log("Is changing tab");
-			List<ItemStack> listItemsToShow = currentInventory.Items.FindAll(o => o.Item.ItemType.TabType == selectedTabType);
+			FillTypeTabs(tabTypesList, selectedTab);
+			List<ItemStack> listItemsToShow = currentInventory.Items.FindAll(o => o.Item.ItemType.TabType == selectedTab);
 			FillItems(listItemsToShow);
 		}
 		else
@@ -348,7 +347,7 @@ public class InventoryFiller : MonoBehaviour
 	void ChangeTabEventRaised(InventoryTabType tabType)
 	{
 
-		FillInventory(tabType);
+		FillInventory(tabType.TabType);
 
 	}
 

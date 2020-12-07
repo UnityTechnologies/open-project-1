@@ -9,8 +9,8 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Events/Toogle Interaction UI Event Channel")]
 public class InteractionUIEventChannelSO : ScriptableObject
 {
-	public UnityAction<bool, Interaction> OnEventRaised;
-	public void RaiseEvent(bool state, Interaction interactionType)
+	public UnityAction<bool, InteractionType> OnEventRaised;
+	public void RaiseEvent(bool state, InteractionType interactionType)
 	{
 		if (OnEventRaised != null)
 			OnEventRaised.Invoke(state, interactionType);

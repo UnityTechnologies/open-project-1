@@ -1,11 +1,11 @@
 ﻿using UnityEngine;
 
-public enum Interaction { None = 0, PickUp, Cook, Talk };
+public enum InteractionType { None = 0, PickUp, Cook, Talk };
 
 public class InteractionManager : MonoBehaviour
 {
-	private Interaction _potentialInteraction;
-	[HideInInspector] public Interaction currentInteraction;
+	private InteractionType _potentialInteraction;
+	[HideInInspector] public InteractionType currentInteraction;
 	[SerializeField] private InputReader _inputReader = default;
 	//To store the object we are currently interacting with
 	private GameObject _currentInteractableObject = null;
@@ -44,8 +44,8 @@ public class InteractionManager : MonoBehaviour
 		switch (_potentialInteraction)
 		{
 			//we show it after cooking or talking, in case player want to interact again
-			case Interaction.Cook:
-			case Interaction.Talk:
+			case InteractionType.Cook:
+			case InteractionType.Talk:
 				_toggleInteractionUI.RaiseEvent(true, _potentialInteraction);
 				Debug.Log("Display interaction UI");
 				break;
@@ -56,11 +56,14 @@ public class InteractionManager : MonoBehaviour
 
 	void OnInteractionButtonPress()
 	{
+		//remove interaction after press 
+		_toggleInteractionUI.RaiseEvent(false, _potentialInteraction);
+
 		switch (_potentialInteraction)
 		{
-			case Interaction.None:
+			case InteractionType.None:
 				return;
-			case Interaction.PickUp:
+			case InteractionType.PickUp:
 				if (_currentInteractableObject != null)
 				{
 					if (_onObjectPickUp != null)
@@ -70,13 +73,13 @@ public class InteractionManager : MonoBehaviour
 						_onObjectPickUp.RaiseEvent(currentItem);
 						Debug.Log("PickUp event raised");
 						//set current interaction for state machine
-						currentInteraction = Interaction.PickUp;
+						currentInteraction = InteractionType.PickUp;
 					}
 				}
 				//destroy the GO
 				Destroy(_currentInteractableObject);
 				break;
-			case Interaction.Cook:
+			case InteractionType.Cook:
 				if (_onCookingStart != null)
 				{
 					_onCookingStart.RaiseEvent();
@@ -84,10 +87,10 @@ public class InteractionManager : MonoBehaviour
 					//Change the action map
 					_inputReader.EnableUIInput();
 					//set current interaction for state machine
-					currentInteraction = Interaction.Cook;
+					currentInteraction = InteractionType.Cook;
 				}
 				break;
-			case Interaction.Talk:
+			case InteractionType.Talk:
 				if (_currentInteractableObject != null)
 				{
 					if (_onCookingStart != null)
@@ -99,7 +102,7 @@ public class InteractionManager : MonoBehaviour
 						//Change the action map
 						_inputReader.EnableDialogueInput();
 						//set current interaction for state machine
-						currentInteraction = Interaction.Talk;
+						currentInteraction = InteractionType.Talk;
 					}
 				}
 				break;
@@ -112,19 +115,19 @@ public class InteractionManager : MonoBehaviour
 	{
 		if (other.CompareTag("Pickable"))
 		{
-			_potentialInteraction = Interaction.PickUp;
+			_potentialInteraction = InteractionType.PickUp;
 			Debug.Log("I triggered a pickable object!");
 			DisplayInteractionUI();
 		}
 		else if (other.CompareTag("CookingPot"))
 		{
-			_potentialInteraction = Interaction.Cook;
+			_potentialInteraction = InteractionType.Cook;
 			Debug.Log("I triggered a cooking pot!");
 			DisplayInteractionUI();
 		}
 		else if (other.CompareTag("NPC"))
 		{
-			_potentialInteraction = Interaction.Talk;
+			_potentialInteraction = InteractionType.Talk;
 			Debug.Log("I triggered an NPC!");
 			DisplayInteractionUI();
 		}
@@ -139,12 +142,17 @@ public class InteractionManager : MonoBehaviour
 
 	private void OnTriggerExit(Collider other)
 	{
+		
+
 		ResetInteraction();
 	}
 
 	private void ResetInteraction()
 	{
-		_potentialInteraction = Interaction.None;
+		_potentialInteraction = InteractionType.None;
 		_currentInteractableObject = null;
+
+		if (_toggleInteractionUI != null)
+			_toggleInteractionUI.RaiseEvent(false, _potentialInteraction);
 	}
 }

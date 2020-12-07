@@ -17,10 +17,10 @@ public class IsPickingUpCondition : Condition
 
 	protected override bool Statement()
 	{
-		if (_interactScript.currentInteraction == Interaction.PickUp)
+		if (_interactScript.currentInteraction == InteractionType.PickUp)
 		{
 			// Consume the input
-			_interactScript.currentInteraction = Interaction.None;
+			_interactScript.currentInteraction = InteractionType.None;
 
 			return true;
 		}
