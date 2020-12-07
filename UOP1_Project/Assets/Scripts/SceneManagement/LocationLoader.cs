@@ -6,14 +6,17 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 /// <summary>
-/// This class manages the scenes loading and unloading
+/// This class manages the scene loading and unloading.
+/// Heavy on comments right now because it is still being worked on.
 /// </summary>
 public class LocationLoader : MonoBehaviour
 {
 	[Header("Initialization Scene")]
 	[SerializeField] private GameSceneSO _initializationScene = default;
+
 	[Header("Load on start")]
 	[SerializeField] private GameSceneSO[] _mainMenuScenes = default;
+
 	[Header("Loading Screen")]
 	[SerializeField] private GameObject _loadingInterface = default;
 	[SerializeField] private Image _loadingProgressBar = default;
@@ -22,12 +25,11 @@ public class LocationLoader : MonoBehaviour
 	//The load event we are listening to
 	[SerializeField] private LoadEventChannelSO _loadEventChannel = default;
 
-	//List of the scenes to load and track progress
 	private List<AsyncOperation> _scenesToLoadAsyncOperations = new List<AsyncOperation>();
-	//List of scenes to unload
-	private List<Scene> _ScenesToUnload = new List<Scene>();
-	//Keep track of the scene we want to set as active (for lighting/skybox)
-	private GameSceneSO _activeScene;
+	private List<Scene> _scenesToUnload = new List<Scene>();
+	private GameSceneSO _activeScene; // The scene we want to set as active (for lighting/skybox)
+
+	private Coroutine runningLoader = null;
 
 	private void OnEnable()
 	{
@@ -52,76 +54,92 @@ public class LocationLoader : MonoBehaviour
 		LoadScenes(_mainMenuScenes, false);
 	}
 
-	/// <summary> This function loads the scenes passed as array parameter </summary>
+	/// <summary>
+	/// This function loads the scenes passed as array parameter 
+	/// </summary>
+	/// <param name="locationsToLoad"></param>
+	/// <param name="showLoadingScreen"></param>
 	private void LoadScenes(GameSceneSO[] locationsToLoad, bool showLoadingScreen)
 	{
-		//Add all current open scenes to unload list
-		AddScenesToUnload();
-
 		_activeScene = locationsToLoad[0];
+		AddScenesToUnload();
+		UnloadScenes();
 
-		for (int i = 0; i < locationsToLoad.Length; ++i)
-		{
-			String currentSceneName = locationsToLoad[i].sceneName;
-			if (!CheckLoadState(currentSceneName))
-			{
-				//Add the scene to the list of scenes to load asynchronously in the background
-				_scenesToLoadAsyncOperations.Add(SceneManager.LoadSceneAsync(currentSceneName, LoadSceneMode.Additive));
-			}
-		}
-		_scenesToLoadAsyncOperations[0].completed += SetActiveScene;
 		if (showLoadingScreen)
 		{
-			//Show the progress bar and track progress if loadScreen is true
 			_loadingInterface.SetActive(true);
-			StartCoroutine(TrackLoadingProgress());
-		}
-		else
-		{
-			//Clear the scenes to load
-			_scenesToLoadAsyncOperations.Clear();
 		}
 
-		//Unload the scenes
-		UnloadScenes();
+		if (_scenesToLoadAsyncOperations.Count == 0)
+		{
+			for (int i = 0; i < locationsToLoad.Length; i++)
+			{
+				string currentSceneName = locationsToLoad[i].sceneName;
+				if (IsSceneLoaded(currentSceneName) == false)
+				{
+					if (runningLoader == null)
+					{
+						_scenesToLoadAsyncOperations.Add(SceneManager.LoadSceneAsync(currentSceneName, LoadSceneMode.Additive));
+						_scenesToLoadAsyncOperations[i].completed += SetActiveScene;
+						// TODO: Run a coroutine for each scene loading that updates a combined value
+						// for the progress bar. This way, as each scene completes loading, we will
+						// know what scene it is. Then decide if it activates right away or not.
+						// runningLoader = StartCoroutine(TrackLoadingProgress(locationsToLoad[i]));
+					}
+				}
+			}
+
+			if (_scenesToLoadAsyncOperations.Count > 0)
+			{
+				// TODO: locationsToLoad[0] is a place holder right now.
+				runningLoader = StartCoroutine(TrackLoadingProgress(locationsToLoad[0]));
+			}
+		}
 	}
 
+	/// <summary>
+	/// SetActiveScene(AsyncOperation asyncOp) is called by AsyncOperation.complete event.
+	/// </summary>
+	/// <param name="asyncOp"></param>
 	private void SetActiveScene(AsyncOperation asyncOp)
 	{
+		// TODO: As each event completes, decide if it needs to activate right away.
 		SceneManager.SetActiveScene(SceneManager.GetSceneByName(_activeScene.sceneName));
 	}
 
 	private void AddScenesToUnload()
 	{
-		for (int i = 0; i < SceneManager.sceneCount; ++i)
+		for (int i = 0; i < SceneManager.sceneCount; i++)
 		{
 			Scene scene = SceneManager.GetSceneAt(i);
-			if (scene.name != _initializationScene.sceneName)
+			if (scene.name != _initializationScene.sceneName && scene.name != _activeScene.name)
 			{
 				Debug.Log("Added scene to unload = " + scene.name);
-				//Add the scene to the list of the scenes to unload
-				_ScenesToUnload.Add(scene);
+				_scenesToUnload.Add(scene);
 			}
 		}
 	}
 
 	private void UnloadScenes()
 	{
-		if (_ScenesToUnload != null)
+		if (_scenesToUnload != null)
 		{
-			for (int i = 0; i < _ScenesToUnload.Count; ++i)
+			for (int i = 0; i < _scenesToUnload.Count; i++)
 			{
-				//Unload the scene asynchronously in the background
-				SceneManager.UnloadSceneAsync(_ScenesToUnload[i]);
+				SceneManager.UnloadSceneAsync(_scenesToUnload[i]);
 			}
+			_scenesToUnload.Clear();
 		}
-		_ScenesToUnload.Clear();
 	}
 
-	/// <summary> This function checks if a scene is already loaded </summary>
-	private bool CheckLoadState(String sceneName)
+	/// <summary>
+	/// This function checks if a scene is already loaded
+	/// </summary>
+	/// <param name="sceneName"></param>
+	/// <returns>bool</returns>
+	private bool IsSceneLoaded(string sceneName)
 	{
-		for (int i = 0; i < SceneManager.sceneCount; ++i)
+		for (int i = 0; i < SceneManager.sceneCount; i++)
 		{
 			Scene scene = SceneManager.GetSceneAt(i);
 			if (scene.name == sceneName)
@@ -132,33 +150,36 @@ public class LocationLoader : MonoBehaviour
 		return false;
 	}
 
-	/// <summary> This function updates the loading progress once per frame until loading is complete </summary>
-	private IEnumerator TrackLoadingProgress()
+	/// <summary>
+	///  This function updates the loading progress once per frame until loading is complete 
+	/// </summary>
+	/// <param name="sceneReference">This is a place holder for the moment</param>
+	/// <returns>IEnumerator</returns>
+	private IEnumerator TrackLoadingProgress(GameSceneSO sceneReference)
 	{
 		float totalProgress = 0;
-		//When the scene reaches 0.9f, it means that it is loaded
-		//The remaining 0.1f are for the integration
+		// When the scene reaches 0.9f, it means that it is loaded
+		// The remaining 0.1f are for the integration
 		while (totalProgress <= 0.9f)
 		{
 
-			//Reset the progress for the new values
 			totalProgress = 0;
-			//Iterate through all the scenes to load
 			for (int i = 0; i < _scenesToLoadAsyncOperations.Count; ++i)
 			{
-				Debug.Log("Scene" + i + " :" + _scenesToLoadAsyncOperations[i].isDone + "progress = " + _scenesToLoadAsyncOperations[i].progress);
-				//Adding the scene progress to the total progress
+				Debug.Log("Scene " + i + " :" + _scenesToLoadAsyncOperations[i].isDone + " progress = " + _scenesToLoadAsyncOperations[i].progress);
 				totalProgress += _scenesToLoadAsyncOperations[i].progress;
 			}
-			//The fillAmount for all scenes, so we devide the progress by the number of scenes to load
+
+			//The fillAmount is for all scenes, so we divide the progress by the number of scenes to load
 			_loadingProgressBar.fillAmount = totalProgress / _scenesToLoadAsyncOperations.Count;
-			Debug.Log("progress bar" + _loadingProgressBar.fillAmount + "and value =" + totalProgress / _scenesToLoadAsyncOperations.Count);
+			Debug.Log("progress bar " + _loadingProgressBar.fillAmount + " and value = " + totalProgress / _scenesToLoadAsyncOperations.Count);
 
 			yield return null;
 		}
 
-		//Clear the scenes to load
 		_scenesToLoadAsyncOperations.Clear();
+
+		runningLoader = null;
 
 		//Hide progress bar when loading is done
 		_loadingInterface.SetActive(false);
