@@ -24,7 +24,7 @@ public class CollectibleItem : MonoBehaviour
 	{
 		Debug.Log("current item " + currentItem);
 		return currentItem;
-		
+
 	}
 
 	//this function is only for testing 

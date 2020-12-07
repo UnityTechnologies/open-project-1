@@ -63,7 +63,7 @@ public class InteractionManager : MonoBehaviour
 			case Interaction.PickUp:
 				if (_currentInteractableObject != null)
 				{
-					if(_onObjectPickUp != null)
+					if (_onObjectPickUp != null)
 					{
 						//raise an event with an item as parameter (to add object to inventory)
 						Item currentItem = _currentInteractableObject.GetComponent<CollectibleItem>().GetItem();
