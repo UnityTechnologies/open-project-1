@@ -14,13 +14,11 @@ public class CC_Button : Button
 	public override void OnPointerEnter(PointerEventData eventData)
 	{
 		_menuSelectionHandler.HandleMouseEnter(gameObject);
-		base.OnPointerEnter(eventData);
 	}
 
 	public override void OnPointerExit(PointerEventData eventData)
 	{
 		_menuSelectionHandler.HandleMouseExit(gameObject);
-		base.OnPointerExit(eventData);
 	}
 
 	public override void OnSelect(BaseEventData eventData)

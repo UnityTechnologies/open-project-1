@@ -33,22 +33,6 @@ public class MenuSelectionHandler : MonoBehaviour
 		// Handle case where no UI element is selected because mouse left selectable bounds
 		if (EventSystem.current.currentSelectedGameObject == null)
 			EventSystem.current.SetSelectedGameObject(_currentSelection);
-
-		// occurs when mouse is on top of some button, and we hit a gamepad or keyboard key to change the selection
-		var mouseIsOverSelectionStart = _mouseSelection == _currentSelection;
-
-		if (mouseIsOverSelectionStart)
-		{
-			// fire pointer exit event because we don't want the button to be in the 'highlighted' state
-			ExecuteEvents.Execute(EventSystem.current.currentSelectedGameObject,
-				new PointerEventData(EventSystem.current),
-				ExecuteEvents.pointerExitHandler);
-			// update the selection
-			EventSystem.current.SetSelectedGameObject(_currentSelection);
-
-			// the event we fired earlier clears _mouseSelection, reset it here because our cursor is still over the button
-			_mouseSelection = _currentSelection;
-		}
 	}
 
 	private void HandleMoveCursor()
