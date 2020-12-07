@@ -20,6 +20,11 @@ public class CollectibleItem : MonoBehaviour
 
 	}
 
+	public Item GetItem()
+	{
+		return currentItem;
+	}
+
 	//this function is only for testing 
 	public void SetItem()
 	{

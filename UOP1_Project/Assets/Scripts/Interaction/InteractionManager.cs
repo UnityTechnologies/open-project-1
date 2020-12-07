@@ -15,7 +15,7 @@ public class InteractionManager : MonoBehaviour
 
 	//Events for the different interaction types
 	[Header("Broadcasting on")]
-	[SerializeField] private GameObjectEventChannelSO _onObjectPickUp = default;
+	[SerializeField] private ItemEventChannelSo _onObjectPickUp = default;
 	//double check with the action name we will show on the UI (because we will not really starting cooking but showing the UI?)
 	[SerializeField] private VoidEventChannelSO _onCookingStart = default;
 	[SerializeField] private DialogueEventChannelSo _startTalking = default;
@@ -64,8 +64,8 @@ public class InteractionManager : MonoBehaviour
 				if (_currentInteractableObject != null)
 				{
 					//raise an event with an item as parameter (to add object to inventory)
-					//Item currentItem = currentInteractableObject.GetComponent<Pickable>.item;
-					//_onObjectPickUp.RaiseEvent(currentItem);
+					Item currentItem = _currentInteractableObject.GetComponent<CollectibleItem>().GetItem();
+					_onObjectPickUp.RaiseEvent(currentItem);
 					Debug.Log("PickUp event raised");
 					//set current interaction for state machine
 					currentInteraction = Interaction.PickUp;
@@ -85,8 +85,8 @@ public class InteractionManager : MonoBehaviour
 				if (_currentInteractableObject != null)
 				{
 					//raise an event with an actor as parameter
-					//Item currentItem = currentInteractableObject.GetComponent<Dialogue>.Actor;
-					//_startTalking.RaiseEvent(currentItem);
+					//Actor currentActor = currentInteractableObject.GetComponent<Dialogue>().GetActor();
+					//_startTalking.RaiseEvent(currentActor);
 					Debug.Log("talk event raised");
 					//Change the action map
 					_inputReader.EnableDialogueInput();

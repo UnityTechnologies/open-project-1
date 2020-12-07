@@ -6,7 +6,7 @@ using UnityEngine;
 /// Example: Pick up an item passed as paramater
 /// </summary>
 
-[CreateAssetMenu(menuName = "Events/Dialogue Event Channel")]
+[CreateAssetMenu(menuName = "Events/UI/Item Event Channel")]
 public class ItemEventChannelSo : ScriptableObject
 {
 	public UnityAction<Item> OnEventRaised;
