@@ -6,7 +6,7 @@ using UnityEngine.Events;
 /// Takes an array of the scenes we want to load and a bool to specify if we want to show a loading screen.
 /// </summary>
 [CreateAssetMenu(menuName = "Events/Load Event Channel")]
-public class LoadEventChannelSO : ScriptableObject
+public class LoadEventChannelSO : EventChannelBaseSO
 {
 	public UnityAction<GameSceneSO[], bool> OnLoadingRequested;
 
