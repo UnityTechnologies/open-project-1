@@ -12,7 +12,7 @@ public class UIManager : MonoBehaviour
 	public VoidEventChannelSO OpenInventoryScreenForCookingEvent;
 	public VoidEventChannelSO CloseInventoryScreenEvent;
 
-	public VoidEventChannelSO OnInteractionEndedEvent; 
+	public VoidEventChannelSO OnInteractionEndedEvent;
 
 	public InteractionUIEventChannelSO SetInteractionEvent;
 
@@ -43,7 +43,7 @@ public class UIManager : MonoBehaviour
 		{
 			SetInteractionEvent.OnEventRaised += SetInteractionPanel;
 		}
-		
+
 	}
 
 	private void Start()
@@ -78,11 +78,11 @@ public class UIManager : MonoBehaviour
 	}
 	public void SetInventoryScreen()
 	{
-		 isForCooking = false;
+		isForCooking = false;
 		OpenInventoryScreen();
 
 	}
-	bool isForCooking = false; 
+	bool isForCooking = false;
 	void OpenInventoryScreen()
 	{
 		inventoryPanel.gameObject.SetActive(true);
