@@ -80,7 +80,7 @@ public class InventoryFiller : MonoBehaviour
 
 		if ((_selectedTabType != TabType.none) && (tabTypesList.Exists(o => o.TabType == _selectedTabType)))
 		{
-			selectedTab = tabTypesList.Find(o=>o.TabType == _selectedTabType);
+			selectedTab = tabTypesList.Find(o => o.TabType == _selectedTabType);
 		}
 		else
 		{

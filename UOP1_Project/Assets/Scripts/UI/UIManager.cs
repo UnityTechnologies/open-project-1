@@ -93,9 +93,9 @@ public class UIManager : MonoBehaviour
 		{
 			inventoryPanel.FillInventory();
 		}
-		
+
 	}
-	
+
 
 	public void CloseInventoryScreen()
 	{
