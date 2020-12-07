@@ -6,11 +6,11 @@ public class ItemPicker : MonoBehaviour
 {
 
 	[SerializeField]
-	ItemEvent AddItemEvent;
+	ItemEventChannelSo AddItemEvent;
 
 	public void PickItem(Item item)
 	{
 		if (AddItemEvent != null)
-			AddItemEvent.Raise(item);
+			AddItemEvent.RaiseEvent(item);
 	}
 }

@@ -5,7 +5,7 @@ using UnityEngine;
 public class UIManager : MonoBehaviour
 {
 
-	public DialogueLineEvent OpenUIDialogueEvent;
+	public DialogueLineChannelSO OpenUIDialogueEvent;
 	public VoidEventChannelSO CloseUIDialogueEvent;
 
 	public VoidEventChannelSO OpenInventoryScreenEvent;
@@ -16,7 +16,7 @@ public class UIManager : MonoBehaviour
 		//Check if the event exists to avoid errors
 		if (OpenUIDialogueEvent != null)
 		{
-			OpenUIDialogueEvent.eventRaised += OpenUIDialogue;
+			OpenUIDialogueEvent.OnEventRaised += OpenUIDialogue;
 		}
 		if (CloseUIDialogueEvent != null)
 		{

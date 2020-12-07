@@ -28,13 +28,13 @@ public class InventoryFiller : MonoBehaviour
 	private List<InventoryItemFiller> instantiatedGameObjects;
 
 
-	public ItemEvent CookRecipeEvent;
-	public ItemEvent UseItemEvent;
-	public ItemEvent EquipItemEvent;
+	public ItemEventChannelSo CookRecipeEvent;
+	public ItemEventChannelSo UseItemEvent;
+	public ItemEventChannelSo EquipItemEvent;
 
-	public TabTypeEvent ChangeTabEvent;
+	public TabEventChannelSo ChangeTabEvent;
 
-	public ItemEvent SelectItemEvent;
+	public ItemEventChannelSo SelectItemEvent;
 
 	public VoidEventChannelSO ActionButtonClicked;
 
@@ -47,11 +47,11 @@ public class InventoryFiller : MonoBehaviour
 		}
 		if (ChangeTabEvent != null)
 		{
-			ChangeTabEvent.eventRaised += ChangeTabEventRaised;
+			ChangeTabEvent.OnEventRaised += ChangeTabEventRaised;
 		}
 		if (SelectItemEvent != null)
 		{
-			SelectItemEvent.eventRaised += InspectItem;
+			SelectItemEvent.OnEventRaised += InspectItem;
 		}
 	}
 
@@ -63,11 +63,11 @@ public class InventoryFiller : MonoBehaviour
 		}
 		if (ChangeTabEvent != null)
 		{
-			ChangeTabEvent.eventRaised -= ChangeTabEventRaised;
+			ChangeTabEvent.OnEventRaised -= ChangeTabEventRaised;
 		}
 		if (SelectItemEvent != null)
 		{
-			SelectItemEvent.eventRaised -= InspectItem;
+			SelectItemEvent.OnEventRaised -= InspectItem;
 		}
 	}
 
@@ -318,7 +318,7 @@ public class InventoryFiller : MonoBehaviour
 	{
 		Debug.Log("USE ITEM " + itemToUse.name);
 
-		UseItemEvent.Raise(itemToUse);
+		UseItemEvent.OnEventRaised(itemToUse);
 		//update inventory
 		FillInventory();
 	}
@@ -327,14 +327,14 @@ public class InventoryFiller : MonoBehaviour
 	void EquipItem(Item itemToUse)
 	{
 		Debug.Log("Equip ITEM " + itemToUse.name);
-		EquipItemEvent.Raise(itemToUse);
+		EquipItemEvent.OnEventRaised(itemToUse);
 	}
 
 	void CookRecipe(Item recipeToCook)
 	{
 
 		//get item
-		CookRecipeEvent.Raise(recipeToCook);
+		CookRecipeEvent.OnEventRaised(recipeToCook);
 
 		//update inspector
 		InspectItem(recipeToCook);

@@ -8,41 +8,41 @@ public class InventoryManager : MonoBehaviour
 	private Inventory currentInventory;
 
 	[SerializeField]
-	private ItemEvent CookRecipeEvent;
+	private ItemEventChannelSo CookRecipeEvent;
 	[SerializeField]
-	private ItemEvent UseItemEvent;
+	private ItemEventChannelSo UseItemEvent;
 	[SerializeField]
-	private ItemEvent EquipItemEvent;
+	private ItemEventChannelSo EquipItemEvent;
 
 
 
 	[SerializeField]
-	ItemEvent AddItemEvent;
+	ItemEventChannelSo AddItemEvent;
 	[SerializeField]
-	ItemEvent RemoveItemEvent;
+	ItemEventChannelSo RemoveItemEvent;
 
 	private void OnEnable()
 	{
 		//Check if the event exists to avoid errors
 		if (CookRecipeEvent != null)
 		{
-			CookRecipeEvent.eventRaised += CookRecipeEventRaised;
+			CookRecipeEvent.OnEventRaised += CookRecipeEventRaised;
 		}
 		if (UseItemEvent != null)
 		{
-			UseItemEvent.eventRaised += UseItemEventRaised;
+			UseItemEvent.OnEventRaised += UseItemEventRaised;
 		}
 		if (EquipItemEvent != null)
 		{
-			EquipItemEvent.eventRaised += EquipItemEventRaised;
+			EquipItemEvent.OnEventRaised += EquipItemEventRaised;
 		}
 		if (AddItemEvent != null)
 		{
-			AddItemEvent.eventRaised += AddItem;
+			AddItemEvent.OnEventRaised += AddItem;
 		}
 		if (RemoveItemEvent != null)
 		{
-			RemoveItemEvent.eventRaised += RemoveItem;
+			RemoveItemEvent.OnEventRaised += RemoveItem;
 		}
 	}
 
@@ -50,23 +50,23 @@ public class InventoryManager : MonoBehaviour
 	{
 		if (CookRecipeEvent != null)
 		{
-			CookRecipeEvent.eventRaised -= CookRecipeEventRaised;
+			CookRecipeEvent.OnEventRaised -= CookRecipeEventRaised;
 		}
 		if (UseItemEvent != null)
 		{
-			UseItemEvent.eventRaised -= UseItemEventRaised;
+			UseItemEvent.OnEventRaised -= UseItemEventRaised;
 		}
 		if (EquipItemEvent != null)
 		{
-			EquipItemEvent.eventRaised -= EquipItemEventRaised;
+			EquipItemEvent.OnEventRaised -= EquipItemEventRaised;
 		}
 		if (AddItemEvent != null)
 		{
-			AddItemEvent.eventRaised -= AddItem;
+			AddItemEvent.OnEventRaised -= AddItem;
 		}
 		if (RemoveItemEvent != null)
 		{
-			RemoveItemEvent.eventRaised -= RemoveItem;
+			RemoveItemEvent.OnEventRaised -= RemoveItem;
 		}
 	}
 

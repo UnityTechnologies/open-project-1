@@ -28,7 +28,7 @@ public class InventoryItemFiller : MonoBehaviour
 	[SerializeField]
 	private Button itemButton;
 
-	public void SetItem(ItemStack itemStack, bool isSelected, ItemEvent selectItemEvent)
+	public void SetItem(ItemStack itemStack, bool isSelected, ItemEventChannelSo selectItemEvent)
 	{
 
 		UnhoverItem();
@@ -48,7 +48,7 @@ public class InventoryItemFiller : MonoBehaviour
 		{
 			SelectItem();
 			UnhoverItem();
-			selectItemEvent.Raise(currentItem.Item);
+			selectItemEvent.RaiseEvent(currentItem.Item);
 
 		});
 	}
