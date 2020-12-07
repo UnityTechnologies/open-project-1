@@ -63,35 +63,44 @@ public class InteractionManager : MonoBehaviour
 			case Interaction.PickUp:
 				if (_currentInteractableObject != null)
 				{
-					//raise an event with an item as parameter (to add object to inventory)
-					Item currentItem = _currentInteractableObject.GetComponent<CollectibleItem>().GetItem();
-					_onObjectPickUp.RaiseEvent(currentItem);
-					Debug.Log("PickUp event raised");
-					//set current interaction for state machine
-					currentInteraction = Interaction.PickUp;
+					if(_onObjectPickUp != null)
+					{
+						//raise an event with an item as parameter (to add object to inventory)
+						Item currentItem = _currentInteractableObject.GetComponent<CollectibleItem>().GetItem();
+						_onObjectPickUp.RaiseEvent(currentItem);
+						Debug.Log("PickUp event raised");
+						//set current interaction for state machine
+						currentInteraction = Interaction.PickUp;
+					}
 				}
 				//destroy the GO
 				Destroy(_currentInteractableObject);
 				break;
 			case Interaction.Cook:
-				_onCookingStart.RaiseEvent();
-				Debug.Log("Cooking event raised");
-				//Change the action map
-				_inputReader.EnableUIInput();
-				//set current interaction for state machine
-				currentInteraction = Interaction.Cook;
+				if (_onCookingStart != null)
+				{
+					_onCookingStart.RaiseEvent();
+					Debug.Log("Cooking event raised");
+					//Change the action map
+					_inputReader.EnableUIInput();
+					//set current interaction for state machine
+					currentInteraction = Interaction.Cook;
+				}
 				break;
 			case Interaction.Talk:
 				if (_currentInteractableObject != null)
 				{
-					//raise an event with an actor as parameter
-					//Actor currentActor = currentInteractableObject.GetComponent<Dialogue>().GetActor();
-					//_startTalking.RaiseEvent(currentActor);
-					Debug.Log("talk event raised");
-					//Change the action map
-					_inputReader.EnableDialogueInput();
-					//set current interaction for state machine
-					currentInteraction = Interaction.Talk;
+					if (_onCookingStart != null)
+					{
+						//raise an event with an actor as parameter
+						//Actor currentActor = currentInteractableObject.GetComponent<Dialogue>().GetActor();
+						//_startTalking.RaiseEvent(currentActor);
+						Debug.Log("talk event raised");
+						//Change the action map
+						_inputReader.EnableDialogueInput();
+						//set current interaction for state machine
+						currentInteraction = Interaction.Talk;
+					}
 				}
 				break;
 			default:

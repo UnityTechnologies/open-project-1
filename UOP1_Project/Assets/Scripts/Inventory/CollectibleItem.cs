@@ -22,7 +22,9 @@ public class CollectibleItem : MonoBehaviour
 
 	public Item GetItem()
 	{
+		Debug.Log("current item " + currentItem);
 		return currentItem;
+		
 	}
 
 	//this function is only for testing 
