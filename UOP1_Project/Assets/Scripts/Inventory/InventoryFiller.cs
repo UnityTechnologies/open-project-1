@@ -36,14 +36,14 @@ public class InventoryFiller : MonoBehaviour
 
 	public ItemEvent SelectItemEvent;
 
-	public VoidGameEvent ActionButtonClicked;
+	public VoidEventChannelSO ActionButtonClicked;
 
 	private void OnEnable()
 	{
 		//Check if the event exists to avoid errors
 		if (ActionButtonClicked != null)
 		{
-			ActionButtonClicked.eventRaised += ActionButtonEventRaised;
+			ActionButtonClicked.OnEventRaised += ActionButtonEventRaised;
 		}
 		if (ChangeTabEvent != null)
 		{
@@ -59,7 +59,7 @@ public class InventoryFiller : MonoBehaviour
 	{
 		if (ActionButtonClicked != null)
 		{
-			ActionButtonClicked.eventRaised -= ActionButtonEventRaised;
+			ActionButtonClicked.OnEventRaised -= ActionButtonEventRaised;
 		}
 		if (ChangeTabEvent != null)
 		{

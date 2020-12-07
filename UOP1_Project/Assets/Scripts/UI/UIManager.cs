@@ -6,10 +6,10 @@ public class UIManager : MonoBehaviour
 {
 
 	public DialogueLineEvent OpenUIDialogueEvent;
-	public VoidGameEvent CloseUIDialogueEvent;
+	public VoidEventChannelSO CloseUIDialogueEvent;
 
-	public VoidGameEvent OpenInventoryScreenEvent;
-	public VoidGameEvent CloseInventoryScreenEvent;
+	public VoidEventChannelSO OpenInventoryScreenEvent;
+	public VoidEventChannelSO CloseInventoryScreenEvent;
 
 	private void OnEnable()
 	{
@@ -20,15 +20,15 @@ public class UIManager : MonoBehaviour
 		}
 		if (CloseUIDialogueEvent != null)
 		{
-			CloseUIDialogueEvent.eventRaised += CloseUIDialogue;
+			CloseUIDialogueEvent.OnEventRaised += CloseUIDialogue;
 		}
 		if (OpenInventoryScreenEvent != null)
 		{
-			OpenInventoryScreenEvent.eventRaised += OpenInventoryScreen;
+			OpenInventoryScreenEvent.OnEventRaised += OpenInventoryScreen;
 		}
 		if (CloseInventoryScreenEvent != null)
 		{
-			CloseInventoryScreenEvent.eventRaised += CloseInventoryScreen;
+			CloseInventoryScreenEvent.OnEventRaised += CloseInventoryScreen;
 		}
 	}
 
