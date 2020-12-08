@@ -10,7 +10,7 @@ public class GameSceneSOEditor : Editor
 {
 	private const string NO_SCENES_WARNING = "There is no Scene associated to this location yet. Add a new scene with the dropdown below";
 	private GUIStyle _headerLabelStyle;
-	private static readonly string[] _excludedProperties = { "m_Script", "sceneName" }; //m_script is a refernce to the script being edited but it'll result an editable object field.
+	private static readonly string[] _excludedProperties = { "m_Script", "sceneName" };  //m_script is a reference to the script being edited but it'll result an editable object field.
 
 	private string[] _sceneList;
 	private GameSceneSO _gameSceneInspected;
