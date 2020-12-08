@@ -24,10 +24,12 @@ public class GameSceneSOEditor : Editor
 
 	public override void OnInspectorGUI()
 	{
+		serializedObject.Update();
 		EditorGUILayout.LabelField("Scene information", _headerLabelStyle);
 		EditorGUILayout.Space();
 		DrawScenePicker();
 		DrawPropertiesExcluding(serializedObject, _excludedProperties);
+		serializedObject.ApplyModifiedProperties();
 	}
 
 	private void DrawScenePicker()
