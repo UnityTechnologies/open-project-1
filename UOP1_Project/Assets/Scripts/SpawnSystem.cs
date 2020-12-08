@@ -1,29 +1,23 @@
 ﻿using System;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class SpawnSystem : MonoBehaviour
 {
 	[Header("Settings")]
 	[SerializeField] private int _defaultSpawnIndex = 0;
 
-	[Header("Project References")]
-	[SerializeField] private Protagonist _playerPrefab = null;
+	[Header("Asset References")]
+	[SerializeField] private Protagonist _playerPrefab = default;
+	[SerializeField] private TransformEventChannelSO _playerInstantiatedChannel = default;
 
 	[Header("Scene References")]
-	[SerializeField] private CameraManager _cameraManager;
 	[SerializeField] private Transform[] _spawnLocations;
 
-	void Awake()
+	void Start()
 	{
-		try
-		{
-			Spawn(_defaultSpawnIndex);
-		}
-		catch (Exception e)
-		{
-			Debug.LogError($"[SpawnSystem] Failed to spawn player. {e.Message}");
-		}
+		Spawn(_defaultSpawnIndex);
 	}
 
 	void Reset()
@@ -31,12 +25,12 @@ public class SpawnSystem : MonoBehaviour
 		AutoFill();
 	}
 
+	/// <summary>
+	/// This function tries to autofill some of the parameters of the component, so it's easy to drop in a new scene
+	/// </summary>
 	[ContextMenu("Attempt Auto Fill")]
 	private void AutoFill()
 	{
-		if (_cameraManager == null)
-			_cameraManager = FindObjectOfType<CameraManager>();
-
 		if (_spawnLocations == null || _spawnLocations.Length == 0)
 			_spawnLocations = transform.GetComponentsInChildren<Transform>(true)
 								.Where(t => t != this.transform)
@@ -46,8 +40,9 @@ public class SpawnSystem : MonoBehaviour
 	private void Spawn(int spawnIndex)
 	{
 		Transform spawnLocation = GetSpawnLocation(spawnIndex, _spawnLocations);
-		Protagonist playerInstance = InstantiatePlayer(_playerPrefab, spawnLocation, _cameraManager);
-		SetupCameras(playerInstance);
+		Protagonist playerInstance = InstantiatePlayer(_playerPrefab, spawnLocation);
+
+		_playerInstantiatedChannel.RaiseEvent(playerInstance.transform); // The CameraSystem will pick this up to frame the player
 	}
 
 	private Transform GetSpawnLocation(int index, Transform[] spawnLocations)
@@ -59,7 +54,7 @@ public class SpawnSystem : MonoBehaviour
 		return spawnLocations[index];
 	}
 
-	private Protagonist InstantiatePlayer(Protagonist playerPrefab, Transform spawnLocation, CameraManager _cameraManager)
+	private Protagonist InstantiatePlayer(Protagonist playerPrefab, Transform spawnLocation)
 	{
 		if (playerPrefab == null)
 			throw new Exception("Player Prefab can't be null.");
@@ -67,11 +62,5 @@ public class SpawnSystem : MonoBehaviour
 		Protagonist playerInstance = Instantiate(playerPrefab, spawnLocation.position, spawnLocation.rotation);
 
 		return playerInstance;
-	}
-
-	private void SetupCameras(Protagonist player)
-	{
-		player.gameplayCamera = _cameraManager.mainCamera.transform;
-		_cameraManager.SetupProtagonistVirtualCamera(player.transform);
 	}
 }
