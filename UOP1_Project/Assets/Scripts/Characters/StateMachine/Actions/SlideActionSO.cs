@@ -3,40 +3,32 @@ using UOP1.StateMachine;
 using UOP1.StateMachine.ScriptableObjects;
 
 [CreateAssetMenu(fileName = "SlideAction", menuName = "State Machines/Actions/Slide")]
-public class SlideActionSO : StateActionSO
+public class SlideActionSO : StateActionSO<SlideAction>
 {
 	[Tooltip("Sliding speed on the XZ plane.")]
-	[SerializeField] private float _slideSpeed = 6f;
-
-	protected override StateAction CreateAction() => new SlideAction(_slideSpeed);
+	public float slideSpeed = 10f;
 }
 
 public class SlideAction : StateAction
 {
 	//Component references
-	private Character _characterScript;
-
-	private float _slideSpeed;
-
-	public SlideAction(float slideSpeed)
-	{
-		_slideSpeed = slideSpeed;
-	}
+	private Protagonist _protagonistScript;
+	private SlideActionSO _originSO => (SlideActionSO)base.OriginSO; // The SO this StateAction spawned from
 
 	public override void Awake(StateMachine stateMachine)
 	{
-		_characterScript = stateMachine.GetComponent<Character>();
+		_protagonistScript = stateMachine.GetComponent<Protagonist>();
 	}
 
 	public override void OnUpdate()
 	{
-		Vector3 hitNormal = _characterScript.lastHit.normal;
-		_characterScript.movementVector.x = (1f - hitNormal.y) * hitNormal.x * _slideSpeed;
-		_characterScript.movementVector.z = (1f - hitNormal.y) * hitNormal.z * _slideSpeed;
+		Vector3 hitNormal = _protagonistScript.lastHit.normal;
+		_protagonistScript.movementVector.x = (1f - hitNormal.y) * hitNormal.x * _originSO.slideSpeed;
+		_protagonistScript.movementVector.z = (1f - hitNormal.y) * hitNormal.z * _originSO.slideSpeed;
 	}
 
 	public override void OnStateExit()
 	{
-		_characterScript.movementVector = Vector3.zero;
+		_protagonistScript.movementVector = Vector3.zero;
 	}
 }

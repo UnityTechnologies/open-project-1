@@ -1,0 +1,29 @@
+using UnityEngine;
+using UOP1.StateMachine;
+using UOP1.StateMachine.ScriptableObjects;
+
+[CreateAssetMenu(fileName = "#RUNTIMENAME#", menuName = "State Machines/Conditions/#RUNTIMENAME_WITH_SPACES#")]
+public class #SCRIPTNAME# : StateConditionSO
+{
+	protected override Condition CreateCondition() => new #RUNTIMENAME#();
+}
+
+public class #RUNTIMENAME# : Condition
+{
+	public override void Awake(StateMachine stateMachine)
+	{
+	}
+		
+	protected override bool Statement()
+	{
+		return true;
+	}
+	
+	// public override void OnStateEnter()
+	// {
+	// }
+	
+	// public override void OnStateExit()
+	// {
+	// }
+}

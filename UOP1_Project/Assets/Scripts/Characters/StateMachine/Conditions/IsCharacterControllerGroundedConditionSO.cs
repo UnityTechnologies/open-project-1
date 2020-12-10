@@ -2,7 +2,7 @@ using UnityEngine;
 using UOP1.StateMachine;
 using UOP1.StateMachine.ScriptableObjects;
 
-[CreateAssetMenu(fileName = "IsGrounded", menuName = "State Machines/Conditions/Is Character Controller Grounded")]
+[CreateAssetMenu(menuName = "State Machines/Conditions/Is Character Controller Grounded")]
 public class IsCharacterControllerGroundedConditionSO : StateConditionSO<IsCharacterControllerGroundedCondition> { }
 
 public class IsCharacterControllerGroundedCondition : Condition
@@ -14,5 +14,5 @@ public class IsCharacterControllerGroundedCondition : Condition
 		_characterController = stateMachine.GetComponent<CharacterController>();
 	}
 
-	public override bool Statement() => _characterController.isGrounded;
+	protected override bool Statement() => _characterController.isGrounded;
 }

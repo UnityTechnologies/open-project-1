@@ -1,19 +1,26 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 /// <summary>
-/// <para>This class listens to the input and it deposits it on the <c>Character</c> component, ready to be used by the <c>StateMachine</c></para>
+/// <para>This component consumes input on the InputReader and stores its values. The input is then read, and manipulated, by the StateMachines's Actions.</para>
 /// </summary>
 public class Protagonist : MonoBehaviour
 {
 	[SerializeField] private InputReader _inputReader = default;
-	public Transform gameplayCamera;
+	public TransformAnchor gameplayCameraTransform;
 
-	private Character _charScript;
 	private Vector2 _previousMovementInput;
 
-	private void Awake()
+	//These fields are read and manipulated by the StateMachine actions
+	[HideInInspector] public bool jumpInput;
+	[HideInInspector] public bool extraActionInput;
+	[HideInInspector] public Vector3 movementInput; //Initial input coming from the Protagonist script
+	[HideInInspector] public Vector3 movementVector; //Final movement vector, manipulated by the StateMachine actions
+	[HideInInspector] public ControllerColliderHit lastHit;
+
+	private void OnControllerColliderHit(ControllerColliderHit hit)
 	{
-		_charScript = GetComponent<Character>();
+		lastHit = hit;
 	}
 
 	//Adds listeners for events being triggered in the InputReader script
@@ -22,6 +29,7 @@ public class Protagonist : MonoBehaviour
 		_inputReader.jumpEvent += OnJumpInitiated;
 		_inputReader.jumpCanceledEvent += OnJumpCanceled;
 		_inputReader.moveEvent += OnMove;
+		_inputReader.extraActionEvent += OnExtraAction;
 		//...
 	}
 
@@ -31,6 +39,7 @@ public class Protagonist : MonoBehaviour
 		_inputReader.jumpEvent -= OnJumpInitiated;
 		_inputReader.jumpCanceledEvent -= OnJumpCanceled;
 		_inputReader.moveEvent -= OnMove;
+		_inputReader.extraActionEvent -= OnExtraAction;
 		//...
 	}
 
@@ -41,17 +50,26 @@ public class Protagonist : MonoBehaviour
 
 	private void RecalculateMovement()
 	{
-		//Get the two axes from the camera and flatten them on the XZ plane
-		Vector3 cameraForward = gameplayCamera.forward;
-		cameraForward.y = 0f;
-		Vector3 cameraRight = gameplayCamera.right;
-		cameraRight.y = 0f;
+		if (gameplayCameraTransform.isSet)
+		{
+			//Get the two axes from the camera and flatten them on the XZ plane
+			Vector3 cameraForward = gameplayCameraTransform.Transform.forward;
+			cameraForward.y = 0f;
+			Vector3 cameraRight = gameplayCameraTransform.Transform.right;
+			cameraRight.y = 0f;
 
-		//Use the two axes, modulated by the corresponding inputs, and construct the final vector
-		Vector3 adjustedMovement = cameraRight.normalized * _previousMovementInput.x +
-			cameraForward.normalized * _previousMovementInput.y;
+			//Use the two axes, modulated by the corresponding inputs, and construct the final vector
+			Vector3 adjustedMovement = cameraRight.normalized * _previousMovementInput.x +
+				cameraForward.normalized * _previousMovementInput.y;
 
-		_charScript.Move(Vector3.ClampMagnitude(adjustedMovement, 1f));
+			movementInput = Vector3.ClampMagnitude(adjustedMovement, 1f);
+		}
+		else
+		{
+			//No CameraManager exists in the scene, so the input is just used absolute in world-space
+			Debug.LogWarning("No gameplay camera in the scene. Movement orientation will not be correct.");
+			movementInput = new Vector3(_previousMovementInput.x, 0f, _previousMovementInput.y);
+		}
 	}
 
 	//---- EVENT LISTENERS ----
@@ -63,11 +81,17 @@ public class Protagonist : MonoBehaviour
 
 	private void OnJumpInitiated()
 	{
-		_charScript.Jump();
+		jumpInput = true;
 	}
 
 	private void OnJumpCanceled()
 	{
-		_charScript.CancelJump();
+		jumpInput = false;
+	}
+
+	// This handler is just used for debug, for now
+	private void OnExtraAction()
+	{
+		extraActionInput = true;
 	}
 }

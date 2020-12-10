@@ -2,16 +2,13 @@ using UnityEngine;
 using UOP1.StateMachine;
 using UOP1.StateMachine.ScriptableObjects;
 
-[CreateAssetMenu(fileName = "Descend", menuName = "State Machines/Actions/Descend")]
-public class DescendActionSO : StateActionSO
-{
-	protected override StateAction CreateAction() => new DescendAction();
-}
+[CreateAssetMenu(menuName = "State Machines/Actions/Descend")]
+public class DescendActionSO : StateActionSO<DescendAction> { }
 
 public class DescendAction : StateAction
 {
 	//Component references
-	private Character _characterScript;
+	private Protagonist _protagonistScript;
 
 	private float _verticalMovement;
 	private const float GRAVITY_MULTIPLIER = 5f;
@@ -20,16 +17,16 @@ public class DescendAction : StateAction
 
 	public override void Awake(StateMachine stateMachine)
 	{
-		_characterScript = stateMachine.GetComponent<Character>();
+		_protagonistScript = stateMachine.GetComponent<Protagonist>();
 	}
 
 	public override void OnStateEnter()
 	{
-		_verticalMovement = _characterScript.movementVector.y;
+		_verticalMovement = _protagonistScript.movementVector.y;
 
 		//Prevents a double jump if the player keeps holding the jump button
 		//Basically it "consumes" the input
-		_characterScript.jumpInput = false;
+		_protagonistScript.jumpInput = false;
 	}
 
 	public override void OnUpdate()
@@ -40,6 +37,6 @@ public class DescendAction : StateAction
 		//Cap the maximum so the player doesn't reach incredible speeds when freefalling from high positions
 		_verticalMovement = Mathf.Clamp(_verticalMovement, MAX_FALL_SPEED, MAX_RISE_SPEED);
 
-		_characterScript.movementVector.y = _verticalMovement;
+		_protagonistScript.movementVector.y = _verticalMovement;
 	}
 }
