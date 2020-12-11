@@ -7,9 +7,10 @@ using Moment = UOP1.StateMachine.StateAction.SpecificMoment;
 [CreateAssetMenu(fileName = "PlayParticleEffect", menuName = "State Machines/Actions/Play Particle Effect")]
 public class PlayParticleEffectSO : StateActionSO
 {
-	public ParticleSystem particlesPrefab;
-	public Moment whenToRun = default;
+	public ParticleEffectPoolSO particlePool;
+	public Moment whenToPlay = default;
 	public bool stopOnStateExit = default;
+	public Transform anchor = default;
 	protected override StateAction CreateAction() => new PlayParticleEffect();
 }
 
@@ -37,12 +38,12 @@ public class PlayParticleEffect : StateAction
 		{
 			yield return null;
 		}
-		GameObject.Destroy(particleSystem.gameObject);
+		_parentSO.particlePool.Return(particleSystem);
 	}
 
 	public override void OnStateEnter()
 	{
-		if (Moment.OnStateEnter == _parentSO.whenToRun)
+		if (Moment.OnStateEnter == _parentSO.whenToPlay)
 		{
 			TriggerParticuleEffect();
 		}
@@ -50,7 +51,7 @@ public class PlayParticleEffect : StateAction
 
 	public override void OnStateExit()
 	{
-		if (Moment.OnStateExit == _parentSO.whenToRun)
+		if (Moment.OnStateExit == _parentSO.whenToPlay)
 		{
 			TriggerParticuleEffect();
 		}
@@ -65,7 +66,14 @@ public class PlayParticleEffect : StateAction
 
 	private void TriggerParticuleEffect()
 	{
-		_particles = GameObject.Instantiate(_parentSO.particlesPrefab, _stateMachine.transform);
+		_particles = _parentSO.particlePool.Request();
+
+		_particles.transform.SetParent(_stateMachine.transform);
+
+		_particles.transform.localPosition = _parentSO.anchor.localPosition;
+		_particles.transform.localRotation = _parentSO.anchor.localRotation;
+		_particles.transform.localScale = _parentSO.anchor.localScale;
+
 		_stateMachine.StartCoroutine(TriggerEffectCoroutine(_particles));
 	}
 }
