@@ -11,8 +11,8 @@ float4 _CameraDepthTexture_TexelSize;
 TEXTURE2D(_CameraDepthNormalsTexture);
 SAMPLER(sampler_CameraDepthNormalsTexture);
 
-TEXTURE2D(_CameraOutlineTicknessTexture);
-SAMPLER(sampler_CameraOutlineTicknessTexture);
+TEXTURE2D(_CameraOutlineThicknessTexture);
+SAMPLER(sampler_CameraOutlineThicknessTexture);
  
 float3 DecodeNormal(float4 enc)
 {
@@ -46,7 +46,7 @@ float getTicknessBiasing(float2 UV, float OutlineThickness) {
 	
 	for (int i = 0; i < 4; i++)
 	{
-		maskSample = SAMPLE_TEXTURE2D(_CameraOutlineTicknessTexture, sampler_CameraOutlineTicknessTexture, uvSamples[i]).r;
+		maskSample = SAMPLE_TEXTURE2D(_CameraOutlineThicknessTexture, sampler_CameraOutlineThicknessTexture, uvSamples[i]).r;
 		allSamplesIn = allSamplesIn * maskSample;
 		atLeastOneSampleIn = atLeastOneSampleIn + maskSample;
 	}

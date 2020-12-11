@@ -20,7 +20,7 @@ MonoBehaviour:
       RenderQueueType: 1
       LayerMask:
         serializedVersion: 2
-        m_Bits: 4112
+        m_Bits: 16
       PassNames: []
     overrideMaterial: {fileID: 0}
     overrideMaterialPassIndex: 0
@@ -78,6 +78,24 @@ MonoBehaviour:
       restoreCamera: 1
       offset: {x: 0, y: 0, z: 0, w: 0}
       cameraFieldOfView: 60
+--- !u!114 &-1113642819029512119
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc32c24f5bd7815468fccd33bdb39967, type: 3}
+  m_Name: Outline Pass
+  m_EditorClassIdentifier: 
+  m_Active: 1
+  outlineTicknessMaterial: {fileID: 2100000, guid: 37bd992a568ed5a418eab23517a834c5,
+    type: 2}
+  outlineTicknessLayerMask:
+    serializedVersion: 2
+    m_Bits: 57856
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -96,8 +114,8 @@ MonoBehaviour:
   - {fileID: 466668180145458491}
   - {fileID: -8170998572127264418}
   - {fileID: 6060256440939812884}
-  - {fileID: 7886538759297836212}
-  m_RendererFeatureMap: f8d024bb3d3093cbec2b2cef2b7c072d3b4d8cc13cf079065e61212817c89a8e1498fdd91f5b1a54b4244c87379d726d
+  - {fileID: -1113642819029512119}
+  m_RendererFeatureMap: f8d024bb3d3093cbec2b2cef2b7c072d3b4d8cc13cf079065e61212817c89a8e1498fdd91f5b1a5449d014a5c18b8bf0
   postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}
   shaders:
     blitPS: {fileID: 4800000, guid: c17132b1f77d20942aa75f8429c0f8bc, type: 3}
@@ -211,21 +229,3 @@ MonoBehaviour:
   m_Name: DepthNormalsFeature
   m_EditorClassIdentifier: 
   m_Active: 1
---- !u!114 &7886538759297836212
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cc32c24f5bd7815468fccd33bdb39967, type: 3}
-  m_Name: Outline Tickness
-  m_EditorClassIdentifier: 
-  m_Active: 1
-  outlineTicknessMaterial: {fileID: 2100000, guid: 37bd992a568ed5a418eab23517a834c5,
-    type: 2}
-  outlineTicknessLayerMask:
-    serializedVersion: 2
-    m_Bits: 57856

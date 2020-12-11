@@ -19,7 +19,7 @@ public class OutlineTicknessFeature : ScriptableRendererFeature
 
         private Material outlineTicknessMaterial = null;
         private FilteringSettings m_FilteringSettings;
-        string m_ProfilerTag = "OutlineTickness Prepass";
+        string m_ProfilerTag = "OutlineThickness Prepass";
         ShaderTagId m_ShaderTagId = new ShaderTagId("SRPDefaultUnlit");
 
         public OutlineTicknessPass(RenderQueueRange renderQueueRange, LayerMask layerMask, Material material)
@@ -76,7 +76,7 @@ public class OutlineTicknessFeature : ScriptableRendererFeature
 				context.DrawRenderers(renderingData.cullResults, ref drawSettings,
                     ref m_FilteringSettings);
 
-                cmd.SetGlobalTexture("_CameraOutlineTicknessTexture", outlineTicknessAttachmentHandle.id);
+                cmd.SetGlobalTexture("_CameraOutlineThicknessTexture", outlineTicknessAttachmentHandle.id);
             }
 
             context.ExecuteCommandBuffer(cmd);
@@ -103,7 +103,7 @@ public class OutlineTicknessFeature : ScriptableRendererFeature
     {
 		outlineTicknessPass = new OutlineTicknessPass(RenderQueueRange.opaque, outlineTicknessLayerMask, outlineTicknessMaterial);
 		outlineTicknessPass.renderPassEvent = RenderPassEvent.AfterRenderingPrePasses;
-		outlineTicknessTexture.Init("_CameraOutlineTicknessTexture");
+		outlineTicknessTexture.Init("_CameraOutlineThicknessTexture");
     }
 
     // Here you can inject one or multiple render passes in the renderer.
