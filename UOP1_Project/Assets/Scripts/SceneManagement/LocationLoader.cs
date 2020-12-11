@@ -43,7 +43,7 @@ public class LocationLoader : MonoBehaviour
 
 	private void Start()
 	{
-		if (SceneManager.GetActiveScene().name == _initializationScene.sceneName)
+		if (SceneManager.GetActiveScene().path == _initializationScene.scenePath)
 		{
 			LoadMainMenu();
 		}
@@ -74,12 +74,12 @@ public class LocationLoader : MonoBehaviour
 		{
 			for (int i = 0; i < locationsToLoad.Length; i++)
 			{
-				string currentSceneName = locationsToLoad[i].sceneName;
-				if (IsSceneLoaded(currentSceneName) == false)
+				string currentScenePath = locationsToLoad[i].scenePath;
+				if (IsSceneLoaded(currentScenePath) == false)
 				{
 					if (runningLoader == null)
 					{
-						_scenesToLoadAsyncOperations.Add(SceneManager.LoadSceneAsync(currentSceneName, LoadSceneMode.Additive));
+						_scenesToLoadAsyncOperations.Add(SceneManager.LoadSceneAsync(currentScenePath, LoadSceneMode.Additive));
 						_scenesToLoadAsyncOperations[i].completed += SetActiveScene;
 						// TODO: Run a coroutine for each scene loading that updates a combined value
 						// for the progress bar. This way, as each scene completes loading, we will
@@ -104,17 +104,18 @@ public class LocationLoader : MonoBehaviour
 	private void SetActiveScene(AsyncOperation asyncOp)
 	{
 		// TODO: As each event completes, decide if it needs to activate right away.
-		SceneManager.SetActiveScene(SceneManager.GetSceneByName(_activeScene.sceneName));
+		SceneManager.SetActiveScene(SceneManager.GetSceneByPath(_activeScene.scenePath));
 	}
 
 	private void AddScenesToUnload()
 	{
 		for (int i = 0; i < SceneManager.sceneCount; i++)
 		{
-			Scene scene = SceneManager.GetSceneAt(i);
-			if (scene.name != _initializationScene.sceneName && scene.name != _activeScene.name)
+			var scene = SceneManager.GetSceneAt(i);
+			var scenePath = scene.path;
+			if (scenePath != _initializationScene.scenePath && scenePath != _activeScene.scenePath)
 			{
-				Debug.Log("Added scene to unload = " + scene.name);
+				Debug.Log("Added scene to unload = " + scenePath);
 				_scenesToUnload.Add(scene);
 			}
 		}
