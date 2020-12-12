@@ -1,36 +1,32 @@
-﻿// This code is an adaptation of the open-source work by Alexander Ameye
-// From a tutorial originally posted here:
-// https://alexanderameye.github.io/outlineshader
-// Code also available on his Gist account
-// https://gist.github.com/AlexanderAmeye
-
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.Profiling;
 
-public class OutlineTicknessFeature : ScriptableRendererFeature
+public class RenderPassOnTextureFeature : ScriptableRendererFeature
 {
-    class OutlineTicknessPass : ScriptableRenderPass
+    class RenderPassOnTexture : ScriptableRenderPass
     {
         int kDepthBufferBits = 32;
-        private RenderTargetHandle outlineTicknessAttachmentHandle { get; set; }
+        private RenderTargetHandle renderPassTextureAttachmentHandle { get; set; }
         internal RenderTextureDescriptor descriptor { get; private set; }
 
-        private Material outlineTicknessMaterial = null;
+        private Material m_renderPassMaterial = null;
         private FilteringSettings m_FilteringSettings;
-        string m_ProfilerTag = "OutlineThickness Prepass";
+        string m_ProfilerTag = "RenderPassTexture Prepass";
         ShaderTagId m_ShaderTagId = new ShaderTagId("SRPDefaultUnlit");
+		string m_TextureName;
 
-        public OutlineTicknessPass(RenderQueueRange renderQueueRange, LayerMask layerMask, Material material)
+        public RenderPassOnTexture(RenderQueueRange renderQueueRange, LayerMask layerMask, Material material, string textureName)
         {
             m_FilteringSettings = new FilteringSettings(renderQueueRange, layerMask);
-			outlineTicknessMaterial = material;
-        }
+			m_renderPassMaterial = material;
+			m_TextureName = textureName;
+		}
 
         public void Setup(RenderTextureDescriptor baseDescriptor, RenderTargetHandle outlineTicknessAttachmentHandle)
         {
-            this.outlineTicknessAttachmentHandle = outlineTicknessAttachmentHandle;
+            this.renderPassTextureAttachmentHandle = outlineTicknessAttachmentHandle;
             baseDescriptor.colorFormat = RenderTextureFormat.ARGB32;
             baseDescriptor.depthBufferBits = kDepthBufferBits;
             descriptor = baseDescriptor;
@@ -43,8 +39,8 @@ public class OutlineTicknessFeature : ScriptableRendererFeature
         // The render pipeline will ensure target setup and clearing happens in an performance manner.
         public override void Configure(CommandBuffer cmd, RenderTextureDescriptor cameraTextureDescriptor)
         {
-            cmd.GetTemporaryRT(outlineTicknessAttachmentHandle.id, descriptor, FilterMode.Point);
-            ConfigureTarget(outlineTicknessAttachmentHandle.Identifier());
+            cmd.GetTemporaryRT(renderPassTextureAttachmentHandle.id, descriptor, FilterMode.Point);
+            ConfigureTarget(renderPassTextureAttachmentHandle.Identifier());
             ConfigureClear(ClearFlag.All, Color.black);
         }
 
@@ -71,12 +67,12 @@ public class OutlineTicknessFeature : ScriptableRendererFeature
                 if (cameraData.isStereoEnabled)
                     context.StartMultiEye(camera);
 
-				drawSettings.overrideMaterial = outlineTicknessMaterial;
+				drawSettings.overrideMaterial = m_renderPassMaterial;
 
 				context.DrawRenderers(renderingData.cullResults, ref drawSettings,
                     ref m_FilteringSettings);
 
-                cmd.SetGlobalTexture("_CameraOutlineThicknessTexture", outlineTicknessAttachmentHandle.id);
+                cmd.SetGlobalTexture(m_TextureName, renderPassTextureAttachmentHandle.id);
             }
 
             context.ExecuteCommandBuffer(cmd);
@@ -86,32 +82,33 @@ public class OutlineTicknessFeature : ScriptableRendererFeature
         /// Cleanup any allocated resources that were created during the execution of this render pass.
         public override void FrameCleanup(CommandBuffer cmd)
         {
-            if (outlineTicknessAttachmentHandle != RenderTargetHandle.CameraTarget)
+            if (renderPassTextureAttachmentHandle != RenderTargetHandle.CameraTarget)
             {
-                cmd.ReleaseTemporaryRT(outlineTicknessAttachmentHandle.id);
-				outlineTicknessAttachmentHandle = RenderTargetHandle.CameraTarget;
+                cmd.ReleaseTemporaryRT(renderPassTextureAttachmentHandle.id);
+				renderPassTextureAttachmentHandle = RenderTargetHandle.CameraTarget;
             }
         }
     }
 
-	OutlineTicknessPass outlineTicknessPass;
-    RenderTargetHandle outlineTicknessTexture;
-	public Material outlineTicknessMaterial;
-	public LayerMask outlineTicknessLayerMask;
+	RenderPassOnTexture renderPass;
+    RenderTargetHandle renderPassTexture;
+	public string textureName;
+	public Material renderPassMaterial;
+	public LayerMask renderPassLayerMask;
 
 	public override void Create()
     {
-		outlineTicknessPass = new OutlineTicknessPass(RenderQueueRange.opaque, outlineTicknessLayerMask, outlineTicknessMaterial);
-		outlineTicknessPass.renderPassEvent = RenderPassEvent.AfterRenderingPrePasses;
-		outlineTicknessTexture.Init("_CameraOutlineThicknessTexture");
+		renderPass = new RenderPassOnTexture(RenderQueueRange.opaque, renderPassLayerMask, renderPassMaterial, textureName);
+		renderPass.renderPassEvent = RenderPassEvent.AfterRenderingPrePasses;
+		renderPassTexture.Init(textureName);
     }
 
     // Here you can inject one or multiple render passes in the renderer.
     // This method is called when setting up the renderer once per-camera.
     public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData)
     {
-		outlineTicknessPass.Setup(renderingData.cameraData.cameraTargetDescriptor, outlineTicknessTexture);
-        renderer.EnqueuePass(outlineTicknessPass);
+		renderPass.Setup(renderingData.cameraData.cameraTargetDescriptor, renderPassTexture);
+        renderer.EnqueuePass(renderPass);
     }
 }
 
