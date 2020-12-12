@@ -26,6 +26,6 @@ public class PlayLandParticlesAction : StateAction
 			t = Time.time;
 		}
 	}
-	
+
 	public override void OnUpdate() { }
 }
