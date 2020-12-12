@@ -24,9 +24,9 @@ public class RenderPassOnTextureFeature : ScriptableRendererFeature
 			m_TextureName = textureName;
 		}
 
-        public void Setup(RenderTextureDescriptor baseDescriptor, RenderTargetHandle outlineTicknessAttachmentHandle)
+        public void Setup(RenderTextureDescriptor baseDescriptor, RenderTargetHandle renderPassTextureAttachmentHandle)
         {
-            this.renderPassTextureAttachmentHandle = outlineTicknessAttachmentHandle;
+            this.renderPassTextureAttachmentHandle = renderPassTextureAttachmentHandle;
             baseDescriptor.colorFormat = RenderTextureFormat.ARGB32;
             baseDescriptor.depthBufferBits = kDepthBufferBits;
             descriptor = baseDescriptor;

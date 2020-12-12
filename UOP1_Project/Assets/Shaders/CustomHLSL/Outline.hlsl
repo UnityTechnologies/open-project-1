@@ -29,7 +29,7 @@ float3 DecodeNormal(float4 enc)
 // If all the points are out of the mask (black pixels) then the funtion return 0 (Force no outline)
 // If at least one pixel is black and another is white the function return (Force no outline)
 // If all the pixels are white (inside an area covered by outlined objects). Return 0.5 half outline size.
-float getTicknessBiasing(float2 UV, float OutlineThickness) {
+float getThicknessBiasing(float2 UV, float OutlineThickness) {
 	float halfScaleFloor = floor(OutlineThickness * 0.5);
 	float halfScaleCeil = ceil(OutlineThickness * 0.5);
 
@@ -55,7 +55,7 @@ float getTicknessBiasing(float2 UV, float OutlineThickness) {
 
 void OutlineObject_float(float2 UV, float OutlineThickness, float DepthSensitivity, float NormalsSensitivity, float DepthNormalSensitivity, float DepthNormalThresholdScale, float3 viewDir, out float Out)
 {
-	float biasedThickness = getTicknessBiasing(UV, OutlineThickness);
+	float biasedThickness = getThicknessBiasing(UV, OutlineThickness);
 	if (biasedThickness == 0.0) //The considered pixel is far from an outlined object so no need to draw outline.
 	{
 		Out = 0.0;
@@ -91,7 +91,7 @@ void OutlineObject_float(float2 UV, float OutlineThickness, float DepthSensitivi
 		float edgeDepth = sqrt(pow(depthFiniteDifference0, 2) + pow(depthFiniteDifference1, 2)) * 100;
 
 		// Thresholding with view direction. Balance normal difference based on the camera direction for flat surface viewed from a grazing angle
-		float NdotV = 1 - dot(normalSamples[0], viewDir);
+		float NdotV = 1 - dot(2*normalSamples[0] - 1, -viewDir);
 		float normalThreshold01 = saturate((NdotV - DepthNormalSensitivity) / (1 - DepthNormalSensitivity));
 		float normalThreshold = normalThreshold01 * DepthNormalThresholdScale + 1;
 		float depthThreshold = (biasedThickness / DepthSensitivity) * depthSamples[0] * normalThreshold;
