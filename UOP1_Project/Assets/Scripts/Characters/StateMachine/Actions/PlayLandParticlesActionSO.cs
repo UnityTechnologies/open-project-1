@@ -20,20 +20,12 @@ public class PlayLandParticlesAction : StateAction
 
 	public override void OnStateExit()
 	{
-		PlayLandParticles();
-	}
-
-	private void PlayLandParticles()
-	{
 		if (Time.time >= t + _coolDown)
 		{
 			_dustController.PlayLandParticles();
 			t = Time.time;
-		}	
+		}
 	}
-
-	public override void OnUpdate()
-	{
-		
-	}
+	
+	public override void OnUpdate() { }
 }
