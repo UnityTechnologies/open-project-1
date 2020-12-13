@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 [CustomEditor(typeof(GameSceneSO), true)]
-public class GameSceneSOEditor : Editor
+public class GameSceneSOEditor : CustomBaseEditor
 {
 	private const string NO_SCENES_WARNING = "There is no Scene associated to this location yet. Add a new scene with the dropdown below";
 	private GUIStyle _headerLabelStyle;
@@ -24,12 +24,7 @@ public class GameSceneSOEditor : Editor
 
 	public override void OnInspectorGUI()
 	{
-		//Make GUI not editable.
-		GUI.enabled = false;
-		//Draw reference information about script being edited.
-		EditorGUILayout.ObjectField("Script", MonoScript.FromScriptableObject((GameSceneSO)target), typeof(GameSceneSO), false);
-		//Make GUI editable.
-		GUI.enabled = true;
+		DrawNonEdtiableScriptReference<GameSceneSO>();
 
 		serializedObject.Update();
 		EditorGUILayout.LabelField("Scene information", _headerLabelStyle);
