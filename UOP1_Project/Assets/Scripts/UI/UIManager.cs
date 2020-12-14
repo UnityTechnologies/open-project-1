@@ -89,7 +89,7 @@ public class UIManager : MonoBehaviour
 
 		if (isForCooking)
 		{
-			inventoryPanel.FillInventory(TabType.recipe);
+			inventoryPanel.FillInventory(TabType.recipe, true);
 
 		}
 		else
