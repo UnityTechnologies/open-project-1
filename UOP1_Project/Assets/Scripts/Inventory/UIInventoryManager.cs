@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class InventoryFiller : MonoBehaviour
+public class UIInventoryManager : MonoBehaviour
 {
 	[SerializeField]
 	private Inventory currentInventory;

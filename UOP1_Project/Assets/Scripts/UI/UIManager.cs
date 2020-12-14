@@ -52,13 +52,13 @@ public class UIManager : MonoBehaviour
 	}
 
 	[SerializeField]
-	DialogueUIController dialogueController = default;
+	UIDialogueManager dialogueController = default;
 
 	[SerializeField]
-	InventoryFiller inventoryPanel;
+	UIInventoryManager inventoryPanel;
 
 	[SerializeField]
-	UIInteractionPanelFiller interactionPanel;
+	UIInteractionManager interactionPanel;
 
 	public void OpenUIDialogue(DialogueLineSO dialogueLine)
 	{

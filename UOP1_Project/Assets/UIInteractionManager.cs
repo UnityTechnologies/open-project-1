@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UIInteractionPanelFiller : MonoBehaviour
+public class UIInteractionManager : MonoBehaviour
 {
 	[SerializeField]
 	private List<InteractionSO> listInteractions;
