@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.Localization.Components;
-public class DialogueUIController : MonoBehaviour
+public class UIDialogueManager : MonoBehaviour
 {
 	[SerializeField] LocalizeStringEvent lineText = default;
 

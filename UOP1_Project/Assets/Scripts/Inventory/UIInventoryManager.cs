@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class InventoryFiller : MonoBehaviour
+public class UIInventoryManager : MonoBehaviour
 {
 	[SerializeField]
 	private Inventory currentInventory;
@@ -38,6 +38,8 @@ public class InventoryFiller : MonoBehaviour
 
 	public VoidEventChannelSO ActionButtonClicked;
 
+	public VoidEventChannelSO OnInteractionEndedEvent;
+
 	private void OnEnable()
 	{
 		//Check if the event exists to avoid errors
@@ -52,6 +54,10 @@ public class InventoryFiller : MonoBehaviour
 		if (SelectItemEvent != null)
 		{
 			SelectItemEvent.OnEventRaised += InspectItem;
+		}
+		if (OnInteractionEndedEvent != null)
+		{
+			OnInteractionEndedEvent.OnEventRaised += InteractionEnded;
 		}
 	}
 
@@ -73,10 +79,10 @@ public class InventoryFiller : MonoBehaviour
 
 
 
-
-	public void FillInventory(TabType _selectedTabType = TabType.none)
+	bool isNearPot = false;
+	public void FillInventory(TabType _selectedTabType = TabType.none, bool _isNearPot = false)
 	{
-
+		isNearPot = _isNearPot;
 
 		if ((_selectedTabType != TabType.none) && (tabTypesList.Exists(o => o.TabType == _selectedTabType)))
 		{
@@ -108,7 +114,10 @@ public class InventoryFiller : MonoBehaviour
 
 		}
 	}
-
+	public void InteractionEnded()
+	{
+		isNearPot = false;
+	}
 	void FillTypeTabs(List<InventoryTabType> typesList, InventoryTabType selectedType)
 	{
 
@@ -236,7 +245,8 @@ public class InventoryFiller : MonoBehaviour
 			bool isInteractable = true;
 			if (itemToInspect.ItemType.ActionType == ItemInventoryActionType.cook)
 			{
-				isInteractable = currentInventory.hasIngredients(itemToInspect.IngredientsList);
+				isInteractable = currentInventory.hasIngredients(itemToInspect.IngredientsList) && isNearPot
+					;
 
 			}
 			else if (itemToInspect.ItemType.ActionType == ItemInventoryActionType.doNothing)

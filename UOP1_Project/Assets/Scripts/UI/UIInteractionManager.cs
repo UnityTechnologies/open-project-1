@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UIInteractionPanelFiller : MonoBehaviour
+public class UIInteractionManager : MonoBehaviour
 {
 	[SerializeField]
 	private List<InteractionSO> listInteractions;
@@ -16,7 +16,7 @@ public class UIInteractionPanelFiller : MonoBehaviour
 
 			{
 				interactionItem.FillInteractionPanel(listInteractions.Find(o => o.InteractionType == interactionType));
-				
+
 			}
 	}
 

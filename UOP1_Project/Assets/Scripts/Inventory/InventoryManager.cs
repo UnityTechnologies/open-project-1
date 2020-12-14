@@ -124,11 +124,9 @@ public class InventoryManager : MonoBehaviour
 			{
 				for (int i = 0; i < ingredients.Count; i++)
 				{
-					if (ingredients[i].Item.ItemType.ActionType == ItemInventoryActionType.use)
+					if ((ingredients[i].Item.ItemType.ActionType == ItemInventoryActionType.use))
 						currentInventory.Remove(ingredients[i].Item, ingredients[i].Amount);
-
 				}
-
 				//add dish
 				currentInventory.Add(recipe.ResultingDish);
 			}
