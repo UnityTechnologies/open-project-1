@@ -9,14 +9,10 @@ public class InteractionManager : MonoBehaviour
 	[SerializeField] private InputReader _inputReader = default;
 	//To store the object we are currently interacting with
 	private GameObject _currentInteractableObject = null;
-	//Or do we want to have stg specific for every type of interaction like:
-	//Item for pickup?
-	//Character (or other relevant type) for talk?
 
 	//Events for the different interaction types
 	[Header("Broadcasting on")]
 	[SerializeField] private ItemEventChannelSo _onObjectPickUp = default;
-	//double check with the action name we will show on the UI (because we will not really starting cooking but showing the UI?)
 	[SerializeField] private VoidEventChannelSO _onCookingStart = default;
 	[SerializeField] private DialogueEventChannelSo _startTalking = default;
 	//UI event
