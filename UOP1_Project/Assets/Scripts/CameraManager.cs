@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using Cinemachine;
+using System.Collections;
 
 public class CameraManager : MonoBehaviour
 {
@@ -11,6 +12,14 @@ public class CameraManager : MonoBehaviour
 
 	[SerializeField, Range(1f, 5f)]
 	private float speed = default;
+	[SerializeField] private TransformAnchor _cameraTransformAnchor = default;
+
+	[Header("Listening on channels")]
+	[Tooltip("The CameraManager listens to this event, fired by objects in any scene, to adapt camera position")]
+	[SerializeField] private TransformEventChannelSO _frameObjectChannel = default;
+
+
+	private bool cameraMovementLock = false;
 
 	public void SetupProtagonistVirtualCamera(Transform target)
 	{
@@ -23,6 +32,11 @@ public class CameraManager : MonoBehaviour
 		inputReader.cameraMoveEvent += OnCameraMove;
 		inputReader.enableMouseControlCameraEvent += OnEnableMouseControlCamera;
 		inputReader.disableMouseControlCameraEvent += OnDisableMouseControlCamera;
+
+		if (_frameObjectChannel != null)
+			_frameObjectChannel.OnEventRaised += OnFrameObjectEvent;
+
+		_cameraTransformAnchor.Transform = mainCamera.transform;
 	}
 
 	private void OnDisable()
@@ -30,6 +44,9 @@ public class CameraManager : MonoBehaviour
 		inputReader.cameraMoveEvent -= OnCameraMove;
 		inputReader.enableMouseControlCameraEvent -= OnEnableMouseControlCamera;
 		inputReader.disableMouseControlCameraEvent -= OnDisableMouseControlCamera;
+
+		if (_frameObjectChannel != null)
+			_frameObjectChannel.OnEventRaised -= OnFrameObjectEvent;
 	}
 
 	private void OnEnableMouseControlCamera()
@@ -38,6 +55,15 @@ public class CameraManager : MonoBehaviour
 
 		Cursor.lockState = CursorLockMode.Locked;
 		Cursor.visible = false;
+
+		StartCoroutine(DisableMouseControlForFrame());
+	}
+
+	IEnumerator DisableMouseControlForFrame()
+	{
+		cameraMovementLock = true;
+		yield return new WaitForEndOfFrame();
+		cameraMovementLock = false;
 	}
 
 	private void OnDisableMouseControlCamera()
@@ -55,10 +81,18 @@ public class CameraManager : MonoBehaviour
 
 	private void OnCameraMove(Vector2 cameraMovement, bool isDeviceMouse)
 	{
+		if (cameraMovementLock)
+			return;
+
 		if (isDeviceMouse && !_isRMBPressed)
 			return;
 
 		freeLookVCam.m_XAxis.m_InputAxisValue = cameraMovement.x * Time.smoothDeltaTime * speed;
 		freeLookVCam.m_YAxis.m_InputAxisValue = cameraMovement.y * Time.smoothDeltaTime * speed;
+	}
+
+	private void OnFrameObjectEvent(Transform value)
+	{
+		SetupProtagonistVirtualCamera(value);
 	}
 }
