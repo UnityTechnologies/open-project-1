@@ -22,7 +22,12 @@ public class Inventory : ScriptableObject
 			ItemStack currentItemStack = _items[i];
 			if (item == currentItemStack.Item)
 			{
-				currentItemStack.Amount += count;
+				//only add to the amount if the item is usable 
+				if (currentItemStack.Item.ItemType.ActionType == ItemInventoryActionType.use)
+				{
+					currentItemStack.Amount += count;
+				}
+
 				return;
 			}
 		}
@@ -76,5 +81,29 @@ public class Inventory : ScriptableObject
 		}
 
 		return 0;
+	}
+
+	public bool[] IngredietsAvailability(List<ItemStack> ingredients)
+	{
+
+		bool[] availabilityArray = new bool[ingredients.Count];
+
+		for (int i = 0; i < ingredients.Count; i++)
+		{
+			availabilityArray[i] = _items.Exists(o => o.Item == ingredients[i].Item && o.Amount >= ingredients[i].Amount);
+
+		}
+		return availabilityArray;
+
+
+	}
+	public bool hasIngredients(List<ItemStack> ingredients)
+	{
+
+		bool hasIngredients = !ingredients.Exists(j => !_items.Exists(o => o.Item == j.Item && o.Amount >= j.Amount));
+
+		return hasIngredients;
+
+
 	}
 }
