@@ -7,43 +7,34 @@ using Moment = UOP1.StateMachine.StateAction.SpecificMoment;
 [CreateAssetMenu(fileName = "PlayParticleEffect", menuName = "State Machines/Actions/Play Particle Effect")]
 public class PlayParticleEffectSO : StateActionSO
 {
-	public ParticleEffectPoolSO particlePool;
+	public ParticleEffectSO particleEffect;
 	public Moment whenToPlay = default;
 	public bool stopOnStateExit = default;
-	public Transform anchor = default;
+	public float coolDown = 0.0f;
 	protected override StateAction CreateAction() => new PlayParticleEffect();
 }
 
 public class PlayParticleEffect : StateAction
 {
-	private ParticleSystem _particles;
+
 	private PlayParticleEffectSO _parentSO;
-	private StateMachine _stateMachine;
+	private EffectController _effectController;
+	private float t = 0f;
 
 	public override void Awake(StateMachine stateMachine)
 	{
 		_parentSO = (PlayParticleEffectSO)OriginSO;
-		_stateMachine = stateMachine;
+		_effectController = stateMachine.GetComponent<EffectController>();
 	}
 		
 	public override void OnUpdate()
 	{
-	}
 
-	private IEnumerator TriggerEffectCoroutine(ParticleSystem particleSystem)
-	{
-		particleSystem.Play();
-
-		while (particleSystem.IsAlive())
-		{
-			yield return null;
-		}
-		_parentSO.particlePool.Return(particleSystem);
 	}
 
 	public override void OnStateEnter()
 	{
-		if (Moment.OnStateEnter == _parentSO.whenToPlay)
+		if (Moment.OnStateEnter == _parentSO.whenToPlay && _effectController != null)
 		{
 			TriggerParticuleEffect();
 		}
@@ -55,25 +46,17 @@ public class PlayParticleEffect : StateAction
 		{
 			TriggerParticuleEffect();
 		}
-		if (_parentSO.stopOnStateExit)
+		if (_parentSO.stopOnStateExit && _effectController != null)
 		{
-			if (_particles != null)
-			{
-				_particles.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
-			}
+			_effectController.StopEffect(_parentSO.particleEffect);
 		}
 	}
 
 	private void TriggerParticuleEffect()
 	{
-		_particles = _parentSO.particlePool.Request();
-
-		_particles.transform.SetParent(_stateMachine.transform);
-
-		_particles.transform.localPosition = _parentSO.anchor.localPosition;
-		_particles.transform.localRotation = _parentSO.anchor.localRotation;
-		_particles.transform.localScale = _parentSO.anchor.localScale;
-
-		_stateMachine.StartCoroutine(TriggerEffectCoroutine(_particles));
+		if (Time.time >= t + _parentSO.coolDown)
+		{
+			_effectController.PlayEffect(_parentSO.particleEffect);
+		}
 	}
 }
