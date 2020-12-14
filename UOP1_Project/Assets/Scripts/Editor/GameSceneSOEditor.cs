@@ -10,7 +10,7 @@ public class GameSceneSOEditor : Editor
 {
 	private const string NO_SCENES_WARNING = "There is no Scene associated to this location yet. Add a new scene with the dropdown below";
 	private GUIStyle _headerLabelStyle;
-	private static readonly string[] _excludedProperties = { "m_Script", "sceneName" };
+	private static readonly string[] _excludedProperties = { "m_Script", "sceneName" };  //m_script is a reference to the script being edited but it'll result an editable object field.
 
 	private string[] _sceneList;
 	private GameSceneSO _gameSceneInspected;
@@ -24,10 +24,19 @@ public class GameSceneSOEditor : Editor
 
 	public override void OnInspectorGUI()
 	{
+		//Make GUI not editable.
+		GUI.enabled = false;
+		//Draw reference information about script being edited.
+		EditorGUILayout.ObjectField("Script", MonoScript.FromScriptableObject((GameSceneSO)target), typeof(GameSceneSO), false);
+		//Make GUI editable.
+		GUI.enabled = true;
+
+		serializedObject.Update();
 		EditorGUILayout.LabelField("Scene information", _headerLabelStyle);
 		EditorGUILayout.Space();
 		DrawScenePicker();
 		DrawPropertiesExcluding(serializedObject, _excludedProperties);
+		serializedObject.ApplyModifiedProperties();
 	}
 
 	private void DrawScenePicker()
