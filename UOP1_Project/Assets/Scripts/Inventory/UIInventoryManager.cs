@@ -79,10 +79,10 @@ public class UIInventoryManager : MonoBehaviour
 
 
 
-	bool isNearPot = false; 
+	bool isNearPot = false;
 	public void FillInventory(TabType _selectedTabType = TabType.none, bool _isNearPot = false)
 	{
-		isNearPot = _isNearPot; 
+		isNearPot = _isNearPot;
 
 		if ((_selectedTabType != TabType.none) && (tabTypesList.Exists(o => o.TabType == _selectedTabType)))
 		{
@@ -114,8 +114,9 @@ public class UIInventoryManager : MonoBehaviour
 
 		}
 	}
-	public void InteractionEnded() {
-		isNearPot = false; 
+	public void InteractionEnded()
+	{
+		isNearPot = false;
 	}
 	void FillTypeTabs(List<InventoryTabType> typesList, InventoryTabType selectedType)
 	{

@@ -14,7 +14,8 @@ public class UIInteractionItemFiller : MonoBehaviour
 	TextMeshProUGUI interactionKeyButton;
 
 
-	public void FillInteractionPanel(InteractionSO interactionItem) {
+	public void FillInteractionPanel(InteractionSO interactionItem)
+	{
 		interactionName.StringReference = interactionItem.InteractionName;
 		interactionKeyButton.text = KeyCode.E.ToString(); // this keycode will be modified later on 
 

@@ -16,7 +16,7 @@ public class UIInteractionManager : MonoBehaviour
 
 			{
 				interactionItem.FillInteractionPanel(listInteractions.Find(o => o.InteractionType == interactionType));
-				
+
 			}
 	}
 
