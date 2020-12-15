@@ -9,10 +9,8 @@ SAMPLER(sampler_CameraDepthTexture);
 float4 _CameraDepthTexture_TexelSize;
 
 TEXTURE2D(_CameraDepthNormalsTexture);
-SAMPLER(sampler_CameraDepthNormalsTexture);
 
-TEXTURE2D(_CameraOutlineThicknessTexture);
-SAMPLER(sampler_CameraOutlineThicknessTexture);
+TEXTURE2D(_CameraOutlineTexture);
  
 float3 DecodeNormal(float4 enc)
 {
@@ -25,91 +23,105 @@ float3 DecodeNormal(float4 enc)
     return n;
 }
 
-// This method checks where the sampling pixels are regarding to the outlined object mask renderer pass
-// If all the points are out of the mask (black pixels) then the funtion return 0 (Force no outline)
-// If at least one pixel is black and another is white the function return (Force no outline)
-// If all the pixels are white (inside an area covered by outlined objects). Return 0.5 half outline size.
-float getThicknessBiasing(float2 UV, float OutlineThickness) {
+float InnerOutlineObject(float2 UV, float OutlineThickness, float DepthSensitivity, float NormalsSensitivity, float DepthNormalSensitivity, float DepthNormalThresholdScale, float3 viewDir)
+{
+	float halfScaleFloor = floor(OutlineThickness * 0.5);
+	float halfScaleCeil = ceil(OutlineThickness * 0.5);
 
-	float2 uvSamples[4];
-	float allSamplesIn = 1.0;
-	float atLeastOneSampleIn = 0.0;
+	float2 uvSamples[9];
+	float depthSamples[9];
+	float3 normalSamples[9];
 
-	uvSamples[0] = UV - float2(_CameraDepthTexture_TexelSize.x, _CameraDepthTexture_TexelSize.y) * OutlineThickness;
-	uvSamples[1] = UV + float2(_CameraDepthTexture_TexelSize.x, _CameraDepthTexture_TexelSize.y) * OutlineThickness;
-	uvSamples[2] = UV + float2(_CameraDepthTexture_TexelSize.x * OutlineThickness, -_CameraDepthTexture_TexelSize.y * OutlineThickness);
-	uvSamples[3] = UV + float2(-_CameraDepthTexture_TexelSize.x * OutlineThickness, _CameraDepthTexture_TexelSize.y * OutlineThickness);
-	
-	float maskSample;
-	
-	for (int i = 0; i < 4; i++)
+	uvSamples[1] = UV + float2(-_CameraDepthTexture_TexelSize.x * halfScaleFloor, _CameraDepthTexture_TexelSize.y * halfScaleCeil);
+	uvSamples[2] = UV + float2(0, _CameraDepthTexture_TexelSize.y * halfScaleCeil);
+	uvSamples[3] = UV + float2(_CameraDepthTexture_TexelSize.x * halfScaleCeil, _CameraDepthTexture_TexelSize.y * halfScaleCeil);
+
+	uvSamples[4] = UV + float2(-_CameraDepthTexture_TexelSize.x * halfScaleFloor, 0);
+	uvSamples[0] = UV;
+	uvSamples[5] = UV + float2(_CameraDepthTexture_TexelSize.x * halfScaleCeil, 0);
+
+
+	uvSamples[6] = UV + float2(-_CameraDepthTexture_TexelSize.x * halfScaleFloor, -_CameraDepthTexture_TexelSize.y  * halfScaleFloor);
+	uvSamples[7] = UV + float2(0, -_CameraDepthTexture_TexelSize.y  * halfScaleFloor);
+	uvSamples[8] = UV + float2(+_CameraDepthTexture_TexelSize.x * halfScaleCeil, -_CameraDepthTexture_TexelSize.y  * halfScaleFloor);
+
+	for (int i = 0; i < 9; i++)
 	{
-		maskSample = SAMPLE_TEXTURE2D(_CameraOutlineThicknessTexture, sampler_CameraOutlineThicknessTexture, uvSamples[i]).r;
-		allSamplesIn = allSamplesIn * maskSample;
-		atLeastOneSampleIn = atLeastOneSampleIn + maskSample;
+		depthSamples[i] = SAMPLE_TEXTURE2D(_CameraDepthTexture, sampler_CameraDepthTexture, uvSamples[i]).r;
+		normalSamples[i] = DecodeNormal(SAMPLE_TEXTURE2D(_CameraDepthNormalsTexture, sampler_CameraDepthTexture, uvSamples[i]));
 	}
-	return atLeastOneSampleIn == 0 ? 0.0 : (1.0 - 0.5 * allSamplesIn);
+
+	// Depth
+	float depthFiniteDifference0 = (-depthSamples[1] - 2 * depthSamples[4] - depthSamples[6] + depthSamples[3] + 2 * depthSamples[5] + depthSamples[8]) / 4;
+	float depthFiniteDifference1 = (-depthSamples[1] - 2 * depthSamples[2] - depthSamples[3] + depthSamples[6] + 2 * depthSamples[7] + depthSamples[8]) / 4;
+	float edgeDepth = sqrt(pow(depthFiniteDifference0, 2) + pow(depthFiniteDifference1, 2)) * 100;
+
+	// Thresholding with view direction. Balance normal difference based on the camera direction for flat surface viewed from a grazing angle
+	float NdotV = 1 - dot(2 * normalSamples[0] - 1, -viewDir);
+	float normalThreshold01 = saturate((NdotV - DepthNormalSensitivity) / (1 - DepthNormalSensitivity));
+	float normalThreshold = normalThreshold01 * DepthNormalThresholdScale + 1;
+	float depthThreshold = (1 / DepthSensitivity) * depthSamples[0] * normalThreshold;
+	edgeDepth = edgeDepth > depthThreshold ? 1 : 0;
+
+	// Normals
+	float3 normalFiniteDifference0 = (-normalSamples[1] - 2 * normalSamples[4] - normalSamples[6] + normalSamples[3] + 2 * normalSamples[5] + normalSamples[8]) / 4;
+	float3 normalFiniteDifference1 = (-normalSamples[1] - 2 * normalSamples[2] - normalSamples[3] + normalSamples[6] + 2 * normalSamples[7] + normalSamples[8]) / 4;
+	float edgeNormal = sqrt(dot(normalFiniteDifference0, normalFiniteDifference0) + dot(normalFiniteDifference1, normalFiniteDifference1));
+	edgeNormal = edgeNormal > (1 / NormalsSensitivity) ? 1 : 0;
+
+	float edge = max(edgeDepth, edgeNormal);
+	return edge;
 }
 
 void OutlineObject_float(float2 UV, float OutlineThickness, float DepthSensitivity, float NormalsSensitivity, float DepthNormalSensitivity, float DepthNormalThresholdScale, float3 viewDir, out float Out)
 {
-	float biasedThickness = getThicknessBiasing(UV, OutlineThickness);
-	if (biasedThickness == 0.0) //The considered pixel is far from an outlined object so no need to draw outline.
+	
+	float screenBiasedTickness = OutlineThickness;
+	
+	float2 uvSamples[5];
+	float maskSample[5];
+	bool allSamplesInAndSame = true;
+	bool atLeastOneSampleIn = false;
+	float minValue = 100;
+
+	uvSamples[0] = UV;
+	uvSamples[1] = UV - float2(_CameraDepthTexture_TexelSize.x, _CameraDepthTexture_TexelSize.y) * screenBiasedTickness;
+	uvSamples[2] = UV + float2(_CameraDepthTexture_TexelSize.x, _CameraDepthTexture_TexelSize.y) * screenBiasedTickness;
+	uvSamples[3] = UV + float2(_CameraDepthTexture_TexelSize.x * OutlineThickness, -_CameraDepthTexture_TexelSize.y * screenBiasedTickness);
+	uvSamples[4] = UV + float2(-_CameraDepthTexture_TexelSize.x * OutlineThickness, _CameraDepthTexture_TexelSize.y * screenBiasedTickness);
+
+	for (int i = 0; i < 5; i++)
+	{
+		maskSample[i] = SAMPLE_TEXTURE2D(_CameraOutlineTexture, sampler_CameraDepthTexture, uvSamples[i]).r;
+	}
+	for (int i = 1; i < 5; i++)
+	{
+		allSamplesInAndSame = allSamplesInAndSame && (maskSample[1] == maskSample[i]);
+		atLeastOneSampleIn = atLeastOneSampleIn || (maskSample[i] > 0);
+		if (maskSample[i] < minValue)
+		{
+			minValue = maskSample[i];
+		}
+	}
+
+	if (!atLeastOneSampleIn) //The considered pixel is far from an outlined object so no need to draw outline.
 	{
 		Out = 0.0;
 	}
-	else if (biasedThickness == 1.0) // The considered pixel is on the border between outlined and not outlined object. Always draw an outline.
+	else if (!allSamplesInAndSame) // The considered pixel is on the border between outlined and not outlined object. Always draw an outline.
 	{
-		Out = 1.0;
+		if (minValue < maskSample[0])
+		{
+			Out = 1.0;
+		}
+		else
+		{
+			Out = 0.0;
+		}
 	}
 	else // Inner outline and outline between overlapping outlined objects. Apply the depth/normal technique with half outline thickness to balance that all outline width will be drawn 
 	{
-		float halfScaleFloor = floor(OutlineThickness * 0.5);
-		float halfScaleCeil = ceil(OutlineThickness * 0.5);
-
-		float2 uvSamples[9];
-		float depthSamples[9];
-		float3 normalSamples[9];
-
-		uvSamples[1] = UV + float2(-_CameraDepthTexture_TexelSize.x * halfScaleFloor, _CameraDepthTexture_TexelSize.y * halfScaleCeil);
-		uvSamples[2] = UV + float2(0, _CameraDepthTexture_TexelSize.y * halfScaleCeil);
-		uvSamples[3] = UV + float2(_CameraDepthTexture_TexelSize.x * halfScaleCeil, _CameraDepthTexture_TexelSize.y * halfScaleCeil);
-
-		uvSamples[4] = UV + float2(-_CameraDepthTexture_TexelSize.x * halfScaleFloor, 0);
-		uvSamples[0] = UV;
-		uvSamples[5] = UV + float2(_CameraDepthTexture_TexelSize.x * halfScaleCeil, 0);
-
-
-		uvSamples[6] = UV + float2(-_CameraDepthTexture_TexelSize.x * halfScaleFloor, -_CameraDepthTexture_TexelSize.y  * halfScaleFloor);
-		uvSamples[7] = UV + float2(0, -_CameraDepthTexture_TexelSize.y  * halfScaleFloor);
-		uvSamples[8] = UV + float2(+_CameraDepthTexture_TexelSize.x * halfScaleCeil, -_CameraDepthTexture_TexelSize.y  * halfScaleFloor);
-
-		for (int i = 0; i < 9; i++)
-		{
-			depthSamples[i] = SAMPLE_TEXTURE2D(_CameraDepthTexture, sampler_CameraDepthTexture, uvSamples[i]).r;
-			normalSamples[i] = DecodeNormal(SAMPLE_TEXTURE2D(_CameraDepthNormalsTexture, sampler_CameraDepthNormalsTexture, uvSamples[i]));
-		}
-
-		// Depth
-		float depthFiniteDifference0 = (-depthSamples[1] - 2 * depthSamples[4] - depthSamples[6] + depthSamples[3] + 2 * depthSamples[5] + depthSamples[8])/4;
-		float depthFiniteDifference1 = (-depthSamples[1] - 2 * depthSamples[2] - depthSamples[3] + depthSamples[6] + 2 * depthSamples[7] + depthSamples[8])/4;
-		float edgeDepth = sqrt(pow(depthFiniteDifference0, 2) + pow(depthFiniteDifference1, 2)) * 100;
-
-		// Thresholding with view direction. Balance normal difference based on the camera direction for flat surface viewed from a grazing angle
-		float NdotV = 1 - dot(2*normalSamples[0] - 1, -viewDir);
-		float normalThreshold01 = saturate((NdotV - DepthNormalSensitivity) / (1 - DepthNormalSensitivity));
-		float normalThreshold = normalThreshold01 * DepthNormalThresholdScale + 1;
-		float depthThreshold = (1 / DepthSensitivity) * depthSamples[0] * normalThreshold;
-		edgeDepth = edgeDepth > depthThreshold ? 1 : 0;
-
-		// Normals
-		float3 normalFiniteDifference0 = (-normalSamples[1] - 2 * normalSamples[4] - normalSamples[6] + normalSamples[3] + 2 * normalSamples[5] + normalSamples[8])/4;
-		float3 normalFiniteDifference1 = (-normalSamples[1] - 2 * normalSamples[2] - normalSamples[3] + normalSamples[6] + 2 * normalSamples[7] + normalSamples[8])/4;
-		float edgeNormal = sqrt(dot(normalFiniteDifference0, normalFiniteDifference0) + dot(normalFiniteDifference1, normalFiniteDifference1));
-		edgeNormal = edgeNormal > (1 / NormalsSensitivity) ? 1 : 0;
-
-		float edge = max(edgeDepth, edgeNormal);
-		Out = edge;
+		Out = InnerOutlineObject(UV, screenBiasedTickness * 2, DepthSensitivity, NormalsSensitivity, DepthNormalSensitivity, DepthNormalThresholdScale, viewDir);
 	}
 }
 
