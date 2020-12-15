@@ -8,6 +8,231 @@ using UnityEngine;
 
 public class SceneSelector : EditorWindow
 {
+	public class PreferencesWindow : EditorWindow
+	{
+		private class Styles
+		{
+			public GUIStyle itemBorder;
+			public GUIStyle buttonVisibilityOn;
+			public GUIStyle buttonVisibilityOff;
+		}
+
+		private const string kWindowCaption = "Scene Selector Preferences";
+		private const float kHeaderHeight = 0.0f;
+		private const float kItemHeight = 24.0f;
+		private const float kVisibilityButtonSize = 16.0f;
+
+		private static readonly Color kItemBorderColor = new Color(1.0f, 1.0f, 1.0f, 0.16f);
+
+		private SceneSelector _owner;
+		private ReorderableList _itemsReorderableList;
+		private Styles _styles;
+		private Vector2 _windowScrollPosition;
+		private bool _hasEmptyItems;
+
+		private List<Item> items => _owner._storage.items;
+		private Dictionary<int, Item> itemsMap => _owner._storage.itemsMap;
+
+		public static PreferencesWindow Open(SceneSelector owner)
+		{
+			var window = GetWindow<PreferencesWindow>(true, kWindowCaption, true);
+			window.Init(owner);
+			return window;
+		}
+
+		private void OnEnable()
+		{
+			wantsMouseMove = true;
+			GameSceneSO.onEnabled += OnGameSceneSOCreated;
+		}
+
+		private void OnDisable()
+		{
+			_owner.SaveStorage();
+			GameSceneSO.onEnabled -= OnGameSceneSOCreated;
+		}
+
+		private void Init(SceneSelector owner)
+		{
+			_owner = owner;
+			CreateReorderableList();
+			PopulateItems();
+		}
+
+		private void OnGUI()
+		{
+			EnsureStyles();
+			RemoveEmptyItemsIfRequired();
+			HandleEvents();
+			DrawWindow();
+		}
+
+		private void RepaintAll()
+		{
+			Repaint();
+			_owner.Repaint();
+		}
+
+		private void CreateReorderableList()
+		{
+			_itemsReorderableList = new ReorderableList(items, typeof(Item), true, true, false, false);
+			_itemsReorderableList.drawElementCallback = DrawItem;
+			_itemsReorderableList.drawElementBackgroundCallback = DrawItemBackground;
+			_itemsReorderableList.headerHeight = kHeaderHeight;
+			_itemsReorderableList.elementHeight = kItemHeight;
+		}
+
+		private void PopulateItems()
+		{
+			var gameScenes = new List<GameSceneSO>();
+			FindAssetsByType(gameScenes);
+
+			foreach (var gameScene in gameScenes)
+			{
+				var id = gameScene.GetInstanceID();
+				if (itemsMap.TryGetValue(id, out var item))
+				{
+					item.gameScene = gameScene;
+				}
+				else
+				{
+					item = new Item()
+					{
+						gameScene = gameScene,
+						id = gameScene.GetInstanceID()
+					};
+					items.Add(item);
+					itemsMap.Add(id, item);
+				}
+			}
+		}
+
+		private void HandleEvents()
+		{
+			if (Event.current.type == EventType.MouseMove)
+				RepaintAll();
+		}
+
+		private void DrawWindow()
+		{
+			using (var scrollScope = new EditorGUILayout.ScrollViewScope(_windowScrollPosition))
+			{
+				GUILayout.Space(4.0f);
+				_itemsReorderableList.DoLayoutList();
+				_windowScrollPosition = scrollScope.scrollPosition;
+			}
+		}
+
+		private void DrawItem(Rect rect, int index, bool isActive, bool isFocused)
+		{
+			var item = items[index];
+			var gameScene = item.gameScene;
+			if (gameScene != null)
+			{
+				var itemLabelRect = rect;
+				itemLabelRect.width -= kVisibilityButtonSize;
+
+				GUI.Label(itemLabelRect, gameScene.name);
+
+				var visibilityButtonRect = new Rect(rect);
+				visibilityButtonRect.width = kVisibilityButtonSize;
+				visibilityButtonRect.height = kVisibilityButtonSize;
+				visibilityButtonRect.x = itemLabelRect.x + itemLabelRect.width;
+				visibilityButtonRect.y += (rect.height - visibilityButtonRect.height) * 0.5f;
+
+				var visibilityStyle = item.isVisible
+				? _styles.buttonVisibilityOn
+				: _styles.buttonVisibilityOff;
+
+				if (GUI.Button(visibilityButtonRect, GUIContent.none, visibilityStyle))
+				{
+					item.isVisible = !item.isVisible;
+				}
+			}
+			else
+			{
+				_hasEmptyItems = true;
+			}
+		}
+
+		private void DrawItemBackground(Rect rect, int index, bool isActive, bool isFocused)
+		{
+			ReorderableList.defaultBehaviours.DrawElementBackground(rect, index, isActive, isFocused, true);
+			using (ReplaceColor.With(kItemBorderColor))
+			{
+				GUI.Box(rect, GUIContent.none, _styles.itemBorder);
+			}
+		}
+
+		private void RemoveEmptyItemsIfRequired()
+		{
+			if (_hasEmptyItems)
+			{
+				for (int i = items.Count - 1; i >= 0; --i)
+				{
+					var sceneItem = items[i];
+					if (sceneItem == null || sceneItem.gameScene == null)
+					{
+						items.RemoveAt(i);
+						itemsMap.Remove(sceneItem.id);
+					}
+				}
+				items.RemoveAll((x) => x == null || x.gameScene == null);
+			}
+			_hasEmptyItems = false;
+		}
+
+		private void OnGameSceneSOCreated(GameSceneSO _)
+		{
+			RunOnNextUpdate(PopulateItems);
+		}
+
+		private void RunOnNextUpdate(Action action)
+		{
+			void Run()
+			{
+				action?.Invoke();
+				EditorApplication.update -= Run;
+			}
+			EditorApplication.update += Run;
+		}
+
+		private void EnsureStyles()
+		{
+			if (_styles == null)
+			{
+				_styles = new Styles();
+
+				_styles.itemBorder = GUI.skin.GetStyle("HelpBox");
+
+				_styles.buttonVisibilityOn = new GUIStyle(GUI.skin.label);
+				_styles.buttonVisibilityOn.padding = new RectOffset(0, 0, 0, 0);
+				_styles.buttonVisibilityOn.normal.background = EditorGUIUtility.FindTexture("d_scenevis_visible");
+				_styles.buttonVisibilityOn.hover.background = EditorGUIUtility.FindTexture("d_scenevis_visible_hover");
+
+				_styles.buttonVisibilityOff = new GUIStyle(GUI.skin.label);
+				_styles.buttonVisibilityOff.padding = new RectOffset(0, 0, 0, 0);
+				_styles.buttonVisibilityOff.normal.background = EditorGUIUtility.FindTexture("d_scenevis_hidden");
+				_styles.buttonVisibilityOff.hover.background = EditorGUIUtility.FindTexture("d_scenevis_hidden_hover");
+			}
+		}
+	}
+
+	private struct ReplaceColor : IDisposable
+	{
+		public static ReplaceColor With(Color color) => new ReplaceColor(color);
+
+		private Color _oldColor;
+
+		private ReplaceColor(Color color)
+		{
+			_oldColor = GUI.color;
+			GUI.color = color;
+		}
+
+		void IDisposable.Dispose() => GUI.color = _oldColor;
+	}
+
 	[Serializable]
 	private class Item
 	{
@@ -63,11 +288,7 @@ public class SceneSelector : EditorWindow
 	private Styles _styles;
 	private Textures _textures;
 	private Storage _storage;
-	private ReorderableList _itemsReorderableList;
-	private List<Item> _visibleItems = new List<Item>();
-	private List<Item> _hiddenItems = new List<Item>();
 	private Vector2 _windowScrollPosition;
-	private bool _hasEmptyItems;
 	private bool _showHiddenItems;
 
 	private List<Item> items => _storage.items;
@@ -83,142 +304,47 @@ public class SceneSelector : EditorWindow
 	{
 		LoadStorage();
 		LoadTextures();
-		CreateReorderableList();
-		PopulateItems();
-		GameSceneSO.onEnabled += OnGameSceneSOCreated;
+		PreferencesWindow.Open(this);
 	}
 
 	private void OnDisable()
 	{
 		SaveStorage();
-		GameSceneSO.onEnabled -= OnGameSceneSOCreated;
 	}
 
 	private void OnGUI()
 	{
 		EnsureStyles();
-		RemoveEmptyItemsIfRequired();
 		DrawWindow();
-	}
-
-	private void CreateReorderableList()
-	{
-		_itemsReorderableList = new ReorderableList(items, typeof(Item), true, true, false, false);
-		_itemsReorderableList.drawElementCallback = DrawItem;
-		_itemsReorderableList.drawHeaderCallback = DrawListHeader;
-		_itemsReorderableList.elementHeightCallback = GetGameSceneItemHeight;
-	}
-
-	private void PopulateItems()
-	{
-		var gameScenes = new List<GameSceneSO>();
-		FindAssetsByType(gameScenes);
-
-		foreach (var gameScene in gameScenes)
-		{
-			var id = gameScene.GetInstanceID();
-			if (itemsMap.TryGetValue(id, out var item))
-			{
-				item.gameScene = gameScene;
-			}
-			else
-			{
-				item = new Item()
-				{
-					gameScene = gameScene,
-					id = gameScene.GetInstanceID()
-				};
-				items.Add(item);
-				itemsMap.Add(id, item);
-			}
-		}
-	}
-
-	private void DrawListHeader(Rect rect)
-	{ }
-
-	private float GetGameSceneItemHeight(int index)
-	{
-		const float kZeroHeight = 0.0f;
-		const float kNormalHeight = 20.0f;
-		var item = items[index];
-		var isVisible = item.isVisible || _showHiddenItems;
-		return isVisible
-			? kNormalHeight
-			: kZeroHeight;
-	}
-
-	private void DrawItemBackground(Rect rect, int index, bool isActive, bool isFocused)
-	{ }
-
-	private void DrawItem(Rect rect, int index, bool isActive, bool isFocused)
-	{
-		var item = items[index];
-		var gameScene = item.gameScene;
-		if (gameScene != null)
-		{
-			if (item.isVisible || _showHiddenItems)
-			{
-				var visWidth = rect.height;
-
-				var buttonRect = rect;
-				buttonRect.width -= visWidth;
-
-				var visRect = new Rect(rect);
-				visRect.x = buttonRect.x + buttonRect.width;
-				visRect.width = visWidth;
-				visRect.height = visWidth;
-
-				if (GUI.Button(buttonRect, gameScene.name))
-				{
-					OpenScene(gameScene.scenePath);
-				}
-
-				var visibilityIcon = item.isVisible
-				? _textures.visibilityOn
-				: _textures.visibilityOff;
-				if (GUI.Button(visRect, visibilityIcon, _styles.button))
-				{
-					item.isVisible = !item.isVisible;
-				}
-			}
-		}
-		else
-		{
-			_hasEmptyItems = true;
-		}
-	}
-
-	private void RemoveEmptyItemsIfRequired()
-	{
-		if (_hasEmptyItems)
-		{
-			for (int i = items.Count - 1; i >= 0; --i)
-			{
-				var sceneItem = items[i];
-				if (sceneItem == null || sceneItem.gameScene == null)
-				{
-					items.RemoveAt(i);
-					itemsMap.Remove(sceneItem.id);
-				}
-			}
-			items.RemoveAll((x) => x == null || x.gameScene == null);
-		}
-		_hasEmptyItems = false;
-	}
-
-	private void OnGameSceneSOCreated(GameSceneSO _)
-	{
-		RunOnNextUpdate(PopulateItems);
 	}
 
 	private void DrawWindow()
 	{
 		using (var scrollScope = new EditorGUILayout.ScrollViewScope(_windowScrollPosition))
 		{
-			DrawToolbar();
-			_itemsReorderableList.DoLayoutList();
+			GUILayout.Space(4.0f);
+			DrawItems();
 			_windowScrollPosition = scrollScope.scrollPosition;
+		}
+	}
+
+	private void DrawItems()
+	{
+		foreach (var item in items)
+		{
+			DrawItem(item);
+		}
+	}
+
+	private void DrawItem(Item item)
+	{
+		if (item.isVisible)
+		{
+			var gameScene = item.gameScene;
+			if (GUILayout.Button(gameScene.name))
+			{
+				OpenScene(gameScene.scenePath);
+			}
 		}
 	}
 
@@ -236,16 +362,6 @@ public class SceneSelector : EditorWindow
 				_showHiddenItems = !_showHiddenItems;
 			}
 		}
-	}
-
-	private void RunOnNextUpdate(Action action)
-	{
-		void Run()
-		{
-			action?.Invoke();
-			EditorApplication.update -= Run;
-		}
-		EditorApplication.update += Run;
 	}
 
 	private void LoadStorage()
