@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -25,6 +26,13 @@ public abstract class GameSceneSO : ScriptableObject
 
 #if UNITY_EDITOR
 	private SceneAsset prevSceneAsset;
+
+	public static Action<GameSceneSO> onEnabled;
+
+	private void OnEnable()
+	{
+		onEnabled?.Invoke(this);
+	}
 
 	void ISerializationCallbackReceiver.OnBeforeSerialize()
 	{
