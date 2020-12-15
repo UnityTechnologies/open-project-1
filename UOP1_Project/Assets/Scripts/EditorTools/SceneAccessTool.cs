@@ -11,7 +11,7 @@ public class SceneAccessTool : EditorWindow, IHasCustomMenu
 	private SceneAccessHolderSO _inspected;
 	private SerializedObject _serializedObject;
 	private Editor _sceneAccessHolderSOEditor;
-	public enum Layout { List,  Grid}
+	public enum Layout { List, Grid }
 	private Layout _layout;
 	private bool _showOptions = false;
 	private bool _editMode = false;
@@ -44,7 +44,7 @@ public class SceneAccessTool : EditorWindow, IHasCustomMenu
 					EditorGUI.PropertyField(
 						new Rect(rect.x + rect.width - 25, rect.y, 25, EditorGUIUtility.singleLineHeight),
 						element.FindPropertyRelative("visible"), GUIContent.none);
-			};
+				};
 		}
 	}
 	[MenuItem("Tools/SceneAccessTool")]
@@ -56,7 +56,7 @@ public class SceneAccessTool : EditorWindow, IHasCustomMenu
 	{
 		if (_inspected != null)
 		{
-			if(_showOptions)
+			if (_showOptions)
 				ShowOptions();
 			ShowSceneList();
 		}
@@ -130,8 +130,8 @@ public class SceneAccessTool : EditorWindow, IHasCustomMenu
 					{
 						EditorSceneManager.OpenScene(sceneItem.path);
 					}
-					
-					widthCount += gridSize+4;
+
+					widthCount += gridSize + 4;
 
 					if (widthCount > position.width)
 					{
@@ -166,7 +166,7 @@ public class SceneAccessTool : EditorWindow, IHasCustomMenu
 				});
 		}
 		//add the new scenes
-		foreach(SceneAccessHolderSO.SceneInfo sceneInfo in allScene)
+		foreach (SceneAccessHolderSO.SceneInfo sceneInfo in allScene)
 		{
 			if (!_inspected.sceneList.Contains(sceneInfo))
 			{
