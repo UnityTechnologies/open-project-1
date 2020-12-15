@@ -137,7 +137,11 @@ public class ReplaceTool : EditorWindow
 		{
 			var go = objectToReplace[i];
 			Undo.RegisterCompleteObjectUndo(go, "Saving game object state");
-			var inst = Instantiate(replaceObject, go.transform.position, go.transform.rotation, go.transform.parent);
+			var inst = (GameObject)PrefabUtility.InstantiatePrefab(replaceObject);
+			inst.transform.position = go.transform.position;
+			inst.transform.rotation = go.transform.rotation;
+			inst.transform.parent = go.transform.parent;
+
 			inst.transform.localScale = go.transform.localScale;
 			Undo.RegisterCreatedObjectUndo(inst, "Replacement creation.");
 			foreach (Transform child in go.transform)
