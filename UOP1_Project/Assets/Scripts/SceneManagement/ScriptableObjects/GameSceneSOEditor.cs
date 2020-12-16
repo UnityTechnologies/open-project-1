@@ -16,6 +16,11 @@ public abstract partial class GameSceneSO : ScriptableObject, ISerializationCall
 	void ISerializationCallbackReceiver.OnAfterDeserialize()
 	{ }
 
+	private void OnEnable()
+	{
+		PopulateScenePath();
+	}
+
 	private void PopulateScenePath()
 	{
 		if (sceneAsset != null)
