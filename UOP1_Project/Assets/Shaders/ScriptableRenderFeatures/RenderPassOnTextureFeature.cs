@@ -66,9 +66,10 @@ public class RenderPassOnTextureFeature : ScriptableRendererFeature
                 Camera camera = cameraData.camera;
                 if (cameraData.isStereoEnabled)
                     context.StartMultiEye(camera);
-
-				drawSettings.overrideMaterial = m_renderPassMaterial;
-
+				if (m_renderPassMaterial != null)
+				{
+					drawSettings.overrideMaterial = m_renderPassMaterial;
+				}
 				context.DrawRenderers(renderingData.cullResults, ref drawSettings,
                     ref m_FilteringSettings);
 
