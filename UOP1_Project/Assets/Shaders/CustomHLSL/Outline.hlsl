@@ -28,6 +28,7 @@ float InnerOutlineObject(float2 UV, float OutlineThickness, float DepthSensitivi
 	float halfScaleCeil = ceil(OutlineThickness * 0.5);
 	 
 	float2 uvSamples[9];
+	float depthMaskSample[9];
 	float depthSamples[9];
 	float3 normalSamples[9];
 
@@ -39,29 +40,38 @@ float InnerOutlineObject(float2 UV, float OutlineThickness, float DepthSensitivi
 	uvSamples[0] = UV;
 	uvSamples[5] = UV + float2(_CameraDepthTexture_TexelSize.x * halfScaleCeil, 0);
 
-
 	uvSamples[6] = UV + float2(-_CameraDepthTexture_TexelSize.x * halfScaleFloor, -_CameraDepthTexture_TexelSize.y  * halfScaleFloor);
 	uvSamples[7] = UV + float2(0, -_CameraDepthTexture_TexelSize.y  * halfScaleFloor);
 	uvSamples[8] = UV + float2(+_CameraDepthTexture_TexelSize.x * halfScaleCeil, -_CameraDepthTexture_TexelSize.y  * halfScaleFloor);
 
 	for (int i = 0; i < 9; i++)
 	{
+		depthMaskSample[i] = SAMPLE_TEXTURE2D(_CameraDepthOutlineTexture, sampler_CameraDepthTexture, uvSamples[i]).r;
 		depthSamples[i] = SAMPLE_TEXTURE2D(_CameraDepthTexture, sampler_CameraDepthTexture, uvSamples[i]).r;
 		normalSamples[i] = DecodeNormal(SAMPLE_TEXTURE2D(_CameraDepthNormalsTexture, sampler_CameraDepthTexture, uvSamples[i]));
 	}
 
-	// Depth
-	float depthFiniteDifference0 = (-depthSamples[1] - 2 * depthSamples[4] - depthSamples[6] + depthSamples[3] + 2 * depthSamples[5] + depthSamples[8]) / 4;
-	float depthFiniteDifference1 = (-depthSamples[1] - 2 * depthSamples[2] - depthSamples[3] + depthSamples[6] + 2 * depthSamples[7] + depthSamples[8]) / 4;
-	float edgeDepth = sqrt(pow(depthFiniteDifference0, 2) + pow(depthFiniteDifference1, 2)) * 100;
+	bool allSamplesInAndSame = true;
+	float edgeDepth = 0;
 
+	for (int i = 0; i < 9; i++)
+	{
+		allSamplesInAndSame = allSamplesInAndSame && (depthMaskSample[0] == depthMaskSample[i]);
+	}
+	if (allSamplesInAndSame) {
+		// Depth
+		float depthFiniteDifference0 = (-depthSamples[1] - 2 * depthSamples[4] - depthSamples[6] + depthSamples[3] + 2 * depthSamples[5] + depthSamples[8]) / 4;
+		float depthFiniteDifference1 = (-depthSamples[1] - 2 * depthSamples[2] - depthSamples[3] + depthSamples[6] + 2 * depthSamples[7] + depthSamples[8]) / 4;
+		edgeDepth = sqrt(pow(depthFiniteDifference0, 2) + pow(depthFiniteDifference1, 2)) * 100;
 
-	// Thresholding with view direction. Balance normal difference based on the camera direction for flat surface viewed from a grazing angle
-	float NdotV = 1 - dot(2 * normalSamples[0] - 1, ViewDir);
-	float normalThreshold01 = saturate((NdotV - DepthNormalSensitivity) / (1 - DepthNormalSensitivity));
-	float normalThreshold = normalThreshold01 * DepthNormalThresholdScale + 1;
-	float depthThreshold = (1 / DepthSensitivity) * depthSamples[0] * normalThreshold;
-	edgeDepth = edgeDepth > depthThreshold ? 1 : 0;
+		// Thresholding with view direction. Balance normal difference based on the camera direction for flat surface viewed from a grazing angle
+		float NdotV = 1 - dot(2 * normalSamples[0] - 1, ViewDir);
+		float normalThreshold01 = saturate((NdotV - DepthNormalSensitivity) / (1 - DepthNormalSensitivity));
+		float normalThreshold = normalThreshold01 * DepthNormalThresholdScale + 1;
+		float depthThreshold = (1 / DepthSensitivity) * depthSamples[0] * normalThreshold;
+
+		edgeDepth = edgeDepth > depthThreshold ? 1 : 0;
+	}
 
 	// Normals
 	float3 normalFiniteDifference0 = (-normalSamples[1] - 2 * normalSamples[4] - normalSamples[6] + normalSamples[3] + 2 * normalSamples[5] + normalSamples[8]) / 4;
@@ -75,7 +85,6 @@ float InnerOutlineObject(float2 UV, float OutlineThickness, float DepthSensitivi
 
 void OutlineObject_float(float2 UV, float OutlineThickness, float DepthSensitivity, float NormalsSensitivity, float DepthNormalSensitivity, float DepthNormalThresholdScale, float3 ViewDir, out float Out)
 {
-	
 	float screenBiasedTickness = OutlineThickness * _ScreenParams.y / 1080;
 	
 	float2 uvSamples[5];
