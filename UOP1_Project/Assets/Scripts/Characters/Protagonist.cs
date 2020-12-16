@@ -6,6 +6,7 @@ using UnityEngine;
 /// </summary>
 public class Protagonist : MonoBehaviour
 {
+	
 	[SerializeField] private InputReader _inputReader = default;
 	public TransformAnchor gameplayCameraTransform;
 
@@ -17,6 +18,10 @@ public class Protagonist : MonoBehaviour
 	[HideInInspector] public Vector3 movementInput; //Initial input coming from the Protagonist script
 	[HideInInspector] public Vector3 movementVector; //Final movement vector, manipulated by the StateMachine actions
 	[HideInInspector] public ControllerColliderHit lastHit;
+
+	[Header("Event Channels")]
+	[SerializeField] private Vector3ArrayChannelSO _movePlayerChannel;
+	[SerializeField] private TransformEventChannelSO _moveCameraChannel;
 
 	private void OnControllerColliderHit(ControllerColliderHit hit)
 	{
@@ -30,6 +35,8 @@ public class Protagonist : MonoBehaviour
 		_inputReader.jumpCanceledEvent += OnJumpCanceled;
 		_inputReader.moveEvent += OnMove;
 		_inputReader.extraActionEvent += OnExtraAction;
+		if (_movePlayerChannel != null)
+			_movePlayerChannel.OnEventRaised += Teleport;
 		//...
 	}
 
@@ -40,6 +47,8 @@ public class Protagonist : MonoBehaviour
 		_inputReader.jumpCanceledEvent -= OnJumpCanceled;
 		_inputReader.moveEvent -= OnMove;
 		_inputReader.extraActionEvent -= OnExtraAction;
+		if (_movePlayerChannel != null)
+			_movePlayerChannel.OnEventRaised -= Teleport;
 		//...
 	}
 
@@ -47,7 +56,20 @@ public class Protagonist : MonoBehaviour
 	{
 		RecalculateMovement();
 	}
-
+	/// <summary>
+	/// Teleports the protagonist to another location(and rotation).
+	/// </summary>
+	/// <param name="vectors">This Vector3 array must be of length 2. Where elements [0] and [1] are position and rotation respectively.</param>
+	private void Teleport(Vector3[] vectors)
+	{
+		if (vectors.Length == 2)
+		{
+			this.transform.position = vectors[0];
+			this.transform.rotation = Quaternion.Euler(vectors[1]);
+			Physics.SyncTransforms();
+		}
+		
+	}
 	private void RecalculateMovement()
 	{
 		if (gameplayCameraTransform.isSet)

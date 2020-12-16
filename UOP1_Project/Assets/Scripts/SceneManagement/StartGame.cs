@@ -6,12 +6,12 @@
 
 public class StartGame : MonoBehaviour
 {
-	public LoadEventChannelSO onPlayButtonPress;
-	public GameSceneSO[] locationsToLoad;
+	[SerializeField] private LoadSceneChannelSO _onPlayButtonPress;
+	[SerializeField] private LocationSelection _locationToLoad;
 	public bool showLoadScreen;
 
 	public void OnPlayButtonPress()
 	{
-		onPlayButtonPress.RaiseEvent(locationsToLoad, showLoadScreen);
+		_onPlayButtonPress.RaiseEvent(_locationToLoad, showLoadScreen);
 	}
 }

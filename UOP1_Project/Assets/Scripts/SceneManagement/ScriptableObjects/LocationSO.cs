@@ -1,14 +1,10 @@
 ﻿using UnityEngine;
 
-using UnityEngine.Localization;
-/// <summary>
-/// This class contains Settings specific to Locations only
-/// </summary>
-
 [CreateAssetMenu(fileName = "NewLocation", menuName = "Scene Data/Location")]
-public class LocationSO : GameSceneSO
+public class LocationSO : ScriptableObject
 {
-	[Header("Location specific")]
-	public LocalizedString locationName;
-	public int enemiesCount; //Example variable, will change later
+	public string LocationName;
+	public Vector3 LocationPosition, LocationRotation;
+	[TextArea]
+	public string LocationDescription;
 }
