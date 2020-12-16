@@ -123,12 +123,21 @@ public class InputReader : ScriptableObject, GameInput.IGameplayActions, GameInp
 	{
 		gameInput.Dialogues.Enable();
 		gameInput.Gameplay.Disable();
+		gameInput.Menus.Disable();
 	}
 
 	public void EnableGameplayInput()
 	{
 		gameInput.Gameplay.Enable();
 		gameInput.Dialogues.Disable();
+		gameInput.Menus.Disable();
+	}
+
+	public void EnableUIInput()
+	{
+		gameInput.Gameplay.Disable();
+		gameInput.Dialogues.Disable();
+		gameInput.Menus.Enable();
 	}
 
 	public void DisableAllInput()
