@@ -6,9 +6,78 @@ using UnityEditorInternal;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 
-public class SceneSelector : EditorWindow
+public class SceneSelector : EditorWindow, IHasCustomMenu
 {
-	public class PreferencesWindow : EditorWindow
+	private class ColorSelectorWindow : EditorWindow
+	{
+		private static readonly float kCellSize = PreferencesWindow.kColorMarkerFieldSize * 2.0f;
+		private static readonly Vector2Int kCount = new Vector2Int(5, 5);
+
+		private Color[,] _colors;
+		private Item _item;
+
+		public static ColorSelectorWindow Open(Rect rect, Item item)
+		{
+			var window = CreateInstance<ColorSelectorWindow>();
+			window.Init(rect, item);
+			return window;
+		}
+
+		private void Init(Rect rect, Item item)
+		{
+			var size = (Vector2)kCount * kCellSize;
+			ShowAsDropDown(rect, size);
+			_item = item;
+		}
+
+		private void OnEnable()
+		{
+			wantsMouseMove = true;
+			InitColors();
+		}
+
+		private void OnGUI()
+		{
+			RepaintOnMouseMove(this);
+			DrawMarkers();
+		}
+
+		private void DrawMarkers()
+		{
+			var size = new Vector2(kCellSize, kCellSize);
+			for (int x = 0; x < kCount.x; ++x)
+			{
+				for (int y = 0; y < kCount.y; ++y)
+				{
+					var color = _colors[x, y];
+					var position = size * new Vector2(x, y);
+					var rect = new Rect(position, size);
+					if (DrawColorMarker(rect, color, true, true))
+					{
+						_item.color = color;
+						Close();
+					}
+				}
+			}
+		}
+
+		private void InitColors()
+		{
+			var count = kCount.x * kCount.y;
+			_colors = new Color[kCount.x, kCount.y];
+			for (int x = 0; x < kCount.x; ++x)
+			{
+				var h = x * kCount.y;
+				for (int y = 0; y < kCount.y; ++y)
+				{
+					float hue = (float)(h + y) / count;
+					_colors[x, y] = Color.HSVToRGB(hue, 1.0f, 1.0f);
+				}
+			}
+		}
+	}
+
+	private class PreferencesWindow : EditorWindow
 	{
 		private class Styles
 		{
@@ -22,13 +91,14 @@ public class SceneSelector : EditorWindow
 		private const float kItemHeight = 24.0f;
 		private const float kVisibilityButtonSize = 16.0f;
 
+		public static float kColorMarkerFieldSize = Mathf.Ceil(kColorMarkerNormalSize * 1.41f + 8.0f);
 		private static readonly Color kItemBorderColor = new Color(1.0f, 1.0f, 1.0f, 0.16f);
 
 		private SceneSelector _owner;
+		private ColorSelectorWindow _colorSelectorWindow;
 		private ReorderableList _itemsReorderableList;
 		private Styles _styles;
 		private Vector2 _windowScrollPosition;
-		private bool _hasEmptyItems;
 
 		private List<Item> items => _owner._storage.items;
 		private Dictionary<int, Item> itemsMap => _owner._storage.itemsMap;
@@ -43,34 +113,26 @@ public class SceneSelector : EditorWindow
 		private void OnEnable()
 		{
 			wantsMouseMove = true;
-			GameSceneSO.onEnabled += OnGameSceneSOCreated;
 		}
 
 		private void OnDisable()
 		{
 			_owner.SaveStorage();
-			GameSceneSO.onEnabled -= OnGameSceneSOCreated;
+			if (_colorSelectorWindow != null)
+				_colorSelectorWindow.Close();
 		}
 
 		private void Init(SceneSelector owner)
 		{
 			_owner = owner;
 			CreateReorderableList();
-			PopulateItems();
 		}
 
 		private void OnGUI()
 		{
 			EnsureStyles();
-			RemoveEmptyItemsIfRequired();
-			HandleEvents();
+			RepaintOnMouseMove(this);
 			DrawWindow();
-		}
-
-		private void RepaintAll()
-		{
-			Repaint();
-			_owner.Repaint();
 		}
 
 		private void CreateReorderableList()
@@ -78,39 +140,9 @@ public class SceneSelector : EditorWindow
 			_itemsReorderableList = new ReorderableList(items, typeof(Item), true, true, false, false);
 			_itemsReorderableList.drawElementCallback = DrawItem;
 			_itemsReorderableList.drawElementBackgroundCallback = DrawItemBackground;
+			_itemsReorderableList.onReorderCallback = OnReorder;
 			_itemsReorderableList.headerHeight = kHeaderHeight;
 			_itemsReorderableList.elementHeight = kItemHeight;
-		}
-
-		private void PopulateItems()
-		{
-			var gameScenes = new List<GameSceneSO>();
-			FindAssetsByType(gameScenes);
-
-			foreach (var gameScene in gameScenes)
-			{
-				var id = gameScene.GetInstanceID();
-				if (itemsMap.TryGetValue(id, out var item))
-				{
-					item.gameScene = gameScene;
-				}
-				else
-				{
-					item = new Item()
-					{
-						gameScene = gameScene,
-						id = gameScene.GetInstanceID()
-					};
-					items.Add(item);
-					itemsMap.Add(id, item);
-				}
-			}
-		}
-
-		private void HandleEvents()
-		{
-			if (Event.current.type == EventType.MouseMove)
-				RepaintAll();
 		}
 
 		private void DrawWindow()
@@ -129,8 +161,17 @@ public class SceneSelector : EditorWindow
 			var gameScene = item.gameScene;
 			if (gameScene != null)
 			{
+				var colorMarkerRect = rect;
+				colorMarkerRect.width = colorMarkerRect.height;
+
+				if (DrawColorMarker(colorMarkerRect, item.color, true, true))
+				{
+					_colorSelectorWindow = ColorSelectorWindow.Open(GUIUtility.GUIToScreenRect(colorMarkerRect), item);
+				}
+
 				var itemLabelRect = rect;
-				itemLabelRect.width -= kVisibilityButtonSize;
+				itemLabelRect.x += colorMarkerRect.width;
+				itemLabelRect.width -= kVisibilityButtonSize + colorMarkerRect.width;
 
 				GUI.Label(itemLabelRect, gameScene.name);
 
@@ -147,11 +188,8 @@ public class SceneSelector : EditorWindow
 				if (GUI.Button(visibilityButtonRect, GUIContent.none, visibilityStyle))
 				{
 					item.isVisible = !item.isVisible;
+					RepaintOwner();
 				}
-			}
-			else
-			{
-				_hasEmptyItems = true;
 			}
 		}
 
@@ -164,37 +202,14 @@ public class SceneSelector : EditorWindow
 			}
 		}
 
-		private void RemoveEmptyItemsIfRequired()
+		private void OnReorder(ReorderableList _)
 		{
-			if (_hasEmptyItems)
-			{
-				for (int i = items.Count - 1; i >= 0; --i)
-				{
-					var sceneItem = items[i];
-					if (sceneItem == null || sceneItem.gameScene == null)
-					{
-						items.RemoveAt(i);
-						itemsMap.Remove(sceneItem.id);
-					}
-				}
-				items.RemoveAll((x) => x == null || x.gameScene == null);
-			}
-			_hasEmptyItems = false;
+			RepaintOwner();
 		}
 
-		private void OnGameSceneSOCreated(GameSceneSO _)
+		private void RepaintOwner()
 		{
-			RunOnNextUpdate(PopulateItems);
-		}
-
-		private void RunOnNextUpdate(Action action)
-		{
-			void Run()
-			{
-				action?.Invoke();
-				EditorApplication.update -= Run;
-			}
-			EditorApplication.update += Run;
+			_owner.Repaint();
 		}
 
 		private void EnsureStyles()
@@ -239,6 +254,7 @@ public class SceneSelector : EditorWindow
 		public int id;
 		public int order = int.MaxValue;
 		public bool isVisible = true;
+		public Color color = Color.red;
 
 		[NonSerialized]
 		public GameSceneSO gameScene;
@@ -246,7 +262,7 @@ public class SceneSelector : EditorWindow
 
 	private class Styles
 	{
-		public GUIStyle button;
+		public GUIStyle item;
 	}
 
 	private class Textures
@@ -284,12 +300,18 @@ public class SceneSelector : EditorWindow
 	}
 
 	private const string kPreferencesKey = "uop1.SceneSelector.Preferences";
+	private const float kColorMarkerNormalSize = 4.0f;
+	private const float kColorMarkerHoveredSize = 6.0f;
+	private const int kItemContentLeftPadding = 32;
+	private static readonly GUIContent kOpenPreferencesItemContent = new GUIContent("Open Preferences");
+	private static readonly Color kColorMarkerLightTint = new Color(1.0f, 1.0f, 1.0f, 0.32f);
+	private static readonly Color kColorMarkerDarkTint = Color.gray;
 
 	private Styles _styles;
-	private Textures _textures;
 	private Storage _storage;
+	private PreferencesWindow _preferencesWindow;
 	private Vector2 _windowScrollPosition;
-	private bool _showHiddenItems;
+	private bool _hasEmptyItems;
 
 	private List<Item> items => _storage.items;
 	private Dictionary<int, Item> itemsMap => _storage.itemsMap;
@@ -302,19 +324,25 @@ public class SceneSelector : EditorWindow
 
 	private void OnEnable()
 	{
+		wantsMouseMove = true;
 		LoadStorage();
-		LoadTextures();
-		PreferencesWindow.Open(this);
+		PopulateItems();
+		GameSceneSO.onEnabled += OnGameSceneSOCreated;
 	}
 
 	private void OnDisable()
 	{
+		if (_preferencesWindow != null)
+			_preferencesWindow.Close();
 		SaveStorage();
+		GameSceneSO.onEnabled -= OnGameSceneSOCreated;
 	}
 
 	private void OnGUI()
 	{
 		EnsureStyles();
+		RepaintOnMouseMove(this);
+		RemoveEmptyItemsIfRequired();
 		DrawWindow();
 	}
 
@@ -341,25 +369,21 @@ public class SceneSelector : EditorWindow
 		if (item.isVisible)
 		{
 			var gameScene = item.gameScene;
-			if (GUILayout.Button(gameScene.name))
+			if (gameScene != null)
 			{
-				OpenScene(gameScene.scenePath);
+				if (GUILayout.Button(gameScene.name, _styles.item))
+				{
+					OpenScene(gameScene.scenePath);
+				}
+
+				var colorMarkerRect = GUILayoutUtility.GetLastRect();
+				colorMarkerRect.width = colorMarkerRect.height;
+				colorMarkerRect.x += (_styles.item.padding.left - colorMarkerRect.width) * 0.5f;
+				DrawColorMarker(colorMarkerRect, item.color);
 			}
-		}
-	}
-
-	private void DrawToolbar()
-	{
-		using (var horizontal = new EditorGUILayout.HorizontalScope())
-		{
-			GUILayout.FlexibleSpace();
-
-			var visibilityIcon = _showHiddenItems
-				? _textures.visibilityOn
-				: _textures.visibilityOff;
-			if (GUILayout.Button(visibilityIcon, _styles.button))
+			else
 			{
-				_showHiddenItems = !_showHiddenItems;
+				_hasEmptyItems = true;
 			}
 		}
 	}
@@ -380,26 +404,113 @@ public class SceneSelector : EditorWindow
 		EditorPrefs.SetString(kPreferencesKey, preferencesJSON);
 	}
 
+	private void PopulateItems()
+	{
+		var gameScenes = new List<GameSceneSO>();
+		FindAssetsByType(gameScenes);
+
+		foreach (var gameScene in gameScenes)
+		{
+			var id = gameScene.GetInstanceID();
+			if (itemsMap.TryGetValue(id, out var item))
+			{
+				item.gameScene = gameScene;
+			}
+			else
+			{
+				item = new Item()
+				{
+					gameScene = gameScene,
+					id = gameScene.GetInstanceID()
+				};
+				items.Add(item);
+				itemsMap.Add(id, item);
+			}
+		}
+	}
+
+	private void RemoveEmptyItemsIfRequired()
+	{
+		if (_hasEmptyItems)
+		{
+			for (int i = items.Count - 1; i >= 0; --i)
+			{
+				var sceneItem = items[i];
+				if (sceneItem == null || sceneItem.gameScene == null)
+				{
+					items.RemoveAt(i);
+					itemsMap.Remove(sceneItem.id);
+				}
+			}
+			items.RemoveAll((x) => x == null || x.gameScene == null);
+		}
+		_hasEmptyItems = false;
+	}
+
+	private void OnGameSceneSOCreated(GameSceneSO _)
+	{
+		RunOnNextUpdate(PopulateItems);
+	}
+
+	private void RunOnNextUpdate(Action action)
+	{
+		void Run()
+		{
+			action?.Invoke();
+			EditorApplication.update -= Run;
+		}
+		EditorApplication.update += Run;
+	}
+
 	private void EnsureStyles()
 	{
 		if (_styles == null)
 		{
 			_styles = new Styles();
 
-			_styles.button = new GUIStyle(GUI.skin.button);
-			_styles.button.padding = new RectOffset(0, 0, 0, 0);
+			_styles.item = "MenuItem";
+			_styles.item.padding.left = kItemContentLeftPadding;
 		}
 	}
 
-	private void LoadTextures()
+	private void OpenPreferences()
 	{
-		if (_textures == null)
-		{
-			_textures = new Textures();
+		_preferencesWindow = PreferencesWindow.Open(this);
+	}
 
-			_textures.visibilityOn = EditorGUIUtility.FindTexture("d_scenevis_visible");
-			_textures.visibilityOff = EditorGUIUtility.FindTexture("d_scenevis_hidden");
-		}
+	private static void RepaintOnMouseMove(EditorWindow window)
+	{
+		if (Event.current.type == EventType.MouseMove)
+			window.Repaint();
+	}
+
+	private static bool DrawColorMarker(Rect rect, Color color, bool isClickable = false, bool isHoverable = false)
+	{
+		bool isClicked = false;
+		if (isClickable)
+			isClicked = GUI.Button(rect, GUIContent.none, GUIStyle.none);
+
+		var currentEvent = Event.current;
+		var isHovered = isHoverable && rect.Contains(currentEvent.mousePosition);
+		var targetSize = isHovered ? kColorMarkerHoveredSize : kColorMarkerNormalSize;
+
+		var size = rect.size;
+		rect.size = new Vector2(targetSize, targetSize);
+		rect.position += (size - rect.size) * 0.5f;
+
+		Rect shadowRect = rect;
+		shadowRect.position -= Vector2.one;
+		shadowRect.size += Vector2.one;
+		Rect lightRect = rect;
+		lightRect.size += Vector2.one;
+
+		GUIUtility.RotateAroundPivot(45.0f, rect.center);
+		EditorGUI.DrawRect(shadowRect, color * kColorMarkerDarkTint);
+		EditorGUI.DrawRect(lightRect, kColorMarkerLightTint);
+		EditorGUI.DrawRect(rect, color);
+		GUIUtility.RotateAroundPivot(-45.0f, rect.center);
+
+		return isClicked;
 	}
 
 	private static void OpenScene(string path)
@@ -425,6 +536,11 @@ public class SceneSelector : EditorWindow
 			}
 		}
 		return foundAssetsCount;
+	}
+
+	void IHasCustomMenu.AddItemsToMenu(GenericMenu menu)
+	{
+		menu.AddItem(kOpenPreferencesItemContent, false, OpenPreferences);
 	}
 }
 
