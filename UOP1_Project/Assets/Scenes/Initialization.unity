@@ -406,13 +406,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6b928d1d6f59854499ed82bdeef2305, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _initializationScene: {fileID: 11400000, guid: c2119785ce96367428081d6eee0d932b,
-    type: 2}
-  _mainMenuScenes:
-  - {fileID: 11400000, guid: 431ff81b74b48fb4d9301fb76ca633dd, type: 2}
-  _loadingInterface: {fileID: 363619424}
-  _loadingProgressBar: {fileID: 841012435}
-  _loadEventChannel: {fileID: 11400000, guid: 00e3063edc5902e40832ea618644c597, type: 2}
+  _spawnPoint: {fileID: 11400000, guid: 7ab970217bab5bc4bba9183c38c812ba, type: 2}
+  _initializationScene:
+    SceneIndex: 0
+    LocationIndex: 0
+  _mainMenuScene:
+    SceneIndex: 1
+    LocationIndex: 0
+  _loadSceneChannel: {fileID: 11400000, guid: fe0bea873fba39d4aaa7eede5db3b036, type: 2}
+  _movePlayerChannel: {fileID: 11400000, guid: 989a9878817b75449b6e47266abae8f2, type: 2}
 --- !u!4 &1242953037
 Transform:
   m_ObjectHideFlags: 0
@@ -421,7 +423,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1242953035}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 10.11, y: 5.3500004, z: 29.12}
+  m_LocalPosition: {x: 9.75, y: 5.3500004, z: 29.12}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}

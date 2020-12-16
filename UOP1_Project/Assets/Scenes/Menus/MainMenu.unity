@@ -135,6 +135,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 40564194958535909, guid: 54d1f8b93400ea64d97c276fab375df3,
         type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 40564194958535909, guid: 54d1f8b93400ea64d97c276fab375df3,
+        type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -150,6 +155,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 40564194958535909, guid: 54d1f8b93400ea64d97c276fab375df3,
         type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 40564194958535909, guid: 54d1f8b93400ea64d97c276fab375df3,
+        type: 3}
       propertyPath: m_LocalRotation.x
       value: 0
       objectReference: {fileID: 0}
@@ -161,16 +171,6 @@ PrefabInstance:
     - target: {fileID: 40564194958535909, guid: 54d1f8b93400ea64d97c276fab375df3,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 40564194958535909, guid: 54d1f8b93400ea64d97c276fab375df3,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 40564194958535909, guid: 54d1f8b93400ea64d97c276fab375df3,
-        type: 3}
-      propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 40564194958535909, guid: 54d1f8b93400ea64d97c276fab375df3,
@@ -524,7 +524,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -39.3}
+  m_AnchoredPosition: {x: 0, y: -39.30005}
   m_SizeDelta: {x: 0, y: 441.28995}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1228641981
@@ -1036,10 +1036,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45ecefb9fe27f1f4b8cf3ecc3fad707c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  onPlayButtonPress: {fileID: 11400000, guid: 00e3063edc5902e40832ea618644c597, type: 2}
-  locationsToLoad:
-  - {fileID: 11400000, guid: 2f386bbc670c05145834a0f9c7d55798, type: 2}
-  showLoadScreen: 1
+  _onPlayButtonPress: {fileID: 11400000, guid: fe0bea873fba39d4aaa7eede5db3b036, type: 2}
+  _locationToLoad:
+    SceneIndex: 2
+    LocationIndex: 1
+  showLoadScreen: 0
 --- !u!1 &2140469179
 GameObject:
   m_ObjectHideFlags: 0
