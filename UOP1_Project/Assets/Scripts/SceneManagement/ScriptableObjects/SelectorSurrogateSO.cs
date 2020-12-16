@@ -15,7 +15,7 @@ public class SelectorSurrogateSO : ScriptableObject
 		_instance = this;
 	}
 	[RuntimeInitializeOnLoadMethod]
-	private static void Initialize()
+	public static void Initialize()
 	{
 		_instance = Resources.LoadAll<SelectorSurrogateSO>("Editor")[0];
 	}

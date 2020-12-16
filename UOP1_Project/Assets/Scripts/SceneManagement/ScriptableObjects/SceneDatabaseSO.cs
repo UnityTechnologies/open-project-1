@@ -14,7 +14,7 @@ public class SceneDatabaseSO : ScriptableObject
 		_instance = this;
 	}
 	[RuntimeInitializeOnLoadMethod]
-	private static void Initialize ()
+	public static void Initialize ()
 	{
 		_instance = Resources.LoadAll<SceneDatabaseSO>("Databases")[0];
 	}
