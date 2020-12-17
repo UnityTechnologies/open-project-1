@@ -11,22 +11,26 @@ public class SceneSelector : EditorWindow, IHasCustomMenu
 	private class ColorSelectorWindow : EditorWindow
 	{
 		private static readonly float kCellSize = PreferencesWindow.kColorMarkerFieldSize * 2.0f;
+		private static readonly Color kCellBackColor = new Color(0.0f, 0.0f, 0.0f, 0.1f);
+		private static readonly Vector2 kCellOffset = new Vector2(1.0f, 1.0f);
 		private static readonly Vector2Int kCount = new Vector2Int(5, 5);
 
+		private PreferencesWindow _owner;
 		private Color[,] _colors;
 		private Item _item;
 
-		public static ColorSelectorWindow Open(Rect rect, Item item)
+		public static ColorSelectorWindow Open(Rect rect, PreferencesWindow owner, Item item)
 		{
 			var window = CreateInstance<ColorSelectorWindow>();
-			window.Init(rect, item);
+			window.Init(rect, owner, item);
 			return window;
 		}
 
-		private void Init(Rect rect, Item item)
+		private void Init(Rect rect, PreferencesWindow owner, Item item)
 		{
 			var size = (Vector2)kCount * kCellSize;
 			ShowAsDropDown(rect, size);
+			_owner = owner;
 			_item = item;
 		}
 
@@ -52,9 +56,16 @@ public class SceneSelector : EditorWindow, IHasCustomMenu
 					var color = _colors[x, y];
 					var position = size * new Vector2(x, y);
 					var rect = new Rect(position, size);
+					{
+						var cellBackRect = rect;
+						cellBackRect.position += kCellOffset;
+						cellBackRect.size -= kCellOffset * 2.0f;
+						EditorGUI.DrawRect(cellBackRect, kCellBackColor);
+					}
 					if (DrawColorMarker(rect, color, true, true))
 					{
 						_item.color = color;
+						_owner.RepaintAll();
 						Close();
 					}
 				}
@@ -101,7 +112,7 @@ public class SceneSelector : EditorWindow, IHasCustomMenu
 		private Vector2 _windowScrollPosition;
 
 		private List<Item> items => _owner._storage.items;
-		private Dictionary<int, Item> itemsMap => _owner._storage.itemsMap;
+		private Dictionary<string, Item> itemsMap => _owner._storage.itemsMap;
 
 		public static PreferencesWindow Open(SceneSelector owner)
 		{
@@ -122,17 +133,23 @@ public class SceneSelector : EditorWindow, IHasCustomMenu
 				_colorSelectorWindow.Close();
 		}
 
-		private void Init(SceneSelector owner)
-		{
-			_owner = owner;
-			CreateReorderableList();
-		}
-
 		private void OnGUI()
 		{
 			EnsureStyles();
 			RepaintOnMouseMove(this);
 			DrawWindow();
+		}
+
+		public void RepaintAll()
+		{
+			RepaintOwner();
+			Repaint();
+		}
+
+		private void Init(SceneSelector owner)
+		{
+			_owner = owner;
+			CreateReorderableList();
 		}
 
 		private void CreateReorderableList()
@@ -166,7 +183,8 @@ public class SceneSelector : EditorWindow, IHasCustomMenu
 
 				if (DrawColorMarker(colorMarkerRect, item.color, true, true))
 				{
-					_colorSelectorWindow = ColorSelectorWindow.Open(GUIUtility.GUIToScreenRect(colorMarkerRect), item);
+					var colorSelectorRect = GUIUtility.GUIToScreenRect(colorMarkerRect);
+					_colorSelectorWindow = ColorSelectorWindow.Open(colorSelectorRect, this, item);
 				}
 
 				var itemLabelRect = rect;
@@ -251,10 +269,10 @@ public class SceneSelector : EditorWindow, IHasCustomMenu
 	[Serializable]
 	private class Item
 	{
-		public int id;
+		public string guid;
 		public int order = int.MaxValue;
 		public bool isVisible = true;
-		public Color color = Color.red;
+		public Color color = Color.clear;
 
 		[NonSerialized]
 		public GameSceneSO gameScene;
@@ -278,7 +296,7 @@ public class SceneSelector : EditorWindow, IHasCustomMenu
 		public List<Item> items = new List<Item>();
 
 		[NonSerialized]
-		public Dictionary<int, Item> itemsMap = new Dictionary<int, Item>();
+		public Dictionary<string, Item> itemsMap = new Dictionary<string, Item>();
 
 		void ISerializationCallbackReceiver.OnBeforeSerialize()
 		{
@@ -294,7 +312,7 @@ public class SceneSelector : EditorWindow, IHasCustomMenu
 			items.OrderBy(x => x.order);
 			foreach (var item in items)
 			{
-				itemsMap.Add(item.id, item);
+				itemsMap.Add(item.guid, item);
 			}
 		}
 	}
@@ -303,9 +321,16 @@ public class SceneSelector : EditorWindow, IHasCustomMenu
 	private const float kColorMarkerNormalSize = 4.0f;
 	private const float kColorMarkerHoveredSize = 6.0f;
 	private const int kItemContentLeftPadding = 32;
-	private static readonly GUIContent kOpenPreferencesItemContent = new GUIContent("Open Preferences");
-	private static readonly Color kColorMarkerLightTint = new Color(1.0f, 1.0f, 1.0f, 0.32f);
 	private static readonly Color kColorMarkerDarkTint = Color.gray;
+	private static readonly Color kColorMarkerLightTint = new Color(1.0f, 1.0f, 1.0f, 0.32f);
+	private static readonly GUIContent kOpenPreferencesItemContent = new GUIContent("Open Preferences");
+	private static readonly Dictionary<Type, Color> kDefaultMarkerColors = new Dictionary<Type, Color>()
+	{
+		{ typeof(InitializationSO), Color.magenta },
+		{ typeof(LocationSO), Color.green },
+		{ typeof(MenuSO), Color.cyan },
+	};
+	
 
 	private Styles _styles;
 	private Storage _storage;
@@ -314,7 +339,7 @@ public class SceneSelector : EditorWindow, IHasCustomMenu
 	private bool _hasEmptyItems;
 
 	private List<Item> items => _storage.items;
-	private Dictionary<int, Item> itemsMap => _storage.itemsMap;
+	private Dictionary<string, Item> itemsMap => _storage.itemsMap;
 
 	[MenuItem("Window/Scene Selector", false, 100)]
 	private static void Open()
@@ -383,6 +408,7 @@ public class SceneSelector : EditorWindow, IHasCustomMenu
 			}
 			else
 			{
+				// In case GameSceneSO was removed (see RemoveEmptyItemsIfRequired)
 				_hasEmptyItems = true;
 			}
 		}
@@ -411,20 +437,23 @@ public class SceneSelector : EditorWindow, IHasCustomMenu
 
 		foreach (var gameScene in gameScenes)
 		{
-			var id = gameScene.GetInstanceID();
-			if (itemsMap.TryGetValue(id, out var item))
+			if (AssetDatabase.TryGetGUIDAndLocalFileIdentifier(gameScene, out var guid, out long _))
 			{
-				item.gameScene = gameScene;
-			}
-			else
-			{
-				item = new Item()
+				if (itemsMap.TryGetValue(guid, out var item))
 				{
-					gameScene = gameScene,
-					id = gameScene.GetInstanceID()
-				};
-				items.Add(item);
-				itemsMap.Add(id, item);
+					item.gameScene = gameScene;
+				}
+				else
+				{
+					item = new Item()
+					{
+						gameScene = gameScene,
+						guid = guid,
+						color = GetDefaultColor(gameScene)
+					};
+					items.Add(item);
+					itemsMap.Add(guid, item);
+				}
 			}
 		}
 	}
@@ -439,10 +468,9 @@ public class SceneSelector : EditorWindow, IHasCustomMenu
 				if (sceneItem == null || sceneItem.gameScene == null)
 				{
 					items.RemoveAt(i);
-					itemsMap.Remove(sceneItem.id);
+					itemsMap.Remove(sceneItem.guid);
 				}
 			}
-			items.RemoveAll((x) => x == null || x.gameScene == null);
 		}
 		_hasEmptyItems = false;
 	}
@@ -521,6 +549,14 @@ public class SceneSelector : EditorWindow, IHasCustomMenu
 		}
 	}
 
+	private static Color GetDefaultColor(GameSceneSO gameScene)
+	{
+		var type = gameScene.GetType();
+		if (kDefaultMarkerColors.TryGetValue(type, out var color))
+			return color;
+		return Color.red;
+	}
+
 	private static int FindAssetsByType<T>(List<T> assets) where T : UnityEngine.Object
 	{
 		int foundAssetsCount = 0;
@@ -544,11 +580,14 @@ public class SceneSelector : EditorWindow, IHasCustomMenu
 	}
 }
 
-public static class KeyValuePairExtension
+namespace SceneSelectorInternal
 {
-	public static void Deconstruct<T1, T2>(this KeyValuePair<T1, T2> tuple, out T1 key, out T2 value)
+	public static class KeyValuePairExtension
 	{
-		key = tuple.Key;
-		value = tuple.Value;
+		public static void Deconstruct<T1, T2>(this KeyValuePair<T1, T2> tuple, out T1 key, out T2 value)
+		{
+			key = tuple.Key;
+			value = tuple.Value;
+		}
 	}
 }
