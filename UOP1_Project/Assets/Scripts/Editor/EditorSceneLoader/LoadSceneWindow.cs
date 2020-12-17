@@ -8,11 +8,14 @@ using UnityEngine.SceneManagement;
 class LoadSceneWindow : EditorWindow 
 {
     [SerializeField]
-    public AllScenesHolderSO scenesData;
+    public static AllScenesHolderSO scenesData;
 
     public SceneButtons[] sceneButtons = null;
 
     Vector2 scrollView;
+
+    const string NO_SCENES_MESSAGE = "There are no Scenes Assigned in the provided Scene Data";
+    const string NOT_ASSINGED_MESSAGE = "There is no Scene Data Asssigned";
 
     [MenuItem("ChopChop/Scene Management/Scene Loader Window")]
     public static void ShowWindow() 
@@ -20,27 +23,52 @@ class LoadSceneWindow : EditorWindow
         EditorWindow.GetWindow(typeof(LoadSceneWindow), false, "Load A Scene", true);
     }
 
+    void OnEnable()
+    {
+        LoadSceneData(scenesData);
+    }
+
     void OnGUI() 
     {
-        GUILayout.Space(30);
+        GUILayout.Space(20);
+
+        EditorGUI.BeginChangeCheck();
         scenesData = (AllScenesHolderSO) EditorGUILayout.ObjectField("Scenes Index", scenesData, typeof(AllScenesHolderSO), false);
+        if (EditorGUI.EndChangeCheck())
+        {
+            LoadSceneData(scenesData);
+        }
+        
         GUILayout.Space(15);
-        GUILayout.Label("A small Scene Loader Window.", EditorStyles.boldLabel);
+        GUILayout.Label("A small Scene Loader Window.", EditorStyles.whiteLargeLabel);
 
         scrollView = EditorGUILayout.BeginScrollView(scrollView);
 
+        LoadSceneData(scenesData);
+
+        EditorGUILayout.EndScrollView();
+    }
+
+    public void LoadSceneData(AllScenesHolderSO sceneData)
+    {
         if (scenesData == null)
-            return;
-        
-        if (sceneButtons == null)
         {
-            sceneButtons = new SceneButtons[scenesData.Scenes.Length];
-            for (int i = 0; i < sceneButtons.Length; i++)
-            {
-                sceneButtons[i] = new SceneButtons();
-                sceneButtons[i].sceneName = scenesData.Scenes[i].sceneDisplayName;
-                sceneButtons[i].scenePath = scenesData.Scenes[i].scenePath;
-            }
+            EditorGUILayout.HelpBox(NOT_ASSINGED_MESSAGE, MessageType.Info);
+            return;
+        }
+
+        if (sceneData.Scenes.Length == 0 )
+        {
+            EditorGUILayout.HelpBox(NO_SCENES_MESSAGE, MessageType.Info);
+            return;
+        }
+
+        sceneButtons = new SceneButtons[scenesData.Scenes.Length];
+        for (int i = 0; i < sceneButtons.Length; i++)
+        {
+            sceneButtons[i] = new SceneButtons();
+            sceneButtons[i].sceneName = scenesData.Scenes[i].scene.name;
+            sceneButtons[i].scenePath = scenesData.Scenes[i].scenePath;
         }
 
         for (int i = 0; i < sceneButtons.Length; i++)
@@ -54,9 +82,8 @@ class LoadSceneWindow : EditorWindow
                 GUILayout.Space(20);
             }
         }
-
-        EditorGUILayout.EndScrollView();
     }
+    
 }
 
 class SceneButtons
@@ -68,6 +95,5 @@ class SceneButtons
     public void PressButton()
     {
         EditorSceneManager.OpenScene(scenePath);
-        //Debug.Log(scenePath);
     }
 }
