@@ -18,6 +18,8 @@ public abstract partial class GameSceneSO : ScriptableObject, ISerializationCall
 
 	private void OnEnable()
 	{
+		// In case domain was not reloaded after entering play mode
+		prevSceneAsset = null;
 		PopulateScenePath();
 	}
 
