@@ -7,7 +7,7 @@
 public class LocationExit : MonoBehaviour
 {
 	[Header("Loading settings")]
-	[SerializeField] private LocationSelection _locationToLoad;
+	[SerializeField] private PointSelection _locationToLoad;
 	[SerializeField] private bool _showLoadScreen = default;
 
 	[Header("Broadcasting on")]

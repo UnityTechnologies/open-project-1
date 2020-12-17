@@ -6,9 +6,9 @@ using UnityEngine.Events;
 [CreateAssetMenu(menuName = "Events/Load Scene Channel")]
 public class LoadSceneChannelSO : ScriptableObject
 {
-	public UnityAction<LocationSelection, bool> OnLoadingRequested;
+	public UnityAction<PointSelection, bool> OnLoadingRequested;
 
-	public void RaiseEvent(LocationSelection locationToLoad, bool showLoadingScreen)
+	public void RaiseEvent(PointSelection locationToLoad, bool showLoadingScreen)
 	{
 		if (OnLoadingRequested != null)
 		{

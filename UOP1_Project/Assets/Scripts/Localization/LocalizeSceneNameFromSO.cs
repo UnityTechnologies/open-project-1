@@ -6,7 +6,7 @@ public class LocalizeSceneNameFromSO : MonoBehaviour
 {
 	[SerializeField] LocalizeStringEvent localizationEvent = default;
 
-	[SerializeField] LocationSO SO = default;
+	[SerializeField] PointSO SO = default;
 
 	private void Start()
 	{

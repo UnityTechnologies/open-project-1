@@ -8,7 +8,7 @@ public class DatabaseInitialization : MonoBehaviour
 {
 	void Awake()
 	{
-		SceneDatabaseSO.Initialize();
+		LocationDatabaseSO.Initialize();
 		SelectorSurrogateSO.Initialize();
 	}
 }

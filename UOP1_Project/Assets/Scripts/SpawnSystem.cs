@@ -9,7 +9,7 @@ public class SpawnSystem : MonoBehaviour
 	[Header("Asset References")]
 	[SerializeField] private Protagonist _playerPrefab = default;
 	[SerializeField] private TransformEventChannelSO _playerInstantiatedChannel = default;
-	[SerializeField] private SpawnLocationSO _spawnLocation = default;
+	[SerializeField] private SpawnPointSO _spawnLocation = default;
 
 	void Start()
 	{

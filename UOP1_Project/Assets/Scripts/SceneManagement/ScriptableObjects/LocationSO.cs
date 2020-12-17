@@ -1,10 +1,12 @@
 ﻿using UnityEngine;
 
-[CreateAssetMenu(fileName = "NewLocation", menuName = "Scene Data/Location")]
-public class LocationSO : ScriptableObject
+/// <summary>
+/// This class contains Settings specific to Locations only
+/// </summary>
+
+[CreateAssetMenu(fileName = "NewLocationData", menuName = "Scene Data/LocationData")]
+public class LocationSO : BaseSceneSO
 {
-	public string LocationName;
-	public Vector3 LocationPosition, LocationRotation;
-	[TextArea]
-	public string LocationDescription;
+	[Header("Points")]
+	public PointSO[] Points;
 }

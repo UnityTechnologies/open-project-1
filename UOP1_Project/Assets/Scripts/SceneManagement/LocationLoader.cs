@@ -12,10 +12,10 @@ using UnityEngine.UI;
 public class LocationLoader : MonoBehaviour
 {
 	[Tooltip("Stores the spawn point location for the spawn system to use.")]
-	[SerializeField] private SpawnLocationSO _spawnPoint;
-	[SerializeField] private LocationSelection _initializationScene;
+	[SerializeField] private SpawnPointSO _spawnPoint;
+	[SerializeField] private PointSelection _initializationScene;
 
-	[SerializeField] private LocationSelection _mainMenuScene;
+	[SerializeField] private PointSelection _mainMenuScene;
 
 	[Header("Load Event")]
 	[SerializeField] private LoadSceneChannelSO _loadSceneChannel = default;
@@ -24,7 +24,7 @@ public class LocationLoader : MonoBehaviour
 
 	private AsyncOperation _loadingOperation;
 	private List<Scene> _scenesToUnload = new List<Scene>();
-	private SceneSO _activeScene;
+	private LocationSO _activeScene;
 
 
 	private Coroutine runningLoader = null;
@@ -48,11 +48,11 @@ public class LocationLoader : MonoBehaviour
 		}
 	}
 
-	private void LoadScene(LocationSelection selection, bool showLoadingScreen)
+	private void LoadScene(PointSelection selection, bool showLoadingScreen)
 	{
 		if (selection != null)
 		{
-			_activeScene = SceneDatabaseSO.Instance.Scenes[selection.SceneIndex];
+			_activeScene = LocationDatabaseSO.Instance.Locations[selection.LocationIndex];
 			AddScenesToUnload();
 			UnloadScenes();
 			_spawnPoint.Location = selection;
@@ -86,7 +86,7 @@ public class LocationLoader : MonoBehaviour
 		for (int i = 0; i < SceneManager.sceneCount; i++)
 		{
 			Scene scene = SceneManager.GetSceneAt(i);
-			if (scene.name != SceneDatabaseSO.Instance.Scenes[_initializationScene.SceneIndex].SceneName && scene.name != _activeScene.name)
+			if (scene.name != LocationDatabaseSO.Instance.Locations[_initializationScene.LocationIndex].SceneName && scene.name != _activeScene.name)
 			{
 				_scenesToUnload.Add(scene);
 			}

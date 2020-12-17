@@ -7,7 +7,7 @@
 public class StartGame : MonoBehaviour
 {
 	[SerializeField] private LoadSceneChannelSO _onPlayButtonPress;
-	[SerializeField] private LocationSelection _locationToLoad;
+	[SerializeField] private PointSelection _locationToLoad;
 	public bool showLoadScreen;
 
 	public void OnPlayButtonPress()
