@@ -87,8 +87,8 @@ public class CameraManager : MonoBehaviour
 		if (isDeviceMouse && !_isRMBPressed)
 			return;
 
-		freeLookVCam.m_XAxis.m_InputAxisValue = cameraMovement.x * Time.smoothDeltaTime * speed;
-		freeLookVCam.m_YAxis.m_InputAxisValue = cameraMovement.y * Time.smoothDeltaTime * speed;
+		freeLookVCam.m_XAxis.m_InputAxisValue = cameraMovement.x * Time.smoothDeltaTime * speed * 0.2f;
+		freeLookVCam.m_YAxis.m_InputAxisValue = cameraMovement.y * Time.smoothDeltaTime * speed * 0.2f;
 	}
 
 	private void OnFrameObjectEvent(Transform value)

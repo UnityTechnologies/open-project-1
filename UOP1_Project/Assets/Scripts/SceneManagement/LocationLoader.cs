@@ -136,14 +136,14 @@ public class LocationLoader : MonoBehaviour
 	/// <summary>
 	/// This function checks if a scene is already loaded
 	/// </summary>
-	/// <param name="sceneName"></param>
+	/// <param name="scenePath"></param>
 	/// <returns>bool</returns>
-	private bool IsSceneLoaded(string sceneName)
+	private bool IsSceneLoaded(string scenePath)
 	{
 		for (int i = 0; i < SceneManager.sceneCount; i++)
 		{
 			Scene scene = SceneManager.GetSceneAt(i);
-			if (scene.name == sceneName)
+			if (scene.path == scenePath)
 			{
 				return true;
 			}
