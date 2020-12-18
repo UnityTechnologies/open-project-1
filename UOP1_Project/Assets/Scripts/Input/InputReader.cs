@@ -16,10 +16,12 @@ public class InputReader : ScriptableObject, GameInput.IGameplayActions, GameInp
 	public event UnityAction<Vector2, bool> cameraMoveEvent;
 	public event UnityAction enableMouseControlCameraEvent;
 	public event UnityAction disableMouseControlCameraEvent;
+	public event UnityAction startedRunning;
+	public event UnityAction stoppedRunning;
 
 	// Dialogue
-	public event UnityAction advanceDialogueEvent = delegate { };
-	public event UnityAction onMoveSelectionEvent = delegate { };
+	public event UnityAction advanceDialogueEvent;
+	public event UnityAction onMoveSelectionEvent;
 
 	private GameInput gameInput;
 
@@ -77,6 +79,19 @@ public class InputReader : ScriptableObject, GameInput.IGameplayActions, GameInp
 		if (moveEvent != null)
 		{
 			moveEvent.Invoke(context.ReadValue<Vector2>());
+		}
+	}
+
+	public void OnRun(InputAction.CallbackContext context)
+	{
+		switch (context.phase)
+		{
+			case InputActionPhase.Performed:
+				startedRunning?.Invoke();
+				break;
+			case InputActionPhase.Canceled:
+				stoppedRunning?.Invoke();
+				break;
 		}
 	}
 

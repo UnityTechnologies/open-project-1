@@ -17,6 +17,7 @@ public class Protagonist : MonoBehaviour
 	[HideInInspector] public Vector3 movementInput; //Initial input coming from the Protagonist script
 	[HideInInspector] public Vector3 movementVector; //Final movement vector, manipulated by the StateMachine actions
 	[HideInInspector] public ControllerColliderHit lastHit;
+	[HideInInspector] public bool isRunning; // Used when using the keyboard to run, brings the normalised speed to 1
 
 	private void OnControllerColliderHit(ControllerColliderHit hit)
 	{
@@ -30,6 +31,8 @@ public class Protagonist : MonoBehaviour
 		_inputReader.jumpCanceledEvent += OnJumpCanceled;
 		_inputReader.moveEvent += OnMove;
 		_inputReader.extraActionEvent += OnExtraAction;
+		_inputReader.startedRunning += OnStartedRunning;
+		_inputReader.stoppedRunning += OnStoppedRunning;
 		//...
 	}
 
@@ -40,6 +43,8 @@ public class Protagonist : MonoBehaviour
 		_inputReader.jumpCanceledEvent -= OnJumpCanceled;
 		_inputReader.moveEvent -= OnMove;
 		_inputReader.extraActionEvent -= OnExtraAction;
+		_inputReader.startedRunning -= OnStartedRunning;
+		_inputReader.stoppedRunning -= OnStoppedRunning;
 		//...
 	}
 
@@ -70,6 +75,11 @@ public class Protagonist : MonoBehaviour
 			Debug.LogWarning("No gameplay camera in the scene. Movement orientation will not be correct.");
 			movementInput = new Vector3(_previousMovementInput.x, 0f, _previousMovementInput.y);
 		}
+
+		// This is used to set the speed to the maximum if holding the Shift key,
+		// to allow keyboard players to "run"
+		if (isRunning)
+			movementInput.Normalize();
 	}
 
 	//---- EVENT LISTENERS ----
@@ -88,6 +98,10 @@ public class Protagonist : MonoBehaviour
 	{
 		jumpInput = false;
 	}
+
+	private void OnStoppedRunning() => isRunning = false;
+
+	private void OnStartedRunning() => isRunning = true;
 
 	// This handler is just used for debug, for now
 	private void OnExtraAction()
