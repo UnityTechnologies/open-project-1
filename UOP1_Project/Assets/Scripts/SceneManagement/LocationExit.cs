@@ -8,6 +8,8 @@ public class LocationExit : MonoBehaviour
 {
 	[Header("Loading settings")]
 	[SerializeField] private GameSceneSO[] _locationsToLoad = default;
+	[SerializeField] private SpawnPointSO _spawnPoint;
+	[SerializeField] private PointSO _destination;
 	[SerializeField] private bool _showLoadScreen = default;
 
 	[Header("Broadcasting on")]
@@ -17,6 +19,7 @@ public class LocationExit : MonoBehaviour
 	{
 		if (other.CompareTag("Player"))
 		{
+			_spawnPoint.ExecuteLoad(_destination,_locationsToLoad[0]);
 			_locationExitLoadChannel.RaiseEvent(_locationsToLoad, _showLoadScreen);
 		}
 	}

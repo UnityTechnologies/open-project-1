@@ -11,6 +11,8 @@ public class Protagonist : MonoBehaviour
 
 	private Vector2 _previousMovementInput;
 
+	public SpawnPointSO SpawnPoint;
+
 	//These fields are read and manipulated by the StateMachine actions
 	[HideInInspector] public bool jumpInput;
 	[HideInInspector] public bool extraActionInput;
@@ -26,6 +28,7 @@ public class Protagonist : MonoBehaviour
 	//Adds listeners for events being triggered in the InputReader script
 	private void OnEnable()
 	{
+		SpawnPoint.SceneChange = false;
 		_inputReader.jumpEvent += OnJumpInitiated;
 		_inputReader.jumpCanceledEvent += OnJumpCanceled;
 		_inputReader.moveEvent += OnMove;
@@ -42,9 +45,19 @@ public class Protagonist : MonoBehaviour
 		_inputReader.extraActionEvent -= OnExtraAction;
 		//...
 	}
-
+	public void Teleport(Vector3 position, Vector3 rotation)
+	{
+		this.transform.position = position;
+		this.transform.rotation = Quaternion.Euler(rotation);
+		Physics.SyncTransforms();
+	}
 	private void Update()
 	{
+		if (SpawnPoint.Used == true && SpawnPoint.SceneChange == false)
+		{
+			SpawnPoint.Used = false;
+			Teleport(SpawnPoint.Position, SpawnPoint.Rotation);
+		}
 		RecalculateMovement();
 	}
 
