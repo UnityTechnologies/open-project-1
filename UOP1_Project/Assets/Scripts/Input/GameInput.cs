@@ -372,7 +372,7 @@ public class @GameInput : IInputActionCollection, IDisposable
                     ""id"": ""2b832572-50ef-4dba-aaeb-964ed1c854bb"",
                     ""path"": ""<Gamepad>/rightStick"",
                     ""interactions"": """",
-                    ""processors"": ""ScaleVector2(x=2,y=2)"",
+                    ""processors"": ""StickDeadzone,ScaleVector2(x=10,y=10)"",
                     ""groups"": ""KeyboardOrGamepad"",
                     ""action"": ""RotateCamera"",
                     ""isComposite"": false,
@@ -381,9 +381,9 @@ public class @GameInput : IInputActionCollection, IDisposable
                 {
                     ""name"": ""Keyboard TFGH"",
                     ""id"": ""8e17360e-f036-4963-93f6-05d14787dfb5"",
-                    ""path"": ""2DVector"",
+                    ""path"": ""2DVector(mode=1)"",
                     ""interactions"": """",
-                    ""processors"": ""ScaleVector2(x=2,y=2)"",
+                    ""processors"": ""ScaleVector2(x=10,y=10)"",
                     ""groups"": """",
                     ""action"": ""RotateCamera"",
                     ""isComposite"": true,
@@ -449,7 +449,7 @@ public class @GameInput : IInputActionCollection, IDisposable
                     ""id"": ""88e5a69d-cf1d-43ce-b5ab-9db67f819255"",
                     ""path"": ""<Mouse>/delta"",
                     ""interactions"": """",
-                    ""processors"": ""ScaleVector2"",
+                    ""processors"": """",
                     ""groups"": ""KeyboardOrGamepad"",
                     ""action"": ""RotateCamera"",
                     ""isComposite"": false,
@@ -1098,6 +1098,11 @@ public class @GameInput : IInputActionCollection, IDisposable
                 },
                 {
                     ""devicePath"": ""<Keyboard>"",
+                    ""isOptional"": false,
+                    ""isOR"": false
+                },
+                {
+                    ""devicePath"": ""<Mouse>"",
                     ""isOptional"": false,
                     ""isOR"": false
                 }
