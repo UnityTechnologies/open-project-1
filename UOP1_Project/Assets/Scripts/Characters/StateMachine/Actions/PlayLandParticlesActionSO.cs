@@ -32,7 +32,7 @@ public class PlayLandParticlesAction : StateAction
 	public override void OnStateExit()
 	{
 		_fallEndY = _transform.position.y;
-		float dY = _fallStartY - _fallEndY;
+		float dY = Mathf.Abs(_fallStartY - _fallEndY);
 		float fallIntensity = Mathf.InverseLerp(0, _maxFallDistance, dY);
 
 		if (Time.time >= t + _coolDown)
