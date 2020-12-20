@@ -132,17 +132,22 @@ public class ReplaceTool : EditorWindow
 	/// <param name="replaceObject">Prefab that will be instantiated in place of the objects to replace.</param>
 	internal static void ReplaceSelectedObjects(GameObject[] objectToReplace, GameObject replaceObject)
 	{
-		//Debug.Log("[Replace Tool] Replace process");
+		var newInstances = new int[objectToReplace.Length];
+
 		for (int i = 0; i < objectToReplace.Length; i++)
 		{
 			var go = objectToReplace[i];
+
 			Undo.RegisterCompleteObjectUndo(go, "Saving game object state");
+
 			var inst = (GameObject)PrefabUtility.InstantiatePrefab(replaceObject);
+			newInstances[i] = inst.GetInstanceID();
+			
 			inst.transform.position = go.transform.position;
 			inst.transform.rotation = go.transform.rotation;
 			inst.transform.parent = go.transform.parent;
-
 			inst.transform.localScale = go.transform.localScale;
+
 			Undo.RegisterCreatedObjectUndo(inst, "Replacement creation.");
 			foreach (Transform child in go.transform)
 			{
@@ -150,7 +155,8 @@ public class ReplaceTool : EditorWindow
 			}
 			Undo.DestroyObjectImmediate(go);
 		}
-		//Debug.LogFormat("[Replace Tool] {0} objects replaced on scene with {1}", objectToReplace.Length, replaceObject.name);
+
+		Selection.instanceIDs = newInstances;
 	}
 }
 
