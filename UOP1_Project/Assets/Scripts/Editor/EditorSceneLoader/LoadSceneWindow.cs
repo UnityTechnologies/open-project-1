@@ -5,7 +5,7 @@ using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine.SceneManagement;
 
-class LoadSceneWindow : EditorWindow 
+class LoadSceneWindow : EditorWindow
 {
     [SerializeField]
     public static AllScenesHolderSO scenesData;
@@ -57,7 +57,7 @@ class LoadSceneWindow : EditorWindow
             return;
         }
 
-        if (sceneData.Scenes.Length == 0 )
+        if (sceneData.Scenes.Length == 0)
         {
             EditorGUILayout.HelpBox(NO_SCENES_MESSAGE, MessageType.Info);
             return;
@@ -83,7 +83,6 @@ class LoadSceneWindow : EditorWindow
             }
         }
     }
-    
 }
 
 class SceneButtons
@@ -94,6 +93,11 @@ class SceneButtons
 
     public void PressButton()
     {
-        EditorSceneManager.OpenScene(scenePath);
+        if (EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo())
+        {
+            EditorSceneManager.OpenScene(scenePath);
+        } else {
+            return; //Pass, Do not save
+        }
     }
 }
