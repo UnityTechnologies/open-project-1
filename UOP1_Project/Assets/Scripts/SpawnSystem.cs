@@ -10,6 +10,7 @@ public class SpawnSystem : MonoBehaviour
 
 	[Header("Asset References")]
 	[SerializeField] private Protagonist _playerPrefab = default;
+	[SerializeField] private TransformAnchor _playerTransformAnchor = default;
 	[SerializeField] private TransformEventChannelSO _playerInstantiatedChannel = default;
 
 	[Header("Scene References")]
@@ -43,6 +44,7 @@ public class SpawnSystem : MonoBehaviour
 		Protagonist playerInstance = InstantiatePlayer(_playerPrefab, spawnLocation);
 
 		_playerInstantiatedChannel.RaiseEvent(playerInstance.transform); // The CameraSystem will pick this up to frame the player
+		_playerTransformAnchor.Transform = playerInstance.transform;
 	}
 
 	private Transform GetSpawnLocation(int index, Transform[] spawnLocations)
