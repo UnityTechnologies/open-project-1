@@ -81,6 +81,14 @@ public class @GameInput : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Run"",
+                    ""type"": ""Button"",
+                    ""id"": ""495f7a0f-88a3-4e91-92ce-2666f3f4c85e"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -144,7 +152,7 @@ public class @GameInput : IInputActionCollection, IDisposable
                     ""id"": ""f8b893c4-85c2-492d-89ab-41f8d1520def"",
                     ""path"": ""2DVector"",
                     ""interactions"": """",
-                    ""processors"": """",
+                    ""processors"": ""ScaleVector2(x=0.6,y=0.6)"",
                     ""groups"": """",
                     ""action"": ""Move"",
                     ""isComposite"": true,
@@ -199,7 +207,7 @@ public class @GameInput : IInputActionCollection, IDisposable
                     ""id"": ""b437a09d-8ca4-4996-a2f1-edf980623f6e"",
                     ""path"": ""2DVector"",
                     ""interactions"": """",
-                    ""processors"": """",
+                    ""processors"": ""ScaleVector2(x=0.6,y=0.6)"",
                     ""groups"": """",
                     ""action"": ""Move"",
                     ""isComposite"": true,
@@ -364,7 +372,7 @@ public class @GameInput : IInputActionCollection, IDisposable
                     ""id"": ""2b832572-50ef-4dba-aaeb-964ed1c854bb"",
                     ""path"": ""<Gamepad>/rightStick"",
                     ""interactions"": """",
-                    ""processors"": ""ScaleVector2(x=2,y=2)"",
+                    ""processors"": ""StickDeadzone,ScaleVector2(x=8,y=8)"",
                     ""groups"": ""KeyboardOrGamepad"",
                     ""action"": ""RotateCamera"",
                     ""isComposite"": false,
@@ -373,9 +381,9 @@ public class @GameInput : IInputActionCollection, IDisposable
                 {
                     ""name"": ""Keyboard TFGH"",
                     ""id"": ""8e17360e-f036-4963-93f6-05d14787dfb5"",
-                    ""path"": ""2DVector"",
+                    ""path"": ""2DVector(mode=1)"",
                     ""interactions"": """",
-                    ""processors"": ""ScaleVector2(x=2,y=2)"",
+                    ""processors"": ""ScaleVector2(x=8,y=8)"",
                     ""groups"": """",
                     ""action"": ""RotateCamera"",
                     ""isComposite"": true,
@@ -441,7 +449,7 @@ public class @GameInput : IInputActionCollection, IDisposable
                     ""id"": ""88e5a69d-cf1d-43ce-b5ab-9db67f819255"",
                     ""path"": ""<Mouse>/delta"",
                     ""interactions"": """",
-                    ""processors"": ""ScaleVector2"",
+                    ""processors"": ""ScaleVector2(x=2,y=2)"",
                     ""groups"": ""KeyboardOrGamepad"",
                     ""action"": ""RotateCamera"",
                     ""isComposite"": false,
@@ -455,6 +463,28 @@ public class @GameInput : IInputActionCollection, IDisposable
                     ""processors"": """",
                     ""groups"": ""KeyboardOrGamepad"",
                     ""action"": ""MouseControlCamera"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""effcfcac-ef7a-475b-8b36-fba0eae0c360"",
+                    ""path"": ""<Keyboard>/shift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardOrGamepad"",
+                    ""action"": ""Run"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c12f6092-2567-4907-bf0c-cb3c67347a0f"",
+                    ""path"": ""<Keyboard>/rightShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardOrGamepad"",
+                    ""action"": ""Run"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1070,6 +1100,11 @@ public class @GameInput : IInputActionCollection, IDisposable
                     ""devicePath"": ""<Keyboard>"",
                     ""isOptional"": false,
                     ""isOR"": false
+                },
+                {
+                    ""devicePath"": ""<Mouse>"",
+                    ""isOptional"": false,
+                    ""isOR"": false
                 }
             ]
         }
@@ -1085,6 +1120,7 @@ public class @GameInput : IInputActionCollection, IDisposable
 		m_Gameplay_ExtraAction = m_Gameplay.FindAction("ExtraAction", throwIfNotFound: true);
 		m_Gameplay_RotateCamera = m_Gameplay.FindAction("RotateCamera", throwIfNotFound: true);
 		m_Gameplay_MouseControlCamera = m_Gameplay.FindAction("MouseControlCamera", throwIfNotFound: true);
+		m_Gameplay_Run = m_Gameplay.FindAction("Run", throwIfNotFound: true);
 		// Menus
 		m_Menus = asset.FindActionMap("Menus", throwIfNotFound: true);
 		m_Menus_MoveSelection = m_Menus.FindAction("MoveSelection", throwIfNotFound: true);
@@ -1151,6 +1187,7 @@ public class @GameInput : IInputActionCollection, IDisposable
 	private readonly InputAction m_Gameplay_ExtraAction;
 	private readonly InputAction m_Gameplay_RotateCamera;
 	private readonly InputAction m_Gameplay_MouseControlCamera;
+	private readonly InputAction m_Gameplay_Run;
 	public struct GameplayActions
 	{
 		private @GameInput m_Wrapper;
@@ -1163,6 +1200,7 @@ public class @GameInput : IInputActionCollection, IDisposable
 		public InputAction @ExtraAction => m_Wrapper.m_Gameplay_ExtraAction;
 		public InputAction @RotateCamera => m_Wrapper.m_Gameplay_RotateCamera;
 		public InputAction @MouseControlCamera => m_Wrapper.m_Gameplay_MouseControlCamera;
+		public InputAction @Run => m_Wrapper.m_Gameplay_Run;
 		public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
 		public void Enable() { Get().Enable(); }
 		public void Disable() { Get().Disable(); }
@@ -1196,6 +1234,9 @@ public class @GameInput : IInputActionCollection, IDisposable
 				@MouseControlCamera.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnMouseControlCamera;
 				@MouseControlCamera.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnMouseControlCamera;
 				@MouseControlCamera.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnMouseControlCamera;
+				@Run.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnRun;
+				@Run.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnRun;
+				@Run.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnRun;
 			}
 			m_Wrapper.m_GameplayActionsCallbackInterface = instance;
 			if (instance != null)
@@ -1224,6 +1265,9 @@ public class @GameInput : IInputActionCollection, IDisposable
 				@MouseControlCamera.started += instance.OnMouseControlCamera;
 				@MouseControlCamera.performed += instance.OnMouseControlCamera;
 				@MouseControlCamera.canceled += instance.OnMouseControlCamera;
+				@Run.started += instance.OnRun;
+				@Run.performed += instance.OnRun;
+				@Run.canceled += instance.OnRun;
 			}
 		}
 	}
@@ -1338,6 +1382,7 @@ public class @GameInput : IInputActionCollection, IDisposable
 		void OnExtraAction(InputAction.CallbackContext context);
 		void OnRotateCamera(InputAction.CallbackContext context);
 		void OnMouseControlCamera(InputAction.CallbackContext context);
+		void OnRun(InputAction.CallbackContext context);
 	}
 	public interface IMenusActions
 	{

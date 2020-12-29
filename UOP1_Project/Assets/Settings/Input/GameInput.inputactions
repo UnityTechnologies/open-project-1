@@ -68,6 +68,14 @@
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
+                },
+                {
+                    "name": "Run",
+                    "type": "Button",
+                    "id": "495f7a0f-88a3-4e91-92ce-2666f3f4c85e",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
                 }
             ],
             "bindings": [
@@ -131,7 +139,7 @@
                     "id": "f8b893c4-85c2-492d-89ab-41f8d1520def",
                     "path": "2DVector",
                     "interactions": "",
-                    "processors": "",
+                    "processors": "ScaleVector2(x=0.6,y=0.6)",
                     "groups": "",
                     "action": "Move",
                     "isComposite": true,
@@ -186,7 +194,7 @@
                     "id": "b437a09d-8ca4-4996-a2f1-edf980623f6e",
                     "path": "2DVector",
                     "interactions": "",
-                    "processors": "",
+                    "processors": "ScaleVector2(x=0.6,y=0.6)",
                     "groups": "",
                     "action": "Move",
                     "isComposite": true,
@@ -351,7 +359,7 @@
                     "id": "2b832572-50ef-4dba-aaeb-964ed1c854bb",
                     "path": "<Gamepad>/rightStick",
                     "interactions": "",
-                    "processors": "ScaleVector2(x=2,y=2)",
+                    "processors": "StickDeadzone,ScaleVector2(x=8,y=8)",
                     "groups": "KeyboardOrGamepad",
                     "action": "RotateCamera",
                     "isComposite": false,
@@ -360,9 +368,9 @@
                 {
                     "name": "Keyboard TFGH",
                     "id": "8e17360e-f036-4963-93f6-05d14787dfb5",
-                    "path": "2DVector",
+                    "path": "2DVector(mode=1)",
                     "interactions": "",
-                    "processors": "ScaleVector2(x=2,y=2)",
+                    "processors": "ScaleVector2(x=8,y=8)",
                     "groups": "",
                     "action": "RotateCamera",
                     "isComposite": true,
@@ -428,7 +436,7 @@
                     "id": "88e5a69d-cf1d-43ce-b5ab-9db67f819255",
                     "path": "<Mouse>/delta",
                     "interactions": "",
-                    "processors": "ScaleVector2",
+                    "processors": "ScaleVector2(x=2,y=2)",
                     "groups": "KeyboardOrGamepad",
                     "action": "RotateCamera",
                     "isComposite": false,
@@ -442,6 +450,28 @@
                     "processors": "",
                     "groups": "KeyboardOrGamepad",
                     "action": "MouseControlCamera",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "effcfcac-ef7a-475b-8b36-fba0eae0c360",
+                    "path": "<Keyboard>/shift",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardOrGamepad",
+                    "action": "Run",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "c12f6092-2567-4907-bf0c-cb3c67347a0f",
+                    "path": "<Keyboard>/rightShift",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardOrGamepad",
+                    "action": "Run",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
@@ -1055,6 +1085,11 @@
                 },
                 {
                     "devicePath": "<Keyboard>",
+                    "isOptional": false,
+                    "isOR": false
+                },
+                {
+                    "devicePath": "<Mouse>",
                     "isOptional": false,
                     "isOR": false
                 }
