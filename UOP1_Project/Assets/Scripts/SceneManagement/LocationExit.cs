@@ -19,12 +19,12 @@ public class LocationExit : MonoBehaviour
 	{
 		if (other.CompareTag("Player"))
 		{
-			UpdateLocationPathTaken();
+			UpdatePathTaken();
 			_locationExitLoadChannel.RaiseEvent(_locationsToLoad, _showLoadScreen);
 		}
 	}
 
-	private void UpdateLocationPathTaken() {
+	private void UpdatePathTaken() {
 		if (_pathTaken != null)
 			_pathTaken.Path = _exitPath;
 	}
