@@ -41,6 +41,7 @@ public class SaveSystem : MonoBehaviour
 	private void Start()
 	{
 		Debug.Log("SaveSystem start getting called");
+		_saveRegistry = new HashSet<ISaveable>();
 		AddToRegistry?.Invoke(_saveRegistry);
 		LoadGame();
 	}
