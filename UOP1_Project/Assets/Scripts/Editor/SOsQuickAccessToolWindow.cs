@@ -25,17 +25,72 @@ class SOsQuickAccessToolWindow : EditorWindow
     {
         assetSearchFolders = new string[1];
         assetSearchFolders[0] = "Assets/ScriptableObjects";
+
+        FindAllSOs();
     }
 
-    [MenuItem("Tools/Quick Access Tool")]
+    void OnFocus()
+    {
+        FindAllSOs();
+    }
+
+    [MenuItem("Tools/SOs Quick Access Tool")]
     private static void ShowWindow() 
     {
-        GetWindow<SOsQuickAccessToolWindow>("Quick Access Tool");
+        GetWindow<SOsQuickAccessToolWindow>("SOs Quick Access Tool");
     }
 
     void OnGUI() 
     {
-        // All finding work #1
+        GUILayout.Space(EditorGUIUtility.singleLineHeight);
+
+        if (GUILayout.Button("Refresh All"))
+        {
+            FindAllSOs();
+            FindDisplaySOs();
+        }
+
+        GUILayout.Space(EditorGUIUtility.singleLineHeight);
+        GUILayout.Label("Please select a Scriptable Object Type To Search For");
+        GUILayout.Space(EditorGUIUtility.singleLineHeight);
+        DrawSOsPicker();
+        
+        GUILayout.Space(EditorGUIUtility.singleLineHeight * 3f);
+        DrawSOsList();
+    }
+
+    void DrawSOsPicker()
+    {
+        EditorGUI.BeginChangeCheck();
+        selected = EditorGUILayout.Popup("Scriptable Object Types", selected, SOTypes.ToArray());    
+        if (EditorGUI.EndChangeCheck())
+        {
+            FindDisplaySOs();
+        }
+    }
+
+    void DrawSOsList()
+    {
+        scroll = GUILayout.BeginScrollView(scroll);
+
+        for (int i=0; i< displayObjectsGUIDs.Length; i++)
+        {
+            GUILayout.Label(i+1 + ". " + displayObjects[i].name);
+
+            if (GUILayout.Button("Locate Quickly"))
+            {
+                EditorUtility.FocusProjectWindow();
+                EditorGUIUtility.PingObject(displayObjects[i]);
+            }
+
+            GUILayout.Space(EditorGUIUtility.singleLineHeight);
+        }
+
+        GUILayout.EndScrollView();
+    }
+
+    void FindAllSOs()
+    {
         objectsGUIDs = AssetDatabase.FindAssets("t:ScriptableObject", assetSearchFolders) as string[];
 
         objectsPaths = new string[objectsGUIDs.Length];
@@ -57,30 +112,9 @@ class SOsQuickAccessToolWindow : EditorWindow
                 SOTypes.Add(objects[i].GetType().ToString());
             }
         }
-        // End #1
-
-        GUILayout.Space(EditorGUIUtility.singleLineHeight * 2f);
-
-        GUILayout.Label("Please select a Scriptable Object Type To Search For...");
-
-        GUILayout.Space(EditorGUIUtility.singleLineHeight);
-        DrawSOsPicker();
-        
-        GUILayout.Space(EditorGUIUtility.singleLineHeight * 3f);
-        DrawSOsList();
     }
 
-    void DrawSOsPicker()
-    {
-        EditorGUI.BeginChangeCheck();
-        selected = EditorGUILayout.Popup("Scriptable Object Types", selected, SOTypes.ToArray());    
-        if (EditorGUI.EndChangeCheck())
-        {
-            DrawSOsList();
-        }
-    }
-
-    void DrawSOsList()
+    void FindDisplaySOs()
     {
         if (displayObjects != null)
         {
@@ -104,22 +138,5 @@ class SOsQuickAccessToolWindow : EditorWindow
             displayObjectsPaths.Add(AssetDatabase.GUIDToAssetPath(displayObjectsGUIDs[i]));
             displayObjects.Add(AssetDatabase.LoadAssetAtPath(displayObjectsPaths[i], typeof(ScriptableObject)) as ScriptableObject);
         }
-
-        scroll = GUILayout.BeginScrollView(scroll);
-
-        for (int i=0; i< displayObjectsGUIDs.Length; i++)
-        {
-            GUILayout.Label(i+1 + ". " + displayObjects[i].name);
-
-            if (GUILayout.Button("Locate"))
-            {
-                EditorUtility.FocusProjectWindow();
-                EditorGUIUtility.PingObject(displayObjects[i]);
-            }
-
-            GUILayout.Space(EditorGUIUtility.singleLineHeight);
-        }
-
-        GUILayout.EndScrollView();
     }
 }
