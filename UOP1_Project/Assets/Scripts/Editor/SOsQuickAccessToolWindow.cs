@@ -27,11 +27,13 @@ class SOsQuickAccessToolWindow : EditorWindow
         assetSearchFolders[0] = "Assets/ScriptableObjects";
 
         FindAllSOs();
+        FindDisplaySOs();
     }
 
     void OnFocus()
     {
         FindAllSOs();
+        FindDisplaySOs();
     }
 
     [MenuItem("Tools/SOs Quick Access Tool")]
@@ -42,27 +44,26 @@ class SOsQuickAccessToolWindow : EditorWindow
 
     void OnGUI() 
     {
-        GUILayout.Space(EditorGUIUtility.singleLineHeight);
+        GUILayout.Space(EditorGUIUtility.singleLineHeight * 0.5f);
 
+        GUILayout.BeginHorizontal();
+
+        DrawSOsPicker();
         if (GUILayout.Button("Refresh All"))
         {
             FindAllSOs();
             FindDisplaySOs();
         }
 
-        GUILayout.Space(EditorGUIUtility.singleLineHeight);
-        GUILayout.Label("Please select a Scriptable Object Type To Search For");
-        GUILayout.Space(EditorGUIUtility.singleLineHeight);
-        DrawSOsPicker();
-        
-        GUILayout.Space(EditorGUIUtility.singleLineHeight * 3f);
+        GUILayout.EndHorizontal();
+
         DrawSOsList();
     }
 
     void DrawSOsPicker()
     {
         EditorGUI.BeginChangeCheck();
-        selected = EditorGUILayout.Popup("Scriptable Object Types", selected, SOTypes.ToArray());    
+        selected = EditorGUILayout.Popup(GUIContent.none, selected, SOTypes.ToArray());    
         if (EditorGUI.EndChangeCheck())
         {
             FindDisplaySOs();
