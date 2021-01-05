@@ -14,7 +14,10 @@ public class InventoryManager : MonoBehaviour
 	[SerializeField]
 	private ItemEventChannelSo EquipItemEvent;
 
-
+	[SerializeField]
+	private ItemEventChannelSo RewardItemEvent;
+	[SerializeField]
+	private ItemEventChannelSo GiveItemEvent;
 
 	[SerializeField]
 	ItemEventChannelSo AddItemEvent;
@@ -43,6 +46,14 @@ public class InventoryManager : MonoBehaviour
 		if (RemoveItemEvent != null)
 		{
 			RemoveItemEvent.OnEventRaised += RemoveItem;
+		}
+		if (RewardItemEvent != null)
+		{
+			RewardItemEvent.OnEventRaised += AddItem;
+		}
+		if (GiveItemEvent != null)
+		{
+			GiveItemEvent.OnEventRaised += RemoveItem;
 		}
 	}
 
