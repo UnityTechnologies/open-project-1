@@ -13,7 +13,8 @@ public class DialogueManager : MonoBehaviour
 //	[SerializeField] private ChoiceBox _choiceBox; // TODO: Demonstration purpose only. Remove or adjust later.
 
 	[SerializeField] private InputReader _inputReader = default;
-
+	public DialogueLineChannelSO OpenUIDialogueEvent;
+	public VoidEventChannelSO CloseUIDialogueEvent;
 	private DialogueDataSO _currentDialogueDataSO;
 	private int _counter;
 	private bool _reachedEndOfDialogue { get => _counter >= _currentDialogueDataSO.DialogueLines.Count; }
@@ -46,9 +47,12 @@ public class DialogueManager : MonoBehaviour
 	/// <param name="dialogueLine"></param>
 	public void DisplayDialogueLine(DialogueLineSO dialogueLine, ActorSO actor)
 	{
-		//TODO: Interface with a UIManager to allow displayal of the line of dialogue in the UI
-		Debug.Log("A line of dialogue has been spoken: \"" + dialogueLine.Sentence + "\" by " +actor.ActorName );
-	}
+if(OpenUIDialogueEvent!=null)
+		{
+
+			OpenUIDialogueEvent.RaiseEvent(dialogueLine, actor); 
+		}
+}
 
 	private void OnAdvance()
 	{ 
@@ -81,9 +85,8 @@ public class DialogueManager : MonoBehaviour
 
 	public void DialogueEnded()
 	{
-		// TODO: Disable dialogue box.
-
-		Debug.Log("Dialogue Ended");
+		if(CloseUIDialogueEvent!=null)
+		CloseUIDialogueEvent.RaiseEvent(); 
 		_inputReader.advanceDialogueEvent -= OnAdvance;
 		_inputReader.EnableGameplayInput();
 	}

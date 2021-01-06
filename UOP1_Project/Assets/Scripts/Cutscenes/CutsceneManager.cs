@@ -40,6 +40,7 @@ public class CutsceneManager : MonoBehaviour
 			_activePlayableDirector.stopped -= HandleDirectorStopped;
 
 		_inputReader.EnableGameplayInput();
+		_dialogueManager.DialogueEnded();
 	}
 
 	private void HandleDirectorStopped(PlayableDirector director) => CutsceneEnded();
