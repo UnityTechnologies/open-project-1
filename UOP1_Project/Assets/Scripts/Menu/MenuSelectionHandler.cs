@@ -1,18 +1,22 @@
 ﻿using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 public class MenuSelectionHandler : MonoBehaviour
 {
+	[SerializeField] private InputReader _inputReader;
+	[SerializeField] private GameObject _defaultSelection;
 	public GameObject _currentSelection;
 	public GameObject _mouseSelection;
-	[SerializeField] private InputReader _inputReader;
 
 	private void OnEnable()
 	{
 		_inputReader.MouseMoveMenuEvent += HandleMoveCursor;
 		_inputReader.MoveSelectionMenuEvent += HandleMoveSelection;
+
+		StartCoroutine(SelectDefault());
 	}
 
 	private void OnDisable()
@@ -22,8 +26,19 @@ public class MenuSelectionHandler : MonoBehaviour
 	}
 
 	/// <summary>
-	/// Fired by keyboard and gamepad inputs.  current selected UI element will be the ui Element that was selected
-	/// when the event was fired.  The _currentSelection is updated later on, after the EventSystem moves to the
+	/// Highlights the default element
+	/// </summary>
+	private IEnumerator SelectDefault()
+	{
+		yield return new WaitForEndOfFrame(); // Necessary wait otherwise the highlight won't show up
+
+		if (_defaultSelection != null)
+			EventSystem.current.SetSelectedGameObject(_defaultSelection);
+	}
+
+	/// <summary>
+	/// Fired by keyboard and gamepad inputs. Current selected UI element will be the ui Element that was selected
+	/// when the event was fired. The _currentSelection is updated later on, after the EventSystem moves to the
 	/// desired UI element, the UI element will call into UpdateSelection()
 	/// </summary>
 	private void HandleMoveSelection()
