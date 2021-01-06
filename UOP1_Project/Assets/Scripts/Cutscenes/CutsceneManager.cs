@@ -44,9 +44,9 @@ public class CutsceneManager : MonoBehaviour
 
 	private void HandleDirectorStopped(PlayableDirector director) => CutsceneEnded();
 
-	public void PlayDialogueFromClip(DialogueLineSO dialogueLine)
+	public void PlayDialogueFromClip(DialogueLineSO dialogueLine, ActorSO actor)
 	{
-		_dialogueManager.DisplayDialogueLine(dialogueLine);
+		_dialogueManager.DisplayDialogueLine(dialogueLine, actor);
 	}
 
 	/// <summary>

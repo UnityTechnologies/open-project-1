@@ -6,6 +6,8 @@ using UnityEngine.Playables;
 public class DialogueBehaviour : PlayableBehaviour
 {
 	[SerializeField] private DialogueLineSO _dialogueLine = default;
+	[SerializeField] private ActorSO _actor = default;
+
 	[SerializeField] private bool _pauseWhenClipEnds = default; //This won't work if the clip ends on the very last frame of the Timeline
 
 	[HideInInspector] public CutsceneManager cutsceneManager;
@@ -26,9 +28,9 @@ public class DialogueBehaviour : PlayableBehaviour
 			if (playable.GetGraph().IsPlaying()
 				&& cutsceneManager.IsCutscenePlaying)
 			{
-				if (_dialogueLine != null)
+				if (_dialogueLine != null&& _actor != null)
 				{
-					cutsceneManager.PlayDialogueFromClip(_dialogueLine);
+					cutsceneManager.PlayDialogueFromClip(_dialogueLine, _actor );
 					_dialoguePlayed = true;
 				}
 				else

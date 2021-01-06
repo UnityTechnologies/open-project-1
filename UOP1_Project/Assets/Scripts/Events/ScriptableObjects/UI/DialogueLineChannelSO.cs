@@ -6,10 +6,10 @@ using UnityEngine.Events;
 [CreateAssetMenu(menuName = "Events/UI/Dialogue line Channel")]
 public class DialogueLineChannelSO : ScriptableObject
 {
-	public UnityAction<DialogueLineSO> OnEventRaised;
-	public void RaiseEvent(DialogueLineSO line)
+	public UnityAction<DialogueLineSO, ActorSO> OnEventRaised;
+	public void RaiseEvent(DialogueLineSO line, ActorSO actor)
 	{
 		if (OnEventRaised != null)
-			OnEventRaised.Invoke(line);
+			OnEventRaised.Invoke(line, actor);
 	}
 }

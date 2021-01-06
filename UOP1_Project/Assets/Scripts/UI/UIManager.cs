@@ -60,9 +60,9 @@ public class UIManager : MonoBehaviour
 	[SerializeField]
 	UIInteractionManager interactionPanel;
 
-	public void OpenUIDialogue(DialogueLineSO dialogueLine)
+	public void OpenUIDialogue(DialogueLineSO dialogueLine, ActorSO actor)
 	{
-		dialogueController.SetDialogue(dialogueLine);
+		dialogueController.SetDialogue(dialogueLine, actor);
 		dialogueController.gameObject.SetActive(true);
 	}
 	public void CloseUIDialogue()

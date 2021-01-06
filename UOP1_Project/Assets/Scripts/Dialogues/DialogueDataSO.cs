@@ -10,8 +10,14 @@ using UnityEngine.Timeline;
 [CreateAssetMenu(fileName = "newDialogue", menuName = "CutsceneSystem/Dialogue Data")]
 public class DialogueDataSO : ScriptableObject
 {
-	public List<DialogueLineSO> dialogueLines;
-	public List<Choice> Choices;
+
+	[SerializeField] private ActorSO _actor = default;
+	[SerializeField] private List<DialogueLineSO> _dialogueLines;
+	[SerializeField] private List<Choice> _choices;
+
+	public ActorSO Actor => _actor; 
+	public List<DialogueLineSO> DialogueLines => _dialogueLines; 
+	public List<Choice> Choices => _choices;
 
 	//TODO: Add support for branching conversations
 	// Maybe add 2 (or more) special line slots which represent a choice in a conversation
@@ -21,9 +27,9 @@ public class DialogueDataSO : ScriptableObject
 [Serializable]
 public class Choice
 {
-	[SerializeField] private string _optionName;
-	[SerializeField] private DialogueDataSO _response;
+	[SerializeField] private DialogueLineSO _response;
+	[SerializeField] private DialogueDataSO _nextDialogue;
 
-	public string OptionName { get => _optionName; }
-	public DialogueDataSO Response { get => _response; }
+	public DialogueLineSO Response { get => _response; }
+	public DialogueDataSO NextDialogue { get => _nextDialogue; }
 }

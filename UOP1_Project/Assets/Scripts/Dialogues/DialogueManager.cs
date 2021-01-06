@@ -10,13 +10,13 @@ using UnityEngine.UI;
 /// </summary>
 public class DialogueManager : MonoBehaviour
 { 
-	[SerializeField] private ChoiceBox _choiceBox; // TODO: Demonstration purpose only. Remove or adjust later.
+//	[SerializeField] private ChoiceBox _choiceBox; // TODO: Demonstration purpose only. Remove or adjust later.
 
 	[SerializeField] private InputReader _inputReader = default;
 
 	private DialogueDataSO _currentDialogueDataSO;
 	private int _counter;
-	private bool _reachedEndOfDialogue { get => _counter >= _currentDialogueDataSO.dialogueLines.Count; }
+	private bool _reachedEndOfDialogue { get => _counter >= _currentDialogueDataSO.DialogueLines.Count; }
 
 	/// <summary>
 	/// Displays DialogueData in the UI, one by one.
@@ -25,8 +25,7 @@ public class DialogueManager : MonoBehaviour
 	public void DisplayDialogueData(DialogueDataSO dialogueDataSO)
 	{
 		BeginDialogueData(dialogueDataSO);
-
-		DisplayDialogueLine(_currentDialogueDataSO.dialogueLines[_counter]);
+		DisplayDialogueLine(_currentDialogueDataSO.DialogueLines[_counter], dialogueDataSO.Actor);
 	}
 
 	/// <summary>
@@ -45,10 +44,10 @@ public class DialogueManager : MonoBehaviour
 	/// This function is also called by <c>DialogueBehaviour</c> from clips on Timeline during cutscenes.
 	/// </summary>
 	/// <param name="dialogueLine"></param>
-	public void DisplayDialogueLine(DialogueLineSO dialogueLine)
+	public void DisplayDialogueLine(DialogueLineSO dialogueLine, ActorSO actor)
 	{
 		//TODO: Interface with a UIManager to allow displayal of the line of dialogue in the UI
-		Debug.Log("A line of dialogue has been spoken: \"" + dialogueLine.Sentence + "\" by " + dialogueLine.Actor.ActorName);
+		Debug.Log("A line of dialogue has been spoken: \"" + dialogueLine.Sentence + "\" by " +actor.ActorName );
 	}
 
 	private void OnAdvance()
@@ -57,7 +56,7 @@ public class DialogueManager : MonoBehaviour
 
 		if (!_reachedEndOfDialogue)
 		{
-			DisplayDialogueLine(_currentDialogueDataSO.dialogueLines[_counter]);
+			DisplayDialogueLine(_currentDialogueDataSO.DialogueLines[_counter], _currentDialogueDataSO.Actor);
 		}
 		else
 		{
@@ -77,7 +76,7 @@ public class DialogueManager : MonoBehaviour
 		_inputReader.advanceDialogueEvent -= OnAdvance;
 
 		// TODO: Demonstration purpose only. Remove or adjust later.
-		_choiceBox.Show(_currentDialogueDataSO.Choices, this);
+		//_choiceBox.Show(_currentDialogueDataSO.Choices, this);
 	}
 
 	public void DialogueEnded()
@@ -91,6 +90,7 @@ public class DialogueManager : MonoBehaviour
 }
 
 // TODO: Demonstration purpose only. Remove or adjust later.
+/*
 [Serializable]
 public class ChoiceBox	
 {
@@ -128,3 +128,4 @@ public class ChoiceBox
 		_gameObject.SetActive(false);
 	}
 }
+*/
