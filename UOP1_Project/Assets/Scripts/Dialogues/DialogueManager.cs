@@ -14,10 +14,17 @@ public class DialogueManager : MonoBehaviour
 
 	[SerializeField] private InputReader _inputReader = default;
 	public DialogueLineChannelSO OpenUIDialogueEvent;
+	public DialogueChoicesChannelSO ShowChoicesUIEvent;
+	public DialogueChoiceChannelSO MakeDialogueChoiceEvent;
 	public VoidEventChannelSO CloseUIDialogueEvent;
 	private DialogueDataSO _currentDialogueDataSO;
 	private int _counter;
 	private bool _reachedEndOfDialogue { get => _counter >= _currentDialogueDataSO.DialogueLines.Count; }
+
+	private void Start()
+	{
+		
+	}
 
 	/// <summary>
 	/// Displays DialogueData in the UI, one by one.
@@ -47,9 +54,8 @@ public class DialogueManager : MonoBehaviour
 	/// <param name="dialogueLine"></param>
 	public void DisplayDialogueLine(DialogueLineSO dialogueLine, ActorSO actor)
 	{
-if(OpenUIDialogueEvent!=null)
+        if(OpenUIDialogueEvent!=null)
 		{
-
 			OpenUIDialogueEvent.RaiseEvent(dialogueLine, actor); 
 		}
 }
@@ -79,8 +85,25 @@ if(OpenUIDialogueEvent!=null)
 	{
 		_inputReader.advanceDialogueEvent -= OnAdvance;
 
-		// TODO: Demonstration purpose only. Remove or adjust later.
-		//_choiceBox.Show(_currentDialogueDataSO.Choices, this);
+		if (MakeDialogueChoiceEvent != null)
+		{
+			MakeDialogueChoiceEvent.OnEventRaised += MakeDialogueChoice;
+		}
+
+		if (ShowChoicesUIEvent != null)
+		{
+			ShowChoicesUIEvent.RaiseEvent(choices);
+		}
+	}
+
+	private void MakeDialogueChoice(Choice choice)
+	{
+		if (MakeDialogueChoiceEvent != null)
+		{
+			MakeDialogueChoiceEvent.OnEventRaised -= MakeDialogueChoice;
+		}
+
+		DisplayDialogueData(choice.NextDialogue); 
 	}
 
 	public void DialogueEnded()

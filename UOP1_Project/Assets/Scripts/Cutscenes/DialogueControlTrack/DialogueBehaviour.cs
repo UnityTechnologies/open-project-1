@@ -10,7 +10,8 @@ public class DialogueBehaviour : PlayableBehaviour
 
 	[SerializeField] private bool _pauseWhenClipEnds = default; //This won't work if the clip ends on the very last frame of the Timeline
 
-	[HideInInspector] public CutsceneManager cutsceneManager;
+	[SerializeField] public DialogueLineChannelSO PlayDialogueEvent;
+	[SerializeField] public VoidEventChannelSO PauseTimelineEvent;
 
 	private bool _dialoguePlayed;
 
@@ -25,12 +26,13 @@ public class DialogueBehaviour : PlayableBehaviour
 		if (Application.isPlaying)  //TODO: Find a way to "play" dialogue lines even when scrubbing the Timeline not in Play Mode
 		{
 			// Need to ask the CutsceneManager if the cutscene is playing, since the graph is not actually stopped/paused: it's just going at speed 0.
-			if (playable.GetGraph().IsPlaying()
-				&& cutsceneManager.IsCutscenePlaying)
+			if (playable.GetGraph().IsPlaying())
+				//&& cutsceneManager.IsCutscenePlaying) Need to find an alternative to this 
 			{
-				if (_dialogueLine != null&& _actor != null)
+				if (_dialogueLine != null && _actor != null)
 				{
-					cutsceneManager.PlayDialogueFromClip(_dialogueLine, _actor );
+					if(PlayDialogueEvent != null)
+					PlayDialogueEvent.RaiseEvent(_dialogueLine, _actor );
 					_dialoguePlayed = true;
 				}
 				else
@@ -51,7 +53,10 @@ public class DialogueBehaviour : PlayableBehaviour
 			&& _dialoguePlayed)
 		{
 			if (_pauseWhenClipEnds)
-				cutsceneManager.PauseTimeline();
+				if(PauseTimelineEvent!=null)
+				{
+					PauseTimelineEvent.OnEventRaised(); 
+				}
 		}
 	}
 }

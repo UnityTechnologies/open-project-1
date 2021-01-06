@@ -7,6 +7,7 @@ public class UIManager : MonoBehaviour
 
 	public DialogueLineChannelSO OpenUIDialogueEvent;
 	public VoidEventChannelSO CloseUIDialogueEvent;
+	public DialogueChoicesChannelSO ShowChoicesUIEvent;
 
 	public VoidEventChannelSO OpenInventoryScreenEvent;
 	public VoidEventChannelSO OpenInventoryScreenForCookingEvent;

@@ -8,10 +8,14 @@ public class CutsceneManager : MonoBehaviour
 	[SerializeField] private InputReader _inputReader = default;
 	[SerializeField] private DialogueManager _dialogueManager = default;
 
+	[SerializeField] private PlayableDirectorChannelSO PlayCutsceneEvent;
+	[SerializeField] public DialogueLineChannelSO PlayDialogueEvent;
+	[SerializeField] public VoidEventChannelSO PauseTimelineEvent;
+
 	private PlayableDirector _activePlayableDirector;
 	private bool _isPaused;
 
-	public bool IsCutscenePlaying => _activePlayableDirector.playableGraph.GetRootPlayable(0).GetSpeed() != 0d;
+	 bool IsCutscenePlaying => _activePlayableDirector.playableGraph.GetRootPlayable(0).GetSpeed() != 0d;
 
 	private void OnEnable()
 	{
@@ -22,8 +26,28 @@ public class CutsceneManager : MonoBehaviour
 	{
 		_inputReader.advanceDialogueEvent -= OnAdvance;
 	}
+	private void Start()
+	{
+	  if(	PlayCutsceneEvent!=null)
+		{
 
-	public void PlayCutscene(PlayableDirector activePlayableDirector)
+			PlayCutsceneEvent.OnEventRaised += PlayCutscene; 
+
+		}
+		if (PlayDialogueEvent != null)
+		{
+
+			PlayDialogueEvent.OnEventRaised += PlayDialogueFromClip;
+
+		}
+		if (PauseTimelineEvent != null)
+		{
+
+			PauseTimelineEvent.OnEventRaised += PauseTimeline;
+
+		}
+	}
+	void PlayCutscene(PlayableDirector activePlayableDirector)
 	{
 		_inputReader.EnableDialogueInput();
 
@@ -34,7 +58,7 @@ public class CutsceneManager : MonoBehaviour
 		_activePlayableDirector.stopped += HandleDirectorStopped;
 	}
 
-	public void CutsceneEnded()
+	 void CutsceneEnded()
 	{
 		if (_activePlayableDirector != null)
 			_activePlayableDirector.stopped -= HandleDirectorStopped;
@@ -45,7 +69,7 @@ public class CutsceneManager : MonoBehaviour
 
 	private void HandleDirectorStopped(PlayableDirector director) => CutsceneEnded();
 
-	public void PlayDialogueFromClip(DialogueLineSO dialogueLine, ActorSO actor)
+	 void PlayDialogueFromClip(DialogueLineSO dialogueLine, ActorSO actor)
 	{
 		_dialogueManager.DisplayDialogueLine(dialogueLine, actor);
 	}
@@ -62,13 +86,13 @@ public class CutsceneManager : MonoBehaviour
 	/// <summary>
 	/// Called by <c>DialogueControlClip</c> on the Timeline.
 	/// </summary>
-	public void PauseTimeline()
+	 void PauseTimeline()
 	{
 		_isPaused = true;
 		_activePlayableDirector.playableGraph.GetRootPlayable(0).SetSpeed(0);
 	}
 
-	public void ResumeTimeline()
+	 void ResumeTimeline()
 	{
 		_isPaused = false;
 		_activePlayableDirector.playableGraph.GetRootPlayable(0).SetSpeed(1);
