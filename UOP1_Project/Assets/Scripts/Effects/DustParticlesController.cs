@@ -30,4 +30,37 @@ public class DustParticlesController : MonoBehaviour
 	{
 		_landParticles.Play();
 	}
+
+	public void PlayLandParticles(float intensity)
+	{
+		// make sure intensity is always between 0 and 1
+		intensity = Mathf.Clamp01(intensity);
+
+		var main = _landParticles.main;
+		var origCurve = main.startSize; //save original curve to be assigned back to particle system
+		ParticleSystem.MinMaxCurve newCurve = main.startSize; //Make a new minMax curve and make our changes to the new copy
+
+		float minSize = newCurve.constantMin;
+		float maxSize = newCurve.constantMax;
+
+		// use the intensity to change the maximum size of the particle curve
+		newCurve.constantMax = Mathf.Lerp(minSize, maxSize, intensity);
+		main.startSize = newCurve;
+
+		_landParticles.Play();
+
+		// Put the original startSize back where you found it
+		StartCoroutine(ResetMinMaxCurve(_landParticles, origCurve));
+	}
+
+	private IEnumerator ResetMinMaxCurve(ParticleSystem ps, ParticleSystem.MinMaxCurve curve)
+	{
+		while (ps.isEmitting)
+		{
+			yield return null;
+		}
+
+		var main = ps.main;
+		main.startSize = curve;
+	}
 }
