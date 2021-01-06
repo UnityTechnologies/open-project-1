@@ -14,9 +14,9 @@ public class PlayLandParticlesAction : StateAction
 	private float _coolDown = 0.3f;
 	private float t = 0f;
 
-	private float _fallStartY = 0;
-	private float _fallEndY = 0;
-	private float _maxFallDistance = 4; //Used to adjust particle emission intensity
+	private float _fallStartY = 0f;
+	private float _fallEndY = 0f;
+	private float _maxFallDistance = 4f; //Used to adjust particle emission intensity
 
 	public override void Awake(StateMachine stateMachine)
 	{
@@ -37,7 +37,6 @@ public class PlayLandParticlesAction : StateAction
 
 		if (Time.time >= t + _coolDown)
 		{
-			//_dustController.PlayLandParticles();
 			_dustController.PlayLandParticles(fallIntensity);
 			t = Time.time;
 		}
