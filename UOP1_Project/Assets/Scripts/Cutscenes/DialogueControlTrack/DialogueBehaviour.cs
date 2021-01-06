@@ -10,8 +10,8 @@ public class DialogueBehaviour : PlayableBehaviour
 
 	[SerializeField] private bool _pauseWhenClipEnds = default; //This won't work if the clip ends on the very last frame of the Timeline
 
-	[SerializeField] public DialogueLineChannelSO PlayDialogueEvent;
-	[SerializeField] public VoidEventChannelSO PauseTimelineEvent;
+	[HideInInspector] public DialogueLineChannelSO PlayDialogueEvent;
+	[HideInInspector] public VoidEventChannelSO PauseTimelineEvent;
 
 	private bool _dialoguePlayed;
 
