@@ -14,6 +14,7 @@ public class Protagonist : MonoBehaviour
 	//These fields are read and manipulated by the StateMachine actions
 	[HideInInspector] public bool jumpInput;
 	[HideInInspector] public bool extraActionInput;
+	[HideInInspector] public bool attackInput;
 	[HideInInspector] public Vector3 movementInput; //Initial input coming from the Protagonist script
 	[HideInInspector] public Vector3 movementVector; //Final movement vector, manipulated by the StateMachine actions
 	[HideInInspector] public ControllerColliderHit lastHit;
@@ -33,6 +34,7 @@ public class Protagonist : MonoBehaviour
 		_inputReader.extraActionEvent += OnExtraAction;
 		_inputReader.startedRunning += OnStartedRunning;
 		_inputReader.stoppedRunning += OnStoppedRunning;
+		_inputReader.attackEvent += OnAttack;
 		//...
 	}
 
@@ -108,4 +110,6 @@ public class Protagonist : MonoBehaviour
 	{
 		extraActionInput = true;
 	}
+
+	private void OnAttack() => attackInput = true;
 }
