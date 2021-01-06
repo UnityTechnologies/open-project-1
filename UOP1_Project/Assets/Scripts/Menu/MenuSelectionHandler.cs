@@ -30,7 +30,7 @@ public class MenuSelectionHandler : MonoBehaviour
 	/// </summary>
 	private IEnumerator SelectDefault()
 	{
-		yield return new WaitForEndOfFrame(); // Necessary wait otherwise the highlight won't show up
+		yield return new WaitForSeconds(.03f); // Necessary wait otherwise the highlight won't show up
 
 		if (_defaultSelection != null)
 			EventSystem.current.SetSelectedGameObject(_defaultSelection);

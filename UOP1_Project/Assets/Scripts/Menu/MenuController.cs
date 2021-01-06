@@ -3,9 +3,10 @@ using UnityEngine;
 
 public class MenuController : MonoBehaviour
 {
+	[SerializeField] private InputReader _inputReader;
 	[SerializeField] private GameObject _menuPrefab;
 	private GameObject _menuInstance;
-	[SerializeField] private InputReader _inputReader;
+
 	private void OnEnable()
 	{
 		_inputReader.pauseEvent += OpenMenu;
