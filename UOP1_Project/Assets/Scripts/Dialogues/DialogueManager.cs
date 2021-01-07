@@ -18,6 +18,7 @@ public class DialogueManager : MonoBehaviour
 	public DialogueChoiceChannelSO MakeDialogueChoiceEvent;
 	public VoidEventChannelSO CloseUIDialogueEvent;
 	private DialogueDataSO _currentDialogueDataSO;
+
 	private int _counter;
 	private bool _reachedEndOfDialogue { get => _counter >= _currentDialogueDataSO.DialogueLines.Count; }
 

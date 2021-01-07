@@ -6,8 +6,8 @@ using UnityEngine;
 /// Example: start talking to an actor passed as paramater
 /// </summary>
 
-[CreateAssetMenu(menuName = "Events/Dialogue Event Channel")]
-public class DialogueEventChannelSo : ScriptableObject
+[CreateAssetMenu(menuName = "Events/Dialogue Actor Channel")]
+public class DialogueActorChannelSo : ScriptableObject
 {
 	public UnityAction<ActorSO> OnEventRaised;
 	public void RaiseEvent(ActorSO actor)

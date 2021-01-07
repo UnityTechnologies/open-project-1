@@ -5,17 +5,17 @@ using UnityEngine;
 public class UIManager : MonoBehaviour
 {
 
-	public DialogueLineChannelSO OpenUIDialogueEvent;
-	public VoidEventChannelSO CloseUIDialogueEvent;
-	public DialogueChoicesChannelSO ShowChoicesUIEvent;
+	[SerializeField] private DialogueLineChannelSO OpenUIDialogueEvent= default;
+	[SerializeField] private VoidEventChannelSO CloseUIDialogueEvent = default;
+	[SerializeField] private DialogueChoicesChannelSO ShowChoicesUIEvent = default;
 
-	public VoidEventChannelSO OpenInventoryScreenEvent;
-	public VoidEventChannelSO OpenInventoryScreenForCookingEvent;
-	public VoidEventChannelSO CloseInventoryScreenEvent;
+	[SerializeField] private VoidEventChannelSO OpenInventoryScreenEvent = default;
+	[SerializeField] private VoidEventChannelSO OpenInventoryScreenForCookingEvent = default;
+	[SerializeField] private VoidEventChannelSO CloseInventoryScreenEvent = default;
 
-	public VoidEventChannelSO OnInteractionEndedEvent;
+	[SerializeField] private VoidEventChannelSO OnInteractionEndedEvent = default;
 
-	public InteractionUIEventChannelSO SetInteractionEvent;
+	[SerializeField] private InteractionUIEventChannelSO SetInteractionEvent = default;
 
 	private void OnEnable()
 	{
@@ -53,13 +53,13 @@ public class UIManager : MonoBehaviour
 	}
 
 	[SerializeField]
-	UIDialogueManager dialogueController = default;
+	private UIDialogueManager dialogueController = default;
 
 	[SerializeField]
-	UIInventoryManager inventoryPanel;
+	private UIInventoryManager inventoryPanel = default;
 
 	[SerializeField]
-	UIInteractionManager interactionPanel;
+	private UIInteractionManager interactionPanel = default;
 
 	public void OpenUIDialogue(DialogueLineSO dialogueLine, ActorSO actor)
 	{

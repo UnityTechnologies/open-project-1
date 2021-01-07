@@ -7,7 +7,7 @@ using UnityEngine.Timeline;
 /// A Dialogue is a list of consecutive DialogueLines. They play in sequence using the input of the player to skip forward.
 /// In future versions it might contain support for branching conversations.
 /// </summary>
-[CreateAssetMenu(fileName = "newDialogue", menuName = "CutsceneSystem/Dialogue Data")]
+[CreateAssetMenu(fileName = "newDialogue", menuName = "Dialogues/Dialogue Data")]
 public class DialogueDataSO : ScriptableObject
 {
 

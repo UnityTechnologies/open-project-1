@@ -14,7 +14,7 @@ public class InteractionManager : MonoBehaviour
 	[Header("Broadcasting on")]
 	[SerializeField] private ItemEventChannelSo _onObjectPickUp = default;
 	[SerializeField] private VoidEventChannelSO _onCookingStart = default;
-	[SerializeField] private DialogueEventChannelSo _startTalking = default;
+	[SerializeField] private DialogueDataChannelSo _startTalking = default;
 	//UI event
 	[SerializeField] private InteractionUIEventChannelSO _toggleInteractionUI = default;
 	[Header("Listening to")]
