@@ -54,32 +54,32 @@ public class InputReader : ScriptableObject, GameInput.IGameplayActions, GameInp
 	public void OnAttack(InputAction.CallbackContext context)
 	{
 		if (attackEvent != null
-		    && context.phase == InputActionPhase.Performed)
+			&& context.phase == InputActionPhase.Performed)
 			attackEvent.Invoke();
 	}
 
 	public void OnExtraAction(InputAction.CallbackContext context)
 	{
 		if (extraActionEvent != null
-		    && context.phase == InputActionPhase.Performed)
+			&& context.phase == InputActionPhase.Performed)
 			extraActionEvent.Invoke();
 	}
 
 	public void OnInteract(InputAction.CallbackContext context)
 	{
 		if (interactEvent != null
-		    && context.phase == InputActionPhase.Performed)
+			&& context.phase == InputActionPhase.Performed)
 			interactEvent.Invoke();
 	}
 
 	public void OnJump(InputAction.CallbackContext context)
 	{
 		if (jumpEvent != null
-		    && context.phase == InputActionPhase.Performed)
+			&& context.phase == InputActionPhase.Performed)
 			jumpEvent.Invoke();
 
 		if (jumpCanceledEvent != null
-		    && context.phase == InputActionPhase.Canceled)
+			&& context.phase == InputActionPhase.Canceled)
 			jumpCanceledEvent.Invoke();
 	}
 
@@ -107,7 +107,7 @@ public class InputReader : ScriptableObject, GameInput.IGameplayActions, GameInp
 	public void OnPause(InputAction.CallbackContext context)
 	{
 		if (pauseEvent != null
-		    && context.phase == InputActionPhase.Performed)
+			&& context.phase == InputActionPhase.Performed)
 			pauseEvent.Invoke();
 	}
 

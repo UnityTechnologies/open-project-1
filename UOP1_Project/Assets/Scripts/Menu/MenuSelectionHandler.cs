@@ -68,7 +68,8 @@ public class MenuSelectionHandler : MonoBehaviour
 
 	public void HandleMouseExit(GameObject uiElement)
 	{
-		if (EventSystem.current.currentSelectedGameObject != uiElement) return;
+		if (EventSystem.current.currentSelectedGameObject != uiElement)
+			return;
 
 		// deselect UI element if mouse moves away from it
 		_mouseSelection = null;
@@ -81,10 +82,10 @@ public class MenuSelectionHandler : MonoBehaviour
 	/// <returns></returns>
 	public bool AllowsSubmitOccurance()
 	{
-				// if LMB is not down, there is no edge case to handle, allow the event to continue
+		// if LMB is not down, there is no edge case to handle, allow the event to continue
 		return !_inputReader.LeftMouseDown()
-				// if we know mouse & keyboard are on different elements, do not allow interaction to continue
-		       || _mouseSelection != null && _mouseSelection == _currentSelection;
+			   // if we know mouse & keyboard are on different elements, do not allow interaction to continue
+			   || _mouseSelection != null && _mouseSelection == _currentSelection;
 	}
 
 	/// <summary>
