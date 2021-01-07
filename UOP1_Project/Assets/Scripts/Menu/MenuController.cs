@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class MenuController : MonoBehaviour
 {
@@ -10,19 +9,20 @@ public class MenuController : MonoBehaviour
 	private void OnEnable()
 	{
 		_inputReader.pauseEvent += OpenMenu;
-		_inputReader.UnpauseMenuEvent += UnpauseMenu;
+		_inputReader.menuUnpauseEvent += UnpauseMenu;
 	}
 
 	private void OnDisable()
 	{
 		_inputReader.pauseEvent -= OpenMenu;
-		_inputReader.UnpauseMenuEvent -= UnpauseMenu;
+		_inputReader.menuUnpauseEvent -= UnpauseMenu;
 	}
 
 	private void OpenMenu()
 	{
 		if (_menuInstance == null)
 			_menuInstance = Instantiate(_menuPrefab);
+
 		_menuInstance.SetActive(true);
 		_inputReader.EnableMenuInput();
 	}

@@ -1,12 +1,16 @@
-﻿using UnityEngine.EventSystems;
+﻿using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-// Chop Chop button
-public class CC_Button : Button
+/// <summary>
+/// An extension of Unity's base Button class, to support input from both mouse and keyboard/joypad
+/// </summary>
+[AddComponentMenu("UOP1/UI/MultiInputButton")]
+public class MultiInputButton : Button
 {
 	private MenuSelectionHandler _menuSelectionHandler;
 
-	private void Awake()
+	private new void Awake()
 	{
 		_menuSelectionHandler = transform.root.gameObject.GetComponentInChildren<MenuSelectionHandler>();
 	}
@@ -29,7 +33,7 @@ public class CC_Button : Button
 
 	public override void OnSubmit(BaseEventData eventData)
 	{
-		if (_menuSelectionHandler.AllowsSubmitOccurance())
+		if (_menuSelectionHandler.AllowsSubmit())
 			base.OnSubmit(eventData);
 	}
 }

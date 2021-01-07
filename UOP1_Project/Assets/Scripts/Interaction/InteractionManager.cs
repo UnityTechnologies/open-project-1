@@ -81,7 +81,7 @@ public class InteractionManager : MonoBehaviour
 					_onCookingStart.RaiseEvent();
 					Debug.Log("Cooking event raised");
 					//Change the action map
-					_inputReader.EnableUIInput();
+					_inputReader.EnableMenuInput();
 					//set current interaction for state machine
 					currentInteraction = InteractionType.Cook;
 				}

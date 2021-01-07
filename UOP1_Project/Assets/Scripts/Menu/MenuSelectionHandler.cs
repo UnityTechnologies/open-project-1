@@ -1,28 +1,26 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.InputSystem;
 
 public class MenuSelectionHandler : MonoBehaviour
 {
 	[SerializeField] private InputReader _inputReader;
 	[SerializeField] private GameObject _defaultSelection;
-	public GameObject _currentSelection;
-	public GameObject _mouseSelection;
+	public GameObject currentSelection;
+	public GameObject mouseSelection;
 
 	private void OnEnable()
 	{
-		_inputReader.MouseMoveMenuEvent += HandleMoveCursor;
-		_inputReader.MoveSelectionMenuEvent += HandleMoveSelection;
+		_inputReader.menuMouseMoveEvent += HandleMoveCursor;
+		_inputReader.moveSelectionEvent += HandleMoveSelection;
 
 		StartCoroutine(SelectDefault());
 	}
 
 	private void OnDisable()
 	{
-		_inputReader.MouseMoveMenuEvent -= HandleMoveCursor;
-		_inputReader.MoveSelectionMenuEvent -= HandleMoveSelection;
+		_inputReader.menuMouseMoveEvent -= HandleMoveCursor;
+		_inputReader.moveSelectionEvent -= HandleMoveSelection;
 	}
 
 	/// <summary>
@@ -47,32 +45,32 @@ public class MenuSelectionHandler : MonoBehaviour
 
 		// Handle case where no UI element is selected because mouse left selectable bounds
 		if (EventSystem.current.currentSelectedGameObject == null)
-			EventSystem.current.SetSelectedGameObject(_currentSelection);
+			EventSystem.current.SetSelectedGameObject(currentSelection);
 	}
 
 	private void HandleMoveCursor()
 	{
-		if (_mouseSelection != null)
+		if (mouseSelection != null)
 		{
-			EventSystem.current.SetSelectedGameObject(_mouseSelection);
+			EventSystem.current.SetSelectedGameObject(mouseSelection);
 		}
 
 		Cursor.visible = true;
 	}
 
-	public void HandleMouseEnter(GameObject uiElement)
+	public void HandleMouseEnter(GameObject UIElement)
 	{
-		_mouseSelection = uiElement;
-		EventSystem.current.SetSelectedGameObject(uiElement);
+		mouseSelection = UIElement;
+		EventSystem.current.SetSelectedGameObject(UIElement);
 	}
 
-	public void HandleMouseExit(GameObject uiElement)
+	public void HandleMouseExit(GameObject UIElement)
 	{
-		if (EventSystem.current.currentSelectedGameObject != uiElement)
+		if (EventSystem.current.currentSelectedGameObject != UIElement)
 			return;
 
 		// deselect UI element if mouse moves away from it
-		_mouseSelection = null;
+		mouseSelection = null;
 		EventSystem.current.SetSelectedGameObject(null);
 	}
 
@@ -80,24 +78,24 @@ public class MenuSelectionHandler : MonoBehaviour
 	/// Method interactable UI elements should call on Submit interaction to determine whether to continue or not.
 	/// </summary>
 	/// <returns></returns>
-	public bool AllowsSubmitOccurance()
+	public bool AllowsSubmit()
 	{
 		// if LMB is not down, there is no edge case to handle, allow the event to continue
 		return !_inputReader.LeftMouseDown()
 			   // if we know mouse & keyboard are on different elements, do not allow interaction to continue
-			   || _mouseSelection != null && _mouseSelection == _currentSelection;
+			   || mouseSelection != null && mouseSelection == currentSelection;
 	}
 
 	/// <summary>
 	/// Fired by gamepad or keyboard navigation inputs
 	/// </summary>
-	/// <param name="uiElement"></param>
-	public void UpdateSelection(GameObject uiElement) => _currentSelection = uiElement;
+	/// <param name="UIElement"></param>
+	public void UpdateSelection(GameObject UIElement) => currentSelection = UIElement;
 
-	// debug
+	// Debug
 	// private void OnGUI()
 	// {
-	// 	GUILayout.Box($"_currentSelection: {(_currentSelection != null ? _currentSelection.name : "null")}");
-	// 	GUILayout.Box($"_mouseSelection: {(_mouseSelection != null ? _mouseSelection.name : "null")}");
+	//	 	GUILayout.Box($"_currentSelection: {(_currentSelection != null ? _currentSelection.name : "null")}");
+	//	 	GUILayout.Box($"_mouseSelection: {(_mouseSelection != null ? _mouseSelection.name : "null")}");
 	// }
 }
