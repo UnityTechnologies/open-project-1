@@ -17,12 +17,12 @@ public class EditorInitialisationLoader : MonoBehaviour
 		for (int i = 0; i < SceneManager.sceneCount; ++i)
 		{
 			Scene scene = SceneManager.GetSceneAt(i);
-			if (scene.name == initializationScene.sceneName)
+			if (scene.path == initializationScene.scenePath)
 			{
 				return;
 			}
 		}
-		SceneManager.LoadSceneAsync(initializationScene.sceneName, LoadSceneMode.Additive);
+		SceneManager.LoadSceneAsync(initializationScene.scenePath, LoadSceneMode.Additive);
 	}
 #endif
 }

@@ -3,7 +3,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.Events;
 
 [CreateAssetMenu(fileName = "InputReader", menuName = "Game/Input Reader")]
-public class InputReader : ScriptableObject, GameInput.IGameplayActions, GameInput.IDialoguesActions
+public class InputReader : ScriptableObject, GameInput.IGameplayActions, GameInput.IDialoguesActions, GameInput.IMenusActions
 {
 	// Gameplay
 	public event UnityAction jumpEvent;
@@ -16,10 +16,20 @@ public class InputReader : ScriptableObject, GameInput.IGameplayActions, GameInp
 	public event UnityAction<Vector2, bool> cameraMoveEvent;
 	public event UnityAction enableMouseControlCameraEvent;
 	public event UnityAction disableMouseControlCameraEvent;
+	public event UnityAction startedRunning;
+	public event UnityAction stoppedRunning;
 
 	// Dialogue
-	public event UnityAction advanceDialogueEvent = delegate { };
-	public event UnityAction onMoveSelectionEvent = delegate { };
+	public event UnityAction advanceDialogueEvent;
+	public event UnityAction onMoveSelectionEvent;
+
+	// MenuEvents
+	public event UnityAction MoveSelectionMenuEvent = delegate { };
+	public event UnityAction MouseMoveMenuEvent = delegate { };
+	public event UnityAction ConfirmMenuEvent = delegate { };
+	public event UnityAction CancelMenuEvent = delegate { };
+	public event UnityAction UnpauseMenuEvent = delegate { };
+
 
 	private GameInput gameInput;
 
@@ -28,6 +38,7 @@ public class InputReader : ScriptableObject, GameInput.IGameplayActions, GameInp
 		if (gameInput == null)
 		{
 			gameInput = new GameInput();
+			gameInput.Menus.SetCallbacks(this);
 			gameInput.Gameplay.SetCallbacks(this);
 			gameInput.Dialogues.SetCallbacks(this);
 		}
@@ -80,6 +91,19 @@ public class InputReader : ScriptableObject, GameInput.IGameplayActions, GameInp
 		}
 	}
 
+	public void OnRun(InputAction.CallbackContext context)
+	{
+		switch (context.phase)
+		{
+			case InputActionPhase.Performed:
+				startedRunning?.Invoke();
+				break;
+			case InputActionPhase.Canceled:
+				stoppedRunning?.Invoke();
+				break;
+		}
+	}
+
 	public void OnPause(InputAction.CallbackContext context)
 	{
 		if (pauseEvent != null
@@ -118,22 +142,72 @@ public class InputReader : ScriptableObject, GameInput.IGameplayActions, GameInp
 			advanceDialogueEvent();
 	}
 
+	public void OnMoveMenuSelection(InputAction.CallbackContext context)
+	{
+		if (context.phase == InputActionPhase.Performed)
+			MoveSelectionMenuEvent();
+	}
+
+	public void OnConfirm(InputAction.CallbackContext context)
+	{
+		if (context.phase == InputActionPhase.Performed)
+			ConfirmMenuEvent();
+	}
+
+	public void OnCancel(InputAction.CallbackContext context)
+	{
+		if (context.phase == InputActionPhase.Performed)
+			CancelMenuEvent();
+	}
+
+	public void OnMouseMove(InputAction.CallbackContext context)
+	{
+		if (context.phase == InputActionPhase.Performed)
+			MouseMoveMenuEvent();
+	}
+
+	public void OnUnpause(InputAction.CallbackContext context)
+	{
+		if (context.phase == InputActionPhase.Performed)
+			UnpauseMenuEvent();
+	}
 
 	public void EnableDialogueInput()
 	{
 		gameInput.Dialogues.Enable();
+		gameInput.Menus.Disable();
 		gameInput.Gameplay.Disable();
+		gameInput.Menus.Disable();
 	}
 
 	public void EnableGameplayInput()
 	{
 		gameInput.Gameplay.Enable();
+		gameInput.Menus.Disable();
 		gameInput.Dialogues.Disable();
+		gameInput.Menus.Disable();
+	}
+
+	public void EnableUIInput()
+	{
+		gameInput.Gameplay.Disable();
+		gameInput.Dialogues.Disable();
+		gameInput.Menus.Enable();
 	}
 
 	public void DisableAllInput()
 	{
 		gameInput.Gameplay.Disable();
+		gameInput.Menus.Disable();
 		gameInput.Dialogues.Disable();
 	}
+
+	public void EnableMenuInput()
+	{
+		gameInput.Dialogues.Disable();
+		gameInput.Gameplay.Disable();
+		gameInput.Menus.Enable();
+	}
+
+	public bool LeftMouseDown() => Mouse.current.leftButton.isPressed;
 }
