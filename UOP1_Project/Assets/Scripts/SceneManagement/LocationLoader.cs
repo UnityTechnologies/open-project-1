@@ -105,6 +105,9 @@ public class LocationLoader : MonoBehaviour
 	{
 		// TODO: As each event completes, decide if it needs to activate right away.
 		SceneManager.SetActiveScene(SceneManager.GetSceneByPath(_activeScene.scenePath));
+
+		// Will reconstruct LightProbe tetrahedrons to include the probes from the newly-loaded scene
+		LightProbes.TetrahedralizeAsync();
 	}
 
 	private void AddScenesToUnload()
