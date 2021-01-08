@@ -1,48 +1,59 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class UIManager : MonoBehaviour
 {
+	[Header("Listening on channels")]
+	[Header("Dialogue Events")]
+	[FormerlySerializedAs("OpenUIDialogueEvent")]
+	[SerializeField] private DialogueLineChannelSO _openUIDialogueEvent= default;
+	[FormerlySerializedAs("CloseUIDialogueEvent")]
+	[SerializeField] private VoidEventChannelSO _closeUIDialogueEvent = default;
+	[FormerlySerializedAs("ShowChoicesUIEvent")]
+	[SerializeField] private DialogueChoicesChannelSO _showChoicesUIEvent = default;
 
-	[SerializeField] private DialogueLineChannelSO OpenUIDialogueEvent= default;
-	[SerializeField] private VoidEventChannelSO CloseUIDialogueEvent = default;
-	[SerializeField] private DialogueChoicesChannelSO ShowChoicesUIEvent = default;
+	[Header("Inventory Events")]
+	[FormerlySerializedAs("OpenInventoryScreenEvent")]
+	[SerializeField] private VoidEventChannelSO _openInventoryScreenEvent = default;
+	[FormerlySerializedAs("OpenInventoryScreenForCookingEvent")]
+	[SerializeField] private VoidEventChannelSO _openInventoryScreenForCookingEvent = default;
+	[FormerlySerializedAs("CloseInventoryScreenEvent")]
+	[SerializeField] private VoidEventChannelSO _closeInventoryScreenEvent = default;
 
-	[SerializeField] private VoidEventChannelSO OpenInventoryScreenEvent = default;
-	[SerializeField] private VoidEventChannelSO OpenInventoryScreenForCookingEvent = default;
-	[SerializeField] private VoidEventChannelSO CloseInventoryScreenEvent = default;
-
-	[SerializeField] private VoidEventChannelSO OnInteractionEndedEvent = default;
-
-	[SerializeField] private InteractionUIEventChannelSO SetInteractionEvent = default;
+	[Header("Interaction Events")]
+	[FormerlySerializedAs("OnInteractionEndedEvent")]
+	[SerializeField] private VoidEventChannelSO _onInteractionEndedEvent = default;
+	[FormerlySerializedAs("SetInteractionEvent")]
+	[SerializeField] private InteractionUIEventChannelSO _setInteractionEvent = default;
 
 	private void OnEnable()
 	{
 		//Check if the event exists to avoid errors
-		if (OpenUIDialogueEvent != null)
+		if (_openUIDialogueEvent != null)
 		{
-			OpenUIDialogueEvent.OnEventRaised += OpenUIDialogue;
+			_openUIDialogueEvent.OnEventRaised += OpenUIDialogue;
 		}
-		if (CloseUIDialogueEvent != null)
+		if (_closeUIDialogueEvent != null)
 		{
-			CloseUIDialogueEvent.OnEventRaised += CloseUIDialogue;
+			_closeUIDialogueEvent.OnEventRaised += CloseUIDialogue;
 		}
-		if (OpenInventoryScreenForCookingEvent != null)
+		if (_openInventoryScreenForCookingEvent != null)
 		{
-			OpenInventoryScreenForCookingEvent.OnEventRaised += SetInventoryScreenForCooking;
+			_openInventoryScreenForCookingEvent.OnEventRaised += SetInventoryScreenForCooking;
 		}
-		if (OpenInventoryScreenEvent != null)
+		if (_openInventoryScreenEvent != null)
 		{
-			OpenInventoryScreenEvent.OnEventRaised += SetInventoryScreen;
+			_openInventoryScreenEvent.OnEventRaised += SetInventoryScreen;
 		}
-		if (CloseInventoryScreenEvent != null)
+		if (_closeInventoryScreenEvent != null)
 		{
-			CloseInventoryScreenEvent.OnEventRaised += CloseInventoryScreen;
+			_closeInventoryScreenEvent.OnEventRaised += CloseInventoryScreen;
 		}
-		if (SetInteractionEvent != null)
+		if (_setInteractionEvent != null)
 		{
-			SetInteractionEvent.OnEventRaised += SetInteractionPanel;
+			_setInteractionEvent.OnEventRaised += SetInteractionPanel;
 		}
 
 	}
@@ -107,7 +118,7 @@ public class UIManager : MonoBehaviour
 
 		if (isForCooking)
 		{
-			OnInteractionEndedEvent.RaiseEvent();
+			_onInteractionEndedEvent.RaiseEvent();
 
 		}
 	}

@@ -14,7 +14,7 @@ public class InteractionManager : MonoBehaviour
 	[Header("Broadcasting on")]
 	[SerializeField] private ItemEventChannelSo _onObjectPickUp = default;
 	[SerializeField] private VoidEventChannelSO _onCookingStart = default;
-	[SerializeField] private DialogueDataChannelSo _startTalking = default;
+	[SerializeField] private DialogueActorChannelSo _startTalking = default;
 	//UI event
 	[SerializeField] private InteractionUIEventChannelSO _toggleInteractionUI = default;
 	[Header("Listening to")]
@@ -89,10 +89,10 @@ public class InteractionManager : MonoBehaviour
 			case InteractionType.Talk:
 				if (_currentInteractableObject != null)
 				{
-					if (_onCookingStart != null)
+					if (_startTalking != null)
 					{
 						//raise an event with an actor as parameter
-						//Actor currentActor = currentInteractableObject.GetComponent<Dialogue>().GetActor();
+						_currentInteractableObject.GetComponent<TaskManager>().InteractWithCharacter(); 
 						//_startTalking.RaiseEvent(currentActor);
 						Debug.Log("talk event raised");
 						//Change the action map

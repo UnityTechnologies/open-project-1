@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 /// <summary>
@@ -13,17 +14,28 @@ public class DialogueManager : MonoBehaviour
 //	[SerializeField] private ChoiceBox _choiceBox; // TODO: Demonstration purpose only. Remove or adjust later.
 
 	[SerializeField] private InputReader _inputReader = default;
-	public DialogueLineChannelSO OpenUIDialogueEvent;
-	public DialogueChoicesChannelSO ShowChoicesUIEvent;
-	public DialogueChoiceChannelSO MakeDialogueChoiceEvent;
-	public VoidEventChannelSO CloseUIDialogueEvent;
-	private DialogueDataSO _currentDialogueDataSO;
-
 	private int _counter;
 	private bool _reachedEndOfDialogue { get => _counter >= _currentDialogueDataSO.DialogueLines.Count; }
 
+	[Header("Listening on channels")]
+	[SerializeField] private DialogueDataChannelSo _startDialogue = default;
+	[SerializeField] private DialogueChoiceChannelSO _makeDialogueChoiceEvent = default;
+
+	[Header("BoradCasting on channels")]
+	[SerializeField] private DialogueLineChannelSO _openUIDialogueEvent = default;
+	[SerializeField] private DialogueChoicesChannelSO _showChoicesUIEvent = default;
+	[SerializeField] private VoidEventChannelSO _endDialogue = default;
+	[SerializeField] private VoidEventChannelSO _closeDialogueUIEvent = default;
+
+
+	private DialogueDataSO _currentDialogueDataSO = default;
+
 	private void Start()
 	{
+		if(_startDialogue!=null)
+		{
+			_startDialogue.OnEventRaised += DisplayDialogueData; 
+		}
 		
 	}
 
@@ -55,9 +67,9 @@ public class DialogueManager : MonoBehaviour
 	/// <param name="dialogueLine"></param>
 	public void DisplayDialogueLine(DialogueLineSO dialogueLine, ActorSO actor)
 	{
-        if(OpenUIDialogueEvent!=null)
+        if(_openUIDialogueEvent!=null)
 		{
-			OpenUIDialogueEvent.RaiseEvent(dialogueLine, actor); 
+			_openUIDialogueEvent.RaiseEvent(dialogueLine, actor); 
 		}
 }
 
@@ -86,22 +98,22 @@ public class DialogueManager : MonoBehaviour
 	{
 		_inputReader.advanceDialogueEvent -= OnAdvance;
 
-		if (MakeDialogueChoiceEvent != null)
+		if (_makeDialogueChoiceEvent != null)
 		{
-			MakeDialogueChoiceEvent.OnEventRaised += MakeDialogueChoice;
+			_makeDialogueChoiceEvent.OnEventRaised += MakeDialogueChoice;
 		}
 
-		if (ShowChoicesUIEvent != null)
+		if (_showChoicesUIEvent != null)
 		{
-			ShowChoicesUIEvent.RaiseEvent(choices);
+			_showChoicesUIEvent.RaiseEvent(choices);
 		}
 	}
 
 	private void MakeDialogueChoice(Choice choice)
 	{
-		if (MakeDialogueChoiceEvent != null)
+		if (_makeDialogueChoiceEvent != null)
 		{
-			MakeDialogueChoiceEvent.OnEventRaised -= MakeDialogueChoice;
+			_makeDialogueChoiceEvent.OnEventRaised -= MakeDialogueChoice;
 		}
 
 		DisplayDialogueData(choice.NextDialogue); 
@@ -109,50 +121,14 @@ public class DialogueManager : MonoBehaviour
 
 	public void DialogueEnded()
 	{
-		if(CloseUIDialogueEvent!=null)
-		CloseUIDialogueEvent.RaiseEvent(); 
+		if(_endDialogue!=null)
+		    _endDialogue.RaiseEvent();
+
+		if (_closeDialogueUIEvent != null)
+			_closeDialogueUIEvent.RaiseEvent();
+
 		_inputReader.advanceDialogueEvent -= OnAdvance;
 		_inputReader.EnableGameplayInput();
 	}
 }
 
-// TODO: Demonstration purpose only. Remove or adjust later.
-/*
-[Serializable]
-public class ChoiceBox	
-{
-	[SerializeField] private GameObject _gameObject;
-	[SerializeField] private Transform _contentTrans;
-	[SerializeField] private GameObject _buttonPrefab;
-
-	public void Show(List<Choice> choices, DialogueManager dialogueManager)
-	{
-		_gameObject.SetActive(true);
-
-		// Refresh choice box
-		foreach(Transform child in _contentTrans)
-		{
-			GameObject.Destroy(child.gameObject);
-		}
-
-		for(int i = 0; i < choices.Count; i++)
-		{
-			Button choiceButton = GameObject.Instantiate<Button>(_buttonPrefab.GetComponent<Button>(), _contentTrans);
-			choiceButton.GetComponentInChildren<TMP_Text>().text = choices[i].OptionName;
-
-			int index = i;
-			choiceButton.onClick.AddListener(() => OnChoiceButtonClick(choices[index], dialogueManager)); 
-		}
-	}
-
-	private void OnChoiceButtonClick(Choice choice, DialogueManager dialogueManager)
-	{
-		if (choice.Response != null)
-			dialogueManager.DisplayDialogueData(choice.Response);
-		else
-			dialogueManager.DialogueEnded();
-
-		_gameObject.SetActive(false);
-	}
-}
-*/

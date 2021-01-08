@@ -5,11 +5,15 @@ using UnityEngine;
 public class QuestSO : ScriptableObject
 {
 	[Tooltip("The collection of Tasks composing the Quest")]
-	
 	[SerializeField]
 	private List<TaskSO> _tasks = new List<TaskSO>();
-
+	bool _isDone = false;
 	public List<TaskSO> Tasks => _tasks;
+	public bool IsDone => _isDone;
+	public void FinishQuest()
+	{
+		_isDone = true;
+	}
 
 
 }
