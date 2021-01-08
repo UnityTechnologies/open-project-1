@@ -6,6 +6,9 @@ public class LoadingScreenManager : MonoBehaviour
 	//The loading screen event we are listening to
 	[SerializeField] private BoolEventChannelSO _ToggleLoadingScreen = default;
 
+	[Header("Loading screen ")]
+	public GameObject loadingInterface;
+
 	private void OnEnable()
 	{
 		if (_ToggleLoadingScreen != null)
@@ -24,7 +27,8 @@ public class LoadingScreenManager : MonoBehaviour
 
 	private void ToggleLoadingScreen(bool state)
 	{
-		gameObject.SetActive(state);
+		Debug.Log("I am toggeling the loading screen");
+		loadingInterface.SetActive(state);
 	}
 
 }
