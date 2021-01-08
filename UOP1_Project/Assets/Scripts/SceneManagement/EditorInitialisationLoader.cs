@@ -10,11 +10,8 @@ public class EditorInitialisationLoader : MonoBehaviour
 #if UNITY_EDITOR
 	public GameSceneSO[] scenesToLoad;
 	public int targetFramerate = 0; // For debugging purposes
-	//add bool and access it from other script
-
-
-	[Header("Broadcasting on")]
-	[SerializeField] private VoidEventChannelSO _OnEditorInitializer = default;
+	//bool to know if we are coming from editor initializer mode
+	[HideInInspector] public bool _isEditorInitializerMode=false;
 
 	private void Start()
 	{
@@ -32,7 +29,7 @@ public class EditorInitialisationLoader : MonoBehaviour
 				{
 					SceneManager.LoadSceneAsync(scenesToLoad[j].scenePath, LoadSceneMode.Additive);
 					//Inform that we are pressing play from a location or menu
-					_OnEditorInitializer.RaiseEvent();
+					_isEditorInitializerMode = true;
 				}
 		}
 	}

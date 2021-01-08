@@ -85,7 +85,6 @@ public class SceneLoader : MonoBehaviour
 	{
 		//Take the first scene in the array as the scene we want to set active
 		_activeScene = locationsToLoad[0];
-		Debug.Log("active scene = " + _activeScene.scenePath);
 		UnloadScenes();
 
 		if (showLoadingScreen)

@@ -8,33 +8,16 @@
 public class SceneReadyBroadcaster : MonoBehaviour
 {
 #if UNITY_EDITOR
-
-	[Header("On Editor Initializer event")]
-	[SerializeField] private VoidEventChannelSO _OnEditorInitializer = default;
-
-
 	[Header("Broadcasting on")]
 	[SerializeField] private VoidEventChannelSO _OnSceneReady = default;
 
-	private void OnEnable()
+	private void Start()
 	{
-		if (_OnEditorInitializer != null)
+		if(GetComponent<EditorInitialisationLoader>()._isEditorInitializerMode == true)
 		{
-			_OnEditorInitializer.OnEventRaised += InformSceneIsReady;
+			_OnSceneReady.RaiseEvent();
 		}
 	}
 
-	private void OnDisable()
-	{
-		if (_OnEditorInitializer != null)
-		{
-			_OnEditorInitializer.OnEventRaised -= InformSceneIsReady;
-		}
-	}
-
-	void InformSceneIsReady()
-	{
-		_OnSceneReady.RaiseEvent();
-	}
 #endif
 }

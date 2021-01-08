@@ -27,7 +27,6 @@ public class LoadingScreenManager : MonoBehaviour
 
 	private void ToggleLoadingScreen(bool state)
 	{
-		Debug.Log("I am toggeling the loading screen");
 		loadingInterface.SetActive(state);
 	}
 
