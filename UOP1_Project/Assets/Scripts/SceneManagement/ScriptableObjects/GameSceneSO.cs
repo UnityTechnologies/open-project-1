@@ -12,7 +12,7 @@ public abstract partial class GameSceneSO : ScriptableObject
 #endif
 	[HideInInspector]
 	public string scenePath;
-	public string shortDescription;
+	[TextArea] public string shortDescription;
 
 	[Header("Sounds")]
 	public AudioClip music;
