@@ -20,7 +20,7 @@ public class InitializationLoader : MonoBehaviour
 	[SerializeField] private LoadEventChannelSO _MenuLoadChannel = default;
 
 	void Start()
-    {
+	{
 		//Load the persistent managers scene
 		StartCoroutine(loadScene(_PersistentManagersScene.scenePath));
 	}

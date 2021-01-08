@@ -22,7 +22,7 @@ public class LoadingScreenManager : MonoBehaviour
 		if (_ToggleLoadingScreen != null)
 		{
 			_ToggleLoadingScreen.OnEventRaised += ToggleLoadingScreen;
-		}		
+		}
 	}
 
 	private void ToggleLoadingScreen(bool state)

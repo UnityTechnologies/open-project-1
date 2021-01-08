@@ -166,7 +166,7 @@ public class SceneLoader : MonoBehaviour
 				if (scenePath != persistentScenes[j].scenePath)
 				{
 					//Check if we reached the last persistent scenes check
-					if (j == persistentScenes.Count-1)
+					if (j == persistentScenes.Count - 1)
 					{
 						//If the scene is not one of the persistent scenes, we add it to the scenes to unload
 						_scenesToUnload.Add(scene);
