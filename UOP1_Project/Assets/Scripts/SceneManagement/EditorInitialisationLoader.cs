@@ -11,6 +11,9 @@ public class EditorInitialisationLoader : MonoBehaviour
 	public GameSceneSO[] persistentScenes;
 	public int targetFramerate = 0; // For debugging purposes
 
+	[Header("Broadcasting on")]
+	[SerializeField] private VoidEventChannelSO _OnEditorInitializer = default;
+
 	private void Start()
 	{
 		Application.targetFrameRate = targetFramerate; // For debugging purposes
@@ -26,6 +29,8 @@ public class EditorInitialisationLoader : MonoBehaviour
 				else
 				{
 					SceneManager.LoadSceneAsync(persistentScenes[j].scenePath, LoadSceneMode.Additive);
+					//Inform that we are pressing play from a location or menu
+					_OnEditorInitializer.RaiseEvent();
 				}
 		}
 	}
