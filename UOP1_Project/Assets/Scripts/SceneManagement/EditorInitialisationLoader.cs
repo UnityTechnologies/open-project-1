@@ -8,8 +8,10 @@ using UnityEngine.SceneManagement;
 public class EditorInitialisationLoader : MonoBehaviour
 {
 #if UNITY_EDITOR
-	public GameSceneSO[] persistentScenes;
+	public GameSceneSO[] scenesToLoad;
 	public int targetFramerate = 0; // For debugging purposes
+	//add bool and access it from other script
+
 
 	[Header("Broadcasting on")]
 	[SerializeField] private VoidEventChannelSO _OnEditorInitializer = default;
@@ -21,14 +23,14 @@ public class EditorInitialisationLoader : MonoBehaviour
 		for (int i = 0; i < SceneManager.sceneCount; ++i)
 		{
 			Scene scene = SceneManager.GetSceneAt(i);
-			for (int j = 0; j < persistentScenes.Length; ++j)
-				if (scene.path == persistentScenes[j].scenePath)
+			for (int j = 0; j < scenesToLoad.Length; ++j)
+				if (scene.path == scenesToLoad[j].scenePath)
 				{
 					return;
 				}
 				else
 				{
-					SceneManager.LoadSceneAsync(persistentScenes[j].scenePath, LoadSceneMode.Additive);
+					SceneManager.LoadSceneAsync(scenesToLoad[j].scenePath, LoadSceneMode.Additive);
 					//Inform that we are pressing play from a location or menu
 					_OnEditorInitializer.RaiseEvent();
 				}
