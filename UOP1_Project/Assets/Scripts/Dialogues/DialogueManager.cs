@@ -9,7 +9,7 @@ using UnityEngine;
 public class DialogueManager : MonoBehaviour
 {
 	[SerializeField] private InputReader _inputReader = default;
-
+	[SerializeField] DialogueLineChannelSO dialogueLineEvent;
 	/// <summary>
 	/// Called to begin a dialogue, i.e. a sequence of lines that require the player's input to move forward.
 	/// </summary>
@@ -29,7 +29,8 @@ public class DialogueManager : MonoBehaviour
 	{
 		//TODO: Interface with a UIManager to allow displayal of the line of dialogue in the UI
 		//Debug.Log("A line of dialogue has been spoken: \"" + dialogueLine.Sentence + "\" by " + dialogueLine.Actor.ActorName);
-		UIManager.Instance.OpenUIDialogue(dialogueLine);
+		if (dialogueLineEvent != null)
+			dialogueLineEvent.OnEventRaised(dialogueLine);
 
 	}
 }

@@ -10,8 +10,8 @@ public class CameraManager : MonoBehaviour
 	public CinemachineFreeLook freeLookVCam;
 	private bool _isRMBPressed;
 
-	[SerializeField, Range(1f, 5f)]
-	private float speed = default;
+	[SerializeField, Range(.5f, 3f)]
+	private float _speedMultiplier = 1f; //TODO: make this modifiable in the game settings
 	[SerializeField] private TransformAnchor _cameraTransformAnchor = default;
 
 	[Header("Listening on channels")]
@@ -19,7 +19,7 @@ public class CameraManager : MonoBehaviour
 	[SerializeField] private TransformEventChannelSO _frameObjectChannel = default;
 
 
-	private bool cameraMovementLock = false;
+	private bool _cameraMovementLock = false;
 
 	public void SetupProtagonistVirtualCamera(Transform target)
 	{
@@ -61,9 +61,9 @@ public class CameraManager : MonoBehaviour
 
 	IEnumerator DisableMouseControlForFrame()
 	{
-		cameraMovementLock = true;
+		_cameraMovementLock = true;
 		yield return new WaitForEndOfFrame();
-		cameraMovementLock = false;
+		_cameraMovementLock = false;
 	}
 
 	private void OnDisableMouseControlCamera()
@@ -81,14 +81,14 @@ public class CameraManager : MonoBehaviour
 
 	private void OnCameraMove(Vector2 cameraMovement, bool isDeviceMouse)
 	{
-		if (cameraMovementLock)
+		if (_cameraMovementLock)
 			return;
 
 		if (isDeviceMouse && !_isRMBPressed)
 			return;
 
-		freeLookVCam.m_XAxis.m_InputAxisValue = cameraMovement.x * Time.smoothDeltaTime * speed;
-		freeLookVCam.m_YAxis.m_InputAxisValue = cameraMovement.y * Time.smoothDeltaTime * speed;
+		freeLookVCam.m_XAxis.m_InputAxisValue = cameraMovement.x * Time.smoothDeltaTime * _speedMultiplier;
+		freeLookVCam.m_YAxis.m_InputAxisValue = cameraMovement.y * Time.smoothDeltaTime * _speedMultiplier;
 	}
 
 	private void OnFrameObjectEvent(Transform value)

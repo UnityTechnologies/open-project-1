@@ -1,12 +1,23 @@
-﻿public class ItemStack
+﻿using System;
+using UnityEngine;
+
+[Serializable]
+public class ItemStack
 {
-	public Item Item { get; }
+	[SerializeField]
+	private Item _item;
 
-	public int Amount { get; set; }
+	public Item Item => _item;
 
+	public int Amount;
+	public ItemStack()
+	{
+		_item = null;
+		Amount = 0;
+	}
 	public ItemStack(Item item, int amount)
 	{
-		Item = item;
+		_item = item;
 		Amount = amount;
 	}
 }
