@@ -31,8 +31,6 @@ public class LocationLoader : MonoBehaviour
 	private GameSceneSO _activeScene; // The scene we want to set as active (for lighting/skybox)
 	private List<GameSceneSO> _persistentScenes = new List<GameSceneSO>(); //Scenes to keep loaded when a load event is raised
 
-	private Coroutine runningLoader = null;
-
 	private void OnEnable()
 	{
 		if (_loadLocation != null)
