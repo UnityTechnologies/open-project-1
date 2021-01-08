@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public class SpawnSystem : MonoBehaviour
 {
@@ -15,7 +14,26 @@ public class SpawnSystem : MonoBehaviour
 	[Header("Scene References")]
 	[SerializeField] private Transform[] _spawnLocations;
 
-	void Start()
+	[Header("Scene Ready Event")]
+	[SerializeField] private VoidEventChannelSO _OnSceneReady = default; //Raised when the scene is loaded and set active
+
+	private void OnEnable()
+	{
+		if (_OnSceneReady != null)
+		{
+			_OnSceneReady.OnEventRaised += SpawnPlayer;
+		}
+	}
+
+	private void OnDisable()
+	{
+		if (_OnSceneReady != null)
+		{
+			_OnSceneReady.OnEventRaised -= SpawnPlayer;
+		}
+	}
+
+	private void SpawnPlayer()
 	{
 		Spawn(_defaultSpawnIndex);
 	}
