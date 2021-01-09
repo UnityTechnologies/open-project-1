@@ -55,11 +55,20 @@ namespace UOP1.StateMachine.Editor
 				bool Button(Rect pos, string icon) => GUI.Button(pos, EditorGUIUtility.IconContent(icon));
 
 				var buttonRect = new Rect(
-					x: rect.width - 90,
+					x: rect.width - 125,
 					y: rect.y + 5,
 					width: 30,
 					height: 18);
 
+				// State editor
+				if (Button(buttonRect, "SceneViewTools"))
+				{
+					_editor.DisplayStateEditor(SerializedTransition.ToState.objectReferenceValue);
+					return true;
+				}
+
+				buttonRect.x += 35;
+				
 				// Move transition up
 				if (Button(buttonRect, "scrollup"))
 					if (_editor.ReorderTransition(SerializedTransition, true))

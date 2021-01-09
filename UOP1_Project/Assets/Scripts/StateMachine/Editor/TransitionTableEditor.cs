@@ -132,12 +132,7 @@ namespace UOP1.StateMachine.Editor
 						// Switch to state editor
 						if (Button(buttonRect, "SceneViewTools"))
 						{
-							if (_cachedStateEditor == null)
-								_cachedStateEditor = CreateEditor(transitions[0].SerializedTransition.FromState.objectReferenceValue, typeof(StateEditor));
-							else
-								CreateCachedEditor(transitions[0].SerializedTransition.FromState.objectReferenceValue, typeof(StateEditor), ref _cachedStateEditor);
-
-							_displayStateEditor = true;
+							DisplayStateEditor(transitions[0].SerializedTransition.FromState.objectReferenceValue);
 							return;
 						}
 
@@ -191,6 +186,16 @@ namespace UOP1.StateMachine.Editor
 			_addTransitionHelper.Display(rect);
 
 			EndHorizontal();
+		}
+
+		internal void DisplayStateEditor(Object state)
+		{
+			if (_cachedStateEditor == null)
+				_cachedStateEditor = CreateEditor(state, typeof(StateEditor));
+			else
+				CreateCachedEditor(state, typeof(StateEditor), ref _cachedStateEditor);
+
+			_displayStateEditor = true;
 		}
 
 		/// <summary>
