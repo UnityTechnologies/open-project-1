@@ -68,7 +68,7 @@ namespace UOP1.StateMachine.Editor
 				}
 
 				buttonRect.x += 35;
-				
+
 				// Move transition up
 				if (Button(buttonRect, "scrollup"))
 					if (_editor.ReorderTransition(SerializedTransition, true))
