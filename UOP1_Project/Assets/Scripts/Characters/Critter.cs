@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Critter : MonoBehaviour
 {
-	[SerializeField] private int _maxHealth = 20;
+	[SerializeField] private int _fullHealth = 20;
 
 	private int _currentHealth = default;
 	private bool _playerInAlertZone = default;
@@ -30,25 +30,25 @@ public class Critter : MonoBehaviour
 		set => _getHit = value;
 	}
 
-	private bool _killed = default;
-	public bool Killed
+	private bool _isDead = default;
+	public bool IsDead
 	{
-		get => _killed;
-		set => _killed = true;
+		get => _isDead;
+		set => _isDead = true;
 	}
 
 	private void Awake()
 	{
-		_currentHealth = _maxHealth;
+		_currentHealth = _fullHealth;
 	}
 
-	private void ReceiveAnAttack(int damage)
+	private void ReceiveAnAttack(int damange)
 	{
-		_currentHealth -= damage;
+		_currentHealth -= damange;
 		_getHit = true;
 		if (_currentHealth <= 0)
 		{
-			_killed = true;
+			_isDead = true;
 		}
 	}
 
