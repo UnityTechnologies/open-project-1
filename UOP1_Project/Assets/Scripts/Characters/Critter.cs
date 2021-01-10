@@ -42,9 +42,9 @@ public class Critter : MonoBehaviour
 		_currentHealth = _maxHealth;
 	}
 
-	private void ReceiveAnAttack(int damange)
+	private void ReceiveAnAttack(int damage)
 	{
-		_currentHealth -= damange;
+		_currentHealth -= damage;
 		_getHit = true;
 		if (_currentHealth <= 0)
 		{
