@@ -29,7 +29,7 @@ public class TaskSO : ScriptableObject
 	[Tooltip("The type of the task")]
 	[SerializeField]
 	private taskType _type = default;
-	
+	[SerializeField]
 	bool _isDone=false;
 	public DialogueDataSO DialogueBeforeTask => _dialogueBeforeTask;
 	public DialogueDataSO WinDialogue => _winDialogue;

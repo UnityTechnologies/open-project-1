@@ -14,6 +14,9 @@ public class TaskManager : MonoBehaviour
 	[SerializeField] private TaskChannelSO _startTaskEvent = default;
 	[SerializeField] private VoidEventChannelSO _endDialogueEvent = default;
 	[SerializeField] private DialogueActorChannelSo _interactionEvent = default;
+	[SerializeField] private VoidEventChannelSO _winDialogueEvent = default;
+	[SerializeField] private VoidEventChannelSO _loseDialogueEvent = default;
+	[SerializeField] private TaskChannelSO _endTaskEvent = default;
 
 	[Header("Broadcasting on channels")]
 	[SerializeField] private VoidEventChannelSO _checkTaskValidityEvent = default;
@@ -32,7 +35,12 @@ public class TaskManager : MonoBehaviour
 		{ _startTaskEvent.OnEventRaised += CheckTaskInvolvment; }
 		if (_interactionEvent != null)
 		{ _interactionEvent.OnEventRaised += InteractWithCharacter; }
-
+		if (_winDialogueEvent != null)
+		{ _winDialogueEvent.OnEventRaised += PlayWinDialogue; }
+		if (_loseDialogueEvent != null)
+		{ _loseDialogueEvent.OnEventRaised += PlayLoseDialogue; }
+		if (_endTaskEvent != null)
+		{ _endTaskEvent.OnEventRaised += EndTask; }
 
 	}
 	//play default dialogue if no task
@@ -47,6 +55,7 @@ public class TaskManager : MonoBehaviour
 	}
 	void CheckTaskInvolvment(TaskSO task)
 	{
+		Debug.Log("check involvment"); 
 		if(_actor == task.Actor)
 		{
 			RegisterTask(task); 
@@ -92,7 +101,7 @@ public class TaskManager : MonoBehaviour
 		
 	}
 	void StartTask() {
-if(_currentTask!=null)
+        if(_currentTask!=null)
 		if (_currentTask.DialogueBeforeTask != null)
 		{
 			_currentDialogue = _currentTask.DialogueBeforeTask;
@@ -107,41 +116,66 @@ if(_currentTask!=null)
 	{
 		if (_startDialogueEvent != null)
 		{
+			Debug.Log("Start Dialogue ");
 			_startDialogueEvent.RaiseEvent(_currentDialogue);
 		}
 
 
 	}
+	void PlayLoseDialogue() {
+		
+		if (_currentTask != null)
+			if (_currentTask.LoseDialogue != null)
+			{
+				Debug.Log("Play lose Dialogue ");
+				_currentDialogue = _currentTask.LoseDialogue;
+				StartDialogue();
+			}
+		
+	}
+	void PlayWinDialogue()
+	{
+		Debug.Log("Play Win Dialogue" + _currentTask.WinDialogue);
+		if (_currentTask != null)
+			if (_currentTask.WinDialogue != null)
+			{
+				_currentDialogue = _currentTask.WinDialogue;
+				StartDialogue();
+			}
+
+	}
 	//End dialogue
 	 void EndDialogue()
 	{
+		
 		//depending on the dialogue that ended, do something 
-		switch (_currentDialogue.DialogueType)
-		{
-			case dialogueType.startDialogue:
-				//Check the validity of the task
-				CheckTaskValidity();
-				break;
-			case dialogueType.winDialogue:
-				//After playing the win dialogue close Dialogue and end Task
-				EndTask(); 
-				break;
-			case dialogueType.loseDialogue:
-				//closeDialogue
-				//replay start Dialogue if the lose Dialogue ended
-				if(_currentTask.DialogueBeforeTask!=null)
-				{
-					_currentDialogue = _currentTask.DialogueBeforeTask; 
+			switch (_currentDialogue.DialogueType)
+			{
+				case dialogueType.startDialogue:
+					//Check the validity of the task
+					CheckTaskValidity();
+					break;
+				case dialogueType.winDialogue:
+					//After playing the win dialogue close Dialogue and end Task
+					break;
+				case dialogueType.loseDialogue:
+					//closeDialogue
+					//replay start Dialogue if the lose Dialogue ended
+					if (_currentTask.DialogueBeforeTask != null)
+					{
+						_currentDialogue = _currentTask.DialogueBeforeTask;
 
-				}
-				break;
-			case dialogueType.defaultDialogue:
-				//close Dialogue
-				//nothing happens if it's the default dialogue
-				break;
-			default:
-				break;
+					}
+					break;
+				case dialogueType.defaultDialogue:
+					//close Dialogue
+					//nothing happens if it's the default dialogue
+					break;
+				default:
+					break;
+			
 		}
+		
 
 
 	}
@@ -154,14 +188,25 @@ if(_currentTask!=null)
 
 
 	}
-	 void EndTask()
+	 void EndTask(TaskSO taskToFinish)
 	{
+		Debug.Log("End Task " + taskToFinish.name); 
+		if(taskToFinish==_currentTask)
+		    UnregisterTask();
+		else
+		{
+			StartTask(); 
+		}
 
-		UnregisterTask(); 
+	}
+	void EndTask()
+	{
+	
+			UnregisterTask();
 
 	}
 	//unregister a task when it ends.
-	 void UnregisterTask()
+	void UnregisterTask()
 	{
 		_currentTask = null;
 		_hasActifTask = false;

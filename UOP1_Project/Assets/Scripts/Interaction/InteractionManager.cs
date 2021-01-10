@@ -94,7 +94,6 @@ public class InteractionManager : MonoBehaviour
 						//raise an event with an actor as parameter
 						_currentInteractableObject.GetComponent<TaskManager>().InteractWithCharacter(); 
 						//_startTalking.RaiseEvent(currentActor);
-						Debug.Log("talk event raised");
 						//Change the action map
 						_inputReader.EnableDialogueInput();
 						//set current interaction for state machine

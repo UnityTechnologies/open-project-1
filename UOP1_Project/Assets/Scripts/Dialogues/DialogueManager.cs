@@ -67,6 +67,7 @@ public class DialogueManager : MonoBehaviour
 	/// <param name="dialogueLine"></param>
 	public void DisplayDialogueLine(DialogueLineSO dialogueLine, ActorSO actor)
 	{
+		Debug.Log("DisplayDialogueLine"); 
         if(_openUIDialogueEvent!=null)
 		{
 			_openUIDialogueEvent.RaiseEvent(dialogueLine, actor); 
@@ -89,7 +90,7 @@ public class DialogueManager : MonoBehaviour
 			}
 			else
 			{
-				DialogueEnded();
+				DialogueEndedAndCloseDialogueUI();
 			}
 		}
 	}
@@ -115,20 +116,29 @@ public class DialogueManager : MonoBehaviour
 		{
 			_makeDialogueChoiceEvent.OnEventRaised -= MakeDialogueChoice;
 		}
-
-		DisplayDialogueData(choice.NextDialogue); 
+		if (choice.NextDialogue != null)
+			DisplayDialogueData(choice.NextDialogue);
+		else
+			DialogueEnded();
 	}
 
-	public void DialogueEnded()
+	 void DialogueEnded()
 	{
-		if(_endDialogue!=null)
+		Debug.Log("DialogueEnded");
+		if (_endDialogue!=null)
 		    _endDialogue.RaiseEvent();
-
+	}
+	public void DialogueEndedAndCloseDialogueUI()
+	{
+		Debug.Log("DialogueEnded");
+		if (_endDialogue != null)
+			_endDialogue.RaiseEvent();
 		if (_closeDialogueUIEvent != null)
 			_closeDialogueUIEvent.RaiseEvent();
-
 		_inputReader.advanceDialogueEvent -= OnAdvance;
 		_inputReader.EnableGameplayInput();
+
+
 	}
 }
 

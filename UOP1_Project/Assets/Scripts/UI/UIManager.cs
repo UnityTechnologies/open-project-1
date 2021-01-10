@@ -74,11 +74,13 @@ public class UIManager : MonoBehaviour
 
 	public void OpenUIDialogue(DialogueLineSO dialogueLine, ActorSO actor)
 	{
+		Debug.Log("Open UI Dialogue");
 		dialogueController.SetDialogue(dialogueLine, actor);
 		dialogueController.gameObject.SetActive(true);
 	}
 	public void CloseUIDialogue()
 	{
+		Debug.Log("Close UI Dialogue");
 		dialogueController.gameObject.SetActive(false);
 	}
 

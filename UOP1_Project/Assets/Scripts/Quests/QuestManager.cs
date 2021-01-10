@@ -11,7 +11,7 @@ public class QuestManager : MonoBehaviour
 
 	[Header("Linstening to channels")]
 	[SerializeField] private VoidEventChannelSO _checkTaskValidityEvent = default;
-	[SerializeField] private VoidEventChannelSO _endTaskEvent = default;
+	[SerializeField] private TaskChannelSO _endTaskEvent = default;
 
 	[Header("Broadcasting on channels")]
 	[SerializeField] private TaskChannelSO _startTaskEvent = default;
@@ -27,38 +27,38 @@ public class QuestManager : MonoBehaviour
 	private int _currentQuestIndex =0;
 	private int _currentTaskIndex =0;
 	private void Start()
- 	{
-	    if(	_checkTaskValidityEvent!=null)
+	{
+		Debug.Log("Start");
+		if (	_checkTaskValidityEvent!=null)
 		{
 			_checkTaskValidityEvent.OnEventRaised += CheckTaskValidity; 
 		}
-		if (_endTaskEvent != null)
-		{
-			_endTaskEvent.OnEventRaised += EndTask;
-		}
+		
 		StartGame(); 
 
 	}
 	 void StartGame()
-	{//Add code for saved information 
+	{//Add code for saved information
+		Debug.Log("Start Game"); 
 		_currentQuestIndex = 0;
 		if (_quests != null)
 		{
 			_currentQuestIndex = _quests.FindIndex(o => o.IsDone == false);
-			if(_currentQuestIndex >0)
+			if (_currentQuestIndex >=0)
 			StartQuest();
 		}
 
 	}
 	 void StartQuest()
 	{
+		Debug.Log("Start Quest");
 		if (_quests != null)
 			if ( _quests.Count > _currentQuestIndex)
 		{
 			_currentQuest = _quests[_currentQuestIndex];
 			_currentTaskIndex = 0;
 			_currentTaskIndex = _currentQuest.Tasks.FindIndex(o => o.IsDone == false);
-				if (_currentTaskIndex > 0)
+				if (_currentTaskIndex >= 0)
 					StartTask();
 		}
 
@@ -66,7 +66,8 @@ public class QuestManager : MonoBehaviour
 
 	 void StartTask()
 	{
-		if(_currentQuest.Tasks!=null)
+		Debug.Log("Start task");
+		if (_currentQuest.Tasks!=null)
 			if (_currentQuest.Tasks.Count > _currentTaskIndex)
 		    {
 			_currentTask = _currentQuest.Tasks[_currentTaskIndex];
@@ -93,6 +94,7 @@ public class QuestManager : MonoBehaviour
 						{
 							_winDialogueEvent.OnEventRaised();
 						}
+								EndTask();
 					}
 					else
 					{
@@ -112,7 +114,8 @@ public class QuestManager : MonoBehaviour
 						{
 							_winDialogueEvent.OnEventRaised();
 						}
-					}
+								EndTask();
+							}
 					else
 					{
 						//trigger lose dialogue
@@ -124,10 +127,12 @@ public class QuestManager : MonoBehaviour
 					break;
 				case taskType.rewardItem:
 					_rewardItemEvent.RaiseEvent(_currentTask.Item);
-					//no dialogue is needed after Reward Item
-					break;
+							//no dialogue is needed after Reward Item
+							EndTask();
+							break;
 				case taskType.dialogue:
-					//dialogue has already been played
+							//dialogue has already been played
+							EndTask(); 
 					break;
 
 
@@ -139,17 +144,17 @@ public class QuestManager : MonoBehaviour
 
 	 void EndTask()
 	{
-		_currentTask.FinishTask();
+		_currentTask = null; 
 
 		if (_quests != null)
 			if (_quests.Count > _currentQuestIndex)
 				if (_quests[_currentQuestIndex].Tasks != null)
 					if (_quests[_currentQuestIndex].Tasks.Count > _currentTaskIndex)
 					{
-						Debug.Log(_quests[_currentQuestIndex].Tasks[_currentTaskIndex].IsDone);
+						if (_endTaskEvent != null)
+							_endTaskEvent.RaiseEvent(_quests[_currentQuestIndex].Tasks[_currentTaskIndex]);
 						_quests[_currentQuestIndex].Tasks[_currentTaskIndex].FinishTask();
-
-						if(_quests[_currentQuestIndex].Tasks.Count < _currentTaskIndex+1)
+						if(_quests[_currentQuestIndex].Tasks.Count > _currentTaskIndex +1)
 						{
 							_currentTaskIndex++;
 							StartTask();

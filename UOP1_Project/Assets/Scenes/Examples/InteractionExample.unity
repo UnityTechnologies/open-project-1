@@ -99,7 +99,7 @@ LightmapSettings:
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 112000000, guid: f3658c79011056a45be1a9f331e27541,
     type: 2}
-  m_UseShadowmask: 0
+  m_UseShadowmask: 1
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -954,6 +954,7 @@ MonoBehaviour:
   _openUIDialogueEvent: {fileID: 0}
   _showChoicesUIEvent: {fileID: 0}
   _endDialogue: {fileID: 0}
+  _closeDialogueUIEvent: {fileID: 0}
 --- !u!4 &419940103
 Transform:
   m_ObjectHideFlags: 0
@@ -1228,14 +1229,14 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 564729674, guid: 7f3c311f1ca46334ab26b1adfc5be02f, type: 3}
-      propertyPath: _actor
+      propertyPath: _endTaskEvent
       value: 
-      objectReference: {fileID: 11400000, guid: 027d026cf519df04eb8b7bf251472e13,
+      objectReference: {fileID: 11400000, guid: fa6fff5267e6a0340aa7b0222f9c77c7,
         type: 2}
     - target: {fileID: 564729674, guid: 7f3c311f1ca46334ab26b1adfc5be02f, type: 3}
-      propertyPath: _defaultDialogue
+      propertyPath: _endDialogueEvent
       value: 
-      objectReference: {fileID: 11400000, guid: f7ead55387bac6d4a9ba9bf10c5c3ee5,
+      objectReference: {fileID: 11400000, guid: b2a95390cb0fdfd4ebbd4fac6e1ca2bc,
         type: 2}
     - target: {fileID: 2723178623857253410, guid: 7f3c311f1ca46334ab26b1adfc5be02f,
         type: 3}
