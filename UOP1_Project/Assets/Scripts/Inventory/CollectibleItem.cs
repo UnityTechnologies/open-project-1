@@ -3,12 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 public class CollectibleItem : MonoBehaviour
 {
+	[SerializeField] private Item _currentItem;
+	[SerializeField] private SpriteRenderer[] _itemImages;
 
-	[SerializeField]
-	private Item currentItem;
-
-	[SerializeField]
-	private SpriteRenderer[] itemImages;
 	private void Start()
 	{
 		SetItem();
@@ -17,36 +14,32 @@ public class CollectibleItem : MonoBehaviour
 	public void PickedItem()
 	{
 
-
 	}
 
 	public Item GetItem()
 	{
-		Debug.Log("current item " + currentItem);
-		return currentItem;
-
+		Debug.Log("current item " + _currentItem);
+		return _currentItem;
 	}
 
-	//this function is only for testing 
+	// TODO: This function is only for testing 
 	public void SetItem()
 	{
-		for (int i = 0; i < itemImages.Length; i++)
+		for (int i = 0; i < _itemImages.Length; i++)
 		{
-			itemImages[i].sprite = currentItem.PreviewImage;
+			_itemImages[i].sprite = _currentItem.PreviewImage;
 		}
-
 	}
+
 	public void OnTriggerEnter(Collider other)
 	{
 		if (other.tag == "Player")
 		{
-			if (other.gameObject.GetComponent<ItemPicker>())
+			if (other.gameObject.TryGetComponent<ItemPicker>(out ItemPicker itemPickerComp))
 			{
 
-				other.gameObject.GetComponent<ItemPicker>().PickItem(currentItem);
-
+				itemPickerComp.PickItem(_currentItem);
 			}
-
 		}
 	}
 }

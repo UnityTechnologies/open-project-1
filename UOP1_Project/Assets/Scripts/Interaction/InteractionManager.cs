@@ -138,8 +138,6 @@ public class InteractionManager : MonoBehaviour
 
 	private void OnTriggerExit(Collider other)
 	{
-
-
 		ResetInteraction();
 	}
 
