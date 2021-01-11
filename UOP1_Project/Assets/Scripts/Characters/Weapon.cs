@@ -7,11 +7,7 @@ public class Weapon : MonoBehaviour
 	[SerializeField] private int _attackStrength = default;
 
 	private bool _enable = false;
-	public bool Enable
-	{
-		get => _enable;
-		set => _enable = value;
-	}	
+	public bool Enable { get; set; }
 
 	public int AttackStrength
 	{
