@@ -5,7 +5,7 @@ using UOP1.StateMachine.ScriptableObjects;
 [CreateAssetMenu(fileName = "FaceProtagonist", menuName = "State Machines/Actions/Face Protagonist")]
 public class FaceProtagonistSO : StateActionSO
 {
-    public TransformAnchor playerAnchor;
+	public TransformAnchor playerAnchor;
 	protected override StateAction CreateAction() => new FaceProtagonist();
 }
 
@@ -19,7 +19,7 @@ public class FaceProtagonist : StateAction
 		_actor = stateMachine.transform;
 		_protagonist = ((FaceProtagonistSO)OriginSO).playerAnchor;
 	}
-		
+
 	public override void OnUpdate()
 	{
 		if (_protagonist.isSet)
@@ -31,9 +31,9 @@ public class FaceProtagonist : StateAction
 			_actor.rotation = rotation;
 		}
 	}
-	
+
 	public override void OnStateEnter()
 	{
-		
+
 	}
 }
