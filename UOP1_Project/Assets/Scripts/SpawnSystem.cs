@@ -14,7 +14,7 @@ public class SpawnSystem : MonoBehaviour
 	[SerializeField] private PathAnchor _pathTaken = default;
 
 	[Header("Scene References")]
-	[SerializeField] private Transform[] _spawnLocations;
+	private Transform[] _spawnLocations;
 
 	[Header("Scene Ready Event")]
 	[SerializeField] private VoidEventChannelSO _OnSceneReady = default; //Raised when the scene is loaded and set active
@@ -38,8 +38,8 @@ public class SpawnSystem : MonoBehaviour
 	private void SpawnPlayer()
 	{
 		GameObject[] spawnLocationsGO = GameObject.FindGameObjectsWithTag("SpawnLocation");
-
-		for(int i = 0; i < spawnLocationsGO.Length; ++i)
+		_spawnLocations = new Transform[spawnLocationsGO.Length];
+		for (int i = 0; i < spawnLocationsGO.Length; ++i)
 		{
 			_spawnLocations[i] = spawnLocationsGO[i].transform;
 		}
