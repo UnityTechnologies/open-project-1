@@ -86,7 +86,7 @@ public class SpawnSystem : MonoBehaviour
 		if (pathTaken == null)
 			return _defaultSpawnIndex;
 
-		int index = Array.FindIndex(_spawnLocations, element => 
+		int index = Array.FindIndex(_spawnLocations, element =>
 			element?.GetComponent<LocationEntrance>()?.EntrancePath == pathTaken
 		);
 
