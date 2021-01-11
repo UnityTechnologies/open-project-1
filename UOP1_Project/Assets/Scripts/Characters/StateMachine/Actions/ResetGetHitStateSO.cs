@@ -24,6 +24,6 @@ public class ResetGetHitState : StateAction
 
 	public override void OnStateExit()
 	{
-		_critter.GetHit = false;
+		_critter.getHit = false;
 	}
 }

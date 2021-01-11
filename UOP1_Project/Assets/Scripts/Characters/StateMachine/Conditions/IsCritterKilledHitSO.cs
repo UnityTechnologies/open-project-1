@@ -22,7 +22,7 @@ public class IsCritterKilled : Condition
 		bool result = false;
 		if (_critter != null)
 		{
-			result = _critter.IsDead;
+			result = _critter.isDead;
 		}
 		return result;
 	}

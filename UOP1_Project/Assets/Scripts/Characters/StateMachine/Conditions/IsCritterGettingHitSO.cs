@@ -24,7 +24,7 @@ public class IsCritterGettingHit : Condition
 		bool result = false;
 		if (_critter != null)
 		{
-			result = _critter.GetHit;
+			result = _critter.getHit;
 		}
 		return result;
 	}

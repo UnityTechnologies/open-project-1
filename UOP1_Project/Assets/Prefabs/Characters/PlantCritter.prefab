@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 460632933}
   - component: {fileID: 460632932}
   m_Layer: 0
-  m_Name: AlertZoneCollider
+  m_Name: AlertZone
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -43,7 +43,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 2
+  m_Radius: 7
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &460632932
 MonoBehaviour:
@@ -61,7 +61,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 443910769}
-        m_MethodName: set_IsPlayerInAlertZone
+        m_MethodName: set_isPlayerInAlertZone
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -86,7 +86,7 @@ GameObject:
   - component: {fileID: 575482850}
   - component: {fileID: 575482849}
   m_Layer: 0
-  m_Name: AttackZoneCollider
+  m_Name: AttackZone
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -117,7 +117,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 1
+  m_Radius: 1.5
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &575482849
 MonoBehaviour:
@@ -135,7 +135,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 443910769}
-        m_MethodName: set_IsPlayerInAttackZone
+        m_MethodName: set_isPlayerInAttackZone
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -162,6 +162,20 @@ CapsuleCollider:
   m_Height: 5
   m_Direction: 1
   m_Center: {x: -0.01654327, y: 2, z: 0.03308654}
+--- !u!136 &1330865802894030747
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8745063237678790951}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  m_Radius: 0.38419735
+  m_Height: 0.9338093
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.50470877, z: 0.03308642}
 --- !u!95 &950100416
 Animator:
   serializedVersion: 3
@@ -211,20 +225,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d83d74df43f0a0b42afeaffe5c3e02cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!136 &1330865802894030747
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8745063237678790951}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  m_Radius: 0.38419735
-  m_Height: 0.9338093
-  m_Direction: 1
-  m_Center: {x: 0, y: 0.50470877, z: 0.03308642}
+  _fullHealth: 20
 --- !u!1001 &8475173613595968630
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -235,7 +236,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 415e24332f8993c4da4c452ed27d2873,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.41807827
+      value: 1.09
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 415e24332f8993c4da4c452ed27d2873,
         type: 3}
@@ -245,7 +246,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 415e24332f8993c4da4c452ed27d2873,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -4.303776
+      value: -7.58
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 415e24332f8993c4da4c452ed27d2873,
         type: 3}

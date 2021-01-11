@@ -7,35 +7,11 @@ public class Critter : MonoBehaviour
 	[SerializeField] private int _fullHealth = 20;
 
 	private int _currentHealth = default;
-	private bool _playerInAlertZone = default;
 
-	public bool IsPlayerInAlertZone
-	{
-		get => _playerInAlertZone;
-		set => _playerInAlertZone = value;
-	}
-
-	private bool _isPlayerInAttackZone = default;
-
-	public bool IsPlayerInAttackZone
-	{
-		get => _isPlayerInAttackZone;
-		set => _isPlayerInAttackZone = value;
-	}
-
-	private bool _getHit = default;
-	public bool GetHit
-	{
-		get => _getHit;
-		set => _getHit = value;
-	}
-
-	private bool _isDead = default;
-	public bool IsDead
-	{
-		get => _isDead;
-		set => _isDead = true;
-	}
+	public bool isPlayerInAlertZone { get; set; }
+	public bool isPlayerInAttackZone { get; set; }
+	public bool getHit { get; set; }
+	public bool isDead { get; set; }
 
 	private void Awake()
 	{
@@ -45,17 +21,17 @@ public class Critter : MonoBehaviour
 	private void ReceiveAnAttack(int damange)
 	{
 		_currentHealth -= damange;
-		_getHit = true;
+		getHit = true;
 		if (_currentHealth <= 0)
 		{
-			_isDead = true;
+			isDead = true;
 		}
 	}
 
 	private void OnTriggerEnter(Collider other)
 	{
 		Weapon playerWeapon = other.GetComponent<Weapon>();
-		if (!_getHit && playerWeapon != null && playerWeapon.Enable)
+		if (!getHit && playerWeapon != null && playerWeapon.Enable)
 		{
 			ReceiveAnAttack(playerWeapon.AttackStrength);
 		}

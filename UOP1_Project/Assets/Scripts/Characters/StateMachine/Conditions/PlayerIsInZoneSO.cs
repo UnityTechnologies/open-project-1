@@ -34,10 +34,10 @@ public class PlayerIsInZone : Condition
 			switch (((PlayerIsInZoneSO)OriginSO).zone)
 			{
 				case ZoneType.Alert:
-					result = _critter.IsPlayerInAlertZone;
+					result = _critter.isPlayerInAlertZone;
 					break;
 				case ZoneType.Attack:
-					result = _critter.IsPlayerInAttackZone;
+					result = _critter.isPlayerInAttackZone;
 					break;
 				default:
 					break;
