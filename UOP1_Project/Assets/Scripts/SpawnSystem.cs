@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public class SpawnSystem : MonoBehaviour
 {
@@ -10,13 +9,33 @@ public class SpawnSystem : MonoBehaviour
 
 	[Header("Asset References")]
 	[SerializeField] private Protagonist _playerPrefab = default;
+	[SerializeField] private TransformAnchor _playerTransformAnchor = default;
 	[SerializeField] private TransformEventChannelSO _playerInstantiatedChannel = default;
 	[SerializeField] private PathAnchor _pathTaken = default;
 
 	[Header("Scene References")]
 	[SerializeField] private Transform[] _spawnLocations;
 
-	void Start()
+	[Header("Scene Ready Event")]
+	[SerializeField] private VoidEventChannelSO _OnSceneReady = default; //Raised when the scene is loaded and set active
+
+	private void OnEnable()
+	{
+		if (_OnSceneReady != null)
+		{
+			_OnSceneReady.OnEventRaised += SpawnPlayer;
+		}
+	}
+
+	private void OnDisable()
+	{
+		if (_OnSceneReady != null)
+		{
+			_OnSceneReady.OnEventRaised -= SpawnPlayer;
+		}
+	}
+
+	private void SpawnPlayer()
 	{
 		Spawn(FindSpawnIndex(_pathTaken?.Path ?? null));
 	}
@@ -44,6 +63,7 @@ public class SpawnSystem : MonoBehaviour
 		Protagonist playerInstance = InstantiatePlayer(_playerPrefab, spawnLocation);
 
 		_playerInstantiatedChannel.RaiseEvent(playerInstance.transform); // The CameraSystem will pick this up to frame the player
+		_playerTransformAnchor.Transform = playerInstance.transform;
 	}
 
 	private Transform GetSpawnLocation(int index, Transform[] spawnLocations)
