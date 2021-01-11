@@ -12,7 +12,7 @@ public enum ZoneType
 [CreateAssetMenu(fileName = "PlayerIsInZone", menuName = "State Machines/Conditions/Player Is In Zone")]
 public class PlayerIsInZoneSO : StateConditionSO
 {
-    public ZoneType zone;
+	public ZoneType zone;
 
 	protected override Condition CreateCondition() => new PlayerIsInZone();
 }
@@ -26,11 +26,12 @@ public class PlayerIsInZone : Condition
 	{
 		_critter = stateMachine.GetComponent<Critter>();
 	}
-		
+
 	protected override bool Statement()
 	{
 		bool result = false;
-		if (_critter != null) {
+		if (_critter != null)
+		{
 			switch (((PlayerIsInZoneSO)OriginSO).zone)
 			{
 				case ZoneType.Alert:
