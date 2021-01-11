@@ -10,8 +10,8 @@ using UnityEngine.UI;
 /// Keeps track of choices in the dialogue (if any) and then gives back control to gameplay when appropriate.
 /// </summary>
 public class DialogueManager : MonoBehaviour
-{ 
-//	[SerializeField] private ChoiceBox _choiceBox; // TODO: Demonstration purpose only. Remove or adjust later.
+{
+	//	[SerializeField] private ChoiceBox _choiceBox; // TODO: Demonstration purpose only. Remove or adjust later.
 
 	[SerializeField] private InputReader _inputReader = default;
 	private int _counter;
@@ -33,11 +33,11 @@ public class DialogueManager : MonoBehaviour
 
 	private void Start()
 	{
-		if(_startDialogue!=null)
+		if (_startDialogue != null)
 		{
-			_startDialogue.OnEventRaised += DisplayDialogueData; 
+			_startDialogue.OnEventRaised += DisplayDialogueData;
 		}
-		
+
 	}
 
 	/// <summary>
@@ -68,14 +68,14 @@ public class DialogueManager : MonoBehaviour
 	/// <param name="dialogueLine"></param>
 	public void DisplayDialogueLine(DialogueLineSO dialogueLine, ActorSO actor)
 	{
-        if(_openUIDialogueEvent!=null)
+		if (_openUIDialogueEvent != null)
 		{
-			_openUIDialogueEvent.RaiseEvent(dialogueLine, actor); 
+			_openUIDialogueEvent.RaiseEvent(dialogueLine, actor);
 		}
-}
+	}
 
 	private void OnAdvance()
-	{ 
+	{
 		_counter++;
 
 		if (!_reachedEndOfDialogue)
@@ -84,7 +84,7 @@ public class DialogueManager : MonoBehaviour
 		}
 		else
 		{
-			if(_currentDialogue.Choices.Count > 0)
+			if (_currentDialogue.Choices.Count > 0)
 			{
 				DisplayChoices(_currentDialogue.Choices);
 			}
@@ -118,8 +118,8 @@ public class DialogueManager : MonoBehaviour
 		}
 		if (choice.ActionType == DialogueActionType.continueWithStep)
 		{
-			if(_continueWithStep!=null)
-			_continueWithStep.RaiseEvent();
+			if (_continueWithStep != null)
+				_continueWithStep.RaiseEvent();
 			if (choice.NextDialogue != null)
 				DisplayDialogueData(choice.NextDialogue);
 		}
@@ -132,10 +132,10 @@ public class DialogueManager : MonoBehaviour
 		}
 	}
 
-	 void DialogueEnded()
+	void DialogueEnded()
 	{
-		if (_endDialogue!=null)
-		    _endDialogue.RaiseEvent(_currentDialogue);
+		if (_endDialogue != null)
+			_endDialogue.RaiseEvent(_currentDialogue);
 	}
 	public void DialogueEndedAndCloseDialogueUI()
 	{

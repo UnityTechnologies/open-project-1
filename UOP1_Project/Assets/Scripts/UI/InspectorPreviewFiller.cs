@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class InspectorPreviewFiller : MonoBehaviour
 {
 	[SerializeField]
-	private Image _previewImage =default;
+	private Image _previewImage = default;
 
 
 	public void FillPreview(Item ItemToInspect)

@@ -6,13 +6,13 @@ using UnityEngine.Localization.Components;
 public class UIDialogueManager : MonoBehaviour
 {
 
-	[SerializeField]  private LocalizeStringEvent _lineText = default;
+	[SerializeField] private LocalizeStringEvent _lineText = default;
 
 	[SerializeField] private LocalizeStringEvent _actorNameText = default;
 
 	[SerializeField] private UIDialogueChoicesManager _choicesManager = default;
 
-	[SerializeField] private DialogueChoicesChannelSO _showChoicesEvent = default; 
+	[SerializeField] private DialogueChoicesChannelSO _showChoicesEvent = default;
 	private void Start()
 	{
 		if (_showChoicesEvent != null)
@@ -28,8 +28,9 @@ public class UIDialogueManager : MonoBehaviour
 
 	}
 
-     void ShowChoices(List<Choice> choices) {
-		
+	void ShowChoices(List<Choice> choices)
+	{
+
 		_choicesManager.FillChoices(choices);
 		_choicesManager.gameObject.SetActive(true);
 	}

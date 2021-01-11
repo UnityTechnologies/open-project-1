@@ -7,7 +7,7 @@ public class InspectorFiller : MonoBehaviour
 
 	[SerializeField] private SimpleInventoryInspectorFiller _simpleInventoryInspector = default;
 
-	[SerializeField] private CookingInventoryInspectorFiller _cookingInventoryInspector=default;
+	[SerializeField] private CookingInventoryInspectorFiller _cookingInventoryInspector = default;
 
 	public void FillItemInspector(Item itemToInspect, bool[] availabilityArray = null)
 	{

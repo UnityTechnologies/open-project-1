@@ -6,7 +6,7 @@ public class UIManager : MonoBehaviour
 {
 	[Header("Listening on channels")]
 	[Header("Dialogue Events")]
-	[SerializeField] private DialogueLineChannelSO _openUIDialogueEvent= default;
+	[SerializeField] private DialogueLineChannelSO _openUIDialogueEvent = default;
 	[SerializeField] private VoidEventChannelSO _closeUIDialogueEvent = default;
 
 	[Header("Inventory Events")]

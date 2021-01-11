@@ -3,7 +3,7 @@ using UnityEngine;
 public enum stepType
 {
 	dialogue,
-    giveItem,
+	giveItem,
 	checkItem,
 	rewardItem
 }
@@ -30,7 +30,7 @@ public class StepSO : ScriptableObject
 	[SerializeField]
 	private stepType _type = default;
 	[SerializeField]
-	bool _isDone=false;
+	bool _isDone = false;
 	public DialogueDataSO DialogueBeforeStep => _dialogueBeforeStep;
 	public DialogueDataSO WinDialogue => _winDialogue;
 	public DialogueDataSO LoseDialogue => _loseDialogue;
@@ -42,7 +42,7 @@ public class StepSO : ScriptableObject
 	public void FinishStep()
 	{
 
-		_isDone = true; 
+		_isDone = true;
 
 	}
 

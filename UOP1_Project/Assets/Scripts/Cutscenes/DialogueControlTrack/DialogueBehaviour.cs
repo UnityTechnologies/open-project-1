@@ -27,12 +27,12 @@ public class DialogueBehaviour : PlayableBehaviour
 		{
 			// Need to ask the CutsceneManager if the cutscene is playing, since the graph is not actually stopped/paused: it's just going at speed 0.
 			if (playable.GetGraph().IsPlaying())
-				//&& cutsceneManager.IsCutscenePlaying) Need to find an alternative to this 
+			//&& cutsceneManager.IsCutscenePlaying) Need to find an alternative to this 
 			{
 				if (_dialogueLine != null && _actor != null)
 				{
-					if(PlayDialogueEvent != null)
-					PlayDialogueEvent.RaiseEvent(_dialogueLine, _actor );
+					if (PlayDialogueEvent != null)
+						PlayDialogueEvent.RaiseEvent(_dialogueLine, _actor);
 					_dialoguePlayed = true;
 				}
 				else
@@ -53,9 +53,9 @@ public class DialogueBehaviour : PlayableBehaviour
 			&& _dialoguePlayed)
 		{
 			if (_pauseWhenClipEnds)
-				if(PauseTimelineEvent!=null)
+				if (PauseTimelineEvent != null)
 				{
-					PauseTimelineEvent.OnEventRaised(); 
+					PauseTimelineEvent.OnEventRaised();
 				}
 		}
 	}

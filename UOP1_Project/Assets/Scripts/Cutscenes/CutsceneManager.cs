@@ -8,16 +8,16 @@ public class CutsceneManager : MonoBehaviour
 	[SerializeField] private InputReader _inputReader = default;
 	[SerializeField] private DialogueManager _dialogueManager = default;
 
-	[SerializeField] private PlayableDirectorChannelSO _playCutsceneEvent =default;
+	[SerializeField] private PlayableDirectorChannelSO _playCutsceneEvent = default;
 
-	[SerializeField] public DialogueLineChannelSO _playDialogueEvent=default;
+	[SerializeField] public DialogueLineChannelSO _playDialogueEvent = default;
 
-	[SerializeField] public VoidEventChannelSO _pauseTimelineEvent=default;
+	[SerializeField] public VoidEventChannelSO _pauseTimelineEvent = default;
 
 	private PlayableDirector _activePlayableDirector;
 	private bool _isPaused;
 
-	 bool IsCutscenePlaying => _activePlayableDirector.playableGraph.GetRootPlayable(0).GetSpeed() != 0d;
+	bool IsCutscenePlaying => _activePlayableDirector.playableGraph.GetRootPlayable(0).GetSpeed() != 0d;
 
 	private void OnEnable()
 	{
@@ -30,10 +30,10 @@ public class CutsceneManager : MonoBehaviour
 	}
 	private void Start()
 	{
-	  if(	_playCutsceneEvent!=null)
+		if (_playCutsceneEvent != null)
 		{
 
-			_playCutsceneEvent.OnEventRaised += PlayCutscene; 
+			_playCutsceneEvent.OnEventRaised += PlayCutscene;
 
 		}
 		if (_playDialogueEvent != null)
@@ -60,7 +60,7 @@ public class CutsceneManager : MonoBehaviour
 		_activePlayableDirector.stopped += HandleDirectorStopped;
 	}
 
-	 void CutsceneEnded()
+	void CutsceneEnded()
 	{
 		if (_activePlayableDirector != null)
 			_activePlayableDirector.stopped -= HandleDirectorStopped;
@@ -71,7 +71,7 @@ public class CutsceneManager : MonoBehaviour
 
 	private void HandleDirectorStopped(PlayableDirector director) => CutsceneEnded();
 
-	 void PlayDialogueFromClip(DialogueLineSO dialogueLine, ActorSO actor)
+	void PlayDialogueFromClip(DialogueLineSO dialogueLine, ActorSO actor)
 	{
 		_dialogueManager.DisplayDialogueLine(dialogueLine, actor);
 	}
@@ -88,13 +88,13 @@ public class CutsceneManager : MonoBehaviour
 	/// <summary>
 	/// Called by <c>DialogueControlClip</c> on the Timeline.
 	/// </summary>
-	 void PauseTimeline()
+	void PauseTimeline()
 	{
 		_isPaused = true;
 		_activePlayableDirector.playableGraph.GetRootPlayable(0).SetSpeed(0);
 	}
 
-	 void ResumeTimeline()
+	void ResumeTimeline()
 	{
 		_isPaused = false;
 		_activePlayableDirector.playableGraph.GetRootPlayable(0).SetSpeed(1);

@@ -92,7 +92,7 @@ public class InteractionManager : MonoBehaviour
 					if (_startTalking != null)
 					{
 						//raise an event with an actor as parameter
-						_currentInteractableObject.GetComponent<StepController>().InteractWithCharacter(); 
+						_currentInteractableObject.GetComponent<StepController>().InteractWithCharacter();
 						//_startTalking.RaiseEvent(currentActor);
 						//Change the action map
 						_inputReader.EnableDialogueInput();

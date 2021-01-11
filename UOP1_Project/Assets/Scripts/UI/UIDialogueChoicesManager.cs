@@ -9,7 +9,7 @@ public class UIDialogueChoicesManager : MonoBehaviour
 	public void FillChoices(List<Choice> choices)
 	{
 
-		if(choices !=null)
+		if (choices != null)
 		{
 			int maxCount = Mathf.Max(choices.Count, listChoiceButtons.Length);
 
@@ -26,17 +26,17 @@ public class UIDialogueChoicesManager : MonoBehaviour
 					else
 					{
 
-						listChoiceButtons[i].gameObject.SetActive(false); 
+						listChoiceButtons[i].gameObject.SetActive(false);
 
 					}
 				}
 				else
 				{
 
-					Debug.LogError("There are more choices than buttons"); 
+					Debug.LogError("There are more choices than buttons");
 
 				}
-				
+
 			}
 
 		}

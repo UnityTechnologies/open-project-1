@@ -20,7 +20,7 @@ public class DialogueClip : PlayableAsset, ITimelineClipAsset
 		ScriptPlayable<DialogueBehaviour> playable = ScriptPlayable<DialogueBehaviour>.Create(graph, _template);
 
 		_template.PlayDialogueEvent = PlayDialogueEvent;
-		_template.PauseTimelineEvent = PauseTimelineEvent; 
+		_template.PauseTimelineEvent = PauseTimelineEvent;
 
 		return playable;
 	}

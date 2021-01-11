@@ -29,8 +29,8 @@ public class DialogueDataSO : ScriptableObject
 	[SerializeField] private List<Choice> _choices = default;
 	[SerializeField] private DialogueType _dialogueType = default;
 
-	public ActorSO Actor => _actor; 
-	public List<DialogueLineSO> DialogueLines => _dialogueLines; 
+	public ActorSO Actor => _actor;
+	public List<DialogueLineSO> DialogueLines => _dialogueLines;
 	public List<Choice> Choices => _choices;
 	public DialogueType DialogueType => _dialogueType;
 
@@ -45,7 +45,7 @@ public class Choice
 	[SerializeField] private DialogueLineSO _response = default;
 	[SerializeField] private DialogueDataSO _nextDialogue = default;
 	[SerializeField] private DialogueActionType _actionType = default;
-	public DialogueLineSO Response => _response; 
-	public DialogueDataSO NextDialogue => _nextDialogue; 
+	public DialogueLineSO Response => _response;
+	public DialogueDataSO NextDialogue => _nextDialogue;
 	public DialogueActionType ActionType => _actionType;
 }
