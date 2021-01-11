@@ -24,6 +24,6 @@ public class DestroyCritter : StateAction
 
 	public override void OnStateEnter()
 	{
-		_critter.DestroyCritter();
+		_critter.CritterIsDead();
 	}
 }
