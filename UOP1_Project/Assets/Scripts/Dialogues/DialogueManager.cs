@@ -18,7 +18,7 @@ public class DialogueManager : MonoBehaviour
 	private bool _reachedEndOfDialogue { get => _counter >= _currentDialogueDataSO.DialogueLines.Count; }
 
 	[Header("Listening on channels")]
-	[SerializeField] private DialogueDataChannelSo _startDialogue = default;
+	[SerializeField] private DialogueDataChannelSO _startDialogue = default;
 	[SerializeField] private DialogueChoiceChannelSO _makeDialogueChoiceEvent = default;
 
 	[Header("BoradCasting on channels")]

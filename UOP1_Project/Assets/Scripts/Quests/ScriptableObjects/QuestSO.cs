@@ -4,12 +4,12 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Quest", menuName = "Quests/Quest", order = 51)]
 public class QuestSO : ScriptableObject
 {
-	[Tooltip("The collection of Tasks composing the Quest")]
+	[Tooltip("The collection of Steps composing the Quest")]
 	[SerializeField]
-	private List<TaskSO> _tasks = new List<TaskSO>();
+	private List<StepSO> _steps = new List<StepSO>();
 	[SerializeField]
 	bool _isDone = false;
-	public List<TaskSO> Tasks => _tasks;
+	public List<StepSO> Steps => _steps;
 	public bool IsDone => _isDone;
 	public void FinishQuest()
 	{

@@ -10,28 +10,28 @@ public class QuestManager : MonoBehaviour
 
 
 	[Header("Linstening to channels")]
-	[SerializeField] private VoidEventChannelSO _checkTaskValidityEvent = default;
-	[SerializeField] private TaskChannelSO _endTaskEvent = default;
+	[SerializeField] private VoidEventChannelSO _checkStepValidityEvent = default;
+	[SerializeField] private StepChannelSO _endStepEvent = default;
 
 	[Header("Broadcasting on channels")]
-	[SerializeField] private TaskChannelSO _startTaskEvent = default;
+	[SerializeField] private StepChannelSO _startStepEvent = default;
 
 	[SerializeField] private VoidEventChannelSO _winDialogueEvent = default;
 	[SerializeField] private VoidEventChannelSO _loseDialogueEvent = default;
 
-	[SerializeField] private ItemEventChannelSo _giveItemEvent = default;
-	[SerializeField] private ItemEventChannelSo _rewardItemEvent = default; 
+	[SerializeField] private ItemEventChannelSO _giveItemEvent = default;
+	[SerializeField] private ItemEventChannelSO _rewardItemEvent = default; 
 
 	private QuestSO _currentQuest;
-	private TaskSO _currentTask;
+	private StepSO _currentStep;
 	private int _currentQuestIndex =0;
-	private int _currentTaskIndex =0;
+	private int _currentStepIndex =0;
 	private void Start()
 	{
 		Debug.Log("Start");
-		if (	_checkTaskValidityEvent!=null)
+		if (	_checkStepValidityEvent!=null)
 		{
-			_checkTaskValidityEvent.OnEventRaised += CheckTaskValidity; 
+			_checkStepValidityEvent.OnEventRaised += CheckStepValidity; 
 		}
 		
 		StartGame(); 
@@ -56,45 +56,44 @@ public class QuestManager : MonoBehaviour
 			if ( _quests.Count > _currentQuestIndex)
 		{
 			_currentQuest = _quests[_currentQuestIndex];
-			_currentTaskIndex = 0;
-			_currentTaskIndex = _currentQuest.Tasks.FindIndex(o => o.IsDone == false);
-				if (_currentTaskIndex >= 0)
-					StartTask();
+			_currentStepIndex = 0;
+			_currentStepIndex = _currentQuest.Steps.FindIndex(o => o.IsDone == false);
+				if (_currentStepIndex >= 0)
+					StartStep();
 		}
 
 	}
 
-	 void StartTask()
+	 void StartStep()
 	{
-		Debug.Log("Start task");
-		if (_currentQuest.Tasks!=null)
-			if (_currentQuest.Tasks.Count > _currentTaskIndex)
+		Debug.Log("Start step");
+		if (_currentQuest.Steps!=null)
+			if (_currentQuest.Steps.Count > _currentStepIndex)
 		    {
-			_currentTask = _currentQuest.Tasks[_currentTaskIndex];
-			_startTaskEvent.RaiseEvent(_currentTask); 
+			_currentStep = _currentQuest.Steps[_currentStepIndex];
+			_startStepEvent.RaiseEvent(_currentStep); 
 
 		    }
 
 	}
-	void CheckTaskValidity()
+	void CheckStepValidity()
 	{
 		if(_currentQuest!=null)
-			if (_currentQuest.Tasks != null)
-				if (_currentQuest.Tasks.Count > _currentTaskIndex)
+			if (_currentQuest.Steps != null)
+				if (_currentQuest.Steps.Count > _currentStepIndex)
 		{
-			_currentTask = _currentQuest.Tasks[_currentTaskIndex];
-			switch (_currentTask.Type)
+			_currentStep = _currentQuest.Steps[_currentStepIndex];
+			switch (_currentStep.Type)
 			{
-				case taskType.checkItem:
-					if (_inventory.Contains(_currentTask.Item))
+				case stepType.checkItem:
+					if (_inventory.Contains(_currentStep.Item))
 					{
-						_inventory.Contains(_currentTask.Item);
+						_inventory.Contains(_currentStep.Item);
 						//Trigger win dialogue
 						if(_winDialogueEvent!=null)
 						{
 							_winDialogueEvent.OnEventRaised();
 						}
-								EndTask();
 					}
 					else
 					{
@@ -105,16 +104,15 @@ public class QuestManager : MonoBehaviour
 						}
 					}
 					break;
-				case taskType.giveItem:
-					if (_inventory.Contains(_currentTask.Item))
+				case stepType.giveItem:
+					if (_inventory.Contains(_currentStep.Item))
 					{
-						_giveItemEvent.RaiseEvent(_currentTask.Item);
+						_giveItemEvent.RaiseEvent(_currentStep.Item);
 						//trigger win dialogue
 						if (_winDialogueEvent != null)
 						{
 							_winDialogueEvent.OnEventRaised();
 						}
-								EndTask();
 							}
 					else
 					{
@@ -125,14 +123,14 @@ public class QuestManager : MonoBehaviour
 						}
 					}
 					break;
-				case taskType.rewardItem:
-					_rewardItemEvent.RaiseEvent(_currentTask.Item);
+				case stepType.rewardItem:
+					_rewardItemEvent.RaiseEvent(_currentStep.Item);
 							//no dialogue is needed after Reward Item
-							EndTask();
+							EndStep();
 							break;
-				case taskType.dialogue:
+				case stepType.dialogue:
 							//dialogue has already been played
-							EndTask(); 
+							EndStep(); 
 					break;
 
 
@@ -142,22 +140,22 @@ public class QuestManager : MonoBehaviour
 
 		}
 
-	 void EndTask()
+	 void EndStep()
 	{
-		_currentTask = null; 
+		_currentStep = null; 
 
 		if (_quests != null)
 			if (_quests.Count > _currentQuestIndex)
-				if (_quests[_currentQuestIndex].Tasks != null)
-					if (_quests[_currentQuestIndex].Tasks.Count > _currentTaskIndex)
+				if (_quests[_currentQuestIndex].Steps != null)
+					if (_quests[_currentQuestIndex].Steps.Count > _currentStepIndex)
 					{
-						if (_endTaskEvent != null)
-							_endTaskEvent.RaiseEvent(_quests[_currentQuestIndex].Tasks[_currentTaskIndex]);
-						_quests[_currentQuestIndex].Tasks[_currentTaskIndex].FinishTask();
-						if(_quests[_currentQuestIndex].Tasks.Count > _currentTaskIndex +1)
+						if (_endStepEvent != null)
+							_endStepEvent.RaiseEvent(_quests[_currentQuestIndex].Steps[_currentStepIndex]);
+						_quests[_currentQuestIndex].Steps[_currentStepIndex].FinishStep();
+						if(_quests[_currentQuestIndex].Steps.Count > _currentStepIndex +1)
 						{
-							_currentTaskIndex++;
-							StartTask();
+							_currentStepIndex++;
+							StartStep();
 
 						}
 						else

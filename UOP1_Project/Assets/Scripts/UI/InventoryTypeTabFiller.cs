@@ -13,7 +13,7 @@ public class InventoryTypeTabFiller : MonoBehaviour
 	[SerializeField]
 	private Button actionButton;
 
-	public void fillTab(InventoryTabType tabType, bool isSelected, TabEventChannelSo changeTabEvent)
+	public void fillTab(InventoryTabType tabType, bool isSelected, TabEventChannelSO changeTabEvent)
 	{
 
 		tabName.StringReference = tabType.TabName;

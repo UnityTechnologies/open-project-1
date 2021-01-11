@@ -6,7 +6,7 @@ public class ItemPicker : MonoBehaviour
 {
 
 	[SerializeField]
-	ItemEventChannelSo AddItemEvent;
+	ItemEventChannelSO AddItemEvent;
 
 	public void PickItem(Item item)
 	{
