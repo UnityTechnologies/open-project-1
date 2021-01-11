@@ -1,14 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
+using UnityEngine; 
+
 public class CollectibleItem : MonoBehaviour
 {
 
-	[SerializeField]
-	private Item currentItem;
+	[SerializeField] private Item _currentItem=default;
 
-	[SerializeField]
-	private SpriteRenderer[] itemImages;
+	[SerializeField] private SpriteRenderer[] _itemImages=default;
 	private void Start()
 	{
 		SetItem();
@@ -22,17 +21,17 @@ public class CollectibleItem : MonoBehaviour
 
 	public Item GetItem()
 	{
-		Debug.Log("current item " + currentItem);
-		return currentItem;
+		Debug.Log("current item " + _currentItem);
+		return _currentItem;
 
 	}
 
 	//this function is only for testing 
 	public void SetItem()
 	{
-		for (int i = 0; i < itemImages.Length; i++)
+		for (int i = 0; i < _itemImages.Length; i++)
 		{
-			itemImages[i].sprite = currentItem.PreviewImage;
+			_itemImages[i].sprite = _currentItem.PreviewImage;
 		}
 
 	}
@@ -43,7 +42,7 @@ public class CollectibleItem : MonoBehaviour
 			if (other.gameObject.GetComponent<ItemPicker>())
 			{
 
-				other.gameObject.GetComponent<ItemPicker>().PickItem(currentItem);
+				other.gameObject.GetComponent<ItemPicker>().PickItem(_currentItem);
 
 			}
 

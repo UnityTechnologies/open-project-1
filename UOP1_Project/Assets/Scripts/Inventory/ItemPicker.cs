@@ -4,13 +4,11 @@ using UnityEngine;
 
 public class ItemPicker : MonoBehaviour
 {
-
-	[SerializeField]
-	ItemEventChannelSO AddItemEvent;
+	[SerializeField] ItemEventChannelSO _addItemEvent = default;
 
 	public void PickItem(Item item)
 	{
-		if (AddItemEvent != null)
-			AddItemEvent.RaiseEvent(item);
+		if (_addItemEvent != null)
+			_addItemEvent.RaiseEvent(item);
 	}
 }

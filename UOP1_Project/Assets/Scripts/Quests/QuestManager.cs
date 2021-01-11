@@ -11,7 +11,8 @@ public class QuestManager : MonoBehaviour
 
 	[Header("Linstening to channels")]
 	[SerializeField] private VoidEventChannelSO _checkStepValidityEvent = default;
-	[SerializeField] private StepChannelSO _endStepEvent = default;
+	[SerializeField] private VoidEventChannelSO _endStepEvent = default;
+	[SerializeField] private DialogueDataChannelSO _endDialogueEvent = default;
 
 	[Header("Broadcasting on channels")]
 	[SerializeField] private StepChannelSO _startStepEvent = default;
@@ -28,18 +29,21 @@ public class QuestManager : MonoBehaviour
 	private int _currentStepIndex =0;
 	private void Start()
 	{
-		Debug.Log("Start");
+		
 		if (	_checkStepValidityEvent!=null)
 		{
 			_checkStepValidityEvent.OnEventRaised += CheckStepValidity; 
 		}
-		
+		if ( _endDialogueEvent != null)
+		{
+			_endDialogueEvent.OnEventRaised += EndDialogue;
+		}
 		StartGame(); 
 
 	}
 	 void StartGame()
 	{//Add code for saved information
-		Debug.Log("Start Game"); 
+		
 		_currentQuestIndex = 0;
 		if (_quests != null)
 		{
@@ -51,7 +55,6 @@ public class QuestManager : MonoBehaviour
 	}
 	 void StartQuest()
 	{
-		Debug.Log("Start Quest");
 		if (_quests != null)
 			if ( _quests.Count > _currentQuestIndex)
 		{
@@ -66,7 +69,6 @@ public class QuestManager : MonoBehaviour
 
 	 void StartStep()
 	{
-		Debug.Log("Start step");
 		if (_currentQuest.Steps!=null)
 			if (_currentQuest.Steps.Count > _currentStepIndex)
 		    {
@@ -113,7 +115,7 @@ public class QuestManager : MonoBehaviour
 						{
 							_winDialogueEvent.OnEventRaised();
 						}
-							}
+					}
 					else
 					{
 						//trigger lose dialogue
@@ -125,12 +127,12 @@ public class QuestManager : MonoBehaviour
 					break;
 				case stepType.rewardItem:
 					_rewardItemEvent.RaiseEvent(_currentStep.Item);
-							//no dialogue is needed after Reward Item
-							EndStep();
-							break;
+					//no dialogue is needed after Reward Item
+					EndStep();
+					break;
 				case stepType.dialogue:
-							//dialogue has already been played
-							EndStep(); 
+					//dialogue has already been played
+					EndStep(); 
 					break;
 
 
@@ -139,8 +141,23 @@ public class QuestManager : MonoBehaviour
 
 
 		}
+	void EndDialogue (DialogueDataSO dialogue)
+	{
 
-	 void EndStep()
+		//depending on the dialogue that ended, do something 
+		switch (dialogue.DialogueType)
+		{
+			case DialogueType.winDialogue:
+				EndStep(); 
+				break;
+			
+			default:
+				break;
+
+		}
+
+	}
+	void EndStep()
 	{
 		_currentStep = null; 
 
@@ -150,7 +167,7 @@ public class QuestManager : MonoBehaviour
 					if (_quests[_currentQuestIndex].Steps.Count > _currentStepIndex)
 					{
 						if (_endStepEvent != null)
-							_endStepEvent.RaiseEvent(_quests[_currentQuestIndex].Steps[_currentStepIndex]);
+							_endStepEvent.RaiseEvent();
 						_quests[_currentQuestIndex].Steps[_currentStepIndex].FinishStep();
 						if(_quests[_currentQuestIndex].Steps.Count > _currentStepIndex +1)
 						{

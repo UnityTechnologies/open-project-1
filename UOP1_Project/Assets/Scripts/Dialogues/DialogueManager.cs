@@ -15,7 +15,7 @@ public class DialogueManager : MonoBehaviour
 
 	[SerializeField] private InputReader _inputReader = default;
 	private int _counter;
-	private bool _reachedEndOfDialogue { get => _counter >= _currentDialogueDataSO.DialogueLines.Count; }
+	private bool _reachedEndOfDialogue { get => _counter >= _currentDialogue.DialogueLines.Count; }
 
 	[Header("Listening on channels")]
 	[SerializeField] private DialogueDataChannelSO _startDialogue = default;
@@ -24,11 +24,12 @@ public class DialogueManager : MonoBehaviour
 	[Header("BoradCasting on channels")]
 	[SerializeField] private DialogueLineChannelSO _openUIDialogueEvent = default;
 	[SerializeField] private DialogueChoicesChannelSO _showChoicesUIEvent = default;
-	[SerializeField] private VoidEventChannelSO _endDialogue = default;
+	[SerializeField] private DialogueDataChannelSO _endDialogue = default;
+	[SerializeField] private VoidEventChannelSO _continueWithStep = default;
 	[SerializeField] private VoidEventChannelSO _closeDialogueUIEvent = default;
 
 
-	private DialogueDataSO _currentDialogueDataSO = default;
+	private DialogueDataSO _currentDialogue = default;
 
 	private void Start()
 	{
@@ -46,7 +47,7 @@ public class DialogueManager : MonoBehaviour
 	public void DisplayDialogueData(DialogueDataSO dialogueDataSO)
 	{
 		BeginDialogueData(dialogueDataSO);
-		DisplayDialogueLine(_currentDialogueDataSO.DialogueLines[_counter], dialogueDataSO.Actor);
+		DisplayDialogueLine(_currentDialogue.DialogueLines[_counter], dialogueDataSO.Actor);
 	}
 
 	/// <summary>
@@ -57,7 +58,7 @@ public class DialogueManager : MonoBehaviour
 		_counter = 0;
 		_inputReader.EnableDialogueInput();
 		_inputReader.advanceDialogueEvent += OnAdvance;
-		_currentDialogueDataSO = dialogueDataSO;
+		_currentDialogue = dialogueDataSO;
 	}
 
 	/// <summary>
@@ -67,7 +68,6 @@ public class DialogueManager : MonoBehaviour
 	/// <param name="dialogueLine"></param>
 	public void DisplayDialogueLine(DialogueLineSO dialogueLine, ActorSO actor)
 	{
-		Debug.Log("DisplayDialogueLine"); 
         if(_openUIDialogueEvent!=null)
 		{
 			_openUIDialogueEvent.RaiseEvent(dialogueLine, actor); 
@@ -80,13 +80,13 @@ public class DialogueManager : MonoBehaviour
 
 		if (!_reachedEndOfDialogue)
 		{
-			DisplayDialogueLine(_currentDialogueDataSO.DialogueLines[_counter], _currentDialogueDataSO.Actor);
+			DisplayDialogueLine(_currentDialogue.DialogueLines[_counter], _currentDialogue.Actor);
 		}
 		else
 		{
-			if(_currentDialogueDataSO.Choices.Count > 0)
+			if(_currentDialogue.Choices.Count > 0)
 			{
-				DisplayChoices(_currentDialogueDataSO.Choices);
+				DisplayChoices(_currentDialogue.Choices);
 			}
 			else
 			{
@@ -116,23 +116,31 @@ public class DialogueManager : MonoBehaviour
 		{
 			_makeDialogueChoiceEvent.OnEventRaised -= MakeDialogueChoice;
 		}
-		if (choice.NextDialogue != null)
-			DisplayDialogueData(choice.NextDialogue);
+		if (choice.ActionType == DialogueActionType.continueWithStep)
+		{
+			if(_continueWithStep!=null)
+			_continueWithStep.RaiseEvent();
+			if (choice.NextDialogue != null)
+				DisplayDialogueData(choice.NextDialogue);
+		}
 		else
-			DialogueEnded();
+		{
+			if (choice.NextDialogue != null)
+				DisplayDialogueData(choice.NextDialogue);
+			else
+				DialogueEndedAndCloseDialogueUI();
+		}
 	}
 
 	 void DialogueEnded()
 	{
-		Debug.Log("DialogueEnded");
 		if (_endDialogue!=null)
-		    _endDialogue.RaiseEvent();
+		    _endDialogue.RaiseEvent(_currentDialogue);
 	}
 	public void DialogueEndedAndCloseDialogueUI()
 	{
-		Debug.Log("DialogueEnded");
 		if (_endDialogue != null)
-			_endDialogue.RaiseEvent();
+			_endDialogue.RaiseEvent(_currentDialogue);
 		if (_closeDialogueUIEvent != null)
 			_closeDialogueUIEvent.RaiseEvent();
 		_inputReader.advanceDialogueEvent -= OnAdvance;

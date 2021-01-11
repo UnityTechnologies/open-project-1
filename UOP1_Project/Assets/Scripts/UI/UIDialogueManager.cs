@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-using UnityEngine.Serialization;
 using UnityEngine.Localization.Components;
 public class UIDialogueManager : MonoBehaviour
 {
@@ -13,12 +12,12 @@ public class UIDialogueManager : MonoBehaviour
 
 	[SerializeField] private UIDialogueChoicesManager _choicesManager = default;
 
-	[SerializeField] private DialogueChoicesChannelSO ShowChoicesEvent; 
+	[SerializeField] private DialogueChoicesChannelSO _showChoicesEvent = default; 
 	private void Start()
 	{
-		if (ShowChoicesEvent != null)
+		if (_showChoicesEvent != null)
 		{
-			ShowChoicesEvent.OnEventRaised += ShowChoices;
+			_showChoicesEvent.OnEventRaised += ShowChoices;
 		}
 	}
 	public void SetDialogue(DialogueLineSO dialogueLine, ActorSO actor)

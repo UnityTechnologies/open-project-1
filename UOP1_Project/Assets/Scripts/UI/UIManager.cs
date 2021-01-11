@@ -1,31 +1,21 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public class UIManager : MonoBehaviour
 {
 	[Header("Listening on channels")]
 	[Header("Dialogue Events")]
-	[FormerlySerializedAs("OpenUIDialogueEvent")]
 	[SerializeField] private DialogueLineChannelSO _openUIDialogueEvent= default;
-	[FormerlySerializedAs("CloseUIDialogueEvent")]
 	[SerializeField] private VoidEventChannelSO _closeUIDialogueEvent = default;
-	[FormerlySerializedAs("ShowChoicesUIEvent")]
-	[SerializeField] private DialogueChoicesChannelSO _showChoicesUIEvent = default;
 
 	[Header("Inventory Events")]
-	[FormerlySerializedAs("OpenInventoryScreenEvent")]
 	[SerializeField] private VoidEventChannelSO _openInventoryScreenEvent = default;
-	[FormerlySerializedAs("OpenInventoryScreenForCookingEvent")]
 	[SerializeField] private VoidEventChannelSO _openInventoryScreenForCookingEvent = default;
-	[FormerlySerializedAs("CloseInventoryScreenEvent")]
 	[SerializeField] private VoidEventChannelSO _closeInventoryScreenEvent = default;
 
 	[Header("Interaction Events")]
-	[FormerlySerializedAs("OnInteractionEndedEvent")]
 	[SerializeField] private VoidEventChannelSO _onInteractionEndedEvent = default;
-	[FormerlySerializedAs("SetInteractionEvent")]
 	[SerializeField] private InteractionUIEventChannelSO _setInteractionEvent = default;
 
 	private void OnEnable()

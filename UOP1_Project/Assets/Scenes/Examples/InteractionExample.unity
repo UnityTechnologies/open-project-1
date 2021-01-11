@@ -954,6 +954,7 @@ MonoBehaviour:
   _openUIDialogueEvent: {fileID: 0}
   _showChoicesUIEvent: {fileID: 0}
   _endDialogue: {fileID: 0}
+  _continueWithStep: {fileID: 0}
   _closeDialogueUIEvent: {fileID: 0}
 --- !u!4 &419940103
 Transform:
@@ -2053,7 +2054,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _openUIDialogueEvent: {fileID: 0}
   _closeUIDialogueEvent: {fileID: 0}
-  _showChoicesUIEvent: {fileID: 0}
   _openInventoryScreenEvent: {fileID: 0}
   _openInventoryScreenForCookingEvent: {fileID: 0}
   _closeInventoryScreenEvent: {fileID: 0}
@@ -2973,9 +2973,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _inputReader: {fileID: 11400000, guid: 945ec0365077176418488737deed54be, type: 2}
   _dialogueManager: {fileID: 419940102}
-  PlayCutsceneEvent: {fileID: 0}
-  PlayDialogueEvent: {fileID: 0}
-  PauseTimelineEvent: {fileID: 0}
+  _playCutsceneEvent: {fileID: 0}
+  _playDialogueEvent: {fileID: 0}
+  _pauseTimelineEvent: {fileID: 0}
 --- !u!4 &1647029640
 Transform:
   m_ObjectHideFlags: 0
@@ -3783,7 +3783,7 @@ MonoBehaviour:
   _lineText: {fileID: 0}
   _actorNameText: {fileID: 0}
   _choicesManager: {fileID: 0}
-  ShowChoicesEvent: {fileID: 0}
+  _showChoicesEvent: {fileID: 0}
 --- !u!222 &1981939916
 CanvasRenderer:
   m_ObjectHideFlags: 0

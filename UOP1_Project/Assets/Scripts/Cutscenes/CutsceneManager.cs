@@ -8,9 +8,11 @@ public class CutsceneManager : MonoBehaviour
 	[SerializeField] private InputReader _inputReader = default;
 	[SerializeField] private DialogueManager _dialogueManager = default;
 
-	[SerializeField] private PlayableDirectorChannelSO PlayCutsceneEvent;
-	[SerializeField] public DialogueLineChannelSO PlayDialogueEvent;
-	[SerializeField] public VoidEventChannelSO PauseTimelineEvent;
+	[SerializeField] private PlayableDirectorChannelSO _playCutsceneEvent =default;
+
+	[SerializeField] public DialogueLineChannelSO _playDialogueEvent=default;
+
+	[SerializeField] public VoidEventChannelSO _pauseTimelineEvent=default;
 
 	private PlayableDirector _activePlayableDirector;
 	private bool _isPaused;
@@ -28,22 +30,22 @@ public class CutsceneManager : MonoBehaviour
 	}
 	private void Start()
 	{
-	  if(	PlayCutsceneEvent!=null)
+	  if(	_playCutsceneEvent!=null)
 		{
 
-			PlayCutsceneEvent.OnEventRaised += PlayCutscene; 
+			_playCutsceneEvent.OnEventRaised += PlayCutscene; 
 
 		}
-		if (PlayDialogueEvent != null)
+		if (_playDialogueEvent != null)
 		{
 
-			PlayDialogueEvent.OnEventRaised += PlayDialogueFromClip;
+			_playDialogueEvent.OnEventRaised += PlayDialogueFromClip;
 
 		}
-		if (PauseTimelineEvent != null)
+		if (_pauseTimelineEvent != null)
 		{
 
-			PauseTimelineEvent.OnEventRaised += PauseTimeline;
+			_pauseTimelineEvent.OnEventRaised += PauseTimeline;
 
 		}
 	}

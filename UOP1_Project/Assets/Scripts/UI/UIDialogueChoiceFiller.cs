@@ -3,14 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.Localization.Components;
-using UnityEngine.Serialization;
 
 public class UIDialogueChoiceFiller : MonoBehaviour
 {
-	[FormerlySerializedAs("choiceText")]
-	[SerializeField] private LocalizeStringEvent _choiceText;
-	[FormerlySerializedAs("MakeAChoiceEvent")]
-	[SerializeField] private DialogueChoiceChannelSO _makeAChoiceEvent;
+
+	[SerializeField] private LocalizeStringEvent _choiceText =default;
+	[SerializeField] private DialogueChoiceChannelSO _makeAChoiceEvent=default;
 
 	Choice currentChoice;
 
