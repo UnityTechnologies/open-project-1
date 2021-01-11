@@ -7,7 +7,7 @@ public partial class SceneSelector : EditorWindow, IHasCustomMenu
 {
 	private const string kPreferencesKey = "uop1.SceneSelector.Preferences";
 	private const int kItemContentLeftPadding = 32;
-	private static readonly GUIContent kOpenPreferencesItemContent = new GUIContent("Open Preferences");	
+	private static readonly GUIContent kOpenPreferencesItemContent = new GUIContent("Open Preferences");
 
 	private Styles _styles;
 	private Storage _storage;
