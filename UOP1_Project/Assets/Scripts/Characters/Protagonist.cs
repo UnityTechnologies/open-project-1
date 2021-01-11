@@ -9,11 +9,14 @@ public class Protagonist : MonoBehaviour
 	[SerializeField] private InputReader _inputReader = default;
 	public TransformAnchor gameplayCameraTransform;
 
+	[SerializeField] private VoidEventChannelSO _openInventoryChannel = default;
+
 	private Vector2 _previousMovementInput;
 
 	//These fields are read and manipulated by the StateMachine actions
 	[HideInInspector] public bool jumpInput;
 	[HideInInspector] public bool extraActionInput;
+	[HideInInspector] public bool attackInput;
 	[HideInInspector] public Vector3 movementInput; //Initial input coming from the Protagonist script
 	[HideInInspector] public Vector3 movementVector; //Final movement vector, manipulated by the StateMachine actions
 	[HideInInspector] public ControllerColliderHit lastHit;
@@ -30,9 +33,10 @@ public class Protagonist : MonoBehaviour
 		_inputReader.jumpEvent += OnJumpInitiated;
 		_inputReader.jumpCanceledEvent += OnJumpCanceled;
 		_inputReader.moveEvent += OnMove;
-		_inputReader.extraActionEvent += OnExtraAction;
+		_inputReader.openInventoryEvent += OnOpenInventory;
 		_inputReader.startedRunning += OnStartedRunning;
 		_inputReader.stoppedRunning += OnStoppedRunning;
+		_inputReader.attackEvent += OnAttack;
 		//...
 	}
 
@@ -42,7 +46,7 @@ public class Protagonist : MonoBehaviour
 		_inputReader.jumpEvent -= OnJumpInitiated;
 		_inputReader.jumpCanceledEvent -= OnJumpCanceled;
 		_inputReader.moveEvent -= OnMove;
-		_inputReader.extraActionEvent -= OnExtraAction;
+		_inputReader.openInventoryEvent -= OnOpenInventory;
 		_inputReader.startedRunning -= OnStartedRunning;
 		_inputReader.stoppedRunning -= OnStoppedRunning;
 		//...
@@ -103,9 +107,10 @@ public class Protagonist : MonoBehaviour
 
 	private void OnStartedRunning() => isRunning = true;
 
-	// This handler is just used for debug, for now
-	private void OnExtraAction()
+	private void OnOpenInventory()
 	{
-		extraActionInput = true;
+		_openInventoryChannel.RaiseEvent();
 	}
+
+	private void OnAttack() => attackInput = true;
 }
