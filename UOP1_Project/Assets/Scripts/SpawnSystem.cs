@@ -37,6 +37,12 @@ public class SpawnSystem : MonoBehaviour
 
 	private void SpawnPlayer()
 	{
+		GameObject[] spawnLocationsGO = GameObject.FindGameObjectsWithTag("SpawnLocation");
+
+		for(int i = 0; i < spawnLocationsGO.Length; ++i)
+		{
+			_spawnLocations[i] = spawnLocationsGO[i].transform;
+		}
 		Spawn(FindSpawnIndex(_pathTaken?.Path ?? null));
 	}
 
