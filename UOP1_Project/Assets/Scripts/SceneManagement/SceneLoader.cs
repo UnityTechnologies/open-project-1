@@ -128,6 +128,7 @@ public class SceneLoader : MonoBehaviour
 				{
 					_loadingDone = true;
 					_scenesToLoadAsyncOperations.Clear();
+					_persistentScenes.Clear();
 				}
 			}
 			yield return null;
