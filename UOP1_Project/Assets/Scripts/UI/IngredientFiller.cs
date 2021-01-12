@@ -8,13 +8,13 @@ public class IngredientFiller : MonoBehaviour
 {
 
 	[SerializeField]
-	private TextMeshProUGUI _ingredientAmount=default;
+	private TextMeshProUGUI _ingredientAmount = default;
 
 	[SerializeField]
-	private LocalizeStringEvent _ingredientName=default;
+	private LocalizeStringEvent _ingredientName = default;
 
 	[SerializeField]
-	private GameObject _checkMark=default;
+	private GameObject _checkMark = default;
 
 	public void FillIngredient(ItemStack ingredient, bool isAvailable)
 	{

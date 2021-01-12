@@ -5,10 +5,10 @@ using UnityEngine;
 public class UIInteractionManager : MonoBehaviour
 {
 	[SerializeField]
-	private List<InteractionSO> _listInteractions =default;
+	private List<InteractionSO> _listInteractions = default;
 
 	[SerializeField]
-	private UIInteractionItemFiller _interactionItem=default;
+	private UIInteractionItemFiller _interactionItem = default;
 
 	public void FillInteractionPanel(InteractionType interactionType)
 	{

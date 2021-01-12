@@ -7,7 +7,7 @@ using UnityEngine;
 public class StepController : MonoBehaviour
 {
 	[Header("Data")]
-	[SerializeField] private ActorSO _actor=default;
+	[SerializeField] private ActorSO _actor = default;
 	[SerializeField] private DialogueDataSO _defaultDialogue = default;
 
 	[Header("Listening to channels")]
@@ -51,25 +51,25 @@ public class StepController : MonoBehaviour
 	{
 		if (_defaultDialogue != null)
 		{
-			_currentDialogue = _defaultDialogue; 
-		    StartDialogue();
+			_currentDialogue = _defaultDialogue;
+			StartDialogue();
 		}
 
 	}
 	void CheckStepInvolvement(StepSO step)
 	{
-		if(_actor == step.Actor)
+		if (_actor == step.Actor)
 		{
-			RegisterStep(step); 
+			RegisterStep(step);
 		}
 
 	}
 	//register a step
-    void RegisterStep(StepSO step)
+	void RegisterStep(StepSO step)
 	{
 		_currentStep = step;
 		_hasActifStep = true;
-		
+
 	}
 	//start a dialogue when interaction
 	//some Steps need to be instantanious. And do not need the interact button.
@@ -92,29 +92,30 @@ public class StepController : MonoBehaviour
 	public void InteractWithCharacter()
 	{
 		if (_hasActifStep)
-			{
-				StartStep();
-
-			}
-			else
-			{
-				PlayDefaultDialogue();
-			}
-		
-	}
-	void StartStep() {
-        if(_currentStep!=null)
-		if (_currentStep.DialogueBeforeStep != null)
 		{
-			_currentDialogue = _currentStep.DialogueBeforeStep;
-			StartDialogue();
+			StartStep();
+
 		}
 		else
 		{
-				Debug.LogError("step without dialogue registring not implemented."); 
+			PlayDefaultDialogue();
 		}
+
 	}
-	 void StartDialogue()
+	void StartStep()
+	{
+		if (_currentStep != null)
+			if (_currentStep.DialogueBeforeStep != null)
+			{
+				_currentDialogue = _currentStep.DialogueBeforeStep;
+				StartDialogue();
+			}
+			else
+			{
+				Debug.LogError("step without dialogue registring not implemented.");
+			}
+	}
+	void StartDialogue()
 	{
 		if (_startDialogueEvent != null)
 		{
@@ -123,15 +124,16 @@ public class StepController : MonoBehaviour
 
 
 	}
-	void PlayLoseDialogue() {
-		
+	void PlayLoseDialogue()
+	{
+
 		if (_currentStep != null)
 			if (_currentStep.LoseDialogue != null)
 			{
 				_currentDialogue = _currentStep.LoseDialogue;
 				StartDialogue();
 			}
-		
+
 	}
 	void PlayWinDialogue()
 	{
@@ -144,37 +146,37 @@ public class StepController : MonoBehaviour
 
 	}
 	//End dialogue
-	 void EndDialogue(DialogueDataSO dialogue)
+	void EndDialogue(DialogueDataSO dialogue)
 	{
-		    //depending on the dialogue that ended, do something. The dialogue type can be different from the current dialogue type
-			switch (dialogue.DialogueType)
-			{
-				case DialogueType.startDialogue:
-					//Check the validity of the step
-					CheckStepValidity();
-					break;
-				case DialogueType.winDialogue:
-					//After playing the win dialogue close Dialogue and end step
-					
-					break;
-				case DialogueType.loseDialogue:
-					//closeDialogue
-					//replay start Dialogue if the lose Dialogue ended
-					if (_currentStep.DialogueBeforeStep != null)
-					{
-						_currentDialogue = _currentStep.DialogueBeforeStep;
+		//depending on the dialogue that ended, do something. The dialogue type can be different from the current dialogue type
+		switch (dialogue.DialogueType)
+		{
+			case DialogueType.startDialogue:
+				//Check the validity of the step
+				CheckStepValidity();
+				break;
+			case DialogueType.winDialogue:
+				//After playing the win dialogue close Dialogue and end step
 
-					}
-					break;
-				case DialogueType.defaultDialogue:
-					//close Dialogue
-					//nothing happens if it's the default dialogue
-					break;
-				default:
-					break;
-			
+				break;
+			case DialogueType.loseDialogue:
+				//closeDialogue
+				//replay start Dialogue if the lose Dialogue ended
+				if (_currentStep.DialogueBeforeStep != null)
+				{
+					_currentDialogue = _currentStep.DialogueBeforeStep;
+
+				}
+				break;
+			case DialogueType.defaultDialogue:
+				//close Dialogue
+				//nothing happens if it's the default dialogue
+				break;
+			default:
+				break;
+
 		}
-		
+
 
 
 	}
@@ -188,27 +190,27 @@ public class StepController : MonoBehaviour
 
 	void CheckStepValidity()
 	{
-		if(_checkStepValidityEvent!=null)
+		if (_checkStepValidityEvent != null)
 		{
-			_checkStepValidityEvent.RaiseEvent(); 
+			_checkStepValidityEvent.RaiseEvent();
 		}
 
 
 	}
-	 void EndStep(StepSO stepToFinish)
+	void EndStep(StepSO stepToFinish)
 	{
-		if(stepToFinish==_currentStep)
-		    UnregisterStep();
+		if (stepToFinish == _currentStep)
+			UnregisterStep();
 		else
 		{
-			StartStep(); 
+			StartStep();
 		}
 
 	}
 	void EndStep()
 	{
-	
-			UnregisterStep();
+
+		UnregisterStep();
 
 	}
 	//unregister a step when it ends.
@@ -216,8 +218,8 @@ public class StepController : MonoBehaviour
 	{
 		_currentStep = null;
 		_hasActifStep = false;
-		_currentDialogue = _defaultDialogue; 
+		_currentDialogue = _defaultDialogue;
 
-		
+
 	}
 }

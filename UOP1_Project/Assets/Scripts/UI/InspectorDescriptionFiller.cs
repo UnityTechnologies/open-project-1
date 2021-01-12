@@ -9,7 +9,7 @@ public class InspectorDescriptionFiller : MonoBehaviour
 {
 	[SerializeField] private LocalizeStringEvent _textDescription = default;
 
-	[SerializeField] private LocalizeStringEvent _textName=default; 
+	[SerializeField] private LocalizeStringEvent _textName = default;
 
 	public void FillDescription(Item itemToInspect)
 	{

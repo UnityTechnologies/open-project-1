@@ -5,11 +5,11 @@ using UnityEngine;
 public class CookingInventoryInspectorFiller : MonoBehaviour
 {
 
-	[SerializeField] private InspectorPreviewFiller _inspectorPreviewFiller=default;
+	[SerializeField] private InspectorPreviewFiller _inspectorPreviewFiller = default;
 
-	[SerializeField] private InspectorDescriptionFiller _inspectorDescriptionFiller=default;
+	[SerializeField] private InspectorDescriptionFiller _inspectorDescriptionFiller = default;
 
-	[SerializeField] private RecipeIngredientsFiller _recipeIngredientsFiller=default;
+	[SerializeField] private RecipeIngredientsFiller _recipeIngredientsFiller = default;
 
 
 

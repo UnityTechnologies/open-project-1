@@ -6,9 +6,9 @@ using TMPro;
 
 public class UIInteractionItemFiller : MonoBehaviour
 {
-	[SerializeField] LocalizeStringEvent _interactionName=default;
+	[SerializeField] LocalizeStringEvent _interactionName = default;
 
-	[SerializeField] TextMeshProUGUI _interactionKeyButton=default;
+	[SerializeField] TextMeshProUGUI _interactionKeyButton = default;
 
 
 	public void FillInteractionPanel(InteractionSO interactionItem)

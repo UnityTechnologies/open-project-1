@@ -9,7 +9,7 @@ public class InventoryTypeTabFiller : MonoBehaviour
 
 	[SerializeField] private LocalizeStringEvent _tabName = default;
 
-	[SerializeField] private Button _actionButton=default;
+	[SerializeField] private Button _actionButton = default;
 
 	public void fillTab(InventoryTabType tabType, bool isSelected, TabEventChannelSO changeTabEvent)
 	{

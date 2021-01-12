@@ -1,13 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using UnityEngine; 
+using UnityEngine;
 
 public class CollectibleItem : MonoBehaviour
 {
 
-	[SerializeField] private Item _currentItem=default;
+	[SerializeField] private Item _currentItem = default;
 
-	[SerializeField] private SpriteRenderer[] _itemImages=default;
+	[SerializeField] private SpriteRenderer[] _itemImages = default;
 	private void Start()
 	{
 		SetItem();
