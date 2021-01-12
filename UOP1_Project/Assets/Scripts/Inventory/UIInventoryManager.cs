@@ -294,7 +294,7 @@ public class UIInventoryManager : MonoBehaviour
 		if (ActionButtonClicked != null)
 		{
 			//find the selected Item
-			if (instantiatedGameObjects.Count > selectedItemId)
+			if (instantiatedGameObjects.Count > selectedItemId && selectedItemId > -1)
 			{
 				//find the item 
 				Item itemToActOn = new Item();
