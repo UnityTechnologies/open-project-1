@@ -116,7 +116,7 @@ public class DialogueManager : MonoBehaviour
 		{
 			_makeDialogueChoiceEvent.OnEventRaised -= MakeDialogueChoice;
 		}
-		if (choice.ActionType == DialogueActionType.continueWithStep)
+		if (choice.ActionType == ChoiceActionType.continueWithStep)
 		{
 			if(_continueWithStep!=null)
 			_continueWithStep.RaiseEvent();

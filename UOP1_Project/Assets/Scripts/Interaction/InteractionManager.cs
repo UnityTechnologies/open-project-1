@@ -111,19 +111,16 @@ public class InteractionManager : MonoBehaviour
 		if (other.CompareTag("Pickable"))
 		{
 			_potentialInteraction = InteractionType.PickUp;
-			Debug.Log("I triggered a pickable object!");
 			DisplayInteractionUI();
 		}
 		else if (other.CompareTag("CookingPot"))
 		{
 			_potentialInteraction = InteractionType.Cook;
-			Debug.Log("I triggered a cooking pot!");
 			DisplayInteractionUI();
 		}
 		else if (other.CompareTag("NPC"))
 		{
 			_potentialInteraction = InteractionType.Talk;
-			Debug.Log("I triggered an NPC!");
 			DisplayInteractionUI();
 		}
 		_currentInteractableObject = other.gameObject;

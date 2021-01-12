@@ -33,7 +33,7 @@ public class StepController : MonoBehaviour
 		if (_endDialogueEvent != null)
 		{ _endDialogueEvent.OnEventRaised += EndDialogue; }
 		if (_startStepEvent != null)
-		{ _startStepEvent.OnEventRaised += CheckStepInvolvment; }
+		{ _startStepEvent.OnEventRaised += CheckStepInvolvement; }
 		if (_interactionEvent != null)
 		{ _interactionEvent.OnEventRaised += InteractWithCharacter; }
 		if (_winDialogueEvent != null)
@@ -56,7 +56,7 @@ public class StepController : MonoBehaviour
 		}
 
 	}
-	void CheckStepInvolvment(StepSO step)
+	void CheckStepInvolvement(StepSO step)
 	{
 		if(_actor == step.Actor)
 		{

@@ -10,9 +10,9 @@ public enum DialogueType
 	defaultDialogue,
 
 }
-public enum DialogueActionType
+public enum ChoiceActionType
 {
-	nothing,
+	doNothing,
 	continueWithStep
 
 }
@@ -44,8 +44,8 @@ public class Choice
 {
 	[SerializeField] private DialogueLineSO _response = default;
 	[SerializeField] private DialogueDataSO _nextDialogue = default;
-	[SerializeField] private DialogueActionType _actionType = default;
+	[SerializeField] private ChoiceActionType _actionType = default;
 	public DialogueLineSO Response => _response; 
 	public DialogueDataSO NextDialogue => _nextDialogue; 
-	public DialogueActionType ActionType => _actionType;
+	public ChoiceActionType ActionType => _actionType;
 }

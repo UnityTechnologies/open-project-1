@@ -11,11 +11,12 @@ public class QuestManager : MonoBehaviour
 
 	[Header("Linstening to channels")]
 	[SerializeField] private VoidEventChannelSO _checkStepValidityEvent = default;
-	[SerializeField] private VoidEventChannelSO _endStepEvent = default;
 	[SerializeField] private DialogueDataChannelSO _endDialogueEvent = default;
 
 	[Header("Broadcasting on channels")]
 	[SerializeField] private StepChannelSO _startStepEvent = default;
+
+	[SerializeField] private VoidEventChannelSO _endStepEvent = default;
 
 	[SerializeField] private VoidEventChannelSO _winDialogueEvent = default;
 	[SerializeField] private VoidEventChannelSO _loseDialogueEvent = default;
