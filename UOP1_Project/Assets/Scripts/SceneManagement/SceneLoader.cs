@@ -5,7 +5,6 @@ using UnityEngine.SceneManagement;
 
 /// <summary>
 /// This class manages the scene loading and unloading.
-/// Heavy on comments right now because it is still being worked on.
 /// </summary>
 public class SceneLoader : MonoBehaviour
 {
