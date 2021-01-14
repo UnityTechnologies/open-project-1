@@ -21,7 +21,7 @@ public class CollectibleItem : MonoBehaviour
 
 	public Item GetItem()
 	{
-		Debug.Log("current item " + _currentItem);
+	
 		return _currentItem;
 
 	}

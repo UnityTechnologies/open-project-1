@@ -70,7 +70,6 @@ public class InteractionManager : MonoBehaviour
 						{
 							currentItem = _currentInteractableObject.GetComponent<CollectibleItem>().GetItem();
 							_onObjectPickUp.RaiseEvent(currentItem);
-							Debug.Log("PickUp event raised");
 						}
 						//set current interaction for state machine
 						currentInteraction = InteractionType.PickUp;
@@ -85,7 +84,7 @@ public class InteractionManager : MonoBehaviour
 					_onCookingStart.RaiseEvent();
 					Debug.Log("Cooking event raised");
 					//Change the action map
-					_inputReader.EnableUIInput();
+					_inputReader.EnableMenuInput();
 					//set current interaction for state machine
 					currentInteraction = InteractionType.Cook;
 				}

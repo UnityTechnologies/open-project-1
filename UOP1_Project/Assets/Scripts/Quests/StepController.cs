@@ -190,7 +190,7 @@ public class StepController : MonoBehaviour
 
 	void CheckStepValidity()
 	{
-		if (_checkStepValidityEvent != null)
+			if (_checkStepValidityEvent != null)
 		{
 			_checkStepValidityEvent.RaiseEvent();
 		}

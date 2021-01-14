@@ -98,7 +98,6 @@ public class DialogueManager : MonoBehaviour
 	private void DisplayChoices(List<Choice> choices)
 	{
 		_inputReader.advanceDialogueEvent -= OnAdvance;
-
 		if (_makeDialogueChoiceEvent != null)
 		{
 			_makeDialogueChoiceEvent.OnEventRaised += MakeDialogueChoice;
@@ -112,6 +111,7 @@ public class DialogueManager : MonoBehaviour
 
 	private void MakeDialogueChoice(Choice choice)
 	{
+	
 		if (_makeDialogueChoiceEvent != null)
 		{
 			_makeDialogueChoiceEvent.OnEventRaised -= MakeDialogueChoice;
