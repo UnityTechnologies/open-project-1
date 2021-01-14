@@ -64,10 +64,14 @@ public class InteractionManager : MonoBehaviour
 				{
 					if (_onObjectPickUp != null)
 					{
+						Item currentItem = default;
 						//raise an event with an item as parameter (to add object to inventory)
-						Item currentItem = _currentInteractableObject.GetComponent<CollectibleItem>().GetItem();
-						_onObjectPickUp.RaiseEvent(currentItem);
-						Debug.Log("PickUp event raised");
+						if (_currentInteractableObject.GetComponent<CollectibleItem>())
+						{
+							currentItem = _currentInteractableObject.GetComponent<CollectibleItem>().GetItem();
+							_onObjectPickUp.RaiseEvent(currentItem);
+							Debug.Log("PickUp event raised");
+						}
 						//set current interaction for state machine
 						currentInteraction = InteractionType.PickUp;
 					}
@@ -112,18 +116,20 @@ public class InteractionManager : MonoBehaviour
 		{
 			_potentialInteraction = InteractionType.PickUp;
 			DisplayInteractionUI();
+			_currentInteractableObject = other.gameObject;
 		}
 		else if (other.CompareTag("CookingPot"))
 		{
 			_potentialInteraction = InteractionType.Cook;
 			DisplayInteractionUI();
+			_currentInteractableObject = other.gameObject;
 		}
 		else if (other.CompareTag("NPC"))
 		{
 			_potentialInteraction = InteractionType.Talk;
 			DisplayInteractionUI();
+			_currentInteractableObject = other.gameObject;
 		}
-		_currentInteractableObject = other.gameObject;
 	}
 
 	private void DisplayInteractionUI()
@@ -134,8 +140,6 @@ public class InteractionManager : MonoBehaviour
 
 	private void OnTriggerExit(Collider other)
 	{
-
-
 		ResetInteraction();
 	}
 
