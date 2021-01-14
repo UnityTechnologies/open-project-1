@@ -21,7 +21,7 @@ public class CollectibleItem : MonoBehaviour
 
 	public Item GetItem()
 	{
-	
+
 		return _currentItem;
 
 	}

@@ -111,7 +111,7 @@ public class DialogueManager : MonoBehaviour
 
 	private void MakeDialogueChoice(Choice choice)
 	{
-	
+
 		if (_makeDialogueChoiceEvent != null)
 		{
 			_makeDialogueChoiceEvent.OnEventRaised -= MakeDialogueChoice;
