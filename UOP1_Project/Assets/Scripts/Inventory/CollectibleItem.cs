@@ -7,10 +7,10 @@ public class CollectibleItem : MonoBehaviour
 
 	[SerializeField] private Item _currentItem = default;
 
-//	[SerializeField] private SpriteRenderer[] _itemImages = default;
+	//	[SerializeField] private SpriteRenderer[] _itemImages = default;
 	private void Start()
 	{
-	//	SetItem();
+		//	SetItem();
 	}
 
 	public void PickedItem()
