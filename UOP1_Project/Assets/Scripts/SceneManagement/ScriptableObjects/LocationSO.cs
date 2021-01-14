@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-
 using UnityEngine.Localization;
 /// <summary>
 /// This class contains Settings specific to Locations only
