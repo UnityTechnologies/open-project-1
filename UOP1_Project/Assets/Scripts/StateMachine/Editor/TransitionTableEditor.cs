@@ -262,38 +262,26 @@ namespace UOP1.StateMachine.Editor
 		/// <returns>True if changes were made and returning is required. Otherwise false.</returns>
 		internal bool ReorderTransition(SerializedTransition serializedTransition, bool up)
 		{
-			int targetIndex = -1;
-			int fromId = serializedTransition.FromState.objectReferenceInstanceIDValue;
-			SerializedTransition st;
-			for (int i = 0; i < _transitions.arraySize; i++)
-			{
-				if (up && i >= serializedTransition.Index)
-					break;
+			int stateIndex = _fromStates.IndexOf(serializedTransition.FromState.objectReferenceValue);
+			var stateTransitions = _transitionsByFromStates[stateIndex];
+			int index = stateTransitions.FindIndex(t => t.SerializedTransition.Index == serializedTransition.Index);
 
-				if (!up && i <= serializedTransition.Index)
-					continue;
-
-				st = new SerializedTransition(_transitions, i);
-				if (st.FromState.objectReferenceInstanceIDValue != fromId)
-					continue;
-
-				targetIndex = i;
-				if (!up)
-					break;
-			}
-
-			if (targetIndex == -1)
+			// If not found, or moving up and index is 0, or moving down and index is last, return.
+			if (index == -1 || up && index == 0 || !up && index == stateTransitions.Count - 1)
 				return false;
 
-			_transitions.MoveArrayElement(serializedTransition.Index, targetIndex);
+			// When moving up, move the selected transition to the index of the previous transition of the state.
+			// When moving down, move the next transition of the state up to the index of the transition we want to move down.
+			// This way we make sure the states don't go out of order.
+			(int currentIndex, int targetIndex) = up ?
+				(serializedTransition.Index, stateTransitions[index - 1].SerializedTransition.Index) :
+				(stateTransitions[index + 1].SerializedTransition.Index, serializedTransition.Index);
+
+			_transitions.MoveArrayElement(currentIndex, targetIndex);
 			serializedObject.ApplyModifiedProperties();
 			Reset();
 
-			_toggles[
-				_fromStates.IndexOf(
-					_transitions.GetArrayElementAtIndex(targetIndex)
-					.FindPropertyRelative("FromState")
-					.objectReferenceValue)] = true;
+			_toggles[stateIndex] = true;
 
 			return true;
 		}
