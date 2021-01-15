@@ -7,10 +7,6 @@ public class Critter : MonoBehaviour
 {
 	[SerializeField]
 	private CritterSO _critterSO;
-	[SerializeField] private float _waitTime = default;
-	[SerializeField] private float _speed = default;
-	[SerializeField] private float _roamingDistance = default;
-	[SerializeField] private TransformAnchor playerTransform = default;
 
 	[SerializeField]
 	private GameObject _collectibleItemPrefab;
@@ -20,6 +16,7 @@ public class Critter : MonoBehaviour
 	private Vector3 _startPosition = default;
 	private Vector3 _roamingPosTarget = default;
 	private NavMeshAgent _agent;
+	private bool _agentActiveOnNavMesh = default;
 
 	public bool isPlayerInAlertZone { get; set; }
 	public bool isPlayerInAttackZone { get; set; }
@@ -32,19 +29,16 @@ public class Critter : MonoBehaviour
 	{
 		_currentHealth = _critterSO.MaxHealth;
 		_startPosition = transform.position;
-		_currentWaitTime = _waitTime;
+		_currentWaitTime = _critterSO.WaitTime;
 		_agent = GetComponent<NavMeshAgent>();
+		_agentActiveOnNavMesh = _agent != null && _agent.isActiveAndEnabled && _agent.isOnNavMesh;
 		_roamingPosTarget = GetRoamingPosition();
-		if (_agent != null)
-		{
-			_agent.speed = _speed;
-		}
 	}
 
 	private void Update()
 	{
 		// Play roaming and chasing movement only if the critter is not static.
-		if (_speed > 0)
+		if (_agentActiveOnNavMesh)
 		{
 			isRoaming = false;
 			// Critter fainting is not moving.
@@ -55,7 +49,8 @@ public class Critter : MonoBehaviour
 			// Chasing the player nearby
 			else if (isPlayerInAlertZone)
 			{
-				_agent.SetDestination(playerTransform.Transform.position);
+				_agent.speed = _critterSO.ChasingSpeed;
+				_agent.SetDestination(_critterSO.PlayerPosition);
 				// Stop the critter when close enough to perform an attack.
 				if (isPlayerInAttackZone)
 				{
@@ -70,6 +65,7 @@ public class Critter : MonoBehaviour
 			// Roaming routine around its start point
 			else
 			{
+				_agent.speed = _critterSO.RoamingSpeed;
 				_agent.SetDestination(_roamingPosTarget);
 				if (!_agent.hasPath)
 				{
@@ -78,7 +74,7 @@ public class Critter : MonoBehaviour
 					if (_currentWaitTime < 0)
 					{
 						_roamingPosTarget = GetRoamingPosition();
-						_currentWaitTime = _waitTime;
+						_currentWaitTime = _critterSO.WaitTime;
 					}
 				}
 				else
@@ -92,7 +88,7 @@ public class Critter : MonoBehaviour
 	// Compute a random target position around the starting position.
 	private Vector3 GetRoamingPosition()
 	{
-		return _startPosition + new Vector3(Random.Range(-1, 1), 0.0f, Random.Range(-1, 1)).normalized * Random.Range(_roamingDistance / 2, _roamingDistance);
+		return _startPosition + new Vector3(Random.Range(-1, 1), 0.0f, Random.Range(-1, 1)).normalized * Random.Range(_critterSO.RoamingDistance / 2, _critterSO.RoamingDistance);
 	}
 
 	private void ReceiveAnAttack(int damange)
