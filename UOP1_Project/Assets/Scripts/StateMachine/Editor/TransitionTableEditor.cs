@@ -172,7 +172,7 @@ namespace UOP1.StateMachine.Editor
 					EditorGUI.BeginChangeCheck();
 					stateRect.y += EditorGUIUtility.singleLineHeight * 2;
 
-					foreach (var transition in transitions)	// Display all the transitions in the state
+					foreach (var transition in transitions) // Display all the transitions in the state
 					{
 						if (transition.Display(ref stateRect)) // Return if there were changes
 						{
@@ -221,7 +221,8 @@ namespace UOP1.StateMachine.Editor
 		{
 			var toggledState = _toggledIndex > -1 ? _fromStates[_toggledIndex] : null;
 
-			if (!up) index++;
+			if (!up)
+				index++;
 
 			var transitions = _transitionsByFromStates[index];
 			int transitionIndex = transitions[0].SerializedTransition.Index;
