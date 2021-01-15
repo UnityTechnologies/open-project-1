@@ -9,9 +9,7 @@ public class FadeManager : MonoBehaviour
 	[SerializeField] private FadeChannelSO _fadeChannelSO = default;
 
 	[Header("Fadeout Canvas")]
-	public GameObject _fadeoutCanvas = default;
-
-	private Image _imageComponent;
+	[SerializeField] private Image imageComponent;
 
 	private bool IsCurrentlyFading = false;
 
