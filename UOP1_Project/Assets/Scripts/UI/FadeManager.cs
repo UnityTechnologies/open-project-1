@@ -5,13 +5,11 @@ using UnityEngine.UI;
 
 public class FadeManager : MonoBehaviour
 {
-	[Header("Fadeout Event")]
-	[SerializeField] private FadeChannelSO _fadeChannelSO = default;
+	[Header("Fade Event")]
+	[SerializeField] private FadeChannelSO _fadeChannelSO;
 
-	[Header("Fadeout Canvas")]
-	public GameObject _fadeoutCanvas = default;
-
-	private Image _imageComponent;
+	[Header("Fade Image")]
+	[SerializeField] private Image _imageComponent;
 
 	private bool IsCurrentlyFading = false;
 
@@ -54,11 +52,6 @@ public class FadeManager : MonoBehaviour
 		_imageComponent.color = new Color(0, 0, 0, 0); // Here to guarentee the image is fully transparent at the end of the loop.
 		IsCurrentlyFading = false;
 		yield return null;
-	}
-
-	private void Start()
-	{
-		_imageComponent = _fadeoutCanvas.GetComponent<Image>();
 	}
 
 	private void OnEnable()
