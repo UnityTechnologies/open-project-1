@@ -30,8 +30,8 @@ namespace UOP1.StateMachine.Editor
 
 			DarkGray = EditorGUIUtility.isProSkin ? new Color(0.283f, 0.283f, 0.283f) : new Color(0.7f, 0.7f, 0.7f);
 			LightGray = EditorGUIUtility.isProSkin ? new Color(0.33f, 0.33f, 0.33f) : new Color(0.8f, 0.8f, 0.8f);
-			ZebraDark = new Color(0.1f, 0.5f, 0.9f, 0.1f);
-			ZebraLight = new Color(0.8f, 0.8f, 0.9f, 0.1f);
+			ZebraDark = new Color(0.4f, 0.4f, 0.4f, 0.1f);
+			ZebraLight = new Color(0.8f, 0.8f, 0.8f, 0.1f);
 			Focused = new Color(0.5f, 0.5f, 0.5f, 0.5f);
 			Padding = new RectOffset(5, 5, 5, 5);
 			LeftPadding = new RectOffset(10, 0, 0, 0);
