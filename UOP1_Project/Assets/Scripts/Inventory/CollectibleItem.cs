@@ -6,6 +6,11 @@ public class CollectibleItem : MonoBehaviour
 	[SerializeField] private Item _currentItem;
 	[SerializeField] private SpriteRenderer[] _itemImages;
 
+	public Item CurrentItem
+	{
+		set => _currentItem = value;
+	}
+
 	private void Start()
 	{
 		SetItem();
