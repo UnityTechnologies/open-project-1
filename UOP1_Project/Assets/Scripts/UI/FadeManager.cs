@@ -40,14 +40,15 @@ public class FadeManager : MonoBehaviour
 	/// </summary>
 	/// <param name="duration">How long it takes to the image to fade out.</param>
 	/// <returns></returns>
-	private IEnumerator FadeOutEnum(float duration)
+	private IEnumerator FadeOutEnum(float duration, Color color = default)
 	{
-		Color oldColor = _imageComponent.color; // Temporarily stores the old color of the image component, as we can't assume the image will always be black.
+		if (color == default)
+			color = _imageComponent.color; // Stores the old color of the image component, as we can't assume the image will always be black, if no color is specified.
 		float totalTime = 0f; // Total amount of time this coroutine has taken. Determines when the fadeout will end and what color the imageComponent should be at every frame.
 		while (totalTime <= duration)
 		{
 			totalTime += Time.deltaTime;
-			_imageComponent.color = Color.Lerp(oldColor, new Color(0, 0, 0, 0), totalTime / duration); // Sets the image's color to a mixture between the old color and  total transparency, and interpolates based on the amount of time to completion.
+			_imageComponent.color = Color.Lerp(color, new Color(0, 0, 0, 0), totalTime / duration); // Sets the image's color to a mixture between the old color and  total transparency, and interpolates based on the amount of time to completion.
 			yield return null;
 		}
 		_imageComponent.color = new Color(0, 0, 0, 0); // Here to guarentee the image is fully transparent at the end of the loop.
@@ -93,8 +94,7 @@ public class FadeManager : MonoBehaviour
 			}
 			else
 			{
-				StartCoroutine(FadeOutEnum(duration)); // Fadeout doesn't need color, so the color parameter is disregarded.
-				// I would like to say that setting the color for the fadeout wouldn't be hard to implement, but I reckon most people wouldn't use it, so it would just be an unnecessary burden.
+				StartCoroutine(FadeOutEnum(duration, color)); // Fadeout doesn't need color, so the color parameter is disregarded.
 			}
 		}
 	}

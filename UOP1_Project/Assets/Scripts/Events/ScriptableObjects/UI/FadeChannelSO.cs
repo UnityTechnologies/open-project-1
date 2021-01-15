@@ -13,21 +13,12 @@ public class FadeChannelSO : ScriptableObject
 	/// <param name="fadeIn">If true, the rectangle fades in. If false, the rectangle fades out.</param>
 	/// <param name="duration">How long it takes to the image to fade in/out.</param>
 	/// <param name="color">Target color for the image to reach. Disregarded when fading out.</param>
-	public void Fade(bool fadeIn, float duration, Color color)
+	public void Fade(bool fadeIn, float duration, Color color = default)
 	{
+		if (color == default && fadeIn) // If no fadein color is assigned, black is given as default. If we are supposed to fadeout the rectangle, default is simply passed through.
+			color = Color.black;
 		if (OnEventRaised != null)
 			OnEventRaised.Invoke(fadeIn, duration, color);
-	}
-
-	/// <summary>
-	/// Generic fade function. Communicates with <seealso cref="FadeManager.cs"/>.
-	/// </summary>
-	/// <param name="fadeIn">If true, the rectangle fades in. If false, the rectangle fades out.</param>
-	/// <param name="duration">How long it takes to the image to fade in/out.</param>
-	public void Fade(bool fadeIn, float duration)
-	{
-		if (OnEventRaised != null)
-			OnEventRaised.Invoke(fadeIn, duration, new Color(0, 0, 0, 1));
 	}
 
 	/// <summary>
@@ -35,24 +26,18 @@ public class FadeChannelSO : ScriptableObject
 	/// </summary>
 	/// <param name="duration">How long it takes to the image to fade in.</param>
 	/// <param name="color">Target color for the image to reach.</param>
-	public void FadeIn(float duration, Color color)
+	public void FadeIn(float duration, Color color = default)
 	{
+		if (color == default)
+			color = Color.black;
 		Fade(true, duration, color);
-	}
-	/// <summary>
-	/// Fade helper function to simplify usage. Fades in the rectangle.
-	/// </summary>
-	/// <param name="duration">How long it takes to the image to fade in.</param>
-	public void FadeIn(float duration)
-	{
-		Fade(true, duration, new Color(0, 0, 0, 1));
 	}
 	/// <summary>
 	/// Fade helper function to simplify usage. Fades out the rectangle.
 	/// </summary>
 	/// <param name="duration">How long it takes to the image to fade out.</param>
-	public void FadeOut(float duration)
+	public void FadeOut(float duration, Color color = default)
 	{
-		Fade(false, duration, new Color(0, 0, 0, 1));
+		Fade(false, duration, color);
 	}
 }
