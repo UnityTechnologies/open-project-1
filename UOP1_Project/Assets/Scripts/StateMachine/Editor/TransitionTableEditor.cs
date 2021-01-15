@@ -84,7 +84,7 @@ namespace UOP1.StateMachine.Editor
 			EditorGUILayout.HelpBox("Click on any State's name to see the Transitions it contains, or click the Pencil/Wrench icon to see its Actions.", MessageType.Info);
 			Separator();
 
-			serializedObject.UpdateIfRequiredOrScript();
+			ResetIfRequired();
 
 			// For each fromState
 			for (int i = 0; i < _fromStates.Count; i++)
