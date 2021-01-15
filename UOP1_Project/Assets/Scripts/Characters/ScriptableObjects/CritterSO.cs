@@ -36,7 +36,7 @@ public class CritterSO : ScriptableObject
 	{
 		float dropDice = Random.value;
 		float _currentRate = 0.0f;
-		foreach(DropItem dropItem in _dropItems)
+		foreach (DropItem dropItem in _dropItems)
 		{
 			_currentRate += dropItem.DropRate;
 			if (_currentRate >= dropDice)
