@@ -48,6 +48,7 @@ public class SceneAccessTool : EditorWindow, IHasCustomMenu
 						element.FindPropertyRelative("visible"), GUIContent.none);
 				};
 		}
+		PopulateSceneList();
 	}
 	[MenuItem("Tools/SceneAccessTool")]
 	public static void ShowWindow()

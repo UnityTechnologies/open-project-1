@@ -81,7 +81,7 @@ public class CameraManager : MonoBehaviour
 
 	private void OnCameraMove(Vector2 cameraMovement, bool isDeviceMouse)
 	{
-		Debug.Log(cameraMovement);
+		//Debug.Log(cameraMovement);
 
 		if (_cameraMovementLock)
 			return;

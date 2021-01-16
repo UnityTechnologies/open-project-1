@@ -24,6 +24,7 @@ public class LocationLoader : MonoBehaviour
 	[Header("Load Event")]
 	//The load event we are listening to
 	[SerializeField] private LoadEventChannelSO _loadEventChannel = default;
+	[SerializeField] private BoolEventChannelSO _fadeScreenToBlack;
 
 	private List<AsyncOperation> _scenesToLoadAsyncOperations = new List<AsyncOperation>();
 	private List<Scene> _scenesToUnload = new List<Scene>();
@@ -40,7 +41,13 @@ public class LocationLoader : MonoBehaviour
 	{
 		_loadEventChannel.OnLoadingRequested -= LoadScenes;
 	}
-
+	private void Awake()
+	{
+		if(_fadeScreenToBlack == null)
+		{
+			Debug.LogError("There is no attatched BoolEventChannelSO for fading screen to black on LocationLoader");
+		}
+	}
 	private void Start()
 	{
 		if (SceneManager.GetActiveScene().name == _initializationScene.sceneName)
@@ -65,6 +72,7 @@ public class LocationLoader : MonoBehaviour
 		AddScenesToUnload();
 		UnloadScenes();
 
+		_fadeScreenToBlack.RaiseEvent(true);
 		if (showLoadingScreen)
 		{
 			_loadingInterface.SetActive(true);
@@ -166,13 +174,13 @@ public class LocationLoader : MonoBehaviour
 			totalProgress = 0;
 			for (int i = 0; i < _scenesToLoadAsyncOperations.Count; ++i)
 			{
-				Debug.Log("Scene " + i + " :" + _scenesToLoadAsyncOperations[i].isDone + " progress = " + _scenesToLoadAsyncOperations[i].progress);
+				//Debug.Log("Scene " + i + " :" + _scenesToLoadAsyncOperations[i].isDone + " progress = " + _scenesToLoadAsyncOperations[i].progress);
 				totalProgress += _scenesToLoadAsyncOperations[i].progress;
 			}
 
 			//The fillAmount is for all scenes, so we divide the progress by the number of scenes to load
 			_loadingProgressBar.fillAmount = totalProgress / _scenesToLoadAsyncOperations.Count;
-			Debug.Log("progress bar " + _loadingProgressBar.fillAmount + " and value = " + totalProgress / _scenesToLoadAsyncOperations.Count);
+			//Debug.Log("progress bar " + _loadingProgressBar.fillAmount + " and value = " + totalProgress / _scenesToLoadAsyncOperations.Count);
 
 			yield return null;
 		}
@@ -183,6 +191,7 @@ public class LocationLoader : MonoBehaviour
 
 		//Hide progress bar when loading is done
 		_loadingInterface.SetActive(false);
+		_fadeScreenToBlack.RaiseEvent(false);
 	}
 
 	private void ExitGame()
