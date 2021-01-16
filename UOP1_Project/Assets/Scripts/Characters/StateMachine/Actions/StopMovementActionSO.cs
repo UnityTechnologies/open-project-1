@@ -23,7 +23,7 @@ public class StopMovement : StateAction
 	{
 		_protagonist = stateMachine.GetComponent<Protagonist>();
 	}
-		
+
 	public override void OnUpdate()
 	{
 		if (OriginSO.Moment == SpecificMoment.OnUpdate)

@@ -29,7 +29,7 @@ public class AerialMovementAction : StateAction
 	{
 		_protagonist = stateMachine.GetComponent<Protagonist>();
 	}
-		
+
 	public override void OnUpdate()
 	{
 		Vector3 velocity = _protagonist.movementVector;
