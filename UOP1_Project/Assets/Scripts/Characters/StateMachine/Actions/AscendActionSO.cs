@@ -16,9 +16,6 @@ public class AscendAction : StateAction
 
 	private float _verticalMovement;
 	private float _gravityContributionMultiplier;
-	private const float GRAVITY_COMEBACK_MULTIPLIER = .03f;
-	private const float GRAVITY_DIVIDER = .6f;
-	private const float GRAVITY_MULTIPLIER = 5f;
 	private AscendActionSO _originSO => (AscendActionSO)base.OriginSO; // The SO this StateAction spawned from
 
 	public override void Awake(StateMachine stateMachine)
@@ -33,9 +30,9 @@ public class AscendAction : StateAction
 
 	public override void OnUpdate()
 	{
-		_gravityContributionMultiplier += GRAVITY_COMEBACK_MULTIPLIER;
-		_gravityContributionMultiplier *= GRAVITY_DIVIDER; //Reduce the gravity effect
-		_verticalMovement += Physics.gravity.y * GRAVITY_MULTIPLIER * Time.deltaTime * _gravityContributionMultiplier;
+		_gravityContributionMultiplier += Protagonist.GRAVITY_COMEBACK_MULTIPLIER;
+		_gravityContributionMultiplier *= Protagonist.GRAVITY_DIVIDER; //Reduce the gravity effect
+		_verticalMovement += Physics.gravity.y * Protagonist.GRAVITY_MULTIPLIER * Time.deltaTime * _gravityContributionMultiplier;
 		//Note that even if it's added, the above value is negative due to Physics.gravity.y
 
 		_protagonistScript.movementVector.y = _verticalMovement;
