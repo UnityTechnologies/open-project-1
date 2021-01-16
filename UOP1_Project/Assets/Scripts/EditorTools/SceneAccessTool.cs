@@ -15,7 +15,9 @@ public class SceneAccessTool : EditorWindow, IHasCustomMenu
 	private Layout _layout;
 	private bool _showOptions = false;
 	private bool _editMode = false;
+	private bool _showAllScenes = false;
 	private ReorderableList list;
+	private Vector2 scrollPos;
 
 	private void OnEnable()
 	{
@@ -52,13 +54,16 @@ public class SceneAccessTool : EditorWindow, IHasCustomMenu
 	{
 		GetWindow<SceneAccessTool>("SceneAccessTool");
 	}
+
 	private void OnGUI()
 	{
 		if (_inspected != null)
 		{
+			scrollPos = EditorGUILayout.BeginScrollView(scrollPos);
 			if (_showOptions)
 				ShowOptions();
 			ShowSceneList();
+			EditorGUILayout.EndScrollView();
 		}
 	}
 
@@ -152,19 +157,61 @@ public class SceneAccessTool : EditorWindow, IHasCustomMenu
 	/// </summary>
 	private void PopulateSceneList()
 	{
-		EditorBuildSettingsScene[] currentScenes = EditorBuildSettings.scenes;
-		EditorBuildSettingsScene[] filteredScenes = currentScenes.Where(ebss => File.Exists(ebss.path)).ToArray();
 		List<SceneAccessHolderSO.SceneInfo> allScene = new List<SceneAccessHolderSO.SceneInfo>();
-		for (int i = 0; i < filteredScenes.Length; i++)
+
+		if (!_showAllScenes)
 		{
-			allScene.Add(
-				new SceneAccessHolderSO.SceneInfo
-				{
-					name = Path.GetFileNameWithoutExtension(filteredScenes[i].path),
-					path = Path.GetFullPath(filteredScenes[i].path),
-					visible = true
-				});
+			EditorBuildSettingsScene[] currentScenes = EditorBuildSettings.scenes;
+			EditorBuildSettingsScene[] filteredScenes = currentScenes.Where(ebss => File.Exists(ebss.path)).ToArray();
+			for (int i = 0; i < filteredScenes.Length; i++)
+			{
+				allScene.Add(
+					new SceneAccessHolderSO.SceneInfo
+					{
+						name = Path.GetFileNameWithoutExtension(filteredScenes[i].path),
+						path = Path.GetFullPath(filteredScenes[i].path),
+						visible = true
+					});
+			}
 		}
+		else
+		{
+			DirectoryInfo mainDir = new DirectoryInfo("Assets/Scenes");
+			List<DirectoryInfo> DirInfos = new List<DirectoryInfo>();
+			DirInfos.Add(mainDir);
+			int i = 0;
+			//search in every subDirectory
+			while (i < DirInfos.Count)
+			{
+				DirectoryInfo dirInfo = DirInfos.ElementAt(i);
+				//get subDirectories 
+				DirectoryInfo[] SubDirs = dirInfo.GetDirectories();
+				foreach (var subDir in SubDirs)
+				{
+					//add subDirectories to the list so they will be searched for scenes 
+					DirInfos.Add(subDir);
+				}
+				FileInfo[] FileInfos = dirInfo.GetFiles();
+				foreach (FileInfo fileInfo in FileInfos)
+				{
+					string name = fileInfo.Name;
+					//if file is .unity and not a .unity.meta
+					if (!name.Contains(".meta") && name.Contains(".unity"))
+					{
+						allScene.Add(
+							new SceneAccessHolderSO.SceneInfo
+							{
+								name = Path.GetFileNameWithoutExtension(fileInfo.FullName),
+								path = Path.GetFullPath(fileInfo.FullName),
+								visible = true
+							});
+					}
+
+				}
+				i++;
+			}
+		}
+
 		//add the new scenes
 		foreach (SceneAccessHolderSO.SceneInfo sceneInfo in allScene)
 		{
@@ -192,8 +239,13 @@ public class SceneAccessTool : EditorWindow, IHasCustomMenu
 	{
 		menu.AddItem(new GUIContent("ToggleOptions"), false, ToggleOptions);
 		menu.AddItem(new GUIContent("ToggleLayout"), false, ToggleLayout);
+		menu.AddItem(new GUIContent("ToggleShowAllScenes"), false, ToggleShowAllScenes);
 	}
-
+	private void ToggleShowAllScenes()
+	{
+		_showAllScenes = !_showAllScenes;
+		PopulateSceneList();
+	}
 	private void ToggleOptions()
 	{
 		_showOptions = !_showOptions;
