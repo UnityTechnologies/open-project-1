@@ -19,7 +19,7 @@ namespace UOP1.StateMachine.Editor
 		private List<List<TransitionDisplayHelper>> _transitionsByFromStates;
 
 		// Index of the state currently toggled on, -1 if none is.
-		private int _toggledIndex = -1;
+		internal int _toggledIndex = -1;
 
 		// Helper class to add new transitions.
 		private AddTransitionHelper _addTransitionHelper;
@@ -46,9 +46,12 @@ namespace UOP1.StateMachine.Editor
 		/// </summary>
 		internal void Reset()
 		{
+			Object toggledState = null;
+			if (_toggledIndex > -1)
+				toggledState = _fromStates[_toggledIndex];
 			_transitions = serializedObject.FindProperty("_transitions");
 			GroupByFromState();
-			_toggledIndex = -1;
+			_toggledIndex = toggledState ? _fromStates.IndexOf(toggledState) : -1;
 		}
 
 		public override void OnInspectorGUI()
@@ -64,8 +67,12 @@ namespace UOP1.StateMachine.Editor
 			Separator();
 
 			// Back button
-			if (GUILayout.Button(EditorGUIUtility.IconContent("scrollleft"), GUILayout.Width(35), GUILayout.Height(20)))
+			if (GUILayout.Button(EditorGUIUtility.IconContent("scrollleft"), GUILayout.Width(35), GUILayout.Height(20))
+				|| _cachedStateEditor.serializedObject == null)
+			{
 				_displayStateEditor = false;
+				return;
+			}
 
 
 			Separator();
