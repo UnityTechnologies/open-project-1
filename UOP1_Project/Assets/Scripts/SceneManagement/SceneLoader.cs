@@ -5,7 +5,6 @@ using UnityEngine.SceneManagement;
 
 /// <summary>
 /// This class manages the scene loading and unloading.
-/// Heavy on comments right now because it is still being worked on.
 /// </summary>
 public class SceneLoader : MonoBehaviour
 {
@@ -129,6 +128,7 @@ public class SceneLoader : MonoBehaviour
 				{
 					_loadingDone = true;
 					_scenesToLoadAsyncOperations.Clear();
+					_persistentScenes.Clear();
 				}
 			}
 			yield return null;

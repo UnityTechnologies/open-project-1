@@ -2,8 +2,8 @@
 using UnityEngine;
 
 /// <summary>
-/// This class is used for Events that have one int argument.
-/// Example: An Achievement unlock event, where the int is the Achievement ID.
+/// This class is used for Events that have a bool argument.
+/// Example: An event to toggle a UI interface
 /// </summary>
 
 [CreateAssetMenu(menuName = "Events/Bool Event Channel")]

@@ -4,7 +4,11 @@ using UnityEngine;
 
 public class Critter : MonoBehaviour
 {
-	[SerializeField] private int _fullHealth = 20;
+	[SerializeField]
+	private CritterSO _critterSO;
+
+	[SerializeField]
+	private GameObject _collectibleItemPrefab;
 
 	private int _currentHealth = default;
 
@@ -15,7 +19,7 @@ public class Critter : MonoBehaviour
 
 	private void Awake()
 	{
-		_currentHealth = _fullHealth;
+		_currentHealth = _critterSO.MaxHealth;
 	}
 
 	private void ReceiveAnAttack(int damange)
@@ -37,8 +41,24 @@ public class Critter : MonoBehaviour
 		}
 	}
 
-	public void DestroyCritter()
+	public void CritterIsDead()
 	{
+		// Drop items
+		for (int i = 0; i < _critterSO.GetNbDroppedItems(); i++)
+		{
+			Item item = _critterSO.GetDroppedItem();
+
+			float randPosRight = Random.value * 2 - 1.0f;
+			float randPosForward = Random.value * 2 - 1.0f;
+
+			GameObject collectibleItem = GameObject.Instantiate(_collectibleItemPrefab,
+				gameObject.transform.position + _collectibleItemPrefab.transform.localPosition +
+				2 * (randPosForward * Vector3.forward + randPosRight * Vector3.right),
+				gameObject.transform.localRotation);
+			collectibleItem.GetComponent<CollectibleItem>().CurrentItem = item;
+		}
+
+		// Remove Critter from the game
 		GameObject.Destroy(this.gameObject);
 	}
 }
