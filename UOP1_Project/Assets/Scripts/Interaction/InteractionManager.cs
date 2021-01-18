@@ -8,7 +8,7 @@ public class InteractionManager : MonoBehaviour
 	[HideInInspector] public InteractionType currentInteraction;
 	[SerializeField] private InputReader _inputReader = default;
 	//To store the object we are currently interacting with
-	private Stack<Interaction> _ongoingInteractions = new Stack<Interaction>();
+	private LinkedList<Interaction> _ongoingInteractions = new LinkedList<Interaction>();
 
 	//Events for the different interaction types
 	[Header("Broadcasting on")]
@@ -37,7 +37,7 @@ public class InteractionManager : MonoBehaviour
 	void OnInteractionEnd()
 	{
 		_inputReader.EnableGameplayInput();
-		Interaction onGoingInteraction = _ongoingInteractions.Peek();
+		Interaction onGoingInteraction = _ongoingInteractions.First.Value;
 		switch (onGoingInteraction.Type)
 		{
 			//we show it after cooking or talking, in case player want to interact again
@@ -55,14 +55,15 @@ public class InteractionManager : MonoBehaviour
 	{
 		//remove interaction after press
 		Interaction onGoingInteraction = _ongoingInteractions.Count > 0 ?
-			_ongoingInteractions.Peek() : Interaction.NONE;
+			_ongoingInteractions.First.Value : Interaction.NONE;
 		_toggleInteractionUI.RaiseEvent(false, onGoingInteraction.Type);
 		switch (onGoingInteraction.Type)
 		{
 			case InteractionType.None:
 				return;
 			case InteractionType.PickUp:
-				GameObject itemObject = _ongoingInteractions.Pop().InteractableObject;
+				GameObject itemObject = onGoingInteraction.InteractableObject;
+				_ongoingInteractions.RemoveFirst();
 				if (_onObjectPickUp != null)
 				{
 					//raise an event with an item as parameter (to add object to inventory)
@@ -125,7 +126,7 @@ public class InteractionManager : MonoBehaviour
 		}
 		if (ongoingInteractionType != InteractionType.None)
 		{
-			_ongoingInteractions.Push(new Interaction(ongoingInteractionType, other.gameObject));
+			_ongoingInteractions.AddFirst(new Interaction(ongoingInteractionType, other.gameObject));
 			DisplayInteractionUI();
 		}
 	}
@@ -133,7 +134,7 @@ public class InteractionManager : MonoBehaviour
 	private void DisplayInteractionUI()
 	{
 		//Raise event to display UI
-		Interaction onGoingInteraction = _ongoingInteractions.Peek();
+		Interaction onGoingInteraction = _ongoingInteractions.First.Value;
 		_toggleInteractionUI.RaiseEvent(true, onGoingInteraction.Type);
 	}
 
@@ -144,21 +145,20 @@ public class InteractionManager : MonoBehaviour
 
 	private void ResetInteraction(GameObject obj)
 	{
-		Stack<Interaction> updatedStack = new Stack<Interaction>();
-		while(_ongoingInteractions.Count > 0)
+		LinkedListNode<Interaction> currentNode = _ongoingInteractions.First;
+		while (currentNode != null)
 		{
-			Interaction interaction = _ongoingInteractions.Pop();
-			if (interaction.InteractableObject != obj)
+			if (currentNode.Value.InteractableObject == obj)
 			{
-				updatedStack.Push(interaction);
+				_ongoingInteractions.Remove(currentNode);
+				break;
 			}
+			currentNode = currentNode.Next;
 		}
-		_ongoingInteractions = updatedStack;
 
 		if (_ongoingInteractions.Count > 0)
 		{
-			_toggleInteractionUI.RaiseEvent(true, _ongoingInteractions.Peek().Type);
-
+			_toggleInteractionUI.RaiseEvent(true, _ongoingInteractions.First.Value.Type);
 		}
 		else
 		{
