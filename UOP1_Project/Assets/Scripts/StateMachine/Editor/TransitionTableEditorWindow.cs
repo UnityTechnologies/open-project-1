@@ -15,7 +15,7 @@ namespace UOP1.StateMachine.Editor
 
 		private UnityEditor.Editor _transitionTableEditor;
 
-		[MenuItem("Transition Table Editor", menuItem = "ChopChop/State Machine/Transition Table Editor")]
+		[MenuItem("Transition Table Editor", menuItem = "ChopChop/Transition Table Editor")]
 		internal static void Display()
 		{
 			if (_window == null)

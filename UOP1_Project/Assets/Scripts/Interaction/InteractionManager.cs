@@ -81,7 +81,7 @@ public class InteractionManager : MonoBehaviour
 					_onCookingStart.RaiseEvent();
 					Debug.Log("Cooking event raised");
 					//Change the action map
-					_inputReader.EnableUIInput();
+					_inputReader.EnableMenuInput();
 					//set current interaction for state machine
 					currentInteraction = InteractionType.Cook;
 				}
@@ -112,19 +112,19 @@ public class InteractionManager : MonoBehaviour
 		if (other.CompareTag("Pickable"))
 		{
 			_potentialInteraction = InteractionType.PickUp;
-			Debug.Log("I triggered a pickable object!");
+			//Debug.Log("I triggered a pickable object!");
 			DisplayInteractionUI();
 		}
 		else if (other.CompareTag("CookingPot"))
 		{
 			_potentialInteraction = InteractionType.Cook;
-			Debug.Log("I triggered a cooking pot!");
+			//Debug.Log("I triggered a cooking pot!");
 			DisplayInteractionUI();
 		}
 		else if (other.CompareTag("NPC"))
 		{
 			_potentialInteraction = InteractionType.Talk;
-			Debug.Log("I triggered an NPC!");
+			//Debug.Log("I triggered an NPC!");
 			DisplayInteractionUI();
 		}
 		_currentInteractableObject = other.gameObject;
@@ -138,8 +138,6 @@ public class InteractionManager : MonoBehaviour
 
 	private void OnTriggerExit(Collider other)
 	{
-
-
 		ResetInteraction();
 	}
 

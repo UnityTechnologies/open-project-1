@@ -19,7 +19,14 @@ public class AudioCue : MonoBehaviour
 	private void Start()
 	{
 		if (_playOnStart)
-			PlayAudioCue();
+			StartCoroutine(PlayDelayed());
+	}
+
+	private IEnumerator PlayDelayed()
+	{
+		yield return new WaitForSeconds(.1f);
+
+		PlayAudioCue();
 	}
 
 	public void PlayAudioCue()
