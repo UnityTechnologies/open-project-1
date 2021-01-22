@@ -2,13 +2,13 @@
 using UOP1.StateMachine;
 using UOP1.StateMachine.ScriptableObjects;
 
-[CreateAssetMenu(fileName = "ResetGetHitState", menuName = "State Machines/Actions/Reset Get Hit State")]
-public class ResetGetHitStateSO : StateActionSO
+[CreateAssetMenu(fileName = "ResetGetHitCritter", menuName = "State Machines/Actions/Reset Get Hit of Critter")]
+public class ResetGetHitCritterSO : StateActionSO
 {
-	protected override StateAction CreateAction() => new ResetGetHitState();
+	protected override StateAction CreateAction() => new ResetGetHitCritter();
 }
 
-public class ResetGetHitState : StateAction
+public class ResetGetHitCritter : StateAction
 {
 	private Critter _critter;
 
