@@ -1,38 +1,74 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.AI;
 
-public class Critter : MonoBehaviour
+public class Critter : MonoBehaviour, IAttackerCharacter
 {
+	//-----------------------------------
+	// Critter behaviour described through the listed SO
+
 	[SerializeField]
 	private CritterSO _critterSO;
 
 	[SerializeField]
-	private GameObject _collectibleItemPrefab;
+	private AttackConfigSO _attackConfigSO;
+	private AttackData _attackData;
 
-	private int _currentHealth = default;
-	private float _currentWaitTime = default;
-	private Vector3 _startPosition = default;
-	private Vector3 _roamingPosTarget = default;
+	[SerializeField]
+	private ChasingConfigSO _chasingConfigSO;
+
+	[SerializeField]
+	private NpcMovementSO _npcMovementSO;
+	private NpcMovementData _npcMovementData;
+
+	[SerializeField]
+	private DroppableRewardSO _droppableRewardSO;
+
+	[SerializeField]
+	private GetHitEffectSO _getHitEffectSO;
+	private GetHitData _getHitData;
+
+	//-----------------------------------
+
 	private NavMeshAgent _agent;
 	private bool _agentActiveOnNavMesh = default;
 
+	private int _currentHealth = default;
+
+	[SerializeField]
+	private Renderer _renderer;
+
+	// Critter status properties
 	public bool isPlayerInAlertZone { get; set; }
 	public bool isPlayerInAttackZone { get; set; }
 	public bool getHit { get; set; }
 	public bool isDead { get; set; }
 	public bool isRoaming { get; set; }
 
+	public AttackConfigSO getAttackConfig()
+	{
+		return _attackConfigSO;
+	}
+
+	public void TriggerAttack()
+	{
+		_attackConfigSO.Attack(_attackData);
+	}
+
+	public bool IsReadyToAttack()
+	{
+		return _attackConfigSO.isReadyToAttack(_attackData);
+	}
 
 	private void Awake()
 	{
-		_currentHealth = _critterSO.MaxHealth;
-		_startPosition = transform.position;
-		_currentWaitTime = _critterSO.WaitTime;
 		_agent = GetComponent<NavMeshAgent>();
 		_agentActiveOnNavMesh = _agent != null && _agent.isActiveAndEnabled && _agent.isOnNavMesh;
-		_roamingPosTarget = GetRoamingPosition();
+
+		_npcMovementData = _npcMovementSO.CreateNpcMovementData(gameObject);
+		_getHitData = _getHitEffectSO.CreateData(_renderer.materials[_renderer.materials.Length - 1]);
+		_attackData = _attackConfigSO.createAttackData();
+
+		_currentHealth = _critterSO.MaxHealth;
 	}
 
 	private void Update()
@@ -41,91 +77,67 @@ public class Critter : MonoBehaviour
 		if (_agentActiveOnNavMesh)
 		{
 			isRoaming = false;
-			// Critter fainting is not moving.
+			// A fainting critter is not moving.
 			if (isDead)
 			{
 				_agent.isStopped = true;
 			}
-			// Chasing the player nearby
-			else if (isPlayerInAlertZone)
-			{
-				_agent.speed = _critterSO.ChasingSpeed;
-				_agent.SetDestination(_critterSO.PlayerPosition);
-				// Stop the critter when close enough to perform an attack.
-				if (isPlayerInAttackZone)
-				{
-					_agent.isStopped = true;
-				}
-				// Resume critter chasing if the player is moving away from him.
-				else
-				{
-					_agent.isStopped = false;
-				}
-			}
-			// Roaming routine around its start point
 			else
 			{
-				_agent.speed = _critterSO.RoamingSpeed;
-				_agent.SetDestination(_roamingPosTarget);
-				if (!_agent.hasPath)
+				if (isPlayerInAlertZone)
 				{
-					_currentWaitTime -= Time.deltaTime;
-					// Have a short rest at destination before roaming somewhere else.
-					if (_currentWaitTime < 0)
+					_chasingConfigSO.ChasingTarget(_agent);
+					// Stop the critter when close enough to perform an attack.
+					if (isPlayerInAttackZone)
 					{
-						_roamingPosTarget = GetRoamingPosition();
-						_currentWaitTime = _critterSO.WaitTime;
+						_agent.isStopped = true;
+					}
+					// Resume critter chasing if the player is moving away from him.
+					else
+					{
+						_agent.isStopped = false;
 					}
 				}
+				// Roaming routine around its start point
 				else
 				{
+					_npcMovementSO.NpcMovementUpdate(_npcMovementData);
+					// Pull resulting criter state
 					isRoaming = true;
 				}
 			}
 		}
-	}
 
-	// Compute a random target position around the starting position.
-	private Vector3 GetRoamingPosition()
-	{
-		return _startPosition + new Vector3(Random.Range(-1, 1), 0.0f, Random.Range(-1, 1)).normalized * Random.Range(_critterSO.RoamingDistance / 2, _critterSO.RoamingDistance);
-	}
-
-	private void ReceiveAnAttack(int damange)
-	{
-		_currentHealth -= damange;
-		getHit = true;
-		if (_currentHealth <= 0)
-		{
-			isDead = true;
-		}
+		_getHitEffectSO.ApplyHitEffectIfNeeded(_getHitData);
+		_attackConfigSO.computeAttackCapability(_attackData);
 	}
 
 	private void OnTriggerEnter(Collider other)
 	{
 		Weapon playerWeapon = other.GetComponent<Weapon>();
+		// If the critter is not already under the GetHit state (safe during this state) and the player weapon is active (only during the player attack state),
+		// then the critter receives an attack.
 		if (!getHit && playerWeapon != null && playerWeapon.Enable)
 		{
 			ReceiveAnAttack(playerWeapon.AttackStrength);
 		}
 	}
 
+	private void ReceiveAnAttack(int damange)
+	{
+		_currentHealth -= damange;
+		getHit = true;
+		_getHitData.GetHit();
+		if (_currentHealth <= 0)
+		{
+			isDead = true;
+		}
+	}
+
 	public void CritterIsDead()
 	{
-		// Drop items
-		for (int i = 0; i < _critterSO.GetNbDroppedItems(); i++)
-		{
-			Item item = _critterSO.GetDroppedItem();
-
-			float randPosRight = Random.value * 2 - 1.0f;
-			float randPosForward = Random.value * 2 - 1.0f;
-
-			GameObject collectibleItem = GameObject.Instantiate(_collectibleItemPrefab,
-				gameObject.transform.position + _collectibleItemPrefab.transform.localPosition +
-				2 * (randPosForward * Vector3.forward + randPosRight * Vector3.right),
-				gameObject.transform.localRotation);
-			collectibleItem.GetComponent<CollectibleItem>().CurrentItem = item;
-		}
+		// Drop Item;
+		_droppableRewardSO.DropReward(transform.position);
 
 		// Remove Critter from the game
 		GameObject.Destroy(this.gameObject);

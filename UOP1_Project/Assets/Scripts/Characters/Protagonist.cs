@@ -4,7 +4,7 @@ using UnityEngine;
 /// <summary>
 /// <para>This component consumes input on the InputReader and stores its values. The input is then read, and manipulated, by the StateMachines's Actions.</para>
 /// </summary>
-public class Protagonist : MonoBehaviour
+public class Protagonist : MonoBehaviour, IAttackerCharacter
 {
 	[SerializeField] private InputReader _inputReader = default;
 	public TransformAnchor gameplayCameraTransform;
@@ -21,6 +21,28 @@ public class Protagonist : MonoBehaviour
 	[HideInInspector] public Vector3 movementVector; //Final movement vector, manipulated by the StateMachine actions
 	[HideInInspector] public ControllerColliderHit lastHit;
 	[HideInInspector] public bool isRunning; // Used when using the keyboard to run, brings the normalised speed to 1
+
+	[SerializeField]
+	private HealthAnchor _healthAnchor = default;
+
+	[SerializeField]
+	private AttackConfigSO _attackConfigSO;
+	private AttackData _attackData;
+
+
+	public bool getHit { get; set; }
+	public bool isDead { get => _healthAnchor.isDead(); }
+
+	private void Awake()
+	{
+		_attackData = _attackConfigSO.createAttackData();
+		_healthAnchor.FillHealth();
+	}
+
+	public AttackConfigSO getAttackConfig()
+	{
+		return _attackConfigSO;
+	}
 
 	private void OnControllerColliderHit(ControllerColliderHit hit)
 	{
@@ -55,6 +77,7 @@ public class Protagonist : MonoBehaviour
 	private void Update()
 	{
 		RecalculateMovement();
+		_attackConfigSO.computeAttackCapability(_attackData);
 	}
 
 	private void RecalculateMovement()
@@ -113,4 +136,30 @@ public class Protagonist : MonoBehaviour
 	}
 
 	private void OnAttack() => attackInput = true;
+
+	private void OnTriggerEnter(Collider other)
+	{
+		CritterWeapon critterWeapon = other.GetComponent<CritterWeapon>();
+		if (!getHit && critterWeapon != null && critterWeapon.Enable)
+		{
+			ReceiveAnAttack(critterWeapon.AttackStrength);
+		}
+	}
+
+	private void ReceiveAnAttack(int damage)
+	{
+		_healthAnchor.DecreaseHealth(damage);
+		getHit = true;
+	}
+
+	public void TriggerAttack()
+	{
+		_attackConfigSO.Attack(_attackData);
+	}
+
+	public bool IsReadyToAttack()
+	{
+		return _attackConfigSO.isReadyToAttack(_attackData);
+	}
+
 }

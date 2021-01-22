@@ -4,14 +4,21 @@ using UnityEngine;
 
 public class Weapon : MonoBehaviour
 {
-	[SerializeField] private int _attackStrength = default;
-
+	private AttackConfigSO _attackConfig;
 	private bool _enable = false;
 	public bool Enable { get; set; }
 
+	public void Awake()
+	{
+		_attackConfig = GetComponentInParent<IAttackerCharacter>().getAttackConfig();
+	}
+
 	public int AttackStrength
 	{
-		get => _attackStrength;
+		get
+		{
+			return _attackConfig.AttackStrength;
+		}
 	}
 
 }
