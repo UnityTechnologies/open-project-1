@@ -14,7 +14,7 @@ namespace UOP1.StateMachine.Editor
 		// Property with all the transitions.
 		private SerializedProperty _transitions;
 
-		// _fromStates and _transitionsByFromStates form an Object->Transitions dictionary.
+		// _fromStates and _transitionsByFromStates form a State->Transitions dictionary.
 		private List<Object> _fromStates;
 		private List<List<TransitionDisplayHelper>> _transitionsByFromStates;
 
@@ -31,13 +31,13 @@ namespace UOP1.StateMachine.Editor
 		private void OnEnable()
 		{
 			_addTransitionHelper = new AddTransitionHelper(this);
-			Undo.undoRedoPerformed += ResetIfRequired;
+			Undo.undoRedoPerformed += Reset;
 			Reset();
 		}
 
 		private void OnDisable()
 		{
-			Undo.undoRedoPerformed -= ResetIfRequired;
+			Undo.undoRedoPerformed -= Reset;
 			_addTransitionHelper?.Dispose();
 		}
 
@@ -46,9 +46,8 @@ namespace UOP1.StateMachine.Editor
 		/// </summary>
 		internal void Reset()
 		{
-			Object toggledState = null;
-			if (_toggledIndex > -1)
-				toggledState = _fromStates[_toggledIndex];
+			serializedObject.Update();
+			var toggledState = _toggledIndex > -1 ? _fromStates[_toggledIndex] : null;
 			_transitions = serializedObject.FindProperty("_transitions");
 			GroupByFromState();
 			_toggledIndex = toggledState ? _fromStates.IndexOf(toggledState) : -1;
@@ -90,8 +89,6 @@ namespace UOP1.StateMachine.Editor
 			Separator();
 			EditorGUILayout.HelpBox("Click on any State's name to see the Transitions it contains, or click the Pencil/Wrench icon to see its Actions.", MessageType.Info);
 			Separator();
-
-			ResetIfRequired();
 
 			// For each fromState
 			for (int i = 0; i < _fromStates.Count; i++)
@@ -235,9 +232,9 @@ namespace UOP1.StateMachine.Editor
 			int transitionIndex = transitions[0].SerializedTransition.Index;
 			int targetIndex = _transitionsByFromStates[index - 1][0].SerializedTransition.Index;
 			_transitions.MoveArrayElement(transitionIndex, targetIndex);
-			serializedObject.ApplyModifiedProperties();
-			Reset();
-
+			
+			ApplyModifications($"Moved {_fromStates[index].name} State {(up ? "up" : "down")}");
+			
 			if (toggledState)
 				_toggledIndex = _fromStates.IndexOf(toggledState);
 		}
@@ -266,8 +263,7 @@ namespace UOP1.StateMachine.Editor
 
 			CopyConditions(transition.Conditions, source.Conditions);
 
-			serializedObject.ApplyModifiedProperties();
-			Reset();
+			ApplyModifications($"Added transition from {transition.FromState} to {transition.ToState}");
 
 			_toggledIndex = fromIndex >= 0 ? fromIndex : _fromStates.Count - 1;
 		}
@@ -288,8 +284,8 @@ namespace UOP1.StateMachine.Editor
 				(stateTransitions[index + 1].SerializedTransition.Index, serializedTransition.Index);
 
 			_transitions.MoveArrayElement(currentIndex, targetIndex);
-			serializedObject.ApplyModifiedProperties();
-			Reset();
+
+			ApplyModifications($"Moved transition to {serializedTransition.ToState.objectReferenceValue.name} {(up ? "up" : "down")}");
 
 			_toggledIndex = stateIndex;
 		}
@@ -311,8 +307,8 @@ namespace UOP1.StateMachine.Editor
 
 			_transitions.DeleteArrayElementAtIndex(deleteIndex);
 
-			serializedObject.ApplyModifiedProperties();
-			Reset();
+			ApplyModifications($"Deleted transition from {serializedTransition.FromState.objectReferenceValue.name} " +
+				"to {serializedTransition.ToState.objectReferenceValue.name}");
 
 			if (count > 1)
 				_toggledIndex = stateIndex;
@@ -349,16 +345,6 @@ namespace UOP1.StateMachine.Editor
 			return toIndex >= 0;
 		}
 
-		private void ResetIfRequired()
-		{
-			if (!serializedObject.UpdateIfRequiredOrScript())
-				return;
-
-			var state = _toggledIndex > -1 ? _fromStates[_toggledIndex] : null;
-			Reset();
-			_toggledIndex = state ? _fromStates.IndexOf(state) : -1;
-		}
-
 		private void GroupByFromState()
 		{
 			var groupedTransitions = new Dictionary<Object, List<TransitionDisplayHelper>>();
@@ -370,16 +356,14 @@ namespace UOP1.StateMachine.Editor
 				{
 					Debug.LogError("Transition with invalid \"From State\" found in table " + serializedObject.targetObject.name + ", deleting...");
 					_transitions.DeleteArrayElementAtIndex(i);
-					serializedObject.ApplyModifiedProperties();
-					Reset();
+					ApplyModifications("Invalid transition deleted");
 					return;
 				}
 				if (serializedTransition.ToState.objectReferenceValue == null)
 				{
 					Debug.LogError("Transition with invalid \"Target State\" found in table " + serializedObject.targetObject.name + ", deleting...");
 					_transitions.DeleteArrayElementAtIndex(i);
-					serializedObject.ApplyModifiedProperties();
-					Reset();
+					ApplyModifications("Invalid transition deleted");
 					return;
 				}
 
@@ -395,6 +379,13 @@ namespace UOP1.StateMachine.Editor
 			_transitionsByFromStates = new List<List<TransitionDisplayHelper>>();
 			foreach (var fromState in _fromStates)
 				_transitionsByFromStates.Add(groupedTransitions[fromState]);
+		}
+
+		private void ApplyModifications(string msg)
+		{
+			Undo.RecordObject(serializedObject.targetObject, msg);
+			serializedObject.ApplyModifiedProperties();
+			Reset();
 		}
 	}
 }
