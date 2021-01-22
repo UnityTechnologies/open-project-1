@@ -79,12 +79,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _critterSO: {fileID: 11400000, guid: fd7717100e602c446847524419231170, type: 2}
-  _attackConfigSO: {fileID: 11400000, guid: 893a9a8692f40504399d547f50eb871c, type: 2}
-  _chasingConfigSO: {fileID: 11400000, guid: cd96384fd4490e341ba447e173e3f425, type: 2}
-  _npcMovementSO: {fileID: 11400000, guid: acf3ef2bacd8945408e3efaacf53aed2, type: 2}
-  _droppableRewardSO: {fileID: 11400000, guid: 4804a49ef5371244d9ef4033db9f1065, type: 2}
-  _getHitEffectSO: {fileID: 11400000, guid: 202f442e484b9374fa77a2a523100094, type: 2}
-  _renderer: {fileID: 7464116941563462636}
+  _collectibleItemPrefab: {fileID: 2126586097156616357, guid: 0f60adbc96570cb4e9898a0409956f1d,
+    type: 3}
+--- !u!114 &2038924309811281612
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8687264390989375961}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95216bcd641df05419665f7db9aed05b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _playerTransform: {fileID: 11400000, guid: 35fc4039342b6ba458d0d4429e89ee74, type: 2}
+  _propelFactor: 1
+  _propelDuration: 0.2
 --- !u!1001 &2135821800440209491
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -315,6 +326,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: SlimeCritter_Base
       objectReference: {fileID: 0}
+    - target: {fileID: 1430996729439901540, guid: 63937395ff7a888419d4b8fe450d3c91,
+        type: 3}
+      propertyPath: m_RootBone
+      value: 
+      objectReference: {fileID: 6359161719296748449}
     - target: {fileID: 5866666021909216657, guid: 63937395ff7a888419d4b8fe450d3c91,
         type: 3}
       propertyPath: m_Controller
@@ -334,9 +350,9 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 8380694498511901832}
   m_PrefabAsset: {fileID: 0}
---- !u!137 &7464116941563462636 stripped
-SkinnedMeshRenderer:
-  m_CorrespondingSourceObject: {fileID: 1430996729439901540, guid: 63937395ff7a888419d4b8fe450d3c91,
+--- !u!4 &6359161719296748449 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -6048770967118889175, guid: 63937395ff7a888419d4b8fe450d3c91,
     type: 3}
   m_PrefabInstance: {fileID: 8380694498511901832}
   m_PrefabAsset: {fileID: 0}
