@@ -232,9 +232,9 @@ namespace UOP1.StateMachine.Editor
 			int transitionIndex = transitions[0].SerializedTransition.Index;
 			int targetIndex = _transitionsByFromStates[index - 1][0].SerializedTransition.Index;
 			_transitions.MoveArrayElement(transitionIndex, targetIndex);
-			
+
 			ApplyModifications($"Moved {_fromStates[index].name} State {(up ? "up" : "down")}");
-			
+
 			if (toggledState)
 				_toggledIndex = _fromStates.IndexOf(toggledState);
 		}
