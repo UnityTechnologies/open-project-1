@@ -206,6 +206,25 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &478505547 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8957403575277752759, guid: 021ad8df909ac4147aa545c01f5ad8db,
+    type: 3}
+  m_PrefabInstance: {fileID: 8957403574244887918}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &478505548
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 478505547}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3b99813ebb688d4ea1c24c7ac430cdc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _questAnchor: {fileID: 11400000, guid: dacb138678b7c2344b59c68de5dc18db, type: 2}
 --- !u!114 &670213351 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8980297398607076176, guid: ccad748453924ff4092fe3e5b978d8e5,
@@ -905,7 +924,13 @@ PrefabInstance:
       propertyPath: m_Name
       value: QuestManager
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 8957403575277752759, guid: 021ad8df909ac4147aa545c01f5ad8db,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 8957403575277752756, guid: 021ad8df909ac4147aa545c01f5ad8db, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 021ad8df909ac4147aa545c01f5ad8db, type: 3}
 --- !u!1001 &8980297399098703799
 PrefabInstance:

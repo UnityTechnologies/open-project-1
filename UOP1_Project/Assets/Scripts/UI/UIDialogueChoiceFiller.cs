@@ -19,7 +19,7 @@ public class UIDialogueChoiceFiller : MonoBehaviour
 	}
 
 	public void ButtonClicked()
-	{
+	{ 
 		if (_makeAChoiceEvent != null)
 			_makeAChoiceEvent.RaiseEvent(currentChoice);
 	}
