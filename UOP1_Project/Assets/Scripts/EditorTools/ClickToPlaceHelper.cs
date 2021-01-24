@@ -1,4 +1,7 @@
-﻿using UnityEngine;
+using UnityEngine;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 [ExecuteInEditMode]
 [AddComponentMenu("UOP1/Tools/Click to Place")]
@@ -34,6 +37,9 @@ public class ClickToPlaceHelper : MonoBehaviour
 	public void EndTargeting()
 	{
 		IsTargeting = false;
+#if UNITY_EDITOR
+		Undo.RecordObject(transform, $"{gameObject.name} moved by ClickToPlaceHelper");
+#endif
 		transform.position = _targetPosition;
 	}
 }
