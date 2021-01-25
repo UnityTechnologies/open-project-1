@@ -31,6 +31,5 @@ public class DialogueManager : MonoBehaviour
 		//Debug.Log("A line of dialogue has been spoken: \"" + dialogueLine.Sentence + "\" by " + dialogueLine.Actor.ActorName);
 		if (dialogueLineEvent != null)
 			dialogueLineEvent.OnEventRaised(dialogueLine);
-
 	}
 }

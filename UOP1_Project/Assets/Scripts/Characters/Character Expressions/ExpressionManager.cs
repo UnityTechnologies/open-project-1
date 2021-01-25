@@ -72,32 +72,11 @@ public class ExpressionManager : MonoBehaviour
 		if (_activeMoodSet == null)
 			_activeMoodSet = _defaultMoodSet;
 
+		if (_activeActor == null)
+			_activeActor = _activeMoodSet.Actor;
+
 		if (_activeActor != null && _activeMoodSet != null)
 		{
-			// Handle animation pose changes
-			int clipIndex = 0;
-
-			if (playRandomAnimation)
-				clipIndex = Mathf.RoundToInt(Random.Range(0, _activeMoodSet.AnimatorTitleHashes.Count - 1));
-			else
-				clipIndex = animationIndex;
-			
-			if (clipIndex <= _activeMoodSet.AnimatorTitleHashes.Count-1 && clipIndex >= 0)
-			{			
-				int clipTitle = _activeMoodSet.AnimatorTitleHashes[clipIndex];
-
-				_activeActor.TransitionToAnimatorClip(clipTitle, 0.0f);
-			}
-			else
-			{
-				_activeActor.TransitionToDefaultAnimClip();
-			}
-
-			if (_activeMoodSet.AnimatorTitleHashes.Count == 0)
-			{
-				_activeActor.TransitionToDefaultAnimClip();
-			}
-
 			// Handle blinking
 			_blinkTimer += Time.deltaTime;
 
@@ -241,6 +220,37 @@ public class ExpressionManager : MonoBehaviour
 					_activePhonemeSet = localizedPhonemeSet;
 					_activePhonemeSet.Initialize();
 				}
+			}
+		}
+
+
+		if (_activeMoodSet != null)
+		{ 
+			// Handle animation pose changes
+			int clipIndex = 0;
+
+			if (playRandomAnimation)
+				clipIndex = Mathf.RoundToInt(Random.Range(0, _activeMoodSet.AnimatorTitleHashes.Count - 1));
+			else
+				clipIndex = animationIndex;
+
+			if (_activeActor == null)
+				_activeActor = _activeMoodSet.Actor;
+
+			if (clipIndex <= _activeMoodSet.AnimatorTitleHashes.Count - 1 && clipIndex >= 0)
+			{
+				int clipTitle = _activeMoodSet.AnimatorTitleHashes[clipIndex];
+
+				_activeActor.TransitionToAnimatorClip(clipTitle, 0.0f);
+			}
+			else
+			{
+				_activeActor.TransitionToDefaultAnimClip();
+			}
+
+			if (_activeMoodSet.AnimatorTitleHashes.Count == 0)
+			{
+				_activeActor.TransitionToDefaultAnimClip();
 			}
 		}
 	}

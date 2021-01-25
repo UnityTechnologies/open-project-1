@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class UIManager : MonoBehaviour
 {
-
 	public DialogueLineChannelSO OpenUIDialogueEvent;
 	public VoidEventChannelSO CloseUIDialogueEvent;
 

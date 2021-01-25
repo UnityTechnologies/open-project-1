@@ -10,10 +10,7 @@ public class UIDialogueManager : MonoBehaviour
 	[SerializeField] LocalizeStringEvent actorNameText = default;
 	public void SetDialogue(DialogueLineSO dialogueLine)
 	{
-
 		lineText.StringReference = dialogueLine.Sentence;
 		actorNameText.StringReference = dialogueLine.Actor.ActorName;
-
-
 	}
 }

@@ -4,7 +4,6 @@ using UnityEngine.Playables;
 
 public class CutsceneManager : MonoBehaviour
 {
-
 	[SerializeField] private InputReader _inputReader = default;
 	[SerializeField] private DialogueManager _dialogueManager = default;
 	[SerializeField] private ExpressionManager _expressionManager = default;
