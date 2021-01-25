@@ -37,6 +37,19 @@ namespace UOP1.StateMachine.Editor
 			rootVisualElement.styleSheets.Add(styleSheet);
 
 			minSize = new Vector2(480, 360);
+
+			EditorApplication.playModeStateChanged += OnPlayModeStateChanged;
+		}
+
+		private void OnDisable()
+		{
+			EditorApplication.playModeStateChanged -= OnPlayModeStateChanged;
+		}
+
+		private void OnPlayModeStateChanged(PlayModeStateChange obj)
+		{
+			if (obj == PlayModeStateChange.EnteredPlayMode)
+				_doRefresh = true;
 		}
 
 		/// <summary>
@@ -85,7 +98,11 @@ namespace UOP1.StateMachine.Editor
 			listView.bindItem = (element, i) => ((Label)element).text = assets[i].name;
 			listView.selectionType = SelectionType.Single;
 
+			listView.onSelectionChanged -= OnListSelectionChanged;
 			listView.onSelectionChanged += OnListSelectionChanged;
+
+			if (_transitionTableEditor && _transitionTableEditor.target)
+				listView.selectedIndex = System.Array.IndexOf(assets, _transitionTableEditor.target);
 		}
 
 		private void OnListSelectionChanged(List<object> list)
@@ -102,7 +119,7 @@ namespace UOP1.StateMachine.Editor
 
 			if (_transitionTableEditor == null)
 				_transitionTableEditor = UnityEditor.Editor.CreateEditor(table, typeof(TransitionTableEditor));
-			else
+			else if (_transitionTableEditor.target != table)
 				UnityEditor.Editor.CreateCachedEditor(table, typeof(TransitionTableEditor), ref _transitionTableEditor);
 
 			editor.onGUIHandler = () =>

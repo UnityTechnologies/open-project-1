@@ -10,19 +10,21 @@ public class #SCRIPTNAME# : StateActionSO
 
 public class #RUNTIMENAME# : StateAction
 {
+	protected new #SCRIPTNAME# OriginSO => (#SCRIPTNAME#)base.OriginSO;
+
 	public override void Awake(StateMachine stateMachine)
 	{
 	}
-		
+	
 	public override void OnUpdate()
 	{
 	}
 	
-	// public override void OnStateEnter()
-	// {
-	// }
+	public override void OnStateEnter()
+	{
+	}
 	
-	// public override void OnStateExit()
-	// {
-	// }
+	public override void OnStateExit()
+	{
+	}
 }

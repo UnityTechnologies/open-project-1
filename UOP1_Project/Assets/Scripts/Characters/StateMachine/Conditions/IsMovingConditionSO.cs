@@ -24,9 +24,4 @@ public class IsMovingCondition : Condition
 		movementVector.y = 0f;
 		return movementVector.sqrMagnitude > _originSO.treshold;
 	}
-
-	public override void OnStateExit()
-	{
-		_protagonistScript.movementVector = Vector3.zero;
-	}
 }
