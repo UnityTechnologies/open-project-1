@@ -23,7 +23,7 @@ Material:
   m_Name: Ground Shader Test
   m_Shader: {fileID: -6465566751694194690, guid: 189926528b3c623439062b1257f63248,
     type: 3}
-  m_ShaderKeywords: BOOLEAN_DEBUG_VERTEX_COLOR_ON
+  m_ShaderKeywords: BOOLEAN_DEBUG_VERTEX_COLOR_ON _DEBUG_VERTEX_COLOR_ON
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -62,7 +62,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _NoiseTexture:
-        m_Texture: {fileID: 2800000, guid: 96ab8aaf88568ee4794911ece12a8fdb, type: 3}
+        m_Texture: {fileID: 2800000, guid: e11d5218a0f9cb448b20a4dd10a50cf1, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _OcclusionMap:
@@ -70,7 +70,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SecondTexture:
-        m_Texture: {fileID: 2800000, guid: cc83e3fb0ff712f4aa2bca127f6def52, type: 3}
+        m_Texture: {fileID: 2800000, guid: ec2fb5adbeccb9b439efa9d7af165ef8, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SpecGlossMap:
@@ -78,7 +78,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _ThirdTexture:
-        m_Texture: {fileID: 2800000, guid: ec2fb5adbeccb9b439efa9d7af165ef8, type: 3}
+        m_Texture: {fileID: 2800000, guid: cc83e3fb0ff712f4aa2bca127f6def52, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _ToonShading_4BDB5446_Texture2D75C45C06_1004932281:
@@ -93,15 +93,29 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _ToonShading_DA1DB061_Texture2D75C45C06_1004932281:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Triplanar_422AA52B_Texture_1:
+        m_Texture: {fileID: 2800000, guid: 151291731a3e75844bc6112551a3d7d7, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Triplanar_72076AC2_Texture_1:
+        m_Texture: {fileID: 2800000, guid: 1198d0d0538c98743b1e14694580a2c4, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     m_Floats:
     - BOOLEAN_DEBUG_VERTEX_COLOR: 1
     - DEBUG_VERTEX_COLOR: 0
+    - LIGHTMAP: 0
     - _AlphaClip: 0
     - _BOOLEAN_DEBUG_VERTEX_COLOR: 0
     - _Blend: 0
     - _BumpScale: 1
     - _Cull: 2
     - _Cutoff: 0.5
+    - _DEBUG_VERTEX_COLOR: 1
     - _DstBlend: 0
     - _EnvironmentReflections: 1
     - _FourthTextureScale: 0.2
@@ -110,7 +124,7 @@ Material:
     - _GlossyReflections: 0
     - _MainTextureScale: 0.2
     - _Metallic: 0
-    - _NoiseScale: 0.2
+    - _NoiseScale: 0.5
     - _OcclusionStrength: 1
     - _QueueOffset: 0
     - _ReceiveShadows: 1
@@ -125,7 +139,9 @@ Material:
     - _ZWrite: 1
     m_Colors:
     - Color_C05E8F5A: {r: 0, g: 0, b: 1, a: 1}
+    - Vector3_A60AD52C: {r: 0, g: 0, b: 0, a: 0}
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
+    - _VertexColor_ChannelMixer: {r: 1, g: 1, b: 1, a: 0}
