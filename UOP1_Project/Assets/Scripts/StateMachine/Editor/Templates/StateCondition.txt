@@ -10,20 +10,22 @@ public class #SCRIPTNAME# : StateConditionSO
 
 public class #RUNTIMENAME# : Condition
 {
+	protected new #SCRIPTNAME# OriginSO => (#SCRIPTNAME#)base.OriginSO;
+
 	public override void Awake(StateMachine stateMachine)
 	{
 	}
-		
+	
 	protected override bool Statement()
 	{
 		return true;
 	}
 	
-	// public override void OnStateEnter()
-	// {
-	// }
+	public override void OnStateEnter()
+	{
+	}
 	
-	// public override void OnStateExit()
-	// {
-	// }
+	public override void OnStateExit()
+	{
+	}
 }
