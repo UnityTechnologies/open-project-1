@@ -8,8 +8,12 @@ public class DropItem
 	Item _item;
 
 	[SerializeField]
-	float _dropRate;
+	float _itemDropRate;
+
+	[SerializeField]
+	private GameObject _collectibleItemPrefab;
 
 	public Item Item => _item;
-	public float DropRate => _dropRate;
+	public float ItemDropRate => _itemDropRate;
+	public GameObject CollectibleItemPrefab => _collectibleItemPrefab;
 }
