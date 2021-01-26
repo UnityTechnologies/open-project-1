@@ -5,10 +5,10 @@ using UnityEngine.AI;
 public class ChasingConfigSO : ScriptableObject
 {
 	[Tooltip("Target transform anchor.")]
-	[SerializeField] internal TransformAnchor _targetTransform = default;
+	[SerializeField] private TransformAnchor _targetTransform = default;
 
 	[Tooltip("NPC chasing speed")]
-	[SerializeField] internal float _chasingSpeed = default;
+	[SerializeField] private float _chasingSpeed = default;
 
 	public Vector3 TargetPosition => _targetTransform.Transform.position;
 	public float ChasingSpeed => _chasingSpeed;

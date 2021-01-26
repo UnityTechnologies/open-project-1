@@ -2,7 +2,7 @@
 using UOP1.StateMachine;
 using UOP1.StateMachine.ScriptableObjects;
 
-[CreateAssetMenu(fileName = "DropRewar", menuName = "State Machines/Actions/Drop Reward")]
+[CreateAssetMenu(fileName = "DropReward", menuName = "State Machines/Actions/Drop Reward")]
 public class DropRewardSO : StateActionSO
 {
 	protected override StateAction CreateAction() => new DropReward();
@@ -60,7 +60,7 @@ public class DropReward : StateAction
 			if (_currentRate >= dropDice)
 			{
 				item = dropItem.Item;
-				itemPrefab = dropItem.CollectibleItemPrefab;
+				itemPrefab = dropItem.Item.Prefab;
 				break;
 			}
 		}

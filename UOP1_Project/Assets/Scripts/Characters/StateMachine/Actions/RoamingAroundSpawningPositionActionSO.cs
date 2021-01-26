@@ -45,7 +45,7 @@ public class RoamingAroundSpawningPositionAction : StateAction
 	}
 
 	// Compute a random target position around the starting position.
-	internal Vector3 GetRoamingPositionAroundPosition(Vector3 position)
+	private Vector3 GetRoamingPositionAroundPosition(Vector3 position)
 	{
 		return position + new Vector3(Random.Range(-1, 1), 0.0f, Random.Range(-1, 1)).normalized * Random.Range(_roamingDistance / 2, _roamingDistance);
 	}
