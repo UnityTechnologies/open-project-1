@@ -13,14 +13,16 @@ public class IsActiveAgentSO : StateConditionSO
 public class IsActiveAgent : Condition
 {
 	private NavMeshAgent _agent;
+	private bool _agentDefined;
 
 	public override void Awake(StateMachine stateMachine)
 	{
 		_agent = stateMachine.gameObject.GetComponent<NavMeshAgent>();
+		_agentDefined = _agent != null;
 	}
 
 	protected override bool Statement()
 	{
-		return _agent != null && _agent.isActiveAndEnabled && _agent.isOnNavMesh;
+		return _agentDefined && _agent.isActiveAndEnabled && _agent.isOnNavMesh;
 	}
 }

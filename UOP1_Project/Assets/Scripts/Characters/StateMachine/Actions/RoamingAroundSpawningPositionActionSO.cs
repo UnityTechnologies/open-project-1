@@ -12,6 +12,7 @@ public class RoamingAroundSpawningPositionActionSO : StateActionSO
 public class RoamingAroundSpawningPositionAction : StateAction
 {
 	private NavMeshAgent _agent;
+	private bool _isActiveAgent;
 	private Vector3 _startPosition;
 
 	private float _roamingSpeed;
@@ -23,6 +24,7 @@ public class RoamingAroundSpawningPositionAction : StateAction
 	{
 		RoamingAroundSpawningPositionConfigSO config = stateMachine.GetComponent<Critter>().RoamingAroundSpawningPositionConfig;
 		_agent = stateMachine.gameObject.GetComponent<NavMeshAgent>();
+		_isActiveAgent = _agent != null && _agent.isActiveAndEnabled && _agent.isOnNavMesh;
 		_startPosition = stateMachine.transform.position;
 		_roamingSpeed = config.RoamingSpeed;
 		_roamingDistance = config.RoamingDistance;
@@ -35,7 +37,7 @@ public class RoamingAroundSpawningPositionAction : StateAction
 
 	public override void OnStateEnter()
 	{
-		if (_agent != null)
+		if (_isActiveAgent)
 		{
 			_roamingTargetPosition = GetRoamingPositionAroundPosition(_startPosition);
 			_agent.speed = _roamingSpeed;

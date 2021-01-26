@@ -12,10 +12,12 @@ public class StopAgentSO : StateActionSO
 public class StopAgent : StateAction
 {
 	private NavMeshAgent _agent;
+	private bool _agentDefined;
 
 	public override void Awake(StateMachine stateMachine)
 	{
 		_agent = stateMachine.gameObject.GetComponent<NavMeshAgent>();
+		_agentDefined = _agent != null;
 	}
 
 	public override void OnUpdate()
@@ -25,7 +27,7 @@ public class StopAgent : StateAction
 
 	public override void OnStateEnter()
 	{
-		if (_agent != null)
+		if (_agentDefined)
 		{
 			_agent.isStopped = true;
 		}

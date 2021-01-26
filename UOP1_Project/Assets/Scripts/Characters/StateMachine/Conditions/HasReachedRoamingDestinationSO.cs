@@ -14,14 +14,16 @@ public class HasReachedRoamingDestination : Condition
 {
 	private NavMeshAgent _agent;
 	private float _startTime;
+	private bool _agentDefined;
 
 	public override void Awake(StateMachine stateMachine)
 	{
 		_agent = stateMachine.gameObject.GetComponent<NavMeshAgent>();
+		_agentDefined = _agent != null;
 	}
 
 	protected override bool Statement()
 	{
-		return _agent == null || !_agent.hasPath;
+		return !_agentDefined || !_agent.hasPath;
 	}
 }
