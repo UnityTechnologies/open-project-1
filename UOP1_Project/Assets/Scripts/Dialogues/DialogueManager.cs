@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Localization;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 
@@ -66,7 +67,7 @@ public class DialogueManager : MonoBehaviour
 	/// This function is also called by <c>DialogueBehaviour</c> from clips on Timeline during cutscenes.
 	/// </summary>
 	/// <param name="dialogueLine"></param>
-	public void DisplayDialogueLine(DialogueLineSO dialogueLine, ActorSO actor)
+	public void DisplayDialogueLine(LocalizedString dialogueLine, ActorSO actor)
 	{
 		if (_openUIDialogueEvent != null)
 		{

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 [CreateAssetMenu(fileName = "QuestAnchor", menuName = "Quests/QuestAnchor", order = 51)]
 public class QuestAncorSO : ScriptableObject
@@ -14,15 +15,12 @@ public class QuestAncorSO : ScriptableObject
 	[Header("Linstening to channels")]
 	[SerializeField] private VoidEventChannelSO _checkStepValidityEvent = default;
 	[SerializeField] private DialogueDataChannelSO _endDialogueEvent = default;
-	//[SerializeField] private DialogueActorChannelSO _checkForQuest = default;
 
 	[Header("Broadcasting on channels")]
-	//[SerializeField] private StepChannelSO _startStepEvent = default;
-
-	//[SerializeField] private VoidEventChannelSO _endStepEvent = default;
-
-	[SerializeField] private VoidEventChannelSO _winDialogueEvent = default;
-	[SerializeField] private VoidEventChannelSO _loseDialogueEvent = default;
+	[FormerlySerializedAs("_winDialogueEvent")]
+	[SerializeField] private VoidEventChannelSO _completeDialogueEvent = default;
+	[FormerlySerializedAs("_loseDialogueEvent")]
+	[SerializeField] private VoidEventChannelSO _incompleteDialogueEvent = default;
 
 	[SerializeField] private ItemEventChannelSO _giveItemEvent = default;
 	[SerializeField] private ItemEventChannelSO _rewardItemEvent = default;
@@ -107,12 +105,12 @@ public	void StartGame()
 
 				if (isValid)
 				{
-					return _currentStep.WinDialogue;
+					return _currentStep.CompleteDialogue;
 
 				}
 				else
 				{
-					return _currentStep.LoseDialogue;
+					return _currentStep.IncompleteDialogue;
 
 				}
 
@@ -164,7 +162,6 @@ public	void StartGame()
 	}
 	 void CheckStepValidity()
 	{
-		Debug.Log("Check step Validity");
 
 		if (_currentStep != null)
 		{
@@ -176,37 +173,50 @@ public	void StartGame()
 					{
 						_inventory.Contains(_currentStep.Item);
 						//Trigger win dialogue
-						_winDialogueEvent.RaiseEvent();
+						_completeDialogueEvent.RaiseEvent();
 					}
 					else
 					{
 						//trigger lose dialogue
-						_loseDialogueEvent.RaiseEvent();
+						_incompleteDialogueEvent.RaiseEvent();
 					}
 					break;
 				case stepType.giveItem:
-					Debug.Log("Check Item ");
 					if (_inventory.Contains(_currentStep.Item))
 					{
-						Debug.Log("Item exists");
 						_giveItemEvent.RaiseEvent(_currentStep.Item);
-						_winDialogueEvent.RaiseEvent();
+						_completeDialogueEvent.RaiseEvent();
 					}
 					else
 					{
 						//trigger lose dialogue
-						_loseDialogueEvent.RaiseEvent();
+						_incompleteDialogueEvent.RaiseEvent();
 
 					}
 					break;
 				case stepType.rewardItem:
 					_rewardItemEvent.RaiseEvent(_currentStep.Item);
 					//no dialogue is needed after Reward Item
-					EndStep();
+					if(_currentStep.CompleteDialogue !=null)
+					{
+						_completeDialogueEvent.RaiseEvent();
+					}
+					else
+					{
+						EndStep();
+					}
 					break;
 				case stepType.dialogue:
 					//dialogue has already been played
-					EndStep();
+					if (_currentStep.CompleteDialogue != null)
+					{
+
+						_completeDialogueEvent.RaiseEvent();
+					}
+					else
+					{
+						EndStep();
+					}
 					break;
 
 

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.Localization.Components;
+using UnityEngine.Localization;
+
 public class UIDialogueManager : MonoBehaviour
 {
 
@@ -20,10 +22,10 @@ public class UIDialogueManager : MonoBehaviour
 			_showChoicesEvent.OnEventRaised += ShowChoices;
 		}
 	}
-	public void SetDialogue(DialogueLineSO dialogueLine, ActorSO actor)
+	public void SetDialogue(LocalizedString dialogueLine, ActorSO actor)
 	{
 		_choicesManager.gameObject.SetActive(false);
-		_lineText.StringReference = dialogueLine.Sentence;
+		_lineText.StringReference = dialogueLine;
 		_actorNameText.StringReference = actor.ActorName;
 
 	}

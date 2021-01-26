@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Localization;
 
 public class UIManager : MonoBehaviour
 {
@@ -62,7 +63,7 @@ public class UIManager : MonoBehaviour
 	[SerializeField]
 	private UIInteractionManager interactionPanel = default;
 
-	public void OpenUIDialogue(DialogueLineSO dialogueLine, ActorSO actor)
+	public void OpenUIDialogue(LocalizedString dialogueLine, ActorSO actor)
 	{
 		dialogueController.SetDialogue(dialogueLine, actor);
 		dialogueController.gameObject.SetActive(true);

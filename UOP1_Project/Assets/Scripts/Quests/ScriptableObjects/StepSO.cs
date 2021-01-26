@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 public enum stepType
 {
 	dialogue,
@@ -19,10 +20,12 @@ public class StepSO : ScriptableObject
 	private DialogueDataSO _dialogueBeforeStep = default;
 	[Tooltip("The dialogue that will be diplayed when the step is achieved")]
 	[SerializeField]
-	private DialogueDataSO _winDialogue = default;
+	[FormerlySerializedAs("_winDialogue")]
+	private DialogueDataSO _completeDialogue = default;
 	[Tooltip("The dialogue that will be diplayed if the step is not achieved yet")]
 	[SerializeField]
-	private DialogueDataSO _loseDialogue = default;
+	[FormerlySerializedAs("_loseDialogue")]
+	private DialogueDataSO _incompleteDialogue = default;
 	[Tooltip("The item to check/give/reward")]
 	[SerializeField]
 	private Item _item = default;
@@ -32,8 +35,8 @@ public class StepSO : ScriptableObject
 	[SerializeField]
 	bool _isDone = false;
 	public DialogueDataSO DialogueBeforeStep => _dialogueBeforeStep;
-	public DialogueDataSO WinDialogue => _winDialogue;
-	public DialogueDataSO LoseDialogue => _loseDialogue;
+	public DialogueDataSO CompleteDialogue => _completeDialogue;
+	public DialogueDataSO IncompleteDialogue => _incompleteDialogue;
 	public Item Item => _item;
 	public stepType Type => _type;
 	public bool IsDone => _isDone;

@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Localization;
 using UnityEngine.Playables;
 
 public class CutsceneManager : MonoBehaviour
@@ -71,7 +72,7 @@ public class CutsceneManager : MonoBehaviour
 
 	private void HandleDirectorStopped(PlayableDirector director) => CutsceneEnded();
 
-	void PlayDialogueFromClip(DialogueLineSO dialogueLine, ActorSO actor)
+	void PlayDialogueFromClip(LocalizedString dialogueLine, ActorSO actor)
 	{
 		_dialogueManager.DisplayDialogueLine(dialogueLine, actor);
 	}

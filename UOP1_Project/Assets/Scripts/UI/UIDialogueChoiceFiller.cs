@@ -15,7 +15,7 @@ public class UIDialogueChoiceFiller : MonoBehaviour
 	public void FillChoice(Choice choiceToFill)
 	{
 		currentChoice = choiceToFill;
-		_choiceText.StringReference = choiceToFill.Response.Sentence;
+		_choiceText.StringReference = choiceToFill.Response;
 	}
 
 	public void ButtonClicked()

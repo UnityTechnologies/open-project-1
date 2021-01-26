@@ -7,10 +7,11 @@ public class CollectibleItem : MonoBehaviour
 
 	[SerializeField] private Item _currentItem = default;
 
-	//	[SerializeField] private SpriteRenderer[] _itemImages = default;
+		[SerializeField] private SpriteRenderer[] _itemImages = default;
 	private void Start()
 	{
-		//	SetItem();
+		if(_itemImages!=null)
+			SetItem();
 	}
 
 	public void PickedItem()
@@ -27,14 +28,14 @@ public class CollectibleItem : MonoBehaviour
 	}
 
 	//this function is only for testing 
-	/*public void SetItem()
+	public void SetItem()
 	{
 		for (int i = 0; i < _itemImages.Length; i++)
 		{
 			_itemImages[i].sprite = _currentItem.PreviewImage;
 		}
 
-	}*/
+	}
 	public void OnTriggerEnter(Collider other)
 	{
 		if (other.tag == "Player")
