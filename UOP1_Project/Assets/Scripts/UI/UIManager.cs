@@ -64,6 +64,7 @@ public class UIManager : MonoBehaviour
 		dialogueController.SetDialogue(dialogueLine);
 		dialogueController.gameObject.SetActive(true);
 	}
+
 	public void CloseUIDialogue()
 	{
 		dialogueController.gameObject.SetActive(false);

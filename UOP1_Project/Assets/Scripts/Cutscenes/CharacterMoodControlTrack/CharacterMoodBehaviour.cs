@@ -5,13 +5,13 @@ using UnityEngine.Playables;
 [Serializable]
 public class CharacterMoodBehaviour : PlayableBehaviour
 {
-	[SerializeField] MoodCollectionSO _moodSet = default;
-
+	[HideInInspector] public MoodCollectionSO MoodSet = default;
+	[HideInInspector] public ExpressionManager ExpressionManager;
 	[HideInInspector] public bool PlayRandomAnimation;
 	[HideInInspector] public int AnimationIndex;
-
-	[HideInInspector] public ExpressionManager ExpressionManager;
-	//[HideInInspector] public ExpressionManagerMulti ExpressionManager;
+	[HideInInspector] public bool EnableBlinking = true;
+	[HideInInspector] public bool EnablePhonemes = true;
+	[HideInInspector] public bool EnableAnimations = true;
 
 	public override void ProcessFrame(Playable playable, FrameData info, object playerData)
 	{
@@ -19,18 +19,21 @@ public class CharacterMoodBehaviour : PlayableBehaviour
 		{
 			if (playable.GetGraph().IsPlaying())
 			{
-				if (_moodSet != null)
+				if (MoodSet != null)
 				{
-					ExpressionManager.SetMood(_moodSet.Mood);
-				//	ExpressionManager.SetPhonemeLibraryByMood(_moodSet.Actor, _moodSet.Mood);
+					if (!ExpressionManager.IsActorRegistered(MoodSet.Actor))
+						ExpressionManager.RegisterActor(MoodSet.Actor);
 
-					ExpressionManager.playRandomAnimation = PlayRandomAnimation;
-					ExpressionManager.animationIndex = AnimationIndex;
+					ExpressionManager.EnableBlinking(MoodSet.Actor, EnableBlinking);
+					ExpressionManager.EnablePhonemes(MoodSet.Actor, EnablePhonemes);
+					ExpressionManager.EnableAnimations(MoodSet.Actor, EnableAnimations);
 
-				//	ActorAnimationSettings settings = new ActorAnimationSettings();
-				//	settings.PlayRandomAnimation = PlayRandomAnimation;
-				//	settings.ForcedAnimationIndex = AnimationIndex;
-				//	ExpressionManager.SetActorAnimationSettings(_moodSet.Actor, settings);
+					ExpressionManager.SetPhonemeLibraryByMood(MoodSet.Actor, MoodSet.Mood);
+					
+					ActorAnimationSettings settings = new ActorAnimationSettings();
+					settings.PlayRandomAnimation = PlayRandomAnimation;
+					settings.ForcedAnimationIndex = AnimationIndex;
+					ExpressionManager.SetActorAnimationSettings(MoodSet.Actor, settings);
 				}
 				else
 				{
@@ -39,9 +42,8 @@ public class CharacterMoodBehaviour : PlayableBehaviour
 			}
 			else
 			{
-				ExpressionManager.PlayDefaultAnimClip();
-			//	if (_moodSet != null)
-			//		ExpressionManager.ForceDefaultAnimation(_moodSet.Actor);
+				if (MoodSet != null)
+					ExpressionManager.ForceDefaultAnimation(MoodSet.Actor);
 			}
 		}
 	}

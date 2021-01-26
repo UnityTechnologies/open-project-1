@@ -23,14 +23,12 @@ public class DialogueBehaviour : PlayableBehaviour
 
 		if (_dialoguePlayed && T > 1)
 		{
-			cutsceneManager.ExpressionManager.IsCharacterTalking = false;
-		//	cutsceneManager.ExpressionManager.SetCharacterTalkingState(_dialogueLine.Actor, false);
+			cutsceneManager.ExpressionManager.SetCharacterTalkingState(_dialogueLine.Actor, false);
 			return;
 		}
 		else
 		{
-			cutsceneManager.ExpressionManager.IsCharacterTalking = true;
-			//cutsceneManager.ExpressionManager.SetCharacterTalkingState(_dialogueLine.Actor, true);
+			cutsceneManager.ExpressionManager.SetCharacterTalkingState(_dialogueLine.Actor, true);
 		}
 
 		// Extract the localized string
@@ -82,12 +80,11 @@ public class DialogueBehaviour : PlayableBehaviour
 					if (!_dialoguePlayed)
 						cutsceneManager.PlayDialogueFromClip(_dialogueLine);
 
-					// Handle phonemes through PhonemeManager
-					cutsceneManager.ExpressionManager.ActiveActor = _dialogueLine.Actor;
-					cutsceneManager.ExpressionManager.SetActivePhoneme(phonemeKey);
+					if (!cutsceneManager.ExpressionManager.IsActorRegistered(_dialogueLine.Actor))
+						cutsceneManager.ExpressionManager.RegisterActor(_dialogueLine.Actor);
 
-					//cutsceneManager.ExpressionManager.RegisterActor(_dialogueLine.Actor);
-					//cutsceneManager.ExpressionManager.SetActivePhoneme(_dialogueLine.Actor, phonemeKey);
+					if (cutsceneManager.ExpressionManager.IsThereAnActivePhonemeSetForActor(_dialogueLine.Actor))
+						cutsceneManager.ExpressionManager.SetActivePhoneme(_dialogueLine.Actor, phonemeKey);
 
 					_dialoguePlayed = true;
 				}
