@@ -37,8 +37,6 @@ public class SpawnSystem : MonoBehaviour
 		GameObject[] spawnLocationsGO = GameObject.FindGameObjectsWithTag("SpawnLocation");
 		_spawnLocations = new Transform[spawnLocationsGO.Length];
 
-		Debug.Log(spawnLocationsGO.Length);
-
 		for (int i = 0; i < spawnLocationsGO.Length; ++i)
 		{
 			_spawnLocations[i] = spawnLocationsGO[i].transform;
