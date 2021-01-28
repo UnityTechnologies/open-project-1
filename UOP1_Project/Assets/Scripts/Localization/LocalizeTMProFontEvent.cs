@@ -13,7 +13,7 @@ namespace UnityEngine.Localization.Components
 	}
 
 	[Serializable]
-	public class LocalizedTMProFont : LocalizedAsset<TMP_FontAsset>{ }
+	public class LocalizedTMProFont : LocalizedAsset<TMP_FontAsset> { }
 
 	[Serializable]
 	public class UnityEventFont : UnityEvent<TMP_FontAsset> { }
