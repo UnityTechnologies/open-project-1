@@ -54,34 +54,52 @@ namespace UOP1.StateMachine.Editor
 			{
 				bool Button(Rect pos, string icon) => GUI.Button(pos, EditorGUIUtility.IconContent(icon));
 
-				var buttonRect = new Rect(
-					x: rect.width - 90,
-					y: rect.y + 5,
-					width: 30,
-					height: 18);
+				var buttonRect = new Rect(x: rect.width - 25, y: rect.y + 5, width: 30, height: 18);
 
-				// Move transition up
-				if (Button(buttonRect, "scrollup"))
-					if (_editor.ReorderTransition(SerializedTransition, true))
-						return true;
-
-				buttonRect.x += 35;
-
-				// Move transition down
-				if (Button(buttonRect, "scrolldown"))
-					if (_editor.ReorderTransition(SerializedTransition, false))
-						return true;
-
-				buttonRect.x += 35;
+				int i, l;
+				{
+					var transitions = _editor.GetStateTransitions(SerializedTransition.FromState.objectReferenceValue);
+					l = transitions.Count - 1;
+					i = transitions.FindIndex(t => t.Index == SerializedTransition.Index);
+				}
 
 				// Remove transition
 				if (Button(buttonRect, "Toolbar Minus"))
 				{
-					_editor.RemoveTransition(SerializedTransition.Index);
+					_editor.RemoveTransition(SerializedTransition);
+					return true;
+				}
+				buttonRect.x -= 35;
+
+				// Move transition down
+				if (i < l)
+				{
+					if (Button(buttonRect, "scrolldown"))
+					{
+						_editor.ReorderTransition(SerializedTransition, false);
+						return true;
+					}
+					buttonRect.x -= 35;
+				}
+
+				// Move transition up
+				if (i > 0)
+				{
+					if (Button(buttonRect, "scrollup"))
+					{
+						_editor.ReorderTransition(SerializedTransition, true);
+						return true;
+					}
+					buttonRect.x -= 35;
+				}
+
+				// State editor
+				if (Button(buttonRect, "SceneViewTools"))
+				{
+					_editor.DisplayStateEditor(SerializedTransition.ToState.objectReferenceValue);
 					return true;
 				}
 			}
-
 
 			rect.x = position.x + 5;
 			rect.y += rect.height;
