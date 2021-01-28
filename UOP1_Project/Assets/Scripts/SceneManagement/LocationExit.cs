@@ -7,10 +7,12 @@
 public class LocationExit : MonoBehaviour
 {
 	[Header("Loading settings")]
-	[SerializeField] private GameSceneSO[] _locationsToLoad = default;
 	[SerializeField] private bool _showLoadScreen = default;
-	[SerializeField] private PathAnchor _pathTaken = default;
+	[SerializeField] private GameSceneSO[] _locationsToLoad = default;
 	[SerializeField] private PathSO _exitPath = default;
+
+	[Header("Runtime Anchor")]
+	[SerializeField] private PathAnchor _pathTaken = default;
 
 	[Header("Broadcasting on")]
 	[SerializeField] private LoadEventChannelSO _locationExitLoadChannel = default;

@@ -4,9 +4,6 @@ using UnityEngine;
 
 public class SpawnSystem : MonoBehaviour
 {
-	[Header("Settings")]
-	[SerializeField] private int _defaultSpawnIndex = 0;
-
 	[Header("Asset References")]
 	[SerializeField] private Protagonist _playerPrefab = default;
 	[SerializeField] private TransformAnchor _playerTransformAnchor = default;
@@ -39,28 +36,15 @@ public class SpawnSystem : MonoBehaviour
 	{
 		GameObject[] spawnLocationsGO = GameObject.FindGameObjectsWithTag("SpawnLocation");
 		_spawnLocations = new Transform[spawnLocationsGO.Length];
+
+		Debug.Log(spawnLocationsGO.Length);
+
 		for (int i = 0; i < spawnLocationsGO.Length; ++i)
 		{
 			_spawnLocations[i] = spawnLocationsGO[i].transform;
 		}
+
 		Spawn(FindSpawnIndex(_pathTaken?.Path ?? null));
-	}
-
-	void Reset()
-	{
-		AutoFill();
-	}
-
-	/// <summary>
-	/// This function tries to autofill some of the parameters of the component, so it's easy to drop in a new scene
-	/// </summary>
-	[ContextMenu("Attempt Auto Fill")]
-	private void AutoFill()
-	{
-		if (_spawnLocations == null || _spawnLocations.Length == 0)
-			_spawnLocations = transform.GetComponentsInChildren<Transform>(true)
-								.Where(t => t != this.transform)
-								.ToArray();
 	}
 
 	private void Spawn(int spawnIndex)
@@ -83,14 +67,16 @@ public class SpawnSystem : MonoBehaviour
 
 	private int FindSpawnIndex(PathSO pathTaken)
 	{
+		int defaultSpawnIndex = Array.FindIndex(_spawnLocations, element => element == transform);
+
 		if (pathTaken == null)
-			return _defaultSpawnIndex;
+			return defaultSpawnIndex;
 
 		int index = Array.FindIndex(_spawnLocations, element => 
 			element?.GetComponent<LocationEntrance>()?.EntrancePath == pathTaken
 		);
 
-		return (index < 0) ? _defaultSpawnIndex : index;
+		return (index < 0) ? defaultSpawnIndex : index;
 	}
 
 	private Protagonist InstantiatePlayer(Protagonist playerPrefab, Transform spawnLocation)
