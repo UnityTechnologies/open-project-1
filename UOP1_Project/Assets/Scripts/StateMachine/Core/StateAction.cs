@@ -8,6 +8,10 @@ namespace UOP1.StateMachine
 	public abstract class StateAction : IStateComponent
 	{
 		internal StateActionSO _originSO;
+
+		/// <summary>
+		/// Use this property to access shared data from the <see cref="StateActionSO"/> that corresponds to this <see cref="StateAction"/>
+		/// </summary>
 		protected StateActionSO OriginSO => _originSO;
 
 		/// <summary>

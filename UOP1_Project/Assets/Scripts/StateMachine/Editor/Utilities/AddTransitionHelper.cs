@@ -26,6 +26,8 @@ namespace UOP1.StateMachine.Editor
 
 		internal void Display(Rect position)
 		{
+			position.x += 8;
+			position.width -= 16;
 			var rect = position;
 			float listHeight = _list.GetHeight();
 			float singleLineHeight = EditorGUIUtility.singleLineHeight;
@@ -59,18 +61,18 @@ namespace UOP1.StateMachine.Editor
 			// State Fields
 			{
 				position.y += 10;
-				position.x += 25;
+				position.x += 20;
 				StatePropField(position, "From", SerializedTransition.FromState);
-				position.x = rect.width / 2 + 25;
+				position.x = rect.width / 2 + 20;
 				StatePropField(position, "To", SerializedTransition.ToState);
 			}
 
 			// Conditions List
 			{
 				position.y += 30;
-				position.x = rect.x + 10;
+				position.x = rect.x + 5;
 				position.height = listHeight;
-				position.width -= 20;
+				position.width -= 10;
 				_list.DoList(position);
 			}
 
