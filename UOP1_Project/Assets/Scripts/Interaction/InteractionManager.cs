@@ -1,14 +1,14 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
 
 public enum InteractionType { None = 0, PickUp, Cook, Talk };
 
 public class InteractionManager : MonoBehaviour
 {
-	private InteractionType _potentialInteraction;
 	[HideInInspector] public InteractionType currentInteraction;
 	[SerializeField] private InputReader _inputReader = default;
 	//To store the object we are currently interacting with
-	private GameObject _currentInteractableObject = null;
+	private LinkedList<Interaction> _ongoingInteractions = new LinkedList<Interaction>();
 
 	//Events for the different interaction types
 	[Header("Broadcasting on")]
@@ -37,12 +37,13 @@ public class InteractionManager : MonoBehaviour
 	void OnInteractionEnd()
 	{
 		_inputReader.EnableGameplayInput();
-		switch (_potentialInteraction)
+		Interaction onGoingInteraction = _ongoingInteractions.First.Value;
+		switch (onGoingInteraction.Type)
 		{
 			//we show it after cooking or talking, in case player want to interact again
 			case InteractionType.Cook:
 			case InteractionType.Talk:
-				_toggleInteractionUI.RaiseEvent(true, _potentialInteraction);
+				_toggleInteractionUI.RaiseEvent(true, onGoingInteraction.Type);
 				Debug.Log("Display interaction UI");
 				break;
 			default:
@@ -52,34 +53,34 @@ public class InteractionManager : MonoBehaviour
 
 	void OnInteractionButtonPress()
 	{
-		//remove interaction after press 
-		_toggleInteractionUI.RaiseEvent(false, _potentialInteraction);
-
-		switch (_potentialInteraction)
+		//remove interaction after press
+		Interaction onGoingInteraction = _ongoingInteractions.Count > 0 ?
+			_ongoingInteractions.First.Value : Interaction.NONE;
+		_toggleInteractionUI.RaiseEvent(false, onGoingInteraction.Type);
+		switch (onGoingInteraction.Type)
 		{
 			case InteractionType.None:
 				return;
 			case InteractionType.PickUp:
-				if (_currentInteractableObject != null)
+				GameObject itemObject = onGoingInteraction.InteractableObject;
+				_ongoingInteractions.RemoveFirst();
+				if (_onObjectPickUp != null)
 				{
-					if (_onObjectPickUp != null)
-					{
-						//raise an event with an item as parameter (to add object to inventory)
-						Item currentItem = _currentInteractableObject.GetComponent<CollectibleItem>().GetItem();
-						_onObjectPickUp.RaiseEvent(currentItem);
-						Debug.Log("PickUp event raised");
-						//set current interaction for state machine
-						currentInteraction = InteractionType.PickUp;
-					}
+					//raise an event with an item as parameter (to add object to inventory)
+					Item currentItem = itemObject.GetComponent<CollectibleItem>().GetItem();
+					_onObjectPickUp.RaiseEvent(currentItem);
+					//Debug.Log("PickUp event raised");
+					//set current interaction for state machine
+					currentInteraction = InteractionType.PickUp;
 				}
 				//destroy the GO
-				Destroy(_currentInteractableObject);
+				Destroy(itemObject);
 				break;
 			case InteractionType.Cook:
 				if (_onCookingStart != null)
 				{
 					_onCookingStart.RaiseEvent();
-					Debug.Log("Cooking event raised");
+					//Debug.Log("Cooking event raised");
 					//Change the action map
 					_inputReader.EnableMenuInput();
 					//set current interaction for state machine
@@ -87,19 +88,16 @@ public class InteractionManager : MonoBehaviour
 				}
 				break;
 			case InteractionType.Talk:
-				if (_currentInteractableObject != null)
+				if (_onCookingStart != null)
 				{
-					if (_onCookingStart != null)
-					{
-						//raise an event with an actor as parameter
-						//Actor currentActor = currentInteractableObject.GetComponent<Dialogue>().GetActor();
-						//_startTalking.RaiseEvent(currentActor);
-						Debug.Log("talk event raised");
-						//Change the action map
-						_inputReader.EnableDialogueInput();
-						//set current interaction for state machine
-						currentInteraction = InteractionType.Talk;
-					}
+					//raise an event with an actor as parameter
+					//Actor currentActor = currentInteractableObject.GetComponent<Dialogue>().GetActor();
+					//_startTalking.RaiseEvent(currentActor);
+					//Debug.Log("talk event raised");
+					//Change the action map
+					_inputReader.EnableDialogueInput();
+					//set current interaction for state machine
+					currentInteraction = InteractionType.Talk;
 				}
 				break;
 			default:
@@ -109,44 +107,62 @@ public class InteractionManager : MonoBehaviour
 
 	private void OnTriggerEnter(Collider other)
 	{
+		InteractionType ongoingInteractionType = InteractionType.None;
+
 		if (other.CompareTag("Pickable"))
 		{
-			_potentialInteraction = InteractionType.PickUp;
+			ongoingInteractionType = InteractionType.PickUp;
 			//Debug.Log("I triggered a pickable object!");
-			DisplayInteractionUI();
 		}
 		else if (other.CompareTag("CookingPot"))
 		{
-			_potentialInteraction = InteractionType.Cook;
+			ongoingInteractionType = InteractionType.Cook;
 			//Debug.Log("I triggered a cooking pot!");
-			DisplayInteractionUI();
 		}
 		else if (other.CompareTag("NPC"))
 		{
-			_potentialInteraction = InteractionType.Talk;
+			ongoingInteractionType = InteractionType.Talk;
 			//Debug.Log("I triggered an NPC!");
+		}
+		if (ongoingInteractionType != InteractionType.None)
+		{
+			_ongoingInteractions.AddFirst(new Interaction(ongoingInteractionType, other.gameObject));
 			DisplayInteractionUI();
 		}
-		_currentInteractableObject = other.gameObject;
 	}
 
 	private void DisplayInteractionUI()
 	{
 		//Raise event to display UI
-		_toggleInteractionUI.RaiseEvent(true, _potentialInteraction);
+		Interaction onGoingInteraction = _ongoingInteractions.First.Value;
+		_toggleInteractionUI.RaiseEvent(true, onGoingInteraction.Type);
 	}
 
 	private void OnTriggerExit(Collider other)
 	{
-		ResetInteraction();
+		ResetInteraction(other.gameObject);
 	}
 
-	private void ResetInteraction()
+	private void ResetInteraction(GameObject obj)
 	{
-		_potentialInteraction = InteractionType.None;
-		_currentInteractableObject = null;
+		LinkedListNode<Interaction> currentNode = _ongoingInteractions.First;
+		while (currentNode != null)
+		{
+			if (currentNode.Value.InteractableObject == obj)
+			{
+				_ongoingInteractions.Remove(currentNode);
+				break;
+			}
+			currentNode = currentNode.Next;
+		}
 
-		if (_toggleInteractionUI != null)
-			_toggleInteractionUI.RaiseEvent(false, _potentialInteraction);
+		if (_ongoingInteractions.Count > 0)
+		{
+			_toggleInteractionUI.RaiseEvent(true, _ongoingInteractions.First.Value.Type);
+		}
+		else
+		{
+			_toggleInteractionUI.RaiseEvent(false, InteractionType.None);
+		}
 	}
 }
