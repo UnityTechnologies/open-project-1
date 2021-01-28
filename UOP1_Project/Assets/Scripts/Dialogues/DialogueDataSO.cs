@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Timeline;
-using UnityEngine.Localization; 
+using UnityEngine.Localization;
+using UnityEditor.Localization;
+
 public enum DialogueType
 {
 	startDialogue,
@@ -40,13 +42,37 @@ public class DialogueDataSO : ScriptableObject
 	// Each line would also have an event associated, or another Dialogue
 	private void OnEnable()
 	{
-		findDialogueLines();
+	//  SetDialogueLines();   
 	}
-	void findDialogueLines()
+	void SetDialogueLines()
 	{
-		Debug.Log(DialogueLines[0].TableEntryReference.Key); 
-		Debug.Log(DialogueLines[0].TableReference.TableCollectionName);
+		_dialogueLines.Clear();
 
+		StringTableCollection collection = LocalizationEditorSettings.GetStringTableCollection("Dialogues");
+
+		if (collection != null)
+		{
+			int index = 0;
+			LocalizedString _dialogueLine = null;
+			do
+			{  
+				index++;
+				string key = "L" + index + "-" + this.name;
+				
+				if (collection.SharedData.Contains(key))
+				{  
+					_dialogueLine = new LocalizedString() { TableReference = "Dialogues", TableEntryReference = key };
+					_dialogueLines.Add(_dialogueLine);
+				} 
+				else 
+				{  
+					
+					_dialogueLine = null;
+				}
+
+			} while (_dialogueLine != null );
+			
+		}
 	}
 }
 

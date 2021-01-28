@@ -10,12 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5be51871efa6c3e4eae1703925c8f5ac, type: 3}
-  m_Name: QuestlineDialogue
+  m_Name: Dialogues
   m_EditorClassIdentifier: 
-  m_SharedTableData: {fileID: 11400000, guid: dde4d865ca93d7b4dbc6a1bbce6595b2, type: 2}
+  m_SharedTableData: {fileID: 11400000, guid: d9e7a5c77f5007544a8a7a60a0260ee2, type: 2}
   m_Tables:
-  - {fileID: 11400000, guid: 58a0f131135e1244c92f9d8eaab9bcb0, type: 2}
-  - {fileID: 11400000, guid: d43ae9477a9cbf24c9687d72ad732970, type: 2}
+  - {fileID: 11400000, guid: 6f0ad4e29bd188a42b72bcf38308cdd6, type: 2}
+  - {fileID: 11400000, guid: 29add161c97e563489f42e9c23bc01bc, type: 2}
+  - {fileID: 11400000, guid: 79b8bee5b02dfcc49875b697741d6a2b, type: 2}
   m_Extensions:
   - id: 0
   m_Group: String Table
@@ -34,6 +35,7 @@ MonoBehaviour:
         - id: 1
         - id: 2
         - id: 3
+        - id: 4
         m_RemoveMissingPulledKeys: 1
     00000001:
       type: {class: KeyColumn, ns: UnityEditor.Localization.Plugins.Google.Columns,
@@ -55,4 +57,12 @@ MonoBehaviour:
         m_Column: C
         m_LocaleIdentifier:
           m_Code: fr
+        m_IncludeComments: 0
+    00000004:
+      type: {class: LocaleColumn, ns: UnityEditor.Localization.Plugins.Google.Columns,
+        asm: Unity.Localization.Editor}
+      data:
+        m_Column: D
+        m_LocaleIdentifier:
+          m_Code: it
         m_IncludeComments: 0

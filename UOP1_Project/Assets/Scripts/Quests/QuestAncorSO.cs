@@ -88,7 +88,7 @@ public	void StartGame()
 
 	public DialogueDataSO InteractWithCharacter(ActorSO actor, bool isCheckValidity, bool isValid)
 	{
-		
+		Debug.Log("current quest"+ _currentQuest);
 		if (_currentQuest == null)
 		{
 			if (CheckQuestlineForQuestWithActor(actor))

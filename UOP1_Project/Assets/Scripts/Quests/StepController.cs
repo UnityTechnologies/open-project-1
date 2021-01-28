@@ -59,14 +59,14 @@ public class StepController : MonoBehaviour
 	{
 		
 		DialogueDataSO displayDialogue =_questAnchor.InteractWithCharacter(_actor, false, false);
-		Debug.Log("dialogue " + displayDialogue);
+		Debug.Log("dialogue " + displayDialogue + "actor" + _actor);
 			if (displayDialogue !=null)
 			{
 				_currentDialogue = displayDialogue;
 				StartDialogue(); 
 			}
 			else
-			{
+			{ 
 				PlayDefaultDialogue();
 			}
 		
