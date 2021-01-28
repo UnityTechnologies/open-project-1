@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class Interaction 
+public class Interaction
 {
 	public static Interaction NONE = new Interaction(InteractionType.None, null);
 
