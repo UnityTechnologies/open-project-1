@@ -16,7 +16,12 @@ public class IsRoamingStopTimeElapsed : Condition
 
 	public override void Awake(StateMachine stateMachine)
 	{
-		_stopDuration = stateMachine.GetComponent<Critter>().RoamingAroundSpawningPositionConfig.StopDuration;
+		_stopDuration = 0.0f;
+		MovementConfigSO config = stateMachine.GetComponent<NpcEntity>().MovementConfig;
+		if (typeof(RoamingAroundSpawningPositionConfigSO).IsInstanceOfType(config))
+		{
+			_stopDuration = ((RoamingAroundSpawningPositionConfigSO)config).StopDuration;
+		}
 	}
 
 	public override void OnStateEnter()

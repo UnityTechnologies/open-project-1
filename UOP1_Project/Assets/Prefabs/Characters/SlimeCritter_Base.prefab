@@ -78,14 +78,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d83d74df43f0a0b42afeaffe5c3e02cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _critterSO: {fileID: 11400000, guid: fd7717100e602c446847524419231170, type: 2}
-  _attackConfigSO: {fileID: 11400000, guid: fa67200955f70e64abecdd0107951472, type: 2}
-  _chasingConfigSO: {fileID: 11400000, guid: 120d08344ab40f643beb7bcaeb9c3c23, type: 2}
-  _roamingAroundSpawningPositionConfigSO: {fileID: 11400000, guid: 1090a62009338bd44bf5491afb8ca34e,
-    type: 2}
-  _droppableRewardSO: {fileID: 11400000, guid: 6158158d6ef9a3d47827f7851295bcef, type: 2}
+  _name:
+    m_TableReference:
+      m_TableCollectionName: 
+    m_TableEntryReference:
+      m_KeyId: 0
+      m_Key: 
+  _movementConfigSO: {fileID: 11400000, guid: 1090a62009338bd44bf5491afb8ca34e, type: 2}
+  _healthConfigSO: {fileID: 11400000, guid: fd7717100e602c446847524419231170, type: 2}
   _getHitEffectSO: {fileID: 11400000, guid: efe1f84589f6f1f47a7a10a1a215e843, type: 2}
   _mainMeshRenderer: {fileID: 7464116941563462636}
+  _droppableRewardSO: {fileID: 11400000, guid: 6158158d6ef9a3d47827f7851295bcef, type: 2}
+  _attackConfigSO: {fileID: 11400000, guid: fa67200955f70e64abecdd0107951472, type: 2}
+  _chasingConfigSO: {fileID: 11400000, guid: 120d08344ab40f643beb7bcaeb9c3c23, type: 2}
 --- !u!114 &2038924309811281612
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -330,6 +335,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: SlimeCritter_Base
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 63937395ff7a888419d4b8fe450d3c91,
+        type: 3}
+      propertyPath: m_TagString
+      value: Critter
       objectReference: {fileID: 0}
     - target: {fileID: 1430996729439901540, guid: 63937395ff7a888419d4b8fe450d3c91,
         type: 3}

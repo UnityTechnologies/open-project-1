@@ -20,11 +20,11 @@ public class GetHitFlashingEffectAction : StateAction
 
 	public override void Awake(StateMachine stateMachine)
 	{
-		Critter critter = stateMachine.GetComponent<Critter>();
-		GetHitEffectConfigSO getHitEffectConfig = critter.GetHitEffectConfig;
+		AttackableEntity attackableEntity = stateMachine.GetComponent<AttackableEntity>();
+		GetHitEffectConfigSO getHitEffectConfig = attackableEntity.GetHitEffectConfig;
 
 		// Take the last one if many.
-		_material = critter.MainMeshRenderer.materials[critter.MainMeshRenderer.materials.Length - 1];
+		_material = attackableEntity.MainMeshRenderer.materials[attackableEntity.MainMeshRenderer.materials.Length - 1];
 		_getHitFlashingDuration = getHitEffectConfig.GetHitFlashingDuration;
 		_getHitFlashingSpeed = getHitEffectConfig.GetHitFlashingSpeed;
 		_baseTintColor = _material.GetColor("_MainColor");

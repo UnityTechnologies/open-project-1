@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "DroppableRewardConfig", menuName = "Droppable/Reward Dropping Rate Config")]
+[CreateAssetMenu(fileName = "DroppableRewardConfig", menuName = "EntityConfig/Reward Dropping Rate Config")]
 public class DroppableRewardConfigSO : ScriptableObject
 {
 	[Tooltip("Item scattering distance from the source of dropping.")]

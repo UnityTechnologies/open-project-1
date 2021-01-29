@@ -15,7 +15,7 @@ public class DropReward : StateAction
 
 	public override void Awake(StateMachine stateMachine)
 	{
-		_dropRewardConfig = stateMachine.GetComponent<Critter>().DropableRewardConfig;
+		_dropRewardConfig = stateMachine.GetComponent<DroppingEntity>().DropableRewardConfig;
 		_currentTransform = stateMachine.transform;
 	}
 

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-[CreateAssetMenu(fileName = "GetHitEffectConfig", menuName = "Characters/Get Hit Effect Config")]
+[CreateAssetMenu(fileName = "GetHitEffectConfig", menuName = "EntityConfig/Get Hit Effect Config")]
 public class GetHitEffectConfigSO : ScriptableObject
 {
 	[Tooltip("Flashing effect color applied when getting hit.")]

@@ -77,14 +77,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d83d74df43f0a0b42afeaffe5c3e02cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _critterSO: {fileID: 11400000, guid: 301a61db8a2a4ef408992e723f0b6b53, type: 2}
-  _attackConfigSO: {fileID: 11400000, guid: b8283b4a85847b44993fc5a971db3ac8, type: 2}
-  _chasingConfigSO: {fileID: 11400000, guid: 31ef964f64f38034aacb40476ff3984a, type: 2}
-  _roamingAroundSpawningPositionConfigSO: {fileID: 11400000, guid: c9e9557f6830a06409163830f7615efd,
-    type: 2}
-  _droppableRewardSO: {fileID: 11400000, guid: 6158158d6ef9a3d47827f7851295bcef, type: 2}
+  _name:
+    m_TableReference:
+      m_TableCollectionName: 
+    m_TableEntryReference:
+      m_KeyId: 0
+      m_Key: 
+  _movementConfigSO: {fileID: 11400000, guid: fbbc389a389128d4181de1d6f6b22739, type: 2}
+  _healthConfigSO: {fileID: 11400000, guid: 301a61db8a2a4ef408992e723f0b6b53, type: 2}
   _getHitEffectSO: {fileID: 11400000, guid: b025ed16ca528cd4da2ec4afe52db2d4, type: 2}
   _mainMeshRenderer: {fileID: 855856000742017355}
+  _droppableRewardSO: {fileID: 11400000, guid: 6158158d6ef9a3d47827f7851295bcef, type: 2}
+  _attackConfigSO: {fileID: 11400000, guid: b8283b4a85847b44993fc5a971db3ac8, type: 2}
+  _chasingConfigSO: {fileID: 11400000, guid: 31ef964f64f38034aacb40476ff3984a, type: 2}
 --- !u!1001 &4629040063581857200
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -319,6 +324,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: PlantCritter
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 415e24332f8993c4da4c452ed27d2873,
+        type: 3}
+      propertyPath: m_TagString
+      value: Critter
       objectReference: {fileID: 0}
     - target: {fileID: 8417361359673230750, guid: 415e24332f8993c4da4c452ed27d2873,
         type: 3}

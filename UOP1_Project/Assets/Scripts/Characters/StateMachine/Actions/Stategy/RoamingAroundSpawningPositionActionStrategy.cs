@@ -1,15 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.AI;
-using UOP1.StateMachine;
-using UOP1.StateMachine.ScriptableObjects;
 
-[CreateAssetMenu(fileName = "RoamingAroundSpawningPositionAction", menuName = "State Machines/Actions/Roaming Around Spawning Position Action")]
-public class RoamingAroundSpawningPositionActionSO : StateActionSO
-{
-	protected override StateAction CreateAction() => new RoamingAroundSpawningPositionAction();
-}
-
-public class RoamingAroundSpawningPositionAction : StateAction
+public class RoamingAroundSpawningPositionActionStrategy : IMovementActionStrategy
 {
 	private NavMeshAgent _agent;
 	private bool _isActiveAgent;
@@ -20,22 +12,16 @@ public class RoamingAroundSpawningPositionAction : StateAction
 
 	private Vector3 _roamingTargetPosition;
 
-	public override void Awake(StateMachine stateMachine)
+	public RoamingAroundSpawningPositionActionStrategy(GameObject gameObject, RoamingAroundSpawningPositionConfigSO config)
 	{
-		RoamingAroundSpawningPositionConfigSO config = stateMachine.GetComponent<Critter>().RoamingAroundSpawningPositionConfig;
-		_agent = stateMachine.gameObject.GetComponent<NavMeshAgent>();
+		_agent = gameObject.GetComponent<NavMeshAgent>();
 		_isActiveAgent = _agent != null && _agent.isActiveAndEnabled && _agent.isOnNavMesh;
-		_startPosition = stateMachine.transform.position;
+		_startPosition = gameObject.transform.position;
 		_roamingSpeed = config.RoamingSpeed;
 		_roamingDistance = config.RoamingDistance;
 	}
 
-	public override void OnUpdate()
-	{
-
-	}
-
-	public override void OnStateEnter()
+	public void ApplyMovementOnStateEnter()
 	{
 		if (_isActiveAgent)
 		{
@@ -44,6 +30,16 @@ public class RoamingAroundSpawningPositionAction : StateAction
 			_agent.isStopped = false;
 			_agent.SetDestination(_roamingTargetPosition);
 		}
+	}
+
+	public void ApplyMovementOnStateExit()
+	{
+
+	}
+
+	public void ApplyMovementOnUpdate()
+	{
+
 	}
 
 	// Compute a random target position around the starting position.

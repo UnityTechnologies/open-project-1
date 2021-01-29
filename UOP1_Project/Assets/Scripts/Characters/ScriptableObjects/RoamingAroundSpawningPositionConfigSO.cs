@@ -1,9 +1,7 @@
 ﻿using UnityEngine;
-using UnityEditor;
-using UnityEngine.AI;
 
-[CreateAssetMenu(fileName = "RoamingAroundSpawningPosition", menuName = "Characters/Roaming Around Spawning Position NPC Movement")]
-public class RoamingAroundSpawningPositionConfigSO : ScriptableObject
+[CreateAssetMenu(fileName = "RoamingAroundSpawningPosition", menuName = "NPC/Roaming Around Spawning Position NPC Movement")]
+public class RoamingAroundSpawningPositionConfigSO : MovementConfigSO
 {
 	[Tooltip("How long the NPC wait before roaming somewhere else (in second).")]
 	[SerializeField] private float _stopDuration = default;

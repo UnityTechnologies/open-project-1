@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.Localization;
 
-[CreateAssetMenu(fileName = "AttackConfig", menuName = "Characters/Attack Config")]
+[CreateAssetMenu(fileName = "AttackConfig", menuName = "EntityConfig/Attack Config")]
 public class AttackConfigSO : ScriptableObject
 {
 	[Tooltip("Character attack strength")]

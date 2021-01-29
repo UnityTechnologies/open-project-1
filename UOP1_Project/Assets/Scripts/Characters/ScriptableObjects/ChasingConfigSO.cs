@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.AI;
 
-[CreateAssetMenu(fileName = "ChasingConfig", menuName = "Characters/Chasing Config")]
+[CreateAssetMenu(fileName = "ChasingConfig", menuName = "EntityConfig/Chasing Config")]
 public class ChasingConfigSO : ScriptableObject
 {
 	[Tooltip("Target transform anchor.")]
