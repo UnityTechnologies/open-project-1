@@ -12,17 +12,20 @@ using UnityEngine.UI;
 public class UIDialogueManager : MonoBehaviour
 {
 	[SerializeField] LocalizeStringEvent lineText = default;
-
 	[SerializeField] LocalizeStringEvent actorNameText = default;
-	[SerializeField] LocalizeStringEvent secondActorNameText = default;
 
+	#region DELETABLE_DEMO_CODE
+	[SerializeField] LocalizeStringEvent secondActorNameText = default;
+	[SerializeField] LocalizeStringEvent thirdActorNameText  = default;
 	[SerializeField] GameObject backgroundPanel;
+	#endregion
 
 	public void SetDialogue(DialogueLineSO dialogueLine)
 	{
 		lineText.StringReference = dialogueLine.Sentence;
 		actorNameText.StringReference = dialogueLine.Actor.ActorName;
 		secondActorNameText.StringReference = dialogueLine.Actor.ActorName;
+		thirdActorNameText.StringReference = dialogueLine.Actor.ActorName;
 
 		#region DELETABLE_DEMO_CODE
 		// Extract the localized string
@@ -45,6 +48,7 @@ public class UIDialogueManager : MonoBehaviour
 			lineText.gameObject.GetComponent<TextMeshProUGUI>().color = Color.black;
 
 			secondActorNameText.gameObject.GetComponent<TextMeshProUGUI>().text = "";
+			thirdActorNameText.gameObject.GetComponent<TextMeshProUGUI>().text = "";
 		}
 
 		if (actorName == "Evil Hamlet")
@@ -53,7 +57,18 @@ public class UIDialogueManager : MonoBehaviour
 			lineText.gameObject.GetComponent<TextMeshProUGUI>().color = Color.white;
 
 			actorNameText.gameObject.GetComponent<TextMeshProUGUI>().text = "";
+			thirdActorNameText.gameObject.GetComponent<TextMeshProUGUI>().text = "";
 		}
+
+		if (actorName == "Townsfolk")
+		{
+			backgroundPanel.GetComponent<Image>().color = Color.blue;
+			lineText.gameObject.GetComponent<TextMeshProUGUI>().color = Color.white;
+
+			actorNameText.gameObject.GetComponent<TextMeshProUGUI>().text = "";
+			secondActorNameText.gameObject.GetComponent<TextMeshProUGUI>().text = "";
+		}
+
 		#endregion
 	}
 }

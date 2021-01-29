@@ -21,6 +21,8 @@ public class DialogueBehaviour : PlayableBehaviour
 		// Get the normalized time (0 to 1) of the playhead over the current clip that is playing
 		float T = (float)(playable.GetTime() / playable.GetDuration());
 
+		// ExpressionManager sets the blink rate to be slower when the character is speaking...hence
+		// this block of code
 		if (_dialoguePlayed && T > 1)
 		{
 			cutsceneManager.ExpressionManager.SetCharacterTalkingState(_dialogueLine.Actor, false);
@@ -32,7 +34,8 @@ public class DialogueBehaviour : PlayableBehaviour
 		}
 
 		// Extract the localized string
-		var phonemeOp = LocalizationSettings.StringDatabase.GetLocalizedStringAsync(_dialogueLine.PhonemeSentence.TableReference, _dialogueLine.PhonemeSentence.TableEntryReference);
+		var phonemeOp = LocalizationSettings.StringDatabase.GetLocalizedStringAsync(_dialogueLine.PhonemeSentence.TableReference,
+																					_dialogueLine.PhonemeSentence.TableEntryReference);
 
 		string phonemeLine = null;
 		phonemeLine = phonemeOp.Result;
@@ -61,7 +64,7 @@ public class DialogueBehaviour : PlayableBehaviour
 			// Save this phoneme key so that it can be sent to the CutsceneManager
 			phonemeKey = newPhonemes[index];
 
-			Debug.Log("ACTIVE PHONEME = " + phonemeKey);
+		//	Debug.Log("ACTIVE PHONEME = " + phonemeKey);
 		}
 		else
 		{
@@ -80,9 +83,11 @@ public class DialogueBehaviour : PlayableBehaviour
 					if (!_dialoguePlayed)
 						cutsceneManager.PlayDialogueFromClip(_dialogueLine);
 
+					// Make sure this actor is registered with the ExpressionManager so that it can control the actor's expressions
 					if (!cutsceneManager.ExpressionManager.IsActorRegistered(_dialogueLine.Actor))
 						cutsceneManager.ExpressionManager.RegisterActor(_dialogueLine.Actor);
 
+					// Set the currently parsed phoneme as the active one
 					if (cutsceneManager.ExpressionManager.IsThereAnActivePhonemeSetForActor(_dialogueLine.Actor))
 						cutsceneManager.ExpressionManager.SetActivePhoneme(_dialogueLine.Actor, phonemeKey);
 

@@ -1,19 +1,23 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-// This class is essentially the phoneme texture "alphabet" in use. In other words, how the sounds the character
-// makes are translated into the final mouth texture.
+// To specify whether the character uses 2D (textures) or 3D (blendshapes) for mouth expressions
+public enum PhonemeType { TwoD, ThreeD }
+
+// This class is essentially the phoneme "alphabet" in use. In other words, how the sounds the character
+// makes are translated into the final mouth texture. It applies to characters whose facial expressions
+// are controlled via the mainTexture of a material (2D) or blend shapes (3D).
 [CreateAssetMenu(menuName = "Phonemes/New Phoneme Set")]
 public class PhonemeSetSO : ScriptableObject
 {
-	public List<Phoneme> Phonemes = new List<Phoneme>();
+	public PhonemeType Type;
+	public List<Phoneme> Phonemes = new List<Phoneme>(); // The "alphabet"
 
 	// Dictionary used for efficient runtime lookup
-	private Dictionary<string, Texture2D> _phonemeDictionary = new Dictionary<string, Texture2D>();
+	private Dictionary<string, object> _phonemeDictionary = new Dictionary<string, object>();
+	private bool _init = false;
 
-	public bool _init = false;
-
-	// Initialize the phoneme dictionary, which associates phoneme codes with mouth textures
+	// Initialize the phoneme dictionary, which associates phoneme codes with mouth textures or blend targets
 	public void Initialize()
 	{
 		_phonemeDictionary.Clear();
@@ -22,7 +26,14 @@ public class PhonemeSetSO : ScriptableObject
 		{
 			foreach (string s in p.Codes)
 			{
-				_phonemeDictionary.Add(s, p.MouthShape);
+				if (Type == PhonemeType.TwoD)
+				{
+					_phonemeDictionary.Add(s, p.MouthShape);
+				}
+				else if (Type == PhonemeType.ThreeD)
+				{
+					_phonemeDictionary.Add(s, p.BlendTargets);
+				}
 			}
 		}
 
@@ -30,14 +41,13 @@ public class PhonemeSetSO : ScriptableObject
 	}
 
 	// This function uses the phoneme dictionary to look up and return the corresponding mouth
-	// texture for a given phoneme code.
-	public Texture2D GetMouthShape(string phonemeKey)
+	// texture or blend target for a given phoneme code.
+	public object GetMouthShape(string phonemeKey)
 	{
 		if (!_init)
 			Initialize();
 
-		Texture2D mouthShape = null;
-
+		object mouthShape;
 		if (_phonemeDictionary.TryGetValue(phonemeKey, out mouthShape))
 		{
 			return mouthShape;

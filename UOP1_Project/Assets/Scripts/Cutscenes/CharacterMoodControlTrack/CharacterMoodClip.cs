@@ -4,15 +4,15 @@ using UnityEngine.Timeline;
 
 public class CharacterMoodClip : PlayableAsset, ITimelineClipAsset
 {
-	[HideInInspector] private CharacterMoodBehaviour _behaviour = default;
+	[HideInInspector] private CharacterMoodBehaviour _behaviour           = default;
 
-	[SerializeField] private MoodCollectionSO _moodSet = default;
-	[SerializeField] private bool _playRandomAnimation = true;
-	[SerializeField] private int _animationIndex = 0;
-	[SerializeField] private bool _enableBlinking = true;
-	[SerializeField] private bool _enablePhonemes = true;
-	[SerializeField] private bool _enableAnimations = true;
-	
+	[SerializeField] private MoodCollectionSO        _moodSet             = default;
+	[SerializeField] private bool					 _playRandomAnimation = true;
+	[SerializeField] private int					 _animationIndex      = 0;
+	[SerializeField] private bool				     _enableBlinking      = true;
+	[SerializeField] private bool					 _enablePhonemes      = true;
+	[SerializeField] private bool					 _enableAnimations    = true;
+
 	[HideInInspector] public ExpressionManager ExpressionManager;
 
 	public ClipCaps clipCaps

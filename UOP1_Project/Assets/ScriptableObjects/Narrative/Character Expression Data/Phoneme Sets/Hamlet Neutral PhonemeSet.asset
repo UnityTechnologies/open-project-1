@@ -10,10 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7788d84cbe948a24da99623efa61b463, type: 3}
-  m_Name: Hamlet Neutral Mouth Phonemes
+  m_Name: Hamlet Neutral PhonemeSet
   m_EditorClassIdentifier: 
+  Type: 0
   Phonemes:
-  - Name: K, AA, AE, AH, AO, AY, EH, EY, HH, IH, IY, UH, AW
+  - Name: AH Mouth
     Codes:
     - AA
     - AE
@@ -29,13 +30,37 @@ MonoBehaviour:
     - AW
     - K
     MouthShape: {fileID: 2800000, guid: f1dfac14bdbdc7140b47602877b378ad, type: 3}
-  - Name: Y, L, DH
+    BlendTargets: []
+  - Name: BMP Mouth
     Codes:
-    - Y
-    - L
+    - B
+    - M
+    - P
+    MouthShape: {fileID: 2800000, guid: 5ffe54504bb2e614a81310190faa735c, type: 3}
+    BlendTargets: []
+  - Name: SZ Mouth
+    Codes:
+    - CH
+    - D
     - DH
-    MouthShape: {fileID: 2800000, guid: d3d1d8cbaa6bef34eb444ff7cb145298, type: 3}
-  - Name: ER, OW, OY, R, UW, W
+    - G
+    - JH
+    - NG
+    - S
+    - SH
+    - T
+    - Z
+    - ZH
+    - N
+    MouthShape: {fileID: 2800000, guid: 0146d0a8cd42ae549bfade598b09713e, type: 3}
+    BlendTargets: []
+  - Name: FV Mouth
+    Codes:
+    - F
+    - V
+    MouthShape: {fileID: 2800000, guid: b8b01f96222b0aa4b943bc6df7f7511a, type: 3}
+    BlendTargets: []
+  - Name: OOH Mouth
     Codes:
     - ER
     - OW
@@ -43,31 +68,13 @@ MonoBehaviour:
     - R
     - UW
     - W
+    - Y
     MouthShape: {fileID: 2800000, guid: 000eb6aceea46874d836a76cd57f2a96, type: 3}
-  - Name: CH, D, G, JH, N, NG, S, SH, T, TH, Z, ZH
+    BlendTargets: []
+  - Name: L Mouth
     Codes:
-    - CH
-    - D
-    - G
-    - JH
-    - ZH
-    - N
-    - NG
-    - S
-    - SH
-    - T
     - TH
-    - Z
-    MouthShape: {fileID: 2800000, guid: 0146d0a8cd42ae549bfade598b09713e, type: 3}
-  - Name: F, V
-    Codes:
-    - F
-    - V
-    MouthShape: {fileID: 2800000, guid: b8b01f96222b0aa4b943bc6df7f7511a, type: 3}
-  - Name: B, M, P
-    Codes:
-    - B
-    - M
-    - P
-    MouthShape: {fileID: 2800000, guid: 5ffe54504bb2e614a81310190faa735c, type: 3}
+    - L
+    MouthShape: {fileID: 2800000, guid: d3d1d8cbaa6bef34eb444ff7cb145298, type: 3}
+    BlendTargets: []
   _init: 1
