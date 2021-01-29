@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-[CreateAssetMenu(fileName = "RoamingAroundSpawningPosition", menuName = "NPC/Roaming Around Spawning Position NPC Movement")]
+[CreateAssetMenu(fileName = "RoamingAroundSpawningPosition", menuName = "EntityConfig/Roaming Around Spawning Position NPC Movement")]
 public class RoamingAroundSpawningPositionConfigSO : MovementConfigSO
 {
 	[Tooltip("How long the NPC wait before roaming somewhere else (in second).")]

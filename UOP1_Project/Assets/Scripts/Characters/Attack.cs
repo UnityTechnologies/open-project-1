@@ -2,16 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Weapon : MonoBehaviour
+public class Attack : MonoBehaviour
 {
-	[SerializeField] private int _attackStrength = default;
+	[SerializeField]
+	private AttackConfigSO _attackConfigSO;
 
 	private bool _enable = false;
 	public bool Enable { get; set; }
 
-	public int AttackStrength
-	{
-		get => _attackStrength;
-	}
+	public AttackConfigSO AttackConfig => _attackConfigSO;
 
 }

@@ -12,19 +12,19 @@ public class IsEntityGettingHitSO : StateConditionSO
 public class IsEntityGettingHit : Condition
 {
 
-	private AttackableEntity _attackableEntity;
+	private Damageable _damageableEntity;
 
 	public override void Awake(StateMachine stateMachine)
 	{
-		_attackableEntity = stateMachine.GetComponent<AttackableEntity>();
+		_damageableEntity = stateMachine.GetComponent<Damageable>();
 	}
 
 	protected override bool Statement()
 	{
 		bool result = false;
-		if (_attackableEntity != null)
+		if (_damageableEntity != null)
 		{
-			result = _attackableEntity.getHit;
+			result = _damageableEntity.getHit;
 		}
 		return result;
 	}

@@ -17,7 +17,7 @@ public class IsAttackReloadedCondition : Condition
 
 	public override void Awake(StateMachine stateMachine)
 	{
-		_reloadDuration = stateMachine.GetComponent<Critter>().AttackConfigSO.AttackReloadDuration;
+		_reloadDuration = stateMachine.GetComponent<Attack>().AttackConfig.AttackReloadDuration;
 	}
 
 	public override void OnStateEnter()

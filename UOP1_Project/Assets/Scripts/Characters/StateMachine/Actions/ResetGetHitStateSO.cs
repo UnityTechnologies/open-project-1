@@ -10,11 +10,11 @@ public class ResetGetHitStateSO : StateActionSO
 
 public class ResetGetHitState : StateAction
 {
-	private AttackableEntity _attackableEntity;
+	private Damageable _damageableEntity;
 
 	public override void Awake(StateMachine stateMachine)
 	{
-		_attackableEntity = stateMachine.GetComponent<AttackableEntity>();
+		_damageableEntity = stateMachine.GetComponent<Damageable>();
 	}
 
 	public override void OnUpdate()
@@ -24,6 +24,6 @@ public class ResetGetHitState : StateAction
 
 	public override void OnStateExit()
 	{
-		_attackableEntity.getHit = false;
+		_damageableEntity.getHit = false;
 	}
 }

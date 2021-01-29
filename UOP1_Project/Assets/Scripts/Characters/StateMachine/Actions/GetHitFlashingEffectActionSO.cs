@@ -20,7 +20,7 @@ public class GetHitFlashingEffectAction : StateAction
 
 	public override void Awake(StateMachine stateMachine)
 	{
-		AttackableEntity attackableEntity = stateMachine.GetComponent<AttackableEntity>();
+		Damageable attackableEntity = stateMachine.GetComponent<Damageable>();
 		GetHitEffectConfigSO getHitEffectConfig = attackableEntity.GetHitEffectConfig;
 
 		// Take the last one if many.

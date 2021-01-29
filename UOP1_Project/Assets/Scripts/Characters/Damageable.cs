@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Localization;
 
-public class AttackableEntity : NpcEntity
+public class Damageable : MonoBehaviour
 {
 	[SerializeField]
 	private HealthConfigSO _healthConfigSO;
@@ -11,6 +11,11 @@ public class AttackableEntity : NpcEntity
 
 	[SerializeField]
 	private Renderer _mainMeshRenderer;
+
+	[SerializeField]
+	private DroppableRewardConfigSO _droppableRewardSO;
+
+	public DroppableRewardConfigSO DropableRewardConfig => _droppableRewardSO;
 
 	private int _currentHealth = default;
 
@@ -40,10 +45,10 @@ public class AttackableEntity : NpcEntity
 		// Avoid friendly fire!
 		if (!other.tag.Equals(gameObject.tag))
 		{
-			Weapon weapon = other.GetComponent<Weapon>();
-			if (!getHit && weapon != null && weapon.Enable)
+			Attack attack = other.GetComponent<Attack>();
+			if (!getHit && attack != null && attack.Enable)
 			{
-				ReceiveAnAttack(weapon.AttackStrength);
+				ReceiveAnAttack(attack.AttackConfig.AttackStrength);
 			}
 		}
 	}

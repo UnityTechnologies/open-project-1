@@ -10,19 +10,19 @@ public class IsEntityKilledHitSO : StateConditionSO
 
 public class IsEntityKilledHit : Condition
 {
-	private AttackableEntity _attackableEntity;
+	private Damageable _damageableEntity;
 
 	public override void Awake(StateMachine stateMachine)
 	{
-		_attackableEntity = stateMachine.GetComponent<AttackableEntity>();
+		_damageableEntity = stateMachine.GetComponent<Damageable>();
 	}
 
 	protected override bool Statement()
 	{
 		bool result = false;
-		if (_attackableEntity != null)
+		if (_damageableEntity != null)
 		{
-			result = _attackableEntity.isDead;
+			result = _damageableEntity.isDead;
 		}
 		return result;
 	}

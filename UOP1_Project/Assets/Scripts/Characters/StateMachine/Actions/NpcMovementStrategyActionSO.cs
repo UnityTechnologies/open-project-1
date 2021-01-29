@@ -15,7 +15,7 @@ public class MovementStrategyAction : StateAction
 
 	public override void Awake(StateMachine stateMachine)
 	{
-		MovementConfigSO config = stateMachine.GetComponent<NpcEntity>().MovementConfig;
+		MovementConfigSO config = stateMachine.GetComponent<NPCAgent>().MovementConfig;
 		if (typeof(StaticMovementConfigSO).IsInstanceOfType(config))
 		{
 			_movementStrategy = new StaticMovementActionStrategy(stateMachine.gameObject, (StaticMovementConfigSO)config);

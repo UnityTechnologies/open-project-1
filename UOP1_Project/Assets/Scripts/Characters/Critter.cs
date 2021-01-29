@@ -1,10 +1,7 @@
 ﻿using UnityEngine;
 
-public class Critter : DroppingEntity
+public class Critter : MonoBehaviour
 {
-	[SerializeField]
-	private AttackConfigSO _attackConfigSO;
-
 	[SerializeField]
 	private ChasingConfigSO _chasingConfigSO;
 
@@ -12,6 +9,4 @@ public class Critter : DroppingEntity
 	public bool isPlayerInAttackZone { get; set; }
 
 	public ChasingConfigSO ChasingConfig => _chasingConfigSO;
-	public AttackConfigSO AttackConfigSO => _attackConfigSO;
-	
 }
