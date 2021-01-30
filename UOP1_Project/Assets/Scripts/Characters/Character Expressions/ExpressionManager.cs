@@ -530,12 +530,22 @@ public class ExpressionManager : MonoBehaviour
 			_mouthTimer.Add(actor, 0.0f);
 
 		SampleNewBlinkValues(actor);
+
+		// Call actor.OnStart() so that material and blendshape properties are backed up
+		actor.OnStart();
 	}
 
 	// Unregister an actor from the Expression manager
 	public void UnregisterActor(ActorSO actor)
 	{
 		_registeredActors.Remove(actor);
+	}
+	
+	private void OnDestroy()
+	{
+		// Make sure material properties revert to edit mode settings
+		foreach (ActorSO actor in _registeredActors)
+			actor.OnReset();
 	}
 
 	// Check to see if a particular actor is registered (and therefore, able to have expressions applied)

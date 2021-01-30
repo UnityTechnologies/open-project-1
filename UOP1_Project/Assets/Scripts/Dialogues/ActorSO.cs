@@ -22,9 +22,55 @@ public class ActorSO : ScriptableObject
 	[SerializeField] private Material          _mouthMaterial        = default;
 
 	// Private
+	private Material _backupEyeMaterial;
+	private Material _backupMouthMaterial;
+	private List<float> _backupBlendShapes;
 	private HashSet<Animator>       _animator             = new HashSet<Animator>();
 	private SkinnedMeshRenderer     _smr                  = null;
 	private Dictionary<string, int> _blendShapeDictionary = new Dictionary<string, int>();
+
+	// Record textures and blend shapes before pressing play so that they can be restored when out of play mode
+	public void OnStart()
+	{
+		_backupEyeMaterial = new Material(Shader.Find("Unlit/Transparent"));
+		_backupMouthMaterial = new Material(Shader.Find("Unlit/Transparent"));
+
+		if (_eyeMaterial)
+			_backupEyeMaterial.mainTexture = _eyeMaterial.mainTexture;
+
+		if (_mouthMaterial)
+			_backupMouthMaterial.mainTexture = _mouthMaterial.mainTexture;
+
+		if (_smr)
+		{
+			Mesh mesh = _smr.sharedMesh;
+
+			for (int i = 0; i < mesh.blendShapeCount; i++)
+			{
+				_backupBlendShapes.Add(_smr.GetBlendShapeWeight(i));
+			}
+		}
+	}
+
+	// Restore texture and blend shapes as they were before play was pressed
+	public void OnReset()
+	{
+		if (_eyeMaterial)
+			_eyeMaterial.mainTexture = _backupEyeMaterial.mainTexture;
+
+		if (_mouthMaterial)
+			_mouthMaterial.mainTexture = _backupMouthMaterial.mainTexture;
+
+		if (_smr)
+		{
+			Mesh mesh = _smr.sharedMesh;
+
+			for (int i = 0; i < mesh.blendShapeCount; i++)
+			{
+				_smr.SetBlendShapeWeight(i, _backupBlendShapes[i]);
+			}
+		}
+	}
 
 	// ---- ANIMATION CONTROL ----
 	// This will register an animator to the hash set so that this script will have
