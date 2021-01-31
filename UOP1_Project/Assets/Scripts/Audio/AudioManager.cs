@@ -142,7 +142,7 @@ public class AudioManager : MonoBehaviour
 			{
 				soundEmitters[i].Finish();
 				soundEmitters[i].OnSoundFinishedPlaying += OnSoundEmitterFinishedPlaying;
-			}		
+			}
 		}
 
 		return isFound;
@@ -172,7 +172,7 @@ public class AudioManager : MonoBehaviour
 
 	private void StopAndCleanEmitter(SoundEmitter soundEmitter)
 	{
-		if(soundEmitter.IsFinishing())
+		if (soundEmitter.IsFinishing())
 			soundEmitter.OnSoundFinishedPlaying -= OnSoundEmitterFinishedPlaying;
 
 		soundEmitter.Stop();
