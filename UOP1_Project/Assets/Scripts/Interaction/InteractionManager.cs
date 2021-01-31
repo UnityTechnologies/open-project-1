@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 public enum InteractionType { None = 0, PickUp, Cook, Talk };
 
@@ -105,6 +106,8 @@ public class InteractionManager : MonoBehaviour
 			default:
 				break;
 		}
+
+		StartCoroutine(ClearInteractionCache());
 	}
 
 	private void OnTriggerEnter(Collider other)
@@ -148,5 +151,11 @@ public class InteractionManager : MonoBehaviour
 
 		if (_toggleInteractionUI != null)
 			_toggleInteractionUI.RaiseEvent(false, _potentialInteraction);
+	}
+
+	private IEnumerator ClearInteractionCache()
+	{
+		yield return null;
+		currentInteraction = InteractionType.None;
 	}
 }
