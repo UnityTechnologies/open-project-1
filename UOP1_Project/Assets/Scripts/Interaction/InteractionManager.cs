@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -104,8 +103,6 @@ public class InteractionManager : MonoBehaviour
 			default:
 				break;
 		}
-
-		StartCoroutine(ClearInteractionCache());
 	}
 
 	private void OnTriggerEnter(Collider other)
@@ -167,11 +164,5 @@ public class InteractionManager : MonoBehaviour
 		{
 			_toggleInteractionUI.RaiseEvent(false, InteractionType.None);
 		}
-	}
-
-	private IEnumerator ClearInteractionCache()
-	{
-		yield return null;
-		currentInteraction = InteractionType.None;
 	}
 }
