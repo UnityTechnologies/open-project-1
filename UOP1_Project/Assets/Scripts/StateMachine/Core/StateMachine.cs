@@ -26,6 +26,24 @@ namespace UOP1.StateMachine
 #endif
 		}
 
+#if UNITY_EDITOR
+		private void OnEnable()
+		{
+			UnityEditor.AssemblyReloadEvents.afterAssemblyReload += OnAfterAssemblyReload;
+		}
+
+		private void OnAfterAssemblyReload()
+		{
+			_currentState = _transitionTableSO.GetInitialState(this);
+			_debugger.Awake(this);
+		}
+
+		private void OnDisable()
+		{
+			UnityEditor.AssemblyReloadEvents.afterAssemblyReload -= OnAfterAssemblyReload;
+		}
+#endif
+
 		private void Start()
 		{
 			_currentState.OnStateEnter();
