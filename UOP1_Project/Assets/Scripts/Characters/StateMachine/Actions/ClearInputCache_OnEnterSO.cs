@@ -18,11 +18,11 @@ public class ClearInputCache_OnEnter : StateAction
 		_protagonist = stateMachine.GetComponent<Protagonist>();
 		_interactionManager = stateMachine.GetComponentInChildren<InteractionManager>();
 	}
-	
+
 	public override void OnUpdate()
 	{
 	}
-	
+
 	public override void OnStateEnter()
 	{
 		_protagonist.jumpInput = false;
