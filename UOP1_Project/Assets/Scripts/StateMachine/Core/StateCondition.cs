@@ -27,9 +27,6 @@ namespace UOP1.StateMachine
 		/// </summary>
 		internal bool GetStatement()
 		{
-			if (!_originSO.cacheResult)
-				return Statement();
-
 			if (!_isCached)
 			{
 				_isCached = true;
