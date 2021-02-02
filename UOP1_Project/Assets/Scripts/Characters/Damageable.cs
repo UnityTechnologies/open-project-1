@@ -21,10 +21,10 @@ public class Damageable : MonoBehaviour
 
 	public bool getHit { get; set; }
 	public bool isDead { get; set; }
-	
+
 	public GetHitEffectConfigSO GetHitEffectConfig => _getHitEffectSO;
 	public Renderer MainMeshRenderer => _mainMeshRenderer;
-	
+
 	private void Awake()
 	{
 		_currentHealth = _healthConfigSO.MaxHealth;

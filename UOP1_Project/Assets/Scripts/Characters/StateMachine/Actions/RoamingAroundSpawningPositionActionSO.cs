@@ -31,7 +31,7 @@ public class RoamingAroundSpawningPositionAction : StateAction
 
 	public override void Awake(StateMachine stateMachine)
 	{
-		RoamingAroundSpawningPositionActionSO config = (RoamingAroundSpawningPositionActionSO)OriginSO; 
+		RoamingAroundSpawningPositionActionSO config = (RoamingAroundSpawningPositionActionSO)OriginSO;
 		_agent = stateMachine.gameObject.GetComponent<NavMeshAgent>();
 		_isActiveAgent = _agent != null && _agent.isActiveAndEnabled && _agent.isOnNavMesh;
 		_startPosition = stateMachine.gameObject.transform.position;
