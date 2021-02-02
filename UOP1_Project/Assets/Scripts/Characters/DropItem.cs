@@ -8,8 +8,8 @@ public class DropItem
 	Item _item;
 
 	[SerializeField]
-	float _dropRate;
+	float _itemDropRate;
 
 	public Item Item => _item;
-	public float DropRate => _dropRate;
+	public float ItemDropRate => _itemDropRate;
 }
