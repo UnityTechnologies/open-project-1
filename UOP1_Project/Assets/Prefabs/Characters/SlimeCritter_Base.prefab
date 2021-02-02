@@ -1,18 +1,63 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!135 &4665385715536349190
+--- !u!1 &3916043639789646247
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5196097238923229864}
+  - component: {fileID: 9177114005132659550}
+  - component: {fileID: 4088571348706217679}
+  m_Layer: 0
+  m_Name: AttackSphere
+  m_TagString: Critter
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5196097238923229864
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3916043639789646247}
+  m_LocalRotation: {x: -0.007215321, y: -0.0072048903, z: 0.7107057, w: 0.70341563}
+  m_LocalPosition: {x: -0.21043597, y: -0.0028094123, z: -0.002252251}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 2363228440819588299}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!135 &9177114005132659550
 SphereCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8687264390989375961}
+  m_GameObject: {fileID: 3916043639789646247}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.45
-  m_Center: {x: 0, y: 0.32, z: 0}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &4088571348706217679
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3916043639789646247}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37d3da059d8e76b439a7bd852dfb1f1f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _attackConfigSO: {fileID: 11400000, guid: fa67200955f70e64abecdd0107951472, type: 2}
 --- !u!135 &6188918218575104391
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -24,7 +69,20 @@ SphereCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 0.35
+  m_Center: {x: 0, y: 0.32, z: 0}
+--- !u!135 &6274847306283701072
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8687264390989375961}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.4
   m_Center: {x: 0, y: 0.32, z: 0}
 --- !u!114 &-4815453607611708844
 MonoBehaviour:
@@ -78,19 +136,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d83d74df43f0a0b42afeaffe5c3e02cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1842825883340861665
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8687264390989375961}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 37d3da059d8e76b439a7bd852dfb1f1f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _attackConfigSO: {fileID: 11400000, guid: fa67200955f70e64abecdd0107951472, type: 2}
 --- !u!114 &2038924309811281612
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -384,6 +429,12 @@ Transform:
 --- !u!4 &6359161719296748449 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -6048770967118889175, guid: 63937395ff7a888419d4b8fe450d3c91,
+    type: 3}
+  m_PrefabInstance: {fileID: 8380694498511901832}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &2363228440819588299 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -3132840127588890557, guid: 63937395ff7a888419d4b8fe450d3c91,
     type: 3}
   m_PrefabInstance: {fileID: 8380694498511901832}
   m_PrefabAsset: {fileID: 0}

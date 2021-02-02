@@ -25,6 +25,8 @@ public class Damageable : MonoBehaviour
 	public GetHitEffectConfigSO GetHitEffectConfig => _getHitEffectSO;
 	public Renderer MainMeshRenderer => _mainMeshRenderer;
 
+	public int CurrentHealth => _currentHealth;
+
 	private void Awake()
 	{
 		_currentHealth = _healthConfigSO.MaxHealth;

@@ -144,6 +144,20 @@ MonoBehaviour:
     m_MaintainRotationOffset: 0
   m_SourceObjectsGUIToggle: 1
   m_SettingsGUIToggle: 1
+--- !u!136 &3978636366682026695
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 309633228405838073}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  m_Radius: 0.34339768
+  m_Height: 1.3
+  m_Direction: 1
+  m_Center: {x: 0.023397654, y: 0.65, z: 2.217162e-10}
 --- !u!143 &7139847135753839646
 CharacterController:
   m_ObjectHideFlags: 0
@@ -225,7 +239,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _healthConfigSO: {fileID: 11400000, guid: e45145042f2750b448851311cae4a1ec, type: 2}
-  _getHitEffectSO: {fileID: 11400000, guid: efe1f84589f6f1f47a7a10a1a215e843, type: 2}
+  _getHitEffectSO: {fileID: 11400000, guid: 670b8ed8d060e674aa8c90b1187ea592, type: 2}
   _mainMeshRenderer: {fileID: 2643181883930254223}
   _droppableRewardSO: {fileID: 11400000, guid: f155590e3f62ce94ea050caa8fd5403e, type: 2}
 --- !u!114 &3326384532942868502
@@ -545,35 +559,6 @@ Transform:
   m_Father: {fileID: 7980046698497209273}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!54 &1505046488474153364
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2700848795901119205}
-  serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_UseGravity: 1
-  m_IsKinematic: 1
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
---- !u!114 &2950959790634801748
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2700848795901119205}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 37d3da059d8e76b439a7bd852dfb1f1f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _attackConfigSO: {fileID: 11400000, guid: b8283b4a85847b44993fc5a971db3ac8, type: 2}
 --- !u!1 &2346068202725057742
 GameObject:
   m_ObjectHideFlags: 0
@@ -604,6 +589,35 @@ Transform:
   m_Father: {fileID: 3060529613368993013}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!54 &1505046488474153364
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2700848795901119205}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!114 &2950959790634801748
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2700848795901119205}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37d3da059d8e76b439a7bd852dfb1f1f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _attackConfigSO: {fileID: 11400000, guid: b8283b4a85847b44993fc5a971db3ac8, type: 2}
 --- !u!1 &3054586532798924688
 GameObject:
   m_ObjectHideFlags: 0
@@ -4164,15 +4178,15 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 616254372594363816}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &8520217290748661238 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: -94429984831856546, guid: c478a391cfbc4b74ebda3f9a57283705,
-    type: 3}
-  m_PrefabInstance: {fileID: 616254372594363816}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &8132278368170902139 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -552033998009847853, guid: c478a391cfbc4b74ebda3f9a57283705,
+    type: 3}
+  m_PrefabInstance: {fileID: 616254372594363816}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &8520217290748661238 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -94429984831856546, guid: c478a391cfbc4b74ebda3f9a57283705,
     type: 3}
   m_PrefabInstance: {fileID: 616254372594363816}
   m_PrefabAsset: {fileID: 0}
@@ -4321,6 +4335,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: WalkingCane
+      objectReference: {fileID: 0}
+    - target: {fileID: 4112729716880871686, guid: 2805eb0b3dc773b4a8d0d171134e062c,
+        type: 3}
+      propertyPath: m_TagString
+      value: Player
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2805eb0b3dc773b4a8d0d171134e062c, type: 3}
