@@ -20,11 +20,11 @@ public class InteractionManager : MonoBehaviour
 	[Header("Listening to")]
 	//Check if the interaction ended 
 	[SerializeField] private VoidEventChannelSO _onInteractionEnded = default;
-	[SerializeField] private VoidEventChannelSO _oninteractResponsed = default;
+	[SerializeField] private VoidEventChannelSO _oninteractionResponsed = default;
 	private void OnEnable()
 	{
 		_inputReader.interactEvent += OnInteractionButtonPress;
-		_oninteractResponsed.OnEventRaised += OninteractionResponseActivated;
+		_oninteractionResponsed.OnEventRaised += OnInteractionResponseActivated;
 		_onInteractionEnded.OnEventRaised += OnInteractionEnd;
 		
 	}
@@ -32,7 +32,7 @@ public class InteractionManager : MonoBehaviour
 	private void OnDisable()
 	{
 		_inputReader.interactEvent -= OnInteractionButtonPress;
-		_oninteractResponsed.OnEventRaised -= OninteractionResponseActivated;
+		_oninteractionResponsed.OnEventRaised -= OnInteractionResponseActivated;
 		_onInteractionEnded.OnEventRaised -= OnInteractionEnd;
 	}
 
@@ -55,7 +55,7 @@ public class InteractionManager : MonoBehaviour
 	}
 
 	//  interaction button press event handler activated by the StateMachine
-	void OninteractionResponseActivated()
+	void OnInteractionResponseActivated()
 	{
 		//remove interaction after press
 		Interaction onGoingInteraction = _ongoingInteractions.Count > 0 ?
