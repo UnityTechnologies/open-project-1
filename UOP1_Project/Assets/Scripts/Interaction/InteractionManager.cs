@@ -20,16 +20,19 @@ public class InteractionManager : MonoBehaviour
 	[Header("Listening to")]
 	//Check if the interaction ended 
 	[SerializeField] private VoidEventChannelSO _onInteractionEnded = default;
-
+	[SerializeField] private VoidEventChannelSO _oninteractResponsed = default;
 	private void OnEnable()
 	{
 		_inputReader.interactEvent += OnInteractionButtonPress;
+		_oninteractResponsed.OnEventRaised += OninteractionResponseActivated;
 		_onInteractionEnded.OnEventRaised += OnInteractionEnd;
+		
 	}
 
 	private void OnDisable()
 	{
 		_inputReader.interactEvent -= OnInteractionButtonPress;
+		_oninteractResponsed.OnEventRaised -= OninteractionResponseActivated;
 		_onInteractionEnded.OnEventRaised -= OnInteractionEnd;
 	}
 
@@ -51,7 +54,8 @@ public class InteractionManager : MonoBehaviour
 		}
 	}
 
-	void OnInteractionButtonPress()
+	//  interaction button press event handler activated by the StateMachine
+	void OninteractionResponseActivated()
 	{
 		//remove interaction after press
 		Interaction onGoingInteraction = _ongoingInteractions.Count > 0 ?
@@ -70,10 +74,8 @@ public class InteractionManager : MonoBehaviour
 					Item currentItem = itemObject.GetComponent<CollectibleItem>().GetItem();
 					_onObjectPickUp.RaiseEvent(currentItem);
 					//Debug.Log("PickUp event raised");
-					//set current interaction for state machine
-					currentInteraction = InteractionType.PickUp;
 				}
-				//destroy the GO
+
 				Destroy(itemObject);
 				break;
 			case InteractionType.Cook:
@@ -84,11 +86,10 @@ public class InteractionManager : MonoBehaviour
 					//Change the action map
 					_inputReader.EnableMenuInput();
 					//set current interaction for state machine
-					currentInteraction = InteractionType.Cook;
 				}
 				break;
 			case InteractionType.Talk:
-				if (_onCookingStart != null)
+				if (_startTalking != null)
 				{
 					//raise an event with an actor as parameter
 					//Actor currentActor = currentInteractableObject.GetComponent<Dialogue>().GetActor();
@@ -97,11 +98,22 @@ public class InteractionManager : MonoBehaviour
 					//Change the action map
 					_inputReader.EnableDialogueInput();
 					//set current interaction for state machine
-					currentInteraction = InteractionType.Talk;
+
 				}
 				break;
 			default:
 				break;
+		}
+	}
+
+	void OnInteractionButtonPress()
+	{
+		Interaction onGoingInteraction = _ongoingInteractions.Count > 0 ?
+		_ongoingInteractions.First.Value : Interaction.NONE;
+		//set current interaction for state machine
+		if (onGoingInteraction.Type != InteractionType.None)
+		{
+			currentInteraction = onGoingInteraction.Type;
 		}
 	}
 
