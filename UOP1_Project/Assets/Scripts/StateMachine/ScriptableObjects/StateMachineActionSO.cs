@@ -5,7 +5,7 @@ namespace UOP1.StateMachine.ScriptableObjects
 	using System;
 	using System.Collections.Generic;
 
-	[CreateAssetMenu(fileName = "StateMachine", menuName = "State Machines/Actions/StateMachine")]
+	[CreateAssetMenu(fileName = "StateMachineAction", menuName = "State Machines/Actions/StateMachine")]
 	public class StateMachineActionSO : StateActionSO<StateMachineAction>
 	{
 		[Tooltip("Set the initial state of this StateMachine")]
