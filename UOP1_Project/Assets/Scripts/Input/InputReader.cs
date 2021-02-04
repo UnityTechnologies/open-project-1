@@ -12,6 +12,7 @@ public class InputReader : ScriptableObject, GameInput.IGameplayActions, GameInp
 	public event UnityAction jumpEvent = delegate { };
 	public event UnityAction jumpCanceledEvent = delegate { };
 	public event UnityAction attackEvent = delegate { };
+	public event UnityAction attackCanceledEvent = delegate { };
 	public event UnityAction interactEvent = delegate { }; // Used to talk, pickup objects, interact with tools like the cooking cauldron
 	public event UnityAction openInventoryEvent = delegate { }; // Used to bring up the inventory
 	public event UnityAction pauseEvent = delegate { };
@@ -57,8 +58,15 @@ public class InputReader : ScriptableObject, GameInput.IGameplayActions, GameInp
 
 	public void OnAttack(InputAction.CallbackContext context)
 	{
-		if (context.phase == InputActionPhase.Performed)
-			attackEvent.Invoke();
+		switch (context.phase)
+		{
+			case InputActionPhase.Performed:
+				attackEvent.Invoke();
+				break;
+			case InputActionPhase.Canceled:
+				attackCanceledEvent.Invoke();
+				break;
+		}
 	}
 
 	public void OnOpenInventory(InputAction.CallbackContext context)
