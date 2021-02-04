@@ -1,5 +1,5 @@
-﻿using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine;
 
 public enum InteractionType { None = 0, PickUp, Cook, Talk };
 

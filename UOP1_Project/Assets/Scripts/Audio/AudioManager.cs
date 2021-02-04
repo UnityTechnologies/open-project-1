@@ -27,15 +27,24 @@ public class AudioManager : MonoBehaviour
 	[Range(0f, 1f)]
 	[SerializeField] private float _sfxVolume = 1f;
 
+	private SoundEmitterList _soundEmitterList;
+
 	private void Awake()
 	{
 		//TODO: Get the initial volume levels from the settings
+		_soundEmitterList = new SoundEmitterList();
 
-		_SFXEventChannel.OnAudioCueRequested += PlayAudioCue;
-		_musicEventChannel.OnAudioCueRequested += PlayAudioCue; //TODO: Treat music requests differently?
+		RegisterChannel(_SFXEventChannel);
+		RegisterChannel(_musicEventChannel); //TODO: Treat music requests differently?
 
 		_pool.Prewarm(_initialSize);
 		_pool.SetParent(this.transform);
+	}
+
+	private void OnDestroy()
+	{
+		UnregisterChannel(_SFXEventChannel);
+		UnregisterChannel(_musicEventChannel);
 	}
 
 	/// <summary>
@@ -72,6 +81,20 @@ public class AudioManager : MonoBehaviour
 		}
 	}
 
+	private void RegisterChannel(AudioCueEventChannelSO audioCueEventChannel)
+	{
+		audioCueEventChannel.OnAudioCuePlayRequested += PlayAudioCue;
+		audioCueEventChannel.OnAudioCueStopRequested += StopAudioCue;
+		audioCueEventChannel.OnAudioCueFinishRequested += FinishAudioCue;
+	}
+
+	private void UnregisterChannel(AudioCueEventChannelSO audioCueEventChannel)
+	{
+		audioCueEventChannel.OnAudioCuePlayRequested += PlayAudioCue;
+		audioCueEventChannel.OnAudioCueStopRequested += StopAudioCue;
+		audioCueEventChannel.OnAudioCueFinishRequested += FinishAudioCue;
+	}
+
 	// Both MixerValueNormalized and NormalizedToMixerValue functions are used for easier transformations
 	/// when using UI sliders normalized format
 	private float MixerValueToNormalized(float mixerValue)
@@ -89,28 +112,69 @@ public class AudioManager : MonoBehaviour
 	/// <summary>
 	/// Plays an AudioCue by requesting the appropriate number of SoundEmitters from the pool.
 	/// </summary>
-	public void PlayAudioCue(AudioCueSO audioCue, AudioConfigurationSO settings, Vector3 position = default)
+	public AudioCueKey PlayAudioCue(AudioCueSO audioCue, AudioConfigurationSO settings, Vector3 position = default)
 	{
 		AudioClip[] clipsToPlay = audioCue.GetClips();
-		int nOfClips = clipsToPlay.Length;
+		SoundEmitter[] soundEmitterArray = new SoundEmitter[clipsToPlay.Length];
 
+		int nOfClips = clipsToPlay.Length;
 		for (int i = 0; i < nOfClips; i++)
 		{
-			SoundEmitter soundEmitter = _pool.Request();
-			if (soundEmitter != null)
+			soundEmitterArray[i] = _pool.Request();
+			if (soundEmitterArray[i] != null)
 			{
-				soundEmitter.PlayAudioClip(clipsToPlay[i], settings, audioCue.looping, position);
+				soundEmitterArray[i].PlayAudioClip(clipsToPlay[i], settings, audioCue.looping, position);
 				if (!audioCue.looping)
-					soundEmitter.OnSoundFinishedPlaying += OnSoundEmitterFinishedPlaying;
+					soundEmitterArray[i].OnSoundFinishedPlaying += OnSoundEmitterFinishedPlaying;
 			}
 		}
 
-		//TODO: Save the SoundEmitters that were activated, to be able to stop them if needed
+		return _soundEmitterList.Add(audioCue, soundEmitterArray);
+	}
+
+	public bool FinishAudioCue(AudioCueKey emitterKey)
+	{
+		bool isFound = _soundEmitterList.Get(emitterKey, out SoundEmitter[] soundEmitters);
+
+		if (isFound)
+		{
+			for (int i = 0; i < soundEmitters.Length; i++)
+			{
+				soundEmitters[i].Finish();
+				soundEmitters[i].OnSoundFinishedPlaying += OnSoundEmitterFinishedPlaying;
+			}
+		}
+
+		return isFound;
+	}
+
+	public bool StopAudioCue(AudioCueKey emitterKey)
+	{
+		bool isFound = _soundEmitterList.Get(emitterKey, out SoundEmitter[] soundEmitters);
+
+		if (isFound)
+		{
+			for (int i = 0; i < soundEmitters.Length; i++)
+			{
+				StopAndCleanEmitter(soundEmitters[i]);
+			}
+
+			_soundEmitterList.Remove(emitterKey);
+		}
+
+		return isFound;
 	}
 
 	private void OnSoundEmitterFinishedPlaying(SoundEmitter soundEmitter)
 	{
-		soundEmitter.OnSoundFinishedPlaying -= OnSoundEmitterFinishedPlaying;
+		StopAndCleanEmitter(soundEmitter);
+	}
+
+	private void StopAndCleanEmitter(SoundEmitter soundEmitter)
+	{
+		if (soundEmitter.IsFinishing())
+			soundEmitter.OnSoundFinishedPlaying -= OnSoundEmitterFinishedPlaying;
+
 		soundEmitter.Stop();
 		_pool.Return(soundEmitter);
 	}

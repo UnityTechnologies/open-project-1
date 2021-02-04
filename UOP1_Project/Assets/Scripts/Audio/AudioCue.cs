@@ -16,6 +16,8 @@ public class AudioCue : MonoBehaviour
 	[SerializeField] private AudioCueEventChannelSO _audioCueEventChannel = default;
 	[SerializeField] private AudioConfigurationSO _audioConfiguration = default;
 
+	private AudioCueKey controlKey = AudioCueKey.Invalid;
+
 	private void Start()
 	{
 		if (_playOnStart)
@@ -31,6 +33,28 @@ public class AudioCue : MonoBehaviour
 
 	public void PlayAudioCue()
 	{
-		_audioCueEventChannel.RaiseEvent(_audioCue, _audioConfiguration, transform.position);
+		controlKey = _audioCueEventChannel.RaisePlayEvent(_audioCue, _audioConfiguration, transform.position);
+	}
+
+	public void StopAudioCue()
+	{
+		if (controlKey != AudioCueKey.Invalid)
+		{
+			if (!_audioCueEventChannel.RaiseStopEvent(controlKey))
+			{
+				controlKey = AudioCueKey.Invalid;
+			}
+		}
+	}
+
+	public void FinishAudioCue()
+	{
+		if (controlKey != AudioCueKey.Invalid)
+		{
+			if (!_audioCueEventChannel.RaiseFinishEvent(controlKey))
+			{
+				controlKey = AudioCueKey.Invalid;
+			}
+		}
 	}
 }
