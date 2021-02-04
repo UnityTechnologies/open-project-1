@@ -75,7 +75,7 @@ public class InteractionManager : MonoBehaviour
 					_onObjectPickUp.RaiseEvent(currentItem);
 					//Debug.Log("PickUp event raised");
 				}
-
+				//destroy the GO
 				Destroy(itemObject);
 				break;
 			case InteractionType.Cook:
