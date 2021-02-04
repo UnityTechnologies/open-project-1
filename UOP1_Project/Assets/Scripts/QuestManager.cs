@@ -8,13 +8,13 @@ public class QuestManager : MonoBehaviour
 	[SerializeField] private QuestAncorSO _questAnchor = default;
 	// Start is called before the first frame update
 	void Start()
-    {
-		_questAnchor.StartGame(); 
-    }
+	{
+		_questAnchor.StartGame();
+	}
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+	// Update is called once per frame
+	void Update()
+	{
+
+	}
 }

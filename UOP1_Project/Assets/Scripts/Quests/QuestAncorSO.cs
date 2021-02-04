@@ -25,14 +25,14 @@ public class QuestAncorSO : ScriptableObject
 	[SerializeField] private ItemEventChannelSO _giveItemEvent = default;
 	[SerializeField] private ItemEventChannelSO _rewardItemEvent = default;
 
-	private QuestSO _currentQuest=null;
+	private QuestSO _currentQuest = null;
 	private QuestlineSO _currentQuestline;
 	private StepSO _currentStep;
 	private int _currentQuestIndex = 0;
 	private int _currentQuestlineIndex = 0;
 	private int _currentStepIndex = 0;
-	
-public	void StartGame()
+
+	public void StartGame()
 	{//Add code for saved information
 		if (_checkStepValidityEvent != null)
 		{
@@ -46,7 +46,7 @@ public	void StartGame()
 	}
 	void StartQuestline()
 	{
-				if (_questlines != null)
+		if (_questlines != null)
 		{
 			if (_questlines.Exists(o => !o.IsDone))
 			{
@@ -59,16 +59,16 @@ public	void StartGame()
 	}
 	bool hasStep(ActorSO actorToCheckWith)
 	{
-		if(_currentStep!=null)
+		if (_currentStep != null)
 		{
 
-			if(_currentStep.Actor== actorToCheckWith)
+			if (_currentStep.Actor == actorToCheckWith)
 			{
-				return true; 
+				return true;
 			}
 
 		}
-		return false; 
+		return false;
 
 	}
 	bool CheckQuestlineForQuestWithActor(ActorSO actorToCheckWith)
@@ -77,7 +77,7 @@ public	void StartGame()
 		{
 			if (_currentQuestline != null)
 			{
-				
+
 				return _currentQuestline.Quests.Exists(o => !o.IsDone && o.Steps != null && o.Steps[0].Actor == actorToCheckWith);
 
 			}
@@ -88,7 +88,7 @@ public	void StartGame()
 
 	public DialogueDataSO InteractWithCharacter(ActorSO actor, bool isCheckValidity, bool isValid)
 	{
-		Debug.Log("current quest"+ _currentQuest);
+		Debug.Log("current quest" + _currentQuest);
 		if (_currentQuest == null)
 		{
 			if (CheckQuestlineForQuestWithActor(actor))
@@ -117,7 +117,7 @@ public	void StartGame()
 			}
 			else
 			{
-				return _currentStep.DialogueBeforeStep; 
+				return _currentStep.DialogueBeforeStep;
 			}
 
 		}
@@ -160,7 +160,7 @@ public	void StartGame()
 			}
 
 	}
-	 void CheckStepValidity()
+	void CheckStepValidity()
 	{
 
 		if (_currentStep != null)
@@ -168,7 +168,7 @@ public	void StartGame()
 			switch (_currentStep.Type)
 			{
 				case stepType.checkItem:
-					
+
 					if (_inventory.Contains(_currentStep.Item))
 					{
 						_inventory.Contains(_currentStep.Item);
@@ -197,7 +197,7 @@ public	void StartGame()
 				case stepType.rewardItem:
 					_rewardItemEvent.RaiseEvent(_currentStep.Item);
 					//no dialogue is needed after Reward Item
-					if(_currentStep.CompleteDialogue !=null)
+					if (_currentStep.CompleteDialogue != null)
 					{
 						_completeDialogueEvent.RaiseEvent();
 					}
@@ -243,7 +243,7 @@ public	void StartGame()
 	}
 	void EndStep()
 	{
-		
+
 		_currentStep = null;
 
 		if (_currentQuest != null)
@@ -257,9 +257,9 @@ public	void StartGame()
 
 				}
 				else
-				{ 
+				{
 
-				EndQuest();
+					EndQuest();
 				}
 			}
 

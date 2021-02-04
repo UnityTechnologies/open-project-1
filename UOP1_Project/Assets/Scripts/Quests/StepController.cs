@@ -31,48 +31,48 @@ public class StepController : MonoBehaviour
 
 	private void Start()
 	{
-	
+
 		if (_winDialogueEvent != null)
 		{ _winDialogueEvent.OnEventRaised += PlayWinDialogue; }
 		if (_loseDialogueEvent != null)
 		{ _loseDialogueEvent.OnEventRaised += PlayLoseDialogue; }
-		
+
 
 	}
-	
+
 	void PlayDefaultDialogue()
 	{
-		
-			if (_defaultDialogue != null)
-			{
-				_currentDialogue = _defaultDialogue;
-				StartDialogue();
-			}
+
+		if (_defaultDialogue != null)
+		{
+			_currentDialogue = _defaultDialogue;
+			StartDialogue();
+		}
 
 	}
 
-	
+
 	//start a dialogue when interaction
 	//some Steps need to be instantanious. And do not need the interact button.
 	//when interaction again, restart same dialogue.
 	public void InteractWithCharacter()
 	{
-		
-		DialogueDataSO displayDialogue =_questAnchor.InteractWithCharacter(_actor, false, false);
+
+		DialogueDataSO displayDialogue = _questAnchor.InteractWithCharacter(_actor, false, false);
 		Debug.Log("dialogue " + displayDialogue + "actor" + _actor);
-			if (displayDialogue !=null)
-			{
-				_currentDialogue = displayDialogue;
-				StartDialogue(); 
-			}
-			else
-			{ 
-				PlayDefaultDialogue();
-			}
-		
+		if (displayDialogue != null)
+		{
+			_currentDialogue = displayDialogue;
+			StartDialogue();
+		}
+		else
+		{
+			PlayDefaultDialogue();
+		}
+
 	}
-	
-	
+
+
 	void StartDialogue()
 	{
 		if (_startDialogueEvent != null)
@@ -93,7 +93,7 @@ public class StepController : MonoBehaviour
 
 		}
 
-		
+
 
 	}
 	void PlayWinDialogue()
@@ -109,5 +109,5 @@ public class StepController : MonoBehaviour
 
 		}
 	}
-	
+
 }
