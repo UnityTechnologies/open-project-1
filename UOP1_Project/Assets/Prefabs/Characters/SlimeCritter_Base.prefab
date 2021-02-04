@@ -78,9 +78,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d83d74df43f0a0b42afeaffe5c3e02cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _critterSO: {fileID: 11400000, guid: fd7717100e602c446847524419231170, type: 2}
-  _collectibleItemPrefab: {fileID: 2126586097156616357, guid: 0f60adbc96570cb4e9898a0409956f1d,
-    type: 3}
+--- !u!114 &1842825883340861665
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8687264390989375961}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37d3da059d8e76b439a7bd852dfb1f1f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _attackConfigSO: {fileID: 11400000, guid: fa67200955f70e64abecdd0107951472, type: 2}
 --- !u!114 &2038924309811281612
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -94,8 +104,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _playerTransform: {fileID: 11400000, guid: 35fc4039342b6ba458d0d4429e89ee74, type: 2}
-  _propelFactor: 1
+  _propelFactor: 0.8
   _propelDuration: 0.2
+--- !u!114 &4341850141098197772
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8687264390989375961}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5645a5c5271ed1c419e7a9b472fbbcb7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _healthConfigSO: {fileID: 11400000, guid: fd7717100e602c446847524419231170, type: 2}
+  _getHitEffectSO: {fileID: 11400000, guid: efe1f84589f6f1f47a7a10a1a215e843, type: 2}
+  _mainMeshRenderer: {fileID: 7464116941563462636}
+  _droppableRewardSO: {fileID: 11400000, guid: 6158158d6ef9a3d47827f7851295bcef, type: 2}
 --- !u!1001 &2135821800440209491
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -326,6 +352,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: SlimeCritter_Base
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 63937395ff7a888419d4b8fe450d3c91,
+        type: 3}
+      propertyPath: m_TagString
+      value: Critter
+      objectReference: {fileID: 0}
     - target: {fileID: 1430996729439901540, guid: 63937395ff7a888419d4b8fe450d3c91,
         type: 3}
       propertyPath: m_RootBone
@@ -353,6 +384,12 @@ Transform:
 --- !u!4 &6359161719296748449 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -6048770967118889175, guid: 63937395ff7a888419d4b8fe450d3c91,
+    type: 3}
+  m_PrefabInstance: {fileID: 8380694498511901832}
+  m_PrefabAsset: {fileID: 0}
+--- !u!137 &7464116941563462636 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 1430996729439901540, guid: 63937395ff7a888419d4b8fe450d3c91,
     type: 3}
   m_PrefabInstance: {fileID: 8380694498511901832}
   m_PrefabAsset: {fileID: 0}
