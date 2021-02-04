@@ -124,7 +124,7 @@ public class Critter : MonoBehaviour
 				gameObject.transform.position + _collectibleItemPrefab.transform.localPosition +
 				2 * (randPosForward * Vector3.forward + randPosRight * Vector3.right),
 				gameObject.transform.localRotation);
-			collectibleItem.GetComponent<CollectibleItem>().SetItem( item);
+			collectibleItem.GetComponent<CollectibleItem>().SetItem(item);
 		}
 
 		// Remove Critter from the game

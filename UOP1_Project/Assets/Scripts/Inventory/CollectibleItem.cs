@@ -9,7 +9,7 @@ public class CollectibleItem : MonoBehaviour
 	[SerializeField] private SpriteRenderer[] _itemImages = default;
 	private void Start()
 	{
-		if(_itemImages!=null)
+		if (_itemImages != null)
 			SetCubeItem();
 	}
 
@@ -27,7 +27,7 @@ public class CollectibleItem : MonoBehaviour
 	}
 	public void SetItem(Item item)
 	{
-		_currentItem = item; 
+		_currentItem = item;
 
 	}
 	//this function is only for testing 

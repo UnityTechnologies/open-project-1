@@ -42,7 +42,7 @@ public class DialogueDataSO : ScriptableObject
 	// Each line would also have an event associated, or another Dialogue
 	private void OnEnable()
 	{
-	 SetDialogueLines();   
+		SetDialogueLines();
 	}
 	void SetDialogueLines()
 	{
@@ -55,23 +55,23 @@ public class DialogueDataSO : ScriptableObject
 			int index = 0;
 			LocalizedString _dialogueLine = null;
 			do
-			{  
-				index++; 
+			{
+				index++;
 				string key = "L" + index + "-" + this.name;
-				
+
 				if (collection.SharedData.Contains(key))
-				{  
+				{
 					_dialogueLine = new LocalizedString() { TableReference = "Questline Dialogue", TableEntryReference = key };
 					_dialogueLines.Add(_dialogueLine);
-				} 
-				else 
-				{  
-					
+				}
+				else
+				{
+
 					_dialogueLine = null;
 				}
 
-			} while (_dialogueLine != null );
-			
+			} while (_dialogueLine != null);
+
 		}
 	}
 }
