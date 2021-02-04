@@ -19,11 +19,11 @@ public class ActiveInteractionResponse_OnEnter : StateAction
 	
 	public override void OnUpdate()
 	{
+		OriginSO.interactResponse.RaiseEvent();
 	}
 	
 	public override void OnStateEnter()
 	{
-		OriginSO.interactResponse.RaiseEvent();
 	}
 	
 	public override void OnStateExit()
