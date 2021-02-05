@@ -25,6 +25,7 @@ public class CameraManager : MonoBehaviour
 	{
 		freeLookVCam.Follow = target;
 		freeLookVCam.LookAt = target;
+		freeLookVCam.OnTargetObjectWarped(target,target.position-freeLookVCam.transform.position);
 	}
 
 	private void OnEnable()
@@ -93,6 +94,7 @@ public class CameraManager : MonoBehaviour
 
 	private void OnFrameObjectEvent(Transform value)
 	{
+		Debug.Log("distance of player from camera:" + Vector3.Distance(freeLookVCam.transform.position,value.position));
 		SetupProtagonistVirtualCamera(value);
 	}
 }
