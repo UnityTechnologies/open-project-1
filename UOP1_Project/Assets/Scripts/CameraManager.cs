@@ -11,11 +11,7 @@ public class CameraManager : MonoBehaviour
 	private bool _isRMBPressed;
 
 	[SerializeField, Range(.5f, 3f)]
-	private float _speedMultiplier = 1f; //TODO: make this modifiable in the game settings
-
-	//this is the distance from player the camera will warp to when a new scene is loaded. this can be set individually on each scene, zero is the most consistent
-	[SerializeField,Tooltip("the distance from player the camera will warp to when a new scene is loaded")]
-	private float _SpawnDistanceFromPlayer = 0f; 											
+	private float _speedMultiplier = 1f; //TODO: make this modifiable in the game settings											
 	[SerializeField] private TransformAnchor _cameraTransformAnchor = default;
 
 	[Header("Listening on channels")]
@@ -29,9 +25,7 @@ public class CameraManager : MonoBehaviour
 	{
 		freeLookVCam.Follow = target;
 		freeLookVCam.LookAt = target;
-		//warp the camera to target without lerping to avoid long lerps
-		Vector3 positionDelta = (target.position-freeLookVCam.transform.position) - (target.position-freeLookVCam.transform.position).normalized*_SpawnDistanceFromPlayer;
-		freeLookVCam.OnTargetObjectWarped(target,positionDelta);
+		freeLookVCam.OnTargetObjectWarped(target,target.position-freeLookVCam.transform.position);
 	}
 
 	private void OnEnable()
