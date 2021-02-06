@@ -28,13 +28,13 @@ public class UIInventoryManager : MonoBehaviour
 	private List<InventoryItemFiller> instantiatedGameObjects;
 
 
-	public ItemEventChannelSo CookRecipeEvent;
-	public ItemEventChannelSo UseItemEvent;
-	public ItemEventChannelSo EquipItemEvent;
+	public ItemEventChannelSO CookRecipeEvent;
+	public ItemEventChannelSO UseItemEvent;
+	public ItemEventChannelSO EquipItemEvent;
 
 	public TabEventChannelSo ChangeTabEvent;
 
-	public ItemEventChannelSo SelectItemEvent;
+	public ItemEventChannelSO SelectItemEvent;
 
 	public VoidEventChannelSO ActionButtonClicked;
 

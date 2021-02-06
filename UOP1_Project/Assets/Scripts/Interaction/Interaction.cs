@@ -2,14 +2,12 @@
 
 public class Interaction
 {
-	public static Interaction NONE = new Interaction(InteractionType.None, null);
+	public InteractionType type;
+	public GameObject interactableObject;
 
-	public InteractionType Type;
-	public GameObject InteractableObject;
-
-	public Interaction(InteractionType type, GameObject obj)
+	public Interaction(InteractionType t, GameObject obj)
 	{
-		this.Type = type;
-		this.InteractableObject = obj;
+		type = t;
+		interactableObject = obj;
 	}
 }

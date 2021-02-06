@@ -77,7 +77,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d83d74df43f0a0b42afeaffe5c3e02cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _chasingConfigSO: {fileID: 11400000, guid: 31ef964f64f38034aacb40476ff3984a, type: 2}
+  isPlayerInAlertZone: 0
+  isPlayerInAttackZone: 0
+  currentTarget: {fileID: 0}
 --- !u!114 &5224987954583862020
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -127,7 +129,7 @@ PrefabInstance:
     - target: {fileID: 96998187169542721, guid: c823b09b59e206649a8779a78929fa2d,
         type: 3}
       propertyPath: _enterZone.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: set_isPlayerInAttackZone
+      value: OnAttackTriggerChange
       objectReference: {fileID: 0}
     - target: {fileID: 96998187169542726, guid: c823b09b59e206649a8779a78929fa2d,
         type: 3}
@@ -206,7 +208,7 @@ PrefabInstance:
     - target: {fileID: 96998187169542721, guid: c823b09b59e206649a8779a78929fa2d,
         type: 3}
       propertyPath: _enterZone.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: set_isPlayerInAlertZone
+      value: OnAlertTriggerChange
       objectReference: {fileID: 0}
     - target: {fileID: 96998187169542726, guid: c823b09b59e206649a8779a78929fa2d,
         type: 3}

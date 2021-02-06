@@ -27,6 +27,6 @@ public class ClearInputCache_OnEnter : StateAction
 	{
 		_protagonist.jumpInput = false;
 		_protagonist.attackInput = false;
-		_interactionManager.currentInteraction = InteractionType.None;
+		_interactionManager.currentInteractionType = InteractionType.None;
 	}
 }

@@ -78,6 +78,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d83d74df43f0a0b42afeaffe5c3e02cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isPlayerInAlertZone: 0
+  isPlayerInAttackZone: 0
+  currentTarget: {fileID: 0}
 --- !u!114 &1842825883340861665
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -142,7 +145,7 @@ PrefabInstance:
     - target: {fileID: 96998187169542721, guid: c823b09b59e206649a8779a78929fa2d,
         type: 3}
       propertyPath: _enterZone.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: set_isPlayerInAttackZone
+      value: OnAttackTriggerChange
       objectReference: {fileID: 0}
     - target: {fileID: 96998187169542726, guid: c823b09b59e206649a8779a78929fa2d,
         type: 3}
@@ -221,7 +224,7 @@ PrefabInstance:
     - target: {fileID: 96998187169542721, guid: c823b09b59e206649a8779a78929fa2d,
         type: 3}
       propertyPath: _enterZone.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: set_isPlayerInAlertZone
+      value: OnAlertTriggerChange
       objectReference: {fileID: 0}
     - target: {fileID: 96998187169542726, guid: c823b09b59e206649a8779a78929fa2d,
         type: 3}
@@ -300,7 +303,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 63937395ff7a888419d4b8fe450d3c91,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 3.43
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 63937395ff7a888419d4b8fe450d3c91,
         type: 3}
@@ -310,27 +313,27 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 63937395ff7a888419d4b8fe450d3c91,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 0.46
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 63937395ff7a888419d4b8fe450d3c91,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.3033554
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 63937395ff7a888419d4b8fe450d3c91,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 63937395ff7a888419d4b8fe450d3c91,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0.9528775
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 63937395ff7a888419d4b8fe450d3c91,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 63937395ff7a888419d4b8fe450d3c91,
         type: 3}
@@ -340,7 +343,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 63937395ff7a888419d4b8fe450d3c91,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
+      value: -144.681
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 63937395ff7a888419d4b8fe450d3c91,
         type: 3}
@@ -362,6 +365,26 @@ PrefabInstance:
       propertyPath: m_RootBone
       value: 
       objectReference: {fileID: 6359161719296748449}
+    - target: {fileID: 1430996729439901540, guid: 63937395ff7a888419d4b8fe450d3c91,
+        type: 3}
+      propertyPath: m_AABB.m_Center.x
+      value: -0.008828759
+      objectReference: {fileID: 0}
+    - target: {fileID: 1430996729439901540, guid: 63937395ff7a888419d4b8fe450d3c91,
+        type: 3}
+      propertyPath: m_AABB.m_Center.z
+      value: 0.37773967
+      objectReference: {fileID: 0}
+    - target: {fileID: 1430996729439901540, guid: 63937395ff7a888419d4b8fe450d3c91,
+        type: 3}
+      propertyPath: m_AABB.m_Extent.x
+      value: 0.41092247
+      objectReference: {fileID: 0}
+    - target: {fileID: 1430996729439901540, guid: 63937395ff7a888419d4b8fe450d3c91,
+        type: 3}
+      propertyPath: m_AABB.m_Extent.z
+      value: 0.4083134
+      objectReference: {fileID: 0}
     - target: {fileID: 5866666021909216657, guid: 63937395ff7a888419d4b8fe450d3c91,
         type: 3}
       propertyPath: m_Controller

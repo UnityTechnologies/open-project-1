@@ -2,6 +2,21 @@
 
 public class Critter : MonoBehaviour
 {
-	public bool isPlayerInAlertZone { get; set; }
-	public bool isPlayerInAttackZone { get; set; }
+	[HideInInspector] public bool isPlayerInAlertZone;
+	[HideInInspector] public bool isPlayerInAttackZone;
+	[HideInInspector] public GameObject currentTarget;
+
+	public void OnAlertTriggerChange(bool entered, GameObject who)
+	{
+		isPlayerInAlertZone = entered;
+		currentTarget = entered ? who : null;
+	}
+
+	public void OnAttackTriggerChange(bool entered, GameObject who)
+	{
+		isPlayerInAttackZone = entered;
+
+		//No need to set the target. If we did, we would get currentTarget to null even if
+		//a target exited the Attack zone (inner) but stayed in the Alert zone (outer).
+	}
 }
