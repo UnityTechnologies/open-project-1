@@ -56,6 +56,7 @@ public class Protagonist : MonoBehaviour
 		_inputReader.openInventoryEvent -= OnOpenInventory;
 		_inputReader.startedRunning -= OnStartedRunning;
 		_inputReader.stoppedRunning -= OnStoppedRunning;
+		_inputReader.attackEvent -= OnAttack;
 		//...
 	}
 
