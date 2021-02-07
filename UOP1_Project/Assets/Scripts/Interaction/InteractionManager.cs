@@ -76,8 +76,8 @@ public class InteractionManager : MonoBehaviour
 				}
 				break;
 
-			//No need to do anything for Pickup type, the StateMachine will transition to the state
-			//and then the AnimationClip will call Collect()
+				//No need to do anything for Pickup type, the StateMachine will transition to the state
+				//and then the AnimationClip will call Collect()
 		}
 	}
 
@@ -132,7 +132,7 @@ public class InteractionManager : MonoBehaviour
 
 	private void RequestUpdateUI(bool visible)
 	{
-		if(visible)
+		if (visible)
 			_toggleInteractionUI.RaiseEvent(true, _potentialInteractions.First.Value.type);
 		else
 			_toggleInteractionUI.RaiseEvent(false, InteractionType.None);
@@ -148,7 +148,7 @@ public class InteractionManager : MonoBehaviour
 				RequestUpdateUI(true);
 				break;
 		}
-		
+
 		_inputReader.EnableGameplayInput();
 	}
 }
