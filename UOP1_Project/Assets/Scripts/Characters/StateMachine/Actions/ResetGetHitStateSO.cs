@@ -24,6 +24,6 @@ public class ResetGetHitState : StateAction
 
 	public override void OnStateExit()
 	{
-		_damageableEntity.getHit = false;
+		_damageableEntity.GetHit = false;
 	}
 }

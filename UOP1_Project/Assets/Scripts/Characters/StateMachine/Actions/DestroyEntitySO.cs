@@ -24,8 +24,6 @@ public class DestroyEntity : StateAction
 
 	public override void OnStateEnter()
 	{
-		// Hack to force Collider Exit to be triggered before destroying an object.
-		_gameObject.transform.position += - Vector3.up * 1000;
 		GameObject.Destroy(_gameObject, 0.1f);
 	}
 }
