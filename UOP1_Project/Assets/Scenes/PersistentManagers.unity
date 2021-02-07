@@ -519,11 +519,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1122701836}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1184.9143, y: -540, z: 0}
-  m_LocalScale: {x: 2.057143, y: 2.057143, z: 2.057143}
+  m_LocalPosition: {x: 113.785706, y: 0, z: 0}
+  m_LocalScale: {x: 0.85714287, y: 0.85714287, z: 0.85714287}
   m_Children: []
-  m_Father: {fileID: 1387982343}
-  m_RootOrder: 2
+  m_Father: {fileID: 0}
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1242953036 stripped
 MonoBehaviour:
@@ -850,7 +850,6 @@ RectTransform:
   m_Children:
   - {fileID: 624605539}
   - {fileID: 363619425}
-  - {fileID: 1122701838}
   - {fileID: 565765817888297794}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -989,7 +988,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1387982343}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -1003,6 +1002,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3845877873755819563, guid: ff36e7f2f7928454dae0a4d9af31e076,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3845877873755819563, guid: ff36e7f2f7928454dae0a4d9af31e076,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1020,6 +1024,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3845877873755819563, guid: ff36e7f2f7928454dae0a4d9af31e076,
         type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3845877873755819563, guid: ff36e7f2f7928454dae0a4d9af31e076,
+        type: 3}
       propertyPath: m_LocalRotation.x
       value: 0
       objectReference: {fileID: 0}
@@ -1032,16 +1041,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalRotation.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3845877873755819563, guid: ff36e7f2f7928454dae0a4d9af31e076,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3845877873755819563, guid: ff36e7f2f7928454dae0a4d9af31e076,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3845877873755819563, guid: ff36e7f2f7928454dae0a4d9af31e076,
         type: 3}
@@ -1079,8 +1078,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0, b: 0, a: 0}
-  m_RaycastTarget: 1
-  m_Maskable: 1
+  m_RaycastTarget: 0
+  m_Maskable: 0
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -1106,7 +1105,7 @@ GameObject:
   - component: {fileID: 138035865882902116}
   - component: {fileID: 6952518526949780777}
   m_Layer: 5
-  m_Name: Fadeout Rectangle
+  m_Name: FadeoutRectangle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
