@@ -26,14 +26,15 @@ public class FadeManager : MonoBehaviour
 	private IEnumerator FadeCoroutine(bool fadeIn, float duration, Color endColor = default)
 	{
 		Color startColor = _imageComponent.color;
-		if (fadeIn) endColor = Color.clear;
+		if (fadeIn)
+			endColor = Color.clear;
 
 		float totalTime = 0f;
 
 		while (totalTime <= duration)
 		{
 			totalTime += Time.deltaTime;
-			_imageComponent.color = Color.Lerp(startColor, endColor, totalTime/duration);
+			_imageComponent.color = Color.Lerp(startColor, endColor, totalTime / duration);
 
 			yield return null;
 		}
