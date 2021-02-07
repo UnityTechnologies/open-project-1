@@ -5,7 +5,7 @@ using UnityEngine;
 public class Attack : MonoBehaviour
 {
 	[SerializeField] private AttackConfigSO _attackConfigSO;
-	
+
 	public AttackConfigSO AttackConfig => _attackConfigSO;
 
 	private void Awake()
@@ -18,7 +18,7 @@ public class Attack : MonoBehaviour
 		// Avoid friendly fire!
 		if (!other.CompareTag(gameObject.tag))
 		{
-			if(other.TryGetComponent(out Damageable damageableComp))
+			if (other.TryGetComponent(out Damageable damageableComp))
 			{
 				if (!damageableComp.GetHit)
 					damageableComp.ReceiveAnAttack(_attackConfigSO.AttackStrength);

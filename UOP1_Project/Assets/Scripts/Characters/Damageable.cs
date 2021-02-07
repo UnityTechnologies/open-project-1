@@ -33,7 +33,8 @@ public class Damageable : MonoBehaviour
 		if (_currentHealth <= 0)
 		{
 			IsDead = true;
-			if(OnDie != null) OnDie.Invoke();
+			if (OnDie != null)
+				OnDie.Invoke();
 		}
 	}
 }

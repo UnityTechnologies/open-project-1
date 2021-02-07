@@ -11,7 +11,7 @@ public class Critter : MonoBehaviour
 	{
 		isPlayerInAlertZone = entered;
 
-		if(entered && who.TryGetComponent(out Damageable d))
+		if (entered && who.TryGetComponent(out Damageable d))
 		{
 			currentTarget = d;
 			currentTarget.OnDie += OnTargetDead;
