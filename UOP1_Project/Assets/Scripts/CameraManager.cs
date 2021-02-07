@@ -25,7 +25,7 @@ public class CameraManager : MonoBehaviour
 	{
 		freeLookVCam.Follow = target;
 		freeLookVCam.LookAt = target;
-		freeLookVCam.OnTargetObjectWarped(target,target.position-freeLookVCam.transform.position);
+		freeLookVCam.OnTargetObjectWarped(target, target.position - freeLookVCam.transform.position - Vector3.forward);
 	}
 
 	private void OnEnable()
