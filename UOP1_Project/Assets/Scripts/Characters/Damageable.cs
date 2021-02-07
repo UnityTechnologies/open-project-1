@@ -42,7 +42,7 @@ public class Damageable : MonoBehaviour
 		}
 	}
 
-	private void OnTriggerEnter(Collider other)
+	private void OnTriggerStay(Collider other)
 	{
 		// Avoid friendly fire!
 		if (!other.tag.Equals(gameObject.tag))

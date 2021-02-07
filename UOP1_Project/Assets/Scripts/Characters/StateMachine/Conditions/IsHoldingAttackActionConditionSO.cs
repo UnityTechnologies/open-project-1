@@ -17,16 +17,6 @@ public class IsHoldingAttackActionCondition : Condition
 
 	protected override bool Statement()
 	{
-		if (_protagonistScript.attackInput)
-		{
-			// Consume the input
-			_protagonistScript.attackInput = false;
-
-			return true;
-		}
-		else
-		{
-			return false;
-		}
+		return _protagonistScript.attackInput;
 	}
 }
