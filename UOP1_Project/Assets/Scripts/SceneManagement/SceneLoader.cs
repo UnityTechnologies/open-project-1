@@ -1,6 +1,10 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
+using UnityEngine.ResourceManagement.ResourceProviders;
 using UnityEngine.SceneManagement;
 
 /// <summary>
@@ -12,131 +16,117 @@ public class SceneLoader : MonoBehaviour
 	[SerializeField] private GameSceneSO _gameplayScene = default;
 
 	[Header("Load Events")]
-	//The location load event we are listening to
 	[SerializeField] private LoadEventChannelSO _loadLocation = default;
-	//The menu load event we are listening to
 	[SerializeField] private LoadEventChannelSO _loadMenu = default;
 
 	[Header("Broadcasting on")]
-	[SerializeField] private BoolEventChannelSO _ToggleLoadingScreen = default;
-	[SerializeField] private VoidEventChannelSO _OnSceneReady = default;
-	[SerializeField] private FadeChannelSO _OnFade = default;
+	[SerializeField] private BoolEventChannelSO _toggleLoadingScreen = default;
+	[SerializeField] private VoidEventChannelSO _onSceneReady = default;
+	[SerializeField] private FadeChannelSO _onFade = default;
 
-	private List<AsyncOperation> _scenesToLoadAsyncOperations = new List<AsyncOperation>();
-	private List<Scene> _scenesToUnload = new List<Scene>();
+	private List<AsyncOperationHandle<SceneInstance>> _temporarySceneLoadOpHandles = new List<AsyncOperationHandle<SceneInstance>>();
+	private AsyncOperationHandle<SceneInstance> _gameplayManagerSceneLoadOpHandle = new AsyncOperationHandle<SceneInstance>();
+	private SceneInstance _gameplayManagerSceneInstance = new SceneInstance();
+
 	private GameSceneSO _activeScene; // The scene we want to set as active (for lighting/skybox)
-	private List<GameSceneSO> _persistentScenes = new List<GameSceneSO>(); //Scenes to keep loaded when a load event is raised
 
 	private void OnEnable()
 	{
-		if (_loadLocation != null)
-		{
-			_loadLocation.OnLoadingRequested += LoadLocation;
-		}
-		if (_loadMenu != null)
-		{
-			_loadMenu.OnLoadingRequested += LoadMenu;
-		}
+		_loadLocation.OnLoadingRequested += LoadLocation;
+		_loadMenu.OnLoadingRequested += LoadMenu;
 	}
 
 	private void OnDisable()
 	{
-		if (_loadLocation != null)
-		{
-			_loadLocation.OnLoadingRequested -= LoadLocation;
-		}
-		if (_loadMenu != null)
-		{
-			_loadMenu.OnLoadingRequested -= LoadMenu;
-		}
+		_loadLocation.OnLoadingRequested -= LoadLocation;
+		_loadMenu.OnLoadingRequested -= LoadMenu;
 	}
 
 	/// <summary>
-	/// This function loads the location scenes passed as array parameter 
+	/// This function loads the location scenes passed as array parameter
 	/// </summary>
-	/// <param name="locationsToLoad"></param>
-	/// <param name="showLoadingScreen"></param>
 	private void LoadLocation(GameSceneSO[] locationsToLoad, bool showLoadingScreen)
 	{
-		//When loading a location, we want to keep the persistent managers and gameplay scenes loaded
-		_persistentScenes.Add(_persistentManagersScene);
-		_persistentScenes.Add(_gameplayScene);
-		AddScenesToUnload(_persistentScenes);
+		//In case we are coming from the main menu, we need to get rid of the persistent Gameplay manager scene
+		if (_gameplayManagerSceneInstance.Scene.isLoaded)
+			Addressables.LoadSceneAsync(_gameplayManagerSceneLoadOpHandle,
+													LoadSceneMode.Additive, true).Completed += GameplayManagerLoaded;
+
+		UnloadPreviousScenes();
 		LoadScenes(locationsToLoad, showLoadingScreen);
+	}
+
+	private void GameplayManagerLoaded(AsyncOperationHandle<SceneInstance> obj)
+	{
+		_gameplayManagerSceneInstance = (SceneInstance)obj.Result;
 	}
 
 	/// <summary>
 	/// This function loads the menu scenes passed as array parameter 
 	/// </summary>
-	/// <param name="MenuToLoad"></param>
-	/// <param name="showLoadingScreen"></param>
-	private void LoadMenu(GameSceneSO[] MenuToLoad, bool showLoadingScreen)
+	private void LoadMenu(GameSceneSO[] menuToLoad, bool showLoadingScreen)
 	{
-		//When loading a menu, we only want to keep the persistent managers scene loaded
-		_persistentScenes.Add(_persistentManagersScene);
-		AddScenesToUnload(_persistentScenes);
-		LoadScenes(MenuToLoad, showLoadingScreen);
+		//In case we are coming from a Location back to the main menu, we need to get rid of the persistent Gameplay manager scene
+		if(_gameplayManagerSceneInstance.Scene.isLoaded)
+			Addressables.UnloadSceneAsync(_gameplayManagerSceneLoadOpHandle, true);
+
+		UnloadPreviousScenes();
+		LoadScenes(menuToLoad, showLoadingScreen);
+	}
+
+	private void UnloadPreviousScenes()
+	{
+		for (int i = 0; i < _temporarySceneLoadOpHandles.Count; i++)
+		{
+			Addressables.UnloadSceneAsync(_temporarySceneLoadOpHandles[i], true);
+		}
 	}
 
 	private void LoadScenes(GameSceneSO[] locationsToLoad, bool showLoadingScreen)
 	{
 		//Take the first scene in the array as the scene we want to set active
 		_activeScene = locationsToLoad[0];
-		UnloadScenes();
 
 		if (showLoadingScreen)
 		{
-			_ToggleLoadingScreen.RaiseEvent(true);
+			_toggleLoadingScreen.RaiseEvent(true);
 		}
 
-		if (_scenesToLoadAsyncOperations.Count == 0)
+		for (int i = 0; i < locationsToLoad.Length; i++)
 		{
-			for (int i = 0; i < locationsToLoad.Length; i++)
-			{
-				string currentScenePath = locationsToLoad[i].scenePath;
-				_scenesToLoadAsyncOperations.Add(SceneManager.LoadSceneAsync(currentScenePath, LoadSceneMode.Additive));
-			}
+			_temporarySceneLoadOpHandles.Add(locationsToLoad[i].sceneReference.LoadSceneAsync(LoadSceneMode.Additive, true, 0));
 		}
 
-		//Checks if any of the persistent scenes is not loaded yet and load it if unloaded
-		//This is especially useful when we go from main menu to first location
-		for (int i = 0; i < _persistentScenes.Count; ++i)
-		{
-			if (IsSceneLoaded(_persistentScenes[i].scenePath) == false)
-			{
-				_scenesToLoadAsyncOperations.Add(SceneManager.LoadSceneAsync(_persistentScenes[i].scenePath, LoadSceneMode.Additive));
-			}
-		}
-		StartCoroutine(WaitForLoading(showLoadingScreen));
+		StartCoroutine(LoadingProcess(showLoadingScreen));
 	}
 
-	private IEnumerator WaitForLoading(bool showLoadingScreen)
+	private IEnumerator LoadingProcess(bool showLoadingScreen)
 	{
 		bool _loadingDone = false;
-		// Wait until all scenes are loaded
+
+		//This while will exit when all scenes requested have been loaded
 		while (!_loadingDone)
 		{
-			for (int i = 0; i < _scenesToLoadAsyncOperations.Count; ++i)
+			for (int i = 0; i < _temporarySceneLoadOpHandles.Count; ++i)
 			{
-				if (!_scenesToLoadAsyncOperations[i].isDone)
+				if (_temporarySceneLoadOpHandles[i].Status != AsyncOperationStatus.Succeeded)
 				{
 					break;
 				}
 				else
 				{
 					_loadingDone = true;
-					_scenesToLoadAsyncOperations.Clear();
-					_persistentScenes.Clear();
 				}
 			}
+
 			yield return null;
 		}
-		//Set the active scene
+
 		SetActiveScene();
+
 		if (showLoadingScreen)
 		{
-			//Raise event to disable loading screen 
-			_ToggleLoadingScreen.RaiseEvent(false);
+			_toggleLoadingScreen.RaiseEvent(false);
 		}
 
 	}
@@ -147,48 +137,11 @@ public class SceneLoader : MonoBehaviour
 	private void SetActiveScene()
 	{
 		SceneManager.SetActiveScene(SceneManager.GetSceneByPath(_activeScene.scenePath));
+
 		// Will reconstruct LightProbe tetrahedrons to include the probes from the newly-loaded scene
 		LightProbes.TetrahedralizeAsync();
-		//Raise the event to inform that the scene is loaded and set active
-		_OnSceneReady.RaiseEvent();
-	}
 
-	private void AddScenesToUnload(List<GameSceneSO> persistentScenes)
-	{
-		for (int i = 0; i < SceneManager.sceneCount; ++i)
-		{
-			Scene scene = SceneManager.GetSceneAt(i);
-			string scenePath = scene.path;
-			for (int j = 0; j < persistentScenes.Count; ++j)
-			{
-				if (scenePath != persistentScenes[j].scenePath)
-				{
-					//Check if we reached the last persistent scenes check
-					if (j == persistentScenes.Count - 1)
-					{
-						//If the scene is not one of the persistent scenes, we add it to the scenes to unload
-						_scenesToUnload.Add(scene);
-					}
-				}
-				else
-				{
-					//We move the next scene check as soon as we find that the scene is one of the persistent scenes
-					break;
-				}
-			}
-		}
-	}
-
-	private void UnloadScenes()
-	{
-		if (_scenesToUnload != null)
-		{
-			for (int i = 0; i < _scenesToUnload.Count; ++i)
-			{
-				SceneManager.UnloadSceneAsync(_scenesToUnload[i]);
-			}
-			_scenesToUnload.Clear();
-		}
+		_onSceneReady.RaiseEvent();
 	}
 
 	/// <summary>
@@ -214,5 +167,4 @@ public class SceneLoader : MonoBehaviour
 		Application.Quit();
 		Debug.Log("Exit!");
 	}
-
 }
