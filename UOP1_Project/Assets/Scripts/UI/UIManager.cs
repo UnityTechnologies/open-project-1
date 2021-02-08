@@ -21,27 +21,27 @@ public class UIManager : MonoBehaviour
 		//Check if the event exists to avoid errors
 		if (OpenUIDialogueEvent != null)
 		{
-			OpenUIDialogueEvent.OnEventRaised += OpenUIDialogue;
+			OpenUIDialogueEvent.RegisterEvent(OpenUIDialogue);
 		}
 		if (CloseUIDialogueEvent != null)
 		{
-			CloseUIDialogueEvent.OnEventRaised += CloseUIDialogue;
+			CloseUIDialogueEvent.RegisterEvent(CloseUIDialogue);
 		}
 		if (OpenInventoryScreenForCookingEvent != null)
 		{
-			OpenInventoryScreenForCookingEvent.OnEventRaised += SetInventoryScreenForCooking;
+			OpenInventoryScreenForCookingEvent.RegisterEvent(SetInventoryScreenForCooking);
 		}
 		if (OpenInventoryScreenEvent != null)
 		{
-			OpenInventoryScreenEvent.OnEventRaised += SetInventoryScreen;
+			OpenInventoryScreenEvent.RegisterEvent(SetInventoryScreen);
 		}
 		if (CloseInventoryScreenEvent != null)
 		{
-			CloseInventoryScreenEvent.OnEventRaised += CloseInventoryScreen;
+			CloseInventoryScreenEvent.RegisterEvent(CloseInventoryScreen);
 		}
 		if (SetInteractionEvent != null)
 		{
-			SetInteractionEvent.OnEventRaised += SetInteractionPanel;
+			SetInteractionEvent.RegisterEvent(SetInteractionPanel);
 		}
 
 	}

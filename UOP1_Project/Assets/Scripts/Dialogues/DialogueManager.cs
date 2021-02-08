@@ -30,7 +30,7 @@ public class DialogueManager : MonoBehaviour
 		//TODO: Interface with a UIManager to allow displayal of the line of dialogue in the UI
 		//Debug.Log("A line of dialogue has been spoken: \"" + dialogueLine.Sentence + "\" by " + dialogueLine.Actor.ActorName);
 		if (dialogueLineEvent != null)
-			dialogueLineEvent.OnEventRaised(dialogueLine);
+			dialogueLineEvent.RaiseEvent(dialogueLine);
 
 	}
 }

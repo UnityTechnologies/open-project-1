@@ -22,13 +22,13 @@ public class IntEventListener : MonoBehaviour
 	private void OnEnable()
 	{
 		if (_channel != null)
-			_channel.OnEventRaised += Respond;
+			_channel.RegisterEvent(Respond);
 	}
 
 	private void OnDisable()
 	{
 		if (_channel != null)
-			_channel.OnEventRaised -= Respond;
+			_channel.UnregisterEvent(Respond);
 	}
 
 	private void Respond(int value)

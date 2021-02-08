@@ -23,7 +23,7 @@ public class SpawnSystem : MonoBehaviour
 	{
 		if (_OnSceneReady != null)
 		{
-			_OnSceneReady.OnEventRaised += SpawnPlayer;
+			_OnSceneReady.RegisterEvent(SpawnPlayer);
 		}
 	}
 
@@ -31,7 +31,7 @@ public class SpawnSystem : MonoBehaviour
 	{
 		if (_OnSceneReady != null)
 		{
-			_OnSceneReady.OnEventRaised -= SpawnPlayer;
+			_OnSceneReady.UnregisterEvent(SpawnPlayer);
 		}
 	}
 

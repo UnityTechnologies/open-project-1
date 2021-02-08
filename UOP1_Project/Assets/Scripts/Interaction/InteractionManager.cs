@@ -23,13 +23,13 @@ public class InteractionManager : MonoBehaviour
 	private void OnEnable()
 	{
 		_inputReader.interactEvent += OnInteractionButtonPress;
-		_onInteractionEnded.OnEventRaised += OnInteractionEnd;
+		_onInteractionEnded.RegisterEvent(OnInteractionEnd);
 	}
 
 	private void OnDisable()
 	{
 		_inputReader.interactEvent -= OnInteractionButtonPress;
-		_onInteractionEnded.OnEventRaised -= OnInteractionEnd;
+		_onInteractionEnded.UnregisterEvent(OnInteractionEnd);
 	}
 
 	// Called mid-way through the AnimationClip of collecting

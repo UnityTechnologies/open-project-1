@@ -45,19 +45,19 @@ public class UIInventoryManager : MonoBehaviour
 		//Check if the event exists to avoid errors
 		if (ActionButtonClicked != null)
 		{
-			ActionButtonClicked.OnEventRaised += ActionButtonEventRaised;
+			ActionButtonClicked.RegisterEvent(ActionButtonEventRaised);
 		}
 		if (ChangeTabEvent != null)
 		{
-			ChangeTabEvent.OnEventRaised += ChangeTabEventRaised;
+			ChangeTabEvent.RegisterEvent(ChangeTabEventRaised);
 		}
 		if (SelectItemEvent != null)
 		{
-			SelectItemEvent.OnEventRaised += InspectItem;
+			SelectItemEvent.RegisterEvent(InspectItem);
 		}
 		if (OnInteractionEndedEvent != null)
 		{
-			OnInteractionEndedEvent.OnEventRaised += InteractionEnded;
+			OnInteractionEndedEvent.RegisterEvent(InteractionEnded);
 		}
 	}
 
@@ -65,15 +65,15 @@ public class UIInventoryManager : MonoBehaviour
 	{
 		if (ActionButtonClicked != null)
 		{
-			ActionButtonClicked.OnEventRaised -= ActionButtonEventRaised;
+			ActionButtonClicked.UnregisterEvent(ActionButtonEventRaised);
 		}
 		if (ChangeTabEvent != null)
 		{
-			ChangeTabEvent.OnEventRaised -= ChangeTabEventRaised;
+			ChangeTabEvent.UnregisterEvent(ChangeTabEventRaised);
 		}
 		if (SelectItemEvent != null)
 		{
-			SelectItemEvent.OnEventRaised -= InspectItem;
+			SelectItemEvent.UnregisterEvent(InspectItem);
 		}
 	}
 
@@ -327,7 +327,7 @@ public class UIInventoryManager : MonoBehaviour
 	{
 		Debug.Log("USE ITEM " + itemToUse.name);
 
-		UseItemEvent.OnEventRaised(itemToUse);
+		UseItemEvent.RaiseEvent(itemToUse);
 		//update inventory
 		FillInventory();
 	}
@@ -336,14 +336,14 @@ public class UIInventoryManager : MonoBehaviour
 	void EquipItem(Item itemToUse)
 	{
 		Debug.Log("Equip ITEM " + itemToUse.name);
-		EquipItemEvent.OnEventRaised(itemToUse);
+		EquipItemEvent.RaiseEvent(itemToUse);
 	}
 
 	void CookRecipe(Item recipeToCook)
 	{
 
 		//get item
-		CookRecipeEvent.OnEventRaised(recipeToCook);
+		CookRecipeEvent.RaiseEvent(recipeToCook);
 
 		//update inspector
 		InspectItem(recipeToCook);

@@ -9,9 +9,9 @@ using System.Collections.Generic;
 [CreateAssetMenu(menuName = "Events/AudioCue Event Channel")]
 public class AudioCueEventChannelSO : EventChannelBaseSO
 {
-	public AudioCuePlayAction OnAudioCuePlayRequested;
-	public AudioCueStopAction OnAudioCueStopRequested;
-	public AudioCueFinishAction OnAudioCueFinishRequested;
+	private AudioCuePlayAction OnAudioCuePlayRequested;
+	private AudioCueStopAction OnAudioCueStopRequested;
+	private AudioCueFinishAction OnAudioCueFinishRequested;
 
 	public AudioCueKey RaisePlayEvent(AudioCueSO audioCue, AudioConfigurationSO audioConfiguration, Vector3 positionInSpace)
 	{
@@ -66,6 +66,36 @@ public class AudioCueEventChannelSO : EventChannelBaseSO
 
 		return requestSucceed;
 	}
+
+	public void RegisterAudioCuePlayEvent(AudioCuePlayAction action) {
+		OnAudioCuePlayRequested += action;
+	}
+
+	public void RegisteAudioCueStopEvent(AudioCueStopAction action)
+	{
+		OnAudioCueStopRequested += action;
+	}
+
+	public void RegisteAudioCueFinishEvent(AudioCueFinishAction action)
+	{
+		OnAudioCueFinishRequested += action;
+	}
+
+	public void UnregisterAudioCuePlayEvent(AudioCuePlayAction action)
+	{
+		OnAudioCuePlayRequested -= action;
+	}
+
+	public void UnregisteAudioCueStopEvent(AudioCueStopAction action)
+	{
+		OnAudioCueStopRequested -= action;
+	}
+
+	public void UnregisteAudioCueFinishEvent(AudioCueFinishAction action)
+	{
+		OnAudioCueFinishRequested -= action;
+	}
+
 }
 
 public delegate AudioCueKey AudioCuePlayAction(AudioCueSO audioCue, AudioConfigurationSO audioConfiguration, Vector3 positionInSpace);

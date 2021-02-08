@@ -1,5 +1,6 @@
 ﻿using UnityEngine.Events;
 using UnityEngine;
+using System;
 
 /// <summary>
 /// This class is used for Events that have a bool argument.
@@ -7,12 +8,6 @@ using UnityEngine;
 /// </summary>
 
 [CreateAssetMenu(menuName = "Events/Bool Event Channel")]
-public class BoolEventChannelSO : ScriptableObject
+public class BoolEventChannelSO : EventChannelGenericSO <Boolean>
 {
-	public UnityAction<bool> OnEventRaised;
-	public void RaiseEvent(bool value)
-	{
-		if (OnEventRaised != null)
-			OnEventRaised.Invoke(value);
-	}
 }

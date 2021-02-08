@@ -7,13 +7,8 @@ using UnityEngine;
 /// </summary>
 
 [CreateAssetMenu(menuName = "Events/Dialogue Event Channel")]
-public class DialogueEventChannelSO : ScriptableObject
+public class DialogueEventChannelSO : EventChannelGenericSO <ActorSO>
 {
-	public UnityAction<ActorSO> OnEventRaised;
-	public void RaiseEvent(ActorSO actor)
-	{
-		if (OnEventRaised != null)
-			OnEventRaised.Invoke(actor);
-	}
+	
 }
 

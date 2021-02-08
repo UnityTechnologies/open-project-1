@@ -26,23 +26,23 @@ public class InventoryManager : MonoBehaviour
 		//Check if the event exists to avoid errors
 		if (CookRecipeEvent != null)
 		{
-			CookRecipeEvent.OnEventRaised += CookRecipeEventRaised;
+			CookRecipeEvent.RegisterEvent(CookRecipeEventRaised);
 		}
 		if (UseItemEvent != null)
 		{
-			UseItemEvent.OnEventRaised += UseItemEventRaised;
+			UseItemEvent.RegisterEvent(UseItemEventRaised);
 		}
 		if (EquipItemEvent != null)
 		{
-			EquipItemEvent.OnEventRaised += EquipItemEventRaised;
+			EquipItemEvent.RegisterEvent(EquipItemEventRaised);
 		}
 		if (AddItemEvent != null)
 		{
-			AddItemEvent.OnEventRaised += AddItem;
+			AddItemEvent.RegisterEvent(AddItem);
 		}
 		if (RemoveItemEvent != null)
 		{
-			RemoveItemEvent.OnEventRaised += RemoveItem;
+			RemoveItemEvent.RegisterEvent(RemoveItem);
 		}
 	}
 
@@ -50,23 +50,23 @@ public class InventoryManager : MonoBehaviour
 	{
 		if (CookRecipeEvent != null)
 		{
-			CookRecipeEvent.OnEventRaised -= CookRecipeEventRaised;
+			CookRecipeEvent.UnregisterEvent(CookRecipeEventRaised);
 		}
 		if (UseItemEvent != null)
 		{
-			UseItemEvent.OnEventRaised -= UseItemEventRaised;
+			UseItemEvent.UnregisterEvent(UseItemEventRaised);
 		}
 		if (EquipItemEvent != null)
 		{
-			EquipItemEvent.OnEventRaised -= EquipItemEventRaised;
+			EquipItemEvent.UnregisterEvent(EquipItemEventRaised);
 		}
 		if (AddItemEvent != null)
 		{
-			AddItemEvent.OnEventRaised -= AddItem;
+			AddItemEvent.UnregisterEvent(AddItem);
 		}
 		if (RemoveItemEvent != null)
 		{
-			RemoveItemEvent.OnEventRaised -= RemoveItem;
+			RemoveItemEvent.UnregisterEvent(RemoveItem);
 		}
 	}
 

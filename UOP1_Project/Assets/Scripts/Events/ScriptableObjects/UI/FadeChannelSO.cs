@@ -6,7 +6,7 @@ using UnityEngine.Events;
 [CreateAssetMenu(menuName = "Events/UI/Fade Channel")]
 public class FadeChannelSO : ScriptableObject
 {
-	public UnityAction<bool, float, Color> OnEventRaised;
+	private UnityAction<bool, float, Color> OnEventRaised;
 	/// <summary>
 	/// Generic fade function. Communicates with <seealso cref="FadeManager.cs"/>.
 	/// </summary>
@@ -40,4 +40,14 @@ public class FadeChannelSO : ScriptableObject
 	{
 		Fade(false, duration, color);
 	}
+
+	public void RegisterFadeEvent(UnityAction<bool, float, Color> action) {
+		OnEventRaised += action;
+	}
+
+	public void UnregisterFadeEvent(UnityAction<bool, float, Color> action)
+	{
+		OnEventRaised -= action;
+	}
+
 }

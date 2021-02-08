@@ -12,12 +12,12 @@ public class FadeManager : MonoBehaviour
 
 	private void OnEnable()
 	{
-		_fadeChannelSO.OnEventRaised += InitiateFade;
+		_fadeChannelSO.RegisterFadeEvent(InitiateFade);
 	}
 
 	private void OnDisable()
 	{
-		_fadeChannelSO.OnEventRaised -= InitiateFade;
+		_fadeChannelSO.UnregisterFadeEvent(InitiateFade);
 	}
 
 	/// <summary>

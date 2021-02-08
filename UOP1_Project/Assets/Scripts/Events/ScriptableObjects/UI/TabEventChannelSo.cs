@@ -4,12 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 
 [CreateAssetMenu(menuName = "Events/UI/Inventory Tab Event Channel")]
-public class TabEventChannelSo : ScriptableObject
+public class TabEventChannelSo : EventChannelGenericSO<InventoryTabType>
 {
-	public UnityAction<InventoryTabType> OnEventRaised;
-	public void RaiseEvent(InventoryTabType item)
-	{
-		if (OnEventRaised != null)
-			OnEventRaised.Invoke(item);
-	}
+
 }
