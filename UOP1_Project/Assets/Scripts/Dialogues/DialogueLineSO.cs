@@ -11,7 +11,9 @@ public class DialogueLineSO : ScriptableObject
 {
 	public ActorSO Actor { get => _actor; }
 	public LocalizedString Sentence { get => _sentence; }
+	public LocalizedString PhonemeSentence { get => _phonemeSentence; }
 
 	[SerializeField] private ActorSO _actor = default;
 	[SerializeField] private LocalizedString _sentence = default; //TODO: Connect this with localisation
+	[SerializeField] private LocalizedString _phonemeSentence = default;
 }

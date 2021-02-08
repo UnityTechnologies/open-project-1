@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class UIManager : MonoBehaviour
 {
-
 	public DialogueLineChannelSO OpenUIDialogueEvent;
 	public VoidEventChannelSO CloseUIDialogueEvent;
 
@@ -65,6 +64,7 @@ public class UIManager : MonoBehaviour
 		dialogueController.SetDialogue(dialogueLine);
 		dialogueController.gameObject.SetActive(true);
 	}
+
 	public void CloseUIDialogue()
 	{
 		dialogueController.gameObject.SetActive(false);

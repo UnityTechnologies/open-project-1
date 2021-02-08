@@ -4,13 +4,14 @@ using UnityEngine.Playables;
 
 public class CutsceneManager : MonoBehaviour
 {
-
 	[SerializeField] private InputReader _inputReader = default;
 	[SerializeField] private DialogueManager _dialogueManager = default;
+	[SerializeField] private ExpressionManager _expressionManager = default;
 
 	private PlayableDirector _activePlayableDirector;
 	private bool _isPaused;
 
+	public ExpressionManager ExpressionManager { get => _expressionManager; set => _expressionManager = value; }
 	public bool IsCutscenePlaying => _activePlayableDirector.playableGraph.GetRootPlayable(0).GetSpeed() != 0d;
 
 	private void OnEnable()
