@@ -13,6 +13,8 @@ public class EditorInitialisationLoader : MonoBehaviour
 	//bool to know if we are coming from editor initializer mode
 	[HideInInspector] public bool _isEditorInitializerMode = false;
 
+	/*
+
 	private void Start()
 	{
 		Application.targetFrameRate = targetFramerate; // For debugging purposes
@@ -27,11 +29,16 @@ public class EditorInitialisationLoader : MonoBehaviour
 				}
 				else
 				{
-					SceneManager.LoadSceneAsync(scenesToLoad[j].scenePath, LoadSceneMode.Additive);
+					//TODO: Make it work again
+					//SceneManager.LoadSceneAsync(scenesToLoad[j].scenePath, LoadSceneMode.Additive);
+
 					//Inform that we are pressing play from a location or menu
 					_isEditorInitializerMode = true;
 				}
 		}
 	}
+
+	*/
+
 #endif
 }

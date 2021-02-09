@@ -12,7 +12,6 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public class SceneLoader : MonoBehaviour
 {
-	[SerializeField] private GameSceneSO _persistentManagersScene = default;
 	[SerializeField] private GameSceneSO _gameplayScene = default;
 
 	[Header("Load Events")]
@@ -24,11 +23,15 @@ public class SceneLoader : MonoBehaviour
 	[SerializeField] private VoidEventChannelSO _onSceneReady = default;
 	[SerializeField] private FadeChannelSO _onFade = default;
 
-	private List<AsyncOperationHandle<SceneInstance>> _temporarySceneLoadOpHandles = new List<AsyncOperationHandle<SceneInstance>>();
-	private AsyncOperationHandle<SceneInstance> _gameplayManagerSceneLoadOpHandle = new AsyncOperationHandle<SceneInstance>();
-	private SceneInstance _gameplayManagerSceneInstance = new SceneInstance();
+	private List<AsyncOperationHandle<SceneInstance>> _loadingOperationHandles = new List<AsyncOperationHandle<SceneInstance>>();
+	private AsyncOperationHandle<SceneInstance> _gameplayManagerLoadingOpHandle;
 
-	private GameSceneSO _activeScene; // The scene we want to set as active (for lighting/skybox)
+	//Parameters coming from scene loading requests
+	private GameSceneSO[] _scenesToLoad;
+	private GameSceneSO[] _currentlyLoadedScenes = new GameSceneSO[]{};
+	private bool _showLoadingScreen;
+
+	private SceneInstance _gameplayManagerSceneInstance = new SceneInstance();
 
 	private void OnEnable()
 	{
@@ -47,84 +50,104 @@ public class SceneLoader : MonoBehaviour
 	/// </summary>
 	private void LoadLocation(GameSceneSO[] locationsToLoad, bool showLoadingScreen)
 	{
-		//In case we are coming from the main menu, we need to get rid of the persistent Gameplay manager scene
-		if (_gameplayManagerSceneInstance.Scene.isLoaded)
-			Addressables.LoadSceneAsync(_gameplayManagerSceneLoadOpHandle,
-													LoadSceneMode.Additive, true).Completed += GameplayManagerLoaded;
+		_scenesToLoad = locationsToLoad;
+		_showLoadingScreen = showLoadingScreen;
 
-		UnloadPreviousScenes();
-		LoadScenes(locationsToLoad, showLoadingScreen);
+		//In case we are coming from the main menu, we need to load the persistent Gameplay manager scene first
+		if (_gameplayManagerSceneInstance.Scene == null
+			|| !_gameplayManagerSceneInstance.Scene.isLoaded)
+		{
+			StartCoroutine(ProcessGameplaySceneLoading(locationsToLoad, showLoadingScreen));
+		}
+		else
+		{
+			UnloadPreviousScenes();
+		}
 	}
 
-	private void GameplayManagerLoaded(AsyncOperationHandle<SceneInstance> obj)
+	private IEnumerator ProcessGameplaySceneLoading(GameSceneSO[] locationsToLoad, bool showLoadingScreen)
 	{
-		_gameplayManagerSceneInstance = (SceneInstance)obj.Result;
+		_gameplayManagerLoadingOpHandle = _gameplayScene.sceneReference.LoadSceneAsync(LoadSceneMode.Additive, true);
+
+		while(_gameplayManagerLoadingOpHandle.Status != AsyncOperationStatus.Succeeded)
+		{
+			yield return null;
+		}
+		_gameplayManagerSceneInstance = _gameplayManagerLoadingOpHandle.Result;
+
+		UnloadPreviousScenes();
 	}
 
 	/// <summary>
 	/// This function loads the menu scenes passed as array parameter 
 	/// </summary>
-	private void LoadMenu(GameSceneSO[] menuToLoad, bool showLoadingScreen)
+	private void LoadMenu(GameSceneSO[] menusToLoad, bool showLoadingScreen)
 	{
+		_scenesToLoad = menusToLoad;
+		_showLoadingScreen = showLoadingScreen;
+
 		//In case we are coming from a Location back to the main menu, we need to get rid of the persistent Gameplay manager scene
-		if(_gameplayManagerSceneInstance.Scene.isLoaded)
-			Addressables.UnloadSceneAsync(_gameplayManagerSceneLoadOpHandle, true);
+		if(_gameplayManagerSceneInstance.Scene != null
+			&& _gameplayManagerSceneInstance.Scene.isLoaded)
+			Addressables.UnloadSceneAsync(_gameplayManagerLoadingOpHandle, true);
 
 		UnloadPreviousScenes();
-		LoadScenes(menuToLoad, showLoadingScreen);
 	}
 
 	private void UnloadPreviousScenes()
 	{
-		for (int i = 0; i < _temporarySceneLoadOpHandles.Count; i++)
+		for (int i = 0; i < _currentlyLoadedScenes.Length; i++)
 		{
-			Addressables.UnloadSceneAsync(_temporarySceneLoadOpHandles[i], true);
+			_currentlyLoadedScenes[i].sceneReference.UnLoadScene();
 		}
+
+		LoadNewScenes();
 	}
 
-	private void LoadScenes(GameSceneSO[] locationsToLoad, bool showLoadingScreen)
+	private void LoadNewScenes()
 	{
-		//Take the first scene in the array as the scene we want to set active
-		_activeScene = locationsToLoad[0];
-
-		if (showLoadingScreen)
+		if (_showLoadingScreen)
 		{
 			_toggleLoadingScreen.RaiseEvent(true);
 		}
 
-		for (int i = 0; i < locationsToLoad.Length; i++)
+		_loadingOperationHandles.Clear();
+		//Build the array of handles of the temporary scenes to load
+		for (int i = 0; i < _scenesToLoad.Length; i++)
 		{
-			_temporarySceneLoadOpHandles.Add(locationsToLoad[i].sceneReference.LoadSceneAsync(LoadSceneMode.Additive, true, 0));
+			_loadingOperationHandles.Add(_scenesToLoad[i].sceneReference.LoadSceneAsync(LoadSceneMode.Additive, true, 0));
 		}
 
-		StartCoroutine(LoadingProcess(showLoadingScreen));
+		StartCoroutine(LoadingProcess());
 	}
 
-	private IEnumerator LoadingProcess(bool showLoadingScreen)
+	private IEnumerator LoadingProcess()
 	{
-		bool _loadingDone = false;
+		bool done = _loadingOperationHandles.Count == 0;
 
-		//This while will exit when all scenes requested have been loaded
-		while (!_loadingDone)
+		//This while will exit when all scenes requested have been unloaded
+		while (!done)
 		{
-			for (int i = 0; i < _temporarySceneLoadOpHandles.Count; ++i)
+			for (int i = 0; i < _loadingOperationHandles.Count; ++i)
 			{
-				if (_temporarySceneLoadOpHandles[i].Status != AsyncOperationStatus.Succeeded)
+				if (_loadingOperationHandles[i].Status != AsyncOperationStatus.Succeeded)
 				{
 					break;
 				}
 				else
 				{
-					_loadingDone = true;
+					done = true;
 				}
 			}
 
 			yield return null;
 		}
 
+		//Save loaded scenes (to be unloaded at next load request)
+		_currentlyLoadedScenes = _scenesToLoad;
 		SetActiveScene();
 
-		if (showLoadingScreen)
+		if (_showLoadingScreen)
 		{
 			_toggleLoadingScreen.RaiseEvent(false);
 		}
@@ -136,30 +159,14 @@ public class SceneLoader : MonoBehaviour
 	/// </summary>
 	private void SetActiveScene()
 	{
-		SceneManager.SetActiveScene(SceneManager.GetSceneByPath(_activeScene.scenePath));
+		//All the scenes have been loaded, so we assume the first in the array is ready to become the active scene
+		Scene s = ((SceneInstance)_loadingOperationHandles[0].Result).Scene;
+		SceneManager.SetActiveScene(s);
 
 		// Will reconstruct LightProbe tetrahedrons to include the probes from the newly-loaded scene
 		LightProbes.TetrahedralizeAsync();
 
 		_onSceneReady.RaiseEvent();
-	}
-
-	/// <summary>
-	/// This function checks if a scene is already loaded
-	/// </summary>
-	/// <param name="scenePath"></param>
-	/// <returns>bool</returns>
-	private bool IsSceneLoaded(string scenePath)
-	{
-		for (int i = 0; i < SceneManager.sceneCount; i++)
-		{
-			Scene scene = SceneManager.GetSceneAt(i);
-			if (scene.path == scenePath)
-			{
-				return true;
-			}
-		}
-		return false;
 	}
 
 	private void ExitGame()
