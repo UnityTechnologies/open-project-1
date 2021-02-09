@@ -32,7 +32,7 @@ public class PathwayGizmo : Editor
 		if (_selectedIndex != -1)
 		{
 			Handles.color = _pathway.SelectedObjectColor;
-			Handles.DrawWireCube(_pathway.wayPoints[_selectedIndex] + Vector3.up, Vector3.one * _pathway.Size);
+			Handles.DrawWireCube(_pathway.wayPoints[_selectedIndex] + Vector3.up * _pathway.Size / 2, Vector3.one * _pathway.Size);
 		}
 
 	}
