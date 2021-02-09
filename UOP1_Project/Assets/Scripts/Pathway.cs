@@ -6,6 +6,7 @@ public class Pathway : MonoBehaviour
 {
 	[HideInInspector]
 	public List<Vector3> wayPoints;
+#if UNITY_EDITOR
 	[SerializeField]
 	private float _cubeSize = 3;
 	[SerializeField]
@@ -34,5 +35,7 @@ public class Pathway : MonoBehaviour
 	{
 		get => _cubeSize;
 	}
+#endif
+
 
 }
