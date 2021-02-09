@@ -33,14 +33,14 @@ public class PathwayGizmo : Editor
 			Handles.DrawWireCube(_pathway.wayPoints[_selectedIndex] + Vector3.up, Vector3.one * _pathway.Size);
 		}
 
-		
-
 	}
 
 	private void OnEnable()
 	{
 		 _selectedIndex = -1;
 		_pathway = (Pathway)target;
+		if (_pathway.wayPoints == null)
+			_pathway.wayPoints = new List<Vector3>();
 		_reorderableList = new ReorderableList(serializedObject, serializedObject.FindProperty("wayPoints"), true, true, true, true);
 		// Add listeners to draw events
 		_reorderableList.drawHeaderCallback += DrawHeader;
