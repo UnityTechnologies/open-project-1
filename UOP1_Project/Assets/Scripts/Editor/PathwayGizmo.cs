@@ -20,7 +20,8 @@ public class PathwayGizmo : Editor
 		{
 			_pathway.wayPoints[i]=Handles.PositionHandle(_pathway.wayPoints[i], Quaternion.identity);
 			Handles.Label(_pathway.wayPoints[i] + (_pathway.Size+2)*Vector3.up, FIELD_NAME + i);
-			Handles.DrawWireCube(_pathway.wayPoints[i] + Vector3.up * _pathway.Size / 2, Vector3.one * _pathway.Size);
+			if(_selectedIndex != i || _selectedIndex == -1)
+				Handles.DrawWireCube(_pathway.wayPoints[i] + Vector3.up * _pathway.Size / 2, Vector3.one * _pathway.Size);
 			if (i != 0)
 			{
 				Handles.color = _pathway.LineColor;
@@ -116,7 +117,8 @@ public class PathwayGizmo : Editor
 	}
 
 	private void SelectItem(ReorderableList list) {
-		_selectedIndex=list.index;
+		//TODO: add the possibility of placing the box directly with the mouse
+		_selectedIndex = list.index;
 	}
 
 	public override void OnInspectorGUI()
