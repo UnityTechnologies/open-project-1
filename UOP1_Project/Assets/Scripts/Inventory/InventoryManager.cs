@@ -8,18 +8,18 @@ public class InventoryManager : MonoBehaviour
 	private Inventory currentInventory;
 
 	[SerializeField]
-	private ItemEventChannelSo CookRecipeEvent;
+	private ItemEventChannelSO CookRecipeEvent;
 	[SerializeField]
-	private ItemEventChannelSo UseItemEvent;
+	private ItemEventChannelSO UseItemEvent;
 	[SerializeField]
-	private ItemEventChannelSo EquipItemEvent;
+	private ItemEventChannelSO EquipItemEvent;
 
 
 
 	[SerializeField]
-	ItemEventChannelSo AddItemEvent;
+	ItemEventChannelSO AddItemEvent;
 	[SerializeField]
-	ItemEventChannelSo RemoveItemEvent;
+	ItemEventChannelSO RemoveItemEvent;
 
 	private void OnEnable()
 	{

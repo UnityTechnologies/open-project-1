@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ItemPicker : MonoBehaviour
 {
-	[SerializeField] private ItemEventChannelSo _addItemEvent;
+	[SerializeField] private ItemEventChannelSO _addItemEvent;
 
 	public void PickItem(Item item)
 	{

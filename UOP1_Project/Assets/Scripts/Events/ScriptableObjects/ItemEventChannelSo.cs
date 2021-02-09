@@ -7,7 +7,7 @@ using UnityEngine;
 /// </summary>
 
 [CreateAssetMenu(menuName = "Events/UI/Item Event Channel")]
-public class ItemEventChannelSo : ScriptableObject
+public class ItemEventChannelSO : ScriptableObject
 {
 	public UnityAction<Item> OnEventRaised;
 	public void RaiseEvent(Item item)
