@@ -122,6 +122,6 @@ public class PathwayGizmo : Editor
 		serializedObject.Update();
 		_reorderableList.DoLayoutList();
 		serializedObject.ApplyModifiedProperties();
-
+		SceneView.RepaintAll();
 	}
 }
