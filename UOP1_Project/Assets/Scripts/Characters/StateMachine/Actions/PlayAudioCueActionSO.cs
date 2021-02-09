@@ -27,6 +27,6 @@ public class PlayAudioCueAction : StateAction
 
 	public override void OnStateEnter()
 	{
-		_originSO.audioCueEventChannel.RaiseEvent(_originSO.audioCue, _originSO.audioConfiguration, _stateMachineTransform.position);
+		_originSO.audioCueEventChannel.RaisePlayEvent(_originSO.audioCue, _originSO.audioConfiguration, _stateMachineTransform.position);
 	}
 }

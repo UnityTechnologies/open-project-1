@@ -10,11 +10,11 @@ public class ResetGetHitStateSO : StateActionSO
 
 public class ResetGetHitState : StateAction
 {
-	private Critter _critter;
+	private Damageable _damageableEntity;
 
 	public override void Awake(StateMachine stateMachine)
 	{
-		_critter = stateMachine.GetComponent<Critter>();
+		_damageableEntity = stateMachine.GetComponent<Damageable>();
 	}
 
 	public override void OnUpdate()
@@ -24,6 +24,6 @@ public class ResetGetHitState : StateAction
 
 	public override void OnStateExit()
 	{
-		_critter.getHit = false;
+		_damageableEntity.GetHit = false;
 	}
 }

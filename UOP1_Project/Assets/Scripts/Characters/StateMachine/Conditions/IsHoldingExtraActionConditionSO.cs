@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿/* Unused. Kept for reference
+
+using UnityEngine;
 using UOP1.StateMachine;
 using UOP1.StateMachine.ScriptableObjects;
 
@@ -30,3 +32,5 @@ public class IsHoldingExtraActionCondition : Condition
 		}
 	}
 }
+
+*/

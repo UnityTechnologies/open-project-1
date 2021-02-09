@@ -12,15 +12,15 @@ public class IsPickingUpCondition : Condition
 
 	public override void Awake(StateMachine stateMachine)
 	{
-		_interactScript = stateMachine.GetComponentInChildren<InteractionManager>();
+		_interactScript = stateMachine.GetComponent<InteractionManager>();
 	}
 
 	protected override bool Statement()
 	{
-		if (_interactScript.currentInteraction == InteractionType.PickUp)
+		if (_interactScript.currentInteractionType == InteractionType.PickUp)
 		{
-			// Consume the input
-			_interactScript.currentInteraction = InteractionType.None;
+			// Consume it
+			_interactScript.currentInteractionType = InteractionType.None;
 
 			return true;
 		}
