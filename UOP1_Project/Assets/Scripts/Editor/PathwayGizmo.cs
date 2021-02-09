@@ -97,9 +97,11 @@ public class PathwayGizmo : Editor
 	
 	private void AddItem(ReorderableList list)
 	{
-		var index = list.serializedProperty.arraySize;
+		var index=list.index;
 		list.serializedProperty.arraySize++;
-		list.index = index;
+		for (int i = list.serializedProperty.arraySize - 1; i > index; i--) {
+			list.serializedProperty.GetArrayElementAtIndex(i).vector3Value = list.serializedProperty.GetArrayElementAtIndex(i - 1).vector3Value;
+		}
 		list.serializedProperty.GetArrayElementAtIndex(index).vector3Value = new Vector3();
 		
 	}
