@@ -8,9 +8,9 @@ public class PathwayGizmo : Editor
 {
 	private ReorderableList _reorderableList;
 	private Pathway _pathway;
-	static private int _selectedIndex;
-
-
+	private static int _selectedIndex;
+	private const string _field = "point ";
+	private const string _title = "way points";
 	protected void OnSceneGUI()
 	{
 		EditorGUI.BeginChangeCheck();
@@ -18,6 +18,7 @@ public class PathwayGizmo : Editor
 		for (int i = 0; i < _pathway.wayPoints.Count; i++)
 		{
 			_pathway.wayPoints[i]=Handles.PositionHandle(_pathway.wayPoints[i], Quaternion.identity);
+			Handles.Label(_pathway.wayPoints[i] + (_pathway.Size+2)*Vector3.up, _field+i);
 			Handles.DrawWireCube(_pathway.wayPoints[i] + Vector3.up, Vector3.one * _pathway.Size);
 			if (i != 0)
 			{
@@ -37,7 +38,7 @@ public class PathwayGizmo : Editor
 
 	private void OnEnable()
 	{
-		 _selectedIndex = -1;
+		_selectedIndex = -1;
 		_pathway = (Pathway)target;
 		if (_pathway.wayPoints == null)
 			_pathway.wayPoints = new List<Vector3>();
@@ -68,7 +69,7 @@ public class PathwayGizmo : Editor
 	/// <param name="rect"></param>
 	private void DrawHeader(Rect rect)
 	{
-		GUI.Label(rect, "way points");
+		GUI.Label(rect, _title);
 	}
 
 	/// <summary>
@@ -81,7 +82,7 @@ public class PathwayGizmo : Editor
 	private void DrawElement(Rect rect, int index, bool active, bool focused)
 	{
 		var item = _reorderableList.serializedProperty.GetArrayElementAtIndex(index);
-		item.vector3Value=EditorGUI.Vector3Field(new Rect(rect.x + 18, rect.y, rect.width - 9, rect.height),"point " + index, item.vector3Value);
+		item.vector3Value=EditorGUI.Vector3Field(new Rect(rect.x , rect.y, rect.width, rect.height), _field + index, item.vector3Value);
 		
 	}
 	
