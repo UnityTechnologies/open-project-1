@@ -35,9 +35,17 @@ public class Pathway : MonoBehaviour
 	{
 		get => _cubeSize;
 	}
+
+	public List<Vector3> WayPointsList
+	{
+		get => wayPoints;
+		set => wayPoints=value;
+	}
+
 #endif
+
 	public Vector3[] WayPoints() {
 		return wayPoints.ToArray();
 	}
-
+	
 }
