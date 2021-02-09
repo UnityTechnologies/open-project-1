@@ -99,8 +99,16 @@ public class PathwayGizmo : Editor
 	{
 		var index=list.index;
 		list.serializedProperty.arraySize++;
-		for (int i = list.serializedProperty.arraySize - 1; i > index; i--) {
-			list.serializedProperty.GetArrayElementAtIndex(i).vector3Value = list.serializedProperty.GetArrayElementAtIndex(i - 1).vector3Value;
+		if (index > -1)
+		{
+			for (int i = list.serializedProperty.arraySize - 1; i > index; i--)
+			{
+				list.serializedProperty.GetArrayElementAtIndex(i).vector3Value = list.serializedProperty.GetArrayElementAtIndex(i - 1).vector3Value;
+			}
+		}
+		else
+		{
+			index++;
 		}
 		list.serializedProperty.GetArrayElementAtIndex(index).vector3Value = new Vector3();
 		
@@ -118,12 +126,13 @@ public class PathwayGizmo : Editor
 	}
 
 	private void SelectItem(ReorderableList list) {
+		if(list!=null)
 		_selectedIndex=list.index;
 	}
 
 	public override void OnInspectorGUI()
 	{
-		base.OnInspectorGUI();
+		DrawDefaultInspector();
 		serializedObject.Update();
 		_reorderableList.DoLayoutList();
 		serializedObject.ApplyModifiedProperties();

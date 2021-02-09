@@ -34,4 +34,9 @@ public class Pathway : MonoBehaviour
 	{
 		get => _cubeSize;
 	}
+
+	private void OnEnable()
+	{
+		wayPoints = new List<Vector3>();
+	}
 }
