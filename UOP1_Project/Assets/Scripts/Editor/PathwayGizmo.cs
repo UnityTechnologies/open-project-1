@@ -11,6 +11,7 @@ public class PathwayGizmo : Editor
 	private static int _selectedIndex;
 	private const string _field = "point ";
 	private const string _title = "way points";
+	
 	protected void OnSceneGUI()
 	{
 		EditorGUI.BeginChangeCheck();
@@ -19,7 +20,7 @@ public class PathwayGizmo : Editor
 		{
 			_pathway.wayPoints[i]=Handles.PositionHandle(_pathway.wayPoints[i], Quaternion.identity);
 			Handles.Label(_pathway.wayPoints[i] + (_pathway.Size+2)*Vector3.up, _field+i);
-			Handles.DrawWireCube(_pathway.wayPoints[i] + Vector3.up, Vector3.one * _pathway.Size);
+			Handles.DrawWireCube(_pathway.wayPoints[i] + Vector3.up * _pathway.Size / 2, Vector3.one * _pathway.Size);
 			if (i != 0)
 			{
 				Handles.color = _pathway.LineColor;
@@ -40,6 +41,7 @@ public class PathwayGizmo : Editor
 	{
 		_selectedIndex = -1;
 		_pathway = (Pathway)target;
+		
 		if (_pathway.wayPoints == null)
 			_pathway.wayPoints = new List<Vector3>();
 		_reorderableList = new ReorderableList(serializedObject, serializedObject.FindProperty("wayPoints"), true, true, true, true);
