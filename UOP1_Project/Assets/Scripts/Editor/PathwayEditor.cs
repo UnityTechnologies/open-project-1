@@ -16,16 +16,16 @@ public class PathwayGizmo : Editor
 	{
 		EditorGUI.BeginChangeCheck();
 		Handles.color = _pathway.CubeColor;
-		for (int i = 0; i < _pathway.WayPointsList.Count; i++)
+		for (int i = 0; i < _pathway.wayPoints.Count; i++)
 		{
-			_pathway.WayPointsList[i]=Handles.PositionHandle(_pathway.WayPointsList[i], Quaternion.identity);
-			Handles.Label(_pathway.WayPointsList[i] + (_pathway.Size+2)*Vector3.up, FIELD_NAME + i);
+			_pathway.wayPoints[i]=Handles.PositionHandle(_pathway.wayPoints[i], Quaternion.identity);
+			Handles.Label(_pathway.wayPoints[i] + (_pathway.Size+2)*Vector3.up, FIELD_NAME + i);
 			if(_selectedIndex != i || _selectedIndex == -1)
-				Handles.DrawWireCube(_pathway.WayPointsList[i] + Vector3.up * _pathway.Size / 2, Vector3.one * _pathway.Size);
+				Handles.DrawWireCube(_pathway.wayPoints[i] + Vector3.up * _pathway.Size / 2, Vector3.one * _pathway.Size);
 			if (i != 0)
 			{
 				Handles.color = _pathway.LineColor;
-				Handles.DrawLine(_pathway.WayPointsList[i - 1], _pathway.WayPointsList[i]);
+				Handles.DrawLine(_pathway.wayPoints[i - 1], _pathway.wayPoints[i]);
 				Handles.color = _pathway.CubeColor;
 			}
 		}
@@ -33,7 +33,7 @@ public class PathwayGizmo : Editor
 		if (_selectedIndex != -1)
 		{
 			Handles.color = _pathway.SelectedObjectColor;
-			Handles.DrawWireCube(_pathway.WayPointsList[_selectedIndex] + Vector3.up * _pathway.Size / 2, Vector3.one * _pathway.Size);
+			Handles.DrawWireCube(_pathway.wayPoints[_selectedIndex] + Vector3.up * _pathway.Size / 2, Vector3.one * _pathway.Size);
 		}
 
 	}
@@ -43,8 +43,8 @@ public class PathwayGizmo : Editor
 		_selectedIndex = -1;
 		_pathway = (Pathway)target;
 		
-		if (_pathway.WayPointsList == null)
-			_pathway.WayPointsList = new List<Vector3>();
+		if (_pathway.wayPoints == null)
+			_pathway.wayPoints = new List<Vector3>();
 		_reorderableList = new ReorderableList(serializedObject, serializedObject.FindProperty("wayPoints"), true, true, true, true);
 		// Add listeners to draw events
 		_reorderableList.drawHeaderCallback += DrawHeader;
