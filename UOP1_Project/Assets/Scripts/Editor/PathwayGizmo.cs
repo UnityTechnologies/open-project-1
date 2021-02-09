@@ -7,7 +7,6 @@ using UnityEditorInternal;
 public class PathwayGizmo : Editor
 {
 	private ReorderableList _reorderableList;
-	private List<Vector3> _newTargetsPosition;
 	private Pathway _pathway;
 	static private int _selectedIndex;
 
@@ -16,10 +15,9 @@ public class PathwayGizmo : Editor
 	{
 		EditorGUI.BeginChangeCheck();
 		Handles.color = _pathway.CubeColor;
-		_newTargetsPosition.Clear();
 		for (int i = 0; i < _pathway.wayPoints.Count; i++)
 		{
-			_newTargetsPosition.Add(Handles.PositionHandle(_pathway.wayPoints[i], Quaternion.identity));
+			_pathway.wayPoints[i]=Handles.PositionHandle(_pathway.wayPoints[i], Quaternion.identity);
 			Handles.DrawWireCube(_pathway.wayPoints[i] + Vector3.up, Vector3.one * _pathway.Size);
 			if (i != 0)
 			{
@@ -35,14 +33,7 @@ public class PathwayGizmo : Editor
 			Handles.DrawWireCube(_pathway.wayPoints[_selectedIndex] + Vector3.up, Vector3.one * _pathway.Size);
 		}
 
-		if (EditorGUI.EndChangeCheck())
-		{
-			for (int i = 0; i < _pathway.wayPoints.Count; i++)
-			{
-				_pathway.wayPoints[i] = _newTargetsPosition[i];
-
-			}
-		}
+		
 
 	}
 
@@ -50,7 +41,6 @@ public class PathwayGizmo : Editor
 	{
 		 _selectedIndex = -1;
 		_pathway = (Pathway)target;
-		_newTargetsPosition = new List<Vector3>();
 		_reorderableList = new ReorderableList(serializedObject, serializedObject.FindProperty("wayPoints"), true, true, true, true);
 		// Add listeners to draw events
 		_reorderableList.drawHeaderCallback += DrawHeader;
@@ -101,16 +91,13 @@ public class PathwayGizmo : Editor
 		list.serializedProperty.arraySize++;
 		if (index > -1)
 		{
-			for (int i = list.serializedProperty.arraySize - 1; i > index; i--)
+			for (int i = list.serializedProperty.arraySize - 1; i > index+1; i--)
 			{
 				list.serializedProperty.GetArrayElementAtIndex(i).vector3Value = list.serializedProperty.GetArrayElementAtIndex(i - 1).vector3Value;
 			}
 		}
-		else
-		{
-			index++;
-		}
-		list.serializedProperty.GetArrayElementAtIndex(index).vector3Value = new Vector3();
+		
+		list.serializedProperty.GetArrayElementAtIndex(index+1).vector3Value = new Vector3();
 		
 	}
 
@@ -126,7 +113,6 @@ public class PathwayGizmo : Editor
 	}
 
 	private void SelectItem(ReorderableList list) {
-		if(list!=null)
 		_selectedIndex=list.index;
 	}
 
@@ -136,7 +122,6 @@ public class PathwayGizmo : Editor
 		serializedObject.Update();
 		_reorderableList.DoLayoutList();
 		serializedObject.ApplyModifiedProperties();
-		SceneView.RepaintAll();
 
 	}
 }
