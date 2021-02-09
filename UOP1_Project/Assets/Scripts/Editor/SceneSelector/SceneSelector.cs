@@ -29,7 +29,6 @@ public partial class SceneSelector : EditorWindow, IHasCustomMenu
 		wantsMouseMove = true;
 		LoadStorage();
 		PopulateItems();
-		GameSceneSO.onEnabled += OnGameSceneSOCreated;
 	}
 
 	private void OnDisable()
@@ -37,7 +36,6 @@ public partial class SceneSelector : EditorWindow, IHasCustomMenu
 		if (_preferencesWindow != null)
 			_preferencesWindow.Close();
 		SaveStorage();
-		GameSceneSO.onEnabled -= OnGameSceneSOCreated;
 	}
 
 	private void OnGUI()
@@ -75,7 +73,7 @@ public partial class SceneSelector : EditorWindow, IHasCustomMenu
 			{
 				if (GUILayout.Button(gameScene.name, _styles.item))
 				{
-					Helper.OpenSceneSafe(gameScene.scenePath);
+					Helper.OpenSceneSafe(AssetDatabase.GetAssetPath(gameScene.sceneReference.editorAsset));
 				}
 
 				var colorMarkerRect = GUILayoutUtility.GetLastRect();
@@ -152,10 +150,6 @@ public partial class SceneSelector : EditorWindow, IHasCustomMenu
 		_hasEmptyItems = false;
 	}
 
-	private void OnGameSceneSOCreated(GameSceneSO _)
-	{
-		Helper.RunOnNextUpdate(PopulateItems);
-	}
 
 	private void EnsureStyles()
 	{
