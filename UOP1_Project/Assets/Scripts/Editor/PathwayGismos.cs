@@ -42,18 +42,20 @@ public class PathwayGizmos
 			if (i != 0) 
 			{
 				//Draw lines
-				Handles.color = pathway.LineColor;
-				Handles.DrawDottedLine(pathway.wayPoints[i - 1], pathway.wayPoints[i], 2);
-				Handles.color = pathway.CubeColor;
+				using (new Handles.DrawingScope(pathway.LineColor))
+				{
+					Handles.DrawDottedLine(pathway.wayPoints[i - 1], pathway.wayPoints[i], 2);
+				}
 			}
 		}
 
 		if (pathway.wayPoints.Count > 2)
 		{
 			//draw final line between the first and last point
-			Handles.color = pathway.LineColor;
-			Handles.DrawDottedLine(pathway.wayPoints[0], pathway.wayPoints[pathway.wayPoints.Count - 1], 2);
-			Handles.color = pathway.CubeColor;
+			using (new Handles.DrawingScope(pathway.LineColor))
+			{
+				Handles.DrawDottedLine(pathway.wayPoints[0], pathway.wayPoints[pathway.wayPoints.Count - 1], 2);
+			}
 		}
 
 		if (pathway.SelectedIndex != -1)
