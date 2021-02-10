@@ -83,14 +83,16 @@ public class PathwayEditor : Editor
 			{
 				list.serializedProperty.GetArrayElementAtIndex(i).vector3Value = list.serializedProperty.GetArrayElementAtIndex(i - 1).vector3Value;
 			}
-
-			list.serializedProperty.GetArrayElementAtIndex(index + 1).vector3Value = new Vector3(_pathway.transform.position.x, _pathway.transform.position.y, _pathway.transform.position.z);
+			var previous = list.serializedProperty.GetArrayElementAtIndex(index).vector3Value;
+			list.serializedProperty.GetArrayElementAtIndex(index + 1).vector3Value = new Vector3(previous.x + 2, previous.y, previous.z + 2);
 		}
 		else
 		{
-			list.serializedProperty.GetArrayElementAtIndex(list.serializedProperty.arraySize-1).vector3Value = new Vector3();
+			var previous = _pathway.transform.position;
+			list.serializedProperty.GetArrayElementAtIndex(list.serializedProperty.arraySize - 1).vector3Value = new Vector3(previous.x + 2, previous.y, previous.z + 2);
 		}
-
+		list.index++;
+		_pathway.SelectedIndex = list.index;
 	}
 
 	private void RemoveItem(ReorderableList list)
@@ -103,7 +105,12 @@ public class PathwayEditor : Editor
 		}
 
 		list.serializedProperty.arraySize--;
-		_pathway.SelectedIndex = -1;
+		if (list.index == list.serializedProperty.arraySize)
+		{
+			list.index--;
+		}
+		
+		_pathway.SelectedIndex = list.index;
 	}
 
 	private void SelectItem(ReorderableList list)
