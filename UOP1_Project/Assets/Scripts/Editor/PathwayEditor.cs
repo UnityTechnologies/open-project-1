@@ -44,6 +44,12 @@ public class PathwayEditor : Editor
 			Handles.DrawWireCube(_pathway.wayPoints[_selectedIndex] + vOffset, cubeDim);
 		}
 
+		if (_pathway.wayPoints.Count > 2)
+		{
+			Handles.color = _pathway.LineColor;
+			Handles.DrawLine(_pathway.wayPoints[0], _pathway.wayPoints[_pathway.wayPoints.Count-1]);
+		}
+
 	}
 
 	private void OnEnable()
