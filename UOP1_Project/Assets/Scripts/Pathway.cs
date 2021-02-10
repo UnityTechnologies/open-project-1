@@ -20,6 +20,9 @@ public class Pathway : MonoBehaviour
 	[SerializeField]
 	private Mesh _drawMesh;
 
+	public const string FIELD_LABEL = "Point ";
+	public const string TITLE_LABEL = "Waypoints";
+
 	public Color CubeColor { get => _cubeColor; }
 	public Color LineColor { get => _lineColor; }
 	public Color SelectedColor { get => _selectedColor; }
@@ -27,7 +30,7 @@ public class Pathway : MonoBehaviour
 	public float Size { get => _cubeSize; }
 	public Mesh DrawMesh { get => _drawMesh; }
 	public int SelectedIndex { get; set; }
-
+	
 #endif
 
 	public Vector3[] WayPointsArray() {

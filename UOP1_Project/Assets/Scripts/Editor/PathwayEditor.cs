@@ -8,21 +8,28 @@ public class PathwayEditor : Editor
 {
 	private ReorderableList _reorderableList;
 	private Pathway _pathway;
-	private const string FIELD_LABEL = "Point ";
-	private const string TITLE_LABEL = "Waypoints";
-	
+	Vector3 _newPosition;
 	protected void OnSceneGUI()
 	{
-		EditorGUI.BeginChangeCheck();
+		
 		DispalyHandles();
+			
 	}
 
 	private void DispalyHandles()
 	{
+		
+		EditorGUI.BeginChangeCheck();
+		_newPosition = _pathway.transform.position - _newPosition;
 		for (int i = 0; i < _pathway.wayPoints.Count; i++)
 		{
-			_pathway.wayPoints[i] = Handles.PositionHandle(_pathway.wayPoints[i], Quaternion.identity);
+			_pathway.wayPoints[i] = Handles.PositionHandle(_pathway.wayPoints[i] + _newPosition, Quaternion.identity);
 		}
+		//if (EditorGUI.EndChangeCheck())
+		{
+			_newPosition = _pathway.transform.position;
+		}
+		
 	}
 
 	private void OnEnable()
@@ -35,6 +42,7 @@ public class PathwayEditor : Editor
 		_reorderableList.onSelectCallback += SelectItem;
 		_pathway = (Pathway)target;
 		_pathway.SelectedIndex = -1;
+		_newPosition = _pathway.transform.position;
 
 		if (_pathway.wayPoints == null)
 		{
@@ -55,14 +63,14 @@ public class PathwayEditor : Editor
 
 	private void DrawHeader(Rect rect)
 	{
-		GUI.Label(rect, TITLE_LABEL);
+		GUI.Label(rect, Pathway.TITLE_LABEL);
 	}
 
 	private void DrawElement(Rect rect, int index, bool active, bool focused)
 	{
 		var item = _reorderableList.serializedProperty.GetArrayElementAtIndex(index);
 
-		item.vector3Value=EditorGUI.Vector3Field(rect, FIELD_LABEL + index, item.vector3Value);
+		item.vector3Value=EditorGUI.Vector3Field(rect, Pathway.FIELD_LABEL + index, item.vector3Value);
 	}
 	
 	private void AddItem(ReorderableList list)
@@ -78,7 +86,7 @@ public class PathwayEditor : Editor
 				list.serializedProperty.GetArrayElementAtIndex(i).vector3Value = list.serializedProperty.GetArrayElementAtIndex(i - 1).vector3Value;
 			}
 
-			list.serializedProperty.GetArrayElementAtIndex(index + 1).vector3Value = new Vector3();
+			list.serializedProperty.GetArrayElementAtIndex(index + 1).vector3Value = new Vector3(_pathway.transform.position.x, _pathway.transform.position.y, _pathway.transform.position.z);
 		}
 		else
 		{
