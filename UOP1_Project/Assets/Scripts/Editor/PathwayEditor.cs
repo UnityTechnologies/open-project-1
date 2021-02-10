@@ -9,11 +9,10 @@ public class PathwayEditor : Editor
 	private ReorderableList _reorderableList;
 	private Pathway _pathway;
 	Vector3 _newPosition;
+
 	protected void OnSceneGUI()
 	{
-		
 		DispalyHandles();
-			
 	}
 
 	private void DispalyHandles()
@@ -21,14 +20,13 @@ public class PathwayEditor : Editor
 		
 		EditorGUI.BeginChangeCheck();
 		_newPosition = _pathway.transform.position - _newPosition;
+
 		for (int i = 0; i < _pathway.wayPoints.Count; i++)
 		{
 			_pathway.wayPoints[i] = Handles.PositionHandle(_pathway.wayPoints[i] + _newPosition, Quaternion.identity);
 		}
-		//if (EditorGUI.EndChangeCheck())
-		{
-			_newPosition = _pathway.transform.position;
-		}
+		
+		_newPosition = _pathway.transform.position;
 		
 	}
 
