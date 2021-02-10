@@ -4,24 +4,32 @@ using UnityEditor;
 using UnityEditorInternal;
 
 [CustomEditor (typeof(Pathway))]
-public class PathwayGizmo : Editor
+public class PathwayEditor : Editor
 {
 	private ReorderableList _reorderableList;
 	private Pathway _pathway;
 	private static int _selectedIndex;
-	private const string FIELD_NAME = "point ";
-	private const string LIST_TITLE = "way points";
+	private const string FIELD_LABEL = "Point ";
+	private const string TITLE_LABEL = "Waypoints";
 	
 	protected void OnSceneGUI()
 	{
 		EditorGUI.BeginChangeCheck();
+
 		Handles.color = _pathway.CubeColor;
+		Vector3 vOffset = Vector3.up * _pathway.Size / 2;
+		Vector3 cubeDim = Vector3.one * _pathway.Size;
+
 		for (int i = 0; i < _pathway.wayPoints.Count; i++)
 		{
 			_pathway.wayPoints[i]=Handles.PositionHandle(_pathway.wayPoints[i], Quaternion.identity);
-			Handles.Label(_pathway.wayPoints[i] + (_pathway.Size+2)*Vector3.up, FIELD_NAME + i);
-			if(_selectedIndex != i || _selectedIndex == -1)
-				Handles.DrawWireCube(_pathway.wayPoints[i] + Vector3.up * _pathway.Size / 2, Vector3.one * _pathway.Size);
+			Handles.Label(_pathway.wayPoints[i] + (_pathway.Size + 2)*Vector3.up, FIELD_LABEL + i);
+
+			if (_selectedIndex != i || _selectedIndex == -1)
+			{
+				Handles.DrawWireCube(_pathway.wayPoints[i] + vOffset, cubeDim);
+			}
+
 			if (i != 0)
 			{
 				Handles.color = _pathway.LineColor;
@@ -33,26 +41,27 @@ public class PathwayGizmo : Editor
 		if (_selectedIndex != -1)
 		{
 			Handles.color = _pathway.SelectedObjectColor;
-			Handles.DrawWireCube(_pathway.wayPoints[_selectedIndex] + Vector3.up * _pathway.Size / 2, Vector3.one * _pathway.Size);
+			Handles.DrawWireCube(_pathway.wayPoints[_selectedIndex] + vOffset, cubeDim);
 		}
 
 	}
 
 	private void OnEnable()
 	{
-		_selectedIndex = -1;
-		_pathway = (Pathway)target;
-		
-		if (_pathway.wayPoints == null)
-			_pathway.wayPoints = new List<Vector3>();
 		_reorderableList = new ReorderableList(serializedObject, serializedObject.FindProperty("wayPoints"), true, true, true, true);
-		// Add listeners to draw events
 		_reorderableList.drawHeaderCallback += DrawHeader;
 		_reorderableList.drawElementCallback += DrawElement;
 		_reorderableList.onAddCallback += AddItem;
 		_reorderableList.onRemoveCallback += RemoveItem;
 		_reorderableList.onSelectCallback += SelectItem;
-		
+		_selectedIndex = -1;
+		_pathway = (Pathway)target;
+
+		if (_pathway.wayPoints == null)
+		{
+			_pathway.wayPoints = new List<Vector3>();
+		}
+
 	}
 
 	private void OnDisable()
@@ -63,62 +72,60 @@ public class PathwayGizmo : Editor
 		_reorderableList.onAddCallback -= AddItem;
 		_reorderableList.onRemoveCallback -= RemoveItem;
 		_reorderableList.onSelectCallback -= SelectItem;
-
 	}
 
-	/// <summary>
-	/// Draws the header of the list
-	/// </summary>
-	/// <param name="rect"></param>
 	private void DrawHeader(Rect rect)
 	{
-		GUI.Label(rect, LIST_TITLE);
+		GUI.Label(rect, TITLE_LABEL);
 	}
 
-	/// <summary>
-	/// Draws one element of the list (ListItemExample)
-	/// </summary>
-	/// <param name="rect"></param>
-	/// <param name="index"></param>
-	/// <param name="active"></param>
-	/// <param name="focused"></param>
 	private void DrawElement(Rect rect, int index, bool active, bool focused)
 	{
 		var item = _reorderableList.serializedProperty.GetArrayElementAtIndex(index);
-		item.vector3Value=EditorGUI.Vector3Field(new Rect(rect.x , rect.y, rect.width, rect.height), FIELD_NAME + index, item.vector3Value);
-		
+
+		item.vector3Value=EditorGUI.Vector3Field(rect, FIELD_LABEL + index, item.vector3Value);
 	}
 	
 	private void AddItem(ReorderableList list)
 	{
 		var index=list.index;
+
 		list.serializedProperty.arraySize++;
-		if (index > -1)
+
+		if (index > -1 && list.serializedProperty.arraySize > 1)
 		{
-			for (int i = list.serializedProperty.arraySize - 1; i > index+1; i--)
+			for (int i = list.serializedProperty.arraySize - 1; i > index + 1; i--)
 			{
 				list.serializedProperty.GetArrayElementAtIndex(i).vector3Value = list.serializedProperty.GetArrayElementAtIndex(i - 1).vector3Value;
 			}
+
+			list.serializedProperty.GetArrayElementAtIndex(index + 1).vector3Value = new Vector3();
 		}
-		
-		list.serializedProperty.GetArrayElementAtIndex(index+1).vector3Value = new Vector3();
-		
+		else
+		{
+			list.serializedProperty.GetArrayElementAtIndex(list.serializedProperty.arraySize-1).vector3Value = new Vector3();
+		}
+
 	}
 
 	private void RemoveItem(ReorderableList list)
 	{
 		var index = list.index;
+
 		for (int i = index; i < list.serializedProperty.arraySize - 1; i++)
 		{
 			list.serializedProperty.GetArrayElementAtIndex(i).vector3Value = list.serializedProperty.GetArrayElementAtIndex(i+1).vector3Value;
 		}
+
 		list.serializedProperty.arraySize--;
 		_selectedIndex = -1;
 	}
 
-	private void SelectItem(ReorderableList list) {
+	private void SelectItem(ReorderableList list)
+	{
 		//TODO: add the possibility of placing the box directly with the mouse
 		_selectedIndex = list.index;
+		SceneView.RepaintAll();
 	}
 
 	public override void OnInspectorGUI()
@@ -126,7 +133,6 @@ public class PathwayGizmo : Editor
 		DrawDefaultInspector();
 		serializedObject.Update();
 		_reorderableList.DoLayoutList();
-		serializedObject.ApplyModifiedProperties();
-		SceneView.RepaintAll();
+		serializedObject.ApplyModifiedProperties();	
 	}
 }
