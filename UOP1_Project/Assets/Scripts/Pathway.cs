@@ -14,28 +14,17 @@ public class Pathway : MonoBehaviour
 	[SerializeField]
 	private Color _lineColor = Color.black;
 	[SerializeField]
-	private Color _selectedObjectColor = Color.white;
-
-	public Color CubeColor
-	{
-		get => _cubeColor;
-	}
-
-	public Color LineColor
-	{
-		get => _lineColor;
-	}
-
-	public Color SelectedObjectColor
-	{
-		get => _selectedObjectColor;
-	}
-
-	public float Size
-	{
-		get => _cubeSize;
-	}
-
+	private Color _selectedColor = Color.white;
+	[SerializeField]
+	private Color _textColor = Color.white;
+	[SerializeField]
+	private Mesh _drawMesh;
+	public Color CubeColor { get => _cubeColor; }
+	public Color LineColor { get => _lineColor; }
+	public Color SelectedColor { get => _selectedColor; }
+	public Color TextColor { get => _textColor; }
+	public float Size { get => _cubeSize; }
+	public Mesh DrawMesh { get => _drawMesh; }
 
 #endif
 

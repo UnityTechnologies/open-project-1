@@ -11,45 +11,81 @@ public class PathwayEditor : Editor
 	private static int _selectedIndex;
 	private const string FIELD_LABEL = "Point ";
 	private const string TITLE_LABEL = "Waypoints";
-	
-	protected void OnSceneGUI()
+	private GUIStyle _style;
+
+	[DrawGizmo(GizmoType.Selected)]
+	static void DrawGizmosSelected(Pathway pathway, GizmoType gizmoType)
 	{
-		EditorGUI.BeginChangeCheck();
+		Quaternion lookAt;
+		Vector3 vOffset = Vector3.up * pathway.Size / 2;
+		Vector3 cubeDim = Vector3.one * pathway.Size;
+		Vector3 meshDim = cubeDim / 1.3f;
+		Gizmos.color = pathway.CubeColor;
 
-		Handles.color = _pathway.CubeColor;
-		Vector3 vOffset = Vector3.up * _pathway.Size / 2;
-		Vector3 cubeDim = Vector3.one * _pathway.Size;
-
-		for (int i = 0; i < _pathway.wayPoints.Count; i++)
+		for (int i = 0; i < pathway.wayPoints.Count; i++)
 		{
-			_pathway.wayPoints[i]=Handles.PositionHandle(_pathway.wayPoints[i], Quaternion.identity);
-			Handles.Label(_pathway.wayPoints[i] + (_pathway.Size + 2)*Vector3.up, FIELD_LABEL + i);
-
 			if (_selectedIndex != i || _selectedIndex == -1)
 			{
-				Handles.DrawWireCube(_pathway.wayPoints[i] + vOffset, cubeDim);
-			}
+				if (i != pathway.wayPoints.Count - 1)
+				{
+					lookAt = Quaternion.LookRotation(pathway.wayPoints[i + 1]-pathway.wayPoints[i]);
+				}
+				else
+				{
+					lookAt = Quaternion.LookRotation(pathway.wayPoints[0]-pathway.wayPoints[i]);
+				}
 
-			if (i != 0)
-			{
-				Handles.color = _pathway.LineColor;
-				Handles.DrawLine(_pathway.wayPoints[i - 1], _pathway.wayPoints[i]);
-				Handles.color = _pathway.CubeColor;
+				Gizmos.DrawWireCube(pathway.wayPoints[i] + vOffset, cubeDim);
+				Gizmos.DrawMesh(pathway.DrawMesh, pathway.wayPoints[i], lookAt, meshDim);
 			}
 		}
 
 		if (_selectedIndex != -1)
 		{
-			Handles.color = _pathway.SelectedObjectColor;
-			Handles.DrawWireCube(_pathway.wayPoints[_selectedIndex] + vOffset, cubeDim);
+			if (_selectedIndex != pathway.wayPoints.Count - 1)
+			{
+				lookAt = Quaternion.LookRotation(pathway.wayPoints[_selectedIndex + 1]-pathway.wayPoints[_selectedIndex]);
+			}
+			else
+			{
+				lookAt = Quaternion.LookRotation(pathway.wayPoints[0]- pathway.wayPoints[_selectedIndex]);
+			}
+
+			Gizmos.color = pathway.SelectedColor;
+			Gizmos.DrawWireCube(pathway.wayPoints[_selectedIndex] + vOffset, cubeDim);
+			Gizmos.DrawMesh(pathway.DrawMesh, pathway.wayPoints[_selectedIndex], lookAt, meshDim);
+			Gizmos.color = pathway.CubeColor;
+			
+		}
+	}
+
+
+	protected void OnSceneGUI()
+	{
+		EditorGUI.BeginChangeCheck();
+		DrawStraightLines();
+	}
+
+	private void DrawStraightLines() {
+
+		_style.normal.textColor = _pathway.TextColor;
+		Handles.color = _pathway.LineColor;
+		
+		for (int i = 0; i < _pathway.wayPoints.Count; i++)
+		{
+			_pathway.wayPoints[i] = Handles.PositionHandle(_pathway.wayPoints[i], Quaternion.identity);
+			Handles.Label(_pathway.wayPoints[i] + (_pathway.Size + 2) * Vector3.up, FIELD_LABEL + i, _style);
+
+			if (i != 0)
+			{
+				Handles.DrawDottedLine(_pathway.wayPoints[i - 1], _pathway.wayPoints[i], 2);
+			}
 		}
 
 		if (_pathway.wayPoints.Count > 2)
 		{
-			Handles.color = _pathway.LineColor;
-			Handles.DrawLine(_pathway.wayPoints[0], _pathway.wayPoints[_pathway.wayPoints.Count-1]);
+			Handles.DrawDottedLine(_pathway.wayPoints[0], _pathway.wayPoints[_pathway.wayPoints.Count - 1], 2);
 		}
-
 	}
 
 	private void OnEnable()
@@ -62,6 +98,7 @@ public class PathwayEditor : Editor
 		_reorderableList.onSelectCallback += SelectItem;
 		_selectedIndex = -1;
 		_pathway = (Pathway)target;
+		_style = new GUIStyle();
 
 		if (_pathway.wayPoints == null)
 		{
@@ -129,7 +166,6 @@ public class PathwayEditor : Editor
 
 	private void SelectItem(ReorderableList list)
 	{
-		//TODO: add the possibility of placing the box directly with the mouse
 		_selectedIndex = list.index;
 		SceneView.RepaintAll();
 	}
@@ -139,6 +175,12 @@ public class PathwayEditor : Editor
 		DrawDefaultInspector();
 		serializedObject.Update();
 		_reorderableList.DoLayoutList();
-		serializedObject.ApplyModifiedProperties();	
+		serializedObject.ApplyModifiedProperties();
+
+		if (GUILayout.Button("button"))
+		{
+			
+		}
 	}
+
 }
