@@ -13,24 +13,17 @@ public class PathwayGizmos
 
 	private static void DrawGizmos(Pathway pathway) {
 
-		Vector3 vOffset = Vector3.up * pathway.Size / 2;
-		Vector3 cubeDim = Vector3.one * pathway.Size;
-		Vector3 meshDim = cubeDim / 1.3f;
 		Gizmos.color = pathway.CubeColor;
-		GUIStyle style = new GUIStyle();
-		style.normal.textColor = pathway.TextColor;
-
+		
 		for (int i = 0; i < pathway.wayPoints.Count; i++)
 		{
 			if (pathway.SelectedIndex != i || pathway.SelectedIndex == -1)
 			{
-				
+
 				//Draw cubes, labels and meshes
-				Handles.Label(pathway.wayPoints[i] + (pathway.Size + 2) * Vector3.up, Pathway.FIELD_LABEL + i, style);
-				Gizmos.DrawWireCube(pathway.wayPoints[i] + vOffset, cubeDim);
-				Gizmos.DrawMesh(pathway.DrawMesh, pathway.wayPoints[i], LookAt(pathway, i), meshDim);
+				DrawElements(pathway, i);
 			}
-			if (i != 0) 
+			if (i != 0)
 			{
 				//Draw lines
 				using (new Handles.DrawingScope(pathway.LineColor))
@@ -38,7 +31,7 @@ public class PathwayGizmos
 					Handles.DrawDottedLine(pathway.wayPoints[i - 1], pathway.wayPoints[i], 2);
 				}
 			}
-			
+
 		}
 
 		if (pathway.wayPoints.Count > 2)
@@ -54,9 +47,7 @@ public class PathwayGizmos
 		{
 			//Draw cubes, labels and meshes for the selected index
 			Gizmos.color = pathway.SelectedColor;
-			Gizmos.DrawWireCube(pathway.wayPoints[pathway.SelectedIndex] + vOffset, cubeDim);
-			Gizmos.DrawMesh(pathway.DrawMesh, pathway.wayPoints[pathway.SelectedIndex], LookAt(pathway, pathway.SelectedIndex), meshDim);
-			Gizmos.color = pathway.CubeColor;
+			DrawElements(pathway, pathway.SelectedIndex);
 		}
 
 	}
@@ -80,6 +71,19 @@ public class PathwayGizmos
 			return Quaternion.LookRotation(a - b);
 		}
 		return Quaternion.identity;
+	}
+
+	private static void DrawElements(Pathway pathway, int index){
+		
+		Vector3 vOffset = Vector3.up * pathway.Size / 2;
+		Vector3 cubeDim = Vector3.one * pathway.Size;
+		Vector3 meshDim = cubeDim / 1.3f;
+		GUIStyle style = new GUIStyle();
+
+		style.normal.textColor = pathway.TextColor;
+		Handles.Label(pathway.wayPoints[index] + (pathway.Size + 1) * Vector3.up, Pathway.FIELD_LABEL + index, style);
+		Gizmos.DrawWireCube(pathway.wayPoints[index] + vOffset, cubeDim);
+		Gizmos.DrawMesh(pathway.DrawMesh, pathway.wayPoints[index], LookAt(pathway, index), meshDim);
 	}
 
 }

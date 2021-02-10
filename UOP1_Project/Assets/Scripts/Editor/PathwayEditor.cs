@@ -4,6 +4,7 @@ using UnityEditor;
 using UnityEditorInternal;
 
 [CustomEditor (typeof(Pathway))]
+
 public class PathwayEditor : Editor
 {
 	private ReorderableList _reorderableList;
@@ -105,6 +106,7 @@ public class PathwayEditor : Editor
 		}
 
 		list.serializedProperty.arraySize--;
+
 		if (list.index == list.serializedProperty.arraySize)
 		{
 			list.index--;
@@ -116,7 +118,7 @@ public class PathwayEditor : Editor
 	private void SelectItem(ReorderableList list)
 	{
 		_pathway.SelectedIndex = list.index;
-		SceneView.RepaintAll();
+		InternalEditorUtility.RepaintAllViews();
 	}
 
 	public override void OnInspectorGUI()
