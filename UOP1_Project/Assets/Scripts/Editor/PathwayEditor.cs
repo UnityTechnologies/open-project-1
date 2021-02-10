@@ -9,6 +9,7 @@ public class PathwayEditor : Editor
 	private ReorderableList _reorderableList;
 	private Pathway _pathway;
 	private static int _selectedIndex;
+	private static bool _hideGizmos;
 	private const string FIELD_LABEL = "Point ";
 	private const string TITLE_LABEL = "Waypoints";
 	private GUIStyle _style;
@@ -16,46 +17,49 @@ public class PathwayEditor : Editor
 	[DrawGizmo(GizmoType.Selected)]
 	static void DrawGizmosSelected(Pathway pathway, GizmoType gizmoType)
 	{
-		Quaternion lookAt;
-		Vector3 vOffset = Vector3.up * pathway.Size / 2;
-		Vector3 cubeDim = Vector3.one * pathway.Size;
-		Vector3 meshDim = cubeDim / 1.3f;
-		Gizmos.color = pathway.CubeColor;
-
-		for (int i = 0; i < pathway.wayPoints.Count; i++)
+		if (!_hideGizmos)
 		{
-			if (_selectedIndex != i || _selectedIndex == -1)
+			Quaternion lookAt;
+			Vector3 vOffset = Vector3.up * pathway.Size / 2;
+			Vector3 cubeDim = Vector3.one * pathway.Size;
+			Vector3 meshDim = cubeDim / 1.3f;
+			Gizmos.color = pathway.CubeColor;
+
+			for (int i = 0; i < pathway.wayPoints.Count; i++)
 			{
-				if (i != pathway.wayPoints.Count - 1)
+				if (_selectedIndex != i || _selectedIndex == -1)
 				{
-					lookAt = Quaternion.LookRotation(pathway.wayPoints[i + 1]-pathway.wayPoints[i]);
+					if (i != pathway.wayPoints.Count - 1)
+					{
+						lookAt = Quaternion.LookRotation(pathway.wayPoints[i + 1] - pathway.wayPoints[i]);
+					}
+					else
+					{
+						lookAt = Quaternion.LookRotation(pathway.wayPoints[0] - pathway.wayPoints[i]);
+					}
+
+					Gizmos.DrawWireCube(pathway.wayPoints[i] + vOffset, cubeDim);
+					Gizmos.DrawMesh(pathway.DrawMesh, pathway.wayPoints[i], lookAt, meshDim);
+				}
+			}
+
+			if (_selectedIndex != -1)
+			{
+				if (_selectedIndex != pathway.wayPoints.Count - 1)
+				{
+					lookAt = Quaternion.LookRotation(pathway.wayPoints[_selectedIndex + 1] - pathway.wayPoints[_selectedIndex]);
 				}
 				else
 				{
-					lookAt = Quaternion.LookRotation(pathway.wayPoints[0]-pathway.wayPoints[i]);
+					lookAt = Quaternion.LookRotation(pathway.wayPoints[0] - pathway.wayPoints[_selectedIndex]);
 				}
 
-				Gizmos.DrawWireCube(pathway.wayPoints[i] + vOffset, cubeDim);
-				Gizmos.DrawMesh(pathway.DrawMesh, pathway.wayPoints[i], lookAt, meshDim);
-			}
-		}
+				Gizmos.color = pathway.SelectedColor;
+				Gizmos.DrawWireCube(pathway.wayPoints[_selectedIndex] + vOffset, cubeDim);
+				Gizmos.DrawMesh(pathway.DrawMesh, pathway.wayPoints[_selectedIndex], lookAt, meshDim);
+				Gizmos.color = pathway.CubeColor;
 
-		if (_selectedIndex != -1)
-		{
-			if (_selectedIndex != pathway.wayPoints.Count - 1)
-			{
-				lookAt = Quaternion.LookRotation(pathway.wayPoints[_selectedIndex + 1]-pathway.wayPoints[_selectedIndex]);
 			}
-			else
-			{
-				lookAt = Quaternion.LookRotation(pathway.wayPoints[0]- pathway.wayPoints[_selectedIndex]);
-			}
-
-			Gizmos.color = pathway.SelectedColor;
-			Gizmos.DrawWireCube(pathway.wayPoints[_selectedIndex] + vOffset, cubeDim);
-			Gizmos.DrawMesh(pathway.DrawMesh, pathway.wayPoints[_selectedIndex], lookAt, meshDim);
-			Gizmos.color = pathway.CubeColor;
-			
 		}
 	}
 
@@ -99,6 +103,7 @@ public class PathwayEditor : Editor
 		_selectedIndex = -1;
 		_pathway = (Pathway)target;
 		_style = new GUIStyle();
+		_hideGizmos = false;
 
 		if (_pathway.wayPoints == null)
 		{
@@ -177,9 +182,10 @@ public class PathwayEditor : Editor
 		_reorderableList.DoLayoutList();
 		serializedObject.ApplyModifiedProperties();
 
-		if (GUILayout.Button("button"))
+		if (GUILayout.Button("hide gizmos"))
 		{
-			
+			_hideGizmos=! _hideGizmos;
+			SceneView.RepaintAll();
 		}
 	}
 
