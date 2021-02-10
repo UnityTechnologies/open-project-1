@@ -19,12 +19,14 @@ public class Pathway : MonoBehaviour
 	private Color _textColor = Color.white;
 	[SerializeField]
 	private Mesh _drawMesh;
+
 	public Color CubeColor { get => _cubeColor; }
 	public Color LineColor { get => _lineColor; }
 	public Color SelectedColor { get => _selectedColor; }
 	public Color TextColor { get => _textColor; }
 	public float Size { get => _cubeSize; }
 	public Mesh DrawMesh { get => _drawMesh; }
+	public int SelectedIndex { get; set; }
 
 #endif
 
