@@ -8,6 +8,7 @@ using UnityEditorInternal;
 public class PathwayEditor : Editor
 {
 	private ReorderableList _reorderableList;
+	private SerializedProperty _wayPoints;
 	private Pathway _pathway;
 	Vector3 _newPosition;
 
@@ -33,12 +34,16 @@ public class PathwayEditor : Editor
 
 	private void OnEnable()
 	{
-		_reorderableList = new ReorderableList(serializedObject, serializedObject.FindProperty("wayPoints"), true, true, true, true);
+		Undo.undoRedoPerformed += DoUndo;
+		_wayPoints = serializedObject.FindProperty("wayPoints");
+		_reorderableList = new ReorderableList(serializedObject, _wayPoints, true, true, true, true);
 		_reorderableList.drawHeaderCallback += DrawHeader;
 		_reorderableList.drawElementCallback += DrawElement;
 		_reorderableList.onAddCallback += AddItem;
 		_reorderableList.onRemoveCallback += RemoveItem;
 		_reorderableList.onSelectCallback += SelectItem;
+		_reorderableList.onChangedCallback += ListModified;
+		
 		_pathway = (Pathway)target;
 		_pathway.SelectedIndex = -1;
 		_newPosition = _pathway.transform.position;
@@ -52,6 +57,8 @@ public class PathwayEditor : Editor
 		_reorderableList.onAddCallback -= AddItem;
 		_reorderableList.onRemoveCallback -= RemoveItem;
 		_reorderableList.onSelectCallback -= SelectItem;
+		_reorderableList.onChangedCallback -= ListModified;
+		Undo.undoRedoPerformed -= DoUndo;
 	}
 
 	private void DrawHeader(Rect rect)
@@ -69,22 +76,17 @@ public class PathwayEditor : Editor
 	private void AddItem(ReorderableList list)
 	{
 		var index=list.index;
-
-		list.serializedProperty.arraySize++;
-
 		if (index > -1 && list.serializedProperty.arraySize > 1)
 		{
-			for (int i = list.serializedProperty.arraySize - 1; i > index + 1; i--)
-			{
-				list.serializedProperty.GetArrayElementAtIndex(i).vector3Value = list.serializedProperty.GetArrayElementAtIndex(i - 1).vector3Value;
-			}
-			var previous = list.serializedProperty.GetArrayElementAtIndex(index).vector3Value;
+			list.serializedProperty.InsertArrayElementAtIndex(index+1);
+			var previous = list.serializedProperty.GetArrayElementAtIndex(index+1).vector3Value;
 			list.serializedProperty.GetArrayElementAtIndex(index + 1).vector3Value = new Vector3(previous.x + 2, previous.y, previous.z + 2);
 		}
 		else
 		{
+			list.serializedProperty.InsertArrayElementAtIndex(list.serializedProperty.arraySize);
 			var previous = _pathway.transform.position;
-			list.serializedProperty.GetArrayElementAtIndex(list.serializedProperty.arraySize - 1).vector3Value = new Vector3(previous.x + 2, previous.y, previous.z + 2);
+			list.serializedProperty.GetArrayElementAtIndex(list.serializedProperty.arraySize-1).vector3Value = new Vector3(previous.x + 2, previous.y, previous.z + 2);
 		}
 		list.index++;
 		_pathway.SelectedIndex = list.index;
@@ -94,18 +96,13 @@ public class PathwayEditor : Editor
 	{
 		var index = list.index;
 
-		for (int i = index; i < list.serializedProperty.arraySize - 1; i++)
-		{
-			list.serializedProperty.GetArrayElementAtIndex(i).vector3Value = list.serializedProperty.GetArrayElementAtIndex(i+1).vector3Value;
-		}
-
-		list.serializedProperty.arraySize--;
+		list.serializedProperty.DeleteArrayElementAtIndex(index);
 
 		if (list.index == list.serializedProperty.arraySize)
 		{
 			list.index--;
 		}
-		
+
 		_pathway.SelectedIndex = list.index;
 	}
 
@@ -115,10 +112,19 @@ public class PathwayEditor : Editor
 		InternalEditorUtility.RepaintAllViews();
 	}
 
+	private void ListModified(ReorderableList list)
+	{
+		list.serializedProperty.serializedObject.ApplyModifiedProperties();
+	}
+
+	private void DoUndo()
+	{
+		serializedObject.UpdateIfRequiredOrScript();
+	}
+
 	public override void OnInspectorGUI()
 	{
 		DrawDefaultInspector();
-		serializedObject.Update();
 		_reorderableList.DoLayoutList();
 		serializedObject.ApplyModifiedProperties();
 
