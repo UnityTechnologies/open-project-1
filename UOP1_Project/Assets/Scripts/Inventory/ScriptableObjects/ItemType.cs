@@ -26,23 +26,23 @@ public class ItemType : ScriptableObject
 {
 	[Tooltip("The action associated with the item type")]
 	[SerializeField]
-	private LocalizedString _actionName;
+	private LocalizedString _actionName = default;
 
 	[Tooltip("The action associated with the item type")]
 	[SerializeField]
-	private LocalizedString _typeName;
+	private LocalizedString _typeName = default;
 
 	[Tooltip("The Item's background color in the UI")]
-	[SerializeField] private Color _typeColor;
+	[SerializeField] private Color _typeColor = default;
 	[Tooltip("The Item's type")]
-	[SerializeField] private itemInventoryType _type;
+	[SerializeField] private itemInventoryType _type = default;
 
 	[Tooltip("The Item's action type")]
-	[SerializeField] private ItemInventoryActionType _actionType;
+	[SerializeField] private ItemInventoryActionType _actionType = default;
 
 
 	[Tooltip("The tab type under which the item will be added")]
-	[SerializeField] private InventoryTabType _tabType;
+	[SerializeField] private InventoryTabType _tabType = default;
 
 	public LocalizedString ActionName => _actionName;
 	public LocalizedString TypeName => _typeName;
