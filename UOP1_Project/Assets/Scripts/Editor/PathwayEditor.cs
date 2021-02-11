@@ -76,7 +76,7 @@ public class PathwayEditor : Editor
 	private void AddItem(ReorderableList list)
 	{
 		var index=list.index;
-		if (index > -1 && list.serializedProperty.arraySize > 1)
+		if (index > -1 && list.serializedProperty.arraySize > 0)
 		{
 			list.serializedProperty.InsertArrayElementAtIndex(index+1);
 			var previous = list.serializedProperty.GetArrayElementAtIndex(index+1).vector3Value;
