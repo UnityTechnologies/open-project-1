@@ -5,7 +5,7 @@ using UnityEngine;
 public class Pathway : MonoBehaviour
 {
 	[HideInInspector]
-	public List<Vector3> wayPoints;
+	public Vector3[] wayPoints;
 #if UNITY_EDITOR
 	[SerializeField]
 	private float _cubeSize = 3;
@@ -33,8 +33,5 @@ public class Pathway : MonoBehaviour
 	
 #endif
 
-	public Vector3[] WayPointsArray() {
-		return wayPoints.ToArray();
-	}
 	
 }

@@ -15,7 +15,7 @@ public class PathwayGizmos
 
 		Gizmos.color = pathway.CubeColor;
 		
-		for (int i = 0; i < pathway.wayPoints.Count; i++)
+		for (int i = 0; i < pathway.wayPoints.Length; i++)
 		{
 			if (pathway.SelectedIndex != i || pathway.SelectedIndex == -1)
 			{
@@ -34,12 +34,12 @@ public class PathwayGizmos
 
 		}
 
-		if (pathway.wayPoints.Count > 2)
+		if (pathway.wayPoints.Length > 2)
 		{
 			//Draw final line between the first and last point
 			using (new Handles.DrawingScope(pathway.LineColor))
 			{
-				Handles.DrawDottedLine(pathway.wayPoints[0], pathway.wayPoints[pathway.wayPoints.Count - 1], 2);
+				Handles.DrawDottedLine(pathway.wayPoints[0], pathway.wayPoints[pathway.wayPoints.Length - 1], 2);
 			}
 		}
 
@@ -54,7 +54,7 @@ public class PathwayGizmos
 
 	private static Quaternion LookAt(Pathway pathway, int index)
 	{
-		if (index != pathway.wayPoints.Count - 1)
+		if (index != pathway.wayPoints.Length - 1)
 		{
 			return LookAtDirection(pathway.wayPoints[index + 1], pathway.wayPoints[index]);
 		}

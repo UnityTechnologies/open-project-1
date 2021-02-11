@@ -22,7 +22,7 @@ public class PathwayEditor : Editor
 		EditorGUI.BeginChangeCheck();
 		_newPosition = _pathway.transform.position - _newPosition;
 
-		for (int i = 0; i < _pathway.wayPoints.Count; i++)
+		for (int i = 0; i < _pathway.wayPoints.Length; i++)
 		{
 			_pathway.wayPoints[i] = Handles.PositionHandle(_pathway.wayPoints[i] + _newPosition, Quaternion.identity);
 		}
@@ -42,12 +42,6 @@ public class PathwayEditor : Editor
 		_pathway = (Pathway)target;
 		_pathway.SelectedIndex = -1;
 		_newPosition = _pathway.transform.position;
-
-		if (_pathway.wayPoints == null)
-		{
-			_pathway.wayPoints = new List<Vector3>();
-		}
-
 	}
 
 	private void OnDisable()
