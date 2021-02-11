@@ -65,7 +65,7 @@ public class UIManager : MonoBehaviour
 
 	public void OpenUIDialogue(LocalizedString dialogueLine, ActorSO actor)
 	{
-		
+
 		dialogueController.SetDialogue(dialogueLine, actor);
 		dialogueController.gameObject.SetActive(true);
 	}
