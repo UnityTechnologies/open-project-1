@@ -19,15 +19,15 @@ public class PathwayGizmos
 		}
 	}
 
-	private static Quaternion LookAt(Pathway pathway, int index)
+	private static Quaternion LookAt(Vector3[] path, int index)
 	{
-		if (index != pathway.wayPoints.Length - 1)
+		if (index != path.Length - 1)
 		{
-			return LookAtDirection(pathway.wayPoints[index + 1], pathway.wayPoints[index]);
+			return LookAtDirection(path[index + 1], path[index]);
 		}
 		else
 		{
-			return LookAtDirection(pathway.wayPoints[0], pathway.wayPoints[index]);
+			return LookAtDirection(path[0], path[index]);
 		}
 	}
 
@@ -40,7 +40,7 @@ public class PathwayGizmos
 		return Quaternion.identity;
 	}
 
-	private static void DrawElements(Pathway pathway, int index) {
+	private static void DrawElements(Pathway pathway,Vector3[] path,int index) {
 
 		if (pathway.DrawMesh != null)
 		{
@@ -50,9 +50,9 @@ public class PathwayGizmos
 			GUIStyle style = new GUIStyle();
 
 			style.normal.textColor = pathway.TextColor;
-			Handles.Label(pathway.wayPoints[index] + (pathway.Size + 1) * Vector3.up, Pathway.FIELD_LABEL + index, style);
-			Gizmos.DrawWireCube(pathway.wayPoints[index] + vOffset, cubeDim);
-			Gizmos.DrawMesh(pathway.DrawMesh, pathway.wayPoints[index], LookAt(pathway, index), meshDim);
+			Handles.Label(path[index] + (pathway.Size + 1) * Vector3.up, Pathway.FIELD_LABEL + index, style);
+			Gizmos.DrawWireCube(path[index] + vOffset, cubeDim);
+			Gizmos.DrawMesh(pathway.DrawMesh, path[index], LookAt(path, index), meshDim);
 		}
 	}
 
@@ -64,7 +64,7 @@ public class PathwayGizmos
 			{
 
 				//Draw cubes, labels and meshes
-				DrawElements(pathway, i);
+				DrawElements(pathway, pathway.wayPoints, i);
 			}
 			if (i != 0)
 			{
@@ -89,7 +89,7 @@ public class PathwayGizmos
 		{
 			//Draw cubes, labels and meshes for the selected index
 			Gizmos.color = pathway.SelectedColor;
-			DrawElements(pathway, pathway.SelectedIndex);
+			DrawElements(pathway, pathway.wayPoints, pathway.SelectedIndex);
 		}
 	}
 
@@ -97,11 +97,14 @@ public class PathwayGizmos
 	{
 		for (int i = 0; i < pathway.Path.corners.Length - 1; i++)
 		{
+			DrawElements(pathway,pathway.Path.corners, i);
 			using (new Handles.DrawingScope(pathway.LineColor))
 			{
 				Handles.DrawLine(pathway.Path.corners[i], pathway.Path.corners[i + 1]);
 			}
 		}
+		//Draw cubes, labels and meshes
+		DrawElements(pathway, pathway.Path.corners, pathway.Path.corners.Length - 1);
 		using (new Handles.DrawingScope(pathway.LineColor))
 		{
 			Handles.DrawLine(pathway.Path.corners[0], pathway.Path.corners[pathway.Path.corners.Length - 1]);
