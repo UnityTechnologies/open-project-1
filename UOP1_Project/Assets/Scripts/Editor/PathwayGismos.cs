@@ -8,11 +8,6 @@ public class PathwayGizmos
 	[DrawGizmo(GizmoType.Selected)]
 	static void DrawGizmosSelected(Pathway pathway, GizmoType gizmoType)
 	{
-		DrawGizmos(pathway);
-	}
-
-	private static void DrawGizmos(Pathway pathway) {
-
 		Gizmos.color = pathway.CubeColor;
 		if (pathway.Path.corners.Length == 0)
 		{
