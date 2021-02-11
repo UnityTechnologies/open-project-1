@@ -28,6 +28,7 @@ public class PathwayEditor : Editor
 				}
 				else
 					Debug.LogError("Pathway need more than one point to calculate the path");
+				InternalEditorUtility.RepaintAllViews();
 			}
 		}
 		else
@@ -36,6 +37,7 @@ public class PathwayEditor : Editor
 			{
 				_toggled = false;
 				_pathway.Path.ClearCorners();
+				InternalEditorUtility.RepaintAllViews();
 			}
 		}
 	}
