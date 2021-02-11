@@ -9,15 +9,17 @@ public class Pathway : MonoBehaviour
 	public Vector3[] wayPoints;
 #if UNITY_EDITOR
 	[SerializeField]
+	private Color _lineColor = Color.black;
+	[SerializeField]
 	private float _cubeSize = 3;
 	[SerializeField]
 	private Color _cubeColor = Color.red;
 	[SerializeField]
-	private Color _lineColor = Color.black;
-	[SerializeField]
-	private Color _selectedColor = Color.white;
+	private int _textSize = 20;
 	[SerializeField]
 	private Color _textColor = Color.white;
+	[SerializeField]
+	private Color _selectedColor = Color.white;
 	[SerializeField]
 	private Mesh _drawMesh;
 	
@@ -28,7 +30,8 @@ public class Pathway : MonoBehaviour
 	public Color LineColor { get => _lineColor; }
 	public Color SelectedColor { get => _selectedColor; }
 	public Color TextColor { get => _textColor; }
-	public float Size { get => _cubeSize; }
+	public float CubeSize { get => _cubeSize; }
+	public int TextSize { get => _textSize; }
 	public Mesh DrawMesh { get => _drawMesh; }
 	public int SelectedIndex { get; set; }
 	public NavMeshPath Path { get; set; }

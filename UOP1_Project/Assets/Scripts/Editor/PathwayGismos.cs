@@ -41,19 +41,18 @@ public class PathwayGizmos
 	}
 
 	private static void DrawElements(Pathway pathway,Vector3[] path,int index) {
-
+		GUIStyle style = new GUIStyle();
+		style.normal.textColor = pathway.TextColor;
+		style.fontSize = pathway.TextSize;
 		if (pathway.DrawMesh != null)
 		{
-			Vector3 vOffset = Vector3.up * pathway.Size / 2;
-			Vector3 cubeDim = Vector3.one * pathway.Size;
+			Vector3 vOffset = Vector3.up * pathway.CubeSize / 2;
+			Vector3 cubeDim = Vector3.one * pathway.CubeSize;
 			Vector3 meshDim = cubeDim / 1.3f;
-			GUIStyle style = new GUIStyle();
-
-			style.normal.textColor = pathway.TextColor;
-			Handles.Label(path[index] + (pathway.Size + 1) * Vector3.up, index.ToString(), style);
 			Gizmos.DrawWireCube(path[index] + vOffset, cubeDim);
 			Gizmos.DrawMesh(pathway.DrawMesh, path[index], LookAt(path, index), meshDim);
 		}
+		Handles.Label(path[index] + (pathway.CubeSize + pathway.TextSize/8) * Vector3.up, index.ToString(), style);
 	}
 
 	private static void DrawHandlesLines(Pathway pathway)
