@@ -50,7 +50,7 @@ public class PathwayGizmos
 			GUIStyle style = new GUIStyle();
 
 			style.normal.textColor = pathway.TextColor;
-			Handles.Label(path[index] + (pathway.Size + 1) * Vector3.up, Pathway.FIELD_LABEL + index, style);
+			Handles.Label(path[index] + (pathway.Size + 1) * Vector3.up, index.ToString(), style);
 			Gizmos.DrawWireCube(path[index] + vOffset, cubeDim);
 			Gizmos.DrawMesh(pathway.DrawMesh, path[index], LookAt(path, index), meshDim);
 		}

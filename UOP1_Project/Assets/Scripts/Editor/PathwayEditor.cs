@@ -12,6 +12,34 @@ public class PathwayEditor : Editor
 	private Vector3 _newPosition;
 	private bool _toggled;
 
+	public override void OnInspectorGUI()
+	{
+		DrawDefaultInspector();
+		_reorderableList.DoLayoutList();
+		serializedObject.ApplyModifiedProperties();
+
+		if (_toggled == false)
+		{
+			if (_toggled = GUILayout.Button("NavMesh Path"))
+			{
+				if (_pathway.wayPoints.Length > 1)
+				{
+					GeneateNavMeshPath();
+				}
+				else
+					Debug.LogError("Pathway need more than one point to calculate the path");
+			}
+		}
+		else
+		{
+			if (GUILayout.Button("Handles Path"))
+			{
+				_toggled = false;
+				_pathway.Path.ClearCorners();
+			}
+		}
+	}
+
 	protected void OnSceneGUI()
 	{
 		DispalyHandles();
@@ -126,34 +154,6 @@ public class PathwayEditor : Editor
 		for (int i = 1; i < _pathway.wayPoints.Length; i++)
 		{
 			NavMesh.CalculatePath(_pathway.wayPoints[i - 1], _pathway.wayPoints[i], NavMesh.AllAreas, _pathway.Path);
-		}
-	}
-
-	public override void OnInspectorGUI()
-	{
-		DrawDefaultInspector();
-		_reorderableList.DoLayoutList();
-		serializedObject.ApplyModifiedProperties();
-
-		if (_toggled == false)
-		{
-			if (_toggled = GUILayout.Button("NavMesh Path"))
-			{
-				if (_pathway.wayPoints.Length > 1)
-				{
-					GeneateNavMeshPath();
-				}
-				else
-					Debug.LogError("Pathway need more than one point to calculate the path");
-			}
-		}
-		else
-		{
-			if (GUILayout.Button("Handles Path"))
-			{
-				_toggled = false;
-				_pathway.Path.ClearCorners();
-			}
 		}
 	}
 
