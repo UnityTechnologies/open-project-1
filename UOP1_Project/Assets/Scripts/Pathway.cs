@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Pathway : MonoBehaviour
 {
@@ -19,7 +20,7 @@ public class Pathway : MonoBehaviour
 	private Color _textColor = Color.white;
 	[SerializeField]
 	private Mesh _drawMesh;
-
+	
 	public const string FIELD_LABEL = "Point ";
 	public const string TITLE_LABEL = "Waypoints";
 
@@ -30,8 +31,9 @@ public class Pathway : MonoBehaviour
 	public float Size { get => _cubeSize; }
 	public Mesh DrawMesh { get => _drawMesh; }
 	public int SelectedIndex { get; set; }
-	
+	public NavMeshPath Path { get; set; }
+
 #endif
 
-	
+
 }
