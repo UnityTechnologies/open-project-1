@@ -39,17 +39,5 @@ public class CollectibleItem : MonoBehaviour
 		}
 
 	}
-	public void OnTriggerEnter(Collider other)
-	{
-		if (other.tag == "Player")
-		{
-			if (other.gameObject.GetComponent<ItemPicker>())
-			{
-
-				other.gameObject.GetComponent<ItemPicker>().PickItem(_currentItem);
-
-			}
-
-		}
-	}
+	
 }
