@@ -26,10 +26,10 @@ public class PathwayNavMesh
 
 		_pathway.Hits.Clear();
 
-		for (int i = 0; i < _pathway.WayPoints.Count; i++)
+		for (int i = 0; i < _pathway.Waypoints.Count; i++)
 		{
-			hasHit = NavMesh.SamplePosition(_pathway.WayPoints[i], out hit, _pathway.MeshSize * 2, NavMesh.AllAreas);
-			_pathway.Hits.Add(new Pathway.HitPoint(hasHit, hit.position));
+			hasHit = NavMesh.SamplePosition(_pathway.Waypoints[i], out hit, _pathway.MeshSize * 2, NavMesh.AllAreas);
+			_pathway.Hits.Add(new Pathway.HitPoint(hasHit, hit.position, _pathway.Waypoints[i]));
 			result &= hasHit;
 		}
 
@@ -42,9 +42,9 @@ public class PathwayNavMesh
 		int i = 1;
 		NavMeshPath navMeshPath = new NavMeshPath();
 		
-		while ( i < _pathway.WayPoints.Count)
+		while ( i < _pathway.Waypoints.Count)
 		{
-			canGeneatePath &= NavMesh.CalculatePath(_pathway.WayPoints[i - 1], _pathway.WayPoints[i], NavMesh.AllAreas, navMeshPath);
+			canGeneatePath &= NavMesh.CalculatePath(_pathway.Waypoints[i - 1], _pathway.Waypoints[i], NavMesh.AllAreas, navMeshPath);
 			if (canGeneatePath)
 			{
 				for (int j = 0; j < navMeshPath.corners.Length; j++)
@@ -76,7 +76,7 @@ public class PathwayNavMesh
 			{
 				if (PollsNavMesh())
 				{
-					if (_pathway.WayPoints.Count > 1)
+					if (_pathway.Waypoints.Count > 1)
 					{
 						if (GenerateNavMeshPath())
 						{

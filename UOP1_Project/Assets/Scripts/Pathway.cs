@@ -5,7 +5,7 @@ using UnityEngine;
 public class Pathway : MonoBehaviour
 {
 	[HideInInspector]
-	public List<Vector3> WayPoints;
+	public List<Vector3> Waypoints;
 
 #if UNITY_EDITOR
 
@@ -50,10 +50,12 @@ public class Pathway : MonoBehaviour
 	{
 		public bool HasHit { get; }
 		public Vector3 Position { get; }
-		public HitPoint(bool hit, Vector3 position)
+		public Vector3 Waypoint { get; }
+		public HitPoint(bool hit, Vector3 position, Vector3 waypoint)
 		{
 			HasHit = hit;
 			Position = position;
+			Waypoint = waypoint;
 		}
 	}
 	public List<HitPoint> Hits { get; set; }

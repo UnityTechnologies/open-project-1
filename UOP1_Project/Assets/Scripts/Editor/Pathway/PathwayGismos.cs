@@ -43,34 +43,34 @@ public class PathwayGizmos
 
 	private static void DrawHandlesLines(Pathway pathway)
 	{
-		for (int i = 0; i < pathway.WayPoints.Count; i++)
+		for (int i = 0; i < pathway.Waypoints.Count; i++)
 		{
 			if (pathway.SelectedIndex != i || pathway.SelectedIndex == -1)
 			{
-				DrawElements(pathway, pathway.WayPoints, i);
+				DrawElements(pathway, pathway.Waypoints, i);
 			}
 
 			if (i != 0)
 			{
 				using (new Handles.DrawingScope(pathway.LineColor))
 				{
-					Handles.DrawDottedLine(pathway.WayPoints[i - 1], pathway.WayPoints[i], 2);
+					Handles.DrawDottedLine(pathway.Waypoints[i - 1], pathway.Waypoints[i], 2);
 				}
 			}
 		}
 
-		if (pathway.WayPoints.Count > 2)
+		if (pathway.Waypoints.Count > 2)
 		{
 			using (new Handles.DrawingScope(pathway.LineColor))
 			{
-				Handles.DrawDottedLine(pathway.WayPoints[0], pathway.WayPoints[pathway.WayPoints.Count - 1], 2);
+				Handles.DrawDottedLine(pathway.Waypoints[0], pathway.Waypoints[pathway.Waypoints.Count - 1], 2);
 			}
 		}
 
 		if (pathway.SelectedIndex != -1)
 		{
 			Gizmos.color = pathway.SelectedColor;
-			DrawElements(pathway, pathway.WayPoints, pathway.SelectedIndex);
+			DrawElements(pathway, pathway.Waypoints, pathway.SelectedIndex);
 		}
 	}
 
@@ -98,19 +98,19 @@ public class PathwayGizmos
 		{
 			float sphereRadius = pathway.MeshSize * 2;
 
-			for (int i = 0; i < pathway.WayPoints.Count; i++)
+			for (int i = 0; i < pathway.Hits.Count; i++)
 			{
 				if (pathway.Hits[i].HasHit)
 				{
 					Gizmos.color = Color.red;
-					Gizmos.DrawLine(pathway.Hits[i].Position, pathway.WayPoints[i]);
+					Gizmos.DrawLine(pathway.Hits[i].Position, pathway.Hits[i].Waypoint);
 					Gizmos.color = new Color(0, 255, 0, 0.5f);
-					Gizmos.DrawSphere(pathway.WayPoints[i], sphereRadius);
+					Gizmos.DrawSphere(pathway.Hits[i].Waypoint, sphereRadius);
 				}
 				else
 				{
 					Gizmos.color = new Color(255, 0, 0, 0.5f);
-					Gizmos.DrawSphere(pathway.WayPoints[i], sphereRadius);
+					Gizmos.DrawSphere(pathway.Hits[i].Waypoint, sphereRadius);
 				}
 			}
 		}
