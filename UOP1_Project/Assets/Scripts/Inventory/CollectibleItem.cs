@@ -39,5 +39,5 @@ public class CollectibleItem : MonoBehaviour
 		}
 
 	}
-	
+
 }

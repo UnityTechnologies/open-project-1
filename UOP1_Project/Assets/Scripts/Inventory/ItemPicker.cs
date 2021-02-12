@@ -8,7 +8,7 @@ public class ItemPicker : MonoBehaviour
 
 	public void PickItem(Item item)
 	{
-		Debug.Log("Pick Item"); 
+		Debug.Log("Pick Item");
 		if (_addItemEvent != null)
 			_addItemEvent.RaiseEvent(item);
 	}
