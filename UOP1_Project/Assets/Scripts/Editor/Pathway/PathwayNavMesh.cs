@@ -15,7 +15,7 @@ public class PathwayNavMesh
 		_toggled = false;
 		_pathway.Hits = new List<Pathway.HitPoint>();
 		_pathway.DisplayPolls = false;
-		_pathway.Path = new Vector3[]{ };
+		_pathway.Path = new List<Vector3>();
 	}
 
 	private bool PollsNavMesh()
@@ -26,9 +26,9 @@ public class PathwayNavMesh
 
 		_pathway.Hits.Clear();
 
-		for (int i = 0; i < _pathway.wayPoints.Length; i++)
+		for (int i = 0; i < _pathway.WayPoints.Count; i++)
 		{
-			hasHit = NavMesh.SamplePosition(_pathway.wayPoints[i], out hit, _pathway.MeshSize * 2, NavMesh.AllAreas);
+			hasHit = NavMesh.SamplePosition(_pathway.WayPoints[i], out hit, _pathway.MeshSize * 2, NavMesh.AllAreas);
 			_pathway.Hits.Add(new Pathway.HitPoint(hasHit, hit.position));
 			result &= hasHit;
 		}
@@ -39,26 +39,24 @@ public class PathwayNavMesh
 	private bool GenerateNavMeshPath()
 	{
 		bool canGeneatePath = true;
-		List<Vector3> path = new List<Vector3>();
+		
 		NavMeshPath navMeshPath = new NavMeshPath();
 
 		int i = 1;
-		while ( i < _pathway.wayPoints.Length && canGeneatePath)
+		while ( i < _pathway.WayPoints.Count && canGeneatePath)
 		{
-			canGeneatePath &= NavMesh.CalculatePath(_pathway.wayPoints[i - 1], _pathway.wayPoints[i], NavMesh.AllAreas, navMeshPath);
+			canGeneatePath &= NavMesh.CalculatePath(_pathway.WayPoints[i - 1], _pathway.WayPoints[i], NavMesh.AllAreas, navMeshPath);
 			if (canGeneatePath)
 			{
-				foreach (Vector3 corner in navMeshPath.corners)
+				for(int j = 0; j < navMeshPath.corners.Length; j++)
 				{
-					path.Add(corner);
+					_pathway.Path.Add(navMeshPath.corners[j]);
 				}
 			}
 
 			i++;
 		}
 
-		if (canGeneatePath)
-			_pathway.Path = path.ToArray();
 		return canGeneatePath;
 	}
 
@@ -70,7 +68,7 @@ public class PathwayNavMesh
 			{
 				if (PollsNavMesh())
 				{
-					if (_pathway.wayPoints.Length > 1)
+					if (_pathway.WayPoints.Count > 1)
 					{
 						if (GenerateNavMeshPath())
 						{
@@ -96,7 +94,7 @@ public class PathwayNavMesh
 			{
 				_toggled = false;
 				_pathway.DisplayPolls = false;
-				Array.Clear(_pathway.Path,0,_pathway.Path.Length);
+				_pathway.Path.Clear();
 				InternalEditorUtility.RepaintAllViews();
 			}
 

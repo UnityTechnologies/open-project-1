@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using UnityEditor;
+using System.Collections.Generic;
+
 
 public class PathwayGizmos 
 {
@@ -8,8 +10,8 @@ public class PathwayGizmos
 	private static void DrawGizmosSelected(Pathway pathway, GizmoType gizmoType)
 	{
 		Gizmos.color = pathway.MeshColor;
-
-		if (pathway.Path.Length == 0)
+		
+		if (pathway.Path.Count== 0)
 		{
 			DrawHandlesLines(pathway);
 		}
@@ -21,7 +23,7 @@ public class PathwayGizmos
 		DrawHitPoints(pathway);
 	}
 
-	private static void DrawElements(Pathway pathway, Vector3[] path, int index)
+	private static void DrawElements(Pathway pathway, List<Vector3> path, int index)
 	{
 		GUIStyle style = new GUIStyle();
 
@@ -41,41 +43,41 @@ public class PathwayGizmos
 
 	private static void DrawHandlesLines(Pathway pathway)
 	{
-		for (int i = 0; i < pathway.wayPoints.Length; i++)
+		for (int i = 0; i < pathway.WayPoints.Count; i++)
 		{
 			if (pathway.SelectedIndex != i || pathway.SelectedIndex == -1)
 			{
-				DrawElements(pathway, pathway.wayPoints, i);
+				DrawElements(pathway, pathway.WayPoints, i);
 			}
 
 			if (i != 0)
 			{
 				using (new Handles.DrawingScope(pathway.LineColor))
 				{
-					Handles.DrawDottedLine(pathway.wayPoints[i - 1], pathway.wayPoints[i], 2);
+					Handles.DrawDottedLine(pathway.WayPoints[i - 1], pathway.WayPoints[i], 2);
 				}
 			}
 		}
 
-		if (pathway.wayPoints.Length > 2)
+		if (pathway.WayPoints.Count > 2)
 		{
 			using (new Handles.DrawingScope(pathway.LineColor))
 			{
-				Handles.DrawDottedLine(pathway.wayPoints[0], pathway.wayPoints[pathway.wayPoints.Length - 1], 2);
+				Handles.DrawDottedLine(pathway.WayPoints[0], pathway.WayPoints[pathway.WayPoints.Count - 1], 2);
 			}
 		}
 
 		if (pathway.SelectedIndex != -1)
 		{
 			Gizmos.color = pathway.SelectedColor;
-			DrawElements(pathway, pathway.wayPoints, pathway.SelectedIndex);
+			DrawElements(pathway, pathway.WayPoints, pathway.SelectedIndex);
 		}
 	}
 
 	private static void DrawNavMeshPath(Pathway pathway)
 	{
 		
-		for (int i = 0; i < pathway.Path.Length - 1; i++)
+		for (int i = 0; i < pathway.Path.Count- 1; i++)
 		{
 			DrawElements(pathway, pathway.Path, i);
 			using (new Handles.DrawingScope(pathway.LineColor))
@@ -84,10 +86,10 @@ public class PathwayGizmos
 			}
 		}
 
-		DrawElements(pathway, pathway.Path, pathway.Path.Length - 1);
+		DrawElements(pathway, pathway.Path, pathway.Path.Count - 1);
 		using (new Handles.DrawingScope(pathway.LineColor))
 		{
-			Handles.DrawLine(pathway.Path[0], pathway.Path[pathway.Path.Length - 1]);
+			Handles.DrawLine(pathway.Path[0], pathway.Path[pathway.Path.Count - 1]);
 		}
 	}
 
@@ -95,7 +97,7 @@ public class PathwayGizmos
 	{
 		if (pathway.DisplayPolls)
 		{
-			for (int i = 0; i < pathway.wayPoints.Length; i++)
+			for (int i = 0; i < pathway.WayPoints.Count; i++)
 			{
 				if (pathway.Hits[i].HasHit)
 				{
@@ -111,9 +113,9 @@ public class PathwayGizmos
 		}
 	}
 
-	private static Quaternion LookAt(Vector3[] path, int index)
+	private static Quaternion LookAt(List<Vector3> path, int index)
 	{
-		if (index != path.Length - 1)
+		if (index != path.Count - 1)
 		{
 			return LookAtDirection(path[index + 1], path[index]);
 		}

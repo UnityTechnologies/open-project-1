@@ -9,6 +9,7 @@ public class PathwayHandles
 
 	public PathwayHandles(Pathway pathway) {
 		_pathway = pathway;
+		_newPosition = pathway.transform.position;
 	}
 
 	public void DispalyHandles()
@@ -16,9 +17,9 @@ public class PathwayHandles
 		EditorGUI.BeginChangeCheck();
 		_newPosition = _pathway.transform.position - _newPosition;
 
-		for (int i = 0; i < _pathway.wayPoints.Length; i++)
+		for (int i = 0; i < _pathway.WayPoints.Count; i++)
 		{
-			_pathway.wayPoints[i] = Handles.PositionHandle(_pathway.wayPoints[i] + _newPosition, Quaternion.identity);
+			_pathway.WayPoints[i] = Handles.PositionHandle(_pathway.WayPoints[i] + _newPosition, Quaternion.identity);
 		}
 
 		_newPosition = _pathway.transform.position;

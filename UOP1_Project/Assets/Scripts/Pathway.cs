@@ -5,7 +5,7 @@ using UnityEngine.AI;
 public class Pathway : MonoBehaviour
 {
 	[HideInInspector]
-	public Vector3[] wayPoints;
+	public List<Vector3> WayPoints;
 #if UNITY_EDITOR
 	[SerializeField]
 	private Color _lineColor = Color.black;
@@ -37,7 +37,7 @@ public class Pathway : MonoBehaviour
 	public Color SelectedColor { get => _selectedColor; }
 	public int SelectedIndex { get; set; }
 	public bool DisplayPolls{ get ; set; }
-	public Vector3[] Path { get; set; }
+	public List<Vector3> Path { get; set; }
 	public struct HitPoint
 	{
 		public bool HasHit { get; }

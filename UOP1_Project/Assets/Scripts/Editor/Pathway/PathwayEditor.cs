@@ -26,7 +26,7 @@ public class PathwayEditor : Editor
 	private void OnEnable()
 	{
 		Undo.undoRedoPerformed += DoUndo;
-		_reorderableList = new ReorderableList(serializedObject, serializedObject.FindProperty("wayPoints"), true, true, true, true);
+		_reorderableList = new ReorderableList(serializedObject, serializedObject.FindProperty("WayPoints"), true, true, true, true);
 		_reorderableList.drawHeaderCallback += DrawHeader;
 		_reorderableList.drawElementCallback += DrawElement;
 		_reorderableList.onAddCallback += AddItem;
@@ -110,7 +110,7 @@ public class PathwayEditor : Editor
 
 	private void DoUndo()
 	{
-		serializedObject.UpdateIfRequiredOrScript();
+		serializedObject.Update();
 	}
 
 }
