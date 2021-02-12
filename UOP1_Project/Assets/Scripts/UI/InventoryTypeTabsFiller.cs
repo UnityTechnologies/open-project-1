@@ -10,7 +10,7 @@ public class InventoryTypeTabsFiller : MonoBehaviour
 	[SerializeField]
 	private List<InventoryTypeTabFiller> instantiatedGameObjects;
 
-	public void FillTabs(List<InventoryTabType> typesList, InventoryTabType selectedType, TabEventChannelSo changeTabEvent)
+	public void FillTabs(List<InventoryTabType> typesList, InventoryTabType selectedType, TabEventChannelSO changeTabEvent)
 	{
 
 		if (instantiatedGameObjects == null)
