@@ -13,6 +13,9 @@ public class SpawnSystem : MonoBehaviour
 	[SerializeField] private TransformEventChannelSO _playerInstantiatedChannel = default;
 	[SerializeField] private PathAnchor _pathTaken = default;
 
+	[SerializeField] private LocationAnchor _playerLocation = default;
+	[SerializeField] private LocationSO _thisLocation = default;
+
 	[Header("Scene References")]
 	private Transform[] _spawnLocations;
 
@@ -44,6 +47,7 @@ public class SpawnSystem : MonoBehaviour
 			_spawnLocations[i] = spawnLocationsGO[i].transform;
 		}
 		Spawn(FindSpawnIndex(_pathTaken?.Path ?? null));
+		SetLocation();
 	}
 
 	void Reset()
@@ -61,6 +65,12 @@ public class SpawnSystem : MonoBehaviour
 			_spawnLocations = transform.GetComponentsInChildren<Transform>(true)
 								.Where(t => t != this.transform)
 								.ToArray();
+	}
+
+	private void SetLocation()
+	{
+		if (_playerLocation != null)
+			_playerLocation.Location = _thisLocation;
 	}
 
 	private void Spawn(int spawnIndex)
