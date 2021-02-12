@@ -37,7 +37,7 @@ public class PathwayEditor : Editor
 		_reorderableList.onRemoveCallback += RemoveItem;
 		_reorderableList.onSelectCallback += SelectItem;
 		_reorderableList.onChangedCallback += ListModified;
-		_pathway = (Pathway)target;
+		_pathway = (target as Pathway);
 		_pathway.SelectedIndex = -1;
 		_pathwayHandles = new PathwayHandles(_pathway);
 		_pathwayNavMesh = new PathwayNavMesh(_pathway);
@@ -114,6 +114,7 @@ public class PathwayEditor : Editor
 	private void DoUndo()
 	{
 		serializedObject.UpdateIfRequiredOrScript();
+		_pathway.SelectedIndex = -1;
 	}
 
 }

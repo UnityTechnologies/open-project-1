@@ -7,7 +7,8 @@ public class PathwayHandles
 	private Pathway _pathway;
 	//private Vector3 _newPosition;
 
-	public PathwayHandles(Pathway pathway) {
+	public PathwayHandles(Pathway pathway)
+	{
 		_pathway = pathway;
 		//_newPosition = pathway.transform.position; //to connect the movements of the points held by the pathway with the pathway movement
 	}
