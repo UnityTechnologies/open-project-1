@@ -2,6 +2,8 @@
 using UnityEditor;
 using UnityEditorInternal;
 
+
+
 [CustomEditor(typeof(Pathway))]
 public class PathwayEditor : Editor
 {
@@ -9,6 +11,7 @@ public class PathwayEditor : Editor
 	private Pathway _pathway;
 	private PathwayHandles _pathwayHandles;
 	private PathwayNavMesh _pathwayNavMesh;
+
 
 	public void OnSceneGUI()
 	{
@@ -18,6 +21,7 @@ public class PathwayEditor : Editor
 	public override void OnInspectorGUI()
 	{
 		DrawDefaultInspector();
+		serializedObject.Update();
 		_pathwayNavMesh.OnInspectorGUI();
 		_reorderableList.DoLayoutList();
 		serializedObject.ApplyModifiedProperties();
@@ -33,11 +37,11 @@ public class PathwayEditor : Editor
 		_reorderableList.onRemoveCallback += RemoveItem;
 		_reorderableList.onSelectCallback += SelectItem;
 		_reorderableList.onChangedCallback += ListModified;
-
 		_pathway = (Pathway)target;
 		_pathway.SelectedIndex = -1;
 		_pathwayHandles = new PathwayHandles(_pathway);
 		_pathwayNavMesh = new PathwayNavMesh(_pathway);
+		
 	}
 
 	private void OnDisable()
@@ -66,10 +70,10 @@ public class PathwayEditor : Editor
 	{
 		int index = list.index;
 
-		if (index > -1 && list.serializedProperty.arraySize > 0)
+		if (index > 0 && list.serializedProperty.arraySize > 0)
 		{
 			list.serializedProperty.InsertArrayElementAtIndex(index + 1);
-			Vector3 previous = list.serializedProperty.GetArrayElementAtIndex(index + 1).vector3Value;
+			Vector3 previous = list.serializedProperty.GetArrayElementAtIndex(index).vector3Value;
 			list.serializedProperty.GetArrayElementAtIndex(index + 1).vector3Value = new Vector3(previous.x + 2, previous.y, previous.z + 2);
 		}
 		else
@@ -95,6 +99,7 @@ public class PathwayEditor : Editor
 		}
 
 		_pathway.SelectedIndex = list.index;
+		
 	}
 
 	private void SelectItem(ReorderableList list)
@@ -108,9 +113,10 @@ public class PathwayEditor : Editor
 		list.serializedProperty.serializedObject.ApplyModifiedProperties();
 	}
 
+
 	private void DoUndo()
 	{
-		serializedObject.Update();
+		serializedObject.UpdateIfRequiredOrScript();
 	}
 
 }

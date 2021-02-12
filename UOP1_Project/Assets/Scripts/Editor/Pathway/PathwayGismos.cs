@@ -29,7 +29,7 @@ public class PathwayGizmos
 
 		style.normal.textColor = pathway.SelectedIndex==index? pathway.SelectedColor : pathway.TextColor;
 		style.fontSize = pathway.TextSize;
-		Vector3 textHeight = (pathway.MeshSize + pathway.TextSize / 10) * Vector3.up;
+		Vector3 textHeight = ( pathway.MeshSize * 1.5f + pathway.TextSize * 0.1f) * Vector3.up;
 
 		if (pathway.DrawMesh != null)
 		{
@@ -107,7 +107,7 @@ public class PathwayGizmos
 				else
 				{
 					Gizmos.color = new Color(255, 0, 0, 0.5f);
-					Gizmos.DrawSphere(pathway.Hits[i].Position, pathway.MeshSize*2);
+					Gizmos.DrawSphere(pathway.WayPoints[i], pathway.MeshSize*2);
 				}
 			}
 		}

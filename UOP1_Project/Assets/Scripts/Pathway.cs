@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI;
+
 
 public class Pathway : MonoBehaviour
 {
@@ -51,6 +51,5 @@ public class Pathway : MonoBehaviour
 	public List<HitPoint> Hits { get; set; }
 
 #endif
-
 
 }
