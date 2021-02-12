@@ -1,64 +1,26 @@
 ﻿using UnityEngine;
 using UnityEditor;
 using UnityEditorInternal;
-using UnityEngine.AI;
 
 [CustomEditor(typeof(Pathway))]
-
 public class PathwayEditor : Editor
 {
 	private ReorderableList _reorderableList;
 	private Pathway _pathway;
-	private Vector3 _newPosition;
-	private bool _toggled;
+	private PathwayHandles _pathwayHandles;
+	private PathwayNavMesh _pathwayNavMesh;
+
+	public void OnSceneGUI()
+	{
+		_pathwayHandles.DispalyHandles();
+	}
 
 	public override void OnInspectorGUI()
 	{
 		DrawDefaultInspector();
+		_pathwayNavMesh.OnInspectorGUI();
 		_reorderableList.DoLayoutList();
 		serializedObject.ApplyModifiedProperties();
-
-		if (_toggled == false)
-		{
-			if (_toggled = GUILayout.Button("NavMesh Path"))
-			{
-				if (_pathway.wayPoints.Length > 1)
-				{
-					GeneateNavMeshPath();
-				}
-				else
-					Debug.LogError("Pathway need more than one point to calculate the path");
-
-				InternalEditorUtility.RepaintAllViews();
-			}
-		}
-		else
-		{
-			if (GUILayout.Button("Handles Path"))
-			{
-				_toggled = false;
-				_pathway.Path.ClearCorners();
-				InternalEditorUtility.RepaintAllViews();
-			}
-		}
-	}
-
-	protected void OnSceneGUI()
-	{
-		DispalyHandles();
-	}
-
-	private void DispalyHandles()
-	{
-		EditorGUI.BeginChangeCheck();
-		_newPosition = _pathway.transform.position - _newPosition;
-
-		for (int i = 0; i < _pathway.wayPoints.Length; i++)
-		{
-			_pathway.wayPoints[i] = Handles.PositionHandle(_pathway.wayPoints[i] + _newPosition, Quaternion.identity);
-		}
-
-		_newPosition = _pathway.transform.position;
 	}
 
 	private void OnEnable()
@@ -74,9 +36,8 @@ public class PathwayEditor : Editor
 
 		_pathway = (Pathway)target;
 		_pathway.SelectedIndex = -1;
-		_newPosition = _pathway.transform.position;
-		_pathway.Path = new NavMeshPath();
-		_toggled = false;
+		_pathwayHandles = new PathwayHandles(_pathway);
+		_pathwayNavMesh = new PathwayNavMesh(_pathway);
 	}
 
 	private void OnDisable()
@@ -150,14 +111,6 @@ public class PathwayEditor : Editor
 	private void DoUndo()
 	{
 		serializedObject.UpdateIfRequiredOrScript();
-	}
-
-	void GeneateNavMeshPath(){
-
-		for (int i = 1; i < _pathway.wayPoints.Length; i++)
-		{
-			NavMesh.CalculatePath(_pathway.wayPoints[i - 1], _pathway.wayPoints[i], NavMesh.AllAreas, _pathway.Path);
-		}
 	}
 
 }
