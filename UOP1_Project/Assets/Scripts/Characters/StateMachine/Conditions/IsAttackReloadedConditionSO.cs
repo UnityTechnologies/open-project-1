@@ -12,23 +12,15 @@ public class IsAttackReloadedConditionSO : StateConditionSO
 
 public class IsAttackReloadedCondition : Condition
 {
-	private float _startTime;
-	private float _reloadDuration;
+	private Attacker _attacker;
 
 	public override void Awake(StateMachine stateMachine)
 	{
-		//TODO: Remove this. We don't need to rely on a timer hidden in the attack config of the weapon,
-		//since our attacks depend on the lenght of the animation anyway
-		_reloadDuration = stateMachine.gameObject.GetComponentInChildren<Attack>(true).AttackConfig.AttackReloadDuration;
-	}
-
-	public override void OnStateEnter()
-	{
-		_startTime = Time.time;
+		_attacker = stateMachine.GetComponent<Attacker>();
 	}
 
 	protected override bool Statement()
 	{
-		return Time.time >= _startTime + _reloadDuration;
+		return _attacker.IsAttackReloaded;
 	}
 }

@@ -58,6 +58,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _attackConfigSO: {fileID: 11400000, guid: b8283b4a85847b44993fc5a971db3ac8, type: 2}
+  _hitEffect: {fileID: 0}
 --- !u!136 &236781474
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -150,7 +151,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b11d8701791e30b4f8c6dd812db00c7e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _attackCollider: {fileID: 4216333156615661930}
+  _attack: {fileID: 5383258290465724991}
+  IsAttackReloaded: 0
 --- !u!114 &5224987954583862020
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -213,6 +215,22 @@ MonoBehaviour:
   - {fileID: 699210089534170155}
   - {fileID: 7337735862227476469}
   - {fileID: 1821607689904002344}
+--- !u!208 &3523278284937447661
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8745063237678790951}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 0
+  m_Extents: {x: 0.5, y: 0.65, z: 0.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0.5, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1001 &4629040063581857200
 PrefabInstance:
   m_ObjectHideFlags: 0

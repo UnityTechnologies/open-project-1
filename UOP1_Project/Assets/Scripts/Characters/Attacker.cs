@@ -2,15 +2,33 @@
 
 public class Attacker : MonoBehaviour
 {
-	[SerializeField] private GameObject _attackCollider;
+	[SerializeField] private Attack _attack;
+
+	private float _innerTime;
+
+	[HideInInspector] public bool IsAttackReloaded = false;
 
 	public void EnableWeapon()
 	{
-		_attackCollider.SetActive(true);
+		_attack.gameObject.SetActive(true);
 	}
 
 	public void DisableWeapon()
 	{
-		_attackCollider.SetActive(false);
+		_attack.gameObject.SetActive(false);
+		_innerTime = _attack.AttackConfig.AttackReloadDuration;
+	}
+
+	private void Update()
+	{
+		if (_innerTime > 0)
+		{
+			_innerTime -= Time.deltaTime;
+			IsAttackReloaded = false;
+		}
+		else
+		{
+			IsAttackReloaded = true;
+		}
 	}
 }

@@ -58,6 +58,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _attackConfigSO: {fileID: 11400000, guid: fa67200955f70e64abecdd0107951472, type: 2}
+  _hitEffect: {fileID: 0}
 --- !u!135 &6188918218575104391
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -151,8 +152,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 95216bcd641df05419665f7db9aed05b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _playerTransform: {fileID: 11400000, guid: 35fc4039342b6ba458d0d4429e89ee74, type: 2}
-  _propelFactor: 0.8
   _propelDuration: 0.2
 --- !u!114 &4216565540698897756
 MonoBehaviour:
@@ -166,7 +165,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b11d8701791e30b4f8c6dd812db00c7e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _attackCollider: {fileID: 3916043639789646247}
+  _attack: {fileID: 4088571348706217679}
+  IsAttackReloaded: 0
 --- !u!114 &4341850141098197772
 MonoBehaviour:
   m_ObjectHideFlags: 0
