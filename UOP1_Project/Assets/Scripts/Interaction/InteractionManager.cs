@@ -14,7 +14,8 @@ public class InteractionManager : MonoBehaviour
 	[Header("Broadcasting on")]
 	[SerializeField] private ItemEventChannelSO _onObjectPickUp = default;
 	[SerializeField] private VoidEventChannelSO _onCookingStart = default;
-	[SerializeField] private DialogueEventChannelSO _startTalking = default;
+	[SerializeField] private DialogueActorChannelSO _startTalking = default;
+	//UI event
 	[SerializeField] private InteractionUIEventChannelSO _toggleInteractionUI = default;
 
 	[Header("Listening to")]
@@ -69,9 +70,7 @@ public class InteractionManager : MonoBehaviour
 			case InteractionType.Talk:
 				if (_startTalking != null)
 				{
-					//TODO:
-					//Actor currentActor = currentInteractableObject.GetComponent<Dialogue>().GetActor();
-					//_startTalking.RaiseEvent(currentActor);
+					_potentialInteractions.First.Value.interactableObject.GetComponent<StepController>().InteractWithCharacter();
 					_inputReader.EnableDialogueInput();
 				}
 				break;
