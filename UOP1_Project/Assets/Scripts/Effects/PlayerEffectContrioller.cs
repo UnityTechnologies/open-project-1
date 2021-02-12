@@ -6,11 +6,20 @@ using UOP1.StateMachine;
 /// <summary>
 /// Controls playback of particles connected to movement. Methods invoked by the StateMachine StateActions
 /// </summary>
-public class DustParticlesController : MonoBehaviour
+public class PlayerEffectContrioller : MonoBehaviour
 {
 	[SerializeField] ParticleSystem _walkingParticles = default;
 	[SerializeField] ParticleSystem _landParticles = default;
 	[SerializeField] ParticleSystem _jumpParticles = default;
+
+	[SerializeField] ParticleSystem _slashEffect = default;
+	[SerializeField] ParticleSystem _reverseSlashEffect = default;
+
+	private void Start()
+	{
+		_slashEffect.Stop();
+		_reverseSlashEffect.Stop();
+	}
 
 	public void EnableWalkParticles()
 	{
@@ -29,6 +38,16 @@ public class DustParticlesController : MonoBehaviour
 	public void PlayLandParticles()
 	{
 		_landParticles.Play();
+	}
+
+	public void PlaySlashEffect()
+	{
+		_slashEffect.Play();
+	}
+
+	public void PlayReverseSlashEffect()
+	{
+		_reverseSlashEffect.Play();
 	}
 
 	public void PlayLandParticles(float intensity)
