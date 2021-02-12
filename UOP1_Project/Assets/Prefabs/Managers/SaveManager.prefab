@@ -1,0 +1,57 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2623773707580049358
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2623773707580049356}
+  - component: {fileID: 2623773707580049357}
+  m_Layer: 0
+  m_Name: SaveManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2623773707580049356
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2623773707580049358}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 234.42865, y: 220.66103, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2623773707580049357
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2623773707580049358}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d29cbee62ba2c3a40b164ffcc81b81d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  saveChannel: {fileID: 11400000, guid: b74bbaefdfcc0374da6358333564d6ea, type: 2}
+  loadChannel: {fileID: 11400000, guid: e765fde9593c97f4c95260c02fe0a0a5, type: 2}
+  locations:
+  - {fileID: 11400000, guid: 2f386bbc670c05145834a0f9c7d55798, type: 2}
+  - {fileID: 11400000, guid: d102ba8fe3b291249aeb9de4b95c1904, type: 2}
+  - {fileID: 11400000, guid: 1514f833150a79e4c9d242f58bdbcbc0, type: 2}
+  - {fileID: 11400000, guid: b6eb99b6a389e7240a76ba358990126b, type: 2}
+  loadSceneChannel: {fileID: 11400000, guid: 00e3063edc5902e40832ea618644c597, type: 2}
+  playerInstantiatedChannel: {fileID: 11400000, guid: 2723b3f59f7ede3498fe7e385d2bb6ee,
+    type: 2}
+  playerLocation: {fileID: 11400000, guid: aa0f6a4927c76f946bae908403d9b92e, type: 2}
+  playerInventory: {fileID: 11400000, guid: 59c84467f7726dc4587a8373b0936f03, type: 2}
