@@ -39,10 +39,9 @@ public class PathwayNavMesh
 	private bool GenerateNavMeshPath()
 	{
 		bool canGeneatePath = true;
-		
-		NavMeshPath navMeshPath = new NavMeshPath();
-
 		int i = 1;
+		NavMeshPath navMeshPath = new NavMeshPath();
+		
 		while ( i < _pathway.WayPoints.Count)
 		{
 			canGeneatePath &= NavMesh.CalculatePath(_pathway.WayPoints[i - 1], _pathway.WayPoints[i], NavMesh.AllAreas, navMeshPath);
@@ -111,12 +110,18 @@ public class PathwayNavMesh
 					_pathway.DisplayPolls = false;
 					InternalEditorUtility.RepaintAllViews();
 				}
+			
+				if (GUILayout.Button("Refresh polls"))
+				{
+					PollsNavMesh();
+					InternalEditorUtility.RepaintAllViews();
+				}
+				
 			}
 			else
 			{
 				if (GUILayout.Button("Show polls"))
 				{
-					PollsNavMesh();
 					_pathway.DisplayPolls = true;
 					InternalEditorUtility.RepaintAllViews();
 				}

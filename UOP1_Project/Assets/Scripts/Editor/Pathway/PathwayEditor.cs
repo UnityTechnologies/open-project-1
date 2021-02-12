@@ -41,7 +41,6 @@ public class PathwayEditor : Editor
 		_pathway.SelectedIndex = -1;
 		_pathwayHandles = new PathwayHandles(_pathway);
 		_pathwayNavMesh = new PathwayNavMesh(_pathway);
-		
 	}
 
 	private void OnDisable()
@@ -99,7 +98,6 @@ public class PathwayEditor : Editor
 		}
 
 		_pathway.SelectedIndex = list.index;
-		
 	}
 
 	private void SelectItem(ReorderableList list)
@@ -112,7 +110,6 @@ public class PathwayEditor : Editor
 	{
 		list.serializedProperty.serializedObject.ApplyModifiedProperties();
 	}
-
 
 	private void DoUndo()
 	{

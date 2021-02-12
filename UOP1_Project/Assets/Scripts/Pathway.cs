@@ -6,21 +6,29 @@ public class Pathway : MonoBehaviour
 {
 	[HideInInspector]
 	public List<Vector3> WayPoints;
+
 #if UNITY_EDITOR
+
 	[SerializeField]
 	private Color _lineColor = Color.black;
+
 	[SerializeField, Range(20, 100)]
 	private int _textSize = 20;
+
 	[SerializeField]
 	private Color _textColor = Color.white;
+
 	[SerializeField]
 	[Tooltip("Add a mesh on each point of the drawn paths")]
 	private Mesh _drawMesh;
+
 	[SerializeField, Range(0, 100)]
 	[Tooltip("The poll uses twice the height of the mesh specified for the search radius")]
 	private float _meshSize = 3;
+
 	[SerializeField]
 	private Color _meshColor = Color.red;
+
 	[SerializeField]
 	[Tooltip("color of the selected scene view element by clicking on the list")]
 	private Color _selectedColor = Color.white;

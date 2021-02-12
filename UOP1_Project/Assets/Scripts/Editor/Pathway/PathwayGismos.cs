@@ -26,11 +26,11 @@ public class PathwayGizmos
 	private static void DrawElements(Pathway pathway, List<Vector3> path, int index)
 	{
 		GUIStyle style = new GUIStyle();
+		Vector3 textHeight = (pathway.MeshSize * 1.5f + pathway.TextSize * 0.1f) * Vector3.up;
 
 		style.normal.textColor = pathway.SelectedIndex==index? pathway.SelectedColor : pathway.TextColor;
 		style.fontSize = pathway.TextSize;
-		Vector3 textHeight = ( pathway.MeshSize * 1.5f + pathway.TextSize * 0.1f) * Vector3.up;
-
+		
 		if (pathway.DrawMesh != null)
 		{
 			Vector3 meshDim = Vector3.one * pathway.MeshSize;
@@ -76,7 +76,6 @@ public class PathwayGizmos
 
 	private static void DrawNavMeshPath(Pathway pathway)
 	{
-		
 		for (int i = 0; i < pathway.Path.Count- 1; i++)
 		{
 			DrawElements(pathway, pathway.Path, i);
@@ -97,17 +96,21 @@ public class PathwayGizmos
 	{
 		if (pathway.DisplayPolls)
 		{
+			float sphereRadius = pathway.MeshSize * 2;
+
 			for (int i = 0; i < pathway.WayPoints.Count; i++)
 			{
 				if (pathway.Hits[i].HasHit)
 				{
+					Gizmos.color = Color.red;
+					Gizmos.DrawLine(pathway.Hits[i].Position, pathway.WayPoints[i]);
 					Gizmos.color = new Color(0, 255, 0, 0.5f);
-					Gizmos.DrawSphere(pathway.Hits[i].Position, pathway.MeshSize*2);
+					Gizmos.DrawSphere(pathway.WayPoints[i], sphereRadius);
 				}
 				else
 				{
 					Gizmos.color = new Color(255, 0, 0, 0.5f);
-					Gizmos.DrawSphere(pathway.WayPoints[i], pathway.MeshSize*2);
+					Gizmos.DrawSphere(pathway.WayPoints[i], sphereRadius);
 				}
 			}
 		}

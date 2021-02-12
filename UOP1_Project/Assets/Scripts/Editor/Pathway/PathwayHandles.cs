@@ -15,6 +15,7 @@ public class PathwayHandles
 	public void DispalyHandles()
 	{
 		EditorGUI.BeginChangeCheck();
+
 		//_newPosition = _pathway.transform.position - _newPosition;
 
 		for (int i = 0; i < _pathway.WayPoints.Count; i++)
