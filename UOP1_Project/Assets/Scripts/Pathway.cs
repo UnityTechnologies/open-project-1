@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -10,17 +9,20 @@ public class Pathway : MonoBehaviour
 #if UNITY_EDITOR
 	[SerializeField]
 	private Color _lineColor = Color.black;
-	[SerializeField]
+	[SerializeField, Range(20, 100)]
 	private int _textSize = 20;
 	[SerializeField]
 	private Color _textColor = Color.white;
 	[SerializeField]
+	[Tooltip("Add a mesh on each point of the drawn paths")]
 	private Mesh _drawMesh;
-	[SerializeField]
+	[SerializeField, Range(0, 100)]
+	[Tooltip("The poll uses twice the height of the mesh specified for the search radius")]
 	private float _meshSize = 3;
 	[SerializeField]
 	private Color _meshColor = Color.red;
 	[SerializeField]
+	[Tooltip("color of the selected scene view element by clicking on the list")]
 	private Color _selectedColor = Color.white;
 
 	public const string FIELD_LABEL = "Point ";
@@ -34,6 +36,8 @@ public class Pathway : MonoBehaviour
 	public Mesh DrawMesh { get => _drawMesh; }
 	public Color SelectedColor { get => _selectedColor; }
 	public int SelectedIndex { get; set; }
+	public bool DisplayPolls{ get ; set; }
+	public Vector3[] Path { get; set; }
 	public struct HitPoint
 	{
 		public bool HasHit { get; }
@@ -44,8 +48,6 @@ public class Pathway : MonoBehaviour
 			Position = position;
 		}
 	}
-	public bool DisplayPolls{ get ; set; }
-	public NavMeshPath Path { get; set; }
 	public List<HitPoint> Hits { get; set; }
 
 #endif

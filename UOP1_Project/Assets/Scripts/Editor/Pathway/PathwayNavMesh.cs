@@ -2,21 +2,20 @@
 using UnityEngine;
 using UnityEditorInternal;
 using UnityEngine.AI;
-
-
+using System;
 
 public class PathwayNavMesh 
 {
 	private bool _toggled;
-	public Pathway _pathway;
-
+	private Pathway _pathway;
+	
 	public PathwayNavMesh(Pathway pathway)
 	{
 		_pathway = pathway;
 		_toggled = false;
-		_pathway.Path = new NavMeshPath();
 		_pathway.Hits = new List<Pathway.HitPoint>();
 		_pathway.DisplayPolls = false;
+		_pathway.Path = new Vector3[]{ };
 	}
 
 	private bool PollsNavMesh()
@@ -33,16 +32,34 @@ public class PathwayNavMesh
 			_pathway.Hits.Add(new Pathway.HitPoint(hasHit, hit.position));
 			result &= hasHit;
 		}
+
 		return result;
 	}
 
-	private void GenerateNavMeshPath()
+	private bool GenerateNavMeshPath()
 	{
+		bool canGeneatePath = true;
+		List<Vector3> path = new List<Vector3>();
+		NavMeshPath navMeshPath = new NavMeshPath();
 
-		for (int i = 1; i < _pathway.wayPoints.Length; i++)
+		int i = 1;
+		while ( i < _pathway.wayPoints.Length && canGeneatePath)
 		{
-			NavMesh.CalculatePath(_pathway.wayPoints[i - 1], _pathway.wayPoints[i], NavMesh.AllAreas, _pathway.Path);
+			canGeneatePath &= NavMesh.CalculatePath(_pathway.wayPoints[i - 1], _pathway.wayPoints[i], NavMesh.AllAreas, navMeshPath);
+			if (canGeneatePath)
+			{
+				foreach (Vector3 corner in navMeshPath.corners)
+				{
+					path.Add(corner);
+				}
+			}
+
+			i++;
 		}
+
+		if (canGeneatePath)
+			_pathway.Path = path.ToArray();
+		return canGeneatePath;
 	}
 
 	public void OnInspectorGUI()
@@ -55,8 +72,14 @@ public class PathwayNavMesh
 				{
 					if (_pathway.wayPoints.Length > 1)
 					{
-						GenerateNavMeshPath();
-						InternalEditorUtility.RepaintAllViews();
+						if (GenerateNavMeshPath())
+						{
+							InternalEditorUtility.RepaintAllViews();
+						}
+						else
+						{
+							Debug.LogError("NavMesh path can't generate a path");
+						}
 					}
 					else
 						Debug.LogError("Pathway need more than one point to calculate the path");
@@ -72,8 +95,8 @@ public class PathwayNavMesh
 			if (GUILayout.Button("Handles Path"))
 			{
 				_toggled = false;
-				_pathway.DisplayPolls = true;
-				_pathway.Path.ClearCorners();
+				_pathway.DisplayPolls = false;
+				Array.Clear(_pathway.Path,0,_pathway.Path.Length);
 				InternalEditorUtility.RepaintAllViews();
 			}
 
@@ -87,7 +110,7 @@ public class PathwayNavMesh
 			}
 			else
 			{
-				if (GUILayout.Button("Display Polls"))
+				if (GUILayout.Button("Show polls"))
 				{
 					_pathway.DisplayPolls = true;
 					InternalEditorUtility.RepaintAllViews();

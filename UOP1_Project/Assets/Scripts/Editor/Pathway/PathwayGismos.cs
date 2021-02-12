@@ -8,7 +8,8 @@ public class PathwayGizmos
 	private static void DrawGizmosSelected(Pathway pathway, GizmoType gizmoType)
 	{
 		Gizmos.color = pathway.MeshColor;
-		if (pathway.Path.corners.Length == 0)
+
+		if (pathway.Path.Length == 0)
 		{
 			DrawHandlesLines(pathway);
 		}
@@ -17,22 +18,25 @@ public class PathwayGizmos
 			DrawNavMeshPath(pathway);
 		}
 
-		DisplayHitPoints(pathway);
+		DrawHitPoints(pathway);
 	}
 
 	private static void DrawElements(Pathway pathway, Vector3[] path, int index)
 	{
 		GUIStyle style = new GUIStyle();
-		style.normal.textColor = pathway.TextColor;
+
+		style.normal.textColor = pathway.SelectedIndex==index? pathway.SelectedColor : pathway.TextColor;
 		style.fontSize = pathway.TextSize;
-		Vector3 textUp = (pathway.MeshSize + pathway.TextSize / 8) * Vector3.up;
+		Vector3 textHeight = (pathway.MeshSize + pathway.TextSize / 10) * Vector3.up;
+
 		if (pathway.DrawMesh != null)
 		{
-			Vector3 cubeDim = Vector3.one * pathway.MeshSize;
-			Vector3 meshDim = cubeDim / 1.3f;
+			Vector3 meshDim = Vector3.one * pathway.MeshSize;
+			
 			Gizmos.DrawMesh(pathway.DrawMesh, path[index], LookAt(path, index), meshDim);
 		}
-		Handles.Label(path[index] + textUp, index.ToString(), style);
+
+		Handles.Label(path[index] + textHeight, index.ToString(), style);
 	}
 
 	private static void DrawHandlesLines(Pathway pathway)
@@ -43,6 +47,7 @@ public class PathwayGizmos
 			{
 				DrawElements(pathway, pathway.wayPoints, i);
 			}
+
 			if (i != 0)
 			{
 				using (new Handles.DrawingScope(pathway.LineColor))
@@ -69,49 +74,43 @@ public class PathwayGizmos
 
 	private static void DrawNavMeshPath(Pathway pathway)
 	{
-		for (int i = 0; i < pathway.Path.corners.Length - 1; i++)
+		
+		for (int i = 0; i < pathway.Path.Length - 1; i++)
 		{
-			DrawElements(pathway, pathway.Path.corners, i);
+			DrawElements(pathway, pathway.Path, i);
 			using (new Handles.DrawingScope(pathway.LineColor))
 			{
-				Handles.DrawLine(pathway.Path.corners[i], pathway.Path.corners[i + 1]);
+				Handles.DrawLine(pathway.Path[i], pathway.Path[i + 1]);
 			}
 		}
-		DrawElements(pathway, pathway.Path.corners, pathway.Path.corners.Length - 1);
+
+		DrawElements(pathway, pathway.Path, pathway.Path.Length - 1);
 		using (new Handles.DrawingScope(pathway.LineColor))
 		{
-			Handles.DrawLine(pathway.Path.corners[0], pathway.Path.corners[pathway.Path.corners.Length - 1]);
+			Handles.DrawLine(pathway.Path[0], pathway.Path[pathway.Path.Length - 1]);
 		}
 	}
 
-	private static void DisplayHitPoints(Pathway pathway)
+	private static void DrawHitPoints(Pathway pathway)
 	{
 		if (pathway.DisplayPolls)
 		{
-			Vector3 textUp = (pathway.MeshSize + pathway.TextSize / 8) * Vector3.up;
-			
 			for (int i = 0; i < pathway.wayPoints.Length; i++)
 			{
 				if (pathway.Hits[i].HasHit)
 				{
-					using (new Handles.DrawingScope(Color.green))
-					{
-
-						Handles.DrawWireCube(pathway.Hits[i].Position, Vector3.one);
-					}
+					Gizmos.color = new Color(0, 255, 0, 0.5f);
+					Gizmos.DrawSphere(pathway.Hits[i].Position, pathway.MeshSize*2);
 				}
 				else
 				{
-					using (new Handles.DrawingScope(Color.red))
-					{
-
-						Handles.DrawWireCube(pathway.wayPoints[i], Vector3.one);
-					}
-
+					Gizmos.color = new Color(255, 0, 0, 0.5f);
+					Gizmos.DrawSphere(pathway.Hits[i].Position, pathway.MeshSize*2);
 				}
 			}
 		}
 	}
+
 	private static Quaternion LookAt(Vector3[] path, int index)
 	{
 		if (index != path.Length - 1)

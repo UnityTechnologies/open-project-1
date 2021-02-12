@@ -42,14 +42,13 @@ public class PathwayEditor : Editor
 
 	private void OnDisable()
 	{
-		// Make sure we don't get memory leaks etc.
+		Undo.undoRedoPerformed -= DoUndo;
 		_reorderableList.drawHeaderCallback -= DrawHeader;
 		_reorderableList.drawElementCallback -= DrawElement;
 		_reorderableList.onAddCallback -= AddItem;
 		_reorderableList.onRemoveCallback -= RemoveItem;
 		_reorderableList.onSelectCallback -= SelectItem;
 		_reorderableList.onChangedCallback -= ListModified;
-		Undo.undoRedoPerformed -= DoUndo;
 	}
 
 	private void DrawHeader(Rect rect)
@@ -59,23 +58,24 @@ public class PathwayEditor : Editor
 
 	private void DrawElement(Rect rect, int index, bool active, bool focused)
 	{
-		var item = _reorderableList.serializedProperty.GetArrayElementAtIndex(index);
+		SerializedProperty item = _reorderableList.serializedProperty.GetArrayElementAtIndex(index);
 		item.vector3Value = EditorGUI.Vector3Field(rect, Pathway.FIELD_LABEL + index, item.vector3Value);
 	}
 
 	private void AddItem(ReorderableList list)
 	{
-		var index = list.index;
+		int index = list.index;
+
 		if (index > -1 && list.serializedProperty.arraySize > 0)
 		{
 			list.serializedProperty.InsertArrayElementAtIndex(index + 1);
-			var previous = list.serializedProperty.GetArrayElementAtIndex(index + 1).vector3Value;
+			Vector3 previous = list.serializedProperty.GetArrayElementAtIndex(index + 1).vector3Value;
 			list.serializedProperty.GetArrayElementAtIndex(index + 1).vector3Value = new Vector3(previous.x + 2, previous.y, previous.z + 2);
 		}
 		else
 		{
 			list.serializedProperty.InsertArrayElementAtIndex(list.serializedProperty.arraySize);
-			var previous = _pathway.transform.position;
+			Vector3 previous = _pathway.transform.position;
 			list.serializedProperty.GetArrayElementAtIndex(list.serializedProperty.arraySize - 1).vector3Value = new Vector3(previous.x + 2, previous.y, previous.z + 2);
 		}
 
@@ -85,7 +85,7 @@ public class PathwayEditor : Editor
 
 	private void RemoveItem(ReorderableList list)
 	{
-		var index = list.index;
+		int index = list.index;
 
 		list.serializedProperty.DeleteArrayElementAtIndex(index);
 
