@@ -12,7 +12,7 @@ public class Pathway : MonoBehaviour
 	[SerializeField]
 	private Color _lineColor = Color.black;
 
-	[SerializeField, Range(20, 100)]
+	[SerializeField, Range(0, 100)]
 	private int _textSize = 20;
 
 	[SerializeField]
