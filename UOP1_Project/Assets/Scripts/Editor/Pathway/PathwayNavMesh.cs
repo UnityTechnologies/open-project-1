@@ -88,6 +88,10 @@ public class PathwayNavMesh
 						{
 							InternalEditorUtility.RepaintAllViews();
 						}
+						else
+						{
+							_pathway.TogglePathDisplay = false;
+						}
 					}
 					else
 					{
@@ -140,6 +144,7 @@ public class PathwayNavMesh
 			else
 			{
 				_pathway.TogglePathDisplay = false;
+				InternalEditorUtility.RepaintAllViews();
 			}
 		}
 	}

@@ -67,7 +67,7 @@ public class PathwayEditor : Editor
 	{
 		int index = list.index;
 
-		if (index > 0 && list.serializedProperty.arraySize > 0)
+		if (index > -1 && list.serializedProperty.arraySize >= 1)
 		{
 			list.serializedProperty.InsertArrayElementAtIndex(index + 1);
 			Vector3 previous = list.serializedProperty.GetArrayElementAtIndex(index).vector3Value;
@@ -113,7 +113,8 @@ public class PathwayEditor : Editor
 	{
 		serializedObject.UpdateIfRequiredOrScript();
 		_pathway.SelectedIndex = -1;
-
+		_pathway.TogglePathDisplay = false;
+		_pathway.DisplayPolls = false;
 		if (_reorderableList.index >= _reorderableList.serializedProperty.arraySize )
 		{
 			_reorderableList.index = _reorderableList.serializedProperty.arraySize-1;

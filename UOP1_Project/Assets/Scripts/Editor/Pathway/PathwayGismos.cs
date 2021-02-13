@@ -42,43 +42,40 @@ public class PathwayGizmos
 
 	private static void DrawHandlesLines(Pathway pathway)
 	{
-		if (pathway.Waypoints.Count > 1)
+		for (int i = 0; i < pathway.Waypoints.Count; i++)
 		{
-			for (int i = 0; i < pathway.Waypoints.Count; i++)
+			if (pathway.SelectedIndex != i || pathway.SelectedIndex == -1)
 			{
-				if (pathway.SelectedIndex != i || pathway.SelectedIndex == -1)
-				{
-					DrawElements(pathway, pathway.Waypoints, i);
-				}
-
-				if (i != 0)
-				{
-					using (new Handles.DrawingScope(pathway.LineColor))
-					{
-						Handles.DrawDottedLine(pathway.Waypoints[i - 1], pathway.Waypoints[i], 2);
-					}
-				}
+				DrawElements(pathway, pathway.Waypoints, i);
 			}
 
-			if (pathway.Waypoints.Count > 2)
+			if (i != 0 && pathway.Waypoints.Count > 1)
 			{
 				using (new Handles.DrawingScope(pathway.LineColor))
 				{
-					Handles.DrawDottedLine(pathway.Waypoints[0], pathway.Waypoints[pathway.Waypoints.Count - 1], 2);
+					Handles.DrawDottedLine(pathway.Waypoints[i - 1], pathway.Waypoints[i], 2);
 				}
 			}
+		}
 
-			if (pathway.SelectedIndex != -1)
+		if (pathway.Waypoints.Count > 2)
+		{
+			using (new Handles.DrawingScope(pathway.LineColor))
 			{
-				Gizmos.color = pathway.SelectedColor;
-				DrawElements(pathway, pathway.Waypoints, pathway.SelectedIndex);
+				Handles.DrawDottedLine(pathway.Waypoints[0], pathway.Waypoints[pathway.Waypoints.Count - 1], 2);
 			}
+		}
+
+		if (pathway.SelectedIndex != -1)
+		{
+			Gizmos.color = pathway.SelectedColor;
+			DrawElements(pathway, pathway.Waypoints, pathway.SelectedIndex);
 		}
 	}
 
 	private static void DrawNavMeshPath(Pathway pathway)
 	{
-		for (int i = 0; i < pathway.Path.Count- 1; i++)
+		for (int i = 0; i < pathway.Path.Count - 1; i++)
 		{
 			DrawElements(pathway, pathway.Path, i);
 			using (new Handles.DrawingScope(pathway.LineColor))
