@@ -28,7 +28,7 @@ public class PathwayGizmos
 		GUIStyle style = new GUIStyle();
 		Vector3 textHeight = (pathway.MeshSize * 1.5f + pathway.TextSize * 0.1f) * Vector3.up;
 
-		style.normal.textColor = pathway.SelectedIndex==index? pathway.SelectedColor : pathway.TextColor;
+		style.normal.textColor = pathway.SelectedIndex==index && pathway.Path.Count == 0 ? pathway.SelectedColor : pathway.TextColor;
 		style.fontSize = pathway.TextSize;
 		
 		if (pathway.DrawMesh != null)
