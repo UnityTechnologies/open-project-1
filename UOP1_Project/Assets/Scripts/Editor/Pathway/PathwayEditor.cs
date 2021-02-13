@@ -3,7 +3,6 @@ using UnityEditor;
 using UnityEditorInternal;
 
 
-
 [CustomEditor(typeof(Pathway))]
 public class PathwayEditor : Editor
 {
@@ -20,8 +19,8 @@ public class PathwayEditor : Editor
 	public override void OnInspectorGUI()
 	{
 		DrawDefaultInspector();
-		serializedObject.Update();
 		_pathwayNavMesh.OnInspectorGUI();
+		serializedObject.Update();
 		_reorderableList.DoLayoutList();
 		serializedObject.ApplyModifiedProperties();
 	}
@@ -67,7 +66,7 @@ public class PathwayEditor : Editor
 	private void AddItem(ReorderableList list)
 	{
 		int index = list.index;
-
+		
 		if (index > 0 && list.serializedProperty.arraySize > 0)
 		{
 			list.serializedProperty.InsertArrayElementAtIndex(index + 1);
@@ -114,6 +113,11 @@ public class PathwayEditor : Editor
 	{
 		serializedObject.UpdateIfRequiredOrScript();
 		_pathway.SelectedIndex = -1;
+
+		if (_reorderableList.serializedProperty.arraySize == 0)
+		{
+			_reorderableList.index = -1;
+		}
 	}
 
 }
