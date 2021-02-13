@@ -7,10 +7,11 @@ using UnityEngine.AI;
 public class PathwayNavMesh 
 {
 	private Pathway _pathway;
-	
+	private bool _toggled;
 	public PathwayNavMesh(Pathway pathway)
 	{
 		_pathway = pathway;
+		_toggled = false;
 		_pathway.DisplayPolls = false;
 		_pathway.TogglePathDisplay = false;
 		_pathway.Path = new List<Vector3>();
@@ -76,9 +77,9 @@ public class PathwayNavMesh
 
 	public void OnInspectorGUI()
 	{
-		if (_pathway.TogglePathDisplay == false)
+		if (_toggled == false)
 		{
-			if (_pathway.TogglePathDisplay = GUILayout.Button("NavMesh Path"))
+			if (_toggled = GUILayout.Button("NavMesh Path"))
 			{
 				if (PollsNavMesh())
 				{
@@ -86,21 +87,26 @@ public class PathwayNavMesh
 					{
 						if (GenerateNavMeshPath())
 						{
+							_pathway.TogglePathDisplay = true;
 							InternalEditorUtility.RepaintAllViews();
 						}
 						else
 						{
+							_toggled = false;
 							_pathway.TogglePathDisplay = false;
 						}
+
 					}
 					else
 					{
 						Debug.LogError("Pathway need more than one point to calculate the path");
+						_toggled = false;
 						_pathway.TogglePathDisplay = false;
 					}
 				}
 				else
 				{
+					_pathway.TogglePathDisplay = false;
 					_pathway.DisplayPolls = true;
 					InternalEditorUtility.RepaintAllViews();
 				}
@@ -110,6 +116,7 @@ public class PathwayNavMesh
 		{
 			if (GUILayout.Button("Handles Path"))
 			{
+				_toggled = false;
 				_pathway.TogglePathDisplay = false;
 				_pathway.DisplayPolls = false;
 				_pathway.Path.Clear();
@@ -143,8 +150,9 @@ public class PathwayNavMesh
 			}
 			else
 			{
+				_toggled = false;
 				_pathway.TogglePathDisplay = false;
-				InternalEditorUtility.RepaintAllViews();
+				_pathway.DisplayPolls = false;
 			}
 		}
 	}
