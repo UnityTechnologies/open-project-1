@@ -66,7 +66,7 @@ public class PathwayEditor : Editor
 	private void AddItem(ReorderableList list)
 	{
 		int index = list.index;
-		
+
 		if (index > 0 && list.serializedProperty.arraySize > 0)
 		{
 			list.serializedProperty.InsertArrayElementAtIndex(index + 1);
@@ -114,9 +114,9 @@ public class PathwayEditor : Editor
 		serializedObject.UpdateIfRequiredOrScript();
 		_pathway.SelectedIndex = -1;
 
-		if (_reorderableList.serializedProperty.arraySize == 0)
+		if (_reorderableList.index >= _reorderableList.serializedProperty.arraySize )
 		{
-			_reorderableList.index = -1;
+			_reorderableList.index = _reorderableList.serializedProperty.arraySize-1;
 		}
 	}
 

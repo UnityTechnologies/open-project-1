@@ -112,28 +112,34 @@ public class PathwayNavMesh
 				_pathway.Path.Clear();
 				InternalEditorUtility.RepaintAllViews();
 			}
-
-			if (_pathway.DisplayPolls)
+			if (_pathway.Waypoints.Count > 1)
 			{
-				if (GUILayout.Button("Hide Polls"))
+				if (_pathway.DisplayPolls)
 				{
-					_pathway.DisplayPolls = false;
-					InternalEditorUtility.RepaintAllViews();
+					if (GUILayout.Button("Hide Polls"))
+					{
+						_pathway.DisplayPolls = false;
+						InternalEditorUtility.RepaintAllViews();
+					}
+
+					if (GUILayout.Button("Refresh Polls"))
+					{
+						PollsNavMesh();
+						InternalEditorUtility.RepaintAllViews();
+					}
 				}
-			
-				if (GUILayout.Button("Refresh Polls"))
+				else
 				{
-					PollsNavMesh();
-					InternalEditorUtility.RepaintAllViews();
+					if (GUILayout.Button("Show Polls"))
+					{
+						_pathway.DisplayPolls = true;
+						InternalEditorUtility.RepaintAllViews();
+					}
 				}
 			}
 			else
 			{
-				if (GUILayout.Button("Show Polls"))
-				{
-					_pathway.DisplayPolls = true;
-					InternalEditorUtility.RepaintAllViews();
-				}
+				_toggled = false;
 			}
 		}
 	}
