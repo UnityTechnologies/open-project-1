@@ -2,18 +2,19 @@
 using UnityEngine.Playables;
 using UnityEngine.Timeline;
 
-[TrackBindingType(typeof(CutsceneManager))]
 [TrackClipType(typeof(DialogueClip))]
 public class DialogueTrack : PlayableTrack
 {
+	[SerializeField] public DialogueLineChannelSO PlayDialogueEvent;
+	[SerializeField] public VoidEventChannelSO PauseTimelineEvent;
 	public override Playable CreateTrackMixer(PlayableGraph graph, GameObject go, int inputCount)
 	{
-		CutsceneManager cutsceneManagerRef = go.GetComponent<PlayableDirector>().GetGenericBinding(this) as CutsceneManager;
 
 		foreach (TimelineClip clip in GetClips())
 		{
 			DialogueClip dialogueControlClip = clip.asset as DialogueClip;
-			dialogueControlClip.cutsceneManager = cutsceneManagerRef;
+			dialogueControlClip.PauseTimelineEvent = PauseTimelineEvent;
+			dialogueControlClip.PlayDialogueEvent = PlayDialogueEvent;
 		}
 
 		return base.CreateTrackMixer(graph, go, inputCount);

@@ -5,17 +5,18 @@ using UnityEngine;
 public class UIInteractionManager : MonoBehaviour
 {
 	[SerializeField]
-	private List<InteractionSO> listInteractions;
+	private List<InteractionSO> _listInteractions = default;
+
 	[SerializeField]
-	private UIInteractionItemFiller interactionItem;
+	private UIInteractionItemFiller _interactionItem = default;
 
 	public void FillInteractionPanel(InteractionType interactionType)
 	{
-		if ((listInteractions != null) && (interactionItem != null))
-			if (listInteractions.Exists(o => o.InteractionType == interactionType))
+		if ((_listInteractions != null) && (_interactionItem != null))
+			if (_listInteractions.Exists(o => o.InteractionType == interactionType))
 
 			{
-				interactionItem.FillInteractionPanel(listInteractions.Find(o => o.InteractionType == interactionType));
+				_interactionItem.FillInteractionPanel(_listInteractions.Find(o => o.InteractionType == interactionType));
 
 			}
 	}

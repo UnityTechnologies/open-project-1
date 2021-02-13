@@ -949,7 +949,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _inputReader: {fileID: 11400000, guid: 945ec0365077176418488737deed54be, type: 2}
-  dialogueLineEvent: {fileID: 0}
+  _startDialogue: {fileID: 0}
+  _makeDialogueChoiceEvent: {fileID: 0}
+  _openUIDialogueEvent: {fileID: 0}
+  _showChoicesUIEvent: {fileID: 0}
+  _endDialogue: {fileID: 0}
+  _continueWithStep: {fileID: 0}
+  _closeDialogueUIEvent: {fileID: 0}
 --- !u!4 &419940103
 Transform:
   m_ObjectHideFlags: 0
@@ -2046,13 +2052,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5eb1a5a891704b35b2ad0529d003d43, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  OpenUIDialogueEvent: {fileID: 0}
-  CloseUIDialogueEvent: {fileID: 0}
-  OpenInventoryScreenEvent: {fileID: 0}
-  OpenInventoryScreenForCookingEvent: {fileID: 0}
-  CloseInventoryScreenEvent: {fileID: 0}
-  OnInteractionEndedEvent: {fileID: 0}
-  SetInteractionEvent: {fileID: 0}
+  _openUIDialogueEvent: {fileID: 0}
+  _closeUIDialogueEvent: {fileID: 0}
+  _openInventoryScreenEvent: {fileID: 0}
+  _openInventoryScreenForCookingEvent: {fileID: 0}
+  _closeInventoryScreenEvent: {fileID: 0}
+  _onInteractionEndedEvent: {fileID: 0}
+  _setInteractionEvent: {fileID: 0}
   dialogueController: {fileID: 1981939915}
   inventoryPanel: {fileID: 0}
   interactionPanel: {fileID: 0}
@@ -2967,6 +2973,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _inputReader: {fileID: 11400000, guid: 945ec0365077176418488737deed54be, type: 2}
   _dialogueManager: {fileID: 419940102}
+  _playCutsceneEvent: {fileID: 0}
+  _playDialogueEvent: {fileID: 0}
+  _pauseTimelineEvent: {fileID: 0}
 --- !u!4 &1647029640
 Transform:
   m_ObjectHideFlags: 0
@@ -3771,8 +3780,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6868cb6f048b549b3b137c5989933a22, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lineText: {fileID: 1931605197}
-  actorNameText: {fileID: 902962639}
+  _lineText: {fileID: 0}
+  _actorNameText: {fileID: 0}
+  _choicesManager: {fileID: 0}
+  _showChoicesEvent: {fileID: 0}
 --- !u!222 &1981939916
 CanvasRenderer:
   m_ObjectHideFlags: 0

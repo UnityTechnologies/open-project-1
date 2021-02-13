@@ -6,14 +6,14 @@ using UnityEngine.UI;
 public class InspectorPreviewFiller : MonoBehaviour
 {
 	[SerializeField]
-	private Image previewImage;
+	private Image _previewImage = default;
 
 
 	public void FillPreview(Item ItemToInspect)
 	{
 
-		previewImage.gameObject.SetActive(true);
-		previewImage.sprite = ItemToInspect.PreviewImage;
+		_previewImage.gameObject.SetActive(true);
+		_previewImage.sprite = ItemToInspect.PreviewImage;
 
 	}
 
