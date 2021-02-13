@@ -111,7 +111,7 @@ public class PathwayNavMesh
 					InternalEditorUtility.RepaintAllViews();
 				}
 			
-				if (GUILayout.Button("Refresh polls"))
+				if (GUILayout.Button("Refresh Polls"))
 				{
 					PollsNavMesh();
 					InternalEditorUtility.RepaintAllViews();
@@ -120,7 +120,7 @@ public class PathwayNavMesh
 			}
 			else
 			{
-				if (GUILayout.Button("Show polls"))
+				if (GUILayout.Button("Show Polls"))
 				{
 					_pathway.DisplayPolls = true;
 					InternalEditorUtility.RepaintAllViews();
