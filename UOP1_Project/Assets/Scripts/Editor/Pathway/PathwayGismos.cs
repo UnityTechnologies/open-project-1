@@ -42,7 +42,7 @@ public class PathwayGizmos
 
 	private static void DrawHandlesLines(Pathway pathway)
 	{
-		if (pathway.Waypoints.Count >= 1)
+		if (pathway.Waypoints.Count > 1)
 		{
 			for (int i = 0; i < pathway.Waypoints.Count; i++)
 			{

@@ -111,6 +111,7 @@ public class PathwayNavMesh
 				_pathway.Path.Clear();
 				InternalEditorUtility.RepaintAllViews();
 			}
+
 			if (_pathway.Waypoints.Count > 1)
 			{
 				if (_pathway.DisplayPolls)
