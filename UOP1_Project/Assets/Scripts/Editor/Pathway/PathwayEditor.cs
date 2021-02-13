@@ -12,7 +12,6 @@ public class PathwayEditor : Editor
 	private PathwayHandles _pathwayHandles;
 	private PathwayNavMesh _pathwayNavMesh;
 
-
 	public void OnSceneGUI()
 	{
 		_pathwayHandles.DispalyHandles();

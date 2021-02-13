@@ -123,7 +123,6 @@ public class PathwayNavMesh
 					PollsNavMesh();
 					InternalEditorUtility.RepaintAllViews();
 				}
-				
 			}
 			else
 			{
