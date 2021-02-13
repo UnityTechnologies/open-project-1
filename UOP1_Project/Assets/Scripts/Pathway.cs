@@ -45,6 +45,7 @@ public class Pathway : MonoBehaviour
 	public Color SelectedColor { get => _selectedColor; }
 	public int SelectedIndex { get; set; }
 	public bool DisplayPolls{ get ; set; }
+	public bool TogglePathDisplay { get; set; }
 	public List<Vector3> Path { get; set; }
 	public struct HitPoint
 	{

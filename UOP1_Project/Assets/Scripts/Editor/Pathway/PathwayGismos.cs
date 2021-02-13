@@ -11,7 +11,7 @@ public class PathwayGizmos
 	{
 		Gizmos.color = pathway.MeshColor;
 		
-		if (pathway.Path.Count== 0)
+		if (!pathway.TogglePathDisplay)
 		{
 			DrawHandlesLines(pathway);
 		}
