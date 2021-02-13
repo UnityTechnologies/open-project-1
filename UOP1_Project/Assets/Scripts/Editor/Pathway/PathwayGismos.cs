@@ -96,22 +96,29 @@ public class PathwayGizmos
 	{
 		if (pathway.DisplayPolls)
 		{
-			float sphereRadius = pathway.MeshSize * 2;
-
-			for (int i = 0; i < pathway.Hits.Count; i++)
+			if (pathway.Hits.Count == pathway.Waypoints.Count)
 			{
-				if (pathway.Hits[i].HasHit)
+				float sphereRadius = pathway.MeshSize * 2;
+
+				for (int i = 0; i < pathway.Hits.Count; i++)
 				{
-					Gizmos.color = Color.red;
-					Gizmos.DrawLine(pathway.Hits[i].Position, pathway.Hits[i].Waypoint);
-					Gizmos.color = new Color(0, 255, 0, 0.5f);
-					Gizmos.DrawSphere(pathway.Hits[i].Waypoint, sphereRadius);
+					if (pathway.Hits[i].HasHit)
+					{
+						Gizmos.color = Color.red;
+						Gizmos.DrawLine(pathway.Hits[i].Position, pathway.Waypoints[i]);
+						Gizmos.color = new Color(0, 255, 0, 0.5f);
+						Gizmos.DrawSphere(pathway.Waypoints[i], sphereRadius);
+					}
+					else
+					{
+						Gizmos.color = new Color(255, 0, 0, 0.5f);
+						Gizmos.DrawSphere(pathway.Waypoints[i], sphereRadius);
+					}
 				}
-				else
-				{
-					Gizmos.color = new Color(255, 0, 0, 0.5f);
-					Gizmos.DrawSphere(pathway.Hits[i].Waypoint, sphereRadius);
-				}
+			}
+			else
+			{
+				Debug.LogError("Polls need to be updated");
 			}
 		}
 	}

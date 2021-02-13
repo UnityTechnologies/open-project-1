@@ -29,7 +29,7 @@ public class PathwayNavMesh
 		for (int i = 0; i < _pathway.Waypoints.Count; i++)
 		{
 			hasHit = NavMesh.SamplePosition(_pathway.Waypoints[i], out hit, _pathway.MeshSize * 2, NavMesh.AllAreas);
-			_pathway.Hits.Add(new Pathway.HitPoint(hasHit, hit.position, _pathway.Waypoints[i]));
+			_pathway.Hits.Add(new Pathway.HitPoint(hasHit, hit.position));
 			result &= hasHit;
 		}
 

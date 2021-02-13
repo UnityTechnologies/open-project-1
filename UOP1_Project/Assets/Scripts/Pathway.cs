@@ -50,12 +50,10 @@ public class Pathway : MonoBehaviour
 	{
 		public bool HasHit { get; }
 		public Vector3 Position { get; }
-		public Vector3 Waypoint { get; }
-		public HitPoint(bool hit, Vector3 position, Vector3 waypoint)
+		public HitPoint(bool hit, Vector3 position)
 		{
 			HasHit = hit;
 			Position = position;
-			Waypoint = waypoint;
 		}
 	}
 	public List<HitPoint> Hits { get; set; }
