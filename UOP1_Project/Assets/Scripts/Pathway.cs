@@ -65,9 +65,6 @@ public class Pathway : MonoBehaviour
 	public Color SelectedColor { get => _selectedColor; }
 	public int SelectedIndex { get; set; }
 
-	
-	
-
 #endif
 
 }

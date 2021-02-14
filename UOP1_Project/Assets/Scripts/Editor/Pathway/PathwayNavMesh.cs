@@ -5,11 +5,10 @@ using UnityEngine.AI;
 
 public class PathwayNavMesh 
 {
-	private Pathway _pathway;
-	SerializedProperty _path;
-	SerializedProperty _hits;
-	SerializedProperty _waypoints;
-	SerializedProperty _meshSize;
+	private SerializedProperty _path;
+	private SerializedProperty _hits;
+	private SerializedProperty _waypoints;
+	private SerializedProperty _meshSize;
 
 	public PathwayNavMesh(SerializedObject serializedObject)
 	{

@@ -5,16 +5,15 @@ using UnityEditor;
 public class PathWayNavMeshUI
 {
 	private PathwayNavMesh _pathwayNavMesh;
-	SerializedProperty _displayPolls;
-	SerializedProperty _togglePathDisplay;
-	SerializedProperty _waypoints;
-	SerializedProperty _path;
-	
+	private SerializedProperty _displayPolls;
+	private SerializedProperty _togglePathDisplay;
+	private SerializedProperty _waypoints;
 
 	private bool DisplayPolls {
 		get => _displayPolls.boolValue;
 		set => _displayPolls.boolValue = value;
 	}
+
 	bool TogglePathDisplay
 	{
 		get => _togglePathDisplay.boolValue;
@@ -23,10 +22,8 @@ public class PathWayNavMeshUI
 
 	public PathWayNavMeshUI(SerializedObject serializedObject)
 	{
-		
 		_displayPolls = serializedObject.FindProperty("DisplayPolls");
 		_togglePathDisplay = serializedObject.FindProperty("TogglePathDisplay");
-		_path = serializedObject.FindProperty("Path");
 		_waypoints = serializedObject.FindProperty("Waypoints");
 		_pathwayNavMesh = new PathwayNavMesh(serializedObject);
 	}

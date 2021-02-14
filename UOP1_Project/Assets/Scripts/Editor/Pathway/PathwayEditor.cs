@@ -23,7 +23,6 @@ public class PathwayEditor : Editor
 		_reorderableList.DoLayoutList();
 		_pathWayNavMeshUI.OnInspectorGUI();
 		serializedObject.ApplyModifiedProperties();
-		
 	}
 
 	private void OnEnable()
