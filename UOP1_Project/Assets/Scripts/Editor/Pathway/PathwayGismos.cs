@@ -13,7 +13,7 @@ public class PathwayGizmos
 		
 		if (!pathway.TogglePathDisplay)
 		{
-			DrawHandlesLines(pathway);
+			DrawHandlesPath(pathway);
 		}
 		else
 		{
@@ -40,7 +40,7 @@ public class PathwayGizmos
 		Handles.Label(path[index] + textHeight, index.ToString(), style);
 	}
 
-	private static void DrawHandlesLines(Pathway pathway)
+	private static void DrawHandlesPath(Pathway pathway)
 	{
 		for (int i = 0; i < pathway.Waypoints.Count; i++)
 		{
@@ -105,8 +105,16 @@ public class PathwayGizmos
 					{
 						Gizmos.color = Color.red;
 						Gizmos.DrawLine(pathway.Hits[i].Position, pathway.Waypoints[i]);
+						if (Mathf.Abs(Vector3.Distance(pathway.Hits[i].Position,pathway.Waypoints[i])) <= 0.2f)
+						{
+							Gizmos.color = new Color(0, 0, 255, 1f);
+							Gizmos.DrawSphere(pathway.Waypoints[i], 0.2f);
+						}
+						
+						Debug.Log(pathway.Hits[i].Position);
 						Gizmos.color = new Color(0, 255, 0, 0.5f);
 						Gizmos.DrawSphere(pathway.Waypoints[i], sphereRadius);
+						
 					}
 					else
 					{
