@@ -9,7 +9,7 @@ public class PathwayEditor : Editor
 	private ReorderableList _reorderableList;
 	private Pathway _pathway;
 	private PathwayHandles _pathwayHandles;
-	private PathwayNavMesh _pathwayNavMesh;
+	private PathWayNavMeshUI _pathWayNavMeshUI;
 
 	public void OnSceneGUI()
 	{
@@ -19,7 +19,7 @@ public class PathwayEditor : Editor
 	public override void OnInspectorGUI()
 	{
 		DrawDefaultInspector();
-		_pathwayNavMesh.OnInspectorGUI();
+		_pathWayNavMeshUI.OnInspectorGUI();
 		serializedObject.Update();
 		_reorderableList.DoLayoutList();
 		serializedObject.ApplyModifiedProperties();
@@ -38,7 +38,7 @@ public class PathwayEditor : Editor
 		_pathway = (target as Pathway);
 		_pathway.SelectedIndex = -1;
 		_pathwayHandles = new PathwayHandles(_pathway);
-		_pathwayNavMesh = new PathwayNavMesh(_pathway);
+		_pathWayNavMeshUI = new PathWayNavMeshUI(_pathway);
 	}
 
 	private void OnDisable()
@@ -113,8 +113,7 @@ public class PathwayEditor : Editor
 	{
 		serializedObject.UpdateIfRequiredOrScript();
 		_pathway.SelectedIndex = -1;
-		_pathway.TogglePathDisplay = false;
-		_pathway.DisplayPolls = false;
+
 		if (_reorderableList.index >= _reorderableList.serializedProperty.arraySize )
 		{
 			_reorderableList.index = _reorderableList.serializedProperty.arraySize-1;

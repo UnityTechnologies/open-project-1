@@ -1,24 +1,20 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEditorInternal;
 using UnityEngine.AI;
 
 
 public class PathwayNavMesh 
 {
 	private Pathway _pathway;
-	private bool _toggled;
+	
 	public PathwayNavMesh(Pathway pathway)
 	{
 		_pathway = pathway;
-		_toggled = false;
-		_pathway.DisplayPolls = false;
-		_pathway.TogglePathDisplay = false;
 		_pathway.Path = new List<Vector3>();
 		_pathway.Hits = new List<Pathway.HitPoint>();
 	}
 
-	private bool PollsNavMesh()
+	public bool PollsNavMesh()
 	{
 		NavMeshHit hit;
 		bool hasHit;
@@ -53,7 +49,7 @@ public class PathwayNavMesh
 		}
 	}
 
-	private bool GenerateNavMeshPath()
+	public bool GenerateNavMeshPath()
 	{
 		bool canGeneatePath=true;
 		int i = 1;
@@ -73,88 +69,6 @@ public class PathwayNavMesh
 		}
 
 		return canGeneatePath;
-	}
-
-	public void OnInspectorGUI()
-	{
-		if (_toggled == false)
-		{
-			if (_toggled = GUILayout.Button("NavMesh Path"))
-			{
-				if (PollsNavMesh())
-				{
-					if (_pathway.Waypoints.Count > 1)
-					{
-						if (GenerateNavMeshPath())
-						{
-							_pathway.TogglePathDisplay = true;
-							InternalEditorUtility.RepaintAllViews();
-						}
-						else
-						{
-							_toggled = false;
-							_pathway.TogglePathDisplay = false;
-						}
-
-					}
-					else
-					{
-						Debug.LogError("Pathway need more than one point to calculate the path");
-						_toggled = false;
-						_pathway.TogglePathDisplay = false;
-					}
-				}
-				else
-				{
-					_pathway.TogglePathDisplay = false;
-					_pathway.DisplayPolls = true;
-					InternalEditorUtility.RepaintAllViews();
-				}
-			}
-		}
-		else
-		{
-			if (GUILayout.Button("Handles Path"))
-			{
-				_toggled = false;
-				_pathway.TogglePathDisplay = false;
-				_pathway.DisplayPolls = false;
-				_pathway.Path.Clear();
-				InternalEditorUtility.RepaintAllViews();
-			}
-
-			if (_pathway.Waypoints.Count > 1)
-			{
-				if (_pathway.DisplayPolls)
-				{
-					if (GUILayout.Button("Hide Polls"))
-					{
-						_pathway.DisplayPolls = false;
-						InternalEditorUtility.RepaintAllViews();
-					}
-
-					if (GUILayout.Button("Refresh Polls"))
-					{
-						PollsNavMesh();
-						InternalEditorUtility.RepaintAllViews();
-					}
-				}
-				else
-				{
-					if (GUILayout.Button("Show Polls"))
-					{
-						_pathway.DisplayPolls = true;
-						InternalEditorUtility.RepaintAllViews();
-					}
-				}
-			}
-			else
-			{
-				_toggled = false;
-				_pathway.TogglePathDisplay = false;
-				_pathway.DisplayPolls = false;
-			}
-		}
 	}
 
 }
