@@ -90,9 +90,9 @@ public class AudioManager : MonoBehaviour
 
 	private void UnregisterChannel(AudioCueEventChannelSO audioCueEventChannel)
 	{
-		audioCueEventChannel.OnAudioCuePlayRequested += PlayAudioCue;
-		audioCueEventChannel.OnAudioCueStopRequested += StopAudioCue;
-		audioCueEventChannel.OnAudioCueFinishRequested += FinishAudioCue;
+		audioCueEventChannel.OnAudioCuePlayRequested -= PlayAudioCue;
+		audioCueEventChannel.OnAudioCueStopRequested -= StopAudioCue;
+		audioCueEventChannel.OnAudioCueFinishRequested -= FinishAudioCue;
 	}
 
 	// Both MixerValueNormalized and NormalizedToMixerValue functions are used for easier transformations
