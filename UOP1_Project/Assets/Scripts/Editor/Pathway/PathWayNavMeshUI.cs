@@ -9,12 +9,13 @@ public class PathWayNavMeshUI
 	private SerializedProperty _togglePathDisplay;
 	private SerializedProperty _waypoints;
 
-	private bool DisplayPolls {
+	private bool DisplayPolls
+	{
 		get => _displayPolls.boolValue;
 		set => _displayPolls.boolValue = value;
 	}
 
-	bool TogglePathDisplay
+	private bool TogglePathDisplay
 	{
 		get => _togglePathDisplay.boolValue;
 		set => _togglePathDisplay.boolValue = value;

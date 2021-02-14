@@ -50,7 +50,6 @@ public class Pathway : MonoBehaviour
 	{
 		public bool hasHit;
 		public Vector3 position;
-		
 	}
 
 	public const string FIELD_LABEL = "Point ";

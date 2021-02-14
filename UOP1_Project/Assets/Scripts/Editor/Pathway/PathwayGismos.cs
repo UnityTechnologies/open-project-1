@@ -5,7 +5,6 @@ using System.Collections.Generic;
 
 public class PathwayGizmos 
 {
-	
 	[DrawGizmo(GizmoType.Selected)]
 	private static void DrawGizmosSelected(Pathway pathway, GizmoType gizmoType)
 	{
@@ -28,7 +27,7 @@ public class PathwayGizmos
 		GUIStyle style = new GUIStyle();
 		Vector3 textHeight = (pathway.MeshSize * 1.5f + pathway.TextSize * 0.1f) * Vector3.up;
 
-		style.normal.textColor = pathway.SelectedIndex==index && pathway.Path.Count == 0 ? pathway.SelectedColor : pathway.TextColor;
+		style.normal.textColor = pathway.SelectedIndex == index && pathway.Path.Count == 0 ? pathway.SelectedColor : pathway.TextColor;
 		style.fontSize = pathway.TextSize;
 		
 		if (pathway.DrawMesh != null)
@@ -100,7 +99,7 @@ public class PathwayGizmos
 						Gizmos.color = Color.red;
 						Gizmos.DrawLine(pathway.Hits[i].position, pathway.Waypoints[i]);
 
-						if (Mathf.Abs(Vector3.Distance(pathway.Hits[i].position,pathway.Waypoints[i])) <= 0.2f)
+						if (Mathf.Abs(Vector3.Distance(pathway.Hits[i].position, pathway.Waypoints[i])) <= 0.2f)
 						{
 							Gizmos.color = new Color(0, 0, 255, 1f);
 							Gizmos.DrawSphere(pathway.Waypoints[i], 0.2f);
