@@ -133,14 +133,14 @@ public class CameraManager : MonoBehaviour
     {
         if(vcam != null){
 			if(!cinemachineBrain.IsLive(vcam)){
-				cinemachineBrain.ActiveVirtualCamera.Priority = 0;
+				cinemachineBrain.ActiveVirtualCamera.Priority = 1;
 				vcam.Priority = 100;
 			}
 		}
 		// null indicates default camera. in our case the free look camera
 		else if(vcam == null){
 			if(!cinemachineBrain.IsLive(freeLookVCam)){
-				cinemachineBrain.ActiveVirtualCamera.Priority = 0;
+				cinemachineBrain.ActiveVirtualCamera.Priority = 1;
 				freeLookVCam.Priority = 100;
 			}
 		}

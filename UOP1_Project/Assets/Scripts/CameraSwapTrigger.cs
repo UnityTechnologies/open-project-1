@@ -43,7 +43,7 @@ public class CameraSwapTrigger : MonoBehaviour
                 //check which side the player exited. we consider only the z axis so the enter and exit faces should be along the local z axis.
                 Vector3 playerPosInLocalCoordinates = transform.InverseTransformPoint(other.transform.position);
                 
-                if(Collider.bounds.center.z > playerPosInLocalCoordinates.z){
+                if(transform.InverseTransformPoint(Collider.bounds.center).z > playerPosInLocalCoordinates.z){
                     
                     //player exited on -ve z side which means we switch to the default camera
                     VcamEventChannel.OnEventRaised(null);
