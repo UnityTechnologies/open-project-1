@@ -33,6 +33,26 @@ public class Pathway : MonoBehaviour
 	[Tooltip("color of the selected scene view element by clicking on the list")]
 	private Color _selectedColor = Color.white;
 
+	[HideInInspector]
+	public bool DisplayPolls;
+
+	[HideInInspector]
+	public bool TogglePathDisplay;
+
+	[HideInInspector]
+	public List<Vector3> Path;
+
+	[HideInInspector]
+	public List<HitPoint> Hits;
+
+	[System.Serializable]
+	public struct HitPoint
+	{
+		public bool hasHit;
+		public Vector3 position;
+		
+	}
+
 	public const string FIELD_LABEL = "Point ";
 	public const string TITLE_LABEL = "Waypoints";
 
@@ -44,20 +64,9 @@ public class Pathway : MonoBehaviour
 	public Mesh DrawMesh { get => _drawMesh; }
 	public Color SelectedColor { get => _selectedColor; }
 	public int SelectedIndex { get; set; }
-	public bool DisplayPolls{ get ; set; }
-	public bool TogglePathDisplay { get; set; }
-	public List<Vector3> Path { get; set; }
-	public struct HitPoint
-	{
-		public bool HasHit { get; }
-		public Vector3 Position { get; }
-		public HitPoint(bool hit, Vector3 position)
-		{
-			HasHit = hit;
-			Position = position;
-		}
-	}
-	public List<HitPoint> Hits { get; set; }
+
+	
+	
 
 #endif
 

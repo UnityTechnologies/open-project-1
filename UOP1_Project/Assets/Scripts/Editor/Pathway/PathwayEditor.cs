@@ -19,10 +19,11 @@ public class PathwayEditor : Editor
 	public override void OnInspectorGUI()
 	{
 		DrawDefaultInspector();
-		_pathWayNavMeshUI.OnInspectorGUI();
 		serializedObject.Update();
 		_reorderableList.DoLayoutList();
+		_pathWayNavMeshUI.OnInspectorGUI();
 		serializedObject.ApplyModifiedProperties();
+		
 	}
 
 	private void OnEnable()
@@ -38,7 +39,7 @@ public class PathwayEditor : Editor
 		_pathway = (target as Pathway);
 		_pathway.SelectedIndex = -1;
 		_pathwayHandles = new PathwayHandles(_pathway);
-		_pathWayNavMeshUI = new PathWayNavMeshUI(_pathway);
+		_pathWayNavMeshUI = new PathWayNavMeshUI(serializedObject);
 	}
 
 	private void OnDisable()

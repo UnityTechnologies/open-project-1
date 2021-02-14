@@ -1,24 +1,39 @@
 ﻿using UnityEngine;
 using UnityEditorInternal;
+using UnityEditor;
 
 public class PathWayNavMeshUI
 {
-	private bool _toggled;
-	private Pathway _pathway;
 	private PathwayNavMesh _pathwayNavMesh;
+	SerializedProperty _displayPolls;
+	SerializedProperty _togglePathDisplay;
+	SerializedProperty _waypoints;
+	SerializedProperty _path;
+	
 
-	public PathWayNavMeshUI(Pathway pathway)
+	private bool DisplayPolls {
+		get => _displayPolls.boolValue;
+		set => _displayPolls.boolValue = value;
+	}
+	bool TogglePathDisplay
 	{
-		_pathway = pathway;
-		_pathwayNavMesh = new PathwayNavMesh(pathway);
-		_pathway.DisplayPolls = false;
-		_pathway.TogglePathDisplay = false;
-		_toggled = false;
+		get => _togglePathDisplay.boolValue;
+		set => _togglePathDisplay.boolValue = value;
+	}
+
+	public PathWayNavMeshUI(SerializedObject serializedObject)
+	{
+		
+		_displayPolls = serializedObject.FindProperty("DisplayPolls");
+		_togglePathDisplay = serializedObject.FindProperty("TogglePathDisplay");
+		_path = serializedObject.FindProperty("Path");
+		_waypoints = serializedObject.FindProperty("Waypoints");
+		_pathwayNavMesh = new PathwayNavMesh(serializedObject);
 	}
 
 	public void OnInspectorGUI()
 	{
-		if (_toggled == false)
+		if (!TogglePathDisplay )
 		{
 			NavMeshPathButton();
 		}
@@ -26,49 +41,46 @@ public class PathWayNavMeshUI
 		{
 			HandlesPathButton();
 
-			if (_pathway.Waypoints.Count > 1)
+			if (_waypoints.arraySize > 1)
 			{
 				PollsButtons();
 			}
 			else
 			{
-				_toggled = false;
-				_pathway.TogglePathDisplay = false;
-				_pathway.DisplayPolls = false;
+				TogglePathDisplay = false;
+				DisplayPolls = false;
 			}
 		}
 	}
 
 	private void NavMeshPathButton()
 	{
-		if (_toggled = GUILayout.Button("NavMesh Path"))
+		if ( GUILayout.Button("NavMesh Path"))
 		{
 			if (_pathwayNavMesh.PollsNavMesh())
 			{
-				if (_pathway.Waypoints.Count > 1)
+				if (_waypoints.arraySize > 1)
 				{
 					if (_pathwayNavMesh.GenerateNavMeshPath())
 					{
-						_pathway.TogglePathDisplay = true;
+						TogglePathDisplay = true;
 						InternalEditorUtility.RepaintAllViews();
 					}
 					else
 					{
-						_toggled = false;
-						_pathway.TogglePathDisplay = false;
+						TogglePathDisplay = false;
 					}
 				}
 				else
 				{
 					Debug.LogError("NavMesh need more than one point to calculate the path");
-					_toggled = false;
-					_pathway.TogglePathDisplay = false;
+					TogglePathDisplay = false;
 				}
 			}
 			else
 			{
-				_pathway.TogglePathDisplay = false;
-				_pathway.DisplayPolls = true;
+				TogglePathDisplay = false;
+				DisplayPolls = true;
 				InternalEditorUtility.RepaintAllViews();
 			}
 		}
@@ -78,21 +90,19 @@ public class PathWayNavMeshUI
 	{
 		if (GUILayout.Button("Handles Path"))
 		{
-			_toggled = false;
-			_pathway.TogglePathDisplay = false;
-			_pathway.DisplayPolls = false;
-			_pathway.Path.Clear();
+			TogglePathDisplay = false;
+			DisplayPolls = false;
 			InternalEditorUtility.RepaintAllViews();
 		}
 	}
 
 	private void PollsButtons()
 	{
-		if (_pathway.DisplayPolls)
+		if (DisplayPolls)
 		{
 			if (GUILayout.Button("Hide Polls"))
 			{
-				_pathway.DisplayPolls = false;
+				DisplayPolls = false;
 				InternalEditorUtility.RepaintAllViews();
 			}
 
@@ -106,7 +116,7 @@ public class PathWayNavMeshUI
 		{
 			if (GUILayout.Button("Show Polls"))
 			{
-				_pathway.DisplayPolls = true;
+				DisplayPolls = true;
 				InternalEditorUtility.RepaintAllViews();
 			}
 		}

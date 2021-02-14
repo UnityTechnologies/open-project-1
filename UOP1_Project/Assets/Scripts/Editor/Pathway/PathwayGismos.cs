@@ -83,12 +83,6 @@ public class PathwayGizmos
 				Handles.DrawLine(pathway.Path[i], pathway.Path[i + 1]);
 			}
 		}
-
-		DrawElements(pathway, pathway.Path, pathway.Path.Count - 1);
-		using (new Handles.DrawingScope(pathway.LineColor))
-		{
-			Handles.DrawLine(pathway.Path[0], pathway.Path[pathway.Path.Count - 1]);
-		}
 	}
 
 	private static void DrawHitPoints(Pathway pathway)
@@ -101,12 +95,12 @@ public class PathwayGizmos
 
 				for (int i = 0; i < pathway.Hits.Count; i++)
 				{
-					if (pathway.Hits[i].HasHit)
+					if (pathway.Hits[i].hasHit)
 					{
 						Gizmos.color = Color.red;
-						Gizmos.DrawLine(pathway.Hits[i].Position, pathway.Waypoints[i]);
+						Gizmos.DrawLine(pathway.Hits[i].position, pathway.Waypoints[i]);
 
-						if (Mathf.Abs(Vector3.Distance(pathway.Hits[i].Position,pathway.Waypoints[i])) <= 0.2f)
+						if (Mathf.Abs(Vector3.Distance(pathway.Hits[i].position,pathway.Waypoints[i])) <= 0.2f)
 						{
 							Gizmos.color = new Color(0, 0, 255, 1f);
 							Gizmos.DrawSphere(pathway.Waypoints[i], 0.2f);
