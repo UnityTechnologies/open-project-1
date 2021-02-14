@@ -71,6 +71,16 @@ public class SpawnSystem : MonoBehaviour
 		_playerInstantiatedChannel.RaiseEvent(playerInstance.transform); // The CameraSystem will pick this up to frame the player
 		_playerTransformAnchor.Transform = playerInstance.transform;
 	}
+	/// <summary>
+	/// Teleport protagonist to default spawn location. 
+	/// </summary>
+	public void Respawn(GameObject protagonistGameObject)
+	{
+		Transform spawnLocation = GetSpawnLocation(_defaultSpawnIndex, _spawnLocations); // Get default spawn location
+		protagonistGameObject.transform.position = spawnLocation.transform.position; // Teleport protagonist to spawn location
+		Physics.SyncTransforms(); //Character sometimes stays in the position it was after teleporting, sychnchornize transforms to fix that
+	}
+
 
 	private Transform GetSpawnLocation(int index, Transform[] spawnLocations)
 	{

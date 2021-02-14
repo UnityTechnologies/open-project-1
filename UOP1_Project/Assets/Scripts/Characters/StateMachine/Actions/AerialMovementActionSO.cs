@@ -30,6 +30,18 @@ public class AerialMovementAction : StateAction
 		_protagonist = stateMachine.GetComponent<Protagonist>();
 	}
 
+	public override void OnStateEnter()
+	{
+		base.OnStateEnter();
+		_protagonist.OnStartedFalling(); // Protagonist started falling, call method which react on it
+	}
+
+	public override void OnStateExit()
+	{
+		base.OnStateExit();
+		_protagonist.OnStoppedFalling(); // Protagonist not falling anymore, call method which react on it
+	}
+
 	public override void OnUpdate()
 	{
 		Vector3 velocity = _protagonist.movementVector;

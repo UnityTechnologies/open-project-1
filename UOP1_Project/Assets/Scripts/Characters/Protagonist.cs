@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using UnityEngine;
 
 /// <summary>
@@ -21,9 +22,11 @@ public class Protagonist : MonoBehaviour
 	[NonSerialized] public Vector3 movementVector; //Final movement vector, manipulated by the StateMachine actions
 	[NonSerialized] public ControllerColliderHit lastHit;
 	[NonSerialized] public bool isRunning; // Used when using the keyboard to run, brings the normalised speed to 1
+	public bool isFalling;
 
 	public const float GRAVITY_MULTIPLIER = 5f;
 	public const float MAX_FALL_SPEED = -50f;
+	public const float MAX_FALL_TIME = 5f;
 	public const float MAX_RISE_SPEED = 100f;
 	public const float GRAVITY_COMEBACK_MULTIPLIER = .03f;
 	public const float GRAVITY_DIVIDER = .6f;
@@ -95,6 +98,17 @@ public class Protagonist : MonoBehaviour
 		if (isRunning)
 			movementInput.Normalize();
 	}
+	 /// <summary>
+	 /// Rough check if protagonist fell from map, based on time, invoking respawn
+	 /// </summary>
+	private IEnumerator InvokeActionAfterMaximumFallingTime()
+	{
+		yield return new WaitForSeconds(MAX_FALL_TIME); // Wait for maximum falling time for protagonist
+		SpawnSystem spawnSystem = FindObjectOfType<SpawnSystem>(); // Find SpawnSystem
+		spawnSystem.Respawn(gameObject); // Invoke respawning of protagonist
+
+
+	}
 
 	//---- EVENT LISTENERS ----
 
@@ -124,4 +138,24 @@ public class Protagonist : MonoBehaviour
 
 	private void OnStartedAttack() => attackInput = true;
 	private void OnStoppedAttack() => attackInput = false;
+
+	public void OnStartedFalling()
+	{
+		if (isFalling) // If protagonist is already set as falling, do nothing.
+		{
+			return;
+		}
+		isFalling = true; // set protagonist as falling
+		StartCoroutine("InvokeActionAfterMaximumFallingTime"); // start coroutine which invoke respawn, when protagonist falling too long.
+	}
+
+	public void OnStoppedFalling()
+	{
+		if (!isFalling) // If protagonist not falling, do nothing.
+		{
+			return;
+		}
+		isFalling = false; // set protagonist as not falling. 
+		StopCoroutine("InvokeActionAfterMaximumFallingTime"); // stop courotine which invoke respawn, when protagonist falling too long.
+	}
 }
