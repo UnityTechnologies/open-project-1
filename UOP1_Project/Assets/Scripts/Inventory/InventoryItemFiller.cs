@@ -1,54 +1,42 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.Localization.Components;
+
 public class InventoryItemFiller : MonoBehaviour
 {
-	[SerializeField]
+	[SerializeField] private Image _itemPreviewImage = default;
+	[SerializeField] private LocalizeStringEvent _itemTitle = default;
+	[SerializeField] private TextMeshProUGUI _itemCount = default;
+	[SerializeField] private Image _bgImage = default;
+	[SerializeField] private Image _imgHover = default;
+	[SerializeField] private Image _imgSelected = default;
+	[HideInInspector] public ItemStack _currentItem = default;
+	[SerializeField] private Button _itemButton = default;
 
-	private Image itemPreviewImage;
-	[SerializeField]
-	private LocalizeStringEvent itemTitle;
-	[SerializeField]
-	private TextMeshProUGUI itemCount;
-	[SerializeField]
-	private Image bgImage;
-
-	[SerializeField]
-	private Image imgHover;
-
-	[SerializeField]
-	private Image imgSelected;
-
-	public ItemStack currentItem;
-
-
-	[SerializeField]
-	private Button itemButton;
-
-	public void SetItem(ItemStack itemStack, bool isSelected, ItemEventChannelSo selectItemEvent)
+	public void SetItem(ItemStack itemStack, bool isSelected, ItemEventChannelSO selectItemEvent)
 	{
 
 		UnhoverItem();
 
-		currentItem = itemStack;
+		_currentItem = itemStack;
 
-		imgSelected.gameObject.SetActive(isSelected);
+		_imgSelected.gameObject.SetActive(isSelected);
 
-		itemPreviewImage.sprite = itemStack.Item.PreviewImage;
-		itemTitle.StringReference = itemStack.Item.Name;
-		itemCount.text = itemStack.Amount.ToString();
-		bgImage.color = itemStack.Item.ItemType.TypeColor;
+		_itemPreviewImage.sprite = itemStack.Item.PreviewImage;
+		_itemTitle.StringReference = itemStack.Item.Name;
+		_itemCount.text = itemStack.Amount.ToString();
+		_bgImage.color = itemStack.Item.ItemType.TypeColor;
 
-		itemButton.onClick.RemoveAllListeners();
+		_itemButton.onClick.RemoveAllListeners();
 
-		itemButton.onClick.AddListener(() =>
+		_itemButton.onClick.AddListener(() =>
 		{
 			SelectItem();
 			UnhoverItem();
-			selectItemEvent.RaiseEvent(currentItem.Item);
+			selectItemEvent.RaiseEvent(_currentItem.Item);
 
 		});
 	}
@@ -56,21 +44,21 @@ public class InventoryItemFiller : MonoBehaviour
 
 	public void HoverItem()
 	{
-		imgHover.gameObject.SetActive(true);
+		_imgHover.gameObject.SetActive(true);
 
 
 	}
 	public void UnhoverItem()
 	{
 
-		imgHover.gameObject.SetActive(false);
+		_imgHover.gameObject.SetActive(false);
 
 	}
 
 	public void SelectItem()
 
 	{
-		imgSelected.gameObject.SetActive(true);
+		_imgSelected.gameObject.SetActive(true);
 
 	}
 
@@ -78,7 +66,7 @@ public class InventoryItemFiller : MonoBehaviour
 	{
 
 
-		imgSelected.gameObject.SetActive(false);
+		_imgSelected.gameObject.SetActive(false);
 
 	}
 

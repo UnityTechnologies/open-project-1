@@ -8,10 +8,10 @@ public class InventoryButtonFiller : MonoBehaviour
 {
 
 	[SerializeField]
-	private LocalizeStringEvent buttonActionText;
+	private LocalizeStringEvent _buttonActionText = default;
 
 	[SerializeField]
-	private Button buttonAction;
+	private Button _buttonAction = default;
 
 
 	public void FillInventoryButtons(ItemType itemType, bool isInteractable = true)
@@ -19,9 +19,9 @@ public class InventoryButtonFiller : MonoBehaviour
 
 
 
-		buttonAction.interactable = isInteractable;
+		_buttonAction.interactable = isInteractable;
 
-		buttonActionText.StringReference = itemType.ActionName;
+		_buttonActionText.StringReference = itemType.ActionName;
 
 
 

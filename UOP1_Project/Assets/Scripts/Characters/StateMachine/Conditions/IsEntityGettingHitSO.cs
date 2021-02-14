@@ -24,7 +24,7 @@ public class IsEntityGettingHit : Condition
 		bool result = false;
 		if (_damageableEntity != null)
 		{
-			result = _damageableEntity.getHit;
+			result = _damageableEntity.GetHit;
 		}
 		return result;
 	}

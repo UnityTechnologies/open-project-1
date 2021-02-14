@@ -6,11 +6,11 @@ public class InteractionSO : ScriptableObject
 {
 	[Tooltip("The interaction name")]
 	[SerializeField]
-	private LocalizedString _interactionName;
+	private LocalizedString _interactionName = default;
 
 	[Tooltip("The Interaction Type")]
 	[SerializeField]
-	private InteractionType _interactionType;
+	private InteractionType _interactionType = default;
 
 
 

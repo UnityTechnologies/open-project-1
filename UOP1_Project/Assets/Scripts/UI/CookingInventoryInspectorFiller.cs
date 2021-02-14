@@ -4,23 +4,21 @@ using UnityEngine;
 
 public class CookingInventoryInspectorFiller : MonoBehaviour
 {
-	[SerializeField]
-	private InspectorPreviewFiller inspectorPreviewFiller;
 
-	[SerializeField]
-	private InspectorDescriptionFiller inspectorDescriptionFiller;
+	[SerializeField] private InspectorPreviewFiller _inspectorPreviewFiller = default;
 
-	[SerializeField]
-	private RecipeIngredientsFiller recipeIngredientsFiller;
+	[SerializeField] private InspectorDescriptionFiller _inspectorDescriptionFiller = default;
+
+	[SerializeField] private RecipeIngredientsFiller _recipeIngredientsFiller = default;
 
 
 
 	public void FillItemInspector(Item itemToInspect, bool[] availabilityArray)
 	{
 
-		inspectorPreviewFiller.FillPreview(itemToInspect);
-		inspectorDescriptionFiller.FillDescription(itemToInspect);
-		recipeIngredientsFiller.FillIngredients(itemToInspect.IngredientsList, availabilityArray);
+		_inspectorPreviewFiller.FillPreview(itemToInspect);
+		_inspectorDescriptionFiller.FillDescription(itemToInspect);
+		_recipeIngredientsFiller.FillIngredients(itemToInspect.IngredientsList, availabilityArray);
 
 	}
 }
