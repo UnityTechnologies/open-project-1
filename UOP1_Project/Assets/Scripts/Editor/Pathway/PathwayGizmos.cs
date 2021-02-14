@@ -3,19 +3,19 @@ using UnityEditor;
 using System.Collections.Generic;
 
 
-public class PathwayGizmos 
+public class PathwayGizmos
 {
 	[DrawGizmo(GizmoType.Selected)]
 	private static void DrawGizmosSelected(Pathway pathway, GizmoType gizmoType)
 	{
-		
+
 		DrawHandlesPath(pathway);
 	}
 
 	private static void DrawElements(Pathway pathway, List<Vector3> path, int index)
 	{
 		GUIStyle style = new GUIStyle();
-		Vector3 textHeight =  Vector3.up;
+		Vector3 textHeight = Vector3.up;
 
 		style.normal.textColor = pathway.TextColor;
 		style.fontSize = pathway.TextSize;
@@ -25,7 +25,8 @@ public class PathwayGizmos
 
 	private static void DrawHandlesPath(Pathway pathway)
 	{
-		if (pathway.Waypoints.Count != 0) {
+		if (pathway.Waypoints.Count != 0)
+		{
 			DrawElements(pathway, pathway.Waypoints, 0);
 		}
 
@@ -38,7 +39,7 @@ public class PathwayGizmos
 				{
 					Handles.DrawDottedLine(pathway.Waypoints[i - 1], pathway.Waypoints[i], 2);
 				}
-				
+
 			}
 		}
 

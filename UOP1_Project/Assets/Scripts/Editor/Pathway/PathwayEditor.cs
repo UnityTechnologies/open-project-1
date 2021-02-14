@@ -9,7 +9,7 @@ public class PathwayEditor : Editor
 	private ReorderableList _reorderableList;
 	private Pathway _pathway;
 	private PathwayHandles _pathwayHandles;
-	
+
 
 	public void OnSceneGUI()
 	{
@@ -107,9 +107,9 @@ public class PathwayEditor : Editor
 	{
 		serializedObject.UpdateIfRequiredOrScript();
 
-		if (_reorderableList.index >= _reorderableList.serializedProperty.arraySize )
+		if (_reorderableList.index >= _reorderableList.serializedProperty.arraySize)
 		{
-			_reorderableList.index = _reorderableList.serializedProperty.arraySize-1;
+			_reorderableList.index = _reorderableList.serializedProperty.arraySize - 1;
 		}
 	}
 

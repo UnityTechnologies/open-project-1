@@ -2,7 +2,7 @@
 using UnityEditor;
 
 
-public class PathwayHandles 
+public class PathwayHandles
 {
 	private Pathway _pathway;
 
