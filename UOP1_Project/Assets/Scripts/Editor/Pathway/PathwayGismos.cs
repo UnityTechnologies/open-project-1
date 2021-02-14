@@ -105,13 +105,13 @@ public class PathwayGizmos
 					{
 						Gizmos.color = Color.red;
 						Gizmos.DrawLine(pathway.Hits[i].Position, pathway.Waypoints[i]);
+
 						if (Mathf.Abs(Vector3.Distance(pathway.Hits[i].Position,pathway.Waypoints[i])) <= 0.2f)
 						{
 							Gizmos.color = new Color(0, 0, 255, 1f);
 							Gizmos.DrawSphere(pathway.Waypoints[i], 0.2f);
 						}
-						
-						Debug.Log(pathway.Hits[i].Position);
+
 						Gizmos.color = new Color(0, 255, 0, 0.5f);
 						Gizmos.DrawSphere(pathway.Waypoints[i], sphereRadius);
 						
