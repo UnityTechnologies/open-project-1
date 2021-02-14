@@ -131,18 +131,17 @@ public class CameraManager : MonoBehaviour
 
 	private void OnCameraSwapEvent(CinemachineVirtualCamera vcam)
     {
-		// TODO: find a better way than +10 , -10 priority. may break if scene is setup incorrectly
         if(vcam != null){
 			if(!cinemachineBrain.IsLive(vcam)){
-				cinemachineBrain.ActiveVirtualCamera.Priority -= 10;
-				vcam.Priority += 10;
+				cinemachineBrain.ActiveVirtualCamera.Priority = 0;
+				vcam.Priority = 100;
 			}
 		}
 		// null indicates default camera. in our case the free look camera
 		else if(vcam == null){
 			if(!cinemachineBrain.IsLive(freeLookVCam)){
-				cinemachineBrain.ActiveVirtualCamera.Priority -= 10;
-				freeLookVCam.Priority += 10;
+				cinemachineBrain.ActiveVirtualCamera.Priority = 0;
+				freeLookVCam.Priority = 100;
 			}
 		}
 		
