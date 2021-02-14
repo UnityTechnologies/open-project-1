@@ -22,7 +22,7 @@ public class Protagonist : MonoBehaviour
 	[NonSerialized] public Vector3 movementVector; //Final movement vector, manipulated by the StateMachine actions
 	[NonSerialized] public ControllerColliderHit lastHit;
 	[NonSerialized] public bool isRunning; // Used when using the keyboard to run, brings the normalised speed to 1
-	public bool isFalling;
+	[NonSerialized] public bool isFalling;
 
 	public const float GRAVITY_MULTIPLIER = 5f;
 	public const float MAX_FALL_SPEED = -50f;
