@@ -113,7 +113,7 @@ public class PathwayEditor : Editor
 
 		if (_reorderableList.index >= _reorderableList.serializedProperty.arraySize )
 		{
-			_reorderableList.index = _reorderableList.serializedProperty.arraySize-1;
+			_reorderableList.index = _reorderableList.serializedProperty.arraySize - 1;
 		}
 	}
 

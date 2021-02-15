@@ -1,5 +1,4 @@
 ﻿using UnityEditor;
-using UnityEngine;
 using UnityEngine.AI;
 
 
@@ -62,8 +61,10 @@ public class PathwayNavMesh
 	{
 		bool canGeneatePath=true;
 		int i = 1;
+
 		NavMeshPath navMeshPath = new NavMeshPath();
 		_path.ClearArray();
+
 		while ( i < _waypoints.arraySize)
 		{
 			CopyPathCorners(i - 1, i, navMeshPath, ref canGeneatePath);
