@@ -3,17 +3,18 @@ using UnityEditor;
 using UnityEditorInternal;
 
 
-[CustomEditor(typeof(Pathway))]
+[CustomEditor(typeof(PathwayConfigSO))]
 public class PathwayEditor : Editor
 {
 	private ReorderableList _reorderableList;
-	private Pathway _pathway;
+	private PathwayConfigSO _pathway;
 	private PathwayHandles _pathwayHandles;
 
 
-	public void OnSceneGUI()
+	public void OnSceneGUI(SceneView sceneView)
 	{
 		_pathwayHandles.DispalyHandles();
+		PathwayGizmos.DrawHandlesPath(_pathway);
 	}
 
 	public override void OnInspectorGUI()
@@ -34,8 +35,9 @@ public class PathwayEditor : Editor
 		_reorderableList.onRemoveCallback += RemoveItem;
 		_reorderableList.onSelectCallback += SelectItem;
 		_reorderableList.onChangedCallback += ListModified;
-		_pathway = (target as Pathway);
+		_pathway = (target as PathwayConfigSO);
 		_pathwayHandles = new PathwayHandles(_pathway);
+		SceneView.duringSceneGui += this.OnSceneGUI;
 	}
 
 	private void OnDisable()
@@ -47,6 +49,7 @@ public class PathwayEditor : Editor
 		_reorderableList.onRemoveCallback -= RemoveItem;
 		_reorderableList.onSelectCallback -= SelectItem;
 		_reorderableList.onChangedCallback -= ListModified;
+		SceneView.duringSceneGui -= this.OnSceneGUI;
 	}
 
 	private void DrawHeader(Rect rect)
@@ -64,17 +67,22 @@ public class PathwayEditor : Editor
 	{
 		int index = list.index;
 
-		if (index > -1 && list.serializedProperty.arraySize >= 1)
+		if (index < 0)
 		{
+			index = list.serializedProperty.arraySize - 1;
+		}
+
+		if (list.serializedProperty.arraySize >= 1)
+		{
+			Vector3 previous = (list.serializedProperty.GetArrayElementAtIndex(index).vector3Value + list.serializedProperty.GetArrayElementAtIndex((index + 1) % list.serializedProperty.arraySize).vector3Value) / 2;
 			list.serializedProperty.InsertArrayElementAtIndex(index + 1);
-			Vector3 previous = list.serializedProperty.GetArrayElementAtIndex(index).vector3Value;
-			list.serializedProperty.GetArrayElementAtIndex(index + 1).vector3Value = new Vector3(previous.x + 2, previous.y, previous.z + 2);
+			list.serializedProperty.GetArrayElementAtIndex(index + 1).vector3Value = new Vector3(previous.x, previous.y, previous.z);
 		}
 		else
 		{
+			Vector3 previous = Vector3.zero;
 			list.serializedProperty.InsertArrayElementAtIndex(list.serializedProperty.arraySize);
-			Vector3 previous = _pathway.transform.position;
-			list.serializedProperty.GetArrayElementAtIndex(list.serializedProperty.arraySize - 1).vector3Value = new Vector3(previous.x + 2, previous.y, previous.z + 2);
+			list.serializedProperty.GetArrayElementAtIndex(list.serializedProperty.arraySize - 1).vector3Value = new Vector3(previous.x, previous.y, previous.z);
 		}
 
 		list.index++;

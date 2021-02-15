@@ -4,9 +4,21 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "PathwayConfig", menuName = "EntityConfig/Pathway Config")]
 public class PathwayConfigSO : NPCMovementConfigSO
 {
-	[Tooltip("Pathway waypoints")]
-	[SerializeField] private List<Vector3> _waypoints;
+	[HideInInspector] public List<Vector3> Waypoints;
 
-	public List<Vector3> Waypoints => _waypoints;
+#if UNITY_EDITOR
 
+	[SerializeField]
+	private Color _pathwayEditorColor = Color.cyan;
+	private int _textSize = 10;
+	private Color _textColor = Color.white;
+
+	public const string FIELD_LABEL = "Point ";
+	public const string TITLE_LABEL = "Waypoints";
+
+	public Color LineColor { get => _pathwayEditorColor; }
+	public Color TextColor { get => _textColor; }
+	public int TextSize { get => _textSize; }
+
+#endif
 }
