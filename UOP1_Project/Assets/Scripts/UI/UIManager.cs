@@ -1,47 +1,50 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Localization;
 
 public class UIManager : MonoBehaviour
 {
+	[Header("Listening on channels")]
+	[Header("Dialogue Events")]
+	[SerializeField] private DialogueLineChannelSO _openUIDialogueEvent = default;
+	[SerializeField] private VoidEventChannelSO _closeUIDialogueEvent = default;
 
-	public DialogueLineChannelSO OpenUIDialogueEvent;
-	public VoidEventChannelSO CloseUIDialogueEvent;
+	[Header("Inventory Events")]
+	[SerializeField] private VoidEventChannelSO _openInventoryScreenEvent = default;
+	[SerializeField] private VoidEventChannelSO _openInventoryScreenForCookingEvent = default;
+	[SerializeField] private VoidEventChannelSO _closeInventoryScreenEvent = default;
 
-	public VoidEventChannelSO OpenInventoryScreenEvent;
-	public VoidEventChannelSO OpenInventoryScreenForCookingEvent;
-	public VoidEventChannelSO CloseInventoryScreenEvent;
-
-	public VoidEventChannelSO OnInteractionEndedEvent;
-
-	public InteractionUIEventChannelSO SetInteractionEvent;
+	[Header("Interaction Events")]
+	[SerializeField] private VoidEventChannelSO _onInteractionEndedEvent = default;
+	[SerializeField] private InteractionUIEventChannelSO _setInteractionEvent = default;
 
 	private void OnEnable()
 	{
 		//Check if the event exists to avoid errors
-		if (OpenUIDialogueEvent != null)
+		if (_openUIDialogueEvent != null)
 		{
-			OpenUIDialogueEvent.OnEventRaised += OpenUIDialogue;
+			_openUIDialogueEvent.OnEventRaised += OpenUIDialogue;
 		}
-		if (CloseUIDialogueEvent != null)
+		if (_closeUIDialogueEvent != null)
 		{
-			CloseUIDialogueEvent.OnEventRaised += CloseUIDialogue;
+			_closeUIDialogueEvent.OnEventRaised += CloseUIDialogue;
 		}
-		if (OpenInventoryScreenForCookingEvent != null)
+		if (_openInventoryScreenForCookingEvent != null)
 		{
-			OpenInventoryScreenForCookingEvent.OnEventRaised += SetInventoryScreenForCooking;
+			_openInventoryScreenForCookingEvent.OnEventRaised += SetInventoryScreenForCooking;
 		}
-		if (OpenInventoryScreenEvent != null)
+		if (_openInventoryScreenEvent != null)
 		{
-			OpenInventoryScreenEvent.OnEventRaised += SetInventoryScreen;
+			_openInventoryScreenEvent.OnEventRaised += SetInventoryScreen;
 		}
-		if (CloseInventoryScreenEvent != null)
+		if (_closeInventoryScreenEvent != null)
 		{
-			CloseInventoryScreenEvent.OnEventRaised += CloseInventoryScreen;
+			_closeInventoryScreenEvent.OnEventRaised += CloseInventoryScreen;
 		}
-		if (SetInteractionEvent != null)
+		if (_setInteractionEvent != null)
 		{
-			SetInteractionEvent.OnEventRaised += SetInteractionPanel;
+			_setInteractionEvent.OnEventRaised += SetInteractionPanel;
 		}
 
 	}
@@ -52,21 +55,23 @@ public class UIManager : MonoBehaviour
 	}
 
 	[SerializeField]
-	UIDialogueManager dialogueController = default;
+	private UIDialogueManager dialogueController = default;
 
 	[SerializeField]
-	UIInventoryManager inventoryPanel;
+	private UIInventoryManager inventoryPanel = default;
 
 	[SerializeField]
-	UIInteractionManager interactionPanel;
+	private UIInteractionManager interactionPanel = default;
 
-	public void OpenUIDialogue(DialogueLineSO dialogueLine)
+	public void OpenUIDialogue(LocalizedString dialogueLine, ActorSO actor)
 	{
-		dialogueController.SetDialogue(dialogueLine);
+
+		dialogueController.SetDialogue(dialogueLine, actor);
 		dialogueController.gameObject.SetActive(true);
 	}
 	public void CloseUIDialogue()
 	{
+
 		dialogueController.gameObject.SetActive(false);
 	}
 
@@ -106,7 +111,7 @@ public class UIManager : MonoBehaviour
 
 		if (isForCooking)
 		{
-			OnInteractionEndedEvent.RaiseEvent();
+			_onInteractionEndedEvent.RaiseEvent();
 
 		}
 	}

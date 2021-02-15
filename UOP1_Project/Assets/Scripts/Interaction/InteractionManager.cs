@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum InteractionType { None = 0, PickUp, Cook, Talk, Save };
+public enum InteractionType { None = 0, PickUp, Cook, Talk };
 
 public class InteractionManager : MonoBehaviour
 {
@@ -74,6 +74,7 @@ public class InteractionManager : MonoBehaviour
 					_inputReader.EnableDialogueInput();
 				}
 				break;
+				
 			case InteractionType.Save:
 				_potentialInteractions.First.Value.interactableObject.GetComponent<SavePoint>().Save();
 				break;

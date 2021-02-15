@@ -7,19 +7,17 @@ using UnityEngine.UI;
 public class InventoryTypeTabFiller : MonoBehaviour
 {
 
-	[SerializeField]
-	private LocalizeStringEvent tabName;
+	[SerializeField] private LocalizeStringEvent _tabName = default;
 
-	[SerializeField]
-	private Button actionButton;
+	[SerializeField] private Button _actionButton = default;
 
-	public void fillTab(InventoryTabType tabType, bool isSelected, TabEventChannelSo changeTabEvent)
+	public void fillTab(InventoryTabType tabType, bool isSelected, TabEventChannelSO changeTabEvent)
 	{
 
-		tabName.StringReference = tabType.TabName;
-		actionButton.interactable = !isSelected;
-		actionButton.onClick.RemoveAllListeners();
-		actionButton.onClick.AddListener(() => changeTabEvent.RaiseEvent(tabType));
+		_tabName.StringReference = tabType.TabName;
+		_actionButton.interactable = !isSelected;
+		_actionButton.onClick.RemoveAllListeners();
+		_actionButton.onClick.AddListener(() => changeTabEvent.RaiseEvent(tabType));
 
 	}
 
