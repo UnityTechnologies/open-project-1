@@ -95,16 +95,6 @@ namespace SceneSelectorInternal
 			return Color.red;
 		}
 
-		public static void RunOnNextUpdate(Action action)
-		{
-			void Run()
-			{
-				action?.Invoke();
-				EditorApplication.update -= Run;
-			}
-			EditorApplication.update += Run;
-		}
-
 		public static int FindAssetsByType<T>(List<T> assets) where T : UnityEngine.Object
 		{
 			int foundAssetsCount = 0;

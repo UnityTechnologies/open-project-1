@@ -9,5 +9,4 @@ public class LocationSO : GameSceneSO
 {
 	[Header("Location specific")]
 	public LocalizedString locationName;
-	public int enemiesCount; //Example variable, will change later
 }

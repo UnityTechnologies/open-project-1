@@ -11,7 +11,9 @@ public class EditorInitialisationLoader : MonoBehaviour
 	public GameSceneSO[] scenesToLoad;
 	public int targetFramerate = 0; // For debugging purposes
 	//bool to know if we are coming from editor initializer mode
-	[HideInInspector] public bool _isEditorInitializerMode=false;
+	[HideInInspector] public bool _isEditorInitializerMode = false;
+
+	/*
 
 	private void Start()
 	{
@@ -27,11 +29,16 @@ public class EditorInitialisationLoader : MonoBehaviour
 				}
 				else
 				{
-					SceneManager.LoadSceneAsync(scenesToLoad[j].scenePath, LoadSceneMode.Additive);
+					//TODO: Make it work again
+					//SceneManager.LoadSceneAsync(scenesToLoad[j].scenePath, LoadSceneMode.Additive);
+
 					//Inform that we are pressing play from a location or menu
 					_isEditorInitializerMode = true;
 				}
 		}
 	}
+
+	*/
+
 #endif
 }
