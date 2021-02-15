@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.AI;
 using UnityEditor;
 using UnityEditorInternal;
 
@@ -9,7 +10,6 @@ public class PathwayEditor : Editor
 	private ReorderableList _reorderableList;
 	private PathwayConfigSO _pathway;
 	private PathwayHandles _pathwayHandles;
-
 
 	public void OnSceneGUI(SceneView sceneView)
 	{
@@ -37,7 +37,14 @@ public class PathwayEditor : Editor
 		_reorderableList.onChangedCallback += ListModified;
 		_pathway = (target as PathwayConfigSO);
 		_pathwayHandles = new PathwayHandles(_pathway);
-		SceneView.duringSceneGui += this.OnSceneGUI;
+		if (CheckNavMeshExistence())
+		{
+			SceneView.duringSceneGui += this.OnSceneGUI;
+		}
+		else
+		{
+			Debug.LogWarning("Pathway edition not available on this scene. NavMesh baked data missing.");
+		}
 	}
 
 	private void OnDisable()
@@ -119,6 +126,11 @@ public class PathwayEditor : Editor
 		{
 			_reorderableList.index = _reorderableList.serializedProperty.arraySize - 1;
 		}
+	}
+
+	private bool CheckNavMeshExistence()
+	{
+		return NavMesh.SamplePosition(Vector3.zero, out NavMeshHit hit, 1000.0f, NavMesh.AllAreas);
 	}
 
 }
