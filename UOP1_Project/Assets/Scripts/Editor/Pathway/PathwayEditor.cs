@@ -9,7 +9,7 @@ public class PathwayEditor : Editor
 	private ReorderableList _reorderableList;
 	private Pathway _pathway;
 	private PathwayHandles _pathwayHandles;
-
+	private PathWayNavMeshUI _pathWayNavMeshUI;
 
 	public void OnSceneGUI()
 	{
@@ -21,6 +21,7 @@ public class PathwayEditor : Editor
 		DrawDefaultInspector();
 		serializedObject.Update();
 		_reorderableList.DoLayoutList();
+		_pathWayNavMeshUI.OnInspectorGUI();
 		serializedObject.ApplyModifiedProperties();
 	}
 
@@ -36,6 +37,7 @@ public class PathwayEditor : Editor
 		_reorderableList.onChangedCallback += ListModified;
 		_pathway = (target as Pathway);
 		_pathwayHandles = new PathwayHandles(_pathway);
+		_pathWayNavMeshUI = new PathWayNavMeshUI(serializedObject);
 	}
 
 	private void OnDisable()
@@ -78,6 +80,7 @@ public class PathwayEditor : Editor
 		}
 
 		list.index++;
+		_pathWayNavMeshUI.OnUpdatePolls();
 	}
 
 	private void RemoveItem(ReorderableList list)
@@ -91,6 +94,7 @@ public class PathwayEditor : Editor
 			list.index--;
 		}
 
+		_pathWayNavMeshUI.OnUpdatePolls();
 	}
 
 	private void SelectItem(ReorderableList list)
@@ -107,9 +111,9 @@ public class PathwayEditor : Editor
 	{
 		serializedObject.UpdateIfRequiredOrScript();
 
-		if (_reorderableList.index >= _reorderableList.serializedProperty.arraySize)
+		if (_reorderableList.index >= _reorderableList.serializedProperty.arraySize )
 		{
-			_reorderableList.index = _reorderableList.serializedProperty.arraySize - 1;
+			_reorderableList.index = _reorderableList.serializedProperty.arraySize-1;
 		}
 	}
 

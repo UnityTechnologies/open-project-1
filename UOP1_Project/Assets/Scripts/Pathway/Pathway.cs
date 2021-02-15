@@ -13,10 +13,26 @@ public class Pathway : MonoBehaviour
 	private Color _lineColor = Color.black;
 
 	[SerializeField, Range(0, 100)]
-	private int _textSize = 10;
+	private int _textSize = 20;
 
 	[SerializeField]
 	private Color _textColor = Color.white;
+
+	[SerializeField, Range(0, 100)]
+	[Tooltip("")]
+	private float _probeRadius = 3;
+
+	[HideInInspector]
+	public bool DisplayPolls;
+
+	[HideInInspector]
+	public bool TogglePathDisplay;
+
+	[HideInInspector]
+	public List<Vector3> Path;
+
+	[HideInInspector]
+	public List<bool> Hits;
 
 	public const string FIELD_LABEL = "Point ";
 	public const string TITLE_LABEL = "Waypoints";
@@ -24,7 +40,7 @@ public class Pathway : MonoBehaviour
 	public Color LineColor { get => _lineColor; }
 	public Color TextColor { get => _textColor; }
 	public int TextSize { get => _textSize; }
-	
+	public float ProbeRadius { get => _probeRadius; }
 
 #endif
 
