@@ -95,10 +95,6 @@ public class PathwayGizmos
 					}
 				}
 			}
-			else
-			{
-				Debug.LogError("Polls need to be updated");
-			}
 		}
 	}
 }
