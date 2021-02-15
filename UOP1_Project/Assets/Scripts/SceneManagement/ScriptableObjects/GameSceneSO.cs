@@ -5,15 +5,7 @@ using UnityEngine.AddressableAssets;
 /// This class is a base class which contains what is common to all game scenes (Locations or Menus)
 /// </summary>
 
-public class GameSceneSO : ScriptableObject
+public class GameSceneSO : DescriptionBaseSO
 {
-	[Header("Information")]
 	public AssetReference sceneReference; //Used at runtime to load the scene from the right AssetBundle
-
-	public string scenePath;
-
-	[TextArea] public string shortDescription;
-
-	[Header("Sounds")]
-	public AudioClip music;
 }

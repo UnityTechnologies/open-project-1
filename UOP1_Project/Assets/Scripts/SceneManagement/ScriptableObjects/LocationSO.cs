@@ -7,6 +7,6 @@ using UnityEngine.Localization;
 [CreateAssetMenu(fileName = "NewLocation", menuName = "Scene Data/Location")]
 public class LocationSO : GameSceneSO
 {
-	[Header("Location specific")]
 	public LocalizedString locationName;
+	public AudioClip musicTrack;
 }
