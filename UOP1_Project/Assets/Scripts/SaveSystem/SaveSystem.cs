@@ -1,42 +1,15 @@
-﻿using UnityEngine;
-using UnityEditor;
-using System.IO;
-using System.Collections.Generic;
-using System.Runtime.Serialization.Formatters.Binary;
-
-
-public interface ISaveable
-{
-
-	/// <summary>
-	/// <para>The function which needs to be subscribed to the <see cref="SaveSystem.AddToRegistryCallback"/></para>
-	/// Include it in a place which only gets executed once to avoid data duplication.<br/>
-	/// Like in OnEnable() function of Monobehaviour or ScriptableObject
-	/// </summary>
-	void AddToSaveRegistry(HashSet<ISaveable> registry);
-
-	/// <summary>
-	/// Pure virtual function for saving data to a save file.<br/>
-	/// This will comprise the serialization logic.
-	/// </summary>
-	void Serialize(Save saveFile);
-
-	/// <summary>
-	/// Pure virtual function for loading data from a save file.<br/>
-	/// This will comprise the deserialziation logic.
-	/// </summary>
-	void Deserialize(Save saveFile);
-}
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 public class SaveSystem : MonoBehaviour
 {
 	public delegate void AddToRegistryCallback(HashSet<ISaveable> registry);
+
 	public static AddToRegistryCallback AddToRegistry;
 
 	HashSet<ISaveable> _saveRegistry = default;
 
-	[SerializeField]
-	string _fileNameExtension;
+	const string SAVE_FILENAME = "save.chop";
 
 	private void Start()
 	{
@@ -48,65 +21,35 @@ public class SaveSystem : MonoBehaviour
 
 	private void LoadGame()
 	{
-		FileStream file;
-
-		if(!File.Exists(Application.persistentDataPath + "/save" + _fileNameExtension))
+		if (FileManager.LoadFromFile(SAVE_FILENAME, out var json))
 		{
-			Debug.LogError("No Save Data found");
-			return;
+			Save saveData = new Save();
+			saveData.LoadFromJson(json);
 
-		} else
-		{
-			file = File.Open(Application.persistentDataPath + "/save" + _fileNameExtension, FileMode.Open);
+			foreach (ISaveable saveable in _saveRegistry)
+			{
+				saveable.Deserialize(saveData);
+			}
 		}
-
-		BinaryFormatter formatter = new BinaryFormatter();
-
-		Save saveClass = (Save)formatter.Deserialize(file);
-
-		file.Close();
-
-		foreach(ISaveable saveable in _saveRegistry)
-		{
-			saveable.Deserialize(saveClass);
-		}
-	}
-
-	private void SaveAndQuit()
-	{
-		SaveGame();
-		Application.Quit();
 	}
 
 	private void SaveGame()
 	{
-		FileStream file;
-
-		if(!File.Exists(Application.persistentDataPath + "/save" + _fileNameExtension))
-		{
-			file = File.Create(Application.persistentDataPath + "/save" + _fileNameExtension);
-
-		} else
-		{
-			file = File.Open(Application.persistentDataPath + "/save" + _fileNameExtension, FileMode.Open);
-		}
-
 		// A class with name "Save" must exist in the project. It will contain the appropriate save file structure.
-		Save saveClass = new Save();
-
-		foreach(ISaveable saveable in _saveRegistry)
+		Save saveData = new Save();
+		foreach (ISaveable saveable in _saveRegistry)
 		{
-			saveable.Serialize(saveClass);
+			saveable.Serialize(saveData);
 		}
 
-		BinaryFormatter formatter = new BinaryFormatter();
-		formatter.Serialize(file, saveClass);
-		file.Close();
+		if (FileManager.WriteToFile(SAVE_FILENAME, saveData.ToJson()))
+		{
+			Debug.Log("Save successful");
+		}
 	}
 
 	private void OnDisable()
 	{
-		SaveAndQuit();
+		SaveGame();
 	}
-
 }

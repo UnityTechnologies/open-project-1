@@ -1,16 +1,17 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 /// <summary>
 /// A test script showing usage of the save system.<br/>
 /// This code corresponds to the code written in <see cref="Save"/> class.<br/>
-/// Unfortunately, inspite of all my efforts, I wasn't able to remove all dependencies. 
+/// Unfortunately, in spite of all my efforts, I wasn't able to remove all dependencies.
 /// </summary>
 public class TestScript : MonoBehaviour, ISaveable
 {
-	int _testInteger = default;
-	float _testFloat = default;
-	bool _testBool = default;
+	int _testInteger;
+	float _testFloat;
+	bool _testBool;
 
 	private void OnEnable()
 	{
