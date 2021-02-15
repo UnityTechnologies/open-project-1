@@ -9,11 +9,9 @@ public class PathwayEditor : Editor
 {
 	private ReorderableList _reorderableList;
 	private PathwayConfigSO _pathway;
-	private PathwayHandles _pathwayHandles;
 
 	public void OnSceneGUI(SceneView sceneView)
 	{
-		_pathwayHandles.DispalyHandles();
 		PathwayGizmos.DrawHandlesPath(_pathway);
 	}
 
@@ -36,7 +34,6 @@ public class PathwayEditor : Editor
 		_reorderableList.onSelectCallback += SelectItem;
 		_reorderableList.onChangedCallback += ListModified;
 		_pathway = (target as PathwayConfigSO);
-		_pathwayHandles = new PathwayHandles(_pathway);
 		if (CheckNavMeshExistence())
 		{
 			SceneView.duringSceneGui += this.OnSceneGUI;
