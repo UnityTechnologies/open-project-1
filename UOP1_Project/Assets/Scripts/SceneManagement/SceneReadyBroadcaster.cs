@@ -13,7 +13,7 @@ public class SceneReadyBroadcaster : MonoBehaviour
 
 	private void Start()
 	{
-		if(GetComponent<EditorInitialisationLoader>()._isEditorInitializerMode == true)
+		if(GetComponent<EditorInitialisationLoader>()._shootEvent == true)
 		{
 			_OnSceneReady.RaiseEvent();
 		}

@@ -8,37 +8,8 @@ using UnityEngine.SceneManagement;
 public class EditorInitialisationLoader : MonoBehaviour
 {
 #if UNITY_EDITOR
-	public GameSceneSO[] scenesToLoad;
 	public int targetFramerate = 0; // For debugging purposes
 	//bool to know if we are coming from editor initializer mode
-	[HideInInspector] public bool _isEditorInitializerMode = false;
-
-	/*
-
-	private void Start()
-	{
-		Application.targetFrameRate = targetFramerate; // For debugging purposes
-
-		for (int i = 0; i < SceneManager.sceneCount; ++i)
-		{
-			Scene scene = SceneManager.GetSceneAt(i);
-			for (int j = 0; j < scenesToLoad.Length; ++j)
-				if (scene.path == scenesToLoad[j].scenePath)
-				{
-					return;
-				}
-				else
-				{
-					//TODO: Make it work again
-					//SceneManager.LoadSceneAsync(scenesToLoad[j].scenePath, LoadSceneMode.Additive);
-
-					//Inform that we are pressing play from a location or menu
-					_isEditorInitializerMode = true;
-				}
-		}
-	}
-
-	*/
-
+	[HideInInspector] public bool _shootEvent = true;
 #endif
 }

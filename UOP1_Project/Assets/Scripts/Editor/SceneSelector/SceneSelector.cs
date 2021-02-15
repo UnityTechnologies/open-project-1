@@ -2,6 +2,8 @@
 using UnityEditor;
 using UnityEngine;
 using SceneSelectorInternal;
+using UnityEditor.SceneManagement;
+using SceneType = GameSceneSO.GameSceneType;
 
 public partial class SceneSelector : EditorWindow, IHasCustomMenu
 {
@@ -17,6 +19,8 @@ public partial class SceneSelector : EditorWindow, IHasCustomMenu
 
 	private List<Item> items => _storage.items;
 	private Dictionary<string, Item> itemsMap => _storage.itemsMap;
+
+	private GameSceneSO persistentManagerSceneSO, gameplaySceneSO;
 
 	[MenuItem("ChopChop/Scene Selector")]
 	private static void Open()
@@ -48,6 +52,14 @@ public partial class SceneSelector : EditorWindow, IHasCustomMenu
 
 	private void DrawWindow()
 	{
+		if(GUILayout.Button("Refresh scenes"))
+		{
+			//Forcing deletion of the storage, which will search the project and populate the scene list again
+			_storage = new Storage();
+			EditorPrefs.SetString(kPreferencesKey, "");
+			OnEnable();
+		}
+
 		using (var scrollScope = new EditorGUILayout.ScrollViewScope(_windowScrollPosition))
 		{
 			GUILayout.Space(4.0f);
@@ -68,12 +80,12 @@ public partial class SceneSelector : EditorWindow, IHasCustomMenu
 	{
 		if (item.isVisible)
 		{
-			var gameScene = item.gameScene;
-			if (gameScene != null)
+			var gameSceneSO = item.gameSceneSO;
+			if (gameSceneSO != null)
 			{
-				if (GUILayout.Button(gameScene.name, _styles.item))
+				if (GUILayout.Button(gameSceneSO.name, _styles.item))
 				{
-					Helper.OpenSceneSafe(AssetDatabase.GetAssetPath(gameScene.sceneReference.editorAsset));
+					OpenSceneSafe(gameSceneSO);
 				}
 
 				var colorMarkerRect = GUILayoutUtility.GetLastRect();
@@ -107,25 +119,37 @@ public partial class SceneSelector : EditorWindow, IHasCustomMenu
 
 	private void PopulateItems()
 	{
-		var gameScenes = new List<GameSceneSO>();
-		Helper.FindAssetsByType(gameScenes);
+		var gameSceneSOs = new List<GameSceneSO>();
+		Helper.FindAssetsByType(gameSceneSOs);
 
-		foreach (var gameScene in gameScenes)
+		foreach (var gameSceneSO in gameSceneSOs)
 		{
-			if (AssetDatabase.TryGetGUIDAndLocalFileIdentifier(gameScene, out var guid, out long _))
+			if (AssetDatabase.TryGetGUIDAndLocalFileIdentifier(gameSceneSO, out var guid, out long _))
 			{
 				if (itemsMap.TryGetValue(guid, out var item))
 				{
-					item.gameScene = gameScene;
+					item.gameSceneSO = gameSceneSO;
 				}
 				else
 				{
 					item = new Item()
 					{
-						gameScene = gameScene,
+						gameSceneSO = gameSceneSO,
 						guid = guid,
-						color = Helper.GetDefaultColor(gameScene)
+						color = Helper.GetDefaultColor(gameSceneSO)
 					};
+
+					switch (item.gameSceneSO.sceneType)
+					{
+						case SceneType.PersistentManagers:
+							persistentManagerSceneSO = item.gameSceneSO;
+							break;
+
+						case SceneType.Gameplay:
+							gameplaySceneSO = item.gameSceneSO;
+							break;
+					}
+					
 					items.Add(item);
 					itemsMap.Add(guid, item);
 				}
@@ -140,7 +164,7 @@ public partial class SceneSelector : EditorWindow, IHasCustomMenu
 			for (int i = items.Count - 1; i >= 0; --i)
 			{
 				var sceneItem = items[i];
-				if (sceneItem == null || sceneItem.gameScene == null)
+				if (sceneItem == null || sceneItem.gameSceneSO == null)
 				{
 					items.RemoveAt(i);
 					itemsMap.Remove(sceneItem.guid);
@@ -170,5 +194,24 @@ public partial class SceneSelector : EditorWindow, IHasCustomMenu
 	void IHasCustomMenu.AddItemsToMenu(GenericMenu menu)
 	{
 		menu.AddItem(kOpenPreferencesItemContent, false, OpenPreferences);
+	}
+
+	private void OpenSceneSafe(GameSceneSO gameSceneSO)
+	{
+		if (EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo())
+		{
+			EditorSceneManager.OpenScene(AssetDatabase.GetAssetPath(gameSceneSO.sceneReference.editorAsset));
+
+			//Check if it's a Location or Menu scene, load additional managers
+			if (gameSceneSO.sceneType == SceneType.Location)
+			{
+				EditorSceneManager.OpenScene(AssetDatabase.GetAssetPath(persistentManagerSceneSO.sceneReference.editorAsset), OpenSceneMode.Additive);
+				EditorSceneManager.OpenScene(AssetDatabase.GetAssetPath(gameplaySceneSO.sceneReference.editorAsset), OpenSceneMode.Additive);
+			}
+			else if (gameSceneSO.sceneType == SceneType.Menu)
+			{
+				EditorSceneManager.OpenScene(AssetDatabase.GetAssetPath(persistentManagerSceneSO.sceneReference.editorAsset), OpenSceneMode.Additive);
+			}
+		}
 	}
 }
