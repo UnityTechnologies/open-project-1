@@ -17,11 +17,13 @@ public class SceneLoader : MonoBehaviour
 	[Header("Load Events")]
 	[SerializeField] private LoadEventChannelSO _loadLocation = default;
 	[SerializeField] private LoadEventChannelSO _loadMenu = default;
+#if UNITY_EDITOR
+	[SerializeField] private LoadEventChannelSO _editorColdStartup = default;
+#endif
 
 	[Header("Broadcasting on")]
 	[SerializeField] private BoolEventChannelSO _toggleLoadingScreen = default;
 	[SerializeField] private VoidEventChannelSO _onSceneReady = default;
-	[SerializeField] private FadeChannelSO _onFade = default;
 
 	private List<AsyncOperationHandle<SceneInstance>> _loadingOperationHandles = new List<AsyncOperationHandle<SceneInstance>>();
 	private AsyncOperationHandle<SceneInstance> _gameplayManagerLoadingOpHandle;
@@ -79,7 +81,7 @@ public class SceneLoader : MonoBehaviour
 	}
 
 	/// <summary>
-	/// This function loads the menu scenes passed as array parameter 
+	/// Prepares to load the main menu scene, first removing the Gameplay scene in case the game is coming back from gameplay to menus.
 	/// </summary>
 	private void LoadMenu(GameSceneSO[] menusToLoad, bool showLoadingScreen)
 	{
@@ -94,6 +96,9 @@ public class SceneLoader : MonoBehaviour
 		UnloadPreviousScenes();
 	}
 
+	/// <summary>
+	/// In both Location and Menu loading, this function takes care of removing previously loaded temporary scenes.
+	/// </summary>
 	private void UnloadPreviousScenes()
 	{
 		for (int i = 0; i < _currentlyLoadedScenes.Length; i++)
@@ -104,6 +109,9 @@ public class SceneLoader : MonoBehaviour
 		LoadNewScenes();
 	}
 
+	/// <summary>
+	/// Kicks off the asynchronous loading of an array of scenes, either menus or Locations.
+	/// </summary>
 	private void LoadNewScenes()
 	{
 		if (_showLoadingScreen)
@@ -163,10 +171,9 @@ public class SceneLoader : MonoBehaviour
 		Scene s = ((SceneInstance)_loadingOperationHandles[0].Result).Scene;
 		SceneManager.SetActiveScene(s);
 
-		// Will reconstruct LightProbe tetrahedrons to include the probes from the newly-loaded scene
 		LightProbes.TetrahedralizeAsync();
 
-		_onSceneReady.RaiseEvent();
+		_onSceneReady.RaiseEvent(); //Spawn system will spawn the PigChef
 	}
 
 	private void ExitGame()
