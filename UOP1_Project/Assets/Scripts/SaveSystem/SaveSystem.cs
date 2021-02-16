@@ -1,55 +1,45 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class SaveSystem : MonoBehaviour
+public class SaveSystem : ScriptableObject
 {
-	public delegate void AddToRegistryCallback(HashSet<ISaveable> registry);
+	public LocationDatabase locationDatabase;
+	[SerializeField] private LoadEventChannelSO _loadLocation = default;
 
-	public static AddToRegistryCallback AddToRegistry;
+	public string saveFilename = "save.chop";
+	public Save saveData = new Save();
 
-	HashSet<ISaveable> _saveRegistry = default;
-
-	const string SAVE_FILENAME = "save.chop";
-
-	private void Start()
+	void OnEnable()
 	{
-		Debug.Log("SaveSystem start getting called");
-		_saveRegistry = new HashSet<ISaveable>();
-		AddToRegistry?.Invoke(_saveRegistry);
-		LoadGame();
+		_loadLocation.OnLoadingRequested += CacheLoadLocations;
 	}
 
-	private void LoadGame()
+	void OnDisable()
 	{
-		if (FileManager.LoadFromFile(SAVE_FILENAME, out var json))
+		_loadLocation.OnLoadingRequested -= CacheLoadLocations;
+	}
+
+	private void CacheLoadLocations(GameSceneSO[] locationsToLoad, bool showLoadingScreen)
+	{
+		LocationSO locationSo = locationsToLoad[0] as LocationSO;
+		if (locationSo)
 		{
-			Save saveData = new Save();
+			saveData._locationId = locationSo.DescId.uuid;
+		}
+	}
+
+	public void LoadGame()
+	{
+		if (FileManager.LoadFromFile(saveFilename, out var json))
+		{
 			saveData.LoadFromJson(json);
-
-			foreach (ISaveable saveable in _saveRegistry)
-			{
-				saveable.Deserialize(saveData);
-			}
 		}
 	}
 
-	private void SaveGame()
+	public void SaveGame()
 	{
-		// A class with name "Save" must exist in the project. It will contain the appropriate save file structure.
-		Save saveData = new Save();
-		foreach (ISaveable saveable in _saveRegistry)
-		{
-			saveable.Serialize(saveData);
-		}
-
-		if (FileManager.WriteToFile(SAVE_FILENAME, saveData.ToJson()))
+		if (FileManager.WriteToFile(saveFilename, saveData.ToJson()))
 		{
 			Debug.Log("Save successful");
 		}
-	}
-
-	private void OnDisable()
-	{
-		SaveGame();
 	}
 }
