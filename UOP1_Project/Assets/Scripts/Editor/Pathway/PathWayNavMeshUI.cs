@@ -72,6 +72,12 @@ public class PathWayNavMeshUI
 		}
 	}
 
+	public void ProbeUpdate()
+	{
+		if(TogglePathDisplay)
+			DisplayPolls=!_pathwayNavMesh.hasNavMesh();
+	}
+
 	public void PathUpdate()
 	{
 		if (TogglePathDisplay && _pathwayNavMesh.hasNavMesh())

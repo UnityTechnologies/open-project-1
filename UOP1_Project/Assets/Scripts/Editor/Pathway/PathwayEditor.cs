@@ -59,7 +59,7 @@ public class PathwayEditor : Editor
 	{
 		SerializedProperty item = _reorderableList.serializedProperty.GetArrayElementAtIndex(index);
 		item.vector3Value = EditorGUI.Vector3Field(rect, Pathway.FIELD_LABEL + index, item.vector3Value);
-		_pathWayNavMeshUI.PathUpdate();
+		_pathWayNavMeshUI.ProbeUpdate();
 	}
 
 	private void AddItem(ReorderableList list)
