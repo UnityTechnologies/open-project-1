@@ -10,13 +10,13 @@ public class PathWayNavMeshUI
 	private SerializedProperty _displayPolls;
 	private SerializedProperty _togglePathDisplay;
 
-	private bool DisplayPolls
+	private bool DisplayProbes
 	{
 		get => _displayPolls.boolValue;
 		set => _displayPolls.boolValue = value;
 	}
 
-	private bool TogglePathDisplay
+	private bool ToggleNavMeshDisplay
 	{
 		get => _togglePathDisplay.boolValue;
 		set => _togglePathDisplay.boolValue = value;
@@ -25,15 +25,15 @@ public class PathWayNavMeshUI
 	public PathWayNavMeshUI(SerializedObject serializedObject, Pathway pathway)
 	{
 		_pathway = pathway;
-		_displayPolls = serializedObject.FindProperty("DisplayPolls");
-		_togglePathDisplay = serializedObject.FindProperty("TogglePathDisplay");
+		_displayPolls = serializedObject.FindProperty("DisplayProbes");
+		_togglePathDisplay = serializedObject.FindProperty("ToggleNavMeshDisplay");
 		_pathwayNavMesh = new PathwayNavMesh(serializedObject, pathway);
 		GeneratePath();
 	}
 
 	public void OnInspectorGUI()
 	{
-		if (!TogglePathDisplay )
+		if (!ToggleNavMeshDisplay)
 		{
 			if (GUILayout.Button("NavMesh Path"))
 			{
@@ -44,8 +44,8 @@ public class PathWayNavMeshUI
 		{
 			if (GUILayout.Button("Handles Path"))
 			{
-				TogglePathDisplay = false;
-				DisplayPolls = false;
+				ToggleNavMeshDisplay = false;
+				DisplayProbes = false;
 				InternalEditorUtility.RepaintAllViews();
 			}
 		}
@@ -53,15 +53,15 @@ public class PathWayNavMeshUI
 
 	public void GeneratePath() {
 
-		DisplayPolls = !_pathwayNavMesh.hasNavMesh();
+		DisplayProbes = !_pathwayNavMesh.hasNavMesh();
 
-		if (!DisplayPolls)
+		if (!DisplayProbes)
 		{
 			if (_pathway.Waypoints.Count > 1)
 			{
 				if (_pathwayNavMesh.GenerateNavMeshPath())
 				{
-					TogglePathDisplay = true;
+					ToggleNavMeshDisplay = true;
 					InternalEditorUtility.RepaintAllViews();
 				}
 			}
@@ -77,9 +77,9 @@ public class PathWayNavMeshUI
 	{
 		if (_pathway.RealTimeEnabled)
 		{
-			DisplayPolls = !_pathwayNavMesh.hasNavMesh();
+			DisplayProbes = !_pathwayNavMesh.hasNavMesh();
 			
-			if (!DisplayPolls)
+			if (!DisplayProbes && !GUI.changed)
 			{
 				_pathwayNavMesh.GenerateNavMeshPath();
 			}

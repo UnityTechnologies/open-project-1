@@ -19,14 +19,15 @@ public class Pathway : MonoBehaviour
 	private Color _textColor = Color.white;
 
 	[SerializeField, Range(0, 100)]
-	[Tooltip("")]
+	[Tooltip("This function may reduce the frame rate if a large probe radius is specified. To avoid frame rate issues," +
+				" it is recommended that you specify a maxDistance of twice the agent height.")]
 	private float _probeRadius = 3;
 
 	[HideInInspector]
-	public bool DisplayPolls;
+	public bool DisplayProbes;
 
 	[HideInInspector]
-	public bool TogglePathDisplay;
+	public bool ToggleNavMeshDisplay;
 
 	private List<Vector3> _path;
 	private List<bool> _hits;
