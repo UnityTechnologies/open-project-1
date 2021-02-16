@@ -20,8 +20,6 @@ public partial class SceneSelector : EditorWindow, IHasCustomMenu
 	private List<Item> items => _storage.items;
 	private Dictionary<string, Item> itemsMap => _storage.itemsMap;
 
-	private GameSceneSO persistentManagerSceneSO, gameplaySceneSO;
-
 	[MenuItem("ChopChop/Scene Selector")]
 	private static void Open()
 	{
@@ -52,19 +50,20 @@ public partial class SceneSelector : EditorWindow, IHasCustomMenu
 
 	private void DrawWindow()
 	{
-		if(GUILayout.Button("Refresh scenes"))
-		{
-			//Forcing deletion of the storage, which will search the project and populate the scene list again
-			_storage = new Storage();
-			EditorPrefs.SetString(kPreferencesKey, "");
-			OnEnable();
-		}
-
 		using (var scrollScope = new EditorGUILayout.ScrollViewScope(_windowScrollPosition))
 		{
 			GUILayout.Space(4.0f);
 			DrawItems();
 			_windowScrollPosition = scrollScope.scrollPosition;
+		}
+
+		if (GUILayout.Button("Reset list"))
+		{
+			//Force deletion of the storage
+			_storage = new Storage();
+			EditorPrefs.SetString(kPreferencesKey, "");
+
+			OnEnable(); //search the project and populate the scene list again
 		}
 	}
 
@@ -85,7 +84,7 @@ public partial class SceneSelector : EditorWindow, IHasCustomMenu
 			{
 				if (GUILayout.Button(gameSceneSO.name, _styles.item))
 				{
-					OpenSceneSafe(gameSceneSO);
+					Helper.OpenSceneSafe(gameSceneSO);
 				}
 
 				var colorMarkerRect = GUILayoutUtility.GetLastRect();
@@ -138,17 +137,6 @@ public partial class SceneSelector : EditorWindow, IHasCustomMenu
 						guid = guid,
 						color = Helper.GetDefaultColor(gameSceneSO)
 					};
-
-					switch (item.gameSceneSO.sceneType)
-					{
-						case SceneType.PersistentManagers:
-							persistentManagerSceneSO = item.gameSceneSO;
-							break;
-
-						case SceneType.Gameplay:
-							gameplaySceneSO = item.gameSceneSO;
-							break;
-					}
 					
 					items.Add(item);
 					itemsMap.Add(guid, item);
@@ -194,24 +182,5 @@ public partial class SceneSelector : EditorWindow, IHasCustomMenu
 	void IHasCustomMenu.AddItemsToMenu(GenericMenu menu)
 	{
 		menu.AddItem(kOpenPreferencesItemContent, false, OpenPreferences);
-	}
-
-	private void OpenSceneSafe(GameSceneSO gameSceneSO)
-	{
-		if (EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo())
-		{
-			EditorSceneManager.OpenScene(AssetDatabase.GetAssetPath(gameSceneSO.sceneReference.editorAsset));
-
-			//Check if it's a Location or Menu scene, load additional managers
-			if (gameSceneSO.sceneType == SceneType.Location)
-			{
-				EditorSceneManager.OpenScene(AssetDatabase.GetAssetPath(persistentManagerSceneSO.sceneReference.editorAsset), OpenSceneMode.Additive);
-				EditorSceneManager.OpenScene(AssetDatabase.GetAssetPath(gameplaySceneSO.sceneReference.editorAsset), OpenSceneMode.Additive);
-			}
-			else if (gameSceneSO.sceneType == SceneType.Menu)
-			{
-				EditorSceneManager.OpenScene(AssetDatabase.GetAssetPath(persistentManagerSceneSO.sceneReference.editorAsset), OpenSceneMode.Additive);
-			}
-		}
 	}
 }

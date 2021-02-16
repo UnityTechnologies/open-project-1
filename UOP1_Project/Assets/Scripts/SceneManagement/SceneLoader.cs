@@ -17,9 +17,6 @@ public class SceneLoader : MonoBehaviour
 	[Header("Load Events")]
 	[SerializeField] private LoadEventChannelSO _loadLocation = default;
 	[SerializeField] private LoadEventChannelSO _loadMenu = default;
-#if UNITY_EDITOR
-	[SerializeField] private LoadEventChannelSO _editorColdStartup = default;
-#endif
 
 	[Header("Broadcasting on")]
 	[SerializeField] private BoolEventChannelSO _toggleLoadingScreen = default;
