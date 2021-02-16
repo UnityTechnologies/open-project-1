@@ -75,9 +75,9 @@ public class PathWayNavMeshUI
 
 	public void PathUpdate()
 	{
+		DisplayPolls = !_pathwayNavMesh.hasNavMesh();
 		if (GUI.changed && _pathway.RealTimeEnabled)
 		{
-			DisplayPolls = !_pathwayNavMesh.hasNavMesh();
 			if (!DisplayPolls)
 			{
 				_pathwayNavMesh.GenerateNavMeshPath();
