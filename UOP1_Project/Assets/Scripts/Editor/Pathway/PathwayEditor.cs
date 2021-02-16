@@ -31,7 +31,6 @@ public class PathwayEditor : Editor
 		_reorderableList.drawElementCallback += DrawElement;
 		_reorderableList.onAddCallback += AddItem;
 		_reorderableList.onRemoveCallback += RemoveItem;
-		_reorderableList.onSelectCallback += SelectItem;
 		_reorderableList.onChangedCallback += ListModified;
 		_pathway = (target as PathwayConfigSO);
 		if (CheckNavMeshExistence())
@@ -51,7 +50,6 @@ public class PathwayEditor : Editor
 		_reorderableList.drawElementCallback -= DrawElement;
 		_reorderableList.onAddCallback -= AddItem;
 		_reorderableList.onRemoveCallback -= RemoveItem;
-		_reorderableList.onSelectCallback -= SelectItem;
 		_reorderableList.onChangedCallback -= ListModified;
 		SceneView.duringSceneGui -= this.OnSceneGUI;
 	}
@@ -103,11 +101,6 @@ public class PathwayEditor : Editor
 			list.index--;
 		}
 
-	}
-
-	private void SelectItem(ReorderableList list)
-	{
-		InternalEditorUtility.RepaintAllViews();
 	}
 
 	private void ListModified(ReorderableList list)

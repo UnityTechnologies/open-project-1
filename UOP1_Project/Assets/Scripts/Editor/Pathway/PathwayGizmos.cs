@@ -10,11 +10,13 @@ public class PathwayGizmos
 	{
 		EditorGUI.BeginChangeCheck();
 
+		List<Vector3> pathwayEditorDisplay = new List<Vector3>();
+
 		// Snap the waypoints on the NavMesh
 		for (int i = 0; i < pathway.Waypoints.Count; i++)
 		{
 			NavMesh.SamplePosition(pathway.Waypoints[i], out NavMeshHit hit, 99.0f, NavMesh.AllAreas);
-			pathway.Waypoints[i] = hit.position;
+			pathwayEditorDisplay.Add(hit.position);
 		}
 
 		// Only one waypoint use case.
@@ -24,27 +26,28 @@ public class PathwayGizmos
 			pathway.Waypoints[0] = Handles.PositionHandle(pathway.Waypoints[0], Quaternion.identity);
 		}
 		// All the other use cases where a path exists.
-		else if (pathway.Waypoints.Count > 1)
+		for (int index = 0; index < pathway.Waypoints.Count && pathway.Waypoints.Count > 1; index++)
 		{
-			for (int index = 0; index < pathway.Waypoints.Count && pathway.Waypoints.Count > 1; index++)
+			int nextIndex = (index + 1) % pathway.Waypoints.Count;
+			DrawWaypointLabel(pathway, pathway.Waypoints, index);
+			List<Vector3> navMeshPath = new List<Vector3>();
+			NavMeshPath navPath = new NavMeshPath();
+			NavMesh.CalculatePath(pathwayEditorDisplay[index], pathwayEditorDisplay[nextIndex], NavMesh.AllAreas, navPath);
+			using (new Handles.DrawingScope(pathway.LineColor))
 			{
-				int nextIndex = (index + 1) % pathway.Waypoints.Count;
-				DrawWaypointLabel(pathway, pathway.Waypoints, index);
-				List<Vector3> navMeshPath = new List<Vector3>();
-				NavMeshPath navPath = new NavMeshPath();
-				NavMesh.CalculatePath(pathway.Waypoints[index], pathway.Waypoints[nextIndex], NavMesh.AllAreas, navPath);
-				using (new Handles.DrawingScope(pathway.LineColor))
+				for (int j = 0; j < navPath.corners.Length - 1; j++)
 				{
-					for (int j = 0; j < navPath.corners.Length - 1; j++)
-					{
-						Handles.DrawDottedLine(navPath.corners[j], navPath.corners[j + 1], 2);
-					}
+					Handles.DrawDottedLine(navPath.corners[j], navPath.corners[j + 1], 2);
 				}
-				// Display handles pointing into the path forward direction (Blue handle)
-				if (navPath.corners.Length > 1)
-				{
-					pathway.Waypoints[index] = Handles.PositionHandle(pathway.Waypoints[index], Quaternion.LookRotation(navPath.corners[1] - navPath.corners[0]));
-				}
+			}
+			// Display handles pointing into the path forward direction (Blue handle)
+			if (navPath.corners.Length > 1)
+			{
+				pathway.Waypoints[index] = Handles.PositionHandle(pathway.Waypoints[index], Quaternion.LookRotation(navPath.corners[1] - navPath.corners[0]));
+			}
+			else
+			{
+				pathway.Waypoints[index] = Handles.PositionHandle(pathway.Waypoints[index], Quaternion.identity);
 			}
 		}
 	}
