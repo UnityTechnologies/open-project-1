@@ -14,6 +14,7 @@ public class PathwayEditor : Editor
 	public void OnSceneGUI()
 	{
 		_pathwayHandles.DispalyHandles();
+		_pathWayNavMeshUI.RealTime();
 	}
 
 	public override void OnInspectorGUI()
@@ -33,11 +34,10 @@ public class PathwayEditor : Editor
 		_reorderableList.drawElementCallback += DrawElement;
 		_reorderableList.onAddCallback += AddItem;
 		_reorderableList.onRemoveCallback += RemoveItem;
-		_reorderableList.onSelectCallback += SelectItem;
 		_reorderableList.onChangedCallback += ListModified;
 		_pathway = (target as Pathway);
 		_pathwayHandles = new PathwayHandles(_pathway);
-		_pathWayNavMeshUI = new PathWayNavMeshUI(serializedObject);
+		_pathWayNavMeshUI = new PathWayNavMeshUI(serializedObject, _pathway);
 	}
 
 	private void OnDisable()
@@ -47,7 +47,6 @@ public class PathwayEditor : Editor
 		_reorderableList.drawElementCallback -= DrawElement;
 		_reorderableList.onAddCallback -= AddItem;
 		_reorderableList.onRemoveCallback -= RemoveItem;
-		_reorderableList.onSelectCallback -= SelectItem;
 		_reorderableList.onChangedCallback -= ListModified;
 	}
 
@@ -60,6 +59,7 @@ public class PathwayEditor : Editor
 	{
 		SerializedProperty item = _reorderableList.serializedProperty.GetArrayElementAtIndex(index);
 		item.vector3Value = EditorGUI.Vector3Field(rect, Pathway.FIELD_LABEL + index, item.vector3Value);
+		_pathWayNavMeshUI.ProbeUpdate();
 	}
 
 	private void AddItem(ReorderableList list)
@@ -80,7 +80,6 @@ public class PathwayEditor : Editor
 		}
 
 		list.index++;
-		_pathWayNavMeshUI.OnUpdatePolls();
 	}
 
 	private void RemoveItem(ReorderableList list)
@@ -93,18 +92,12 @@ public class PathwayEditor : Editor
 		{
 			list.index--;
 		}
-
-		_pathWayNavMeshUI.OnUpdatePolls();
-	}
-
-	private void SelectItem(ReorderableList list)
-	{
-		InternalEditorUtility.RepaintAllViews();
 	}
 
 	private void ListModified(ReorderableList list)
 	{
 		list.serializedProperty.serializedObject.ApplyModifiedProperties();
+		_pathWayNavMeshUI.PathUpdate();
 	}
 
 	private void DoUndo()

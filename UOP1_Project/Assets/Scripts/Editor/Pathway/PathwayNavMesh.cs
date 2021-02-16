@@ -1,19 +1,19 @@
 ﻿using UnityEditor;
+using UnityEngine;
 using UnityEngine.AI;
-
+using System.Collections.Generic;
 
 public class PathwayNavMesh 
 {
-	private SerializedProperty _path;
-	private SerializedProperty _hits;
-	private SerializedProperty _waypoints;
+	
 	private SerializedProperty _probeRadius;
-
-	public PathwayNavMesh(SerializedObject serializedObject)
+	private Pathway _pathway;
+	
+	public PathwayNavMesh(SerializedObject serializedObject, Pathway pathway)
 	{
-		_hits = serializedObject.FindProperty("Hits");
-		_path = serializedObject.FindProperty("Path");
-		_waypoints = serializedObject.FindProperty("Waypoints");
+		_pathway = pathway;
+		_pathway.Hits = new List<bool>();
+		_pathway.Path = new List<Vector3>();
 		_probeRadius = serializedObject.FindProperty("_probeRadius");
 	}
 
@@ -23,17 +23,19 @@ public class PathwayNavMesh
 		bool hasHit;
 		bool result = true;
 
-		_hits.ClearArray();
-
-		for (int i = 0; i < _waypoints.arraySize; i++)
+		_pathway.Hits.Clear();
+		
+		for (int i = 0; i < _pathway.Waypoints.Count; i++)
 		{
-			hasHit = NavMesh.SamplePosition(_waypoints.GetArrayElementAtIndex(i).vector3Value, out hit, _probeRadius.floatValue, NavMesh.AllAreas);
-			_hits.InsertArrayElementAtIndex(i);
-			_hits.GetArrayElementAtIndex(i).boolValue = hasHit;
+			hasHit = NavMesh.SamplePosition(_pathway.Waypoints[i], out hit, _probeRadius.floatValue, NavMesh.AllAreas);
+
+			_pathway.Hits.Add(hasHit);
+
 			if (hasHit)
 			{
-				_waypoints.GetArrayElementAtIndex(i).vector3Value= hit.position;
+				_pathway.Waypoints[i] = hit.position;
 			}
+
 			result &= hasHit;
 		}
 
@@ -42,19 +44,15 @@ public class PathwayNavMesh
 
 	private void CopyPathCorners(int startIndex, int endIndex, NavMeshPath navMeshPath, ref bool canGeneratePath) {
 		
-		canGeneratePath &= NavMesh.CalculatePath(_waypoints.GetArrayElementAtIndex(startIndex).vector3Value, _waypoints.GetArrayElementAtIndex(endIndex).vector3Value, NavMesh.AllAreas, navMeshPath);
+		canGeneratePath &= NavMesh.CalculatePath(_pathway.Waypoints[startIndex], _pathway.Waypoints[endIndex], NavMesh.AllAreas, navMeshPath);
 
 		if (canGeneratePath)
 		{
-			int index;
 			for (int j = 0; j < navMeshPath.corners.Length; j++)
 			{
-				index = _path.arraySize;
-				_path.InsertArrayElementAtIndex(_path.arraySize);
-				_path.GetArrayElementAtIndex(index).vector3Value = navMeshPath.corners[j];
+				_pathway.Path.Add(navMeshPath.corners[j]);
 			}
 		}
-		
 	}
 
 	public bool GenerateNavMeshPath()
@@ -63,19 +61,20 @@ public class PathwayNavMesh
 		int i = 1;
 
 		NavMeshPath navMeshPath = new NavMeshPath();
-		_path.ClearArray();
 
-		while ( i < _waypoints.arraySize)
+		_pathway.Path.Clear();
+
+		while ( i < _pathway.Waypoints.Count)
 		{
 			CopyPathCorners(i - 1, i, navMeshPath, ref canGeneatePath);
 			i++;
 		}
 
-		CopyPathCorners(_waypoints.arraySize-1, 0, navMeshPath, ref canGeneatePath);
+		CopyPathCorners(_pathway.Waypoints.Count - 1, 0, navMeshPath, ref canGeneatePath);
 
 		if (!canGeneatePath)
 		{
-			_path.ClearArray();
+			_pathway.Path.Clear();
 		}
 
 		return canGeneatePath;

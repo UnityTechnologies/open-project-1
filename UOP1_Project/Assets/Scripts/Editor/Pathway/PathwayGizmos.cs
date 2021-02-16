@@ -20,7 +20,8 @@ public class PathwayGizmos
 		DrawHitPoints(pathway);
 	}
 
-	private static void DrawElements(Pathway pathway, List<Vector3> path, int index)
+
+	private static void DrawLabels(Pathway pathway, List<Vector3> path, int index)
 	{
 		GUIStyle style = new GUIStyle();
 		Vector3 textHeight = Vector3.up;
@@ -37,14 +38,14 @@ public class PathwayGizmos
 
 		if (pathway.Waypoints.Count != 0)
 		{
-			DrawElements(pathway, pathway.Waypoints, 0);
+			DrawLabels(pathway, pathway.Waypoints, 0);
 		}
 
 		if (pathway.Waypoints.Count > 1)
 		{
 			for (int i = 1; i < pathway.Waypoints.Count; i++)
 			{
-				DrawElements(pathway, pathway.Waypoints, i);
+				DrawLabels(pathway, pathway.Waypoints, i);
 
 				Handles.DrawDottedLine(pathway.Waypoints[i - 1], pathway.Waypoints[i], 2);
 			}
@@ -62,12 +63,15 @@ public class PathwayGizmos
 	private static void DrawNavMeshPath(Pathway pathway)
 	{
 		Handles.color = pathway.LineColor;
-
+		
 		for (int i = 0; i < pathway.Path.Count - 1; i++)
 		{
-			DrawElements(pathway, pathway.Path, i);
-			Handles.DrawLine(pathway.Path[i], pathway.Path[i + 1]);
-			
+			Handles.DrawLine(pathway.Path[i], pathway.Path[i + 1]);	
+		}
+
+		for (int i = 0; i < pathway.Waypoints.Count; i++)
+		{
+			DrawLabels(pathway, pathway.Waypoints, i);
 		}
 	}
 

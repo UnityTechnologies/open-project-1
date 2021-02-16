@@ -5,11 +5,10 @@ using UnityEditor;
 
 public class PathWayNavMeshUI
 {
-	
+	private Pathway _pathway;
 	private PathwayNavMesh _pathwayNavMesh;
 	private SerializedProperty _displayPolls;
 	private SerializedProperty _togglePathDisplay;
-	private SerializedProperty _waypoints;
 
 	private bool DisplayPolls
 	{
@@ -23,65 +22,79 @@ public class PathWayNavMeshUI
 		set => _togglePathDisplay.boolValue = value;
 	}
 
-	public PathWayNavMeshUI(SerializedObject serializedObject)
+	public PathWayNavMeshUI(SerializedObject serializedObject, Pathway pathway)
 	{
+		_pathway = pathway;
 		_displayPolls = serializedObject.FindProperty("DisplayPolls");
 		_togglePathDisplay = serializedObject.FindProperty("TogglePathDisplay");
-		_waypoints = serializedObject.FindProperty("Waypoints");
-		_pathwayNavMesh = new PathwayNavMesh(serializedObject);
+		_pathwayNavMesh = new PathwayNavMesh(serializedObject, pathway);
+		GeneratePath();
 	}
 
 	public void OnInspectorGUI()
 	{
 		if (!TogglePathDisplay )
 		{
-			NavMeshPathButton();
+			if (GUILayout.Button("NavMesh Path"))
+			{
+				GeneratePath();
+			}
 		}
 		else
 		{
-			HandlesPathButton();
-		}
-	}
-
-	private void NavMeshPathButton()
-	{
-		if ( GUILayout.Button("NavMesh Path"))
-		{
-			if (_pathwayNavMesh.hasNavMesh())
+			if (GUILayout.Button("Handles Path"))
 			{
-				if (_waypoints.arraySize > 1)
-				{
-					if (_pathwayNavMesh.GenerateNavMeshPath())
-					{
-						TogglePathDisplay = true;
-						InternalEditorUtility.RepaintAllViews();
-					}
-				}
-				else
-				{
-					Debug.LogError("NavMesh need more than one point to calculate the path");
-				}
-			}
-			else
-			{
-				DisplayPolls = true;
+				TogglePathDisplay = false;
+				DisplayPolls = false;
 				InternalEditorUtility.RepaintAllViews();
 			}
 		}
 	}
 
-	private void HandlesPathButton()
-	{
-		if (GUILayout.Button("Handles Path"))
+	public void GeneratePath() {
+
+		DisplayPolls = !_pathwayNavMesh.hasNavMesh();
+
+		if (!DisplayPolls)
 		{
-			TogglePathDisplay = false;
-			DisplayPolls = false;
+			if (_pathway.Waypoints.Count > 1)
+			{
+				if (_pathwayNavMesh.GenerateNavMeshPath())
+				{
+					TogglePathDisplay = true;
+					InternalEditorUtility.RepaintAllViews();
+				}
+			}
+		}
+		else
+		{
 			InternalEditorUtility.RepaintAllViews();
 		}
 	}
 
-	public void OnUpdatePolls() {
-		_pathwayNavMesh.hasNavMesh();
+	public void ProbeUpdate()
+	{
+		if(TogglePathDisplay)
+			DisplayPolls=!_pathwayNavMesh.hasNavMesh();
 	}
-	
+
+	public void PathUpdate()
+	{
+		if (TogglePathDisplay && _pathwayNavMesh.hasNavMesh())
+		{
+			_pathwayNavMesh.GenerateNavMeshPath();
+		}
+	}
+
+	public void RealTime()
+	{
+		if (_pathway.RealTimeEnabled)
+		{
+			if (GUI.changed)
+			{
+				GeneratePath();
+			}
+		}
+	}
+
 }

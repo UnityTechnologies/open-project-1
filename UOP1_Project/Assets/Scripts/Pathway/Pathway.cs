@@ -28,11 +28,8 @@ public class Pathway : MonoBehaviour
 	[HideInInspector]
 	public bool TogglePathDisplay;
 
-	[HideInInspector]
-	public List<Vector3> Path;
-
-	[HideInInspector]
-	public List<bool> Hits;
+	private List<Vector3> _path;
+	private List<bool> _hits;
 
 	public const string FIELD_LABEL = "Point ";
 	public const string TITLE_LABEL = "Waypoints";
@@ -41,6 +38,10 @@ public class Pathway : MonoBehaviour
 	public Color TextColor { get => _textColor; }
 	public int TextSize { get => _textSize; }
 	public float ProbeRadius { get => _probeRadius; }
+	public List<Vector3> Path { get => _path; set => _path = value; }
+	public List<bool> Hits { get => _hits; set => _hits = value; }
+
+	public bool RealTimeEnabled;
 
 #endif
 
