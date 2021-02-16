@@ -21,7 +21,7 @@ public class PathwayGizmos
 	}
 
 
-	private static void DrawLabels(Pathway pathway, List<Vector3> path, int index)
+	private static void DrawLabel(Pathway pathway, List<Vector3> path, int index)
 	{
 		GUIStyle style = new GUIStyle();
 		Vector3 textHeight = Vector3.up;
@@ -38,14 +38,14 @@ public class PathwayGizmos
 
 		if (pathway.Waypoints.Count != 0)
 		{
-			DrawLabels(pathway, pathway.Waypoints, 0);
+			DrawLabel(pathway, pathway.Waypoints, 0);
 		}
 
 		if (pathway.Waypoints.Count > 1)
 		{
 			for (int i = 1; i < pathway.Waypoints.Count; i++)
 			{
-				DrawLabels(pathway, pathway.Waypoints, i);
+				DrawLabel(pathway, pathway.Waypoints, i);
 
 				Handles.DrawDottedLine(pathway.Waypoints[i - 1], pathway.Waypoints[i], 2);
 			}
@@ -65,7 +65,7 @@ public class PathwayGizmos
 		{
 			Handles.DrawLine(pathway.Path[i], pathway.Path[i + 1]);
 			if (i<pathway.Waypoints.Count) {
-				DrawLabels(pathway, pathway.Waypoints, i);
+				DrawLabel(pathway, pathway.Waypoints, i);
 			}
 		}
 	}
