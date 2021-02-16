@@ -78,12 +78,10 @@ public class PathWayNavMeshUI
 		if (_pathway.RealTimeEnabled)
 		{
 			DisplayPolls = !_pathwayNavMesh.hasNavMesh();
-			if (GUI.changed)
+			
+			if (!DisplayPolls)
 			{
-				if (!DisplayPolls)
-				{
-					_pathwayNavMesh.GenerateNavMeshPath();
-				}
+				_pathwayNavMesh.GenerateNavMeshPath();
 			}
 		}
 	}
