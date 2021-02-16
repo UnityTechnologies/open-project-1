@@ -88,12 +88,9 @@ public class PathWayNavMeshUI
 
 	public void RealTime()
 	{
-		if (_pathway.RealTimeEnabled)
+		if (_pathway.RealTimeEnabled && GUI.changed)
 		{
-			if (GUI.changed)
-			{
 				GeneratePath();
-			}
 		}
 	}
 

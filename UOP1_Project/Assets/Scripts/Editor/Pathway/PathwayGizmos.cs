@@ -50,12 +50,9 @@ public class PathwayGizmos
 				Handles.DrawDottedLine(pathway.Waypoints[i - 1], pathway.Waypoints[i], 2);
 			}
 			
-
 			if (pathway.Waypoints.Count > 2)
 			{
-
 				Handles.DrawDottedLine(pathway.Waypoints[0], pathway.Waypoints[pathway.Waypoints.Count - 1], 2);
-
 			}
 		}
 	}
@@ -87,7 +84,6 @@ public class PathwayGizmos
 					{
 						Gizmos.color = new Color(0, 255, 0, 0.5f);
 						Gizmos.DrawSphere(pathway.Waypoints[i], sphereRadius);
-						
 					}
 					else
 					{
