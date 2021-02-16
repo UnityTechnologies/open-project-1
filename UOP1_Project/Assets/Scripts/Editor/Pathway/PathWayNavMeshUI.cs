@@ -72,17 +72,16 @@ public class PathWayNavMeshUI
 		}
 	}
 
-	public void ProbeUpdate()
-	{
-		if(TogglePathDisplay)
-			DisplayPolls=!_pathwayNavMesh.hasNavMesh();
-	}
 
 	public void PathUpdate()
 	{
-		if (TogglePathDisplay && _pathwayNavMesh.hasNavMesh())
+		if (GUI.changed && _pathway.RealTimeEnabled)
 		{
-			_pathwayNavMesh.GenerateNavMeshPath();
+			DisplayPolls = !_pathwayNavMesh.hasNavMesh();
+			if (!DisplayPolls)
+			{
+				_pathwayNavMesh.GenerateNavMeshPath();
+			}
 		}
 	}
 
