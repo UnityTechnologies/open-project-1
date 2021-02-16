@@ -64,14 +64,12 @@ public class PathwayGizmos
 	{
 		Handles.color = pathway.LineColor;
 		
-		for (int i = 0; i < pathway.Path.Count - 1; i++)
+		for (int i = 0 ; i < pathway.Path.Count - 1; i++)
 		{
-			Handles.DrawLine(pathway.Path[i], pathway.Path[i + 1]);	
-		}
-
-		for (int i = 0; i < pathway.Waypoints.Count; i++)
-		{
-			DrawLabels(pathway, pathway.Waypoints, i);
+			Handles.DrawLine(pathway.Path[i], pathway.Path[i + 1]);
+			if (i<pathway.Waypoints.Count) {
+				DrawLabels(pathway, pathway.Waypoints, i);
+			}
 		}
 	}
 
