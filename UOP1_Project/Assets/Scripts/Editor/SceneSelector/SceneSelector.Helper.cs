@@ -79,7 +79,7 @@ namespace SceneSelectorInternal
 
 			return isClicked;
 		}
-		
+
 		public static void OpenSceneSafe(GameSceneSO gameSceneSO)
 		{
 			if (EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo())

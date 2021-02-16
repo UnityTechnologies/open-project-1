@@ -27,7 +27,7 @@ public class SceneLoader : MonoBehaviour
 
 	//Parameters coming from scene loading requests
 	private GameSceneSO[] _scenesToLoad;
-	private GameSceneSO[] _currentlyLoadedScenes = new GameSceneSO[]{};
+	private GameSceneSO[] _currentlyLoadedScenes = new GameSceneSO[] { };
 	private bool _showLoadingScreen;
 
 	private SceneInstance _gameplayManagerSceneInstance = new SceneInstance();
@@ -68,7 +68,7 @@ public class SceneLoader : MonoBehaviour
 	{
 		_gameplayManagerLoadingOpHandle = _gameplayScene.sceneReference.LoadSceneAsync(LoadSceneMode.Additive, true);
 
-		while(_gameplayManagerLoadingOpHandle.Status != AsyncOperationStatus.Succeeded)
+		while (_gameplayManagerLoadingOpHandle.Status != AsyncOperationStatus.Succeeded)
 		{
 			yield return null;
 		}
@@ -86,7 +86,7 @@ public class SceneLoader : MonoBehaviour
 		_showLoadingScreen = showLoadingScreen;
 
 		//In case we are coming from a Location back to the main menu, we need to get rid of the persistent Gameplay manager scene
-		if(_gameplayManagerSceneInstance.Scene != null
+		if (_gameplayManagerSceneInstance.Scene != null
 			&& _gameplayManagerSceneInstance.Scene.isLoaded)
 			Addressables.UnloadSceneAsync(_gameplayManagerLoadingOpHandle, true);
 

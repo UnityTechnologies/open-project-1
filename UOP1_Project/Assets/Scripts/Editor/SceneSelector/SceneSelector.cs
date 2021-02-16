@@ -137,7 +137,7 @@ public partial class SceneSelector : EditorWindow, IHasCustomMenu
 						guid = guid,
 						color = Helper.GetDefaultColor(gameSceneSO)
 					};
-					
+
 					items.Add(item);
 					itemsMap.Add(guid, item);
 				}
