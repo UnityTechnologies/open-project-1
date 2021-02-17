@@ -1,10 +1,12 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections.Generic;
+using UnityEngine;
 
 /// <summary>
 /// This class contains all the variables that will be serialized and saved to a file.<br/>
 /// Can be considered as a save file structure or format.
 /// </summary>
-[System.Serializable]
+[Serializable]
 public class Save
 {
 	// This is test data, written according to TestScript.cs class
@@ -12,6 +14,7 @@ public class Save
 
 	// The variables need to be public, else we would have to write trivial getter/setter functions.
 	public string _locationId;
+	public List<SerializedItemStack> _itemStacks = new List<SerializedItemStack>();
 
 	public string ToJson()
 	{

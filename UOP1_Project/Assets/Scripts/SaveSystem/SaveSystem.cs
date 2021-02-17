@@ -3,6 +3,7 @@
 public class SaveSystem : ScriptableObject
 {
 	[SerializeField] private LoadEventChannelSO _loadLocation = default;
+	[SerializeField] private Inventory _playerInventory;
 
 	public string saveFilename = "save.chop";
 	public Save saveData = new Save();
@@ -24,6 +25,8 @@ public class SaveSystem : ScriptableObject
 		{
 			saveData._locationId = locationSo.SerializableGuid;
 		}
+
+		SaveGame();
 	}
 
 	public void LoadGame()
@@ -34,8 +37,15 @@ public class SaveSystem : ScriptableObject
 		}
 	}
 
+
 	public void SaveGame()
 	{
+		saveData._itemStacks.Clear();
+		foreach (var itemStack in _playerInventory.Items)
+		{
+			saveData._itemStacks.Add(new SerializedItemStack(itemStack.Item.SerializableGuid, itemStack.Amount));
+		}
+
 		if (FileManager.WriteToFile(saveFilename, saveData.ToJson()))
 		{
 			Debug.Log("Save successful");
