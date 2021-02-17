@@ -16,26 +16,40 @@ public class PathwayNavMesh
 		_probeRadius = serializedObject.FindProperty("_probeRadius");
 	}
 
-	public bool hasNavMesh()
+	public bool HasNavMeshAt(int index)
 	{
 		NavMeshHit hit;
 		bool hasHit;
+
+		hasHit = NavMesh.SamplePosition(_pathway.Waypoints[index], out hit, _probeRadius.floatValue, NavMesh.AllAreas);
+
+		if (index > _pathway.Hits.Count - 1)
+		{
+			index = _pathway.Hits.Count;
+			_pathway.Hits.Add(hasHit);
+			
+		}
+
+		_pathway.Hits[index] = hasHit;
+
+		if (hasHit)
+		{
+			_pathway.Waypoints[index] = hit.position;
+			
+		}
+
+		return hasHit;
+	}
+
+	public bool HasNavMesh()
+	{
 		bool result = true;
 
 		_pathway.Hits.Clear();
 		
 		for (int i = 0; i < _pathway.Waypoints.Count; i++)
 		{
-			hasHit = NavMesh.SamplePosition(_pathway.Waypoints[i], out hit, _probeRadius.floatValue, NavMesh.AllAreas);
-
-			_pathway.Hits.Add(hasHit);
-
-			if (hasHit)
-			{
-				_pathway.Waypoints[i] = hit.position;
-			}
-
-			result &= hasHit;
+			result &= HasNavMeshAt(i);
 		}
 
 		return result;

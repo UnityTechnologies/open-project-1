@@ -11,7 +11,7 @@ public class PathwayHandles
 		_pathway = pathway;
 	}
 
-	public void DispalyHandles()
+	public void DisplayHandles()
 	{
 		EditorGUI.BeginChangeCheck();
 

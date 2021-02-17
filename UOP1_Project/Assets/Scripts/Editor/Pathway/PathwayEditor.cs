@@ -13,7 +13,7 @@ public class PathwayEditor : Editor
 
 	public void OnSceneGUI()
 	{
-		_pathwayHandles.DispalyHandles();
+		_pathwayHandles.DisplayHandles();
 		_pathWayNavMeshUI.RealTime();
 	}
 
@@ -60,7 +60,7 @@ public class PathwayEditor : Editor
 	{
 		SerializedProperty item = _reorderableList.serializedProperty.GetArrayElementAtIndex(index);
 		item.vector3Value = EditorGUI.Vector3Field(rect, Pathway.FIELD_LABEL + index, item.vector3Value);
-		_pathWayNavMeshUI.PathUpdate();
+		_pathWayNavMeshUI.PathUpdate(index);
 	}
 
 	private void AddItem(ReorderableList list)
@@ -98,7 +98,7 @@ public class PathwayEditor : Editor
 	private void ListModified(ReorderableList list)
 	{
 		list.serializedProperty.serializedObject.ApplyModifiedProperties();
-		_pathWayNavMeshUI.PathUpdate();
+		_pathWayNavMeshUI.PathUpdate(list.index);
 	}
 
 	private void DoUndo()

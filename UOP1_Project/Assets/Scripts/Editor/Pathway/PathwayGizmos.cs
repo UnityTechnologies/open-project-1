@@ -46,7 +46,6 @@ public class PathwayGizmos
 			for (int i = 1; i < pathway.Waypoints.Count; i++)
 			{
 				DrawLabel(pathway, pathway.Waypoints, i);
-
 				Handles.DrawDottedLine(pathway.Waypoints[i - 1], pathway.Waypoints[i], 2);
 			}
 			
@@ -74,22 +73,19 @@ public class PathwayGizmos
 	{
 		if (pathway.DisplayProbes)
 		{
-			if (pathway.Hits.Count == pathway.Waypoints.Count)
-			{
-				float sphereRadius = pathway.ProbeRadius;
+			float sphereRadius = pathway.ProbeRadius;
 
-				for (int i = 0; i < pathway.Hits.Count; i++)
+			for (int i = 0; i < pathway.Hits.Count; i++)
+			{
+				if (pathway.Hits[i])
 				{
-					if (pathway.Hits[i])
-					{
-						Gizmos.color = new Color(0, 255, 0, 0.5f);
-						Gizmos.DrawSphere(pathway.Waypoints[i], sphereRadius);
-					}
-					else
-					{
-						Gizmos.color = new Color(255, 0, 0, 0.5f);
-						Gizmos.DrawSphere(pathway.Waypoints[i], sphereRadius);
-					}
+					Gizmos.color = new Color(0, 255, 0, 0.5f);
+					Gizmos.DrawSphere(pathway.Waypoints[i], sphereRadius);
+				}
+				else
+				{
+					Gizmos.color = new Color(255, 0, 0, 0.5f);
+					Gizmos.DrawSphere(pathway.Waypoints[i], sphereRadius);
 				}
 			}
 		}

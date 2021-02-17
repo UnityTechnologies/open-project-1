@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEditorInternal;
 using UnityEditor;
 
 
@@ -41,7 +40,7 @@ public class PathWayNavMeshUI
 
 	public void GeneratePath() {
 
-		_displayProbes.boolValue = !_pathwayNavMesh.hasNavMesh();
+		_displayProbes.boolValue = !_pathwayNavMesh.HasNavMesh();
 
 		if (!_displayProbes.boolValue)
 		{
@@ -50,11 +49,11 @@ public class PathWayNavMeshUI
 	}
 
 
-	public void PathUpdate()
+	public void PathUpdate(int index)
 	{
 		if (_pathway.RealTimeEnabled)
 		{
-			_displayProbes.boolValue = !_pathwayNavMesh.hasNavMesh();
+			_displayProbes.boolValue = !_pathwayNavMesh.HasNavMeshAt(index);
 			
 			if (!_displayProbes.boolValue && !GUI.changed)
 			{
@@ -67,7 +66,7 @@ public class PathWayNavMeshUI
 	{
 		if (_pathway.RealTimeEnabled && GUI.changed)
 		{
-				GeneratePath();
+			GeneratePath();
 		}
 	}
 
