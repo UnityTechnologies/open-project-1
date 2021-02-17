@@ -33,8 +33,10 @@ public class CameraManager : MonoBehaviour
 	{
 		foreach (CinemachineVirtualCameraBase vcam in vcamsInScene)
 		{
-			vcam.LookAt = target;
-			vcam.Follow = target;
+			VCamRequiresPlayerTarget vCamRequiresPlayerTarget = vcam.GetComponent<VCamRequiresPlayerTarget>();
+			if(vCamRequiresPlayerTarget != null){
+				vCamRequiresPlayerTarget.SetPlayerTarget(target);
+			}
 		}
 		freeLookVCam.OnTargetObjectWarped(target, target.position - freeLookVCam.transform.position - Vector3.forward);
 	}
@@ -47,7 +49,6 @@ public class CameraManager : MonoBehaviour
 
 	private void OnEnable()
 	{
-		//? should this just be populated in inspector? we may find virtual cameras which are not for the player
 		foreach (CinemachineVirtualCameraBase vcam in FindObjectsOfType<CinemachineVirtualCameraBase>())
 		{
 			vcamsInScene.Add(vcam);

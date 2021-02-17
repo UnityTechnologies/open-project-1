@@ -416,7 +416,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5457523176376150323}
-  m_LocalRotation: {x: 0.22975291, y: -2.274687e-15, z: 4.0599975e-16, w: 0.973249}
+  m_LocalRotation: {x: 0.22975291, y: -0, z: -0, w: 0.973249}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -787,6 +787,7 @@ MonoBehaviour:
     type: 2}
   _frameObjectChannel: {fileID: 11400000, guid: 2723b3f59f7ede3498fe7e385d2bb6ee,
     type: 2}
+  _VcamEventChannel: {fileID: 0}
 --- !u!1 &8745341641394998848
 GameObject:
   m_ObjectHideFlags: 0
@@ -798,6 +799,7 @@ GameObject:
   - component: {fileID: 8745341641394998850}
   - component: {fileID: 8745341641394998849}
   - component: {fileID: 643664704}
+  - component: {fileID: 6204018112097571263}
   m_Layer: 0
   m_Name: FreeLook_VCam
   m_TagString: Untagged
@@ -953,6 +955,20 @@ MonoBehaviour:
   m_Damping: 2
   m_DampingWhenOccluded: 0
   m_OptimalTargetDistance: 0
+--- !u!114 &6204018112097571263
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8745341641394998848}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b320bb9e71a27c3439f31fa5cecc0f7f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  followsPlayer: 1
+  looksAtPlayer: 1
 --- !u!1 &8745341642014614487
 GameObject:
   m_ObjectHideFlags: 0
