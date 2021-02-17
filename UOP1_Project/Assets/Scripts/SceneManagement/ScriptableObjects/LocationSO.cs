@@ -5,9 +5,13 @@ using UnityEngine.Localization;
 /// </summary>
 
 [CreateAssetMenu(fileName = "NewLocation", menuName = "Scene Data/Location")]
-public class LocationSO : GameSceneSO
+public class LocationSO : GameSceneSO, IDesc
 {
-	[Header("Location specific")]
 	public LocalizedString locationName;
+	public AudioClip musicTrack;
 	public int enemiesCount; //Example variable, will change later
+
+	[Header("Serialization")]
+	[SerializeField] Uuid uuid;
+	public Uuid DescId => uuid;
 }

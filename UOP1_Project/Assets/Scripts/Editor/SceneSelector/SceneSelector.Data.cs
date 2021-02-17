@@ -15,7 +15,7 @@ public partial class SceneSelector : EditorWindow
 		public Color color = Color.clear;
 
 		[NonSerialized]
-		public GameSceneSO gameScene;
+		public GameSceneSO gameSceneSO;
 	}
 
 	private class Styles
