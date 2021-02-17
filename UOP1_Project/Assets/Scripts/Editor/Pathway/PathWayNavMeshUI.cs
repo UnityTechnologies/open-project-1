@@ -7,33 +7,33 @@ public class PathWayNavMeshUI
 {
 	private Pathway _pathway;
 	private PathwayNavMesh _pathwayNavMesh;
-	private SerializedProperty _displayPolls;
-	private SerializedProperty _togglePathDisplay;
+	private SerializedProperty _displayProbes;
+	private SerializedProperty _toggledNavMeshDisplay;
 
 	private bool DisplayProbes
 	{
-		get => _displayPolls.boolValue;
-		set => _displayPolls.boolValue = value;
+		get => _displayProbes.boolValue;
+		set => _displayProbes.boolValue = value;
 	}
 
-	private bool ToggleNavMeshDisplay
+	private bool ToggledNavMeshDisplay
 	{
-		get => _togglePathDisplay.boolValue;
-		set => _togglePathDisplay.boolValue = value;
+		get => _toggledNavMeshDisplay.boolValue;
+		set => _toggledNavMeshDisplay.boolValue = value;
 	}
 
 	public PathWayNavMeshUI(SerializedObject serializedObject, Pathway pathway)
 	{
 		_pathway = pathway;
-		_displayPolls = serializedObject.FindProperty("DisplayProbes");
-		_togglePathDisplay = serializedObject.FindProperty("ToggleNavMeshDisplay");
+		_displayProbes = serializedObject.FindProperty("DisplayProbes");
+		_toggledNavMeshDisplay = serializedObject.FindProperty("ToggledNavMeshDisplay");
 		_pathwayNavMesh = new PathwayNavMesh(serializedObject, pathway);
 		GeneratePath();
 	}
 
 	public void OnInspectorGUI()
 	{
-		if (!ToggleNavMeshDisplay)
+		if (!ToggledNavMeshDisplay)
 		{
 			if (GUILayout.Button("NavMesh Path"))
 			{
@@ -44,7 +44,7 @@ public class PathWayNavMeshUI
 		{
 			if (GUILayout.Button("Handles Path"))
 			{
-				ToggleNavMeshDisplay = false;
+				ToggledNavMeshDisplay = false;
 				DisplayProbes = false;
 				InternalEditorUtility.RepaintAllViews();
 			}
@@ -61,7 +61,7 @@ public class PathWayNavMeshUI
 			{
 				if (_pathwayNavMesh.GenerateNavMeshPath())
 				{
-					ToggleNavMeshDisplay = true;
+					ToggledNavMeshDisplay = true;
 					InternalEditorUtility.RepaintAllViews();
 				}
 			}

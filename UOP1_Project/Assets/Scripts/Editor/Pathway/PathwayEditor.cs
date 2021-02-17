@@ -23,6 +23,7 @@ public class PathwayEditor : Editor
 		serializedObject.Update();
 		_reorderableList.DoLayoutList();
 		_pathWayNavMeshUI.OnInspectorGUI();
+		Tools.hidden = _pathway.HidePathway;
 		serializedObject.ApplyModifiedProperties();
 	}
 

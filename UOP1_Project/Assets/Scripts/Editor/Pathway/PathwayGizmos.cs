@@ -8,7 +8,7 @@ public class PathwayGizmos
 	[DrawGizmo(GizmoType.Selected)]
 	private static void DrawGizmosSelected(Pathway pathway, GizmoType gizmoType)
 	{	
-		if (!pathway.ToggleNavMeshDisplay)
+		if (!pathway.ToggledNavMeshDisplay)
 		{
 			DrawHandlesPath(pathway);
 		}

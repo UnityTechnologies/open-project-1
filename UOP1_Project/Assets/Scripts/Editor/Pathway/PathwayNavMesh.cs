@@ -5,7 +5,6 @@ using System.Collections.Generic;
 
 public class PathwayNavMesh 
 {
-	
 	private SerializedProperty _probeRadius;
 	private Pathway _pathway;
 	

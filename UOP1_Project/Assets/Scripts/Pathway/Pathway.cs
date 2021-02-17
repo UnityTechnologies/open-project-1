@@ -9,6 +9,8 @@ public class Pathway : MonoBehaviour
 
 #if UNITY_EDITOR
 
+	public bool HidePathway;
+
 	[SerializeField]
 	private Color _lineColor = Color.black;
 
@@ -20,14 +22,14 @@ public class Pathway : MonoBehaviour
 
 	[SerializeField, Range(0, 100)]
 	[Tooltip("This function may reduce the frame rate if a large probe radius is specified. To avoid frame rate issues," +
-				" it is recommended that you specify a maxDistance of twice the agent height.")]
+				" it is recommended that you specify a max distance of twice the agent height.")]
 	private float _probeRadius = 3;
 
 	[HideInInspector]
 	public bool DisplayProbes;
 
 	[HideInInspector]
-	public bool ToggleNavMeshDisplay;
+	public bool ToggledNavMeshDisplay;
 
 	private List<Vector3> _path;
 	private List<bool> _hits;
@@ -43,6 +45,7 @@ public class Pathway : MonoBehaviour
 	public List<bool> Hits { get => _hits; set => _hits = value; }
 
 	public bool RealTimeEnabled;
+	
 
 #endif
 
