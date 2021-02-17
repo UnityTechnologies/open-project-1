@@ -23,7 +23,7 @@ public class SaveSystem : ScriptableObject
 		LocationSO locationSo = locationsToLoad[0] as LocationSO;
 		if (locationSo)
 		{
-			saveData._locationId = locationSo.SerializableGuid;
+			saveData._locationId = locationSo.Guid;
 		}
 
 		SaveGame();
@@ -43,7 +43,7 @@ public class SaveSystem : ScriptableObject
 		saveData._itemStacks.Clear();
 		foreach (var itemStack in _playerInventory.Items)
 		{
-			saveData._itemStacks.Add(new SerializedItemStack(itemStack.Item.SerializableGuid, itemStack.Amount));
+			saveData._itemStacks.Add(new SerializedItemStack(itemStack.Item.Guid, itemStack.Amount));
 		}
 
 		if (FileManager.WriteToFile(saveFilename, saveData.ToJson()))
