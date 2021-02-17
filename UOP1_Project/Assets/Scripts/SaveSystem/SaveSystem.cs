@@ -2,7 +2,6 @@
 
 public class SaveSystem : ScriptableObject
 {
-	public LocationDatabase locationDatabase;
 	[SerializeField] private LoadEventChannelSO _loadLocation = default;
 
 	public string saveFilename = "save.chop";
@@ -23,7 +22,7 @@ public class SaveSystem : ScriptableObject
 		LocationSO locationSo = locationsToLoad[0] as LocationSO;
 		if (locationSo)
 		{
-			saveData._locationId = locationSo.DescId.uuid;
+			saveData._locationId = locationSo.SerializableGuid;
 		}
 	}
 
