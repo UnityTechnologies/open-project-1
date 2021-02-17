@@ -10,18 +10,6 @@ public class PathWayNavMeshUI
 	private SerializedProperty _displayProbes;
 	private SerializedProperty _toggledNavMeshDisplay;
 
-	private bool DisplayProbes
-	{
-		get => _displayProbes.boolValue;
-		set => _displayProbes.boolValue = value;
-	}
-
-	private bool ToggledNavMeshDisplay
-	{
-		get => _toggledNavMeshDisplay.boolValue;
-		set => _toggledNavMeshDisplay.boolValue = value;
-	}
-
 	public PathWayNavMeshUI(SerializedObject serializedObject, Pathway pathway)
 	{
 		_pathway = pathway;
@@ -33,42 +21,31 @@ public class PathWayNavMeshUI
 
 	public void OnInspectorGUI()
 	{
-		if (!ToggledNavMeshDisplay)
+		if (!_toggledNavMeshDisplay.boolValue)
 		{
 			if (GUILayout.Button("NavMesh Path"))
 			{
 				GeneratePath();
+				_displayProbes.boolValue = !_toggledNavMeshDisplay.boolValue;
 			}
 		}
 		else
 		{
 			if (GUILayout.Button("Handles Path"))
 			{
-				ToggledNavMeshDisplay = false;
-				DisplayProbes = false;
-				InternalEditorUtility.RepaintAllViews();
+				_toggledNavMeshDisplay.boolValue = false;
+				_displayProbes.boolValue = false;
 			}
 		}
 	}
 
 	public void GeneratePath() {
 
-		DisplayProbes = !_pathwayNavMesh.hasNavMesh();
+		_displayProbes.boolValue = !_pathwayNavMesh.hasNavMesh();
 
-		if (!DisplayProbes)
+		if (!_displayProbes.boolValue)
 		{
-			if (_pathway.Waypoints.Count > 1)
-			{
-				if (_pathwayNavMesh.GenerateNavMeshPath())
-				{
-					ToggledNavMeshDisplay = true;
-					InternalEditorUtility.RepaintAllViews();
-				}
-			}
-		}
-		else
-		{
-			InternalEditorUtility.RepaintAllViews();
+			_toggledNavMeshDisplay.boolValue = _pathwayNavMesh.GenerateNavMeshPath();
 		}
 	}
 
@@ -77,11 +54,11 @@ public class PathWayNavMeshUI
 	{
 		if (_pathway.RealTimeEnabled)
 		{
-			DisplayProbes = !_pathwayNavMesh.hasNavMesh();
+			_displayProbes.boolValue = !_pathwayNavMesh.hasNavMesh();
 			
-			if (!DisplayProbes && !GUI.changed)
+			if (!_displayProbes.boolValue && !GUI.changed)
 			{
-				_pathwayNavMesh.GenerateNavMeshPath();
+				_displayProbes.boolValue = !_pathwayNavMesh.GenerateNavMeshPath();
 			}
 		}
 	}
