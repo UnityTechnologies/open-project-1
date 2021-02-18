@@ -19,23 +19,28 @@ public class PathwayNavMesh
 	public bool HasNavMeshAt(int index)
 	{
 		NavMeshHit hit;
-		bool hasHit;
+		bool hasHit = true;
 
-		hasHit = NavMesh.SamplePosition(_pathway.Waypoints[index], out hit, _probeRadius.floatValue, NavMesh.AllAreas);
-
-		if (index > _pathway.Hits.Count - 1)
+		if (_pathway.Waypoints.Count >= _pathway.Hits.Count)
 		{
-			index = _pathway.Hits.Count;
-			_pathway.Hits.Add(hasHit);
-			
+			hasHit = NavMesh.SamplePosition(_pathway.Waypoints[index], out hit, _probeRadius.floatValue, NavMesh.AllAreas);
+
+			if (index > _pathway.Hits.Count - 1)
+			{
+				index = _pathway.Hits.Count;
+				_pathway.Hits.Add(hasHit);
+			}
+
+			_pathway.Hits[index] = hasHit;
+
+			if (hasHit)
+			{
+				_pathway.Waypoints[index] = hit.position;
+			}
 		}
-
-		_pathway.Hits[index] = hasHit;
-
-		if (hasHit)
+		else
 		{
-			_pathway.Waypoints[index] = hit.position;
-			
+			_pathway.Hits.RemoveAt(index);
 		}
 
 		return hasHit;

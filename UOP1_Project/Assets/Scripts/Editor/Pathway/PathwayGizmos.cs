@@ -39,19 +39,19 @@ public class PathwayGizmos
 		if (pathway.Waypoints.Count != 0)
 		{
 			DrawLabel(pathway, pathway.Waypoints, 0);
-		}
 
-		if (pathway.Waypoints.Count > 1)
-		{
-			for (int i = 1; i < pathway.Waypoints.Count; i++)
+			if (pathway.Waypoints.Count > 1)
 			{
-				DrawLabel(pathway, pathway.Waypoints, i);
-				Handles.DrawDottedLine(pathway.Waypoints[i - 1], pathway.Waypoints[i], 2);
-			}
-			
-			if (pathway.Waypoints.Count > 2)
-			{
-				Handles.DrawDottedLine(pathway.Waypoints[0], pathway.Waypoints[pathway.Waypoints.Count - 1], 2);
+				for (int i = 1; i < pathway.Waypoints.Count; i++)
+				{
+					DrawLabel(pathway, pathway.Waypoints, i);
+					Handles.DrawDottedLine(pathway.Waypoints[i - 1], pathway.Waypoints[i], 2);
+				}
+
+				if (pathway.Waypoints.Count > 2)
+				{
+					Handles.DrawDottedLine(pathway.Waypoints[0], pathway.Waypoints[pathway.Waypoints.Count - 1], 2);
+				}
 			}
 		}
 	}
