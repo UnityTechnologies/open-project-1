@@ -52,10 +52,7 @@ public class SoundEmitter : MonoBehaviour
 		_audioSource.Pause();
 	}
 
-	/// <summary>
-	/// Used when the SFX finished playing. Called by the <c>AudioManager</c>.
-	/// </summary>
-	public void Stop() // Redundant?
+	public void Stop()
 	{
 		_audioSource.Stop();
 	}
@@ -78,11 +75,6 @@ public class SoundEmitter : MonoBehaviour
 	public bool IsLooping()
 	{
 		return _audioSource.loop;
-	}
-
-	public bool IsFinishing()
-	{
-		return !_audioSource.loop;
 	}
 
 	IEnumerator FinishedPlaying(float clipLength)
