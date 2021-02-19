@@ -17,7 +17,7 @@ public class LocationExit : MonoBehaviour
 
 	private void OnTriggerEnter(Collider other)
 	{
-		if (other.CompareTag("Player"))
+		if (other.CompareTag(Tag.Player))
 		{
 			UpdatePathTaken();
 			_locationExitLoadChannel.RaiseEvent(_locationsToLoad, _showLoadScreen);

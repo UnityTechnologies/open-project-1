@@ -93,15 +93,15 @@ public class InteractionManager : MonoBehaviour
 	{
 		Interaction newPotentialInteraction = new Interaction(InteractionType.None, obj);
 
-		if (obj.CompareTag("Pickable"))
+		if (obj.CompareTag(Tag.Pickable))
 		{
 			newPotentialInteraction.type = InteractionType.PickUp;
 		}
-		else if (obj.CompareTag("CookingPot"))
+		else if (obj.CompareTag(Tag.CookingPot))
 		{
 			newPotentialInteraction.type = InteractionType.Cook;
 		}
-		else if (obj.CompareTag("NPC"))
+		else if (obj.CompareTag(Tag.NPC))
 		{
 			newPotentialInteraction.type = InteractionType.Talk;
 		}
