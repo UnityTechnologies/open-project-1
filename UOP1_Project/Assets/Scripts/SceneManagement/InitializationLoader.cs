@@ -1,5 +1,7 @@
-﻿using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
+using UnityEngine.ResourceManagement.ResourceProviders;
 using UnityEngine.SceneManagement;
 
 /// <summary>
@@ -10,31 +12,30 @@ using UnityEngine.SceneManagement;
 public class InitializationLoader : MonoBehaviour
 {
 	[Header("Persistent managers Scene")]
-	[SerializeField] private GameSceneSO _PersistentManagersScene = default;
+	[SerializeField] private GameSceneSO _persistentManagersScene = default;
 
 	[Header("Loading settings")]
-	[SerializeField] private GameSceneSO[] _MenuToLoad = default;
-	[SerializeField] private bool _showLoadScreen = default;
+	[SerializeField] private GameSceneSO[] _menuToLoad = default;
 
 	[Header("Broadcasting on")]
-	[SerializeField] private LoadEventChannelSO _MenuLoadChannel = default;
+	[SerializeField] private AssetReference _menuLoadChannel = default;
 
-	void Start()
+	private void Start()
 	{
 		//Load the persistent managers scene
-		StartCoroutine(loadScene(_PersistentManagersScene.scenePath));
+		_persistentManagersScene.sceneReference.LoadSceneAsync(LoadSceneMode.Additive, true).Completed += LoadEventChannel;
 	}
 
-	IEnumerator loadScene(string scenePath)
+	private void LoadEventChannel(AsyncOperationHandle<SceneInstance> obj)
 	{
-		AsyncOperation loadingSceneAsyncOp = SceneManager.LoadSceneAsync(scenePath, LoadSceneMode.Additive);
+		_menuLoadChannel.LoadAssetAsync<LoadEventChannelSO>().Completed += LoadMainMenu;
+	}
 
-		//Wait until we are done loading the scene
-		while (!loadingSceneAsyncOp.isDone)
-		{
-			yield return null;
-		}
-		//Raise the event to load the main menu
-		_MenuLoadChannel.RaiseEvent(_MenuToLoad, _showLoadScreen);
+	private void LoadMainMenu(AsyncOperationHandle<LoadEventChannelSO> obj)
+	{
+		LoadEventChannelSO loadEventChannelSO = (LoadEventChannelSO)_menuLoadChannel.Asset;
+		loadEventChannelSO.RaiseEvent(_menuToLoad);
+
+		SceneManager.UnloadSceneAsync(0); //Initialization is the only scene in BuildSettings, thus it has index 0
 	}
 }

@@ -6,7 +6,4 @@
 
 [CreateAssetMenu(fileName = "NewGameplayScene", menuName = "Scene Data/Gameplay")]
 
-public class GameplaySO : GameSceneSO
-{
-	//[Header("Gameplay specific")]
-}
+public class GameplaySO : GameSceneSO { }
