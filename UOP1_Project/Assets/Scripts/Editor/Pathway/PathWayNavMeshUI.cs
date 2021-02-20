@@ -75,11 +75,15 @@ public class PathWayNavMeshUI
 	{
 		bool existsPath = true;
 
+		_pathway.Hits.Clear();
+		_pathway.DisplayProbes = false;
+
 		if (_pathway.Waypoints.Count > 1)
 		{
 			for (int i = 0; i < _pathway.Waypoints.Count; i++)
 			{
-				existsPath &= _pathwayNavMesh.HasNavMeshAt(i) && _pathwayNavMesh.UpdateCornersAt(i);
+				existsPath &= _pathwayNavMesh.HasNavMeshAt(i);
+				existsPath &= _pathwayNavMesh.UpdateCornersAt(i);
 			}
 
 			if (existsPath)
@@ -88,8 +92,7 @@ public class PathWayNavMeshUI
 			}
 		}
 
-		_pathway.ToggledNavMeshDisplay = existsPath;
-		_pathway.DisplayProbes = !_pathway.ToggledNavMeshDisplay;
+		_pathway.DisplayProbes = !existsPath;
 	}
 
 	public void GeneratePath()
@@ -97,6 +100,7 @@ public class PathWayNavMeshUI
 		if (_pathway.ToggledNavMeshDisplay)
 		{
 			RestorePath();
+			_pathway.ToggledNavMeshDisplay = !_pathway.DisplayProbes;
 		}
 	}
 
