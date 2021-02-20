@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEditor;
 using UnityEditorInternal;
-
+using System.Linq;
 
 [CustomEditor(typeof(Pathway))]
 public class PathwayEditor : Editor
@@ -10,11 +10,12 @@ public class PathwayEditor : Editor
 	private Pathway _pathway;
 	private PathwayHandles _pathwayHandles;
 	private PathWayNavMeshUI _pathWayNavMeshUI;
+	private bool elemNbChanged = false;
 
 	public void OnSceneGUI()
 	{
-		_pathwayHandles.DisplayHandles();
-		_pathWayNavMeshUI.RealTime();
+		int index = _pathwayHandles.DisplayHandles();
+		_pathWayNavMeshUI.RealTime(index);	
 	}
 
 	public override void OnInspectorGUI()
@@ -37,8 +38,8 @@ public class PathwayEditor : Editor
 		_reorderableList.onRemoveCallback += RemoveItem;
 		_reorderableList.onChangedCallback += ListModified;
 		_pathway = (target as Pathway);
+		_pathWayNavMeshUI = new PathWayNavMeshUI(_pathway);
 		_pathwayHandles = new PathwayHandles(_pathway);
-		_pathWayNavMeshUI = new PathWayNavMeshUI(serializedObject, _pathway);
 	}
 
 	private void OnDisable()
@@ -49,6 +50,7 @@ public class PathwayEditor : Editor
 		_reorderableList.onAddCallback -= AddItem;
 		_reorderableList.onRemoveCallback -= RemoveItem;
 		_reorderableList.onChangedCallback -= ListModified;
+		_pathway.waypoints = _pathway.Waypoints.Select(x => x.waypoint).ToArray();
 	}
 
 	private void DrawHeader(Rect rect)
@@ -58,9 +60,8 @@ public class PathwayEditor : Editor
 
 	private void DrawElement(Rect rect, int index, bool active, bool focused)
 	{
-		SerializedProperty item = _reorderableList.serializedProperty.GetArrayElementAtIndex(index);
+		SerializedProperty item = _reorderableList.serializedProperty.GetArrayElementAtIndex(index).FindPropertyRelative("waypoint");
 		item.vector3Value = EditorGUI.Vector3Field(rect, Pathway.FIELD_LABEL + index, item.vector3Value);
-		_pathWayNavMeshUI.PathUpdate(index);
 	}
 
 	private void AddItem(ReorderableList list)
@@ -70,16 +71,20 @@ public class PathwayEditor : Editor
 		if (index > -1 && list.serializedProperty.arraySize >= 1)
 		{
 			list.serializedProperty.InsertArrayElementAtIndex(index + 1);
-			Vector3 previous = list.serializedProperty.GetArrayElementAtIndex(index).vector3Value;
-			list.serializedProperty.GetArrayElementAtIndex(index + 1).vector3Value = new Vector3(previous.x + 2, previous.y, previous.z + 2);
+			Vector3 previous = list.serializedProperty.GetArrayElementAtIndex(index).FindPropertyRelative("waypoint").vector3Value;
+			list.serializedProperty.GetArrayElementAtIndex(index + 1).FindPropertyRelative("waypoint").vector3Value = new Vector3(previous.x + 2, previous.y, previous.z + 2);
+			_pathWayNavMeshUI.UpdatePathAt(index+1);
+			serializedObject.ApplyModifiedProperties();
 		}
 		else
 		{
 			list.serializedProperty.InsertArrayElementAtIndex(list.serializedProperty.arraySize);
 			Vector3 previous = _pathway.transform.position;
-			list.serializedProperty.GetArrayElementAtIndex(list.serializedProperty.arraySize - 1).vector3Value = new Vector3(previous.x + 2, previous.y, previous.z + 2);
+			list.serializedProperty.GetArrayElementAtIndex(list.serializedProperty.arraySize - 1).FindPropertyRelative("waypoint").vector3Value = new Vector3(previous.x + 2, previous.y, previous.z + 2);
+			_pathWayNavMeshUI.UpdatePathAt(list.serializedProperty.arraySize - 1);
+			serializedObject.ApplyModifiedProperties();
 		}
-
+		elemNbChanged = true;
 		list.index++;
 	}
 
@@ -88,6 +93,8 @@ public class PathwayEditor : Editor
 		int index = list.index;
 
 		list.serializedProperty.DeleteArrayElementAtIndex(index);
+		_pathWayNavMeshUI.UpdatePathAt(index);
+		elemNbChanged = true;
 
 		if (list.index == list.serializedProperty.arraySize)
 		{
@@ -98,7 +105,15 @@ public class PathwayEditor : Editor
 	private void ListModified(ReorderableList list)
 	{
 		list.serializedProperty.serializedObject.ApplyModifiedProperties();
-		_pathWayNavMeshUI.PathUpdate(list.index);
+		
+		if (elemNbChanged == true)
+		{
+			elemNbChanged = false;
+		}
+		else
+		{
+			_pathWayNavMeshUI.GeneratePath();
+		}
 	}
 
 	private void DoUndo()
@@ -109,6 +124,7 @@ public class PathwayEditor : Editor
 		{
 			_reorderableList.index = _reorderableList.serializedProperty.arraySize - 1;
 		}
+		_pathWayNavMeshUI.GeneratePath();
 	}
 
 }

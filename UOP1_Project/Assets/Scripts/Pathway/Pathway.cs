@@ -5,7 +5,7 @@ using UnityEngine;
 public class Pathway : MonoBehaviour
 {
 	[HideInInspector]
-	public List<Vector3> Waypoints;
+	public Vector3[] waypoints;
 
 #if UNITY_EDITOR
 
@@ -45,8 +45,21 @@ public class Pathway : MonoBehaviour
 	public List<bool> Hits { get => _hits; set => _hits = value; }
 
 	public bool RealTimeEnabled;
-	
+
+	[HideInInspector]
+	public List<WaypointData> Waypoints;
 
 #endif
 
 }
+
+#if UNITY_EDITOR
+[System.Serializable]
+public class WaypointData
+{
+	public Vector3 waypoint;
+	public List<Vector3> corners;
+
+}
+
+#endif

@@ -1,72 +1,103 @@
 ﻿using UnityEngine;
 using UnityEditor;
+using UnityEditorInternal;
 
 
 public class PathWayNavMeshUI
 {
 	private Pathway _pathway;
 	private PathwayNavMesh _pathwayNavMesh;
-	private SerializedProperty _displayProbes;
-	private SerializedProperty _toggledNavMeshDisplay;
-
-	public PathWayNavMeshUI(SerializedObject serializedObject, Pathway pathway)
+	
+	public PathWayNavMeshUI(Pathway pathway)
 	{
 		_pathway = pathway;
-		_displayProbes = serializedObject.FindProperty("DisplayProbes");
-		_toggledNavMeshDisplay = serializedObject.FindProperty("ToggledNavMeshDisplay");
-		_pathwayNavMesh = new PathwayNavMesh(serializedObject, pathway);
-		GeneratePath();
+		_pathwayNavMesh = new PathwayNavMesh(pathway);
+		RestorePath();
 	}
 
 	public void OnInspectorGUI()
 	{
-		if (!_toggledNavMeshDisplay.boolValue)
+		if (!_pathway.ToggledNavMeshDisplay)
 		{
 			if (GUILayout.Button("NavMesh Path"))
 			{
+				_pathway.ToggledNavMeshDisplay = true;
 				GeneratePath();
-				_displayProbes.boolValue = !_toggledNavMeshDisplay.boolValue;
+				InternalEditorUtility.RepaintAllViews();
 			}
 		}
 		else
 		{
 			if (GUILayout.Button("Handles Path"))
 			{
-				_toggledNavMeshDisplay.boolValue = false;
-				_displayProbes.boolValue = false;
+				_pathway.ToggledNavMeshDisplay = false;
+				_pathway.DisplayProbes = false;
+				InternalEditorUtility.RepaintAllViews();
 			}
 		}
 	}
 
-	public void GeneratePath() {
 
-		_displayProbes.boolValue = !_pathwayNavMesh.HasNavMesh();
+	public void UpdatePath() {
 
-		if (!_displayProbes.boolValue)
+		if (!_pathway.DisplayProbes)
 		{
-			_toggledNavMeshDisplay.boolValue = _pathwayNavMesh.GenerateNavMeshPath();
+			_pathwayNavMesh.UpdatePath();
 		}
 	}
 
+	public void UpdatePathAt(int index)
+	{
+		_pathway.DisplayProbes = !_pathwayNavMesh.HasNavMeshAt(index);
 
-	public void PathUpdate(int index)
+		if (!_pathway.DisplayProbes && _pathway.ToggledNavMeshDisplay)
+		{
+			_pathway.DisplayProbes = !_pathwayNavMesh.UpdateCornersAt(index);
+		}
+	}
+
+	public void RealTime(int index)
 	{
 		if (_pathway.RealTimeEnabled)
 		{
-			_displayProbes.boolValue = !_pathwayNavMesh.HasNavMeshAt(index);
-			
-			if (!_displayProbes.boolValue && !GUI.changed)
+			if (index >= 0)
 			{
-				_displayProbes.boolValue = !_pathwayNavMesh.GenerateNavMeshPath();
+				UpdatePathAt(index);
+			}
+
+			if (_pathway.ToggledNavMeshDisplay)
+			{
+				UpdatePath();
 			}
 		}
 	}
 
-	public void RealTime()
+	private void RestorePath()
 	{
-		if (_pathway.RealTimeEnabled && GUI.changed)
+		bool existsPath = true;
+
+		if (_pathway.Waypoints.Count > 1)
 		{
-			GeneratePath();
+			for (int i = 0; i < _pathway.Waypoints.Count; i++)
+			{
+				existsPath &= _pathwayNavMesh.HasNavMeshAt(i) && _pathwayNavMesh.UpdateCornersAt(i);
+			}
+
+			if (existsPath)
+			{
+				_pathwayNavMesh.UpdatePath();
+			}
+		}
+
+		_pathway.ToggledNavMeshDisplay = existsPath;
+		_pathway.DisplayProbes = !_pathway.ToggledNavMeshDisplay;
+	}
+
+	public void GeneratePath()
+	{
+		if (_pathway.ToggledNavMeshDisplay)
+		{
+			RestorePath();
 		}
 	}
 

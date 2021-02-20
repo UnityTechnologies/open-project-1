@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using UnityEditor;
-using System.Collections.Generic;
+
 
 public class PathwayHandles
 {
@@ -12,19 +12,21 @@ public class PathwayHandles
 		_pathway = pathway;
 	}
 
-	public void DisplayHandles()
+	public int DisplayHandles()
 	{
 		for (int i = 0; i < _pathway.Waypoints.Count; i++)
 		{
 			EditorGUI.BeginChangeCheck();
 
-			_tmp = Handles.PositionHandle(_pathway.Waypoints[i], Quaternion.identity);
+			_tmp = Handles.PositionHandle(_pathway.Waypoints[i].waypoint, Quaternion.identity);
 
 			if (EditorGUI.EndChangeCheck())
 			{
-				_pathway.Waypoints[i] = _tmp;
+				_pathway.Waypoints[i].waypoint = _tmp;
+				return i;
 			}
 		}
+		return -1;
 	}
 
 }
