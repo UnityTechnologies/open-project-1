@@ -4,25 +4,26 @@ using System.Reflection;
 public static class Tag
 {
 	//Pre-defined Tags
-	public const string Untagged = "Untagged";
-	public const string Respawn = "Respawn";
-	public const string Finish = "Finish";
-	public const string EditorOnly = "EditorOnly";
-	public const string MainCamera = "MainCamera";
-	public const string Player = "Player";
-	public const string GameController = "GameController";
-
+	public const string
+	Untagged = "Untagged",
+	Respawn = "Respawn",
+	Finish = "Finish",
+	EditorOnly = "EditorOnly",
+	MainCamera = "MainCamera",
+	Player = "Player",
+	GameController = "GameController";
 	//Custom Tags
-	public const string Pickable = "Pickable";
-	public const string CookingPot = "CookingPot";
-	public const string NPC = "NPC";
-	public const string SpawnLocation = "SpawnLocation";
-	public const string Critter = "Critter";
+	public const string
+	Pickable = "Pickable",
+	CookingPot = "CookingPot",
+	NPC = "NPC",
+	SpawnLocation = "SpawnLocation",
+	Critter = "Critter";
 		
 	/// <summary>
-	/// Returns all tags that has been defined in Tags class
+	/// Returns all tags that has been defined in Tag class
 	/// </summary>
-	public static string[] GetAllTags()
+	public static string[] GetTags()
 	{
 		FieldInfo[] fields = typeof(Tag).GetFields(BindingFlags.Public | BindingFlags.Static |
 			   BindingFlags.FlattenHierarchy).Where(fi => fi.IsLiteral && !fi.IsInitOnly).ToArray();
@@ -36,11 +37,11 @@ public static class Tag
 	}
 
 	/// <summary>
-	/// Checks if the tag defined in the Tags class
+	/// Checks if the tag defined in the Tag class
 	/// </summary>
 	public static bool TagExist(string search)
 	{
-		string[] AllTags = GetAllTags();
+		string[] AllTags = GetTags();
 		bool result = false;
 		for (int i = 0; i < AllTags.Length; i++)
 		{
