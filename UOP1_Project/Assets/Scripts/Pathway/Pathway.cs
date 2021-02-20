@@ -54,12 +54,12 @@ public class Pathway : MonoBehaviour
 }
 
 #if UNITY_EDITOR
+
 [System.Serializable]
 public class WaypointData
 {
 	public Vector3 waypoint;
 	public List<Vector3> corners;
-
 }
 
 #endif

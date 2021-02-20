@@ -1,5 +1,4 @@
-﻿using UnityEditor;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.AI;
 using System.Collections.Generic;
 using System.Linq;
@@ -45,7 +44,6 @@ public class PathwayNavMesh
 
 		return hasHit;
 	}
-
 
 	private List<Vector3> GetPathCorners(int startIndex, int endIndex)
 	{
