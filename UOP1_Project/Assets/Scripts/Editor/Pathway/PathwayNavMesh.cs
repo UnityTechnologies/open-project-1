@@ -35,7 +35,6 @@ public class PathwayNavMesh
 			{
 				_pathway.Waypoints[index].waypoint = hit.position;
 			}
-
 		}
 		else
 		{
@@ -99,7 +98,7 @@ public class PathwayNavMesh
 	public void UpdatePath()
 	{
 		_pathway.Path.Clear();
-		_pathway.Waypoints.Aggregate(_pathway.Path, (acc, wpd) => {
+		_pathway.Path=_pathway.Waypoints.Aggregate(new List<Vector3>(), (acc, wpd) => {
 			wpd.corners.ForEach(c => acc.Add(c));
 			return acc;
 		});

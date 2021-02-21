@@ -36,7 +36,6 @@ public class PathWayNavMeshUI
 		}
 	}
 
-
 	public void UpdatePath() {
 
 		if (!_pathway.DisplayProbes)

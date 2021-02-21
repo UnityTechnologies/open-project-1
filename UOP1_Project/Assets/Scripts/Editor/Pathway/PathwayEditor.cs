@@ -10,7 +10,6 @@ public class PathwayEditor : Editor
 	private Pathway _pathway;
 	private PathwayHandles _pathwayHandles;
 	private PathWayNavMeshUI _pathWayNavMeshUI;
-	private bool elemNbChanged = false;
 
 	public void OnSceneGUI()
 	{
@@ -73,18 +72,13 @@ public class PathwayEditor : Editor
 			list.serializedProperty.InsertArrayElementAtIndex(index + 1);
 			Vector3 previous = list.serializedProperty.GetArrayElementAtIndex(index).FindPropertyRelative("waypoint").vector3Value;
 			list.serializedProperty.GetArrayElementAtIndex(index + 1).FindPropertyRelative("waypoint").vector3Value = new Vector3(previous.x + 2, previous.y, previous.z + 2);
-			_pathWayNavMeshUI.UpdatePathAt(index+1);
-			serializedObject.ApplyModifiedProperties();
 		}
 		else
 		{
 			list.serializedProperty.InsertArrayElementAtIndex(list.serializedProperty.arraySize);
 			Vector3 previous = _pathway.transform.position;
-			list.serializedProperty.GetArrayElementAtIndex(list.serializedProperty.arraySize - 1).FindPropertyRelative("waypoint").vector3Value = new Vector3(previous.x + 2, previous.y, previous.z + 2);
-			_pathWayNavMeshUI.UpdatePathAt(list.serializedProperty.arraySize - 1);
-			serializedObject.ApplyModifiedProperties();
+			list.serializedProperty.GetArrayElementAtIndex(list.serializedProperty.arraySize - 1).FindPropertyRelative("waypoint").vector3Value = new Vector3(previous.x + 2, previous.y, previous.z + 2);	
 		}
-		elemNbChanged = true;
 		list.index++;
 	}
 
@@ -93,8 +87,6 @@ public class PathwayEditor : Editor
 		int index = list.index;
 
 		list.serializedProperty.DeleteArrayElementAtIndex(index);
-		_pathWayNavMeshUI.UpdatePathAt(index);
-		elemNbChanged = true;
 
 		if (list.index == list.serializedProperty.arraySize)
 		{
@@ -105,15 +97,7 @@ public class PathwayEditor : Editor
 	private void ListModified(ReorderableList list)
 	{
 		list.serializedProperty.serializedObject.ApplyModifiedProperties();
-		
-		if (elemNbChanged == true)
-		{
-			elemNbChanged = false;
-		}
-		else
-		{
-			_pathWayNavMeshUI.GeneratePath();
-		}
+		_pathWayNavMeshUI.GeneratePath();
 	}
 
 	private void DoUndo()
