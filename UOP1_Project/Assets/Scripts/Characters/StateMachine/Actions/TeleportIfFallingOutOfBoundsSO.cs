@@ -15,7 +15,6 @@ public class TeleportIfFallingOutOfBounds : StateAction
 {
 	private Protagonist _protagonistScript;
 
-	private float _verticalMovement;
 	private float _fallTimer;
 	
 	private TeleportIfFallingOutOfBoundsSO _originSO => (TeleportIfFallingOutOfBoundsSO)base.OriginSO;
