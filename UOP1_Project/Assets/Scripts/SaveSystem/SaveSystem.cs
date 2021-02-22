@@ -1,4 +1,7 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 
 public class SaveSystem : ScriptableObject
 {
@@ -26,10 +29,10 @@ public class SaveSystem : ScriptableObject
 			saveData._locationId = locationSo.Guid;
 		}
 
-		SaveGame();
+		SaveDataToDisk();
 	}
 
-	public void LoadGame()
+	public void LoadSaveDataFromDisk()
 	{
 		if (FileManager.LoadFromFile(saveFilename, out var json))
 		{
@@ -37,8 +40,22 @@ public class SaveSystem : ScriptableObject
 		}
 	}
 
+	public IEnumerator LoadSavedInventory()
+	{
+		_playerInventory.Items.Clear();
+		foreach (var serializedItemStack in saveData._itemStacks)
+		{
+			var loadItemOperationHandle = Addressables.LoadAssetAsync<Item>(serializedItemStack.itemGuid);
+			yield return loadItemOperationHandle;
+			if (loadItemOperationHandle.Status == AsyncOperationStatus.Succeeded)
+			{
+				var itemSo = loadItemOperationHandle.Result;
+				_playerInventory.Add(itemSo, serializedItemStack.amount);
+			}
+		}
+	}
 
-	public void SaveGame()
+	public void SaveDataToDisk()
 	{
 		saveData._itemStacks.Clear();
 		foreach (var itemStack in _playerInventory.Items)
