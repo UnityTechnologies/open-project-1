@@ -19,6 +19,11 @@ public class ApplyMovementVectorAction : StateAction
 
 	public override void OnUpdate()
 	{
+		if (_characterController.isGrounded)
+		{
+			_protagonistScript.lastValidPos = _protagonistScript.transform.position;
+		}
+		
 		_characterController.Move(_protagonistScript.movementVector * Time.deltaTime);
 		_protagonistScript.movementVector = _characterController.velocity;
 	}
