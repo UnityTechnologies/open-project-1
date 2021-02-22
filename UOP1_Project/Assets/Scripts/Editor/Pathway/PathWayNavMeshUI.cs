@@ -21,7 +21,7 @@ public class PathWayNavMeshUI
 			if (GUILayout.Button("NavMesh Path"))
 			{
 				_pathway.ToggledNavMeshDisplay = true;
-				UpdatePath();
+				GeneratePath();
 				InternalEditorUtility.RepaintAllViews();
 			}
 		}

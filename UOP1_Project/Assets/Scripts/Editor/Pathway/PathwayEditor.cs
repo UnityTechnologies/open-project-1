@@ -13,6 +13,7 @@ public class PathwayEditor : Editor
 	private enum LIST_MODIFICATION { ADD, SUPP, DRAG, OTHER};
 	private LIST_MODIFICATION _currentListModification;
 	private int _indexCurrentModification;
+
 	public void OnSceneGUI()
 	{
 		int index = _pathwayHandles.DisplayHandles();
@@ -43,7 +44,6 @@ public class PathwayEditor : Editor
 		_pathWayNavMeshUI = new PathWayNavMeshUI(_pathway);
 		_pathwayHandles = new PathwayHandles(_pathway);
 		_currentListModification = LIST_MODIFICATION.OTHER;
-
 	}
 
 	private void OnDisable()
@@ -114,10 +114,13 @@ public class PathwayEditor : Editor
 	private void ListModified(ReorderableList list)
 	{
 		list.serializedProperty.serializedObject.ApplyModifiedProperties();
-		switch (_currentListModification) {
+
+		switch (_currentListModification)
+		{
 			case LIST_MODIFICATION.ADD:
 				_pathWayNavMeshUI.UpdatePathAt(_indexCurrentModification);
 				break;
+
 			case LIST_MODIFICATION.SUPP:
 				if (list.serializedProperty.arraySize > 1)
 				{
