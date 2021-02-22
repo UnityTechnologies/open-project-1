@@ -35,7 +35,7 @@ public class StartGame : MonoBehaviour
 		if (asyncOperationHandle.Status == AsyncOperationStatus.Succeeded)
 		{
 			var locationSo = asyncOperationHandle.Result;
-			onPlayButtonPress.RaiseEvent(new[] {(GameSceneSO)locationSo}, showLoadScreen);
+			onPlayButtonPress.RaiseEvent(new[] { (GameSceneSO)locationSo }, showLoadScreen);
 		}
 	}
 }
