@@ -21,7 +21,7 @@ public class PathWayNavMeshUI
 			if (GUILayout.Button("NavMesh Path"))
 			{
 				_pathway.ToggledNavMeshDisplay = true;
-				GeneratePath();
+				UpdatePath();
 				InternalEditorUtility.RepaintAllViews();
 			}
 		}
@@ -46,11 +46,14 @@ public class PathWayNavMeshUI
 
 	public void UpdatePathAt(int index)
 	{
-		_pathway.DisplayProbes = !_pathwayNavMesh.HasNavMeshAt(index);
-
-		if (!_pathway.DisplayProbes && _pathway.ToggledNavMeshDisplay)
+		if (index >= 0)
 		{
-			_pathway.DisplayProbes = !_pathwayNavMesh.UpdateCornersAt(index);
+			_pathway.DisplayProbes = !_pathwayNavMesh.HasNavMeshAt(index);
+
+			if (!_pathway.DisplayProbes && _pathway.ToggledNavMeshDisplay)
+			{
+				_pathway.DisplayProbes = !_pathwayNavMesh.UpdateCornersAt(index);
+			}
 		}
 	}
 
@@ -58,10 +61,7 @@ public class PathWayNavMeshUI
 	{
 		if (_pathway.RealTimeEnabled)
 		{
-			if (index >= 0)
-			{
-				UpdatePathAt(index);
-			}
+			UpdatePathAt(index);
 
 			if (_pathway.ToggledNavMeshDisplay)
 			{

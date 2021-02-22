@@ -17,7 +17,7 @@ public class PathwayNavMesh
 	public bool HasNavMeshAt(int index)
 	{
 		NavMeshHit hit;
-		bool hasHit = false;
+		bool hasHit = true;
 
 		if (_pathway.Waypoints.Count >= _pathway.Hits.Count)
 		{
@@ -72,7 +72,7 @@ public class PathwayNavMesh
 	public bool UpdateCornersAt(int index)
 	{
 		bool canUpdate = true;
-
+		
 		if (_pathway.Waypoints.Count > 1 &&  index <_pathway.Waypoints.Count)
 		{
 			if (index == 0)
@@ -82,6 +82,7 @@ public class PathwayNavMesh
 			}
 			else if (index == _pathway.Waypoints.Count - 1)
 			{
+				
 				canUpdate = CopyCorners(index - 1, index);
 				canUpdate &= CopyCorners(index, 0);
 			}
