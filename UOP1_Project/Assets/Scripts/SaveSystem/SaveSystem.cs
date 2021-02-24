@@ -70,9 +70,9 @@ public class SaveSystem : ScriptableObject
 		if (FileManager.MoveFile(saveFilename, backupSaveFilename))
 		{
 			if (FileManager.WriteToFile(saveFilename, saveData.ToJson()))
-    		{
-    			Debug.Log("Save successful");
-    		}
+			{
+				Debug.Log("Save successful");
+			}
 		}
 	}
 }
