@@ -9,6 +9,7 @@ public class SaveSystem : ScriptableObject
 	[SerializeField] private Inventory _playerInventory;
 
 	public string saveFilename = "save.chop";
+	public string backupSaveFilename = "save.chop.bak";
 	public Save saveData = new Save();
 
 	void OnEnable()
@@ -32,12 +33,15 @@ public class SaveSystem : ScriptableObject
 		SaveDataToDisk();
 	}
 
-	public void LoadSaveDataFromDisk()
+	public bool LoadSaveDataFromDisk()
 	{
 		if (FileManager.LoadFromFile(saveFilename, out var json))
 		{
 			saveData.LoadFromJson(json);
+			return true;
 		}
+
+		return false;
 	}
 
 	public IEnumerator LoadSavedInventory()
@@ -63,9 +67,12 @@ public class SaveSystem : ScriptableObject
 			saveData._itemStacks.Add(new SerializedItemStack(itemStack.Item.Guid, itemStack.Amount));
 		}
 
-		if (FileManager.WriteToFile(saveFilename, saveData.ToJson()))
+		if (FileManager.MoveFile(saveFilename, backupSaveFilename))
 		{
-			Debug.Log("Save successful");
+			if (FileManager.WriteToFile(saveFilename, saveData.ToJson()))
+    		{
+    			Debug.Log("Save successful");
+    		}
 		}
 	}
 }

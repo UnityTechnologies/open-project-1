@@ -1,7 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
+using UnityEngine.UI;
 
 /// <summary>
 /// This class contains the function to call when play button is pressed
@@ -13,20 +15,48 @@ public class StartGame : MonoBehaviour
 	public bool showLoadScreen;
 
 	public SaveSystem saveSystem;
+	public Text startText;
+
+	public Button resetSaveDataButton;
+	private bool _hasSaveData;
+
+	private void Start()
+	{
+		_hasSaveData = saveSystem.LoadSaveDataFromDisk();
+		if (_hasSaveData)
+		{
+			startText.text = "Continue";
+			resetSaveDataButton.gameObject.SetActive(true);
+		}
+		else
+		{
+			resetSaveDataButton.gameObject.SetActive(false);
+		}
+	}
 
 	public void OnPlayButtonPress()
 	{
-		onPlayButtonPress.RaiseEvent(locationsToLoad, showLoadScreen);
+		if (!_hasSaveData)
+		{
+			//Start new game
+			onPlayButtonPress.RaiseEvent(locationsToLoad, showLoadScreen);
+		}
+		else
+		{
+			//Load Game
+			StartCoroutine(LoadSaveGame());
+		}
 	}
 
-	public void OnLoadButtonPress()
+	public void OnResetSaveDataPress()
 	{
-		StartCoroutine(LoadSaveGame());
+		_hasSaveData = false;
+		startText.text = "Play";
+		resetSaveDataButton.gameObject.SetActive(false);
 	}
 
 	public IEnumerator LoadSaveGame()
 	{
-		saveSystem.LoadSaveDataFromDisk();
 		yield return StartCoroutine(saveSystem.LoadSavedInventory());
 
 		var locationGuid = saveSystem.saveData._locationId;
