@@ -6,7 +6,7 @@ using UOP1.StateMachine;
 /// <summary>
 /// Controls playback of particles connected to movement. Methods invoked by the StateMachine StateActions
 /// </summary>
-public class PlayerEffectContrioller : MonoBehaviour
+public class PlayerEffectController : MonoBehaviour
 {
 	[SerializeField] ParticleSystem _walkingParticles = default;
 	[SerializeField] ParticleSystem _landParticles = default;

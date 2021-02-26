@@ -8,11 +8,11 @@ public class ControlWalkingParticlesActionSO : StateActionSO<ControlWalkingParti
 public class ControlWalkingParticlesAction : StateAction
 {
 	//Component references
-	private PlayerEffectContrioller _dustController;
+	private PlayerEffectController _dustController;
 
 	public override void Awake(StateMachine stateMachine)
 	{
-		_dustController = stateMachine.GetComponent<PlayerEffectContrioller>();
+		_dustController = stateMachine.GetComponent<PlayerEffectController>();
 	}
 
 	public override void OnStateEnter()
