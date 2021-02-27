@@ -176,7 +176,7 @@ public class AudioManager : MonoBehaviour
 
 	private void StopAndCleanEmitter(SoundEmitter soundEmitter)
 	{
-		if(!soundEmitter.IsLooping())
+		if (!soundEmitter.IsLooping())
 			soundEmitter.OnSoundFinishedPlaying -= OnSoundEmitterFinishedPlaying;
 
 		soundEmitter.Stop();

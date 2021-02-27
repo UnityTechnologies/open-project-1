@@ -36,7 +36,7 @@ public class AudioCue : MonoBehaviour
 
 		//This additional check prevents the AudioCue from playing if the object is disabled or the scene unloaded
 		//This prevents playing a looping AudioCue which then would be never stopped
-		if(_playOnStart)
+		if (_playOnStart)
 			PlayAudioCue();
 	}
 
