@@ -1,4 +1,7 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 
 public class SaveSystem : ScriptableObject
 {
@@ -6,6 +9,7 @@ public class SaveSystem : ScriptableObject
 	[SerializeField] private Inventory _playerInventory;
 
 	public string saveFilename = "save.chop";
+	public string backupSaveFilename = "save.chop.bak";
 	public Save saveData = new Save();
 
 	void OnEnable()
@@ -26,19 +30,36 @@ public class SaveSystem : ScriptableObject
 			saveData._locationId = locationSo.Guid;
 		}
 
-		SaveGame();
+		SaveDataToDisk();
 	}
 
-	public void LoadGame()
+	public bool LoadSaveDataFromDisk()
 	{
 		if (FileManager.LoadFromFile(saveFilename, out var json))
 		{
 			saveData.LoadFromJson(json);
+			return true;
+		}
+
+		return false;
+	}
+
+	public IEnumerator LoadSavedInventory()
+	{
+		_playerInventory.Items.Clear();
+		foreach (var serializedItemStack in saveData._itemStacks)
+		{
+			var loadItemOperationHandle = Addressables.LoadAssetAsync<Item>(serializedItemStack.itemGuid);
+			yield return loadItemOperationHandle;
+			if (loadItemOperationHandle.Status == AsyncOperationStatus.Succeeded)
+			{
+				var itemSo = loadItemOperationHandle.Result;
+				_playerInventory.Add(itemSo, serializedItemStack.amount);
+			}
 		}
 	}
 
-
-	public void SaveGame()
+	public void SaveDataToDisk()
 	{
 		saveData._itemStacks.Clear();
 		foreach (var itemStack in _playerInventory.Items)
@@ -46,9 +67,12 @@ public class SaveSystem : ScriptableObject
 			saveData._itemStacks.Add(new SerializedItemStack(itemStack.Item.Guid, itemStack.Amount));
 		}
 
-		if (FileManager.WriteToFile(saveFilename, saveData.ToJson()))
+		if (FileManager.MoveFile(saveFilename, backupSaveFilename))
 		{
-			Debug.Log("Save successful");
+			if (FileManager.WriteToFile(saveFilename, saveData.ToJson()))
+			{
+				Debug.Log("Save successful");
+			}
 		}
 	}
 }

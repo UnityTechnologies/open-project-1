@@ -13,6 +13,7 @@ public class InventoryManager : MonoBehaviour
 	[SerializeField] private ItemEventChannelSO _giveItemEvent = default;
 	[SerializeField] ItemEventChannelSO _addItemEvent = default;
 	[SerializeField] ItemEventChannelSO _removeItemEvent = default;
+	[SerializeField] private SaveSystem _saveSystem;
 
 	private void OnEnable()
 	{
@@ -104,12 +105,13 @@ public class InventoryManager : MonoBehaviour
 	void AddItem(Item item)
 	{
 		_currentInventory.Add(item);
+		_saveSystem.SaveDataToDisk();
 
 	}
 	void RemoveItem(Item item)
 	{
 		_currentInventory.Remove(item);
-
+		_saveSystem.SaveDataToDisk();
 	}
 
 
