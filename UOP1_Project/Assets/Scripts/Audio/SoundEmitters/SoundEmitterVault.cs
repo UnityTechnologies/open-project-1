@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 
-public class SoundEmitterList
+public class SoundEmitterVault
 {
 	private int _nextUniqueKey = 0;
 	private List<AudioCueKey> _emittersKey;
 	private List<SoundEmitter[]> _emittersList;
 
-	public SoundEmitterList()
+	public SoundEmitterVault()
 	{
 		_emittersKey = new List<AudioCueKey>();
 		_emittersList = new List<SoundEmitter[]>();

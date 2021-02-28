@@ -28,12 +28,13 @@ public class AudioManager : MonoBehaviour
 	[Range(0f, 1f)]
 	[SerializeField] private float _sfxVolume = 1f;
 
-	private SoundEmitterList _soundEmitterList;
+	private SoundEmitterVault _soundEmitterVault;
+	private SoundEmitter _musicSoundEmitter;
 
 	private void Awake()
 	{
 		//TODO: Get the initial volume levels from the settings
-		_soundEmitterList = new SoundEmitterList();
+		_soundEmitterVault = new SoundEmitterVault();
 
 		_pool.Prewarm(_initialSize);
 		_pool.SetParent(this.transform);
@@ -46,6 +47,7 @@ public class AudioManager : MonoBehaviour
 		_SFXEventChannel.OnAudioCueFinishRequested += FinishAudioCue;
 
 		_musicEventChannel.OnAudioCuePlayRequested += PlayMusicTrack;
+		_musicEventChannel.OnAudioCueStopRequested += StopMusic;
 	}
 
 	private void OnDestroy()
@@ -107,12 +109,34 @@ public class AudioManager : MonoBehaviour
 
 	private AudioCueKey PlayMusicTrack(AudioCueSO audioCue, AudioConfigurationSO audioConfiguration, Vector3 positionInSpace)
 	{
-		AudioCueKey currentMusicTrack = default;
-		_soundEmitterList.Get(currentMusicTrack, out SoundEmitter[] sem);
-		sem[0].Stop();
+		float fadeDuration = 2f;
+		float startTime = 0f;
 
+		if(_musicSoundEmitter != null && _musicSoundEmitter.IsPlaying())
+		{
+			AudioClip songToPlay = audioCue.GetClips()[0];
+			if (_musicSoundEmitter.GetClip() == songToPlay)
+				return AudioCueKey.Invalid;
 
-		return PlayAudioCue(audioCue, audioConfiguration, positionInSpace);
+			//Music is already playing, need to fade it out
+			startTime = _musicSoundEmitter.FadeMusicOut(fadeDuration);
+		}
+
+		_musicSoundEmitter = _pool.Request();
+		_musicSoundEmitter.FadeMusicIn(audioCue.GetClips()[0], audioConfiguration, 1f, startTime);
+
+		return AudioCueKey.Invalid; //No need to return a valid key for music
+	}
+
+	private bool StopMusic(AudioCueKey key)
+	{
+		if (_musicSoundEmitter != null && _musicSoundEmitter.IsPlaying())
+		{
+			_musicSoundEmitter.Stop();
+			return true;
+		}
+		else
+			return false;
 	}
 
 	/// <summary>
@@ -135,12 +159,12 @@ public class AudioManager : MonoBehaviour
 			}
 		}
 
-		return _soundEmitterList.Add(audioCue, soundEmitterArray);
+		return _soundEmitterVault.Add(audioCue, soundEmitterArray);
 	}
 
-	public bool FinishAudioCue(AudioCueKey emitterKey)
+	public bool FinishAudioCue(AudioCueKey audioCueKey)
 	{
-		bool isFound = _soundEmitterList.Get(emitterKey, out SoundEmitter[] soundEmitters);
+		bool isFound = _soundEmitterVault.Get(audioCueKey, out SoundEmitter[] soundEmitters);
 
 		if (isFound)
 		{
@@ -158,9 +182,9 @@ public class AudioManager : MonoBehaviour
 		return isFound;
 	}
 
-	public bool StopAudioCue(AudioCueKey emitterKey)
+	public bool StopAudioCue(AudioCueKey audioCueKey)
 	{
-		bool isFound = _soundEmitterList.Get(emitterKey, out SoundEmitter[] soundEmitters);
+		bool isFound = _soundEmitterVault.Get(audioCueKey, out SoundEmitter[] soundEmitters);
 
 		if (isFound)
 		{
@@ -169,7 +193,7 @@ public class AudioManager : MonoBehaviour
 				StopAndCleanEmitter(soundEmitters[i]);
 			}
 
-			_soundEmitterList.Remove(emitterKey);
+			_soundEmitterVault.Remove(audioCueKey);
 		}
 
 		return isFound;
@@ -187,7 +211,9 @@ public class AudioManager : MonoBehaviour
 
 		soundEmitter.Stop();
 		_pool.Return(soundEmitter);
-	}
 
-	//TODO: Add methods to play and cross-fade music, or to play individual sounds?
+		//TODO: is the above enough?
+		//_soundEmitterVault.Remove(audioCueKey); is never called if StopAndClean is called after a Finish event
+		//How is the key removed from the vault?
+	}
 }
