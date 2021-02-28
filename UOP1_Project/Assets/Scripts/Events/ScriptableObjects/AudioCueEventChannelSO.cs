@@ -13,7 +13,7 @@ public class AudioCueEventChannelSO : EventChannelBaseSO
 	public AudioCueStopAction OnAudioCueStopRequested;
 	public AudioCueFinishAction OnAudioCueFinishRequested;
 
-	public AudioCueKey RaisePlayEvent(AudioCueSO audioCue, AudioConfigurationSO audioConfiguration, Vector3 positionInSpace)
+	public AudioCueKey RaisePlayEvent(AudioCueSO audioCue, AudioConfigurationSO audioConfiguration, Vector3 positionInSpace = default)
 	{
 		AudioCueKey audioCueKey = AudioCueKey.Invalid;
 

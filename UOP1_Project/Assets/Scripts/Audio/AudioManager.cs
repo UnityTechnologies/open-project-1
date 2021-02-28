@@ -3,6 +3,7 @@ using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
+using System;
 
 public class AudioManager : MonoBehaviour
 {
@@ -34,17 +35,26 @@ public class AudioManager : MonoBehaviour
 		//TODO: Get the initial volume levels from the settings
 		_soundEmitterList = new SoundEmitterList();
 
-		RegisterChannel(_SFXEventChannel);
-		RegisterChannel(_musicEventChannel); //TODO: Treat music requests differently?
-
 		_pool.Prewarm(_initialSize);
 		_pool.SetParent(this.transform);
 	}
 
+	private void OnEnable()
+	{
+		_SFXEventChannel.OnAudioCuePlayRequested += PlayAudioCue;
+		_SFXEventChannel.OnAudioCueStopRequested += StopAudioCue;
+		_SFXEventChannel.OnAudioCueFinishRequested += FinishAudioCue;
+
+		_musicEventChannel.OnAudioCuePlayRequested += PlayMusicTrack;
+	}
+
 	private void OnDestroy()
 	{
-		UnregisterChannel(_SFXEventChannel);
-		UnregisterChannel(_musicEventChannel);
+		_SFXEventChannel.OnAudioCuePlayRequested -= PlayAudioCue;
+		_SFXEventChannel.OnAudioCueStopRequested -= StopAudioCue;
+		_SFXEventChannel.OnAudioCueFinishRequested -= FinishAudioCue;
+
+		_musicEventChannel.OnAudioCuePlayRequested -= PlayMusicTrack;
 	}
 
 	/// <summary>
@@ -81,20 +91,6 @@ public class AudioManager : MonoBehaviour
 		}
 	}
 
-	private void RegisterChannel(AudioCueEventChannelSO audioCueEventChannel)
-	{
-		audioCueEventChannel.OnAudioCuePlayRequested += PlayAudioCue;
-		audioCueEventChannel.OnAudioCueStopRequested += StopAudioCue;
-		audioCueEventChannel.OnAudioCueFinishRequested += FinishAudioCue;
-	}
-
-	private void UnregisterChannel(AudioCueEventChannelSO audioCueEventChannel)
-	{
-		audioCueEventChannel.OnAudioCuePlayRequested -= PlayAudioCue;
-		audioCueEventChannel.OnAudioCueStopRequested -= StopAudioCue;
-		audioCueEventChannel.OnAudioCueFinishRequested -= FinishAudioCue;
-	}
-
 	// Both MixerValueNormalized and NormalizedToMixerValue functions are used for easier transformations
 	/// when using UI sliders normalized format
 	private float MixerValueToNormalized(float mixerValue)
@@ -107,6 +103,16 @@ public class AudioManager : MonoBehaviour
 		// We're assuming the range [0 to 1] becomes [-80dB to 0dB]
 		// This doesn't allow values over 0dB
 		return (normalizedValue - 1f) * 80f;
+	}
+
+	private AudioCueKey PlayMusicTrack(AudioCueSO audioCue, AudioConfigurationSO audioConfiguration, Vector3 positionInSpace)
+	{
+		AudioCueKey currentMusicTrack = default;
+		_soundEmitterList.Get(currentMusicTrack, out SoundEmitter[] sem);
+		sem[0].Stop();
+
+
+		return PlayAudioCue(audioCue, audioConfiguration, positionInSpace);
 	}
 
 	/// <summary>
