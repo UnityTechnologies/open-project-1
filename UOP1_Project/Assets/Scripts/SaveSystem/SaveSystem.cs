@@ -75,4 +75,9 @@ public class SaveSystem : ScriptableObject
 			}
 		}
 	}
+
+	public void WriteEmptySaveFile()
+	{
+		FileManager.WriteToFile(saveFilename, "");
+	}
 }

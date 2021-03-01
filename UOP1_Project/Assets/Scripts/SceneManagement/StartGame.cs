@@ -23,6 +23,7 @@ public class StartGame : MonoBehaviour
 	private void Start()
 	{
 		_hasSaveData = saveSystem.LoadSaveDataFromDisk();
+
 		if (_hasSaveData)
 		{
 			startText.text = "Continue";
@@ -38,6 +39,7 @@ public class StartGame : MonoBehaviour
 	{
 		if (!_hasSaveData)
 		{
+			saveSystem.WriteEmptySaveFile();
 			//Start new game
 			onPlayButtonPress.RaiseEvent(locationsToLoad, showLoadScreen);
 		}
@@ -65,7 +67,7 @@ public class StartGame : MonoBehaviour
 		if (asyncOperationHandle.Status == AsyncOperationStatus.Succeeded)
 		{
 			var locationSo = asyncOperationHandle.Result;
-			onPlayButtonPress.RaiseEvent(new[] { (GameSceneSO)locationSo }, showLoadScreen);
+			onPlayButtonPress.RaiseEvent(new[] {(GameSceneSO)locationSo}, showLoadScreen);
 		}
 	}
 }
