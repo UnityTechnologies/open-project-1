@@ -144,6 +144,10 @@ public class AudioManager : MonoBehaviour
 				soundEmitters[i].OnSoundFinishedPlaying += OnSoundEmitterFinishedPlaying;
 			}
 		}
+		else
+		{
+			Debug.LogWarning("Finishing an AudioCue was requested, but the AudioCue was not found.");
+		}
 
 		return isFound;
 	}
@@ -172,7 +176,7 @@ public class AudioManager : MonoBehaviour
 
 	private void StopAndCleanEmitter(SoundEmitter soundEmitter)
 	{
-		if (soundEmitter.IsFinishing())
+		if (!soundEmitter.IsLooping())
 			soundEmitter.OnSoundFinishedPlaying -= OnSoundEmitterFinishedPlaying;
 
 		soundEmitter.Stop();
