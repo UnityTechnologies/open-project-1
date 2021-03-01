@@ -124,6 +124,7 @@ public class AudioManager : MonoBehaviour
 
 		_musicSoundEmitter = _pool.Request();
 		_musicSoundEmitter.FadeMusicIn(audioCue.GetClips()[0], audioConfiguration, 1f, startTime);
+		_musicSoundEmitter.OnSoundFinishedPlaying += StopMusicEmitter;
 
 		return AudioCueKey.Invalid; //No need to return a valid key for music
 	}
@@ -215,5 +216,11 @@ public class AudioManager : MonoBehaviour
 		//TODO: is the above enough?
 		//_soundEmitterVault.Remove(audioCueKey); is never called if StopAndClean is called after a Finish event
 		//How is the key removed from the vault?
+	}
+
+	private void StopMusicEmitter(SoundEmitter soundEmitter)
+	{
+		soundEmitter.OnSoundFinishedPlaying -= StopMusicEmitter;
+		_pool.Return(soundEmitter);
 	}
 }

@@ -7,7 +7,7 @@ public class MusicPlayer : MonoBehaviour
 {
 	[SerializeField] private VoidEventChannelSO _onSceneReady = default;
 	[SerializeField] private AudioCueEventChannelSO _playMusicOn = default;
-	[SerializeField] private LocationSO _thisSceneSO = default;
+	[SerializeField] private GameSceneSO _thisSceneSO = default;
 	[SerializeField] private AudioConfigurationSO _audioConfig = default;
 
 	private void OnEnable()

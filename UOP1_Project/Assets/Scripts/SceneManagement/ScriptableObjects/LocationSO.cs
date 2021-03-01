@@ -9,5 +9,4 @@ using UnityEngine.Localization;
 public class LocationSO : GameSceneSO
 {
 	public LocalizedString locationName;
-	public AudioCueSO musicTrack;
 }

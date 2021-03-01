@@ -30,6 +30,7 @@ public class SoundEmitter : MonoBehaviour
 		settings.ApplyTo(_audioSource);
 		_audioSource.transform.position = position;
 		_audioSource.loop = hasToLoop;
+		_audioSource.time = 0f; //Reset in case this AudioSource is being reused for a short SFX after being used for a long music track
 		_audioSource.Play();
 
 		if (!hasToLoop)
