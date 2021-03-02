@@ -16,12 +16,14 @@ MonoBehaviour:
     m_Code: en
   m_SharedData: {fileID: 11400000, guid: 41b74adf4121a468e9dbe8958eb2f813, type: 2}
   m_Metadata:
-    m_Items: []
+    m_Items:
+    - id: 0
   m_TableData:
   - m_Id: 9033474048
-    m_Localized: Apple
+    m_Localized: '{Amount:plural: 1 Apple| {} Apples}.'
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - id: 0
   - m_Id: 20018356224
     m_Localized: Banana
     m_Metadata:
@@ -47,12 +49,17 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 24398514807271424
-    m_Localized: Tomato
+    m_Localized: '{0:plural: 1 Tomato| {} Tomatos}.'
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - id: 0
   - m_Id: 24400274405879808
     m_Localized: Tomato soup
     m_Metadata:
       m_Items: []
   references:
     version: 1
+    00000000:
+      type: {class: SmartFormatTag, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_Entries: 00e06f1a02000000007022e851ae5600
