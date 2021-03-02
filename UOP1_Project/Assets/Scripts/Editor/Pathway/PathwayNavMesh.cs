@@ -11,7 +11,6 @@ public class PathwayNavMesh
 	{
 		_pathway = pathway;
 		_pathway.Hits = new List<bool>();
-		_pathway.Path = new List<Vector3>();
 	}
 
 	public bool HasNavMeshAt(int index)
@@ -28,8 +27,11 @@ public class PathwayNavMesh
 				index = _pathway.Hits.Count;
 				_pathway.Hits.Add(hasHit);
 			}
+			else
+			{
+				_pathway.Hits[index] = hasHit;
 
-			_pathway.Hits[index] = hasHit;
+			}
 
 			if (hasHit)
 			{
@@ -98,11 +100,18 @@ public class PathwayNavMesh
 
 	public void UpdatePath()
 	{
-		_pathway.Path.Clear();
-		_pathway.Path=_pathway.Waypoints.Aggregate(new List<Vector3>(), (acc, wpd) => {
-			wpd.corners.ForEach(c => acc.Add(c));
-			return acc;
-		});
+		if (_pathway.Waypoints.Count > 1)
+		{
+			_pathway.Path = _pathway.Waypoints.Aggregate(new List<Vector3>(), (acc, wpd) =>
+			{
+				wpd.corners.ForEach(c => acc.Add(c));
+				return acc;
+			});
+		}
+		else
+		{
+			_pathway.Path.Clear();
+		}
 	}
 
 }

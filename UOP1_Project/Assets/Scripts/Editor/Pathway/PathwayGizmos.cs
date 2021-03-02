@@ -62,7 +62,8 @@ public class PathwayGizmos
 		for (int i = 0 ; i < pathway.Path.Count - 1; i++)
 		{
 			Handles.DrawLine(pathway.Path[i], pathway.Path[i + 1]);
-			if (i<pathway.Waypoints.Count) {
+
+			if (i < pathway.Waypoints.Count) {
 				DrawLabel(pathway, pathway.Waypoints[i].waypoint, i);
 			}
 		}

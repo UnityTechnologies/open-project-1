@@ -30,7 +30,6 @@ public class PathWayNavMeshUI
 			if (GUILayout.Button("Handles Path"))
 			{
 				_pathway.ToggledNavMeshDisplay = false;
-				_pathway.DisplayProbes = false;
 				InternalEditorUtility.RepaintAllViews();
 			}
 		}
