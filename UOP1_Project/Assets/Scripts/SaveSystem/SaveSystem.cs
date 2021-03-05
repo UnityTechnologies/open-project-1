@@ -22,7 +22,7 @@ public class SaveSystem : ScriptableObject
 		_loadLocation.OnLoadingRequested -= CacheLoadLocations;
 	}
 
-	private void CacheLoadLocations(GameSceneSO[] locationsToLoad, bool showLoadingScreen)
+	private void CacheLoadLocations(GameSceneSO[] locationsToLoad, bool showLoadingScreen, bool fadeScreen)
 	{
 		LocationSO locationSo = locationsToLoad[0] as LocationSO;
 		if (locationSo)

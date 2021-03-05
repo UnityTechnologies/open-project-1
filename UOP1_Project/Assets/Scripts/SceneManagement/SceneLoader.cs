@@ -33,6 +33,7 @@ public class SceneLoader : MonoBehaviour
 	private GameSceneSO[] _scenesToLoad;
 	private GameSceneSO[] _currentlyLoadedScenes = new GameSceneSO[] { };
 	private bool _showLoadingScreen;
+	private bool _fadeScreen;
 
 	private SceneInstance _gameplayManagerSceneInstance = new SceneInstance();
 
@@ -53,10 +54,11 @@ public class SceneLoader : MonoBehaviour
 	/// <summary>
 	/// This function loads the location scenes passed as array parameter
 	/// </summary>
-	private void LoadLocation(GameSceneSO[] locationsToLoad, bool showLoadingScreen)
+	private void LoadLocation(GameSceneSO[] locationsToLoad, bool showLoadingScreen, bool fadeScreen)
 	{
 		_scenesToLoad = locationsToLoad;
 		_showLoadingScreen = showLoadingScreen;
+		_fadeScreen = fadeScreen;
 
 		//In case we are coming from the main menu, we need to load the persistent Gameplay manager scene first
 		if (_gameplayManagerSceneInstance.Scene == null
@@ -86,10 +88,11 @@ public class SceneLoader : MonoBehaviour
 	/// <summary>
 	/// Prepares to load the main menu scene, first removing the Gameplay scene in case the game is coming back from gameplay to menus.
 	/// </summary>
-	private void LoadMenu(GameSceneSO[] menusToLoad, bool showLoadingScreen)
+	private void LoadMenu(GameSceneSO[] menusToLoad, bool showLoadingScreen, bool fadeScreen)
 	{
 		_scenesToLoad = menusToLoad;
 		_showLoadingScreen = showLoadingScreen;
+		_fadeScreen = fadeScreen;
 
 		//In case we are coming from a Location back to the main menu, we need to get rid of the persistent Gameplay manager scene
 		if (_gameplayManagerSceneInstance.Scene != null
@@ -110,7 +113,10 @@ public class SceneLoader : MonoBehaviour
 		}
 
 		_inputReader.DisableAllInput();
-		_fadeRequest.Fade(true, _fadeDuration);
+		if(_fadeScreen)
+			_fadeRequest.Fade(true, _fadeDuration);
+		else
+			LoadNewScenes();
 
 	}
 	/// <summary>
@@ -174,8 +180,10 @@ public class SceneLoader : MonoBehaviour
 		{
 			_toggleLoadingScreen.RaiseEvent(false);
 		}
-
-		_fadeRequest.Fade(false, _fadeDuration);
+		if(_fadeScreen)
+			_fadeRequest.Fade(false, _fadeDuration);
+		else
+			_inputReader.EnableGameplayInput();
 	}
 
 	/// <summary>
