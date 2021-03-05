@@ -14,7 +14,7 @@ public class SceneLoader : MonoBehaviour
 {
 	[SerializeField] private GameSceneSO _gameplayScene = default;
 	[SerializeField] private InputReader _inputReader = default;
-	[SerializeField] private VoidEventChannelSO _fadeOutComplete = default;
+	[SerializeField] private BoolEventChannelSO _fadeOutComplete = default;
 	[SerializeField] private float _fadeDuration = 1f;
 
 	[Header("Load Events")]
@@ -33,7 +33,6 @@ public class SceneLoader : MonoBehaviour
 	private GameSceneSO[] _scenesToLoad;
 	private GameSceneSO[] _currentlyLoadedScenes = new GameSceneSO[] { };
 	private bool _showLoadingScreen;
-	private bool _isFadeComplete;
 
 	private SceneInstance _gameplayManagerSceneInstance = new SceneInstance();
 
@@ -41,12 +40,14 @@ public class SceneLoader : MonoBehaviour
 	{
 		_loadLocation.OnLoadingRequested += LoadLocation;
 		_loadMenu.OnLoadingRequested += LoadMenu;
+		_fadeOutComplete.OnEventRaised += FadeComplete;
 	}
 
 	private void OnDisable()
 	{
 		_loadLocation.OnLoadingRequested -= LoadLocation;
 		_loadMenu.OnLoadingRequested -= LoadMenu;
+		_fadeOutComplete.OnEventRaised -= FadeComplete;
 	}
 
 	/// <summary>
@@ -109,35 +110,18 @@ public class SceneLoader : MonoBehaviour
 		}
 
 		_inputReader.DisableAllInput();
-		StartCoroutine(HandleFadeRoutine(true, _fadeDuration));
-	}
+		_fadeRequest.Fade(true, _fadeDuration);
 
-	private void FadeComplete()
-	{
-		_isFadeComplete = true;
 	}
-
 	/// <summary>
-	/// Request Fade from FadeManager and waits until fade is finished
-	/// If fade in was performed (closing a scene), calls LoadNewScenes()
-	/// If fade out was performed (opening a scene), enables gameplay input 
+	/// When fade is complete, continue loading or enable gameplay 
 	/// </summary>
-	private IEnumerator HandleFadeRoutine(bool fadeIn, float duration)
+	private void FadeComplete(bool fadeIn)
 	{
-		Debug.Log("Started fading");
-		_isFadeComplete = false;
-		_fadeOutComplete.OnEventRaised += FadeComplete;
-		_fadeRequest.Fade(fadeIn, duration);
-		while(_isFadeComplete == false)
-		{
-			yield return null;
-		}
-		_fadeOutComplete.OnEventRaised -= FadeComplete;
-		Debug.Log("Finished Fading");
 		if(fadeIn)
 			LoadNewScenes();			
 		else
-			_inputReader.EnableGameplayInput();			
+			_inputReader.EnableGameplayInput();
 	}
 
 	/// <summary>
@@ -191,7 +175,7 @@ public class SceneLoader : MonoBehaviour
 			_toggleLoadingScreen.RaiseEvent(false);
 		}
 
-		StartCoroutine(HandleFadeRoutine(false, _fadeDuration));
+		_fadeRequest.Fade(false, _fadeDuration);
 	}
 
 	/// <summary>

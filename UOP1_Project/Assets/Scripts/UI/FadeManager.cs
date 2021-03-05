@@ -7,7 +7,7 @@ public class FadeManager : MonoBehaviour
 {
 	[SerializeField] private FadeChannelSO _fadeChannelSO;
 	[SerializeField] private Image _imageComponent;
-	[SerializeField] private VoidEventChannelSO _onFadeComplete;
+	[SerializeField] private BoolEventChannelSO _onFadeComplete;
 
 	private bool _isCurrentlyFading = false;
 
@@ -43,7 +43,7 @@ public class FadeManager : MonoBehaviour
 
 		_imageComponent.color = endColor; //Force to end result
 		_isCurrentlyFading = false;
-		_onFadeComplete.RaiseEvent();
+		_onFadeComplete.RaiseEvent(fadeIn);
 	}
 
 	/// <summary>
