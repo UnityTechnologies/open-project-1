@@ -2,11 +2,11 @@
 using UnityEditor;
 
 
-public class PathwayGizmos 
+public class PathwayGizmos
 {
 	[DrawGizmo(GizmoType.Selected)]
 	private static void DrawGizmosSelected(Pathway pathway, GizmoType gizmoType)
-	{	
+	{
 		if (!pathway.ToggledNavMeshDisplay)
 		{
 			DrawHandlesPath(pathway);
@@ -20,7 +20,7 @@ public class PathwayGizmos
 	}
 
 
-	private static void DrawLabel(Pathway pathway,Vector3 path, int index)
+	private static void DrawLabel(Pathway pathway, Vector3 path, int index)
 	{
 		GUIStyle style = new GUIStyle();
 		Vector3 textHeight = Vector3.up;
@@ -58,12 +58,13 @@ public class PathwayGizmos
 	private static void DrawNavMeshPath(Pathway pathway)
 	{
 		Handles.color = pathway.LineColor;
-		
-		for (int i = 0 ; i < pathway.Path.Count - 1; i++)
+
+		for (int i = 0; i < pathway.Path.Count - 1; i++)
 		{
 			Handles.DrawLine(pathway.Path[i], pathway.Path[i + 1]);
 
-			if (i < pathway.Waypoints.Count) {
+			if (i < pathway.Waypoints.Count)
+			{
 				DrawLabel(pathway, pathway.Waypoints[i].waypoint, i);
 			}
 		}

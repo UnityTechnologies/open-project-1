@@ -6,7 +6,7 @@ public class PathWayNavMeshUI
 {
 	private Pathway _pathway;
 	private PathwayNavMesh _pathwayNavMesh;
-	
+
 	public PathWayNavMeshUI(Pathway pathway)
 	{
 		_pathway = pathway;
@@ -35,7 +35,8 @@ public class PathWayNavMeshUI
 		}
 	}
 
-	public void UpdatePath() {
+	public void UpdatePath()
+	{
 
 		if (!_pathway.DisplayProbes)
 		{

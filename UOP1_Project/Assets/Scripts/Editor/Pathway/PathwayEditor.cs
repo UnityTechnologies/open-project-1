@@ -10,14 +10,14 @@ public class PathwayEditor : Editor
 	private Pathway _pathway;
 	private PathwayHandles _pathwayHandles;
 	private PathWayNavMeshUI _pathWayNavMeshUI;
-	private enum LIST_MODIFICATION { ADD, SUPP, DRAG, OTHER};
+	private enum LIST_MODIFICATION { ADD, SUPP, DRAG, OTHER };
 	private LIST_MODIFICATION _currentListModification;
 	private int _indexCurrentModification;
 
 	public void OnSceneGUI()
 	{
 		int index = _pathwayHandles.DisplayHandles();
-		_pathWayNavMeshUI.RealTime(index);	
+		_pathWayNavMeshUI.RealTime(index);
 	}
 
 	public override void OnInspectorGUI()
@@ -141,7 +141,7 @@ public class PathwayEditor : Editor
 	{
 		serializedObject.UpdateIfRequiredOrScript();
 
-		if (_reorderableList.index >= _reorderableList.serializedProperty.arraySize )
+		if (_reorderableList.index >= _reorderableList.serializedProperty.arraySize)
 		{
 			_reorderableList.index = _reorderableList.serializedProperty.arraySize - 1;
 		}

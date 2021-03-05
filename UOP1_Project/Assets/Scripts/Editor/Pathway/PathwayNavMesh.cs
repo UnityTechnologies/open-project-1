@@ -3,10 +3,10 @@ using UnityEngine.AI;
 using System.Collections.Generic;
 using System.Linq;
 
-public class PathwayNavMesh 
+public class PathwayNavMesh
 {
 	private Pathway _pathway;
-	
+
 	public PathwayNavMesh(Pathway pathway)
 	{
 		_pathway = pathway;
@@ -67,15 +67,15 @@ public class PathwayNavMesh
 		{
 			_pathway.Waypoints[startIndex].corners = result;
 		}
-		
+
 		return result != null;
 	}
 
 	public bool UpdateCornersAt(int index)
 	{
 		bool canUpdate = true;
-		
-		if (_pathway.Waypoints.Count > 1 &&  index <_pathway.Waypoints.Count)
+
+		if (_pathway.Waypoints.Count > 1 && index < _pathway.Waypoints.Count)
 		{
 			if (index == 0)
 			{
@@ -84,11 +84,11 @@ public class PathwayNavMesh
 			}
 			else if (index == _pathway.Waypoints.Count - 1)
 			{
-				
+
 				canUpdate = CopyCorners(index - 1, index);
 				canUpdate &= CopyCorners(index, 0);
 			}
-			else 
+			else
 			{
 				canUpdate = CopyCorners(index - 1, index);
 				canUpdate &= CopyCorners(index, index + 1);
