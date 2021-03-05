@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.Localization.Components;
 using TMPro;
 
@@ -11,17 +12,18 @@ public class IngredientFiller : MonoBehaviour
 	private TextMeshProUGUI _ingredientAmount = default;
 
 	[SerializeField]
-	private LocalizeStringEvent _ingredientName = default;
+	private GameObject _checkMark = default;
 
 	[SerializeField]
-	private GameObject _checkMark = default;
+	private Image _ingredientIcon = default;
 
 	public void FillIngredient(ItemStack ingredient, bool isAvailable)
 	{
 
 		_ingredientAmount.text = ingredient.Amount.ToString();
-		_ingredientName.StringReference = ingredient.Item.Name;
-		_checkMark.SetActive(isAvailable);
+		_ingredientAmount.gameObject.SetActive(isAvailable);
+		_ingredientIcon.sprite = ingredient.Item.PreviewImage; 
+		_checkMark.SetActive(!isAvailable);
 
 	}
 }

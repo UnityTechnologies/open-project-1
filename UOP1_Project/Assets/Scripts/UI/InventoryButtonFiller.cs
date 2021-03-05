@@ -16,18 +16,8 @@ public class InventoryButtonFiller : MonoBehaviour
 
 	public void FillInventoryButtons(ItemType itemType, bool isInteractable = true)
 	{
-
-
-
 		_buttonAction.interactable = isInteractable;
-
 		_buttonActionText.StringReference = itemType.ActionName;
-
-
-
-
-
-
 	}
 
 
