@@ -25,7 +25,7 @@ public class InventoryItemFiller : MonoBehaviour
 		_imgHover.gameObject.SetActive(true);
 		_imgSelected.gameObject.SetActive(true);
 		_itemButton.gameObject.SetActive(true);
-		_bgInactiveImage.gameObject.SetActive(false); 
+		_bgInactiveImage.gameObject.SetActive(false);
 
 		UnhoverItem();
 
@@ -47,9 +47,10 @@ public class InventoryItemFiller : MonoBehaviour
 
 		});
 	}
-	public void SetInactiveItem() {
+	public void SetInactiveItem()
+	{
 		UnhoverItem();
-		_itemPreviewImage.gameObject.SetActive(false); 
+		_itemPreviewImage.gameObject.SetActive(false);
 		_itemCount.gameObject.SetActive(false);
 		_bgImage.gameObject.SetActive(false);
 		_imgHover.gameObject.SetActive(false);
