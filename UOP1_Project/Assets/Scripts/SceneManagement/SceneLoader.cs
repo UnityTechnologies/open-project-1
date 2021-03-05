@@ -114,7 +114,7 @@ public class SceneLoader : MonoBehaviour
 
 		_inputReader.DisableAllInput();
 		if(_fadeScreen)
-			_fadeRequest.Fade(true, _fadeDuration);
+			_fadeRequest.FadeIn(_fadeDuration);
 		else
 			LoadNewScenes();
 
@@ -181,7 +181,7 @@ public class SceneLoader : MonoBehaviour
 			_toggleLoadingScreen.RaiseEvent(false);
 		}
 		if(_fadeScreen)
-			_fadeRequest.Fade(false, _fadeDuration);
+			_fadeRequest.FadeOut(_fadeDuration);
 		else
 			_inputReader.EnableGameplayInput();
 	}
