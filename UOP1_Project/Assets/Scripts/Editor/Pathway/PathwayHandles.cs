@@ -5,20 +5,27 @@ using UnityEditor;
 public class PathwayHandles
 {
 	private Pathway _pathway;
+	private Vector3 _tmp;
 
 	public PathwayHandles(Pathway pathway)
 	{
 		_pathway = pathway;
 	}
 
-	public void DispalyHandles()
+	public int DisplayHandles()
 	{
-		EditorGUI.BeginChangeCheck();
-
 		for (int i = 0; i < _pathway.Waypoints.Count; i++)
 		{
-			_pathway.Waypoints[i] = Handles.PositionHandle(_pathway.Waypoints[i], Quaternion.identity);
-		}
-	}
+			EditorGUI.BeginChangeCheck();
 
+			_tmp = Handles.PositionHandle(_pathway.Waypoints[i].waypoint, Quaternion.identity);
+
+			if (EditorGUI.EndChangeCheck())
+			{
+				_pathway.Waypoints[i].waypoint = _tmp;
+				return i;
+			}
+		}
+		return -1;
+	}
 }
