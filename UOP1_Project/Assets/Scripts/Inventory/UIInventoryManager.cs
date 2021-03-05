@@ -163,7 +163,7 @@ public class UIInventoryManager : MonoBehaviour
 			else if (i < _instanciatedItems.Count)
 			{
 				//Desactive
-				_instanciatedItems[i].SetInactiveItem(); 
+				_instanciatedItems[i].SetInactiveItem();
 			}
 
 		}

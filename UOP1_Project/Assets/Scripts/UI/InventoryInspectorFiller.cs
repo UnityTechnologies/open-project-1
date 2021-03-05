@@ -12,7 +12,7 @@ public class InventoryInspectorFiller : MonoBehaviour
 
 
 
-	public void FillItemInspector(Item itemToInspect, bool isCookingInventory, bool[] availabilityArray=null)
+	public void FillItemInspector(Item itemToInspect, bool isCookingInventory, bool[] availabilityArray = null)
 	{
 		_inspectorDescriptionFiller.FillDescription(itemToInspect);
 		if (isCookingInventory)
@@ -21,7 +21,7 @@ public class InventoryInspectorFiller : MonoBehaviour
 			_recipeIngredientsFiller.FillIngredients(itemToInspect.IngredientsList, availabilityArray);
 		}
 		else
-			_recipeIngredientsFiller.gameObject.SetActive(false); 
+			_recipeIngredientsFiller.gameObject.SetActive(false);
 
 	}
 }

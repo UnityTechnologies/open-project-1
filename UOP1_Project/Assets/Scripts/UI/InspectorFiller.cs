@@ -13,8 +13,8 @@ public class InspectorFiller : MonoBehaviour
 		bool isForCooking = (itemToInspect.ItemType.ActionType == ItemInventoryActionType.cook);
 
 		_inventoryInspector.gameObject.SetActive(true);
-	    _inventoryInspector.FillItemInspector(itemToInspect,isForCooking, availabilityArray);
-		
+		_inventoryInspector.FillItemInspector(itemToInspect, isForCooking, availabilityArray);
+
 
 	}
 

@@ -22,7 +22,7 @@ public class IngredientFiller : MonoBehaviour
 
 		_ingredientAmount.text = ingredient.Amount.ToString();
 		_ingredientAmount.gameObject.SetActive(isAvailable);
-		_ingredientIcon.sprite = ingredient.Item.PreviewImage; 
+		_ingredientIcon.sprite = ingredient.Item.PreviewImage;
 		_checkMark.SetActive(!isAvailable);
 
 	}
