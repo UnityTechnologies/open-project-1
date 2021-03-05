@@ -7,6 +7,7 @@ public class FadeManager : MonoBehaviour
 {
 	[SerializeField] private FadeChannelSO _fadeChannelSO;
 	[SerializeField] private Image _imageComponent;
+	[SerializeField] private VoidEventChannelSO _onFadeComplete;
 
 	private bool _isCurrentlyFading = false;
 
@@ -27,7 +28,7 @@ public class FadeManager : MonoBehaviour
 	{
 		Color startColor = _imageComponent.color;
 		if (fadeIn)
-			endColor = Color.clear;
+			endColor = Color.black;
 
 		float totalTime = 0f;
 
@@ -35,12 +36,14 @@ public class FadeManager : MonoBehaviour
 		{
 			totalTime += Time.deltaTime;
 			_imageComponent.color = Color.Lerp(startColor, endColor, totalTime / duration);
+			Debug.Log(_imageComponent.color);
 
 			yield return null;
 		}
 
 		_imageComponent.color = endColor; //Force to end result
 		_isCurrentlyFading = false;
+		_onFadeComplete.RaiseEvent();
 	}
 
 	/// <summary>

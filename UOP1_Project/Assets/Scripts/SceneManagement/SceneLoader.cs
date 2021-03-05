@@ -13,6 +13,9 @@ using UnityEngine.SceneManagement;
 public class SceneLoader : MonoBehaviour
 {
 	[SerializeField] private GameSceneSO _gameplayScene = default;
+	[SerializeField] private InputReader _inputReader = default;
+	[SerializeField] private VoidEventChannelSO _fadeOutComplete = default;
+	[SerializeField] private float _fadeDuration = 1f;
 
 	[Header("Load Events")]
 	[SerializeField] private LoadEventChannelSO _loadLocation = default;
@@ -21,6 +24,7 @@ public class SceneLoader : MonoBehaviour
 	[Header("Broadcasting on")]
 	[SerializeField] private BoolEventChannelSO _toggleLoadingScreen = default;
 	[SerializeField] private VoidEventChannelSO _onSceneReady = default;
+	[SerializeField] private FadeChannelSO _fadeRequest = default;
 
 	private List<AsyncOperationHandle<SceneInstance>> _loadingOperationHandles = new List<AsyncOperationHandle<SceneInstance>>();
 	private AsyncOperationHandle<SceneInstance> _gameplayManagerLoadingOpHandle;
@@ -29,6 +33,7 @@ public class SceneLoader : MonoBehaviour
 	private GameSceneSO[] _scenesToLoad;
 	private GameSceneSO[] _currentlyLoadedScenes = new GameSceneSO[] { };
 	private bool _showLoadingScreen;
+	private bool _isFadeComplete;
 
 	private SceneInstance _gameplayManagerSceneInstance = new SceneInstance();
 
@@ -103,7 +108,36 @@ public class SceneLoader : MonoBehaviour
 			_currentlyLoadedScenes[i].sceneReference.UnLoadScene();
 		}
 
-		LoadNewScenes();
+		_inputReader.DisableAllInput();
+		StartCoroutine(HandleFadeRoutine(true, _fadeDuration));
+	}
+
+	private void FadeComplete()
+	{
+		_isFadeComplete = true;
+	}
+
+	/// <summary>
+	/// Request Fade from FadeManager and waits until fade is finished
+	/// If fade in was performed (closing a scene), calls LoadNewScenes()
+	/// If fade out was performed (opening a scene), enables gameplay input 
+	/// </summary>
+	private IEnumerator HandleFadeRoutine(bool fadeIn, float duration)
+	{
+		Debug.Log("Started fading");
+		_isFadeComplete = false;
+		_fadeOutComplete.OnEventRaised += FadeComplete;
+		_fadeRequest.Fade(fadeIn, duration);
+		while(_isFadeComplete == false)
+		{
+			yield return null;
+		}
+		_fadeOutComplete.OnEventRaised -= FadeComplete;
+		Debug.Log("Finished Fading");
+		if(fadeIn)
+			LoadNewScenes();			
+		else
+			_inputReader.EnableGameplayInput();			
 	}
 
 	/// <summary>
@@ -115,7 +149,7 @@ public class SceneLoader : MonoBehaviour
 		{
 			_toggleLoadingScreen.RaiseEvent(true);
 		}
-
+	
 		_loadingOperationHandles.Clear();
 		//Build the array of handles of the temporary scenes to load
 		for (int i = 0; i < _scenesToLoad.Length; i++)
@@ -157,6 +191,7 @@ public class SceneLoader : MonoBehaviour
 			_toggleLoadingScreen.RaiseEvent(false);
 		}
 
+		StartCoroutine(HandleFadeRoutine(false, _fadeDuration));
 	}
 
 	/// <summary>
