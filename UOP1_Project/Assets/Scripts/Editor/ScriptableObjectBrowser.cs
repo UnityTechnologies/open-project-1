@@ -82,7 +82,7 @@ class ScriptableObjectBrowser : EditorWindow
 
 		for (int i = 0; i < _typeDisplayNames.Count; i++)
 		{
-			if (GUILayout.Button(GetNiceName(_typeDisplayNames[i]), EditorStyles.toolbarButton))
+			if (GUILayout.Button(_typeDisplayNames[i], EditorStyles.foldout))
 			{
 				_selectedIndex = i;
 				GetAssets();
@@ -102,7 +102,7 @@ class ScriptableObjectBrowser : EditorWindow
 
 		for (int i = 0; i < _assets.Count; i++)
 		{
-			if (GUILayout.Button(GetNiceName(_assets.ElementAt(i).Value.name), EditorStyles.toolbarButton))
+			if (GUILayout.Button(GetNiceName(_assets.ElementAt(i).Value.name), EditorStyles.linkLabel))
 			{
 				Selection.activeObject = _assets.ElementAt(i).Value;
 			}
@@ -136,7 +136,7 @@ class ScriptableObjectBrowser : EditorWindow
 				// Full type name, including namespaces.
 				_typeNames.Add(SOs[i].GetType().FullName);
 				// Just the type name alone for display purposes.
-				_typeDisplayNames.Add(SOs[i].GetType().Name);
+				_typeDisplayNames.Add(GetNiceName(SOs[i].GetType().Name));
 			}
 		}
 	}
