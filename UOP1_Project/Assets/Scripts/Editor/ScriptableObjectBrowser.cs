@@ -132,7 +132,7 @@ class ScriptableObjectBrowser : EditorWindow
 		{
 			string typeKey = SOs[i].GetType().Name;
 
-			if (!_types.TryGetValue(typeKey, out Type value))
+			if (!_types.ContainsKey(typeKey))
 			{
 				_types.Add(typeKey, SOs[i].GetType());
 			}
