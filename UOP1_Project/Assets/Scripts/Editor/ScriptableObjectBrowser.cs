@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
@@ -8,8 +9,7 @@ using UnityEngine;
 /// </summary>
 class ScriptableObjectBrowser : EditorWindow
 {
-	private List<string> _typeDisplayNames = new List<string>();
-	private List<string> _typeNames = new List<string>();
+	private SortedDictionary<string, System.Type> _types = new SortedDictionary<string, System.Type>();
 	private Dictionary<string, ScriptableObject> _assets = new Dictionary<string, ScriptableObject>();
 	private Vector2 _typeScrollViewPosition;
 	private Vector2 _assetScrollViewPosition;
@@ -49,7 +49,7 @@ class ScriptableObjectBrowser : EditorWindow
 		}
 		else
 		{
-			GUILayout.Label(GetNiceName(_typeDisplayNames[_selectedIndex]), EditorStyles.largeLabel);
+			GUILayout.Label(GetNiceName(_types.ElementAt(_selectedIndex).Key), EditorStyles.largeLabel);
 
 			GUILayout.BeginHorizontal();
 
@@ -80,9 +80,9 @@ class ScriptableObjectBrowser : EditorWindow
 	{
 		_typeScrollViewPosition = GUILayout.BeginScrollView(_typeScrollViewPosition);
 
-		for (int i = 0; i < _typeDisplayNames.Count; i++)
+		for (int i = 0; i < _types.Count; i++)
 		{
-			if (GUILayout.Button(_typeDisplayNames[i], EditorStyles.foldout))
+			if (GUILayout.Button(GetNiceName(_types.ElementAt(i).Key), EditorStyles.foldout))
 			{
 				_selectedIndex = i;
 				GetAssets();
@@ -126,17 +126,15 @@ class ScriptableObjectBrowser : EditorWindow
 			SOs[i] = (ScriptableObject)AssetDatabase.LoadAssetAtPath(path, typeof(ScriptableObject));
 		}
 
-		_typeNames.Clear();
-		_typeDisplayNames.Clear();
+		_types.Clear();
 
 		for (int i = 0; i < SOs.Length; i++)
 		{
-			if (_typeNames.IndexOf(SOs[i].GetType().ToString()) == -1)
+			string typeKey = SOs[i].GetType().Name;
+
+			if (!_types.TryGetValue(typeKey, out Type value))
 			{
-				// Full type name, including namespaces.
-				_typeNames.Add(SOs[i].GetType().FullName);
-				// Just the type name alone for display purposes.
-				_typeDisplayNames.Add(GetNiceName(SOs[i].GetType().Name));
+				_types.Add(typeKey, SOs[i].GetType());
 			}
 		}
 	}
@@ -146,7 +144,7 @@ class ScriptableObjectBrowser : EditorWindow
 	/// </summary>
 	private void GetAssets()
 	{
-		string[] GUIDs = AssetDatabase.FindAssets("t:" + _typeNames[_selectedIndex]);
+		string[] GUIDs = AssetDatabase.FindAssets("t:" + _types.ElementAt(_selectedIndex).Value.FullName);
 
 		_assets.Clear();
 
