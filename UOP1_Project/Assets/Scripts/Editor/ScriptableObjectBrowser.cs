@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
@@ -13,19 +12,45 @@ class ScriptableObjectBrowser : EditorWindow
 	private Dictionary<string, ScriptableObject> _assets = new Dictionary<string, ScriptableObject>();
 	private Vector2 _typeScrollViewPosition;
 	private Vector2 _assetScrollViewPosition;
-	private int _selectedIndex;
+	private int _typeIndex;
+	private int _lastAssetIndex;
 	private bool _showingTypes = true;
+	private static GUIStyle _buttonStyle;
+
+	public static GUIStyle ButtonStyle
+	{
+		get
+		{
+			if (_buttonStyle == null)
+			{
+				_buttonStyle = EditorStyles.toolbarButton;
+				_buttonStyle.alignment = TextAnchor.MiddleLeft;
+			}
+
+			return _buttonStyle;
+		}
+	}
 
 	private void OnEnable()
 	{
-		GetTypes();
-		GetAssets();
+		LoadData();
 	}
 
 	private void OnFocus()
 	{
-		GetTypes();
-		GetAssets();
+		LoadData();
+	}
+
+	private void LoadData()
+	{
+		if (_showingTypes)
+		{
+			GetTypes();
+		}
+		else
+		{
+			GetAssets();
+		}
 	}
 
 	[MenuItem("ChopChop/Scriptable Object Browser")]
@@ -49,7 +74,7 @@ class ScriptableObjectBrowser : EditorWindow
 		}
 		else
 		{
-			GUILayout.Label(GetNiceName(_types.ElementAt(_selectedIndex).Key), EditorStyles.largeLabel);
+			GUILayout.Label(GetNiceName(_types.ElementAt(_typeIndex).Key), EditorStyles.largeLabel);
 
 			GUILayout.BeginHorizontal();
 
@@ -58,13 +83,10 @@ class ScriptableObjectBrowser : EditorWindow
 				GetAssets();
 			}
 
-			if (!_showingTypes)
+			if (GUILayout.Button("Back to Types"))
 			{
-				if (GUILayout.Button("Back to Types"))
-				{
-					GetTypes();
-					_showingTypes = true;
-				}
+				GetTypes();
+				_showingTypes = true;
 			}
 
 			GUILayout.EndHorizontal();
@@ -84,7 +106,7 @@ class ScriptableObjectBrowser : EditorWindow
 		{
 			if (GUILayout.Button(GetNiceName(_types.ElementAt(i).Key), EditorStyles.foldout))
 			{
-				_selectedIndex = i;
+				_typeIndex = i;
 				GetAssets();
 				_showingTypes = false;
 			}
@@ -102,9 +124,16 @@ class ScriptableObjectBrowser : EditorWindow
 
 		for (int i = 0; i < _assets.Count; i++)
 		{
-			if (GUILayout.Button(GetNiceName(_assets.ElementAt(i).Value.name), EditorStyles.linkLabel))
+			if (GUILayout.Button(GetNiceName(_assets.ElementAt(i).Value.name), ButtonStyle))
 			{
 				Selection.activeObject = _assets.ElementAt(i).Value;
+
+				if (_lastAssetIndex == i)
+				{
+					EditorGUIUtility.PingObject(_assets.ElementAt(i).Value);
+				}
+
+				_lastAssetIndex = i;
 			}
 		}
 
@@ -144,7 +173,7 @@ class ScriptableObjectBrowser : EditorWindow
 	/// </summary>
 	private void GetAssets()
 	{
-		string[] GUIDs = AssetDatabase.FindAssets("t:" + _types.ElementAt(_selectedIndex).Value.FullName);
+		string[] GUIDs = AssetDatabase.FindAssets("t:" + _types.ElementAt(_typeIndex).Value.FullName);
 
 		_assets.Clear();
 
