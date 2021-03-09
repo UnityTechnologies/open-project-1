@@ -40,6 +40,7 @@ namespace SceneSelectorInternal
 		private static readonly Dictionary<Type, Color> kDefaultMarkerColors = new Dictionary<Type, Color>()
 		{
 			{ typeof(PersistentManagersSO), Color.magenta },
+			{ typeof(GameplaySO), Color.magenta },
 			{ typeof(LocationSO), Color.green },
 			{ typeof(MenuSO), Color.cyan },
 		};
@@ -79,11 +80,11 @@ namespace SceneSelectorInternal
 			return isClicked;
 		}
 
-		public static void OpenSceneSafe(string path)
+		public static void OpenSceneSafe(GameSceneSO gameSceneSO)
 		{
 			if (EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo())
 			{
-				EditorSceneManager.OpenScene(path);
+				EditorSceneManager.OpenScene(AssetDatabase.GetAssetPath(gameSceneSO.sceneReference.editorAsset));
 			}
 		}
 
@@ -93,16 +94,6 @@ namespace SceneSelectorInternal
 			if (kDefaultMarkerColors.TryGetValue(type, out var color))
 				return color;
 			return Color.red;
-		}
-
-		public static void RunOnNextUpdate(Action action)
-		{
-			void Run()
-			{
-				action?.Invoke();
-				EditorApplication.update -= Run;
-			}
-			EditorApplication.update += Run;
 		}
 
 		public static int FindAssetsByType<T>(List<T> assets) where T : UnityEngine.Object

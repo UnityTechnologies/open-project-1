@@ -92,7 +92,7 @@ public partial class SceneSelector : EditorWindow
 		private void DrawItem(Rect rect, int index, bool isActive, bool isFocused)
 		{
 			var item = items[index];
-			var gameScene = item.gameScene;
+			var gameScene = item.gameSceneSO;
 			if (gameScene != null)
 			{
 				var colorMarkerRect = rect;

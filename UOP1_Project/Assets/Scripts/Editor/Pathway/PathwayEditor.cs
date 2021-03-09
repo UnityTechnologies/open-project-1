@@ -1,18 +1,23 @@
 ﻿using UnityEngine;
-using UnityEngine.AI;
 using UnityEditor;
 using UnityEditorInternal;
+using System.Linq;
 
-
-[CustomEditor(typeof(PathwayConfigSO))]
+[CustomEditor(typeof(Pathway))]
 public class PathwayEditor : Editor
 {
 	private ReorderableList _reorderableList;
-	private PathwayConfigSO _pathway;
+	private Pathway _pathway;
+	private PathwayHandles _pathwayHandles;
+	private PathWayNavMeshUI _pathWayNavMeshUI;
+	private enum LIST_MODIFICATION { ADD, SUPP, DRAG, OTHER };
+	private LIST_MODIFICATION _currentListModification;
+	private int _indexCurrentModification;
 
-	public void OnSceneGUI(SceneView sceneView)
+	public void OnSceneGUI()
 	{
-		PathwayGizmos.DrawHandlesPath(_pathway);
+		int index = _pathwayHandles.DisplayHandles();
+		_pathWayNavMeshUI.RealTime(index);
 	}
 
 	public override void OnInspectorGUI()
@@ -20,6 +25,8 @@ public class PathwayEditor : Editor
 		DrawDefaultInspector();
 		serializedObject.Update();
 		_reorderableList.DoLayoutList();
+		_pathWayNavMeshUI.OnInspectorGUI();
+		Tools.hidden = _pathway.HidePathway;
 		serializedObject.ApplyModifiedProperties();
 	}
 
@@ -32,15 +39,11 @@ public class PathwayEditor : Editor
 		_reorderableList.onAddCallback += AddItem;
 		_reorderableList.onRemoveCallback += RemoveItem;
 		_reorderableList.onChangedCallback += ListModified;
-		_pathway = (target as PathwayConfigSO);
-		if (CheckNavMeshExistence())
-		{
-			SceneView.duringSceneGui += this.OnSceneGUI;
-		}
-		else
-		{
-			Debug.LogWarning("Pathway edition not available on this scene. NavMesh baked data missing.");
-		}
+		_reorderableList.onMouseDragCallback += DragItem;
+		_pathway = (target as Pathway);
+		_pathWayNavMeshUI = new PathWayNavMeshUI(_pathway);
+		_pathwayHandles = new PathwayHandles(_pathway);
+		_currentListModification = LIST_MODIFICATION.OTHER;
 	}
 
 	private void OnDisable()
@@ -51,7 +54,8 @@ public class PathwayEditor : Editor
 		_reorderableList.onAddCallback -= AddItem;
 		_reorderableList.onRemoveCallback -= RemoveItem;
 		_reorderableList.onChangedCallback -= ListModified;
-		SceneView.duringSceneGui -= this.OnSceneGUI;
+		_reorderableList.onMouseDragCallback -= DragItem;
+		_pathway.waypoints = _pathway.Waypoints.Select(x => x.waypoint).ToArray();
 	}
 
 	private void DrawHeader(Rect rect)
@@ -61,7 +65,7 @@ public class PathwayEditor : Editor
 
 	private void DrawElement(Rect rect, int index, bool active, bool focused)
 	{
-		SerializedProperty item = _reorderableList.serializedProperty.GetArrayElementAtIndex(index);
+		SerializedProperty item = _reorderableList.serializedProperty.GetArrayElementAtIndex(index).FindPropertyRelative("waypoint");
 		item.vector3Value = EditorGUI.Vector3Field(rect, Pathway.FIELD_LABEL + index, item.vector3Value);
 	}
 
@@ -69,24 +73,21 @@ public class PathwayEditor : Editor
 	{
 		int index = list.index;
 
-		if (index < 0)
+		if (index > -1 && list.serializedProperty.arraySize >= 1)
 		{
-			index = list.serializedProperty.arraySize - 1;
-		}
-
-		if (list.serializedProperty.arraySize >= 1)
-		{
-			Vector3 previous = (list.serializedProperty.GetArrayElementAtIndex(index).vector3Value + list.serializedProperty.GetArrayElementAtIndex((index + 1) % list.serializedProperty.arraySize).vector3Value) / 2;
 			list.serializedProperty.InsertArrayElementAtIndex(index + 1);
-			list.serializedProperty.GetArrayElementAtIndex(index + 1).vector3Value = new Vector3(previous.x, previous.y, previous.z);
+			Vector3 previous = list.serializedProperty.GetArrayElementAtIndex(index).FindPropertyRelative("waypoint").vector3Value;
+			list.serializedProperty.GetArrayElementAtIndex(index + 1).FindPropertyRelative("waypoint").vector3Value = new Vector3(previous.x + 2, previous.y, previous.z + 2);
+			_indexCurrentModification = index + 1;
 		}
 		else
 		{
-			Vector3 previous = Vector3.zero;
 			list.serializedProperty.InsertArrayElementAtIndex(list.serializedProperty.arraySize);
-			list.serializedProperty.GetArrayElementAtIndex(list.serializedProperty.arraySize - 1).vector3Value = new Vector3(previous.x, previous.y, previous.z);
+			Vector3 previous = _pathway.transform.position;
+			list.serializedProperty.GetArrayElementAtIndex(list.serializedProperty.arraySize - 1).FindPropertyRelative("waypoint").vector3Value = new Vector3(previous.x + 2, previous.y, previous.z + 2);
+			_indexCurrentModification = list.serializedProperty.arraySize - 1;
 		}
-
+		_currentListModification = LIST_MODIFICATION.ADD;
 		list.index++;
 	}
 
@@ -100,12 +101,40 @@ public class PathwayEditor : Editor
 		{
 			list.index--;
 		}
+		_indexCurrentModification = index - 1;
+		_currentListModification = LIST_MODIFICATION.SUPP;
+	}
 
+	private void DragItem(ReorderableList list)
+	{
+		_indexCurrentModification = list.index;
+		_currentListModification = LIST_MODIFICATION.DRAG;
 	}
 
 	private void ListModified(ReorderableList list)
 	{
 		list.serializedProperty.serializedObject.ApplyModifiedProperties();
+
+		switch (_currentListModification)
+		{
+			case LIST_MODIFICATION.ADD:
+				_pathWayNavMeshUI.UpdatePathAt(_indexCurrentModification);
+				break;
+
+			case LIST_MODIFICATION.SUPP:
+				if (list.serializedProperty.arraySize > 1)
+				{
+					_pathWayNavMeshUI.UpdatePathAt((list.serializedProperty.arraySize + _indexCurrentModification) % list.serializedProperty.arraySize);
+				}
+				break;
+			case LIST_MODIFICATION.DRAG:
+				_pathWayNavMeshUI.UpdatePathAt(list.index);
+				_pathWayNavMeshUI.UpdatePathAt(_indexCurrentModification);
+				break;
+			default:
+				break;
+		}
+		_currentListModification = LIST_MODIFICATION.OTHER;
 	}
 
 	private void DoUndo()
@@ -116,11 +145,7 @@ public class PathwayEditor : Editor
 		{
 			_reorderableList.index = _reorderableList.serializedProperty.arraySize - 1;
 		}
-	}
-
-	private bool CheckNavMeshExistence()
-	{
-		return NavMesh.SamplePosition(Vector3.zero, out NavMeshHit hit, 1000.0f, NavMesh.AllAreas);
+		_pathWayNavMeshUI.GeneratePath();
 	}
 
 }

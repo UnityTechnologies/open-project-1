@@ -24,6 +24,6 @@ public class DestroyEntity : StateAction
 
 	public override void OnStateEnter()
 	{
-		GameObject.Destroy(_gameObject, 0.1f);
+		GameObject.Destroy(_gameObject);
 	}
 }

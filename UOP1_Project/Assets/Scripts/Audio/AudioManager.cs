@@ -3,6 +3,7 @@ using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
+using System;
 
 public class AudioManager : MonoBehaviour
 {
@@ -27,24 +28,35 @@ public class AudioManager : MonoBehaviour
 	[Range(0f, 1f)]
 	[SerializeField] private float _sfxVolume = 1f;
 
-	private SoundEmitterList _soundEmitterList;
+	private SoundEmitterVault _soundEmitterVault;
+	private SoundEmitter _musicSoundEmitter;
 
 	private void Awake()
 	{
 		//TODO: Get the initial volume levels from the settings
-		_soundEmitterList = new SoundEmitterList();
-
-		RegisterChannel(_SFXEventChannel);
-		RegisterChannel(_musicEventChannel); //TODO: Treat music requests differently?
+		_soundEmitterVault = new SoundEmitterVault();
 
 		_pool.Prewarm(_initialSize);
 		_pool.SetParent(this.transform);
 	}
 
+	private void OnEnable()
+	{
+		_SFXEventChannel.OnAudioCuePlayRequested += PlayAudioCue;
+		_SFXEventChannel.OnAudioCueStopRequested += StopAudioCue;
+		_SFXEventChannel.OnAudioCueFinishRequested += FinishAudioCue;
+
+		_musicEventChannel.OnAudioCuePlayRequested += PlayMusicTrack;
+		_musicEventChannel.OnAudioCueStopRequested += StopMusic;
+	}
+
 	private void OnDestroy()
 	{
-		UnregisterChannel(_SFXEventChannel);
-		UnregisterChannel(_musicEventChannel);
+		_SFXEventChannel.OnAudioCuePlayRequested -= PlayAudioCue;
+		_SFXEventChannel.OnAudioCueStopRequested -= StopAudioCue;
+		_SFXEventChannel.OnAudioCueFinishRequested -= FinishAudioCue;
+
+		_musicEventChannel.OnAudioCuePlayRequested -= PlayMusicTrack;
 	}
 
 	/// <summary>
@@ -81,20 +93,6 @@ public class AudioManager : MonoBehaviour
 		}
 	}
 
-	private void RegisterChannel(AudioCueEventChannelSO audioCueEventChannel)
-	{
-		audioCueEventChannel.OnAudioCuePlayRequested += PlayAudioCue;
-		audioCueEventChannel.OnAudioCueStopRequested += StopAudioCue;
-		audioCueEventChannel.OnAudioCueFinishRequested += FinishAudioCue;
-	}
-
-	private void UnregisterChannel(AudioCueEventChannelSO audioCueEventChannel)
-	{
-		audioCueEventChannel.OnAudioCuePlayRequested -= PlayAudioCue;
-		audioCueEventChannel.OnAudioCueStopRequested -= StopAudioCue;
-		audioCueEventChannel.OnAudioCueFinishRequested -= FinishAudioCue;
-	}
-
 	// Both MixerValueNormalized and NormalizedToMixerValue functions are used for easier transformations
 	/// when using UI sliders normalized format
 	private float MixerValueToNormalized(float mixerValue)
@@ -107,6 +105,39 @@ public class AudioManager : MonoBehaviour
 		// We're assuming the range [0 to 1] becomes [-80dB to 0dB]
 		// This doesn't allow values over 0dB
 		return (normalizedValue - 1f) * 80f;
+	}
+
+	private AudioCueKey PlayMusicTrack(AudioCueSO audioCue, AudioConfigurationSO audioConfiguration, Vector3 positionInSpace)
+	{
+		float fadeDuration = 2f;
+		float startTime = 0f;
+
+		if (_musicSoundEmitter != null && _musicSoundEmitter.IsPlaying())
+		{
+			AudioClip songToPlay = audioCue.GetClips()[0];
+			if (_musicSoundEmitter.GetClip() == songToPlay)
+				return AudioCueKey.Invalid;
+
+			//Music is already playing, need to fade it out
+			startTime = _musicSoundEmitter.FadeMusicOut(fadeDuration);
+		}
+
+		_musicSoundEmitter = _pool.Request();
+		_musicSoundEmitter.FadeMusicIn(audioCue.GetClips()[0], audioConfiguration, 1f, startTime);
+		_musicSoundEmitter.OnSoundFinishedPlaying += StopMusicEmitter;
+
+		return AudioCueKey.Invalid; //No need to return a valid key for music
+	}
+
+	private bool StopMusic(AudioCueKey key)
+	{
+		if (_musicSoundEmitter != null && _musicSoundEmitter.IsPlaying())
+		{
+			_musicSoundEmitter.Stop();
+			return true;
+		}
+		else
+			return false;
 	}
 
 	/// <summary>
@@ -129,12 +160,12 @@ public class AudioManager : MonoBehaviour
 			}
 		}
 
-		return _soundEmitterList.Add(audioCue, soundEmitterArray);
+		return _soundEmitterVault.Add(audioCue, soundEmitterArray);
 	}
 
-	public bool FinishAudioCue(AudioCueKey emitterKey)
+	public bool FinishAudioCue(AudioCueKey audioCueKey)
 	{
-		bool isFound = _soundEmitterList.Get(emitterKey, out SoundEmitter[] soundEmitters);
+		bool isFound = _soundEmitterVault.Get(audioCueKey, out SoundEmitter[] soundEmitters);
 
 		if (isFound)
 		{
@@ -144,13 +175,17 @@ public class AudioManager : MonoBehaviour
 				soundEmitters[i].OnSoundFinishedPlaying += OnSoundEmitterFinishedPlaying;
 			}
 		}
+		else
+		{
+			Debug.LogWarning("Finishing an AudioCue was requested, but the AudioCue was not found.");
+		}
 
 		return isFound;
 	}
 
-	public bool StopAudioCue(AudioCueKey emitterKey)
+	public bool StopAudioCue(AudioCueKey audioCueKey)
 	{
-		bool isFound = _soundEmitterList.Get(emitterKey, out SoundEmitter[] soundEmitters);
+		bool isFound = _soundEmitterVault.Get(audioCueKey, out SoundEmitter[] soundEmitters);
 
 		if (isFound)
 		{
@@ -159,7 +194,7 @@ public class AudioManager : MonoBehaviour
 				StopAndCleanEmitter(soundEmitters[i]);
 			}
 
-			_soundEmitterList.Remove(emitterKey);
+			_soundEmitterVault.Remove(audioCueKey);
 		}
 
 		return isFound;
@@ -172,12 +207,20 @@ public class AudioManager : MonoBehaviour
 
 	private void StopAndCleanEmitter(SoundEmitter soundEmitter)
 	{
-		if (soundEmitter.IsFinishing())
+		if (!soundEmitter.IsLooping())
 			soundEmitter.OnSoundFinishedPlaying -= OnSoundEmitterFinishedPlaying;
 
 		soundEmitter.Stop();
 		_pool.Return(soundEmitter);
+
+		//TODO: is the above enough?
+		//_soundEmitterVault.Remove(audioCueKey); is never called if StopAndClean is called after a Finish event
+		//How is the key removed from the vault?
 	}
 
-	//TODO: Add methods to play and cross-fade music, or to play individual sounds?
+	private void StopMusicEmitter(SoundEmitter soundEmitter)
+	{
+		soundEmitter.OnSoundFinishedPlaying -= StopMusicEmitter;
+		_pool.Return(soundEmitter);
+	}
 }

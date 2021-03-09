@@ -37,6 +37,8 @@ public class DialogueDataSO : ScriptableObject
 	public List<Choice> Choices => _choices;
 	public DialogueType DialogueType => _dialogueType;
 
+#if UNITY_EDITOR
+
 	//TODO: Add support for branching conversations
 	// Maybe add 2 (or more) special line slots which represent a choice in a conversation
 	// Each line would also have an event associated, or another Dialogue
@@ -74,7 +76,9 @@ public class DialogueDataSO : ScriptableObject
 
 		}
 	}
+#endif
 }
+
 
 [Serializable]
 public class Choice

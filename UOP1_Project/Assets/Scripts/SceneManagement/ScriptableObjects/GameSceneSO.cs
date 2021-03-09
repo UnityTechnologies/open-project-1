@@ -1,19 +1,30 @@
 ﻿using UnityEngine;
+using UnityEngine.AddressableAssets;
 
 /// <summary>
-/// This class is a base class which contains what is common to all game scenes (Locations or Menus)
+/// This class is a base class which contains what is common to all game scenes (Locations, Menus, Managers)
 /// </summary>
-
-public abstract partial class GameSceneSO : ScriptableObject
+public class GameSceneSO : DescriptionBaseSO
 {
-	[Header("Information")]
-#if UNITY_EDITOR // See GameSceneSOEditor.cs
-	public UnityEditor.SceneAsset sceneAsset;
-#endif
-	[HideInInspector]
-	public string scenePath;
-	[TextArea] public string shortDescription;
+	public GameSceneType sceneType;
+	public AssetReference sceneReference; //Used at runtime to load the scene from the right AssetBundle
+	public AudioCueSO musicTrack;
 
-	[Header("Sounds")]
-	public AudioClip music;
+	/// <summary>
+	/// Used by the SceneSelector tool to discern what type of scene it needs to load
+	/// </summary>
+	public enum GameSceneType
+	{
+		//Playable scenes
+		Location, //SceneSelector tool will also load PersistentManagers and Gameplay
+		Menu, //SceneSelector tool will also load Gameplay
+
+		//Special scenes
+		Initialisation,
+		PersistentManagers,
+		Gameplay,
+
+		//Work in progress scenes that don't need to be played
+		Art,
+	}
 }

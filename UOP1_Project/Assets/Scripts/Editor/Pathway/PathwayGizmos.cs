@@ -1,58 +1,26 @@
 ﻿using UnityEngine;
 using UnityEditor;
-using UnityEngine.AI;
-using System.Collections.Generic;
 
 
 public class PathwayGizmos
 {
-	public static void DrawHandlesPath(PathwayConfigSO pathway)
+	[DrawGizmo(GizmoType.Selected)]
+	private static void DrawGizmosSelected(Pathway pathway, GizmoType gizmoType)
 	{
-		EditorGUI.BeginChangeCheck();
-
-		List<Vector3> pathwayEditorDisplay = new List<Vector3>();
-
-		// Snap the waypoints on the NavMesh
-		for (int i = 0; i < pathway.Waypoints.Count; i++)
+		if (!pathway.ToggledNavMeshDisplay)
 		{
-			NavMesh.SamplePosition(pathway.Waypoints[i], out NavMeshHit hit, 99.0f, NavMesh.AllAreas);
-			pathwayEditorDisplay.Add(hit.position);
+			DrawHandlesPath(pathway);
+		}
+		else
+		{
+			DrawNavMeshPath(pathway);
 		}
 
-		// Only one waypoint use case.
-		if (pathway.Waypoints.Count == 1)
-		{
-			DrawWaypointLabel(pathway, pathway.Waypoints, 0);
-			pathway.Waypoints[0] = Handles.PositionHandle(pathway.Waypoints[0], Quaternion.identity);
-		}
-		// All the other use cases where a path exists.
-		for (int index = 0; index < pathway.Waypoints.Count && pathway.Waypoints.Count > 1; index++)
-		{
-			int nextIndex = (index + 1) % pathway.Waypoints.Count;
-			DrawWaypointLabel(pathway, pathway.Waypoints, index);
-			List<Vector3> navMeshPath = new List<Vector3>();
-			NavMeshPath navPath = new NavMeshPath();
-			NavMesh.CalculatePath(pathwayEditorDisplay[index], pathwayEditorDisplay[nextIndex], NavMesh.AllAreas, navPath);
-			using (new Handles.DrawingScope(pathway.LineColor))
-			{
-				for (int j = 0; j < navPath.corners.Length - 1; j++)
-				{
-					Handles.DrawDottedLine(navPath.corners[j], navPath.corners[j + 1], 2);
-				}
-			}
-			// Display handles pointing into the path forward direction (Blue handle)
-			if (navPath.corners.Length > 1)
-			{
-				pathway.Waypoints[index] = Handles.PositionHandle(pathway.Waypoints[index], Quaternion.LookRotation(navPath.corners[1] - navPath.corners[0]));
-			}
-			else
-			{
-				pathway.Waypoints[index] = Handles.PositionHandle(pathway.Waypoints[index], Quaternion.identity);
-			}
-		}
+		DrawHitPoints(pathway);
 	}
 
-	private static void DrawWaypointLabel(PathwayConfigSO pathway, List<Vector3> path, int index)
+
+	private static void DrawLabel(Pathway pathway, Vector3 path, int index)
 	{
 		GUIStyle style = new GUIStyle();
 		Vector3 textHeight = Vector3.up;
@@ -60,6 +28,67 @@ public class PathwayGizmos
 		style.normal.textColor = pathway.TextColor;
 		style.fontSize = pathway.TextSize;
 
-		Handles.Label(path[index] + textHeight, index.ToString(), style);
+		Handles.Label(path + textHeight, index.ToString(), style);
+	}
+
+	private static void DrawHandlesPath(Pathway pathway)
+	{
+		Handles.color = pathway.LineColor;
+
+		if (pathway.Waypoints.Count != 0)
+		{
+			DrawLabel(pathway, pathway.Waypoints[0].waypoint, 0);
+
+			if (pathway.Waypoints.Count > 1)
+			{
+				for (int i = 1; i < pathway.Waypoints.Count; i++)
+				{
+					DrawLabel(pathway, pathway.Waypoints[i].waypoint, i);
+					Handles.DrawDottedLine(pathway.Waypoints[i - 1].waypoint, pathway.Waypoints[i].waypoint, 2);
+				}
+
+				if (pathway.Waypoints.Count > 2)
+				{
+					Handles.DrawDottedLine(pathway.Waypoints[0].waypoint, pathway.Waypoints[pathway.Waypoints.Count - 1].waypoint, 2);
+				}
+			}
+		}
+	}
+
+	private static void DrawNavMeshPath(Pathway pathway)
+	{
+		Handles.color = pathway.LineColor;
+
+		for (int i = 0; i < pathway.Path.Count - 1; i++)
+		{
+			Handles.DrawLine(pathway.Path[i], pathway.Path[i + 1]);
+
+			if (i < pathway.Waypoints.Count)
+			{
+				DrawLabel(pathway, pathway.Waypoints[i].waypoint, i);
+			}
+		}
+	}
+
+	private static void DrawHitPoints(Pathway pathway)
+	{
+		if (pathway.DisplayProbes)
+		{
+			float sphereRadius = pathway.ProbeRadius;
+
+			for (int i = 0; i < pathway.Hits.Count; i++)
+			{
+				if (pathway.Hits[i])
+				{
+					Gizmos.color = new Color(0, 255, 0, 0.5f);
+					Gizmos.DrawSphere(pathway.Waypoints[i].waypoint, sphereRadius);
+				}
+				else
+				{
+					Gizmos.color = new Color(255, 0, 0, 0.5f);
+					Gizmos.DrawSphere(pathway.Waypoints[i].waypoint, sphereRadius);
+				}
+			}
+		}
 	}
 }

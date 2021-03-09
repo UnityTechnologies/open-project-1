@@ -98,7 +98,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 0
+  m_UseShadowmask: 1
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -150,12 +150,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 43bf3a70578af0044a7af79dd1c44ea6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _PersistentManagersScene: {fileID: 11400000, guid: c2119785ce96367428081d6eee0d932b,
+  _persistentManagersScene: {fileID: 11400000, guid: c2119785ce96367428081d6eee0d932b,
     type: 2}
-  _MenuToLoad:
+  _menuToLoad:
   - {fileID: 11400000, guid: 431ff81b74b48fb4d9301fb76ca633dd, type: 2}
-  _showLoadScreen: 0
-  _MenuLoadChannel: {fileID: 11400000, guid: 33cec85652903d245b99985f9cec9841, type: 2}
+  _showLoadScreen: 1
+  _menuLoadChannel:
+    m_AssetGUID: 33cec85652903d245b99985f9cec9841
+    m_SubObjectName: 
+    m_SubObjectType: 
 --- !u!4 &1266309721
 Transform:
   m_ObjectHideFlags: 0
