@@ -6,7 +6,7 @@ public class PathwayMovementAction : NPCMovementAction
 {
 	private NavMeshAgent _agent;
 	private bool _isActiveAgent;
-	private List<Vector3> _wayppoints;
+	private List<WaypointData> _wayppoints;
 	private int _wayPointIndex;
 	private float _roamingSpeed;
 
@@ -46,7 +46,7 @@ public class PathwayMovementAction : NPCMovementAction
 		if (_wayppoints.Count > 0)
 		{
 			_wayPointIndex = (_wayPointIndex + 1) % _wayppoints.Count;
-			result = _wayppoints[_wayPointIndex];
+			result = _wayppoints[_wayPointIndex].waypoint;
 		}
 		return result;
 	}

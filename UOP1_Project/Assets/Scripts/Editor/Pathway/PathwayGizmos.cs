@@ -5,7 +5,7 @@ using UnityEditor;
 public class PathwayGizmos
 {
 	[DrawGizmo(GizmoType.Selected)]
-	private static void DrawGizmosSelected(Pathway pathway, GizmoType gizmoType)
+	public static void DrawGizmosSelected(PathwayConfigSO pathway, GizmoType gizmoType)
 	{
 		if (!pathway.ToggledNavMeshDisplay)
 		{
@@ -20,7 +20,7 @@ public class PathwayGizmos
 	}
 
 
-	private static void DrawLabel(Pathway pathway, Vector3 path, int index)
+	private static void DrawLabel(PathwayConfigSO pathway, Vector3 path, int index)
 	{
 		GUIStyle style = new GUIStyle();
 		Vector3 textHeight = Vector3.up;
@@ -31,7 +31,7 @@ public class PathwayGizmos
 		Handles.Label(path + textHeight, index.ToString(), style);
 	}
 
-	private static void DrawHandlesPath(Pathway pathway)
+	private static void DrawHandlesPath(PathwayConfigSO pathway)
 	{
 		Handles.color = pathway.LineColor;
 
@@ -55,7 +55,7 @@ public class PathwayGizmos
 		}
 	}
 
-	private static void DrawNavMeshPath(Pathway pathway)
+	private static void DrawNavMeshPath(PathwayConfigSO pathway)
 	{
 		Handles.color = pathway.LineColor;
 
@@ -70,7 +70,7 @@ public class PathwayGizmos
 		}
 	}
 
-	private static void DrawHitPoints(Pathway pathway)
+	private static void DrawHitPoints(PathwayConfigSO pathway)
 	{
 		if (pathway.DisplayProbes)
 		{
@@ -80,13 +80,13 @@ public class PathwayGizmos
 			{
 				if (pathway.Hits[i])
 				{
-					Gizmos.color = new Color(0, 255, 0, 0.5f);
-					Gizmos.DrawSphere(pathway.Waypoints[i].waypoint, sphereRadius);
+					Handles.color = new Color(0, 255, 0, 0.1f);
+					Handles.SphereCap(0, pathway.Waypoints[i].waypoint, Quaternion.identity, sphereRadius);
 				}
 				else
 				{
-					Gizmos.color = new Color(255, 0, 0, 0.5f);
-					Gizmos.DrawSphere(pathway.Waypoints[i].waypoint, sphereRadius);
+					Handles.color = new Color(255, 0, 0, 0.1f);
+					Handles.SphereCap(0, pathway.Waypoints[i].waypoint, Quaternion.identity, sphereRadius);
 				}
 			}
 		}
