@@ -16,7 +16,7 @@ public class Protagonist : MonoBehaviour
 	//These fields are read and manipulated by the StateMachine actions
 	[NonSerialized] public bool jumpInput;
 	[NonSerialized] public bool extraActionInput;
-	[NonSerialized] public bool attackInput;
+	 public bool attackInput;
 	[NonSerialized] public Vector3 movementInput; //Initial input coming from the Protagonist script
 	[NonSerialized] public Vector3 movementVector; //Final movement vector, manipulated by the StateMachine actions
 	[NonSerialized] public ControllerColliderHit lastHit;
@@ -44,7 +44,6 @@ public class Protagonist : MonoBehaviour
 		_inputReader.startedRunning += OnStartedRunning;
 		_inputReader.stoppedRunning += OnStoppedRunning;
 		_inputReader.attackEvent += OnStartedAttack;
-		_inputReader.attackCanceledEvent += OnStoppedAttack;
 		//...
 	}
 
@@ -58,7 +57,6 @@ public class Protagonist : MonoBehaviour
 		_inputReader.startedRunning -= OnStartedRunning;
 		_inputReader.stoppedRunning -= OnStoppedRunning;
 		_inputReader.attackEvent -= OnStartedAttack;
-		_inputReader.attackCanceledEvent -= OnStoppedAttack;
 		//...
 	}
 
@@ -123,5 +121,7 @@ public class Protagonist : MonoBehaviour
 	}
 
 	private void OnStartedAttack() => attackInput = true;
-	private void OnStoppedAttack() => attackInput = false;
+
+	// Triggered from Animation Event
+	public void ConsumeAttackInput() => attackInput = false;
 }
