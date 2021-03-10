@@ -17,6 +17,8 @@ public class InventoryItemFiller : MonoBehaviour
 	[SerializeField] private Image _bgInactiveImage = default;
 
 
+	[SerializeField] private LocalizeSpriteEvent _bgLocalizedImage = default;
+
 	public void SetItem(ItemStack itemStack, bool isSelected, ItemEventChannelSO selectItemEvent)
 	{
 		_itemPreviewImage.gameObject.SetActive(true);
@@ -32,8 +34,16 @@ public class InventoryItemFiller : MonoBehaviour
 		_currentItem = itemStack;
 
 		_imgSelected.gameObject.SetActive(isSelected);
-
+		if(itemStack.Item.IsLocalized)
+		{
+			_bgLocalizedImage.enabled = true;
+			_bgLocalizedImage.AssetReference = itemStack.Item.LocalizePreviewImage; 
+		}
+		else
+		{
+			_bgLocalizedImage.enabled = false; 
 		_itemPreviewImage.sprite = itemStack.Item.PreviewImage;
+		}
 		_itemCount.text = itemStack.Amount.ToString();
 		_bgImage.color = itemStack.Item.ItemType.TypeColor;
 
