@@ -18,7 +18,7 @@ public class PathwayEditor : Editor
 	{
 		int index = _pathwayHandles.DisplayHandles();
 		_pathWayNavMeshUI.RealTime(index);
-		PathwayGizmos.DrawGizmosSelected(_pathway, GizmoType.Active);
+		PathwayGizmos.DrawGizmosSelected(_pathway);
 	}
 
 	public override void OnInspectorGUI()
@@ -27,7 +27,6 @@ public class PathwayEditor : Editor
 		serializedObject.Update();
 		_reorderableList.DoLayoutList();
 		_pathWayNavMeshUI.OnInspectorGUI();
-		Tools.hidden = _pathway.HidePathway;
 		serializedObject.ApplyModifiedProperties();
 	}
 
@@ -57,7 +56,6 @@ public class PathwayEditor : Editor
 		_reorderableList.onRemoveCallback -= RemoveItem;
 		_reorderableList.onChangedCallback -= ListModified;
 		_reorderableList.onMouseDragCallback -= DragItem;
-		_pathway.waypoints = _pathway.Waypoints.Select(x => x.waypoint).ToArray();
 		SceneView.duringSceneGui -= this.OnSceneGUI;
 	}
 

@@ -4,8 +4,7 @@ using UnityEditor;
 
 public class PathwayGizmos
 {
-	[DrawGizmo(GizmoType.Selected)]
-	public static void DrawGizmosSelected(PathwayConfigSO pathway, GizmoType gizmoType)
+	public static void DrawGizmosSelected(PathwayConfigSO pathway)
 	{
 		if (!pathway.ToggledNavMeshDisplay)
 		{
@@ -81,12 +80,12 @@ public class PathwayGizmos
 				if (pathway.Hits[i])
 				{
 					Handles.color = new Color(0, 255, 0, 0.1f);
-					Handles.SphereCap(0, pathway.Waypoints[i].waypoint, Quaternion.identity, sphereRadius);
+					Handles.SphereHandleCap(0, pathway.Waypoints[i].waypoint, Quaternion.identity, sphereRadius, EventType.Repaint);
 				}
 				else
 				{
 					Handles.color = new Color(255, 0, 0, 0.1f);
-					Handles.SphereCap(0, pathway.Waypoints[i].waypoint, Quaternion.identity, sphereRadius);
+					Handles.SphereHandleCap(0, pathway.Waypoints[i].waypoint, Quaternion.identity, sphereRadius, EventType.Repaint);
 				}
 			}
 		}

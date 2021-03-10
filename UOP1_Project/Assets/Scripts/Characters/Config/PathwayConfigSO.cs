@@ -4,12 +4,8 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "PathwayConfig", menuName = "EntityConfig/Pathway Config")]
 public class PathwayConfigSO : NPCMovementConfigSO
 {
-	[HideInInspector]
-	public Vector3[] waypoints;
 
 #if UNITY_EDITOR
-
-	public bool HidePathway;
 
 	[SerializeField]
 	private Color _lineColor = Color.black;
