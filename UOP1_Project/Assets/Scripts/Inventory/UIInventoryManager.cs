@@ -265,7 +265,7 @@ public class UIInventoryManager : MonoBehaviour
 
 			//set button
 			buttonFiller.FillInventoryButtons(itemToInspect.ItemType, isInteractable);
-			
+
 
 		}
 
@@ -282,7 +282,7 @@ public class UIInventoryManager : MonoBehaviour
 	}
 	void HideItemInformation()
 	{
-		buttonFiller.gameObject.SetActive(false); 
+		buttonFiller.gameObject.SetActive(false);
 		inspectorFiller.HideItemInspector();
 
 	}

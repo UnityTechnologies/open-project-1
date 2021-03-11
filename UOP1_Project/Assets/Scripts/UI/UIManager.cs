@@ -64,7 +64,7 @@ public class UIManager : MonoBehaviour
 		CloseUIDialogue();
 	}
 
-	
+
 
 	public void OpenUIDialogue(LocalizedString dialogueLine, ActorSO actor)
 	{
