@@ -5,6 +5,16 @@ using UnityEngine.Localization;
 
 public class UIManager : MonoBehaviour
 {
+	[SerializeField]
+	private UIDialogueManager _dialogueController = default;
+
+	[SerializeField]
+	private UIInventoryManager _inventoryPanel = default;
+
+	[SerializeField]
+	private UIInteractionManager _interactionPanel = default;
+
+	[SerializeField] private InputReader _inputReader = default;
 	[Header("Listening on channels")]
 	[Header("Dialogue Events")]
 	[SerializeField] private DialogueLineChannelSO _openUIDialogueEvent = default;
@@ -54,25 +64,18 @@ public class UIManager : MonoBehaviour
 		CloseUIDialogue();
 	}
 
-	[SerializeField]
-	private UIDialogueManager dialogueController = default;
-
-	[SerializeField]
-	private UIInventoryManager inventoryPanel = default;
-
-	[SerializeField]
-	private UIInteractionManager interactionPanel = default;
+	
 
 	public void OpenUIDialogue(LocalizedString dialogueLine, ActorSO actor)
 	{
 
-		dialogueController.SetDialogue(dialogueLine, actor);
-		dialogueController.gameObject.SetActive(true);
+		_dialogueController.SetDialogue(dialogueLine, actor);
+		_dialogueController.gameObject.SetActive(true);
 	}
 	public void CloseUIDialogue()
 	{
 
-		dialogueController.gameObject.SetActive(false);
+		_dialogueController.gameObject.SetActive(false);
 	}
 
 	public void SetInventoryScreenForCooking()
@@ -90,16 +93,17 @@ public class UIManager : MonoBehaviour
 	bool isForCooking = false;
 	void OpenInventoryScreen()
 	{
-		inventoryPanel.gameObject.SetActive(true);
+		_inventoryPanel.gameObject.SetActive(true);
 
+		_inputReader.EnableMenuInput();
 		if (isForCooking)
 		{
-			inventoryPanel.FillInventory(TabType.recipe, true);
+			_inventoryPanel.FillInventory(TabType.recipe, true);
 
 		}
 		else
 		{
-			inventoryPanel.FillInventory();
+			_inventoryPanel.FillInventory();
 		}
 
 	}
@@ -107,7 +111,7 @@ public class UIManager : MonoBehaviour
 
 	public void CloseInventoryScreen()
 	{
-		inventoryPanel.gameObject.SetActive(false);
+		_inventoryPanel.gameObject.SetActive(false);
 
 		if (isForCooking)
 		{
@@ -120,9 +124,9 @@ public class UIManager : MonoBehaviour
 	{
 		if (isOpenEvent)
 		{
-			interactionPanel.FillInteractionPanel(interactionType);
+			_interactionPanel.FillInteractionPanel(interactionType);
 		}
-		interactionPanel.gameObject.SetActive(isOpenEvent);
+		_interactionPanel.gameObject.SetActive(isOpenEvent);
 
 	}
 }

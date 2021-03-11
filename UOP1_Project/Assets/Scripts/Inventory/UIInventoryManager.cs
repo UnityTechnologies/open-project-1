@@ -251,20 +251,21 @@ public class UIInventoryManager : MonoBehaviour
 
 			//check if interactable
 			bool isInteractable = true;
+			buttonFiller.gameObject.SetActive(true);
 			if (itemToInspect.ItemType.ActionType == ItemInventoryActionType.cook)
 			{
-				isInteractable = currentInventory.hasIngredients(itemToInspect.IngredientsList) && isNearPot
-					;
+				isInteractable = currentInventory.hasIngredients(itemToInspect.IngredientsList) && isNearPot;
 
 			}
 			else if (itemToInspect.ItemType.ActionType == ItemInventoryActionType.doNothing)
 			{
 				isInteractable = false;
-
+				buttonFiller.gameObject.SetActive(false);
 			}
 
 			//set button
 			buttonFiller.FillInventoryButtons(itemToInspect.ItemType, isInteractable);
+			
 
 		}
 
@@ -281,7 +282,7 @@ public class UIInventoryManager : MonoBehaviour
 	}
 	void HideItemInformation()
 	{
-
+		buttonFiller.gameObject.SetActive(false); 
 		inspectorFiller.HideItemInspector();
 
 	}
