@@ -34,15 +34,15 @@ public class InventoryItemFiller : MonoBehaviour
 		_currentItem = itemStack;
 
 		_imgSelected.gameObject.SetActive(isSelected);
-		if(itemStack.Item.IsLocalized)
+		if (itemStack.Item.IsLocalized)
 		{
 			_bgLocalizedImage.enabled = true;
-			_bgLocalizedImage.AssetReference = itemStack.Item.LocalizePreviewImage; 
+			_bgLocalizedImage.AssetReference = itemStack.Item.LocalizePreviewImage;
 		}
 		else
 		{
-			_bgLocalizedImage.enabled = false; 
-		_itemPreviewImage.sprite = itemStack.Item.PreviewImage;
+			_bgLocalizedImage.enabled = false;
+			_itemPreviewImage.sprite = itemStack.Item.PreviewImage;
 		}
 		_itemCount.text = itemStack.Amount.ToString();
 		_bgImage.color = itemStack.Item.ItemType.TypeColor;

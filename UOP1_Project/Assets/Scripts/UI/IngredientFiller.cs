@@ -46,8 +46,8 @@ public class IngredientFiller : MonoBehaviour
 
 		_ingredientAmount.text = ingredient.Amount.ToString();
 		_tooltipMessage.StringReference = ingredient.Item.Name;
-		_tooltipMessage.StringReference.Arguments = new [] {new { Amount = ingredient.Amount} };
-		
+		_tooltipMessage.StringReference.Arguments = new[] { new { Amount = ingredient.Amount } };
+
 		_ingredientIcon.sprite = ingredient.Item.PreviewImage;
 		_availableCheckMark.SetActive(isAvailable);
 		_unavailableCheckMark.SetActive(!isAvailable);
@@ -55,7 +55,7 @@ public class IngredientFiller : MonoBehaviour
 	}
 	public void HoveredItem()
 	{
-		_tooltip.SetActive(true); 
+		_tooltip.SetActive(true);
 	}
 	public void UnHoveredItem()
 	{

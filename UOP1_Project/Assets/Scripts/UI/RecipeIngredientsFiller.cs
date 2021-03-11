@@ -42,5 +42,5 @@ public class RecipeIngredientsFiller : MonoBehaviour
 
 
 	}
-	
+
 }
