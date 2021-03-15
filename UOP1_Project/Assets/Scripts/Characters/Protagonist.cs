@@ -16,7 +16,7 @@ public class Protagonist : MonoBehaviour
 	//These fields are read and manipulated by the StateMachine actions
 	[NonSerialized] public bool jumpInput;
 	[NonSerialized] public bool extraActionInput;
-	 public bool attackInput;
+	[NonSerialized] public bool attackInput;
 	[NonSerialized] public Vector3 movementInput; //Initial input coming from the Protagonist script
 	[NonSerialized] public Vector3 movementVector; //Final movement vector, manipulated by the StateMachine actions
 	[NonSerialized] public ControllerColliderHit lastHit;
