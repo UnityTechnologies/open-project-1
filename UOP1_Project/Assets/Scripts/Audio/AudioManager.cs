@@ -112,7 +112,7 @@ public class AudioManager : MonoBehaviour
 		float fadeDuration = 2f;
 		float startTime = 0f;
 
-		if(_musicSoundEmitter != null && _musicSoundEmitter.IsPlaying())
+		if (_musicSoundEmitter != null && _musicSoundEmitter.IsPlaying())
 		{
 			AudioClip songToPlay = audioCue.GetClips()[0];
 			if (_musicSoundEmitter.GetClip() == songToPlay)

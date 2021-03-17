@@ -23,6 +23,6 @@ public class MusicPlayer : MonoBehaviour
 	private void PlayMusic()
 	{
 		_playMusicOn.RaisePlayEvent(_thisSceneSO.musicTrack, _audioConfig);
-		
+
 	}
 }

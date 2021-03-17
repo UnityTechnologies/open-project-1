@@ -46,7 +46,7 @@ public class SoundEmitter : MonoBehaviour
 
 		//Start the clip at the same time the previous one left, if length allows
 		//TODO: find a better way to sync fading songs
-		if(startTime <= _audioSource.clip.length)
+		if (startTime <= _audioSource.clip.length)
 			_audioSource.time = startTime;
 
 		_audioSource.DOFade(1f, duration);
