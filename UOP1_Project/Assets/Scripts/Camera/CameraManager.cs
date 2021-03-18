@@ -2,12 +2,17 @@
 using UnityEngine;
 using Cinemachine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class CameraManager : MonoBehaviour
 {
 	public InputReader inputReader;
 	public Camera mainCamera;
 	public CinemachineFreeLook freeLookVCam;
+
+	private CinemachineBrain cinemachineBrain;
+
+	private List<CinemachineVirtualCameraBase> vcamsInScene;
 	private bool _isRMBPressed;
 
 	[SerializeField, Range(.5f, 3f)]
@@ -18,18 +23,37 @@ public class CameraManager : MonoBehaviour
 	[Tooltip("The CameraManager listens to this event, fired by objects in any scene, to adapt camera position")]
 	[SerializeField] private TransformEventChannelSO _frameObjectChannel = default;
 
+	[Tooltip("The CameraManager listens to this event, fired by objects in any scene, to swap the active virtual camera")]
+	[SerializeField] private VcamEventChannelSO _VcamEventChannel = default;
+
 
 	private bool _cameraMovementLock = false;
 
 	public void SetupProtagonistVirtualCamera(Transform target)
 	{
-		freeLookVCam.Follow = target;
-		freeLookVCam.LookAt = target;
+		foreach (CinemachineVirtualCameraBase vcam in vcamsInScene)
+		{
+			VCamRequiresPlayerTarget vCamRequiresPlayerTarget = vcam.GetComponent<VCamRequiresPlayerTarget>();
+			if(vCamRequiresPlayerTarget != null){
+				vCamRequiresPlayerTarget.SetPlayerTarget(target);
+			}
+		}
 		freeLookVCam.OnTargetObjectWarped(target, target.position - freeLookVCam.transform.position - Vector3.forward);
+	}
+
+	private void Awake()
+	{
+		cinemachineBrain = mainCamera.GetComponent<CinemachineBrain>();
+		vcamsInScene = new List<CinemachineVirtualCameraBase>();
 	}
 
 	private void OnEnable()
 	{
+		foreach (CinemachineVirtualCameraBase vcam in FindObjectsOfType<CinemachineVirtualCameraBase>())
+		{
+			vcamsInScene.Add(vcam);
+		}
+
 		inputReader.cameraMoveEvent += OnCameraMove;
 		inputReader.enableMouseControlCameraEvent += OnEnableMouseControlCamera;
 		inputReader.disableMouseControlCameraEvent += OnDisableMouseControlCamera;
@@ -37,10 +61,14 @@ public class CameraManager : MonoBehaviour
 		if (_frameObjectChannel != null)
 			_frameObjectChannel.OnEventRaised += OnFrameObjectEvent;
 
+		if(_VcamEventChannel != null)
+			_VcamEventChannel.OnEventRaised += OnCameraSwapEvent;
+
 		_cameraTransformAnchor.Transform = mainCamera.transform;
 	}
 
-	private void OnDisable()
+
+    private void OnDisable()
 	{
 		inputReader.cameraMoveEvent -= OnCameraMove;
 		inputReader.enableMouseControlCameraEvent -= OnEnableMouseControlCamera;
@@ -48,6 +76,11 @@ public class CameraManager : MonoBehaviour
 
 		if (_frameObjectChannel != null)
 			_frameObjectChannel.OnEventRaised -= OnFrameObjectEvent;
+
+		if(_VcamEventChannel != null)
+			_VcamEventChannel.OnEventRaised -= OnCameraSwapEvent;
+
+		vcamsInScene.Clear();
 	}
 
 	private void OnEnableMouseControlCamera()
@@ -96,4 +129,22 @@ public class CameraManager : MonoBehaviour
 	{
 		SetupProtagonistVirtualCamera(value);
 	}
+
+	private void OnCameraSwapEvent(CinemachineVirtualCamera vcam)
+    {
+        if(vcam != null){
+			if(!cinemachineBrain.IsLive(vcam)){
+				cinemachineBrain.ActiveVirtualCamera.Priority = 1;
+				vcam.Priority = 100;
+			}
+		}
+		// null indicates default camera. in our case the free look camera
+		else if(vcam == null){
+			if(!cinemachineBrain.IsLive(freeLookVCam)){
+				cinemachineBrain.ActiveVirtualCamera.Priority = 1;
+				freeLookVCam.Priority = 100;
+			}
+		}
+		
+    }
 }
