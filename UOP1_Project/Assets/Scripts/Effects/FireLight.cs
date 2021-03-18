@@ -17,7 +17,7 @@ public class FireLight : MonoBehaviour
 	}
 
 	void Update()
-    {
+	{
 		_lightComp.intensity = _initialIntensity * lightCurve.Evaluate(Time.time * fireSpeed);
-    }
+	}
 }
