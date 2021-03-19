@@ -1,15 +1,20 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
+public class WaypointData
+{
+	public Vector3 waypoint;
+	public List<Vector3> corners;
+}
 
-public class Pathway : MonoBehaviour
+[CreateAssetMenu(fileName = "PathwayConfig", menuName = "EntityConfig/Pathway Config")]
+public class PathwayConfigSO : NPCMovementConfigSO
 {
 	[HideInInspector]
-	public Vector3[] waypoints;
+	public List<WaypointData> Waypoints;
 
 #if UNITY_EDITOR
-
-	public bool HidePathway;
 
 	[SerializeField]
 	private Color _lineColor = Color.black;
@@ -46,20 +51,6 @@ public class Pathway : MonoBehaviour
 
 	public bool RealTimeEnabled;
 
-	[HideInInspector]
-	public List<WaypointData> Waypoints;
-
 #endif
 
 }
-
-#if UNITY_EDITOR
-
-[System.Serializable]
-public class WaypointData
-{
-	public Vector3 waypoint;
-	public List<Vector3> corners;
-}
-
-#endif

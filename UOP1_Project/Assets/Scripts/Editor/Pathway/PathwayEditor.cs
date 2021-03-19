@@ -3,21 +3,22 @@ using UnityEditor;
 using UnityEditorInternal;
 using System.Linq;
 
-[CustomEditor(typeof(Pathway))]
+[CustomEditor(typeof(PathwayConfigSO))]
 public class PathwayEditor : Editor
 {
 	private ReorderableList _reorderableList;
-	private Pathway _pathway;
+	private PathwayConfigSO _pathway;
 	private PathwayHandles _pathwayHandles;
 	private PathWayNavMeshUI _pathWayNavMeshUI;
 	private enum LIST_MODIFICATION { ADD, SUPP, DRAG, OTHER };
 	private LIST_MODIFICATION _currentListModification;
 	private int _indexCurrentModification;
 
-	public void OnSceneGUI()
+	public void OnSceneGUI(SceneView sceneView)
 	{
 		int index = _pathwayHandles.DisplayHandles();
 		_pathWayNavMeshUI.RealTime(index);
+		PathwayGizmos.DrawGizmosSelected(_pathway);
 	}
 
 	public override void OnInspectorGUI()
@@ -26,7 +27,6 @@ public class PathwayEditor : Editor
 		serializedObject.Update();
 		_reorderableList.DoLayoutList();
 		_pathWayNavMeshUI.OnInspectorGUI();
-		Tools.hidden = _pathway.HidePathway;
 		serializedObject.ApplyModifiedProperties();
 	}
 
@@ -40,10 +40,11 @@ public class PathwayEditor : Editor
 		_reorderableList.onRemoveCallback += RemoveItem;
 		_reorderableList.onChangedCallback += ListModified;
 		_reorderableList.onMouseDragCallback += DragItem;
-		_pathway = (target as Pathway);
+		_pathway = (target as PathwayConfigSO);
 		_pathWayNavMeshUI = new PathWayNavMeshUI(_pathway);
 		_pathwayHandles = new PathwayHandles(_pathway);
 		_currentListModification = LIST_MODIFICATION.OTHER;
+		SceneView.duringSceneGui += this.OnSceneGUI;
 	}
 
 	private void OnDisable()
@@ -55,18 +56,18 @@ public class PathwayEditor : Editor
 		_reorderableList.onRemoveCallback -= RemoveItem;
 		_reorderableList.onChangedCallback -= ListModified;
 		_reorderableList.onMouseDragCallback -= DragItem;
-		_pathway.waypoints = _pathway.Waypoints.Select(x => x.waypoint).ToArray();
+		SceneView.duringSceneGui -= this.OnSceneGUI;
 	}
 
 	private void DrawHeader(Rect rect)
 	{
-		GUI.Label(rect, Pathway.TITLE_LABEL);
+		GUI.Label(rect, PathwayConfigSO.TITLE_LABEL);
 	}
 
 	private void DrawElement(Rect rect, int index, bool active, bool focused)
 	{
 		SerializedProperty item = _reorderableList.serializedProperty.GetArrayElementAtIndex(index).FindPropertyRelative("waypoint");
-		item.vector3Value = EditorGUI.Vector3Field(rect, Pathway.FIELD_LABEL + index, item.vector3Value);
+		item.vector3Value = EditorGUI.Vector3Field(rect, PathwayConfigSO.FIELD_LABEL + index, item.vector3Value);
 	}
 
 	private void AddItem(ReorderableList list)
@@ -83,7 +84,7 @@ public class PathwayEditor : Editor
 		else
 		{
 			list.serializedProperty.InsertArrayElementAtIndex(list.serializedProperty.arraySize);
-			Vector3 previous = _pathway.transform.position;
+			Vector3 previous = Vector3.zero;
 			list.serializedProperty.GetArrayElementAtIndex(list.serializedProperty.arraySize - 1).FindPropertyRelative("waypoint").vector3Value = new Vector3(previous.x + 2, previous.y, previous.z + 2);
 			_indexCurrentModification = list.serializedProperty.arraySize - 1;
 		}

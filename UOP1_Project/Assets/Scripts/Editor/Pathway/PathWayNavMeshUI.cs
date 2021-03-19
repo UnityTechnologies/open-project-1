@@ -4,10 +4,10 @@ using UnityEditorInternal;
 
 public class PathWayNavMeshUI
 {
-	private Pathway _pathway;
+	private PathwayConfigSO _pathway;
 	private PathwayNavMesh _pathwayNavMesh;
 
-	public PathWayNavMeshUI(Pathway pathway)
+	public PathWayNavMeshUI(PathwayConfigSO pathway)
 	{
 		_pathway = pathway;
 		_pathwayNavMesh = new PathwayNavMesh(pathway);
