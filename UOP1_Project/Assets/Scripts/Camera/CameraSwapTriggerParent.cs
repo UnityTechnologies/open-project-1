@@ -5,7 +5,10 @@ using Cinemachine;
 
 public class CameraSwapTriggerParent : MonoBehaviour
 {
-    public CinemachineVirtualCamera cameraToSwap;
+    [Tooltip("default camera used on enter if child collider has no camera")]
+    public CinemachineVirtualCamera cameraToSwapOnEnter;
+
+    public bool swapOnExit = true;
     
     [Header("Asset references")]
     [SerializeField] private VcamEventChannelSO VcamEventChannel = default;
@@ -35,16 +38,19 @@ public class CameraSwapTriggerParent : MonoBehaviour
     }
    
     // called when the player enters any of the child colliders
-    public void OnChildTriggerEntry(Collider childCollider)
+    public void OnChildTriggerEntry(Collider childCollider,CinemachineVirtualCamera childCameraToSwap)
     {
-
+        Debug.Log("Collider:"+childCollider);
         if(colliderDictionary.ContainsKey(childCollider))
         {
             
             if(!IsPlayerInside())
             {
                 // the player has entered the compound collider.
-                VcamEventChannel.OnEventRaised(cameraToSwap);
+                if(childCameraToSwap != null)
+                    VcamEventChannel.OnEventRaised(childCameraToSwap);
+                else
+                    VcamEventChannel.OnEventRaised(cameraToSwapOnEnter);
             }
 
             colliderDictionary[childCollider] = true;
@@ -56,6 +62,9 @@ public class CameraSwapTriggerParent : MonoBehaviour
         }
     }
 
+   
+
+
     public void OnChildTriggerExit(Collider childCollider)
     {
 
@@ -66,7 +75,8 @@ public class CameraSwapTriggerParent : MonoBehaviour
             if(!IsPlayerInside())
             {
                 // the player has left the compound collider.
-                VcamEventChannel.OnEventRaised(null);
+                if(swapOnExit)
+                    VcamEventChannel.OnEventRaised(null);
             }
             
         }
