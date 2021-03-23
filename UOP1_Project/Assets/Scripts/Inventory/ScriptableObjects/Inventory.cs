@@ -83,7 +83,7 @@ public class Inventory : ScriptableObject
 		return 0;
 	}
 
-	public bool[] IngredietsAvailability(List<ItemStack> ingredients)
+	public bool[] IngredientsAvailability(List<ItemStack> ingredients)
 	{
 
 		bool[] availabilityArray = new bool[ingredients.Count];
