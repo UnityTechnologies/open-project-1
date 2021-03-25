@@ -71,12 +71,12 @@ public class Protagonist : MonoBehaviour
 		float targetSpeed = 0f;
 		Vector3 adjustedMovement;
 
-		if (gameplayCameraTransform.isSet)
+		if (gameplayCameraTransform.IsSet)
 		{
 			//Get the two axes from the camera and flatten them on the XZ plane
-			Vector3 cameraForward = gameplayCameraTransform.Transform.forward;
+			Vector3 cameraForward = gameplayCameraTransform.Anchor.forward;
 			cameraForward.y = 0f;
-			Vector3 cameraRight = gameplayCameraTransform.Transform.right;
+			Vector3 cameraRight = gameplayCameraTransform.Anchor.right;
 			cameraRight.y = 0f;
 
 			//Use the two axes, modulated by the corresponding inputs, and construct the final vector

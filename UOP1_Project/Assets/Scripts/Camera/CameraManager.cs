@@ -11,7 +11,7 @@ public class CameraManager : MonoBehaviour
 	private bool _isRMBPressed;
 
 	[SerializeField, Range(.5f, 3f)]
-	private float _speedMultiplier = 1f; //TODO: make this modifiable in the game settings											
+	private float _speedMultiplier = 1f; //TODO: make this modifiable in the game settings
 	[SerializeField] private TransformAnchor _cameraTransformAnchor = default;
 
 	[Header("Listening on channels")]
@@ -37,7 +37,7 @@ public class CameraManager : MonoBehaviour
 		if (_frameObjectChannel != null)
 			_frameObjectChannel.OnEventRaised += OnFrameObjectEvent;
 
-		_cameraTransformAnchor.Transform = mainCamera.transform;
+		_cameraTransformAnchor.Anchor = mainCamera.transform;
 	}
 
 	private void OnDisable()

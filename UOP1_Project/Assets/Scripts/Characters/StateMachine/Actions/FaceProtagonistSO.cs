@@ -22,14 +22,13 @@ public class FaceProtagonist : StateAction
 
 	public override void OnUpdate()
 	{
-		if (_protagonist.isSet)
-		{
-			Vector3 relativePos = _protagonist.Transform.position - _actor.position;
-			relativePos.y = 0f; // Force rotation to be only on Y axis.
+		if (!_protagonist.IsSet) return;
 
-			Quaternion rotation = Quaternion.LookRotation(relativePos);
-			_actor.rotation = rotation;
-		}
+		Vector3 relativePos = _protagonist.Anchor.position - _actor.position;
+		relativePos.y = 0f; // Force rotation to be only on Y axis.
+
+		Quaternion rotation = Quaternion.LookRotation(relativePos);
+		_actor.rotation = rotation;
 	}
 
 	public override void OnStateEnter()

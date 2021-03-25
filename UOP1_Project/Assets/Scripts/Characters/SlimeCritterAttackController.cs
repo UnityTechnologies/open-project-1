@@ -22,7 +22,7 @@ public class SlimeCritterAttackController : MonoBehaviour
 	// When the attack starts, the position targeted by the attack is determined and is not changed afterward
 	public void SetAttackTarget()
 	{
-		_propelTargetVector = (_playerTransform.Transform.position - transform.position) * _propelFactor / _propelDuration;
+		_propelTargetVector = (_playerTransform.Anchor.position - transform.position) * _propelFactor / _propelDuration;
 	}
 
 	// Trigger the propel movement during the attack

@@ -26,7 +26,7 @@ public class LocationExit : MonoBehaviour
 
 	private void UpdatePathTaken()
 	{
-		if (_pathTaken != null)
-			_pathTaken.Path = _exitPath;
+		if (!_pathTaken.IsSet)
+			_pathTaken.Anchor = _exitPath;
 	}
 }

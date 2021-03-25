@@ -12,7 +12,7 @@ public class ChasingTargetActionSO : StateActionSO
 	[Tooltip("NPC chasing speed")]
 	[SerializeField] private float _chasingSpeed = default;
 
-	public Vector3 TargetPosition => _targetTransform.Transform.position;
+	public Vector3 TargetPosition => _targetTransform.Anchor.position;
 	public float ChasingSpeed => _chasingSpeed;
 
 	protected override StateAction CreateAction() => new ChasingTargetAction();
@@ -34,11 +34,10 @@ public class ChasingTargetAction : StateAction
 
 	public override void OnUpdate()
 	{
-		if (_isActiveAgent)
-		{
-			_agent.isStopped = false;
-			_agent.SetDestination(_config.TargetPosition);
-		}
+		if (!_isActiveAgent) return;
+
+		_agent.isStopped = false;
+		_agent.SetDestination(_config.TargetPosition);
 	}
 
 	public override void OnStateEnter()
