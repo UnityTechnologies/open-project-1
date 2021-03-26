@@ -1,0 +1,39 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="QuestEditorWindow.uss" />
+    <ui:VisualElement name="quest-editor-window" style="flex-direction: row; height: 100%; width: 100%; min-height: 700px;">
+        <ui:VisualElement name="1st-column" style="width: 30%;">
+            <ui:VisualElement name="questlines" class="padding5" style="width: auto; background-color: rgb(227, 253, 253); height: 150px;">
+                <ui:Label text="Questlines" display-tooltip-when-elided="true" name="title-questline" class="title" />
+                <ui:VisualElement name="questlines-list" style="height: 100%;" />
+            </ui:VisualElement>
+            <ui:VisualElement name="steps" class="padding5" style="width: auto; background-color: rgb(203, 241, 245); height: 150px;">
+                <ui:Label text="Steps" display-tooltip-when-elided="true" name="title-step" class="title" />
+                <ui:VisualElement name="steps-list" style="height: 100%;" />
+            </ui:VisualElement>
+            <ui:VisualElement name="step-info-panel" class="padding5" style="width: auto; background-color: rgb(227, 253, 253); height: 100%;">
+                <ui:Label text="Step Info" display-tooltip-when-elided="true" name="step-info" class="title" />
+                <ui:VisualElement name="step-info-scroll" style="height: 100%;" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="2nd-column" style="width: 30%;">
+            <ui:VisualElement name="quests" class="padding5" style="width: auto; background-color: rgb(203, 241, 245); height: 150px;">
+                <ui:Label text="Quests" display-tooltip-when-elided="true" name="title-quest" class="title" />
+                <ui:VisualElement name="quests-list" style="height: 100%;" />
+            </ui:VisualElement>
+            <ui:VisualElement name="dialogues" class="padding5" style="width: auto; background-color: rgb(227, 253, 253); height: 150px;">
+                <ui:Label text="Dialogues" display-tooltip-when-elided="true" name="title-dislogues" class="title" />
+                <ui:VisualElement name="dialogues-list" style="height: 100%;" />
+            </ui:VisualElement>
+            <ui:VisualElement name="dialogue-info-panel" class="padding5" style="width: auto; background-color: rgb(203, 241, 245); height: 100%;">
+                <ui:Label text="Dialogue Info" display-tooltip-when-elided="true" name="dialogue-info" class="title" />
+                <ui:VisualElement name="dialogue-info-scroll" style="height: 100%;" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="3rd-column" style="width: 40%; background-color: rgb(113, 201, 206);">
+            <ui:Label text="Quest Preview" display-tooltip-when-elided="true" name="quest-preview-title" class="title" />
+            <ui:Button text="Refresh" display-tooltip-when-elided="true" name="refresh-preview-btn" style="width: 100px; margin-left: auto; margin-right: 1px; background-color: rgba(203, 241, 245, 255);" />
+            <ui:VisualElement name="actor-preview" style="width: 100px; height: 100px; margin-left: auto; margin-right: auto;" />
+            <ui:VisualElement name="actor-conversations" style="padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px;" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
