@@ -21,10 +21,32 @@ namespace UOP1.StateMachine
 		private void Awake()
 		{
 			_currentState = _transitionTableSO.GetInitialState(this);
-			_currentState.OnStateEnter();
 #if UNITY_EDITOR
 			_debugger.Awake(this);
 #endif
+		}
+
+#if UNITY_EDITOR
+		private void OnEnable()
+		{
+			UnityEditor.AssemblyReloadEvents.afterAssemblyReload += OnAfterAssemblyReload;
+		}
+
+		private void OnAfterAssemblyReload()
+		{
+			_currentState = _transitionTableSO.GetInitialState(this);
+			_debugger.Awake(this);
+		}
+
+		private void OnDisable()
+		{
+			UnityEditor.AssemblyReloadEvents.afterAssemblyReload -= OnAfterAssemblyReload;
+		}
+#endif
+
+		private void Start()
+		{
+			_currentState.OnStateEnter();
 		}
 
 		public new bool TryGetComponent<T>(out T component) where T : Component

@@ -40,6 +40,10 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _NormalFromTexture_6D2F1CB1_Texture_0:
+        m_Texture: {fileID: 2800000, guid: cdfa7f9cd6129ea4096c6af086f30325, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _OcclusionMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -52,18 +56,32 @@ Material:
         m_Texture: {fileID: 2800000, guid: 8edbda94a99753b47a061e31ad9273b9, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - unity_Lightmaps:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_LightmapsInd:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_ShadowMasks:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     m_Floats:
     - Foam_Amount: 6.9
     - Foam_Cutoff: 3.4
     - Foam_Evolution_Speed: 1
     - Foam_Scale: 2.8
-    - Global_Fading: 15
+    - Global_Fading: 30
     - Light_Probe_Contribution: 1
-    - Refaction_Scale: 5
+    - Refaction_Scale: 2.25
     - Refraction_Evolution_Speed: 1.5
     - Refraction_Height: 0.2
     - Refraction_Scale: 9.11
     - Vector1_157E1F63: 2
+    - Vector1_2B58F275: -0.14
+    - Vector1_2FBE3DFA: 0.73
     - Vector1_338BB9F0: 88.91
     - Vector1_416519C8: 0.5
     - Vector1_44082C02: 1.18
@@ -71,11 +89,16 @@ Material:
     - Vector1_4B42586: 4
     - Vector1_5442BDBE: 1.5
     - Vector1_54589480: 0.5
+    - Vector1_65DAC18D: 1
     - Vector1_6CEF81B6: -9.77
     - Vector1_77A997E: 0.33
+    - Vector1_7A056A02: 1.61
+    - Vector1_8CEB4E60: 0.84
     - Vector1_C37602FC: 23.9
     - Vector1_CB18EF2B: 3
+    - Vector1_EA2D80AD: 8.55
     - Vector1_EB7F5DFB: 150
+    - Vector1_F591A23A: -0.44
     - Water_Depth: 1.9
     - Wave_Height: 0.23
     - Wave_Scale: 10
@@ -107,13 +130,14 @@ Material:
     - Color_992873A2: {r: 0.33641863, g: 0.6792453, b: 0.4923038, a: 0}
     - Color_AF7C2181: {r: 1, g: 1, b: 1, a: 0.6666667}
     - Far_Color: {r: 0.20392156, g: 0.43921566, b: 0.8156863, a: 0}
-    - Foam_Color: {r: 1, g: 1, b: 1, a: 1}
-    - Shallow_Water_Color: {r: 0.27450964, g: 0.894, b: 0.75159276, a: 0}
-    - Trough_Color: {r: 0, g: 0.38972965, b: 0.5098035, a: 0.5372549}
+    - Foam_Color: {r: 1, g: 1, b: 1, a: 0.8509804}
+    - Shallow_Water_Color: {r: 0.27450964, g: 0.89, b: 0.75, a: 0}
+    - Trough_Color: {r: 0.078, g: 0.3799999, b: 0.5, a: 0.5372549}
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
+  m_BuildTextureStacks: []
 --- !u!114 &6607172260569944357
 MonoBehaviour:
   m_ObjectHideFlags: 11

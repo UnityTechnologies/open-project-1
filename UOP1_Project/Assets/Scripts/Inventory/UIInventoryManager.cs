@@ -3,42 +3,50 @@ using UnityEngine;
 
 public class UIInventoryManager : MonoBehaviour
 {
-	[SerializeField]
-	private Inventory currentInventory;
-	[SerializeField]
-	private InventoryItemFiller itemPrefab;
-	[SerializeField]
-	private GameObject contentParent;
 
 	[SerializeField]
-	private InspectorFiller inspectorFiller;
+	private Inventory currentInventory = default;
+	[SerializeField]
+	private InventoryItemFiller itemPrefab = default;
+	[SerializeField]
+	private GameObject contentParent = default;
 
 	[SerializeField]
-	private InventoryTypeTabsFiller tabFiller;
+	private InspectorFiller inspectorFiller = default;
 
 	[SerializeField]
-	private InventoryButtonFiller buttonFiller;
+	private InventoryTypeTabsFiller tabFiller = default;
 
-	InventoryTabType selectedTab;
+	[SerializeField]
+	private InventoryButtonFiller buttonFiller = default;
+
+	InventoryTabType selectedTab = default;
 	[SerializeField]
 	List<InventoryTabType> tabTypesList = new List<InventoryTabType>();
 
 	private int selectedItemId = -1;
 
-	private List<InventoryItemFiller> instantiatedGameObjects;
+	private List<InventoryItemFiller> instantiatedGameObjects = default;
 
 
-	public ItemEventChannelSo CookRecipeEvent;
-	public ItemEventChannelSo UseItemEvent;
-	public ItemEventChannelSo EquipItemEvent;
+	[SerializeField]
+	private ItemEventChannelSO CookRecipeEvent = default;
+	[SerializeField]
+	private ItemEventChannelSO UseItemEvent = default;
+	[SerializeField]
+	private ItemEventChannelSO EquipItemEvent = default;
 
-	public TabEventChannelSo ChangeTabEvent;
+	[SerializeField]
+	private TabEventChannelSO ChangeTabEvent = default;
 
-	public ItemEventChannelSo SelectItemEvent;
+	[SerializeField]
+	private ItemEventChannelSO SelectItemEvent = default;
 
-	public VoidEventChannelSO ActionButtonClicked;
+	[SerializeField]
+	private VoidEventChannelSO ActionButtonClicked = default;
 
-	public VoidEventChannelSO OnInteractionEndedEvent;
+	[SerializeField]
+	private VoidEventChannelSO OnInteractionEndedEvent = default;
 
 	private void OnEnable()
 	{
@@ -173,10 +181,10 @@ public class UIInventoryManager : MonoBehaviour
 
 		if (removeItem)
 		{
-			if (instantiatedGameObjects.Exists(o => o.currentItem == itemToUpdate))
+			if (instantiatedGameObjects.Exists(o => o._currentItem == itemToUpdate))
 			{
 
-				int index = instantiatedGameObjects.FindIndex(o => o.currentItem == itemToUpdate);
+				int index = instantiatedGameObjects.FindIndex(o => o._currentItem == itemToUpdate);
 				instantiatedGameObjects[index].gameObject.SetActive(false);
 
 			}
@@ -186,10 +194,10 @@ public class UIInventoryManager : MonoBehaviour
 		{
 			int index = 0;
 			//if the item has already been created
-			if (instantiatedGameObjects.Exists(o => o.currentItem == itemToUpdate))
+			if (instantiatedGameObjects.Exists(o => o._currentItem == itemToUpdate))
 			{
 
-				index = instantiatedGameObjects.FindIndex(o => o.currentItem == itemToUpdate);
+				index = instantiatedGameObjects.FindIndex(o => o._currentItem == itemToUpdate);
 
 
 			}
@@ -226,9 +234,9 @@ public class UIInventoryManager : MonoBehaviour
 
 	public void InspectItem(Item itemToInspect)
 	{
-		if (instantiatedGameObjects.Exists(o => o.currentItem.Item == itemToInspect))
+		if (instantiatedGameObjects.Exists(o => o._currentItem.Item == itemToInspect))
 		{
-			int itemIndex = instantiatedGameObjects.FindIndex(o => o.currentItem.Item == itemToInspect);
+			int itemIndex = instantiatedGameObjects.FindIndex(o => o._currentItem.Item == itemToInspect);
 
 
 			//unselect selected Item
@@ -294,11 +302,11 @@ public class UIInventoryManager : MonoBehaviour
 		if (ActionButtonClicked != null)
 		{
 			//find the selected Item
-			if (instantiatedGameObjects.Count > selectedItemId)
+			if (instantiatedGameObjects.Count > selectedItemId && selectedItemId > -1)
 			{
 				//find the item 
 				Item itemToActOn = new Item();
-				itemToActOn = instantiatedGameObjects[selectedItemId].currentItem.Item;
+				itemToActOn = instantiatedGameObjects[selectedItemId]._currentItem.Item;
 
 				//check the selected Item type
 				//call action function depending on the itemType

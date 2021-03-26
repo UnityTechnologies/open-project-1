@@ -46,7 +46,7 @@
                     "interactions": ""
                 },
                 {
-                    "name": "ExtraAction",
+                    "name": "OpenInventory",
                     "type": "Button",
                     "id": "1b6ae4df-f5e6-42fc-92b6-3dcc2e126563",
                     "expectedControlType": "Button",
@@ -280,7 +280,18 @@
                 {
                     "name": "",
                     "id": "91ce58d8-88e1-4ade-945b-59c4f0939828",
-                    "path": "<Keyboard>/j",
+                    "path": "<Keyboard>/f",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardOrGamepad",
+                    "action": "Attack",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "4c248131-d3fe-4545-b4dc-ba0690c01312",
+                    "path": "<Mouse>/leftButton",
                     "interactions": "",
                     "processors": "",
                     "groups": "KeyboardOrGamepad",
@@ -335,11 +346,11 @@
                 {
                     "name": "",
                     "id": "937b421c-9467-4b47-a1fd-445b9b44d5c9",
-                    "path": "<Keyboard>/l",
+                    "path": "<Keyboard>/q",
                     "interactions": "",
                     "processors": "",
                     "groups": "KeyboardOrGamepad",
-                    "action": "ExtraAction",
+                    "action": "OpenInventory",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -350,7 +361,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "KeyboardOrGamepad",
-                    "action": "ExtraAction",
+                    "action": "OpenInventory",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -366,7 +377,7 @@
                     "isPartOfComposite": false
                 },
                 {
-                    "name": "Keyboard TFGH",
+                    "name": "Keyboard IJKL",
                     "id": "8e17360e-f036-4963-93f6-05d14787dfb5",
                     "path": "2DVector(mode=1)",
                     "interactions": "",
@@ -379,7 +390,7 @@
                 {
                     "name": "up",
                     "id": "9a4ec3f5-78bf-4f42-b7d7-f1edd7ce12dc",
-                    "path": "<Keyboard>/t",
+                    "path": "<Keyboard>/i",
                     "interactions": "",
                     "processors": "",
                     "groups": "KeyboardOrGamepad",
@@ -390,7 +401,7 @@
                 {
                     "name": "down",
                     "id": "5d82874e-55d8-4d54-84f5-c4d59dc3b39c",
-                    "path": "<Keyboard>/g",
+                    "path": "<Keyboard>/k",
                     "interactions": "",
                     "processors": "",
                     "groups": "KeyboardOrGamepad",
@@ -401,7 +412,7 @@
                 {
                     "name": "left",
                     "id": "13a13bd5-f4ec-4f5b-9a8e-ef1165cc9f5f",
-                    "path": "<Keyboard>/f",
+                    "path": "<Keyboard>/j",
                     "interactions": "",
                     "processors": "",
                     "groups": "KeyboardOrGamepad",
@@ -412,18 +423,7 @@
                 {
                     "name": "right",
                     "id": "78626b57-196b-4f24-9a3f-af2477d3633b",
-                    "path": "<Keyboard>/h",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "KeyboardOrGamepad",
-                    "action": "RotateCamera",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "up",
-                    "id": "4e483eb2-4460-4dc1-af9f-9bcb31ebe837",
-                    "path": "<Gamepad>/rightStick/up",
+                    "path": "<Keyboard>/l",
                     "interactions": "",
                     "processors": "",
                     "groups": "KeyboardOrGamepad",
@@ -504,6 +504,22 @@
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
+                },
+                {
+                    "name": "MouseMove",
+                    "type": "PassThrough",
+                    "id": "df62b304-145b-43af-9a21-8cfd14f72fdb",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "Unpause",
+                    "type": "Button",
+                    "id": "a33f8309-65f3-4f8a-8671-c7cb90ef798e",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
                 }
             ],
             "bindings": [
@@ -544,6 +560,17 @@
                     "name": "",
                     "id": "77bc3cae-36d6-4cda-bbf3-5f245a50eca2",
                     "path": "<Keyboard>/enter",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardOrGamepad",
+                    "action": "Confirm",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b03f649e-d5ec-4fad-8614-6a69620c5345",
+                    "path": "<Mouse>/leftButton",
                     "interactions": "",
                     "processors": "",
                     "groups": "KeyboardOrGamepad",
@@ -790,6 +817,39 @@
                     "processors": "",
                     "groups": "KeyboardOrGamepad",
                     "action": "Cancel",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "10a96123-fa2f-43f5-b596-4ed4c93fd4b3",
+                    "path": "<Gamepad>/start",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardOrGamepad",
+                    "action": "Unpause",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b8857ec1-9a5c-4cd2-af29-276683c9151e",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardOrGamepad",
+                    "action": "Unpause",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "23583bb1-6dd5-4287-94bd-3028199fc088",
+                    "path": "<Mouse>/position",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse;KeyboardOrGamepad",
+                    "action": "MouseMove",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

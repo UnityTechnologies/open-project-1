@@ -8,11 +8,11 @@ public class PlayJumpParticlesActionSO : StateActionSO<PlayJumpParticlesAction> 
 public class PlayJumpParticlesAction : StateAction
 {
 	//Component references
-	private DustParticlesController _dustController;
+	private PlayerEffectController _dustController;
 
 	public override void Awake(StateMachine stateMachine)
 	{
-		_dustController = stateMachine.GetComponent<DustParticlesController>();
+		_dustController = stateMachine.GetComponent<PlayerEffectController>();
 	}
 
 	public override void OnStateEnter()

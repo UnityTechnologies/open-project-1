@@ -1,24 +1,24 @@
-﻿using UnityEngine;
+using System.Collections.Generic;
+using UnityEngine;
 
 public enum InteractionType { None = 0, PickUp, Cook, Talk };
 
 public class InteractionManager : MonoBehaviour
 {
-	private InteractionType _potentialInteraction;
-	[HideInInspector] public InteractionType currentInteraction;
+	[HideInInspector] public InteractionType currentInteractionType; //This is checked by conditions in the StateMachine
 	[SerializeField] private InputReader _inputReader = default;
 	//To store the object we are currently interacting with
-	private GameObject _currentInteractableObject = null;
+	private LinkedList<Interaction> _potentialInteractions = new LinkedList<Interaction>();
 
 	//Events for the different interaction types
 	[Header("Broadcasting on")]
-	[SerializeField] private ItemEventChannelSo _onObjectPickUp = default;
+	[SerializeField] private ItemEventChannelSO _onObjectPickUp = default;
 	[SerializeField] private VoidEventChannelSO _onCookingStart = default;
-	[SerializeField] private DialogueEventChannelSo _startTalking = default;
+	[SerializeField] private DialogueActorChannelSO _startTalking = default;
 	//UI event
 	[SerializeField] private InteractionUIEventChannelSO _toggleInteractionUI = default;
+
 	[Header("Listening to")]
-	//Check if the interaction ended 
 	[SerializeField] private VoidEventChannelSO _onInteractionEnded = default;
 
 	private void OnEnable()
@@ -33,122 +33,121 @@ public class InteractionManager : MonoBehaviour
 		_onInteractionEnded.OnEventRaised -= OnInteractionEnd;
 	}
 
-	//When the interaction ends, we still want to display the interaction UI if we are still in the trigger zone
-	void OnInteractionEnd()
+	// Called mid-way through the AnimationClip of collecting
+	private void Collect()
 	{
-		_inputReader.EnableGameplayInput();
-		switch (_potentialInteraction)
+		GameObject itemObject = _potentialInteractions.First.Value.interactableObject;
+		_potentialInteractions.RemoveFirst();
+
+		if (_onObjectPickUp != null)
 		{
-			//we show it after cooking or talking, in case player want to interact again
-			case InteractionType.Cook:
-			case InteractionType.Talk:
-				_toggleInteractionUI.RaiseEvent(true, _potentialInteraction);
-				Debug.Log("Display interaction UI");
-				break;
-			default:
-				break;
+			Item currentItem = itemObject.GetComponent<CollectibleItem>().GetItem();
+			_onObjectPickUp.RaiseEvent(currentItem);
 		}
+
+		Destroy(itemObject); //TODO: maybe move this destruction in a more general manger, to implement a removal SFX
+
+		RequestUpdateUI(false);
 	}
 
-	void OnInteractionButtonPress()
+	private void OnInteractionButtonPress()
 	{
-		//remove interaction after press 
-		_toggleInteractionUI.RaiseEvent(false, _potentialInteraction);
+		if (_potentialInteractions.Count == 0)
+			return;
 
-		switch (_potentialInteraction)
+		currentInteractionType = _potentialInteractions.First.Value.type;
+
+		switch (_potentialInteractions.First.Value.type)
 		{
-			case InteractionType.None:
-				return;
-			case InteractionType.PickUp:
-				if (_currentInteractableObject != null)
-				{
-					if (_onObjectPickUp != null)
-					{
-						//raise an event with an item as parameter (to add object to inventory)
-						Item currentItem = _currentInteractableObject.GetComponent<CollectibleItem>().GetItem();
-						_onObjectPickUp.RaiseEvent(currentItem);
-						Debug.Log("PickUp event raised");
-						//set current interaction for state machine
-						currentInteraction = InteractionType.PickUp;
-					}
-				}
-				//destroy the GO
-				Destroy(_currentInteractableObject);
-				break;
 			case InteractionType.Cook:
 				if (_onCookingStart != null)
 				{
 					_onCookingStart.RaiseEvent();
-					Debug.Log("Cooking event raised");
-					//Change the action map
-					_inputReader.EnableUIInput();
-					//set current interaction for state machine
-					currentInteraction = InteractionType.Cook;
+					_inputReader.EnableMenuInput();
 				}
 				break;
+
 			case InteractionType.Talk:
-				if (_currentInteractableObject != null)
+				if (_startTalking != null)
 				{
-					if (_onCookingStart != null)
-					{
-						//raise an event with an actor as parameter
-						//Actor currentActor = currentInteractableObject.GetComponent<Dialogue>().GetActor();
-						//_startTalking.RaiseEvent(currentActor);
-						Debug.Log("talk event raised");
-						//Change the action map
-						_inputReader.EnableDialogueInput();
-						//set current interaction for state machine
-						currentInteraction = InteractionType.Talk;
-					}
+					_potentialInteractions.First.Value.interactableObject.GetComponent<StepController>().InteractWithCharacter();
+					_inputReader.EnableDialogueInput();
 				}
 				break;
-			default:
+
+				//No need to do anything for Pickup type, the StateMachine will transition to the state
+				//and then the AnimationClip will call Collect()
+		}
+	}
+
+	//Called by the Event on the trigger collider on the child GO called "InteractionDetector"
+	public void OnTriggerChangeDetected(bool entered, GameObject obj)
+	{
+		if (entered)
+			AddPotentialInteraction(obj);
+		else
+			RemovePotentialInteraction(obj);
+	}
+
+	private void AddPotentialInteraction(GameObject obj)
+	{
+		Interaction newPotentialInteraction = new Interaction(InteractionType.None, obj);
+
+		if (obj.CompareTag("Pickable"))
+		{
+			newPotentialInteraction.type = InteractionType.PickUp;
+		}
+		else if (obj.CompareTag("CookingPot"))
+		{
+			newPotentialInteraction.type = InteractionType.Cook;
+		}
+		else if (obj.CompareTag("NPC"))
+		{
+			newPotentialInteraction.type = InteractionType.Talk;
+		}
+
+		if (newPotentialInteraction.type != InteractionType.None)
+		{
+			_potentialInteractions.AddFirst(newPotentialInteraction);
+			RequestUpdateUI(true);
+		}
+	}
+
+	private void RemovePotentialInteraction(GameObject obj)
+	{
+		LinkedListNode<Interaction> currentNode = _potentialInteractions.First;
+		while (currentNode != null)
+		{
+			if (currentNode.Value.interactableObject == obj)
+			{
+				_potentialInteractions.Remove(currentNode);
+				break;
+			}
+			currentNode = currentNode.Next;
+		}
+
+		RequestUpdateUI(_potentialInteractions.Count > 0);
+	}
+
+	private void RequestUpdateUI(bool visible)
+	{
+		if (visible)
+			_toggleInteractionUI.RaiseEvent(true, _potentialInteractions.First.Value.type);
+		else
+			_toggleInteractionUI.RaiseEvent(false, InteractionType.None);
+	}
+
+	private void OnInteractionEnd()
+	{
+		switch (currentInteractionType)
+		{
+			case InteractionType.Cook:
+			case InteractionType.Talk:
+				//We show the UI after cooking or talking, in case player wants to interact again
+				RequestUpdateUI(true);
 				break;
 		}
-	}
 
-	private void OnTriggerEnter(Collider other)
-	{
-		if (other.CompareTag("Pickable"))
-		{
-			_potentialInteraction = InteractionType.PickUp;
-			Debug.Log("I triggered a pickable object!");
-			DisplayInteractionUI();
-		}
-		else if (other.CompareTag("CookingPot"))
-		{
-			_potentialInteraction = InteractionType.Cook;
-			Debug.Log("I triggered a cooking pot!");
-			DisplayInteractionUI();
-		}
-		else if (other.CompareTag("NPC"))
-		{
-			_potentialInteraction = InteractionType.Talk;
-			Debug.Log("I triggered an NPC!");
-			DisplayInteractionUI();
-		}
-		_currentInteractableObject = other.gameObject;
-	}
-
-	private void DisplayInteractionUI()
-	{
-		//Raise event to display UI
-		_toggleInteractionUI.RaiseEvent(true, _potentialInteraction);
-	}
-
-	private void OnTriggerExit(Collider other)
-	{
-
-
-		ResetInteraction();
-	}
-
-	private void ResetInteraction()
-	{
-		_potentialInteraction = InteractionType.None;
-		_currentInteractableObject = null;
-
-		if (_toggleInteractionUI != null)
-			_toggleInteractionUI.RaiseEvent(false, _potentialInteraction);
+		_inputReader.EnableGameplayInput();
 	}
 }

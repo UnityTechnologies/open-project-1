@@ -9,15 +9,25 @@ public class Protagonist : MonoBehaviour
 	[SerializeField] private InputReader _inputReader = default;
 	public TransformAnchor gameplayCameraTransform;
 
+	[SerializeField] private VoidEventChannelSO _openInventoryChannel = default;
+
 	private Vector2 _previousMovementInput;
 
 	//These fields are read and manipulated by the StateMachine actions
-	[HideInInspector] public bool jumpInput;
-	[HideInInspector] public bool extraActionInput;
-	[HideInInspector] public Vector3 movementInput; //Initial input coming from the Protagonist script
-	[HideInInspector] public Vector3 movementVector; //Final movement vector, manipulated by the StateMachine actions
-	[HideInInspector] public ControllerColliderHit lastHit;
-	[HideInInspector] public bool isRunning; // Used when using the keyboard to run, brings the normalised speed to 1
+	[NonSerialized] public bool jumpInput;
+	[NonSerialized] public bool extraActionInput;
+	[NonSerialized] public bool attackInput;
+	[NonSerialized] public Vector3 movementInput; //Initial input coming from the Protagonist script
+	[NonSerialized] public Vector3 movementVector; //Final movement vector, manipulated by the StateMachine actions
+	[NonSerialized] public ControllerColliderHit lastHit;
+	[NonSerialized] public bool isRunning; // Used when using the keyboard to run, brings the normalised speed to 1
+
+	public const float GRAVITY_MULTIPLIER = 5f;
+	public const float MAX_FALL_SPEED = -50f;
+	public const float MAX_RISE_SPEED = 100f;
+	public const float GRAVITY_COMEBACK_MULTIPLIER = .03f;
+	public const float GRAVITY_DIVIDER = .6f;
+	public const float AIR_RESISTANCE = 5f;
 
 	private void OnControllerColliderHit(ControllerColliderHit hit)
 	{
@@ -30,9 +40,10 @@ public class Protagonist : MonoBehaviour
 		_inputReader.jumpEvent += OnJumpInitiated;
 		_inputReader.jumpCanceledEvent += OnJumpCanceled;
 		_inputReader.moveEvent += OnMove;
-		_inputReader.extraActionEvent += OnExtraAction;
+		_inputReader.openInventoryEvent += OnOpenInventory;
 		_inputReader.startedRunning += OnStartedRunning;
 		_inputReader.stoppedRunning += OnStoppedRunning;
+		_inputReader.attackEvent += OnStartedAttack;
 		//...
 	}
 
@@ -42,9 +53,10 @@ public class Protagonist : MonoBehaviour
 		_inputReader.jumpEvent -= OnJumpInitiated;
 		_inputReader.jumpCanceledEvent -= OnJumpCanceled;
 		_inputReader.moveEvent -= OnMove;
-		_inputReader.extraActionEvent -= OnExtraAction;
+		_inputReader.openInventoryEvent -= OnOpenInventory;
 		_inputReader.startedRunning -= OnStartedRunning;
 		_inputReader.stoppedRunning -= OnStoppedRunning;
+		_inputReader.attackEvent -= OnStartedAttack;
 		//...
 	}
 
@@ -103,9 +115,13 @@ public class Protagonist : MonoBehaviour
 
 	private void OnStartedRunning() => isRunning = true;
 
-	// This handler is just used for debug, for now
-	private void OnExtraAction()
+	private void OnOpenInventory()
 	{
-		extraActionInput = true;
+		_openInventoryChannel.RaiseEvent();
 	}
+
+	private void OnStartedAttack() => attackInput = true;
+
+	// Triggered from Animation Event
+	public void ConsumeAttackInput() => attackInput = false;
 }

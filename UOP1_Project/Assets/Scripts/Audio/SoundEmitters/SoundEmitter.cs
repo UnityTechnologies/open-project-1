@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿using DG.Tweening;
+using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -28,6 +30,7 @@ public class SoundEmitter : MonoBehaviour
 		settings.ApplyTo(_audioSource);
 		_audioSource.transform.position = position;
 		_audioSource.loop = hasToLoop;
+		_audioSource.time = 0f; //Reset in case this AudioSource is being reused for a short SFX after being used for a long music track
 		_audioSource.Play();
 
 		if (!hasToLoop)
@@ -35,6 +38,40 @@ public class SoundEmitter : MonoBehaviour
 			StartCoroutine(FinishedPlaying(clip.length));
 		}
 	}
+
+	public void FadeMusicIn(AudioClip musicClip, AudioConfigurationSO settings, float duration, float startTime = 0f)
+	{
+		PlayAudioClip(musicClip, settings, true);
+		_audioSource.volume = 0f;
+
+		//Start the clip at the same time the previous one left, if length allows
+		//TODO: find a better way to sync fading songs
+		if (startTime <= _audioSource.clip.length)
+			_audioSource.time = startTime;
+
+		_audioSource.DOFade(1f, duration);
+	}
+
+	public float FadeMusicOut(float duration)
+	{
+		_audioSource.DOFade(0f, duration).onComplete += OnFadeOutComplete;
+
+		return _audioSource.time;
+	}
+
+	private void OnFadeOutComplete()
+	{
+		NotifyBeingDone();
+	}
+
+	/// <summary>
+	/// Used to check which music track is being played.
+	/// </summary>
+	public AudioClip GetClip()
+	{
+		return _audioSource.clip;
+	}
+
 
 	/// <summary>
 	/// Used when the game is unpaused, to pick up SFX from where they left.
@@ -52,15 +89,22 @@ public class SoundEmitter : MonoBehaviour
 		_audioSource.Pause();
 	}
 
-	/// <summary>
-	/// Used when the SFX finished playing. Called by the <c>AudioManager</c>.
-	/// </summary>
-	public void Stop() // Redundant?
+	public void Stop()
 	{
 		_audioSource.Stop();
 	}
 
-	public bool IsInUse()
+	public void Finish()
+	{
+		if (_audioSource.loop)
+		{
+			_audioSource.loop = false;
+			float timeRemaining = _audioSource.clip.length - _audioSource.time;
+			StartCoroutine(FinishedPlaying(timeRemaining));
+		}
+	}
+
+	public bool IsPlaying()
 	{
 		return _audioSource.isPlaying;
 	}
@@ -74,6 +118,11 @@ public class SoundEmitter : MonoBehaviour
 	{
 		yield return new WaitForSeconds(clipLength);
 
+		NotifyBeingDone();
+	}
+
+	private void NotifyBeingDone()
+	{
 		OnSoundFinishedPlaying.Invoke(this); // The AudioManager will pick this up
 	}
 }

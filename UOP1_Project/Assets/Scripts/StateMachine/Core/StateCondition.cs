@@ -10,6 +10,10 @@ namespace UOP1.StateMachine
 		private bool _isCached = false;
 		private bool _cachedStatement = default;
 		internal StateConditionSO _originSO;
+
+		/// <summary>
+		/// Use this property to access shared data from the <see cref="StateConditionSO"/> that corresponds to this <see cref="Condition"/>
+		/// </summary>
 		protected StateConditionSO OriginSO => _originSO;
 
 		/// <summary>
@@ -23,9 +27,6 @@ namespace UOP1.StateMachine
 		/// </summary>
 		internal bool GetStatement()
 		{
-			if (!_originSO.cacheResult)
-				return Statement();
-
 			if (!_isCached)
 			{
 				_isCached = true;

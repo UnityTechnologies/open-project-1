@@ -4,28 +4,27 @@ using UnityEngine.Localization;
 // Created with collaboration from:
 // https://forum.unity.com/threads/inventory-system.980646/
 [CreateAssetMenu(fileName = "Item", menuName = "Inventory/Item", order = 51)]
-public class Item : ScriptableObject
+public class Item : SerializableScriptableObject
 {
 	[Tooltip("The name of the item")]
-	[SerializeField]
-	private LocalizedString _name;
+	[SerializeField] private LocalizedString _name = default;
 
 	[Tooltip("A preview image for the item")]
 	[SerializeField]
-	private Sprite _previewImage;
+	private Sprite _previewImage = default;
 
 	[Tooltip("A description of the item")]
 	[SerializeField]
-	private LocalizedString _description;
+	private LocalizedString _description = default;
 
 
 	[Tooltip("The type of item")]
 	[SerializeField]
-	private ItemType _itemType;
+	private ItemType _itemType = default;
 
 	[Tooltip("A prefab reference for the model of the item")]
 	[SerializeField]
-	private GameObject _prefab;
+	private GameObject _prefab = default;
 
 	[Tooltip("The list of the ingredients necessary to the recipe")]
 	[SerializeField]
@@ -33,7 +32,7 @@ public class Item : ScriptableObject
 
 	[Tooltip("The resulting dish to the recipe")]
 	[SerializeField]
-	private Item _resultingDish;
+	private Item _resultingDish = default;
 
 
 

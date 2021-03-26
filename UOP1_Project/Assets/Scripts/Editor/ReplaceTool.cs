@@ -38,7 +38,7 @@ public class ReplaceTool : EditorWindow
 	}
 
 	// Register menu item to open Window
-	[MenuItem("Tools/Replace with Prefab")]
+	[MenuItem("ChopChop/Replace with Prefab")]
 	public static void ShowWindow()
 	{
 		var window = GetWindow<ReplaceTool>();
@@ -132,17 +132,24 @@ public class ReplaceTool : EditorWindow
 	/// <param name="replaceObject">Prefab that will be instantiated in place of the objects to replace.</param>
 	internal static void ReplaceSelectedObjects(GameObject[] objectToReplace, GameObject replaceObject)
 	{
-		//Debug.Log("[Replace Tool] Replace process");
+		var newInstances = new int[objectToReplace.Length];
+
 		for (int i = 0; i < objectToReplace.Length; i++)
 		{
 			var go = objectToReplace[i];
+
 			Undo.RegisterCompleteObjectUndo(go, "Saving game object state");
+
+			var sibling = go.transform.GetSiblingIndex();
 			var inst = (GameObject)PrefabUtility.InstantiatePrefab(replaceObject);
+			newInstances[i] = inst.GetInstanceID();
+
 			inst.transform.position = go.transform.position;
 			inst.transform.rotation = go.transform.rotation;
 			inst.transform.parent = go.transform.parent;
-
 			inst.transform.localScale = go.transform.localScale;
+			inst.transform.SetSiblingIndex(sibling);
+
 			Undo.RegisterCreatedObjectUndo(inst, "Replacement creation.");
 			foreach (Transform child in go.transform)
 			{
@@ -150,7 +157,8 @@ public class ReplaceTool : EditorWindow
 			}
 			Undo.DestroyObjectImmediate(go);
 		}
-		//Debug.LogFormat("[Replace Tool] {0} objects replaced on scene with {1}", objectToReplace.Length, replaceObject.name);
+
+		Selection.instanceIDs = newInstances;
 	}
 }
 
