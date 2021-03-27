@@ -5,9 +5,9 @@ using System.Linq;
 
 public class PathwayNavMesh
 {
-	private Pathway _pathway;
+	private PathwayConfigSO _pathway;
 
-	public PathwayNavMesh(Pathway pathway)
+	public PathwayNavMesh(PathwayConfigSO pathway)
 	{
 		_pathway = pathway;
 		_pathway.Hits = new List<bool>();

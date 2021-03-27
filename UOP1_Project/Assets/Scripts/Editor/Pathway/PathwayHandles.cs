@@ -4,10 +4,10 @@ using UnityEditor;
 
 public class PathwayHandles
 {
-	private Pathway _pathway;
+	private PathwayConfigSO _pathway;
 	private Vector3 _tmp;
 
-	public PathwayHandles(Pathway pathway)
+	public PathwayHandles(PathwayConfigSO pathway)
 	{
 		_pathway = pathway;
 	}

@@ -44,7 +44,6 @@ public class Protagonist : MonoBehaviour
 		_inputReader.startedRunning += OnStartedRunning;
 		_inputReader.stoppedRunning += OnStoppedRunning;
 		_inputReader.attackEvent += OnStartedAttack;
-		_inputReader.attackCanceledEvent += OnStoppedAttack;
 		//...
 	}
 
@@ -58,7 +57,6 @@ public class Protagonist : MonoBehaviour
 		_inputReader.startedRunning -= OnStartedRunning;
 		_inputReader.stoppedRunning -= OnStoppedRunning;
 		_inputReader.attackEvent -= OnStartedAttack;
-		_inputReader.attackCanceledEvent -= OnStoppedAttack;
 		//...
 	}
 
@@ -123,5 +121,7 @@ public class Protagonist : MonoBehaviour
 	}
 
 	private void OnStartedAttack() => attackInput = true;
-	private void OnStoppedAttack() => attackInput = false;
+
+	// Triggered from Animation Event
+	public void ConsumeAttackInput() => attackInput = false;
 }
