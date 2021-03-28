@@ -13,6 +13,7 @@ public class EditorColdStartup : MonoBehaviour
 	[SerializeField] private GameSceneSO _thisSceneSO = default;
 	[SerializeField] private GameSceneSO _persistentManagersSO = default;
 	[SerializeField] private AssetReference _notifyColdStartupChannel = default;
+	[SerializeField] private SaveSystem _saveSystem = default;
 
 	private void Start()
 	{
@@ -20,6 +21,7 @@ public class EditorColdStartup : MonoBehaviour
 		{
 			_persistentManagersSO.sceneReference.LoadSceneAsync(LoadSceneMode.Additive, true).Completed += LoadEventChannel;
 		}
+		CreateSaveFileIfNotPresent();
 	}
 
 	private void LoadEventChannel(AsyncOperationHandle<SceneInstance> obj)
@@ -31,6 +33,14 @@ public class EditorColdStartup : MonoBehaviour
 	{
 		LoadEventChannelSO loadEventChannelSO = (LoadEventChannelSO)_notifyColdStartupChannel.Asset;
 		loadEventChannelSO.RaiseEvent(_thisSceneSO);
+	}
+
+	private void CreateSaveFileIfNotPresent()
+	{
+		if (_saveSystem != null && !_saveSystem.LoadSaveDataFromDisk())
+		{
+			_saveSystem.WriteEmptySaveFile();
+		}
 	}
 #endif
 }
