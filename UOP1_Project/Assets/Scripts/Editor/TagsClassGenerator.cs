@@ -1,4 +1,5 @@
-﻿using System.CodeDom;
+﻿using System;
+using System.CodeDom;
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.IO;
@@ -88,19 +89,15 @@ namespace UOP1.EditorTools
 			InUnity.Clear();
 
 			foreach (string tag in InternalEditorUtility.tags)
-			{
-				string tagName = tag.Replace(" ", Empty);
-				InUnity.Add(tagName);
-			}
+				InUnity.Add(tag.Replace(" ", Empty));
 
 			InClass.Clear();
 
 			var fields = typeof(Tag).GetFields(BindingFlags.Public | BindingFlags.Static);
 			foreach (FieldInfo fieldInfo in fields)
-			{
 				if (fieldInfo.IsLiteral)
 					InClass.Add(fieldInfo.Name);
-			}
+
 
 			return !InClass.SetEquals(InUnity);
 		}
@@ -203,6 +200,16 @@ namespace UOP1.EditorTools
 					Type = new CodeTypeReference(typeof(string)),
 					InitExpression = new CodePrimitiveExpression(tag)
 				};
+
+				try
+				{
+					CodeGenerator.ValidateIdentifiers(field);
+				}
+				catch (ArgumentException)
+				{
+					Debug.LogError($"'{tag}' cannot be made into a safe identifier. See <a href=\"https://bit.ly/IdentifierNames\">https://bit.ly/IdentifierNames</a> for details.");
+					throw;
+				}
 
 				typeDeclaration.Members.Add(field);
 			}
