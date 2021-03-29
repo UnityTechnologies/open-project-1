@@ -21,10 +21,6 @@ namespace UOP1
     /// }
     /// </code>
     /// </example>
-    /// <remarks>
-    /// <b>Important</b>: To regenerate this class after adding or removing tags to the project; delete
-    /// "Scripts/Tags.cs" via the "Project Window" and use the "ChopChop/Code Generation/Tags" menu to regenerate it.
-    /// </remarks>
     public sealed class Tag
     {
         public const string Untagged = "Untagged";

@@ -1,5 +1,6 @@
 ﻿using System.CodeDom;
 using System.CodeDom.Compiler;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using Microsoft.CSharp;
@@ -20,7 +21,7 @@ namespace UOP1.EditorTools
 		/// <summary>
 		/// The <see cref="MenuItem" /> name.
 		/// </summary>
-		private const string TAGS_MENU_ITEM = "ChopChop/Code Generation/Tags";
+		private const string TAGS_MENU_ITEM = "ChopChop/Code Generation/Regenerate Tag Class";
 
 		/// <summary>
 		/// The name of the class to create.
@@ -39,10 +40,70 @@ namespace UOP1.EditorTools
 
 		#endregion
 
+		#region State
+
 		/// <summary>
 		/// The absolute path to the file containing the tags.
 		/// </summary>
 		private static readonly string TagsFilePath = $"{Application.dataPath}/{TAGS_CLASS_PATH}";
+
+		/// <summary>
+		/// Used to check what tag strings are in the <see cref="Tag"/> class.
+		/// </summary>
+		private static readonly HashSet<string> InClass = new HashSet<string>();
+
+		/// <summary>
+		/// Used to check what tag strings are in the project.
+		/// </summary>
+		private static readonly HashSet<string> InUnity = new HashSet<string>();
+
+		#endregion
+
+		/// <summary>
+		/// Configures the callback for when the editor sends a message the project has changed.
+		/// </summary>
+		[InitializeOnLoadMethod]
+		private static void ConfigureCallback()
+		{
+			EditorApplication.projectChanged += OnProjectChanged;
+		}
+
+		/// <summary>
+		/// If the project has changed, we check if we can generate the file then check if any tags have been updated.
+		/// </summary>
+		private static void OnProjectChanged()
+		{
+			if (!CanGenerate()) return;
+			if (!HasChangedTags()) return;
+
+			GenerateFile();
+		}
+
+		/// <summary>
+		/// Checks if the values defined in the class are the same as in Unity itself.
+		/// </summary>
+		/// <returns>True if the tags in the project don't match the tags in the class.</returns>
+		private static bool HasChangedTags()
+		{
+			InUnity.Clear();
+
+			foreach (string tag in InternalEditorUtility.tags)
+			{
+				string tagName = tag.Replace(" ", Empty);
+				InUnity.Add(tagName);
+			}
+
+			InClass.Clear();
+
+			var fields = typeof(Tag).GetFields(BindingFlags.Public | BindingFlags.Static);
+			foreach (FieldInfo fieldInfo in fields)
+			{
+				if (fieldInfo.IsLiteral)
+					InClass.Add(fieldInfo.Name);
+			}
+
+			return !InClass.SetEquals(InUnity);
+		}
 
 		/// <summary>
 		/// Validates if we can generate a new tags file.
@@ -51,7 +112,6 @@ namespace UOP1.EditorTools
 		/// Can only generate a new file if the following conditions are met:
 		///     - <see cref="TAGS_CLASS_NAME" /> is not null or a whitespace.
 		///     - <see cref="TAGS_CLASS_PATH" /> is not null or a whitespace.
-		///     - <see cref="TagsFilePath" /> doesn't already exist.
 		/// </remarks>
 		/// <remarks>
 		/// These are protections against accidentally overwriting another file if the configuration values are changed.
@@ -64,7 +124,6 @@ namespace UOP1.EditorTools
 		{
 			if (IsNullOrWhiteSpace(TAGS_CLASS_NAME)) return false;
 			if (IsNullOrWhiteSpace(TAGS_CLASS_PATH)) return false;
-			if (File.Exists(TagsFilePath)) return false;
 
 			return true;
 		}
@@ -73,7 +132,7 @@ namespace UOP1.EditorTools
 		/// Generates a new Tags class file.
 		/// </summary>
 		[MenuItem(TAGS_MENU_ITEM)]
-		private static void Generate()
+		private static void GenerateFile()
 		{
 			// Start with a compileUnit to create our code and give it an optional namespace.
 			CodeCompileUnit compileUnit = new CodeCompileUnit();
@@ -121,11 +180,9 @@ namespace UOP1.EditorTools
 		private static void AddComments(CodeTypeDeclaration typeDeclaration)
 		{
 			CodeCommentStatement commentStatement = new CodeCommentStatement(
-				"<summary>\n Use these string constants when comparing tags in code / scripts.\n </summary>" +
-				"\n <example>\n <code>\n if (other.gameObject.CompareTag(Tags.Player)) {\n     Destroy(other.gameObject);" +
-				"\n }\n </code>\n </example>\n <remarks>\n <b>Important</b>: To regenerate this class after adding or removing " +
-				$"tags to the project; delete\n \"{TAGS_CLASS_PATH}\" via the \"Project Window\" and use the " +
-				$"\"{TAGS_MENU_ITEM}\" menu to regenerate it.\n </remarks>",
+				"<summary>\r\n Use these string constants when comparing tags in code / scripts.\r\n </summary>" +
+				"\r\n <example>\r\n <code>\r\n if (other.gameObject.CompareTag(Tags.Player)) {\r\n     Destroy(other.gameObject);" +
+				"\r\n }\r\n </code>\r\n </example>",
 				true);
 
 			typeDeclaration.Comments.Add(commentStatement);
