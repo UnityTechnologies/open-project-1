@@ -22,10 +22,6 @@ namespace UOP1
     /// }
     /// </code>
     /// </example>
-    /// <remarks>
-    /// <b>Important</b>: To regenerate this class after adding or removing layers to the project; delete
-    /// "Scripts/Layers.cs" via the "Project Window" and use the "ChopChop/Code Generation/Layers" menu to regenerate it.
-    /// </remarks>
     public enum Layer
     {
         Default = 0,
@@ -50,10 +46,6 @@ namespace UOP1
     /// }
     /// </code>
     /// </example>
-    /// <remarks>
-    /// <b>Important</b>: To regenerate this class after adding or removing layers to the project; delete
-    /// "Scripts/Layers.cs" via the "Project Window" and use the "ChopChop/Code Generation/Layers" menu to regenerate it.
-    /// </remarks>
     [FlagsAttribute()]
     public enum LayerMasks
     {
