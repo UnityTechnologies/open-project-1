@@ -196,9 +196,9 @@ namespace UOP1.EditorTools
 		private static void AddCommentsToLayerEnum(CodeTypeDeclaration typeDeclaration)
 		{
 			CodeCommentStatement commentStatement = new CodeCommentStatement(
-				"<summary>\n Use this enum in place of layer names in code / scripts.\n </summary>" +
-				"\n <example>\n <code>\n if (other.gameObject.layer == Layer.Characters) {\n     Destroy(other.gameObject);" +
-				"\n }\n </code>\n </example>",
+				"<summary>\r\n Use this enum in place of layer names in code / scripts.\r\n </summary>" +
+				"\r\n <example>\r\n <code>\r\n if (other.gameObject.layer == Layer.Characters) {\r\n     Destroy(other.gameObject);" +
+				"\r\n }\r\n </code>\r\n </example>",
 				true);
 
 			typeDeclaration.Comments.Add(commentStatement);
@@ -211,10 +211,10 @@ namespace UOP1.EditorTools
 		private static void AddCommentsToLayerMasksEnum(CodeTypeDeclaration typeDeclaration)
 		{
 			CodeCommentStatement commentStatement = new CodeCommentStatement(
-				"<summary>\n Use this enum in place of layer mask values in code / scripts.\n </summary>" +
-				"\n <example>\n <code>\n if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), " +
-				"out RaycastHit hit, Mathf.Infinity, (int) (LayerMasks.Characters | LayerMasks.Water)) {\n     " +
-				"Debug.Log(\"Did Hit\");\n }\n </code>\n </example>",
+				"<summary>\r\n Use this enum in place of layer mask values in code / scripts.\r\n </summary>" +
+				"\r\n <example>\r\n <code>\r\n if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), " +
+				"out RaycastHit hit, Mathf.Infinity, (int) (LayerMasks.Characters | LayerMasks.Water)) {\r\n     " +
+				"Debug.Log(\"Did Hit\");\r\n }\r\n </code>\r\n </example>",
 				true);
 
 			typeDeclaration.Comments.Add(commentStatement);
