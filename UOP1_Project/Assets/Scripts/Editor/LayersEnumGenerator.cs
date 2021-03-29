@@ -232,17 +232,40 @@ namespace UOP1.EditorTools
 				string layerName = layer.Replace(" ", Empty);
 				int layerValue = LayerMask.NameToLayer(layer);
 
+				// Layer ID enum
 				CodeMemberField field = new CodeMemberField(LAYERS_ENUM_NAME, layerName)
 				{
 					InitExpression = new CodePrimitiveExpression(layerValue)
 				};
+				ValidateIdentifier(field, layer);
 				layersEnum.Members.Add(field);
 
+				// LayerMasks enum
 				field = new CodeMemberField(LAYERMASKS_ENUM_NAME, layerName)
 				{
 					InitExpression = new CodePrimitiveExpression(1 << layerValue)
 				};
+				ValidateIdentifier(field, layer);
 				layerMasksEnum.Members.Add(field);
+			}
+		}
+
+		/// <summary>
+		/// Validates a given field and layer name.
+		/// </summary>
+		/// <param name="field">The member field to validate.</param>
+		/// <param name="layer">The layer name we're creating a member for.</param>
+		private static void ValidateIdentifier(CodeMemberField field, string layer)
+		{
+			try
+			{
+				CodeGenerator.ValidateIdentifiers(field);
+			}
+			catch (ArgumentException)
+			{
+				Debug.LogError(
+					$"'{layer}' cannot be made into a safe identifier. See <a href=\"https://bit.ly/IdentifierNames\">https://bit.ly/IdentifierNames</a> for details.");
+				throw;
 			}
 		}
 
