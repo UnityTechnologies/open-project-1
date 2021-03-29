@@ -263,8 +263,7 @@ namespace UOP1.EditorTools
 			}
 			catch (ArgumentException)
 			{
-				Debug.LogError(
-					$"'{layer}' cannot be made into a safe identifier. See <a href=\"https://bit.ly/IdentifierNames\">https://bit.ly/IdentifierNames</a> for details.");
+				Debug.LogError($"'{layer}' cannot be made into a safe identifier. See <a href=\"https://bit.ly/IdentifierNames\">https://bit.ly/IdentifierNames</a> for details.");
 				throw;
 			}
 		}
