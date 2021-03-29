@@ -25,7 +25,7 @@ namespace UOP1.EditorTools
 		/// <summary>
 		/// The name of the class to create.
 		/// </summary>
-		private const string TAGS_CLASS_NAME = "Tags";
+		private const string TAGS_CLASS_NAME = "Tag";
 
 		/// <summary>
 		/// Optional namespace to put the class in. Can be '<see langword="null" />' or empty..
