@@ -25,6 +25,11 @@ namespace UOP1.EditorTools
 		private const string LAYERS_MENU_ITEM = "ChopChop/Code Generation/Regenerate Layers Enums";
 
 		/// <summary>
+		/// Optional namespace to put the enums in. Can be '<see langword="null" />' or empty.
+		/// </summary>
+		private const string LAYERS_ENUM_NAMESPACE = "UOP1";
+
+		/// <summary>
 		/// The name of the class to enum.
 		/// </summary>
 		private const string LAYERS_ENUM_NAME = "Layer";
@@ -35,14 +40,14 @@ namespace UOP1.EditorTools
 		private const string LAYERMASKS_ENUM_NAME = "LayerMasks";
 
 		/// <summary>
-		/// Optional namespace to put the enums in. Can be '<see langword="null" />' or empty..
-		/// </summary>
-		private const string LAYERS_ENUM_NAMESPACE = "UOP1";
-
-		/// <summary>
 		/// The path relative to the project's asset folder.
 		/// </summary>
 		private const string LAYERS_ENUM_PATH = "Scripts/Layers.cs";
+
+		/// <summary>
+		/// Used via reflection to look for the generated Enum. Must change if moving to another assembly definition.
+		/// </summary>
+		private const string ASSEMBLY_NAME = "Assembly-CSharp";
 
 		#endregion
 
@@ -52,6 +57,12 @@ namespace UOP1.EditorTools
 		/// The absolute path to the file containing the enums.
 		/// </summary>
 		private static readonly string LayersFilePath = $"{Application.dataPath}/{LAYERS_ENUM_PATH}";
+
+		/// <summary>
+		/// Used to read the values from the Enum. If we don't use reflection to find the Enums, we tie ourselves to a specific
+		/// configuration which isn't ideal.
+		/// </summary>
+		private static readonly Type EnumType = Type.GetType($"{LAYERS_ENUM_NAMESPACE}.{LAYERS_ENUM_NAME}, {ASSEMBLY_NAME}");
 
 		/// <summary>
 		/// Used to check if what layer strings and IDs are in the <see cref="Layer"/> enum.
@@ -80,9 +91,23 @@ namespace UOP1.EditorTools
 		private static void OnProjectChanged()
 		{
 			if (!CanGenerate()) return;
+			if (!EnumTypeExists()) return;
 			if (!HasChangedLayers()) return;
 
 			GenerateFile();
+		}
+
+		/// <summary>
+		/// Checks if the Enum type exists. This will let us know if we can use reflection on it to check for changes in layers.
+		/// </summary>
+		/// <returns>True if the Enum type exists.</returns>
+		private static bool EnumTypeExists()
+		{
+			if (null != EnumType) return true;
+
+			Debug.LogWarning(
+				$"{LAYERS_ENUM_NAMESPACE}.{LAYERS_ENUM_NAME} is missing. Regenerate via the '{LAYERS_MENU_ITEM}' menu item.");
+			return false;
 		}
 
 		/// <summary>
@@ -126,8 +151,8 @@ namespace UOP1.EditorTools
 
 			InEnum.Clear();
 
-			foreach (int enumValue in Enum.GetValues(typeof(Layer)))
-				InEnum.Add((Enum.GetName(typeof(Layer), enumValue), enumValue));
+			foreach (int enumValue in Enum.GetValues(EnumType))
+				InEnum.Add((Enum.GetName(EnumType, enumValue), enumValue));
 
 			return !InEnum.SetEquals(InUnity);
 		}
@@ -263,7 +288,8 @@ namespace UOP1.EditorTools
 			}
 			catch (ArgumentException)
 			{
-				Debug.LogError($"'{layer}' cannot be made into a safe identifier. See <a href=\"https://bit.ly/IdentifierNames\">https://bit.ly/IdentifierNames</a> for details.");
+				Debug.LogError(
+					$"'{layer}' cannot be made into a safe identifier. See <a href=\"https://bit.ly/IdentifierNames\">https://bit.ly/IdentifierNames</a> for details.");
 				throw;
 			}
 		}
