@@ -91,19 +91,16 @@ public class QuestEditorWindow : EditorWindow
 
     private void SetUpQuestPreview(QuestSO quest)
     {
-	    if (quest != null)
-	    {
-		    LoadActorImage(quest.Steps[0].Actor.name);
+	    if (quest == null)
+		    return;
 
-		    //Clear actor conversations area
-		    VisualElement actorConversationsVE = rootVisualElement.Q<VisualElement>("actor-conversations");
-		    actorConversationsVE.Clear();
+	    LoadActorImage(quest.Steps[0].Actor.name);
 
-		    foreach (StepSO step in quest.Steps)
-		    {
-			    LoadAndInitStepUXML(step);
-		    }
-	    }
+	    //Clear actor conversations area
+	    rootVisualElement.Q<VisualElement>("actor-conversations").Clear();
+
+	    foreach (StepSO step in quest.Steps)
+		    LoadAndInitStepUXML(step);
     }
 
     private void LoadAndInitStepUXML(StepSO step)
