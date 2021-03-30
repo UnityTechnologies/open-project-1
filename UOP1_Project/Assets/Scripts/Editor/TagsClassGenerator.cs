@@ -25,19 +25,24 @@ namespace UOP1.EditorTools
 		private const string TAGS_MENU_ITEM = "ChopChop/Code Generation/Regenerate Tag Class";
 
 		/// <summary>
-		/// The name of the class to create.
-		/// </summary>
-		private const string TAGS_CLASS_NAME = "Tag";
-
-		/// <summary>
 		/// Optional namespace to put the class in. Can be '<see langword="null" />' or empty..
 		/// </summary>
 		private const string TAGS_CLASS_NAMESPACE = "UOP1";
 
 		/// <summary>
+		/// The name of the class to create.
+		/// </summary>
+		private const string TAGS_CLASS_NAME = "Tag";
+
+		/// <summary>
 		/// The path relative to the project's asset folder.
 		/// </summary>
 		private const string TAGS_CLASS_PATH = "Scripts/Tags.cs";
+
+		/// <summary>
+		/// Used via reflection to look for the generated class. Must change if moving to another assembly definition.
+		/// </summary>
+		private const string ASSEMBLY_NAME = "Assembly-CSharp";
 
 		#endregion
 
@@ -47,6 +52,12 @@ namespace UOP1.EditorTools
 		/// The absolute path to the file containing the tags.
 		/// </summary>
 		private static readonly string TagsFilePath = $"{Application.dataPath}/{TAGS_CLASS_PATH}";
+
+		/// <summary>
+		/// Used to read the values from the Class. If we don't use reflection to find the Class, we tie ourselves to a specific
+		/// configuration which isn't ideal.
+		/// </summary>
+		private static readonly Type ClassType = Type.GetType($"{TAGS_CLASS_NAMESPACE}.{TAGS_CLASS_NAME}, {ASSEMBLY_NAME}");
 
 		/// <summary>
 		/// Used to check what tag strings are in the <see cref="Tag"/> class.
@@ -75,9 +86,23 @@ namespace UOP1.EditorTools
 		private static void OnProjectChanged()
 		{
 			if (!CanGenerate()) return;
+			if (!ClassTypeExists()) return;
 			if (!HasChangedTags()) return;
 
 			GenerateFile();
+		}
+
+		/// <summary>
+		/// Checks if the Class type exists. This will let us know if we can use reflection on it to check for changes in tags.
+		/// </summary>
+		/// <returns>True if the Class type exists.</returns>
+		private static bool ClassTypeExists()
+		{
+			if (null != ClassType) return true;
+
+			Debug.LogWarning(
+				$"{TAGS_CLASS_NAMESPACE}.{TAGS_CLASS_NAME} is missing. Regenerate via the '{TAGS_MENU_ITEM}' menu item.");
+			return false;
 		}
 
 		/// <summary>
@@ -93,7 +118,7 @@ namespace UOP1.EditorTools
 
 			InClass.Clear();
 
-			var fields = typeof(Tag).GetFields(BindingFlags.Public | BindingFlags.Static);
+			var fields = ClassType.GetFields(BindingFlags.Public | BindingFlags.Static);
 			foreach (FieldInfo fieldInfo in fields)
 				if (fieldInfo.IsLiteral)
 					InClass.Add(fieldInfo.Name);
@@ -207,7 +232,8 @@ namespace UOP1.EditorTools
 				}
 				catch (ArgumentException)
 				{
-					Debug.LogError($"'{tag}' cannot be made into a safe identifier. See <a href=\"https://bit.ly/IdentifierNames\">https://bit.ly/IdentifierNames</a> for details.");
+					Debug.LogError(
+						$"'{tag}' cannot be made into a safe identifier. See <a href=\"https://bit.ly/IdentifierNames\">https://bit.ly/IdentifierNames</a> for details.");
 					throw;
 				}
 
