@@ -91,7 +91,7 @@ namespace UOP1.TagLayerTypeGenerator.Editor
 				string layerName = layer.Replace(" ", Empty);
 				int layerValue = LayerMask.NameToLayer(layer);
 
-				_inUnity.Add(new ValueTuple<string, int>(layerName, layerValue));
+				_inUnity.Add((layerName, layerValue));
 			}
 
 			_inEnum.Clear();
