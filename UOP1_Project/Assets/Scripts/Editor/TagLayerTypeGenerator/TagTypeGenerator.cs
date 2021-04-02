@@ -22,14 +22,10 @@ namespace UOP1.TagLayerTypeGenerator.Editor
 		private readonly HashSet<string> _inUnity = new HashSet<string>();
 
 		/// <summary>The absolute path to the file containing the tags.</summary>
-		private readonly string _tagFilePath = $"{Application.dataPath}/{Settings.tag.filePath}";
+		private readonly string _tagFilePath = $"{Application.dataPath}/{Settings.Tag.FilePath}";
 
-		/// <summary>
-		///     Used to read the values from the Class. If we don't use reflection to find the Class, we tie ourselves to a
-		///     specific configuration which isn't ideal.
-		/// </summary>
-		private readonly Type _tagType =
-			Type.GetType($"{Settings.tag.@namespace}.{Settings.tag.typeName}, {Settings.tag.Assembly}");
+		/// <summary>Used to reflect previous values from the Enum.</summary>
+		private readonly Type _tagType = Type.GetType($"{Settings.Tag.Namespace}.{Settings.Tag.TypeName}, {Settings.Tag.Assembly}");
 
 		/// <summary>Configures the callback for when the editor sends a message the project has changed.</summary>
 		[InitializeOnLoadMethod]
@@ -42,7 +38,7 @@ namespace UOP1.TagLayerTypeGenerator.Editor
 		/// <summary>If the project has changed, check if I can generate the file and if any tags have been updated.</summary>
 		private void OnProjectChanged()
 		{
-			if (!Settings.tag.autoGenerate) return;
+			if (!Settings.Tag.AutoGenerate) return;
 			if (!CanGenerate()) return;
 			if (!TypeExists()) return;
 			if (!HasChangedTags()) return;
@@ -56,8 +52,8 @@ namespace UOP1.TagLayerTypeGenerator.Editor
 		{
 			if (null != _tagType) return true;
 
-			Debug.LogWarning($"{Settings.tag.@namespace}.{Settings.tag.typeName} is missing from {Settings.tag.Assembly}." +
-			                 $"Check correct {nameof(Settings.tag.assemblyDefinition)} is set then regenerate via the Project Settings' menu.",
+			Debug.LogWarning($"{Settings.Tag.Namespace}.{Settings.Tag.TypeName} is missing from {Settings.Tag.Assembly}." +
+			                 $"Check correct {nameof(Settings.Tag.AssemblyDefinition)} is set then regenerate via the Project Settings' menu.",
 				Settings);
 			return false;
 		}
@@ -85,8 +81,9 @@ namespace UOP1.TagLayerTypeGenerator.Editor
 		/// <returns><see langword="true" /> if all conditions are met.</returns>
 		public override bool CanGenerate()
 		{
-			if (IsNullOrWhiteSpace(Settings.tag.typeName)) return false;
-			if (IsNullOrWhiteSpace(Settings.tag.filePath)) return false;
+			if (!CodeGenerator.IsValidLanguageIndependentIdentifier(Settings.Tag.TypeName)) return false;
+			if (!IsNullOrWhiteSpace(Settings.Tag.Namespace) && !CodeGenerator.IsValidLanguageIndependentIdentifier(Settings.Tag.Namespace)) return false;
+			if (IsNullOrWhiteSpace(Settings.Tag.FilePath)) return false;
 
 			return true;
 		}
@@ -96,21 +93,21 @@ namespace UOP1.TagLayerTypeGenerator.Editor
 		{
 			// Start with a compileUnit to create our code and give it an optional namespace.
 			CodeCompileUnit compileUnit = new CodeCompileUnit();
-			CodeNamespace codeNamespace = new CodeNamespace(Settings.tag.@namespace);
+			CodeNamespace codeNamespace = new CodeNamespace(Settings.Tag.Namespace);
 			compileUnit.Namespaces.Add(codeNamespace);
 
 			// Validate the namespace.
-			ValidateIdentifier(codeNamespace, Settings.tag.@namespace);
+			ValidateIdentifier(codeNamespace, Settings.Tag.Namespace);
 
 			// Declare a type that is public and sealed.
-			CodeTypeDeclaration typeDeclaration = new CodeTypeDeclaration(Settings.tag.typeName)
+			CodeTypeDeclaration typeDeclaration = new CodeTypeDeclaration(Settings.Tag.TypeName)
 			{
 				IsClass = true,
 				TypeAttributes = TypeAttributes.Public | TypeAttributes.Sealed
 			};
 
 			// Validate the type name.
-			ValidateIdentifier(typeDeclaration, Settings.tag.typeName);
+			ValidateIdentifier(typeDeclaration, Settings.Tag.TypeName);
 
 			// Add some comments so the class describes it's intended usage.
 			AddComments(typeDeclaration);
@@ -151,9 +148,8 @@ namespace UOP1.TagLayerTypeGenerator.Editor
 		private void AddComments(CodeTypeMember typeDeclaration)
 		{
 			CodeCommentStatement commentStatement = new CodeCommentStatement(
-				"<summary>\r\n Use these string constants when comparing tags in code / scripts.\r\n </summary>" +
-				"\r\n <example>\r\n <code>\r\n if (other.gameObject.CompareTag(Tags.Player)) {\r\n     Destroy(other.gameObject);" +
-				"\r\n }\r\n </code>\r\n </example>",
+				"<summary>\r\n Use these string constants when comparing tags in code / scripts.\r\n </summary>\r\n <example>\r\n <code>\r\n " +
+				"if (other.gameObject.CompareTag(Tags.Player)) {\r\n     Destroy(other.gameObject);\r\n }\r\n </code>\r\n </example>",
 				true);
 
 			typeDeclaration.Comments.Add(commentStatement);

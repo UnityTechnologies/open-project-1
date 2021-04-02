@@ -22,17 +22,13 @@ namespace UOP1.TagLayerTypeGenerator.Editor
 		private readonly HashSet<(string, int)> _inUnity = new HashSet<(string, int)>();
 
 		/// <summary>The absolute path to the file containing the Enums.</summary>
-		private readonly string _layerFilePath = $"{Application.dataPath}/{Settings.layer.filePath}";
+		private readonly string _layerFilePath = $"{Application.dataPath}/{Settings.Layer.FilePath}";
 
-		/// <summary>
-		///     Used to read the values from the Enum. If we don't use reflection to find the Enums, we tie ourselves to a
-		///     specific configuration which isn't ideal.
-		/// </summary>
-		private readonly Type _layerType =
-			Type.GetType($"{Settings.layer.@namespace}.{Settings.layer.typeName}, {Settings.layer.Assembly}");
+		/// <summary>Used to reflect previous values from the Enum.</summary>
+		private readonly Type _layerType = Type.GetType($"{Settings.Layer.Namespace}.{Settings.Layer.TypeName}, {Settings.Layer.Assembly}");
 
 		/// <summary>Type name for layer masks.</summary>
-		private readonly string _maskTypeName = $"{Settings.layer.typeName}Masks";
+		private readonly string _maskTypeName = $"{Settings.Layer.TypeName}Masks";
 
 		/// <summary>Configures the callback for when the editor sends a message the project has changed.</summary>
 		[InitializeOnLoadMethod]
@@ -45,7 +41,7 @@ namespace UOP1.TagLayerTypeGenerator.Editor
 		/// <summary>If the project has changed, we check if we can generate the file then check if any layers have been updated.</summary>
 		private void OnProjectChanged()
 		{
-			if (!Settings.layer.autoGenerate) return;
+			if (!Settings.Layer.AutoGenerate) return;
 			if (!CanGenerate()) return;
 			if (!TypeExists()) return;
 			if (!HasChangedLayers()) return;
@@ -63,8 +59,8 @@ namespace UOP1.TagLayerTypeGenerator.Editor
 			if (null != _layerType) return true;
 
 			Debug.LogWarning(
-				$"{Settings.layer.@namespace}.{Settings.layer.typeName} is missing from {Settings.layer.Assembly}.\n" +
-				$"Check correct {nameof(Settings.layer.assemblyDefinition)} is set then regenerate via the Project Settings' menu.",
+				$"{Settings.Layer.Namespace}.{Settings.Layer.TypeName} is missing from {Settings.Layer.Assembly}.\n" +
+				$"Check correct {nameof(Settings.Layer.AssemblyDefinition)} is set then regenerate via the Project Settings' menu.",
 				Settings);
 			return false;
 		}
@@ -73,8 +69,9 @@ namespace UOP1.TagLayerTypeGenerator.Editor
 		/// <returns><see langword="true" /> if all conditions are met.</returns>
 		public override bool CanGenerate()
 		{
-			if (IsNullOrWhiteSpace(Settings.layer.typeName)) return false;
-			if (IsNullOrWhiteSpace(Settings.layer.filePath)) return false;
+			if (!CodeGenerator.IsValidLanguageIndependentIdentifier(Settings.Layer.TypeName)) return false;
+			if (!IsNullOrWhiteSpace(Settings.Layer.Namespace) && !CodeGenerator.IsValidLanguageIndependentIdentifier(Settings.Layer.Namespace)) return false;
+			if (IsNullOrWhiteSpace(Settings.Layer.FilePath)) return false;
 
 			return true;
 		}
@@ -107,22 +104,22 @@ namespace UOP1.TagLayerTypeGenerator.Editor
 		{
 			// Start with a compileUnit to create our code and give it an optional namespace.
 			CodeCompileUnit compileUnit = new CodeCompileUnit();
-			CodeNamespace codeNamespace = new CodeNamespace(Settings.layer.@namespace);
+			CodeNamespace codeNamespace = new CodeNamespace(Settings.Layer.Namespace);
 			compileUnit.Namespaces.Add(codeNamespace);
 			codeNamespace.Imports.Add(new CodeNamespaceImport(nameof(System)));
 
 			// Validate the namespace.
-			ValidateIdentifier(codeNamespace, Settings.layer.@namespace);
+			ValidateIdentifier(codeNamespace, Settings.Layer.Namespace);
 
 			// Declare a pair of enum types that are public.
-			CodeTypeDeclaration layersEnum = new CodeTypeDeclaration(Settings.layer.typeName)
+			CodeTypeDeclaration layersEnum = new CodeTypeDeclaration(Settings.Layer.TypeName)
 			{
 				IsEnum = true,
 				TypeAttributes = TypeAttributes.Public
 			};
 
 			// Validate the type name.
-			ValidateIdentifier(layersEnum, Settings.layer.typeName);
+			ValidateIdentifier(layersEnum, Settings.Layer.TypeName);
 
 			CodeTypeDeclaration layerMasksEnum = new CodeTypeDeclaration(_maskTypeName)
 			{
@@ -176,9 +173,8 @@ namespace UOP1.TagLayerTypeGenerator.Editor
 		private void AddCommentsToLayerEnum(CodeTypeMember typeDeclaration)
 		{
 			CodeCommentStatement commentStatement = new CodeCommentStatement(
-				"<summary>\r\n Use this enum in place of layer names in code / scripts.\r\n </summary>" +
-				"\r\n <example>\r\n <code>\r\n if (other.gameObject.layer == Layer.Characters) {\r\n     Destroy(other.gameObject);" +
-				"\r\n }\r\n </code>\r\n </example>",
+				"<summary>\r\n Use this enum in place of layer names in code / scripts.\r\n </summary>\r\n <example>\r\n <code>\r\n " +
+				"if (other.gameObject.layer == Layer.Characters) {\r\n     Destroy(other.gameObject);\r\n }\r\n </code>\r\n </example>",
 				true);
 
 			typeDeclaration.Comments.Add(commentStatement);
@@ -189,10 +185,9 @@ namespace UOP1.TagLayerTypeGenerator.Editor
 		private void AddCommentsToLayerMasksEnum(CodeTypeMember typeDeclaration)
 		{
 			CodeCommentStatement commentStatement = new CodeCommentStatement(
-				"<summary>\r\n Use this enum in place of layer mask values in code / scripts.\r\n </summary>" +
-				"\r\n <example>\r\n <code>\r\n if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), " +
-				"out RaycastHit hit, Mathf.Infinity, (int) (LayerMasks.Characters | LayerMasks.Water)) {\r\n     " +
-				"Debug.Log(\"Did Hit\");\r\n }\r\n </code>\r\n </example>",
+				"<summary>\r\n Use this enum in place of layer mask values in code / scripts.\r\n </summary>\r\n <example>\r\n <code>\r\n " +
+				"if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out RaycastHit hit, Mathf.Infinity, " +
+				"(int) (LayerMasks.Characters | LayerMasks.Water)) {\r\n     Debug.Log(\"Did Hit\");\r\n }\r\n </code>\r\n </example>",
 				true);
 
 			typeDeclaration.Comments.Add(commentStatement);
@@ -212,7 +207,7 @@ namespace UOP1.TagLayerTypeGenerator.Editor
 				int layerValue = LayerMask.NameToLayer(layer);
 
 				// Layer ID enum
-				CodeMemberField field = new CodeMemberField(Settings.layer.typeName, layerName)
+				CodeMemberField field = new CodeMemberField(Settings.Layer.TypeName, layerName)
 				{
 					InitExpression = new CodePrimitiveExpression(layerValue)
 				};
