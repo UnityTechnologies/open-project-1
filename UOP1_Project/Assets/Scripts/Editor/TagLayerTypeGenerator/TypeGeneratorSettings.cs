@@ -62,12 +62,13 @@ namespace UOP1.TagLayerTypeGenerator.Editor
 		/// </summary>
 		private void OnValidate()
 		{
-			if (!IsValidLanguageIndependentIdentifier(Tag.TypeName)) Debug.LogErrorFormat(InvalidIdentifier, Tag.TypeName);
-			if (!IsNullOrWhiteSpace(Tag.Namespace) && !IsValidLanguageIndependentIdentifier(Tag.Namespace)) Debug.LogErrorFormat(InvalidIdentifier, Tag.Namespace);
-			if (IsNullOrWhiteSpace(Tag.FilePath) && !IsValidLanguageIndependentIdentifier(Tag.FilePath)) Debug.LogError("Tag path cannot be empty.");
-			if (!IsValidLanguageIndependentIdentifier(Layer.TypeName)) Debug.LogErrorFormat(InvalidIdentifier, Layer.TypeName);
-			if (!IsNullOrWhiteSpace(Layer.Namespace) && !IsValidLanguageIndependentIdentifier(Layer.Namespace)) Debug.LogErrorFormat(InvalidIdentifier, Layer.Namespace);
-			if (IsNullOrWhiteSpace(Layer.FilePath) && !IsValidLanguageIndependentIdentifier(Layer.FilePath)) Debug.LogError("Layer path cannot be empty.");
+			if (!Tag.IsValidTypeName()) Debug.LogErrorFormat(InvalidIdentifier, Tag.TypeName);
+			if (!Tag.IsValidNamespace()) Debug.LogErrorFormat(InvalidIdentifier, Tag.Namespace);
+			if (!Tag.IsValidFilePath()) Debug.LogError("Tag path must be a valid path relative to Assets, not an empty string and ends in '.cs'.");
+
+			if (!Layer.IsValidTypeName()) Debug.LogErrorFormat(InvalidIdentifier, Layer.TypeName);
+			if (!Layer.IsValidNamespace()) Debug.LogErrorFormat(InvalidIdentifier, Layer.Namespace);
+			if (!Layer.IsValidFilePath()) Debug.LogError("Layer path must be a valid path relative to Assets, not an empty string and ends in '.cs'.");
 		}
 
 		/// <summary>Returns <see cref="InvalidOperationException" /> or creates a new one and saves the asset.</summary>
@@ -147,6 +148,27 @@ namespace UOP1.TagLayerTypeGenerator.Editor
 
 			/// <summary>Used via reflection to look for the generated type.</summary>
 			internal string Assembly => AssemblyDefinition == null ? "Assembly-CSharp" : AssemblyDefinition.name;
+
+			/// <summary>Splits <see cref="Namespace"/> by it's "." to validate each nested namespace is a validate identifier.</summary>
+			/// <returns>If all parts of the <see cref="Namespace"/> are valid.</returns>
+			internal bool IsValidNamespace()
+			{
+				return !IsNullOrWhiteSpace(Namespace) && Namespace.Split('.').All(IsValidLanguageIndependentIdentifier);
+			}
+
+			/// <summary>Validates the <see cref="TypeName" /> is a valid identifier.</summary>
+			/// <returns>True if a valid identifier.</returns>
+			internal bool IsValidTypeName()
+			{
+				return IsValidLanguageIndependentIdentifier(TypeName);
+			}
+
+			/// <summary>Validates the <see cref="FilePath" /> is valid.</summary>
+			/// <returns>True if a valid path.</returns>
+			internal bool IsValidFilePath()
+			{
+				return !IsNullOrWhiteSpace(FilePath) && FilePath.Substring(FilePath.Length - 3) == ".cs" && Uri.IsWellFormedUriString(FilePath, UriKind.Relative);
+			}
 		}
 	}
 }
