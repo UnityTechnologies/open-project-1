@@ -5,14 +5,14 @@ using UnityEngine;
 
 namespace UOP1.TagLayerTypeGenerator.Editor
 {
-	/// <summary>We want to share the settings between different close constructed types.</summary>
+	/// <summary>Share share settings between different close constructed types.</summary>
 	public abstract class BaseTypeGenerator
 	{
 		/// <summary>Backing field for <see cref="Settings" />.</summary>
 		private static TypeGeneratorSettings _settings;
 
 		/// <summary>The <see cref="TypeGeneratorSettings" /> to use when generating files.</summary>
-		protected static TypeGeneratorSettings Settings => _settings ??= TypeGeneratorSettings.GetOrCreateSettings();
+		protected static TypeGeneratorSettings Settings => _settings ? _settings : _settings = TypeGeneratorSettings.GetOrCreateSettings();
 
 		/// <summary>Validates a given field.</summary>
 		/// <param name="field">The member field to validate.</param>

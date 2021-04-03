@@ -9,10 +9,10 @@ namespace UOP1.TagLayerTypeGenerator.Editor
 		/// <summary>Backing field for <see cref="Generator" />.</summary>
 		protected static T Instance;
 
-		/// <summary>The instance of <see cref="TagTypeGenerator" />.</summary>
+		/// <summary>Instance of <see cref="ITypeGenerator" />.</summary>
 		public static ITypeGenerator Generator => Instance;
 
-		/// <summary>Invoked when the layer file is generated.</summary>
+		/// <summary>Invoked when the file is generated.</summary>
 		public event UnityAction FileGenerated;
 
 		/// <inheritdoc />

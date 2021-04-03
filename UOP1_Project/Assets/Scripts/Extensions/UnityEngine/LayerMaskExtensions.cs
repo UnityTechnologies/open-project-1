@@ -20,17 +20,6 @@ namespace UOP1.Extensions.UnityEngine
 		}
 
 		/// <summary>
-		///     Check if a <see cref="Layer" /> exists in the <see cref="LayerMask" />.
-		/// </summary>
-		/// <param name="layerMask">The <see cref="LayerMask" /> to check against.</param>
-		/// <param name="layer">The <see cref="Layer" /> to check.</param>
-		/// <returns>True if <paramref name="layer" /> is in <paramref name="layerMask" />.</returns>
-		public static bool Contains(this LayerMask layerMask, Layer layer)
-		{
-			return layerMask.Contains((int)layer);
-		}
-
-		/// <summary>
 		///     Check if a <see cref="GameObject" />'s layer exists in the <see cref="LayerMask" />.
 		/// </summary>
 		/// <param name="layerMask">The <see cref="LayerMask" /> to check against.</param>

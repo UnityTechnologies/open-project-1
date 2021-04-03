@@ -16,7 +16,7 @@ namespace UOP1
     /// </summary>
     /// <example>
     /// <code>
-    /// if (other.gameObject.CompareTag(Tags.Player)) {
+    /// if (other.gameObject.CompareTag(Tag.Player)) {
     ///     Destroy(other.gameObject);
     /// }
     /// </code>

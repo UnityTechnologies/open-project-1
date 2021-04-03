@@ -24,10 +24,10 @@ namespace UOP1.TagLayerTypeGenerator.Editor
 		private const string DefaultLayerFilePath = "Scripts/Layer.cs";
 
 		/// <summary>Where to create a new <see cref="TypeGeneratorSettings" /> asset.</summary>
-		private const string DefaultSettingsAssetPath = "Assets/TypeGenerationSettings.asset";
+		private const string DefaultSettingsAssetPath = "Assets/TypeGeneratorSettings.asset";
 
 		/// <summary>Log errors about invalidate identifiers with this string.</summary>
-		private const string InvalidIdentifier = "'{0}' is an invalid identifier. See <a href=\"https://bit.ly/IdentifierNames\">https://bit.ly/IdentifierNames</a> for details.";
+		private const string InvalidIdentifier = "'{0}' is not a valid identifier. See <a href=\"https://bit.ly/IdentifierNames\">https://bit.ly/IdentifierNames</a> for details.";
 
 		/// <summary>Where to start the asset search for settings.</summary>
 		private static readonly string[] SearchInFolders = {"Assets"};
@@ -56,10 +56,7 @@ namespace UOP1.TagLayerTypeGenerator.Editor
 			Tag.Namespace = Layer.Namespace = Application.productName.Replace(" ", Empty);
 		}
 
-		/// <summary>
-		///     This function is called when the script is loaded or a value is changed in the Inspector (Called in the editor
-		///     only).
-		/// </summary>
+		/// <summary>This function is called when the script is loaded or a value is changed in the Inspector (Called in the editor only).</summary>
 		private void OnValidate()
 		{
 			if (!Tag.IsValidTypeName()) Debug.LogErrorFormat(InvalidIdentifier, Tag.TypeName);
@@ -79,6 +76,7 @@ namespace UOP1.TagLayerTypeGenerator.Editor
 			string[] guids = AssetDatabase.FindAssets($"t:{nameof(TypeGeneratorSettings)}", SearchInFolders);
 
 			TypeGeneratorSettings settings;
+
 			switch (guids.Length)
 			{
 				case 0:
@@ -88,9 +86,8 @@ namespace UOP1.TagLayerTypeGenerator.Editor
 					LoadSettings(guids.Single(), out settings);
 					break;
 				default:
-					throw new InvalidOperationException(
-						$"There must be only one {nameof(TypeGeneratorSettings)} asset in '{Application.productName}'.\n " +
-						$"Found: {Join(", ", guids.Select(AssetDatabase.GUIDToAssetPath))}.");
+					throw new InvalidOperationException($"There MUST be only one {nameof(TypeGeneratorSettings)} asset in '{Application.productName}'.\n " +
+					                                    $"Found: {Join(", ", guids.Select(AssetDatabase.GUIDToAssetPath))}.");
 			}
 
 			return settings;
@@ -131,26 +128,26 @@ namespace UOP1.TagLayerTypeGenerator.Editor
 			internal bool AutoGenerate = true;
 
 			/// <summary>The name of the type to generate.</summary>
-			[SerializeField] [DelayedAttribute] [Tooltip("Name of the type to generate.")]
+			[SerializeField] [Delayed] [Tooltip("Name of the type to generate.")]
 			internal string TypeName;
 
 			/// <summary>The path relative to the project's asset folder.</summary>
-			[SerializeField] [DelayedAttribute] [Tooltip("Location in project assets to store the generated file.")]
+			[SerializeField] [Delayed] [Tooltip("Location in project assets to store the generated file.")]
 			internal string FilePath;
 
 			/// <summary>Optional namespace to put the type in. Can be '<see langword="null" />' or empty..</summary>
-			[Header("Optional")] [DelayedAttribute] [SerializeField] [Tooltip("Optional: Namespace for the type to reside.")]
+			[Header("Optional")] [Delayed] [SerializeField] [Tooltip("Optional: Namespace for the type to reside.")]
 			internal string Namespace;
 
 			/// <summary>Backing field for <see cref="Assembly" />.</summary>
-			[SerializeField] [Tooltip("Optional: If using Assembly Definitions, when checking for updated tags, which Assembly Definition to reflect on.")]
+			[SerializeField] [Tooltip("Optional: If using Assembly Definitions, when checking for updated tags, which Assembly Definition to search in.")]
 			internal AssemblyDefinitionAsset AssemblyDefinition;
 
 			/// <summary>Used via reflection to look for the generated type.</summary>
 			internal string Assembly => AssemblyDefinition == null ? "Assembly-CSharp" : AssemblyDefinition.name;
 
-			/// <summary>Splits <see cref="Namespace"/> by it's "." to validate each nested namespace is a validate identifier.</summary>
-			/// <returns>If all parts of the <see cref="Namespace"/> are valid.</returns>
+			/// <summary>Splits <see cref="Namespace" /> by it's "." to validate each nested namespace is a validate identifier.</summary>
+			/// <returns>If all parts of the <see cref="Namespace" /> are valid.</returns>
 			internal bool IsValidNamespace()
 			{
 				return !IsNullOrWhiteSpace(Namespace) && Namespace.Split('.').All(IsValidLanguageIndependentIdentifier);

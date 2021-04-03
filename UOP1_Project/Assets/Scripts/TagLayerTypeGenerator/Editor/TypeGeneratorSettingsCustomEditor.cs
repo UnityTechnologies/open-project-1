@@ -18,7 +18,6 @@ namespace UOP1.TagLayerTypeGenerator.Editor
 			EditorGUI.BeginDisabledGroup(!TagTypeGenerator.Generator.CanGenerate());
 			if (GUILayout.Button("Regenerate Tag Type File")) TagTypeGenerator.Generator.GenerateFile();
 			EditorGUI.EndDisabledGroup();
-
 			EditorGUI.BeginDisabledGroup(!LayerTypeGenerator.Generator.CanGenerate());
 			if (GUILayout.Button("Regenerate Layer Type File")) LayerTypeGenerator.Generator.GenerateFile();
 			EditorGUI.EndDisabledGroup();

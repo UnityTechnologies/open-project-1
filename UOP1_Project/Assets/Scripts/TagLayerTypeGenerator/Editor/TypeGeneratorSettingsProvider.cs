@@ -52,10 +52,10 @@ namespace UOP1.TagLayerTypeGenerator.Editor
 
 			EditorGUILayout.LabelField("Actions", EditorStyles.boldLabel);
 			EditorGUI.BeginDisabledGroup(!TagTypeGenerator.Generator.CanGenerate());
-			if (GUILayout.Button("Generate Tag Type File")) TagTypeGenerator.Generator.GenerateFile();
+			if (GUILayout.Button("Regenerate Tag Type File")) TagTypeGenerator.Generator.GenerateFile();
 			EditorGUI.EndDisabledGroup();
 			EditorGUI.BeginDisabledGroup(!LayerTypeGenerator.Generator.CanGenerate());
-			if (GUILayout.Button("Generate Layer Type File")) LayerTypeGenerator.Generator.GenerateFile();
+			if (GUILayout.Button("Regenerate Layer Type File")) LayerTypeGenerator.Generator.GenerateFile();
 			EditorGUI.EndDisabledGroup();
 			EditorGUILayout.LabelField("Open", EditorStyles.boldLabel);
 			if (GUILayout.Button("Settings Asset")) Selection.SetActiveObjectWithContext(_settings.targetObject, _settings.context);
