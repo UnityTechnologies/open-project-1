@@ -1,7 +1,7 @@
 ﻿using UnityEditor;
 using UnityEngine;
 
-namespace UOP1.TagLayerTypeGenerator.Editor
+namespace UOP1.TagLayerTypeGenerator.Editor.Settings
 {
 	/// <summary>Custom inspector for <see cref="TypeGeneratorSettings" />.</summary>
 	[CustomEditor(typeof(TypeGeneratorSettings))]
