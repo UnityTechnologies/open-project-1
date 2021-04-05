@@ -13,7 +13,7 @@ using UOP1.TagLayerTypeGenerator.Editor.Sync;
 namespace UOP1.TagLayerTypeGenerator.Editor
 {
 	/// <summary>Generates a file containing a type; which contains constant string definitions for each tag in the project.</summary>
-	internal abstract class TypeGenerator<T> : ITypeGenerator where T : ITypeGenerator
+	public abstract class TypeGenerator<T> : ITypeGenerator where T : ITypeGenerator
 	{
 		/// <summary>Backing field for <see cref="Generator" />.</summary>
 		private static TypeGenerator<T> _instance;

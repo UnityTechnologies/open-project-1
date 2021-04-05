@@ -8,7 +8,7 @@ using static System.String;
 namespace UOP1.TagLayerTypeGenerator.Editor
 {
 	/// <summary>Generates a file containing a type; which contains constant string definitions for each Tag in the project.</summary>
-	internal sealed class TagTypeGenerator : TypeGenerator<TagTypeGenerator>
+	public sealed class TagTypeGenerator : TypeGenerator<TagTypeGenerator>
 	{
 		/// <inheritdoc />
 		private TagTypeGenerator(TypeGeneratorSettings.Settings settings, ISync sync) : base(settings, sync)
