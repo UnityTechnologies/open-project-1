@@ -79,7 +79,7 @@ public class QuestEditorWindow : EditorWindow
 	    };
     }
 
-    private T GetDataFromListViewItem<T>(List<object> enumberable) where T : class
+    private T GetDataFromListViewItem<T>(List<object> enumberable) where T : ScriptableObject
     {
 	    T data = default;
 	    foreach (var item in enumberable)
@@ -202,7 +202,7 @@ public class QuestEditorWindow : EditorWindow
 	    parent.Add(dialogueVE);
     }
 
-    private void FindAllSOsInTargetFolder<T>(Object target, out T[] foundSOs) where T : Object
+    private void FindAllSOsInTargetFolder<T>(Object target, out T[] foundSOs) where T : ScriptableObject
     {
 	    var guids = AssetDatabase.FindAssets($"t:{typeof(T)}", new[] {Path.GetDirectoryName(AssetDatabase.GetAssetPath(target))});
 
@@ -214,7 +214,7 @@ public class QuestEditorWindow : EditorWindow
 	    }
     }
 
-    private void FindAllSOByType<T>(out T[] foundSOs) where T : Object //bug: if I wrote "ScriptableObject", it doesn't work.
+    private void FindAllSOByType<T>(out T[] foundSOs) where T : ScriptableObject
     {
 	    var guids = AssetDatabase.FindAssets($"t:{typeof(T)}");
 
