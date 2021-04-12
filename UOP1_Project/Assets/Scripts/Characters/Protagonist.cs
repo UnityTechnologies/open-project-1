@@ -91,14 +91,15 @@ public class Protagonist : MonoBehaviour
 		}
 
 		//Fix to avoid getting a Vector3.zero vector, which would result in the player turning to x:0, z:0
-		if(_inputVector.sqrMagnitude == 0f)
+		if (_inputVector.sqrMagnitude == 0f)
 			adjustedMovement = transform.forward * (adjustedMovement.magnitude + .01f);
 
 		//Accelerate/decelerate
 		targetSpeed = Mathf.Clamp01(_inputVector.magnitude);
 		// This is used to set the speed to the maximum if holding the Shift key,
 		// to allow keyboard players to "run"
-		if(targetSpeed > 0f && isRunning) targetSpeed = 1f;
+		if (targetSpeed > 0f && isRunning)
+			targetSpeed = 1f;
 		targetSpeed = Mathf.Lerp(_previousSpeed, targetSpeed, Time.deltaTime * 4f);
 
 		movementInput = adjustedMovement.normalized * targetSpeed;
