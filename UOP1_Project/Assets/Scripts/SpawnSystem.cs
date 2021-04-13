@@ -44,7 +44,7 @@ public class SpawnSystem : MonoBehaviour
 			_spawnLocations[i] = spawnLocationsGO[i].transform;
 		}
 
-		Spawn(_pathTaken.IsSet ? FindSpawnIndex(_pathTaken.Anchor) : FindSpawnIndex(null));
+		Spawn(_pathTaken.IsSet ? FindSpawnIndex(_pathTaken) : FindSpawnIndex(null));
 	}
 
 	void Reset()
