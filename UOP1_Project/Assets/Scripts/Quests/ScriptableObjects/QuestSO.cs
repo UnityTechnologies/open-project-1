@@ -1,20 +1,28 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Questline", menuName = "Quests/Questline", order = 51)]
-public class QuestlineSO : ScriptableObject
+[CreateAssetMenu(fileName = "Quest", menuName = "Quests/Quest", order = 51)]
+public class QuestSO : ScriptableObject
 {
-	[Tooltip("The collection of Quests composing the Questline")]
 	[SerializeField]
-	private List<QuestSO> _quests = new List<QuestSO>();
+	private int _idQuest = 0;
+	[Tooltip("The collection of Steps composing the Quest")]
+	[SerializeField]
+	private List<StepSO> _steps = new List<StepSO>();
 	[SerializeField]
 	bool _isDone = false;
-	public List<QuestSO> Quests => _quests;
+
+	public int IdQuest => _idQuest;
+	public List<StepSO> Steps => _steps;
 	public bool IsDone => _isDone;
-	public void FinishQuestline()
+	public void FinishQuest()
 	{
 		_isDone = true;
 	}
 
+	public void SetQuestId(int id)
+	{
+		_idQuest = id;
 
+	}
 }

@@ -1,0 +1,45 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="QuestEditorWindow.uss" />
+    <ui:VisualElement name="quest-editor-window" style="flex-direction: row; height: 100%; width: 100%; min-height: 700px;">
+        <ui:VisualElement name="1st-column" style="width: 30%;">
+            <ui:VisualElement name="questlines" class="padding5 ColorStyling1" style="width: auto; height: 150px;">
+                <ui:Label text="Questlines" display-tooltip-when-elided="true" name="title-questline" class="title" style="flex-direction: row-reverse;">
+                    <ui:Button text="+" display-tooltip-when-elided="true" name="CreateQL" class="AddButton" />
+                </ui:Label>
+                <ui:VisualElement name="questlines-list" style="height: 100%;" />
+            </ui:VisualElement>
+            <ui:VisualElement name="steps" class="padding5 ColorStyling2" style="width: auto; height: 150px;">
+                <ui:Label text="Steps" display-tooltip-when-elided="true" name="title-step" class="title" style="flex-direction: row-reverse;">
+                    <ui:Button text="+" display-tooltip-when-elided="true" name="CreateS" class="AddButton" />
+                </ui:Label>
+                <ui:VisualElement name="steps-list" style="height: 100%;" />
+            </ui:VisualElement>
+            <ui:VisualElement name="step-info-panel" class="padding5 ColorStyling1" style="width: auto; height: 100%;">
+                <ui:Label text="Step Info" display-tooltip-when-elided="true" name="step-info" class="title" />
+                <ui:VisualElement name="step-info-scroll" style="height: 100%;" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="2nd-column" style="width: 30%;">
+            <ui:VisualElement name="quests" class="padding5 ColorStyling2" style="width: auto; height: 150px;">
+                <ui:Label text="Quests" display-tooltip-when-elided="true" name="title-quest" class="title" style="flex-direction: row-reverse;">
+                    <ui:Button text="+" display-tooltip-when-elided="true" name="CreateQ" class="AddButton" />
+                </ui:Label>
+                <ui:VisualElement name="quests-list" style="height: 100%;" />
+            </ui:VisualElement>
+            <ui:VisualElement name="dialogues" class="padding5 ColorStyling1" style="width: auto; height: 150px;">
+                <ui:Label text="Dialogues" display-tooltip-when-elided="true" name="title-dislogues" class="title" />
+                <ui:VisualElement name="dialogues-list" style="height: 100%;" />
+            </ui:VisualElement>
+            <ui:VisualElement name="dialogue-info-panel" class="padding5 ColorStyling2" style="width: auto; height: 100%;">
+                <ui:Label text="Dialogue Info" display-tooltip-when-elided="true" name="dialogue-info" class="title" />
+                <ui:VisualElement name="dialogue-info-scroll" style="height: 100%;" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="3rd-column" style="width: 40%; background-color: rgb(185, 185, 185);">
+            <ui:Label text="Quest Preview" display-tooltip-when-elided="true" name="quest-preview-title" class="title" style="color: rgb(65, 65, 65); height: 18.5px;" />
+            <ui:Button text="Refresh" display-tooltip-when-elided="true" name="refresh-preview-btn" style="width: 100px; margin-left: auto; margin-right: 1px; background-color: rgb(113, 113, 113);" />
+            <ui:VisualElement name="actor-preview" style="width: 100px; height: 100px; margin-left: auto; margin-right: auto;" />
+            <ui:VisualElement name="actor-conversations" style="padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px;" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

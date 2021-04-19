@@ -5,25 +5,52 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEditor.UIElements;
 using UnityEngine.Localization;
+public enum selectionType
+{
+	Questline,
+	Quest,
+	Step,
+	Dialogue, 
 
+}
 public class QuestEditorWindow : EditorWindow
 {
 	private Image actorPreview;
 	private QuestSO currentSeletedQuest;
+	QuestlineSO selectedQuestLine;
+	int idQuestlineSelected;
+	int idQuestSelected;
+	[MenuItem("ChopChop/QuestEditorWindow")]
+	 public static void ShowWindow()
+	{
+		Debug.Log("Show Window");
+		QuestEditorWindow wnd = GetWindow<QuestEditorWindow>();
+		 wnd.titleContent = new GUIContent("QuestEditorWindow");
 
-    [MenuItem("ChopChop/QuestEditorWindow")]
-    public static void ShowWindow()
-    {
-        QuestEditorWindow wnd = GetWindow<QuestEditorWindow>();
-        wnd.titleContent = new GUIContent("QuestEditorWindow");
-    }
+		// Sets a minimum size to the window.
+		wnd.minSize = new Vector2(250, 250);
+	 }
 
-    public void CreateGUI()
+	public static void ShowArtistToolWindow()
+	{
+		// Opens the window, otherwise focuses it if it’s already open.
+		QuestEditorWindow window = GetWindow<QuestEditorWindow>();
+		// Adds a title to the window.
+
+		Debug.Log("Show Window");
+		window.titleContent = new GUIContent("QuestEditorWindow");
+
+		// Sets a minimum size to the window.
+		window.minSize = new Vector2(250, 250);
+
+		//window.SetTool(); 
+	}
+	public void CreateGUI()
     {
         VisualElement root = rootVisualElement;
-
-        // Import UXML
-        var visualTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/Scripts/Quests/Editor/QuestEditorWindow.uxml");
+		Debug.Log("Create GUI");
+		// Import UXML
+		var visualTree =Resources.Load<VisualTreeAsset>("QuestEditorWindow");
         root.Add(visualTree.CloneTree());
 
         //Add Image
@@ -32,54 +59,146 @@ public class QuestEditorWindow : EditorWindow
         preview.Add(actorPreview);
 
         //Import USS
-        var styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>("Assets/Scripts/Quests/Editor/QuestEditorWindow.uss");
+        var styleSheet = Resources.Load< StyleSheet>("QuestEditorWindow");
         root.styleSheets.Add(styleSheet);
 
         //Register button event
         Button refreshQuestPreviewBtn = root.Q<Button>("refresh-preview-btn");
         refreshQuestPreviewBtn.RegisterCallback<ClickEvent>((evt) => SetUpQuestPreview(currentSeletedQuest));
 
-        LoadAllQuestsData();
-    }
+		Button createQuestline = rootVisualElement.Q<Button>("CreateQL");
+		createQuestline.clicked += AddQuestline;
+		createQuestline.SetEnabled (true); 
 
-    private void LoadAllQuestsData()
+        Button createQuest = rootVisualElement.Q<Button>("CreateQ");
+		createQuest.clicked += AddQuest;
+		createQuest.SetEnabled(false);
+
+		Button createStep = rootVisualElement.Q<Button>("CreateS"); 
+		createStep.clicked += AddStep;
+		createStep.SetEnabled(false);
+
+		LoadAllQuestsData();
+
+		
+	}
+	private void ClearElements(selectionType type)
+	{
+		List<string> listElements = new List<string>();
+		listElements.Clear();
+		Button createQuest = rootVisualElement.Q<Button>("CreateQ");
+		Button createStep = rootVisualElement.Q<Button>("CreateS");
+
+		switch (type)
+		{
+			case selectionType.Questline:
+				listElements.Add("steps-list");
+				listElements.Add("actor-conversations");
+				listElements.Add("steps-list");
+				listElements.Add("dialogues-list");
+
+				listElements.Add("step-info-scroll");
+				listElements.Add("dialogue-info-scroll");
+				if (createQuest != null)
+				{ 
+					createQuest.SetEnabled(true);
+				}
+				if (createStep != null)
+				{
+					createStep.SetEnabled(false);
+				}
+
+				break;
+			case selectionType.Quest:
+				listElements.Add("dialogues-list");
+
+				listElements.Add("step-info-scroll");
+				listElements.Add("dialogue-info-scroll");
+
+				if (createStep != null)
+				{
+					createStep.SetEnabled(true);
+				}
+
+				break;
+			case selectionType.Step:
+
+				listElements.Add("dialogue-info-scroll");
+				
+				break;
+		}
+		foreach(string elementName in listElements)
+		{
+			VisualElement element = rootVisualElement.Q<VisualElement>(elementName);
+			element.Clear();
+
+		}
+
+
+	}
+
+
+	private void LoadAllQuestsData()
     {
-	    //Load all questlines
-	    FindAllSOByType(out QuestlineSO[] questLineSOs);
+		Debug.Log("LoadAllQuestsData");
+		//Load all questlines
+		FindAllSOByType(out QuestlineSO[] questLineSOs);
 	    RefreshListView(out ListView allQuestlinesListView, "questlines-list", questLineSOs);
 
-	    allQuestlinesListView.onSelectionChanged += (questlineEnumerable) =>
+		allQuestlinesListView.onSelectionChange += (questlineEnumerable) =>
 	    {
-		    QuestlineSO questLine = GetDataFromListViewItem<QuestlineSO>(questlineEnumerable);
-		    RefreshListView(out ListView allQuestsListView, "quests-list", questLine.Quests.ToArray());
+		   selectedQuestLine = GetDataFromListViewItem<QuestlineSO>(questlineEnumerable);
+			ClearElements(selectionType.Questline);
+			idQuestlineSelected = allQuestlinesListView.selectedIndex;
 
-		    allQuestsListView.onSelectionChanged += (questEnumerable) =>
-		    {
-			    currentSeletedQuest = GetDataFromListViewItem<QuestSO>(questEnumerable);
-			    RefreshListView(out ListView allStepsListView, "steps-list",currentSeletedQuest.Steps.ToArray() );
+			if (selectedQuestLine.Quests != null )
+			{
+				RefreshListView(out ListView allQuestsListView, "quests-list", selectedQuestLine.Quests.ToArray());
 
-			    SetUpQuestPreview(currentSeletedQuest);
+				
 
-			    allStepsListView.onSelectionChanged += (stepEnumerable) =>
-			    {
-				    StepSO step = GetDataFromListViewItem<StepSO>(stepEnumerable);
-				    DisplayAllProperties(step, "step-info-scroll");
 
-				    //Find all DialogueDataSOs in the same folder of the StepSO
-				    FindAllSOsInTargetFolder(step, out DialogueDataSO[] dialogueDataSOs);
-				    RefreshListView(out ListView dialoguesListView, "dialogues-list", dialogueDataSOs);
+				allQuestsListView.onSelectionChange += (questEnumerable) =>
+				{
+					idQuestSelected = allQuestsListView.selectedIndex;
 
-				    dialoguesListView.onSelectionChanged += (dialogueEnumerable) =>
-				    {
-					    DialogueDataSO dialogueData = GetDataFromListViewItem<DialogueDataSO>(dialogueEnumerable);
-					    DisplayAllProperties(dialogueData, "dialogue-info-scroll");
-				    };
-			    };
-		    };
+					currentSeletedQuest = GetDataFromListViewItem<QuestSO>(questEnumerable);
+					ClearElements(selectionType.Quest);
+					if (currentSeletedQuest != null && currentSeletedQuest.Steps != null )
+					{
+						RefreshListView(out ListView allStepsListView, "steps-list", currentSeletedQuest.Steps.ToArray());
+
+						SetUpQuestPreview(currentSeletedQuest);
+
+						allStepsListView.onSelectionChange += (stepEnumerable) =>
+						{
+							StepSO step = GetDataFromListViewItem<StepSO>(stepEnumerable);
+							DisplayAllProperties(step, "step-info-scroll");
+							ClearElements(selectionType.Step);
+							//Find all DialogueDataSOs in the same folder of the StepSO
+							FindAllDialogueInStep(step, out DialogueDataSO[] dialogueDataSOs);
+							if (dialogueDataSOs != null)
+							{
+
+								RefreshListView(out ListView dialoguesListView, "dialogues-list", dialogueDataSOs);
+							
+								dialoguesListView.onSelectionChange += (dialogueEnumerable) =>
+								{
+									DialogueDataSO dialogueData = GetDataFromListViewItem<DialogueDataSO>(dialogueEnumerable);
+
+									DisplayAllProperties(dialogueData, "dialogue-info-scroll");
+								};
+							}
+							
+						};
+
+					}
+				};
+			}
 	    };
     }
 
-    private T GetDataFromListViewItem<T>(List<object> enumberable) where T : ScriptableObject
+    private T GetDataFromListViewItem<T>(IEnumerable<object> enumberable) where T : ScriptableObject
     {
 	    T data = default;
 	    foreach (var item in enumberable)
@@ -88,12 +207,44 @@ public class QuestEditorWindow : EditorWindow
 	    }
 	    return data;
     }
+private void FindAllDialogueInStep(StepSO step, out DialogueDataSO[] AllDialogue)
+	{
+		AllDialogue = null;
+		List<DialogueDataSO> AllDialogueList = new List<DialogueDataSO>(); 
+		if (step!=null)
+		{
+			if (step.DialogueBeforeStep != null)
+			{
+				
+				AllDialogueList.Add(step.DialogueBeforeStep); 
+			}
+			if(step.CompleteDialogue!=null)
+			{
+				AllDialogueList.Add(step.CompleteDialogue);
 
+
+			}
+			if (step.IncompleteDialogue!=null)
+			{
+
+				AllDialogueList.Add(step.IncompleteDialogue);
+
+
+			}
+
+		}
+		Debug.Log("AllDialogueList" + AllDialogueList.ToArray()); 
+		if(AllDialogueList!=null)
+		AllDialogue = AllDialogueList.ToArray(); 
+
+	}
     private void SetUpQuestPreview(QuestSO quest)
     {
 	    if (quest == null)
 		    return;
-
+		if (quest.Steps == null)
+			return;
+		if (quest.Steps.Count>0&& quest.Steps[0].Actor!=null)
 	    LoadActorImage(quest.Steps[0].Actor.name);
 
 	    //Clear actor conversations area
@@ -122,6 +273,7 @@ public class QuestEditorWindow : EditorWindow
 		isDoneToggle.SetEnabled(false);
 
 		//SD
+		if(step.DialogueBeforeStep!=null)
 		LoadAndInitStartDialogueLineUXML(step.DialogueBeforeStep, dialogueAreaVE);
 
 		//CD ID if any
@@ -243,6 +395,7 @@ public class QuestEditorWindow : EditorWindow
 	    listview.style.flexGrow = 1.0f;
 
 	    listview.Refresh();
+		if(itemsSource.Length>0)
 	    listview.selectedIndex = 0;
     }
 
@@ -253,9 +406,11 @@ public class QuestEditorWindow : EditorWindow
 	    parentVE.Clear();
 	    InitListView(listview, itemsSource);
 	    parentVE.Add(listview);
-    }
 
-    private void LoadActorImage(string actorName)
+
+	}
+
+	private void LoadActorImage(string actorName)
     {
 	    Texture2D texture = (Texture2D)AssetDatabase.LoadAssetAtPath($"Assets/Scripts/Quests/Editor/ActorImages/{actorName}.png", typeof(Texture2D));
 	    actorPreview.image = texture;
@@ -283,4 +438,66 @@ public class QuestEditorWindow : EditorWindow
 	    }
 	    parentVE.Add(scrollView);
     }
+	void AddQuestline()
+	{
+		//get questline id
+		FindAllSOByType(out QuestlineSO[] questLineSOs);
+		int id = questLineSOs.Length;
+		id++; 
+		QuestlineSO asset = ScriptableObject.CreateInstance<QuestlineSO>();
+		asset.SetQuestlineId (id); 
+		AssetDatabase.CreateAsset(asset, "Assets/QL"+id+".asset");
+		AssetDatabase.SaveAssets();
+		//refresh
+		LoadAllQuestsData(); 
+	}
+	void RemoveQuestline()
+	{
+
+
+	}
+	void AddQuest()
+	{
+	    QuestSO asset = ScriptableObject.CreateInstance<QuestSO>();
+		int questlineId = 0;
+		questlineId = selectedQuestLine.IdQuestline;
+		int questId = 0;
+		questId = selectedQuestLine.Quests.Count +1 ;
+
+		AssetDatabase.CreateAsset(asset, "Assets/Q"+questId+"-QL"+ questlineId + ".asset");
+		AssetDatabase.SaveAssets();
+		asset.SetQuestId(questId); 
+		selectedQuestLine.Quests.Add(asset);
+		//refresh
+		rootVisualElement.Q<VisualElement>("questlines-list").Q<ListView>().SetSelection(idQuestlineSelected);
+		
+	}
+	void RemoveQuest()
+	{
+
+
+	}
+	void AddStep()
+	{
+		StepSO asset = ScriptableObject.CreateInstance<StepSO>();
+		int questlineId = 0;
+		questlineId = selectedQuestLine.IdQuestline;
+		int questId = 0;
+		questId =currentSeletedQuest.IdQuest;
+		int stepId = 0;
+		stepId = currentSeletedQuest.Steps.Count + 1;
+		AssetDatabase.CreateAsset(asset, "Assets/S"+ stepId + "-Q" + questId + "-QL" + questlineId + ".asset");
+		AssetDatabase.SaveAssets();
+		currentSeletedQuest.Steps.Add(asset);
+		//refresh
+		Debug.Log(idQuestSelected); 
+		rootVisualElement.Q<VisualElement>("quests-list").Q<ListView>().SetSelection(idQuestSelected);
+
+
+	}
+	void RemoveStep()
+	{
+
+
+	}
 }
