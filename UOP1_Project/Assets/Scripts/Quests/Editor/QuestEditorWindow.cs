@@ -445,8 +445,9 @@ private void FindAllDialogueInStep(StepSO step, out DialogueDataSO[] AllDialogue
 		int id = questLineSOs.Length;
 		id++; 
 		QuestlineSO asset = ScriptableObject.CreateInstance<QuestlineSO>();
-		asset.SetQuestlineId (id); 
-		AssetDatabase.CreateAsset(asset, "Assets/QL"+id+".asset");
+		asset.SetQuestlineId (id);
+		AssetDatabase.CreateFolder("Assets/ScriptableObjects/Quests","Questline" + id);
+		AssetDatabase.CreateAsset(asset, "Assets/ScriptableObjects/Quests/Questline"+id+"/QL"+id+".asset");
 		AssetDatabase.SaveAssets();
 		//refresh
 		LoadAllQuestsData(); 
@@ -463,8 +464,8 @@ private void FindAllDialogueInStep(StepSO step, out DialogueDataSO[] AllDialogue
 		questlineId = selectedQuestLine.IdQuestline;
 		int questId = 0;
 		questId = selectedQuestLine.Quests.Count +1 ;
-
-		AssetDatabase.CreateAsset(asset, "Assets/Q"+questId+"-QL"+ questlineId + ".asset");
+		AssetDatabase.CreateFolder("Assets/ScriptableObjects/Quests/Questline" + questlineId, "Quest" + questId); 
+		AssetDatabase.CreateAsset(asset, "Assets/ScriptableObjects/Quests/Questline"+ questlineId + "/Quest"+questId+"/Q" + questId+"-QL"+ questlineId + ".asset");
 		AssetDatabase.SaveAssets();
 		asset.SetQuestId(questId); 
 		selectedQuestLine.Quests.Add(asset);
@@ -486,11 +487,11 @@ private void FindAllDialogueInStep(StepSO step, out DialogueDataSO[] AllDialogue
 		questId =currentSeletedQuest.IdQuest;
 		int stepId = 0;
 		stepId = currentSeletedQuest.Steps.Count + 1;
-		AssetDatabase.CreateAsset(asset, "Assets/S"+ stepId + "-Q" + questId + "-QL" + questlineId + ".asset");
+		AssetDatabase.CreateFolder("Assets/ScriptableObjects/Quests/Questline" + questlineId + "/Quest" + questId , "Step" + stepId);
+		AssetDatabase.CreateAsset(asset, "Assets/ScriptableObjects/Quests/Questline" + questlineId + "/Quest" + questId + "/Step" + stepId +"/S"+ stepId + "-Q" + questId + "-QL" + questlineId + ".asset");
 		AssetDatabase.SaveAssets();
 		currentSeletedQuest.Steps.Add(asset);
 		//refresh
-		Debug.Log(idQuestSelected); 
 		rootVisualElement.Q<VisualElement>("quests-list").Q<ListView>().SetSelection(idQuestSelected);
 
 
