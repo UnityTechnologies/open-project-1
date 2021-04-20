@@ -11,7 +11,7 @@ public class QuestlineSO : ScriptableObject
 	private List<QuestSO> _quests = new List<QuestSO>();
 	[SerializeField]
 	bool _isDone = false;
-	public int IdQuestline => _idQuestLine; 
+	public int IdQuestline => _idQuestLine;
 	public List<QuestSO> Quests => _quests;
 	public bool IsDone => _isDone;
 	public void FinishQuestline()
@@ -20,7 +20,7 @@ public class QuestlineSO : ScriptableObject
 	}
 	public void SetQuestlineId(int id)
 	{
-		_idQuestLine = id; 
+		_idQuestLine = id;
 
 	}
 
