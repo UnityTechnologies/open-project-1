@@ -8,7 +8,5 @@ public class RandomIdleAnimationBehaviour : StateMachineBehaviour
     {
 		int randomIdle = Random.Range(0, 2);
 		animator.SetInteger("RandomIdle", randomIdle);
-
-		Debug.Log("Random");
     }
 }
