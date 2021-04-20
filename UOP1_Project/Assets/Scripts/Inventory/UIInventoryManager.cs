@@ -273,7 +273,7 @@ public class UIInventoryManager : MonoBehaviour
 	void ShowItemInformation(Item item)
 	{
 
-		bool[] availabilityArray = currentInventory.IngredietsAvailability(item.IngredientsList);
+		bool[] availabilityArray = currentInventory.IngredientsAvailability(item.IngredientsList);
 
 		inspectorFiller.FillItemInspector(item, availabilityArray);
 
