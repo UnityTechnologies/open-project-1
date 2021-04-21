@@ -1,0 +1,13 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement name="step-detail-box" style="border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); background-color: rgb(135, 135, 135); border-top-left-radius: 5px; border-bottom-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; margin-left: 3px; margin-right: 3px; margin-top: 3px; margin-bottom: 3px;">
+        <ui:VisualElement name="step-title-box" style="border-bottom-color: rgb(0, 0, 0); border-bottom-width: 1px; flex-direction: row; justify-content: space-between;">
+            <ui:Label text="Step1" display-tooltip-when-elided="true" name="step-title-label" style="-unity-font-style: bold;" />
+            <ui:Toggle name="step-done-toggle" text="IsDone" value="false" style="-unity-font-style: normal;" />
+        </ui:VisualElement>
+        <ui:VisualElement name="dialogue-area" />
+        <ui:VisualElement name="item-validate" style="flex-direction: row; justify-content: space-around;">
+            <ui:Label text="Check Item:" display-tooltip-when-elided="true" name="step-type" style="-unity-font-style: bold;" />
+            <ui:Label text="Apple" display-tooltip-when-elided="true" name="item-to-validate" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
