@@ -113,6 +113,7 @@ public class UIManager : MonoBehaviour
 	{
 		_inventoryPanel.gameObject.SetActive(false);
 
+		_inputReader.EnableGameplayInput();
 		if (isForCooking)
 		{
 			_onInteractionEndedEvent.RaiseEvent();
