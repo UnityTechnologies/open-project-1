@@ -141,7 +141,7 @@ public class UIInventoryManager : MonoBehaviour
 			_instanciatedItems = new List<InventoryItemFiller>();
 
 		int maxCount = Mathf.Max(listItemsToShow.Count, _instanciatedItems.Count);
-
+		
 		for (int i = 0; i < maxCount; i++)
 		{
 			if (i < listItemsToShow.Count)
@@ -173,6 +173,11 @@ public class UIInventoryManager : MonoBehaviour
 		{
 			UnselectItem(selectedItemId);
 			selectedItemId = -1;
+		}
+		//hover First Element
+		if (_instanciatedItems.Count > 0)
+		{
+			_instanciatedItems[0].HoverFirstElement(); 
 		}
 	}
 	public void UpdateOnItemInInventory(ItemStack itemToUpdate, bool removeItem)

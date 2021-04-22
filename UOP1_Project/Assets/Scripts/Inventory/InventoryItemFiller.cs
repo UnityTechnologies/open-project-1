@@ -48,7 +48,7 @@ public class InventoryItemFiller : MonoBehaviour
 		_bgImage.color = itemStack.Item.ItemType.TypeColor;
 
 		_itemButton.onClick.RemoveAllListeners();
-
+		
 		_itemButton.onClick.AddListener(() =>
 		{
 			SelectItem();
@@ -68,6 +68,11 @@ public class InventoryItemFiller : MonoBehaviour
 		_itemButton.gameObject.SetActive(false);
 		_bgInactiveImage.gameObject.SetActive(true);
 
+	}
+
+	public void HoverFirstElement()
+	{
+		_itemButton.Select(); 
 	}
 
 	public void HoverItem()
