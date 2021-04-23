@@ -96,7 +96,7 @@ public class UIManager : MonoBehaviour
 		_inventoryPanel.gameObject.SetActive(true);
 
 		_inputReader.EnableMenuInput();
-		_inputReader.closeInventoryEvent += CloseInventoryScreen; 
+		_inputReader.closeInventoryEvent += CloseInventoryScreen;
 		if (isForCooking)
 		{
 			_inventoryPanel.FillInventory(TabType.recipe, true);
@@ -108,7 +108,7 @@ public class UIManager : MonoBehaviour
 		}
 
 	}
-	
+
 
 	public void CloseInventoryScreen()
 	{
