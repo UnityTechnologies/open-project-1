@@ -77,7 +77,7 @@ public class InputReader : ScriptableObject, GameInput.IGameplayActions, GameInp
 	}
 	public void OnCancel(InputAction.CallbackContext context)
 	{
-	
+
 		if (context.phase == InputActionPhase.Performed)
 			closeInventoryEvent.Invoke();
 	}
@@ -155,11 +155,11 @@ public class InputReader : ScriptableObject, GameInput.IGameplayActions, GameInp
 			menuConfirmEvent();
 	}
 
-/*	public void OnCancel(InputAction.CallbackContext context)
-	{
-		if (context.phase == InputActionPhase.Performed)
-			menuCancelEvent();
-	}*/
+	/*	public void OnCancel(InputAction.CallbackContext context)
+		{
+			if (context.phase == InputActionPhase.Performed)
+				menuCancelEvent();
+		}*/
 
 	public void OnMouseMove(InputAction.CallbackContext context)
 	{

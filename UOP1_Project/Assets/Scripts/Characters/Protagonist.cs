@@ -132,9 +132,9 @@ public class Protagonist : MonoBehaviour
 	{
 		_openInventoryChannel.RaiseEvent();
 
-	
+
 	}
-	
+
 
 	private void OnStartedAttack() => attackInput = true;
 
