@@ -10,7 +10,7 @@ public class UIDialogueChoiceFiller : MonoBehaviour
 
 	[SerializeField] private LocalizeStringEvent _choiceText = default;
 	[SerializeField] private DialogueChoiceChannelSO _makeAChoiceEvent = default;
-	[SerializeField] private Button _actionButton = default; 
+	[SerializeField] private Button _actionButton = default;
 
 	Choice currentChoice;
 
@@ -27,8 +27,8 @@ public class UIDialogueChoiceFiller : MonoBehaviour
 	}
 	public void SetSelected()
 	{
-		if(_actionButton != null)
-			_actionButton.Select(); 
+		if (_actionButton != null)
+			_actionButton.Select();
 
 	}
 }
