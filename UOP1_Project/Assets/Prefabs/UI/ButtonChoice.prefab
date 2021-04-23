@@ -61,6 +61,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -89,6 +90,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Navigation:
     m_Mode: 1
+    m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
@@ -106,7 +108,7 @@ MonoBehaviour:
     m_HighlightedSprite: {fileID: 21300000, guid: cc08ac3a6d81f4dcca62fa2c47106cdf,
       type: 3}
     m_PressedSprite: {fileID: 21300000, guid: 13a92ae90ccfc4d149b1e8e75b939eea, type: 3}
-    m_SelectedSprite: {fileID: 21300000, guid: cc08ac3a6d81f4dcca62fa2c47106cdf, type: 3}
+    m_SelectedSprite: {fileID: 21300000, guid: cef813fa90c604e8b9174b485411e5b1, type: 3}
     m_DisabledSprite: {fileID: 21300000, guid: de74024259ffb4053bd23f3f7d26e397, type: 3}
   m_AnimationTriggers:
     m_NormalTrigger: Normal
@@ -120,6 +122,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1448887160}
+        m_TargetAssemblyTypeName: 
         m_MethodName: ButtonClicked
         m_Mode: 1
         m_Arguments:
@@ -191,6 +194,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _choiceText: {fileID: 550526547636381840}
   _makeAChoiceEvent: {fileID: 11400000, guid: f7b40077957f3834a8d5354c3e4ce759, type: 2}
+  _actionButton: {fileID: 20254461}
 --- !u!1 &550526547636381838
 GameObject:
   m_ObjectHideFlags: 0
@@ -252,14 +256,16 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 0
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
   m_text: 
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 0}
-  m_sharedMaterial: {fileID: 0}
+  m_fontAsset: {fileID: 11400000, guid: fe129390af88b40faa85c89db6820ea6, type: 2}
+  m_sharedMaterial: {fileID: -5592514773993622969, guid: fe129390af88b40faa85c89db6820ea6,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -349,6 +355,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 550526547636381843}
+        m_TargetAssemblyTypeName: 
         m_MethodName: set_text
         m_Mode: 0
         m_Arguments:
