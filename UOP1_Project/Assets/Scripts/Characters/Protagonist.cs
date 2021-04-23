@@ -131,7 +131,10 @@ public class Protagonist : MonoBehaviour
 	private void OnOpenInventory()
 	{
 		_openInventoryChannel.RaiseEvent();
+
+	
 	}
+	
 
 	private void OnStartedAttack() => attackInput = true;
 
