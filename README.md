@@ -1,33 +1,24 @@
-# Unity Open Project #1: Chop Chop
+![Unity Open Projects](https://github.com/UnityTechnologies/open-project-1/blob/main/Docs/ReadmeImages/Devlog4_Header.png)
+### Unity Open Project #1: Chop Chop
+# Devlog 4: Packaging content with Addressable Assets
 
-![Unity Open Projects](/Docs/ReadmeImages/ApproachingTheIsland_Header.jpg)
+You've landed on the repository for the first Unity **Open Project**, an initiative where Unity and the community collaborate together to create a small **open-source game demo**. The first game is an action-adventure titled _Chop Chop_ ([more info](https://open.codecks.io/unity-open-project-1/decks/32/card/126-what-is-this)).
 
-Welcome! This is the repository for the first Unity **Open Project**, an initiative where Unity and the community collaborate together to create a small **open-source game demo**.
+This branch in particular (`devlogs/4-addressables`) contains the **demo assets** associated with the fourth "devlog" video, which explores how we tackled the complex requirements we had for input on this project. You can watch the video [on YouTube](https://youtu.be/XIHINtB2e1U) 🎞
 
-The first game, which is currently under development, is an action-adventure titled _Chop Chop_ ([more info](https://open.codecks.io/unity-open-project-1/decks/32/card/126-what-is-this)).
+**Note:** This branch doesn't necessarily contain the full project, but a trimmed-down version which focuses on the subject of the devlog. We did it so easier to explore and learn from it. In time, we might make small updates to this branch or backport fixes when needed, but don't expect it to be updated with new features and to stay in sync with `main`.
 
-## Follow the progress
-* The [dedicated sub-forum](https://forum.unity.com/forums/open-projects.531/) on the Unity forums is where the Unity team and the whole community discuss and brainstorm ideas.  
-* The [roadmap](https://open.codecks.io/unity-open-project-1) is the central location to know what's coming to the game. Also a great way to find tasks to contribute on!  
-* The Unity team does bi-weekly livestreams on Unity's [YouTube channel](https://www.youtube.com/c/unity/) (subscribe to be notified). Find the past ones [in this playlist](https://www.youtube.com/playlist?list=PLX2vGYjWbI0S6CnkDm0AwVgA6E6L_vJNf).  
-* The [#open-projects channel](https://discord.gg/EZBXA4V) on the Official Unity Discord is where collaborators can meet for a quick chat and non-threaded discussion.
+To find the full project and contribute to it, go to the [main branch](https://github.com/UnityTechnologies/open-project-1).
+
+## Unity version
+Like the [main branch](https://github.com/UnityTechnologies/open-project-1) this demo runs on **Unity 2020.3 LTS**. Upcoming 2020.3 LTS patches should work fine, but compatibility with newer versions (2021.1 and later) is not guaranteed.
+
+## License
+The assets contained in this branch are covered by the same open-source license that covers the rest of the game ([Apache License 2.0](https://github.com/UnityTechnologies/open-project-1/blob/main/LICENSE)), so you are free to use them for your own projects.
 
 ## Contribute
-We would love to get your contributions into the game! Whether you create code, art, narrative, sounds; whether you feel you are experienced enough or not; there is probably [something](https://open.codecks.io/unity-open-project-1) you can add to it.
-
-To learn all about contributing, we have [a series of short videos](https://www.youtube.com/watch?v=RbSrx0QoTG4&list=PLZplUm29-Z-xOYY9Tw6t3tSIvlbhVhzUn) to get you started with Git and with this project in general.  
-In addition to that, make sure you read the [Contribution Guidelines](https://docs.google.com/document/d/1PwBF4yQl69RxvVHZ2m2iiy5pYjd9QO-VcuXWDjB7QwA/edit#). For code style, scene hierarchy, and project organisation standards, read the [Conventions](https://docs.google.com/document/d/1-eUWZ0lWREFu5iH-ggofwnixDDQqalOoT4Yc0NpWR3k/edit) document. And for art contributions, we have the [Art Guidelines](https://docs.google.com/document/d/18zqe31J8EipTiEBZuwzLyG3jH7-5teAOViLEio4uko8/).  
-⚠  Please **post on the [forums](https://forum.unity.com/forums/open-projects.531/) and check the [roadmap](https://open.codecks.io/unity-open-project-1) before starting to work on big contributions!**
-
-If you feel like taking on some **bugs**, check out the [Issues page](https://github.com/UnityTechnologies/open-project-1/issues) on this very repo. In fact, another thing you could help with is by doing some **QA testing**: download the [latest release](https://github.com/UnityTechnologies/open-project-1/releases) of the game, play it, and report issues in the appropriate page. That's also a great way to be part of this project!
-
-This project is built on **Unity 2020.3 LTS**, whatever latest patch is available.
-
-![OP1 WIP Screenshot](/Docs/ReadmeImages/Jumping.png)
-_A work in progress screenshot_
-
-## Play the game
-Just want to try the game out? Head to the [release page](https://github.com/UnityTechnologies/open-project-1/releases) and grab the latest version.
+Open Projects is an open-source game, so we'd love your contributions! However, we don't take contributions on this branch so please don't open PRs against it.
+To take part in the development, go to [the main branch](https://github.com/UnityTechnologies/open-project-1) and find all the instructions on how to contribute in its [Readme](https://github.com/UnityTechnologies/open-project-1/blob/main/README.md).
 
 ##
 
