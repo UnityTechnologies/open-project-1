@@ -4,7 +4,7 @@
 
 You've landed on the repository for the first Unity **Open Project**, an initiative where Unity and the community collaborate together to create a small **open-source game demo**. The first game is an action-adventure titled _Chop Chop_ ([more info](https://open.codecks.io/unity-open-project-1/decks/32/card/126-what-is-this)).
 
-This branch in particular (`devlogs/4-addressables`) contains the **demo assets** associated with the fourth "devlog" video, which explores how we tackled the complex requirements we had for input on this project. You can watch the video [on YouTube](https://youtu.be/XIHINtB2e1U) 🎞
+This branch in particular (`devlogs/4-addressable-assets`) contains the **demo assets** associated with the fourth "devlog" video, which explores how we tackled the complex requirements we had for input on this project. You can watch the video [on YouTube](https://youtu.be/XIHINtB2e1U) 🎞
 
 **Note:** This branch doesn't necessarily contain the full project, but a trimmed-down version which focuses on the subject of the devlog. We did it so easier to explore and learn from it. In time, we might make small updates to this branch or backport fixes when needed, but don't expect it to be updated with new features and to stay in sync with `main`.
 
