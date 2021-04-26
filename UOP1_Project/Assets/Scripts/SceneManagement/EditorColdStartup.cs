@@ -30,7 +30,7 @@ public class EditorColdStartup : MonoBehaviour
 	private void ReloadScene(AsyncOperationHandle<LoadEventChannelSO> obj)
 	{
 		LoadEventChannelSO loadEventChannelSO = (LoadEventChannelSO)_loadSceneEventChannel.Asset;
-		loadEventChannelSO.RaiseEvent(new GameSceneSO[] { _thisSceneSO });
+		loadEventChannelSO.RaiseEvent(_thisSceneSO);
 
 		SceneManager.UnloadSceneAsync(_thisSceneSO.sceneReference.editorAsset.name);
 	}

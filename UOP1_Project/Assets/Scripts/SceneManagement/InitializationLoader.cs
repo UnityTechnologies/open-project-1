@@ -11,11 +11,8 @@ using UnityEngine.SceneManagement;
 
 public class InitializationLoader : MonoBehaviour
 {
-	[Header("Persistent managers Scene")]
-	[SerializeField] private GameSceneSO _persistentManagersScene = default;
-
-	[Header("Loading settings")]
-	[SerializeField] private GameSceneSO[] _menuToLoad = default;
+	[SerializeField] private GameSceneSO _managersScene = default;
+	[SerializeField] private GameSceneSO _menuToLoad = default;
 
 	[Header("Broadcasting on")]
 	[SerializeField] private AssetReference _menuLoadChannel = default;
@@ -23,7 +20,7 @@ public class InitializationLoader : MonoBehaviour
 	private void Start()
 	{
 		//Load the persistent managers scene
-		_persistentManagersScene.sceneReference.LoadSceneAsync(LoadSceneMode.Additive, true).Completed += LoadEventChannel;
+		_managersScene.sceneReference.LoadSceneAsync(LoadSceneMode.Additive, true).Completed += LoadEventChannel;
 	}
 
 	private void LoadEventChannel(AsyncOperationHandle<SceneInstance> obj)
