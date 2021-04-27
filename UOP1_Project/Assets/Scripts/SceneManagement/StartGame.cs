@@ -11,7 +11,7 @@ using UnityEngine.UI;
 public class StartGame : MonoBehaviour
 {
 	public LoadEventChannelSO onPlayButtonPress;
-	public GameSceneSO[] locationsToLoad;
+	public GameSceneSO locationsToLoad;
 	public bool showLoadScreen;
 
 	public SaveSystem saveSystem;
@@ -66,8 +66,8 @@ public class StartGame : MonoBehaviour
 		yield return asyncOperationHandle;
 		if (asyncOperationHandle.Status == AsyncOperationStatus.Succeeded)
 		{
-			var locationSo = asyncOperationHandle.Result;
-			onPlayButtonPress.RaiseEvent(new[] { (GameSceneSO)locationSo }, showLoadScreen);
+			LocationSO locationSO = asyncOperationHandle.Result;
+			onPlayButtonPress.RaiseEvent(locationSO, showLoadScreen);
 		}
 	}
 }
