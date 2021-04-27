@@ -25,7 +25,6 @@ public class UIInventoryManager : MonoBehaviour
 	List<InventoryTabType> tabTypesList = new List<InventoryTabType>();
 
 	private int selectedItemId = -1;
-
 	[SerializeField]
 	private List<InventoryItemFiller> _instanciatedItems = default;
 
@@ -49,6 +48,9 @@ public class UIInventoryManager : MonoBehaviour
 	[SerializeField]
 	private VoidEventChannelSO OnInteractionEndedEvent = default;
 
+	[SerializeField]
+	private InputReader _inputReader = default; 
+
 	private void OnEnable()
 	{
 		//Check if the event exists to avoid errors
@@ -68,6 +70,8 @@ public class UIInventoryManager : MonoBehaviour
 		{
 			OnInteractionEndedEvent.OnEventRaised += InteractionEnded;
 		}
+		_inputReader.menuSwitchTab += SwitchTab;
+		
 	}
 
 	private void OnDisable()
@@ -86,7 +90,33 @@ public class UIInventoryManager : MonoBehaviour
 		}
 	}
 
+	public void SwitchTab(float orientation)
+	{
+	
+		if(orientation!=0)
+		{
+			bool isLeft = orientation < 0;
+			int initialIndex = tabTypesList.FindIndex(o => o == selectedTab);
+			if (initialIndex != -1)
+			{
+				if (isLeft)
+				{
+					initialIndex--;
+				}
+				else
+				{
+					initialIndex++;
+				}
 
+				initialIndex= Mathf.Clamp(initialIndex, 0, tabTypesList.Count-1); 
+			}
+			
+			ChangeTabEventRaised(tabTypesList[initialIndex]); 
+		}
+
+
+
+	}
 
 	bool isNearPot = false;
 	public void FillInventory(TabType _selectedTabType = TabType.none, bool _isNearPot = false)
@@ -179,6 +209,7 @@ public class UIInventoryManager : MonoBehaviour
 		{
 			_instanciatedItems[0].SelectFirstElement();
 		}
+		 
 	}
 	public void UpdateOnItemInInventory(ItemStack itemToUpdate, bool removeItem)
 	{

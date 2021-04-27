@@ -533,6 +533,14 @@ public class @GameInput : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""ChangeTab"",
+                    ""type"": ""Button"",
+                    ""id"": ""abff37db-1fb3-4f26-bceb-8ecdfc99fdef"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -865,6 +873,72 @@ public class @GameInput : IInputActionCollection, IDisposable
                     ""action"": ""MouseMove"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""LeftRight Shoulder"",
+                    ""id"": ""97d06ecb-7982-4ca0-8cc2-3b6ad8c1a4da"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChangeTab"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""Negative"",
+                    ""id"": ""d5251bc5-8e6d-4a72-ae0d-daf1dfb91ec1"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardOrGamepad"",
+                    ""action"": ""ChangeTab"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Positive"",
+                    ""id"": ""7ef21289-1815-4412-9169-7c38cb932530"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardOrGamepad"",
+                    ""action"": ""ChangeTab"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""LeftRight [Keyboard]"",
+                    ""id"": ""f5ee1475-34c9-440e-97c2-81c7ba9165c9"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChangeTab"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""bffa4ad8-a1e1-492b-bcad-c12571cac8c4"",
+                    ""path"": ""<Keyboard>/t"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardOrGamepad"",
+                    ""action"": ""ChangeTab"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""23952932-013c-4b7c-ae49-c5c1fd00f5e8"",
+                    ""path"": ""<Keyboard>/y"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardOrGamepad"",
+                    ""action"": ""ChangeTab"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 }
             ]
         },
@@ -1188,6 +1262,7 @@ public class @GameInput : IInputActionCollection, IDisposable
         m_Menus_Cancel = m_Menus.FindAction("Cancel", throwIfNotFound: true);
         m_Menus_MouseMove = m_Menus.FindAction("MouseMove", throwIfNotFound: true);
         m_Menus_Unpause = m_Menus.FindAction("Unpause", throwIfNotFound: true);
+        m_Menus_ChangeTab = m_Menus.FindAction("ChangeTab", throwIfNotFound: true);
         // Dialogues
         m_Dialogues = asset.FindActionMap("Dialogues", throwIfNotFound: true);
         m_Dialogues_MoveSelection = m_Dialogues.FindAction("MoveSelection", throwIfNotFound: true);
@@ -1343,6 +1418,7 @@ public class @GameInput : IInputActionCollection, IDisposable
     private readonly InputAction m_Menus_Cancel;
     private readonly InputAction m_Menus_MouseMove;
     private readonly InputAction m_Menus_Unpause;
+    private readonly InputAction m_Menus_ChangeTab;
     public struct MenusActions
     {
         private @GameInput m_Wrapper;
@@ -1352,6 +1428,7 @@ public class @GameInput : IInputActionCollection, IDisposable
         public InputAction @Cancel => m_Wrapper.m_Menus_Cancel;
         public InputAction @MouseMove => m_Wrapper.m_Menus_MouseMove;
         public InputAction @Unpause => m_Wrapper.m_Menus_Unpause;
+        public InputAction @ChangeTab => m_Wrapper.m_Menus_ChangeTab;
         public InputActionMap Get() { return m_Wrapper.m_Menus; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1376,6 +1453,9 @@ public class @GameInput : IInputActionCollection, IDisposable
                 @Unpause.started -= m_Wrapper.m_MenusActionsCallbackInterface.OnUnpause;
                 @Unpause.performed -= m_Wrapper.m_MenusActionsCallbackInterface.OnUnpause;
                 @Unpause.canceled -= m_Wrapper.m_MenusActionsCallbackInterface.OnUnpause;
+                @ChangeTab.started -= m_Wrapper.m_MenusActionsCallbackInterface.OnChangeTab;
+                @ChangeTab.performed -= m_Wrapper.m_MenusActionsCallbackInterface.OnChangeTab;
+                @ChangeTab.canceled -= m_Wrapper.m_MenusActionsCallbackInterface.OnChangeTab;
             }
             m_Wrapper.m_MenusActionsCallbackInterface = instance;
             if (instance != null)
@@ -1395,6 +1475,9 @@ public class @GameInput : IInputActionCollection, IDisposable
                 @Unpause.started += instance.OnUnpause;
                 @Unpause.performed += instance.OnUnpause;
                 @Unpause.canceled += instance.OnUnpause;
+                @ChangeTab.started += instance.OnChangeTab;
+                @ChangeTab.performed += instance.OnChangeTab;
+                @ChangeTab.canceled += instance.OnChangeTab;
             }
         }
     }
@@ -1468,6 +1551,7 @@ public class @GameInput : IInputActionCollection, IDisposable
         void OnCancel(InputAction.CallbackContext context);
         void OnMouseMove(InputAction.CallbackContext context);
         void OnUnpause(InputAction.CallbackContext context);
+        void OnChangeTab(InputAction.CallbackContext context);
     }
     public interface IDialoguesActions
     {

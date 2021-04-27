@@ -35,6 +35,7 @@ public class InventoryItemFiller : MonoBehaviour
 		_currentItem = itemStack;
 
 		_imgSelected.gameObject.SetActive(isSelected);
+
 		if (itemStack.Item.IsLocalized)
 		{
 			_bgLocalizedImage.enabled = true;
@@ -66,6 +67,7 @@ public class InventoryItemFiller : MonoBehaviour
 	public void SelectFirstElement()
 	{
 		_itemButton.Select();
+		SelectItem(); 
 	}
 
 	public void HoverItem()
@@ -82,7 +84,6 @@ public class InventoryItemFiller : MonoBehaviour
 	}
 
 	public void SelectItem()
-
 	{
 		_imgSelected.gameObject.SetActive(true);
 		_currentItemEvent.RaiseEvent(_currentItem.Item);

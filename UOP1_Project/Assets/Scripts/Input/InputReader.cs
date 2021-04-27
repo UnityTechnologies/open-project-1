@@ -36,6 +36,8 @@ public class InputReader : ScriptableObject, GameInput.IGameplayActions, GameInp
 	public event UnityAction menuCancelEvent = delegate { };
 	public event UnityAction menuUnpauseEvent = delegate { };
 
+	public event UnityAction<float> menuSwitchTab = delegate { };
+
 
 	private GameInput gameInput;
 
@@ -202,6 +204,12 @@ public class InputReader : ScriptableObject, GameInput.IGameplayActions, GameInp
 		gameInput.Gameplay.Disable();
 		gameInput.Menus.Disable();
 		gameInput.Dialogues.Disable();
+	}
+	public void OnChangeTab(InputAction.CallbackContext context)
+	{
+		if (context.phase == InputActionPhase.Performed)
+			menuSwitchTab.Invoke(context.ReadValue<float>()); 
+
 	}
 
 	public bool LeftMouseDown() => Mouse.current.leftButton.isPressed;
