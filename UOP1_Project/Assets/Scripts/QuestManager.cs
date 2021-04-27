@@ -5,11 +5,11 @@ using UnityEngine;
 public class QuestManager : MonoBehaviour
 {
 
-	[SerializeField] private QuestAncorSO _questAnchor = default;
+	[SerializeField] private QuestDataSO _questData = default;
 	// Start is called before the first frame update
 	void Start()
 	{
-		_questAnchor.StartGame();
+		_questData.StartGame();
 	}
 
 	// Update is called once per frame

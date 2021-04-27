@@ -16,8 +16,9 @@ public class InventoryItemFiller : MonoBehaviour
 	[SerializeField] private Button _itemButton = default;
 	[SerializeField] private Image _bgInactiveImage = default;
 
+	ItemEventChannelSO _currentItemEvent; 
 
-	[SerializeField] private LocalizeSpriteEvent _bgLocalizedImage = default;
+[SerializeField] private LocalizeSpriteEvent _bgLocalizedImage = default;
 
 	public void SetItem(ItemStack itemStack, bool isSelected, ItemEventChannelSO selectItemEvent)
 	{
@@ -28,9 +29,9 @@ public class InventoryItemFiller : MonoBehaviour
 		_imgSelected.gameObject.SetActive(true);
 		_itemButton.gameObject.SetActive(true);
 		_bgInactiveImage.gameObject.SetActive(false);
-
+	
 		UnhoverItem();
-
+		_currentItemEvent = selectItemEvent; 
 		_currentItem = itemStack;
 
 		_imgSelected.gameObject.SetActive(isSelected);
@@ -47,15 +48,7 @@ public class InventoryItemFiller : MonoBehaviour
 		_itemCount.text = itemStack.Amount.ToString();
 		_bgImage.color = itemStack.Item.ItemType.TypeColor;
 
-		_itemButton.onClick.RemoveAllListeners();
-
-		_itemButton.onClick.AddListener(() =>
-		{
-			SelectItem();
-			UnhoverItem();
-			selectItemEvent.RaiseEvent(_currentItem.Item);
-
-		});
+	
 	}
 	public void SetInactiveItem()
 	{
@@ -70,7 +63,7 @@ public class InventoryItemFiller : MonoBehaviour
 
 	}
 
-	public void HoverFirstElement()
+	public void SelectFirstElement()
 	{
 		_itemButton.Select();
 	}
@@ -92,13 +85,12 @@ public class InventoryItemFiller : MonoBehaviour
 
 	{
 		_imgSelected.gameObject.SetActive(true);
+		_currentItemEvent.RaiseEvent(_currentItem.Item);
 
 	}
 
 	public void UnselectItem()
 	{
-
-
 		_imgSelected.gameObject.SetActive(false);
 
 	}

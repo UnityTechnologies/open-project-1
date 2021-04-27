@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Serialization;
 
 [CreateAssetMenu(fileName = "QuestAnchor", menuName = "Quests/QuestAnchor", order = 51)]
-public class QuestAncorSO : ScriptableObject
+public class QuestDataSO : ScriptableObject
 {
 	[Header("Data")]
 	[SerializeField] private List<QuestlineSO> _questlines = default;

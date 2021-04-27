@@ -177,7 +177,7 @@ public class UIInventoryManager : MonoBehaviour
 		//hover First Element
 		if (_instanciatedItems.Count > 0)
 		{
-			_instanciatedItems[0].HoverFirstElement();
+			_instanciatedItems[0].SelectFirstElement();
 		}
 	}
 	public void UpdateOnItemInInventory(ItemStack itemToUpdate, bool removeItem)
