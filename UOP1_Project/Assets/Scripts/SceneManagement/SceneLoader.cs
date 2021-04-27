@@ -120,9 +120,9 @@ public class SceneLoader : MonoBehaviour
 	/// </summary>
 	private void UnloadPreviousScene()
 	{
-		if(_currentlyLoadedScene != null) //would be null if the game was started in Initialisation
+		if (_currentlyLoadedScene != null) //would be null if the game was started in Initialisation
 		{
-			if(_currentlyLoadedScene.sceneReference.OperationHandle.IsValid())
+			if (_currentlyLoadedScene.sceneReference.OperationHandle.IsValid())
 			{
 				//Unload the scene through its AssetReference, i.e. through the Addressable system
 				_currentlyLoadedScene.sceneReference.UnLoadScene();
