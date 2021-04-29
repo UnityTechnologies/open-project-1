@@ -70,6 +70,7 @@ public class UIInventoryManager : MonoBehaviour
 		{
 			OnInteractionEndedEvent.OnEventRaised += InteractionEnded;
 		}
+		if(_inputReader)
 		_inputReader.menuSwitchTab += SwitchTab;
 		
 	}

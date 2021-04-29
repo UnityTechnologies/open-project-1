@@ -541,6 +541,14 @@ public class @GameInput : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""InventoryActionButton"",
+                    ""type"": ""Button"",
+                    ""id"": ""60a66e41-5063-4c5c-b8db-de7aa1aaa1de"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -939,6 +947,28 @@ public class @GameInput : IInputActionCollection, IDisposable
                     ""action"": ""ChangeTab"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4306a7b2-67e8-4e85-9264-99218bea9eb4"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardOrGamepad"",
+                    ""action"": ""InventoryActionButton"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""56d69440-226f-4a0e-bdfe-c5009b83d8cd"",
+                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardOrGamepad"",
+                    ""action"": ""InventoryActionButton"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -1263,6 +1293,7 @@ public class @GameInput : IInputActionCollection, IDisposable
         m_Menus_MouseMove = m_Menus.FindAction("MouseMove", throwIfNotFound: true);
         m_Menus_Unpause = m_Menus.FindAction("Unpause", throwIfNotFound: true);
         m_Menus_ChangeTab = m_Menus.FindAction("ChangeTab", throwIfNotFound: true);
+        m_Menus_InventoryActionButton = m_Menus.FindAction("InventoryActionButton", throwIfNotFound: true);
         // Dialogues
         m_Dialogues = asset.FindActionMap("Dialogues", throwIfNotFound: true);
         m_Dialogues_MoveSelection = m_Dialogues.FindAction("MoveSelection", throwIfNotFound: true);
@@ -1419,6 +1450,7 @@ public class @GameInput : IInputActionCollection, IDisposable
     private readonly InputAction m_Menus_MouseMove;
     private readonly InputAction m_Menus_Unpause;
     private readonly InputAction m_Menus_ChangeTab;
+    private readonly InputAction m_Menus_InventoryActionButton;
     public struct MenusActions
     {
         private @GameInput m_Wrapper;
@@ -1429,6 +1461,7 @@ public class @GameInput : IInputActionCollection, IDisposable
         public InputAction @MouseMove => m_Wrapper.m_Menus_MouseMove;
         public InputAction @Unpause => m_Wrapper.m_Menus_Unpause;
         public InputAction @ChangeTab => m_Wrapper.m_Menus_ChangeTab;
+        public InputAction @InventoryActionButton => m_Wrapper.m_Menus_InventoryActionButton;
         public InputActionMap Get() { return m_Wrapper.m_Menus; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1456,6 +1489,9 @@ public class @GameInput : IInputActionCollection, IDisposable
                 @ChangeTab.started -= m_Wrapper.m_MenusActionsCallbackInterface.OnChangeTab;
                 @ChangeTab.performed -= m_Wrapper.m_MenusActionsCallbackInterface.OnChangeTab;
                 @ChangeTab.canceled -= m_Wrapper.m_MenusActionsCallbackInterface.OnChangeTab;
+                @InventoryActionButton.started -= m_Wrapper.m_MenusActionsCallbackInterface.OnInventoryActionButton;
+                @InventoryActionButton.performed -= m_Wrapper.m_MenusActionsCallbackInterface.OnInventoryActionButton;
+                @InventoryActionButton.canceled -= m_Wrapper.m_MenusActionsCallbackInterface.OnInventoryActionButton;
             }
             m_Wrapper.m_MenusActionsCallbackInterface = instance;
             if (instance != null)
@@ -1478,6 +1514,9 @@ public class @GameInput : IInputActionCollection, IDisposable
                 @ChangeTab.started += instance.OnChangeTab;
                 @ChangeTab.performed += instance.OnChangeTab;
                 @ChangeTab.canceled += instance.OnChangeTab;
+                @InventoryActionButton.started += instance.OnInventoryActionButton;
+                @InventoryActionButton.performed += instance.OnInventoryActionButton;
+                @InventoryActionButton.canceled += instance.OnInventoryActionButton;
             }
         }
     }
@@ -1552,6 +1591,7 @@ public class @GameInput : IInputActionCollection, IDisposable
         void OnMouseMove(InputAction.CallbackContext context);
         void OnUnpause(InputAction.CallbackContext context);
         void OnChangeTab(InputAction.CallbackContext context);
+        void OnInventoryActionButton(InputAction.CallbackContext context);
     }
     public interface IDialoguesActions
     {
