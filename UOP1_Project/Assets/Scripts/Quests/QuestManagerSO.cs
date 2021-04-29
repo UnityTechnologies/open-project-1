@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-[CreateAssetMenu(fileName = "QuestAnchor", menuName = "Quests/QuestAnchor", order = 51)]
-public class QuestDataSO : ScriptableObject
+//[CreateAssetMenu(fileName = "QuestManager", menuName = "Quests/QuestManager", order = 51)]
+public class QuestManagerSO : ScriptableObject
 {
 	[Header("Data")]
 	[SerializeField] private List<QuestlineSO> _questlines = default;
