@@ -16,6 +16,8 @@ public class UIManager : MonoBehaviour
 
 	[SerializeField] private InputReader _inputReader = default;
 	[Header("Listening on channels")]
+	[SerializeField] private VoidEventChannelSO _onSceneReady = default;
+
 	[Header("Dialogue Events")]
 	[SerializeField] private DialogueLineChannelSO _openUIDialogueEvent = default;
 	[SerializeField] private VoidEventChannelSO _closeUIDialogueEvent = default;
@@ -56,15 +58,26 @@ public class UIManager : MonoBehaviour
 		{
 			_setInteractionEvent.OnEventRaised += SetInteractionPanel;
 		}
+		if (_onSceneReady != null)
+		{
+			_onSceneReady.OnEventRaised += ResetUI;
+			
+		}
 
+		
 	}
 
 	private void Start()
 	{
-		CloseUIDialogue();
+		
 	}
 
-
+	void ResetUI()
+	{
+		CloseUIDialogue();
+		CloseInventoryScreen();
+		SetInteractionPanel(false, InteractionType.None); 
+	}
 
 	public void OpenUIDialogue(LocalizedString dialogueLine, ActorSO actor)
 	{
