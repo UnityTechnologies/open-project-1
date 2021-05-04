@@ -144,7 +144,9 @@ public class UIInventoryManager : MonoBehaviour
 		if (selectedTab != null)
 		{
 			FillTypeTabs(tabTypesList, selectedTab);
-			List<ItemStack> listItemsToShow = currentInventory.Items.FindAll(o => o.Item.ItemType.TabType == selectedTab);
+			List<ItemStack> listItemsToShow = new List<ItemStack>();
+			listItemsToShow = currentInventory.Items.FindAll(o => o.Item.ItemType.TabType == selectedTab);
+			
 			FillItems(listItemsToShow);
 		}
 		else
