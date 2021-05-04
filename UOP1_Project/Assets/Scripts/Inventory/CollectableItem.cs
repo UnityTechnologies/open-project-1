@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening; 
-public class CollectibleItem : MonoBehaviour
+public class CollectableItem : MonoBehaviour
 {
 
 	[SerializeField] private Item _currentItem = default;

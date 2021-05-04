@@ -70,6 +70,6 @@ public class DropReward : StateAction
 			position + itemPrefab.transform.localPosition +
 			_dropRewardConfig.ScatteringDistance * (Mathf.Cos(randAngle) * Vector3.forward + Mathf.Sin(randAngle) * Vector3.right),
 			Quaternion.identity);
-		collectibleItem.GetComponent<CollectibleItem>().AnimateItem(); 
+		collectibleItem.GetComponent<CollectableItem>().AnimateItem(); 
 	}
 }
