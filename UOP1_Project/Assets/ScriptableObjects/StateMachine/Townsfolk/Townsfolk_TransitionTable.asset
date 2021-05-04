@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 872cbaa965d1f6e4e98365d74e2060df, type: 3}
+  m_Name: Townsfolk_TransitionTable
+  m_EditorClassIdentifier: 
+  _transitions:
+  - FromState: {fileID: 11400000, guid: 7aedcd9c179a4824eaf24451ab5689ba, type: 2}
+    ToState: {fileID: 11400000, guid: 0e91b8fa2c44dc346b693ecfce70a7f1, type: 2}
+    Conditions:
+    - ExpectedResult: 0
+      Condition: {fileID: 11400000, guid: 80507641566a7d448beec1002e411e54, type: 2}
+      Operator: 0
+  - FromState: {fileID: 11400000, guid: 0e91b8fa2c44dc346b693ecfce70a7f1, type: 2}
+    ToState: {fileID: 11400000, guid: 7aedcd9c179a4824eaf24451ab5689ba, type: 2}
+    Conditions:
+    - ExpectedResult: 0
+      Condition: {fileID: 11400000, guid: f5dfb7f0b89c7224a85f3e349c30893f, type: 2}
+      Operator: 0
+  - FromState: {fileID: 11400000, guid: 0e91b8fa2c44dc346b693ecfce70a7f1, type: 2}
+    ToState: {fileID: 11400000, guid: 1aad0cd7a387c6544a113d9fa8df1ce3, type: 2}
+    Conditions:
+    - ExpectedResult: 0
+      Condition: {fileID: 11400000, guid: 5ef92fc56785ca244a1415862e4e8e6e, type: 2}
+      Operator: 0
+  - FromState: {fileID: 11400000, guid: 1aad0cd7a387c6544a113d9fa8df1ce3, type: 2}
+    ToState: {fileID: 11400000, guid: 7aedcd9c179a4824eaf24451ab5689ba, type: 2}
+    Conditions:
+    - ExpectedResult: 0
+      Condition: {fileID: 11400000, guid: b9ba11af4ed48d645a1c41c3d3666135, type: 2}
+      Operator: 0
