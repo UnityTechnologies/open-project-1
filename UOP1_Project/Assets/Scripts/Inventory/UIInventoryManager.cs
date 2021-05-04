@@ -25,8 +25,8 @@ public class UIInventoryManager : MonoBehaviour
 	List<InventoryTabType> tabTypesList = new List<InventoryTabType>();
 
 	private int selectedItemId = -1;
-
-	private List<InventoryItemFiller> instantiatedGameObjects = default;
+	[SerializeField]
+	private List<InventoryItemFiller> _instanciatedItems = default;
 
 
 	[SerializeField]
@@ -48,6 +48,9 @@ public class UIInventoryManager : MonoBehaviour
 	[SerializeField]
 	private VoidEventChannelSO OnInteractionEndedEvent = default;
 
+	[SerializeField]
+	private InputReader _inputReader = default; 
+
 	private void OnEnable()
 	{
 		//Check if the event exists to avoid errors
@@ -67,6 +70,9 @@ public class UIInventoryManager : MonoBehaviour
 		{
 			OnInteractionEndedEvent.OnEventRaised += InteractionEnded;
 		}
+		if(_inputReader)
+		_inputReader.menuSwitchTab += SwitchTab;
+		
 	}
 
 	private void OnDisable()
@@ -85,7 +91,33 @@ public class UIInventoryManager : MonoBehaviour
 		}
 	}
 
+	public void SwitchTab(float orientation)
+	{
+	
+		if(orientation!=0)
+		{
+			bool isLeft = orientation < 0;
+			int initialIndex = tabTypesList.FindIndex(o => o == selectedTab);
+			if (initialIndex != -1)
+			{
+				if (isLeft)
+				{
+					initialIndex--;
+				}
+				else
+				{
+					initialIndex++;
+				}
 
+				initialIndex= Mathf.Clamp(initialIndex, 0, tabTypesList.Count-1); 
+			}
+			
+			ChangeTabEventRaised(tabTypesList[initialIndex]); 
+		}
+
+
+
+	}
 
 	bool isNearPot = false;
 	public void FillInventory(TabType _selectedTabType = TabType.none, bool _isNearPot = false)
@@ -112,7 +144,9 @@ public class UIInventoryManager : MonoBehaviour
 		if (selectedTab != null)
 		{
 			FillTypeTabs(tabTypesList, selectedTab);
-			List<ItemStack> listItemsToShow = currentInventory.Items.FindAll(o => o.Item.ItemType.TabType == selectedTab);
+			List<ItemStack> listItemsToShow = new List<ItemStack>();
+			listItemsToShow = currentInventory.Items.FindAll(o => o.Item.ItemType.TabType == selectedTab);
+			
 			FillItems(listItemsToShow);
 		}
 		else
@@ -136,33 +170,33 @@ public class UIInventoryManager : MonoBehaviour
 	void FillItems(List<ItemStack> listItemsToShow)
 	{
 
-		if (instantiatedGameObjects == null)
-			instantiatedGameObjects = new List<InventoryItemFiller>();
+		if (_instanciatedItems == null)
+			_instanciatedItems = new List<InventoryItemFiller>();
 
-		int maxCount = Mathf.Max(listItemsToShow.Count, instantiatedGameObjects.Count);
+		int maxCount = Mathf.Max(listItemsToShow.Count, _instanciatedItems.Count);
 
 		for (int i = 0; i < maxCount; i++)
 		{
 			if (i < listItemsToShow.Count)
 			{
-				if (i >= instantiatedGameObjects.Count)
+				if (i >= _instanciatedItems.Count)
 				{
 					//instantiate 
 					InventoryItemFiller instantiatedPrefab = Instantiate(itemPrefab, contentParent.transform) as InventoryItemFiller;
-					instantiatedGameObjects.Add(instantiatedPrefab);
+					_instanciatedItems.Add(instantiatedPrefab);
 
 				}
 				//fill
 
 				bool isSelected = selectedItemId == i;
-				instantiatedGameObjects[i].SetItem(listItemsToShow[i], isSelected, SelectItemEvent);
-				instantiatedGameObjects[i].gameObject.SetActive(true);
+				_instanciatedItems[i].SetItem(listItemsToShow[i], isSelected, SelectItemEvent);
+
 
 			}
-			else if (i < instantiatedGameObjects.Count)
+			else if (i < _instanciatedItems.Count)
 			{
 				//Desactive
-				instantiatedGameObjects[i].gameObject.SetActive(false);
+				_instanciatedItems[i].SetInactiveItem();
 			}
 
 		}
@@ -173,19 +207,25 @@ public class UIInventoryManager : MonoBehaviour
 			UnselectItem(selectedItemId);
 			selectedItemId = -1;
 		}
+		//hover First Element
+		if (_instanciatedItems.Count > 0)
+		{
+			_instanciatedItems[0].SelectFirstElement();
+		}
+		 
 	}
 	public void UpdateOnItemInInventory(ItemStack itemToUpdate, bool removeItem)
 	{
-		if (instantiatedGameObjects == null)
-			instantiatedGameObjects = new List<InventoryItemFiller>();
+		if (_instanciatedItems == null)
+			_instanciatedItems = new List<InventoryItemFiller>();
 
 		if (removeItem)
 		{
-			if (instantiatedGameObjects.Exists(o => o._currentItem == itemToUpdate))
+			if (_instanciatedItems.Exists(o => o._currentItem == itemToUpdate))
 			{
 
-				int index = instantiatedGameObjects.FindIndex(o => o._currentItem == itemToUpdate);
-				instantiatedGameObjects[index].gameObject.SetActive(false);
+				int index = _instanciatedItems.FindIndex(o => o._currentItem == itemToUpdate);
+				_instanciatedItems[index].SetInactiveItem();
 
 			}
 
@@ -194,10 +234,10 @@ public class UIInventoryManager : MonoBehaviour
 		{
 			int index = 0;
 			//if the item has already been created
-			if (instantiatedGameObjects.Exists(o => o._currentItem == itemToUpdate))
+			if (_instanciatedItems.Exists(o => o._currentItem == itemToUpdate))
 			{
 
-				index = instantiatedGameObjects.FindIndex(o => o._currentItem == itemToUpdate);
+				index = _instanciatedItems.FindIndex(o => o._currentItem == itemToUpdate);
 
 
 			}
@@ -205,11 +245,11 @@ public class UIInventoryManager : MonoBehaviour
 			else
 			{
 				//if the new item needs to be instantiated
-				if (currentInventory.Items.Count > instantiatedGameObjects.Count)
+				if (currentInventory.Items.Count > _instanciatedItems.Count)
 				{
 					//instantiate 
 					InventoryItemFiller instantiatedPrefab = Instantiate(itemPrefab, contentParent.transform) as InventoryItemFiller;
-					instantiatedGameObjects.Add(instantiatedPrefab);
+					_instanciatedItems.Add(instantiatedPrefab);
 
 
 				}
@@ -221,9 +261,8 @@ public class UIInventoryManager : MonoBehaviour
 
 			//set item
 			bool isSelected = selectedItemId == index;
-			instantiatedGameObjects[index].SetItem(itemToUpdate, isSelected, SelectItemEvent);
+			_instanciatedItems[index].SetItem(itemToUpdate, isSelected, SelectItemEvent);
 
-			instantiatedGameObjects[index].gameObject.SetActive(true);
 
 
 		}
@@ -234,9 +273,9 @@ public class UIInventoryManager : MonoBehaviour
 
 	public void InspectItem(Item itemToInspect)
 	{
-		if (instantiatedGameObjects.Exists(o => o._currentItem.Item == itemToInspect))
+		if (_instanciatedItems.Exists(o => o._currentItem.Item == itemToInspect))
 		{
-			int itemIndex = instantiatedGameObjects.FindIndex(o => o._currentItem.Item == itemToInspect);
+			int itemIndex = _instanciatedItems.FindIndex(o => o._currentItem.Item == itemToInspect);
 
 
 			//unselect selected Item
@@ -251,20 +290,21 @@ public class UIInventoryManager : MonoBehaviour
 
 			//check if interactable
 			bool isInteractable = true;
+			buttonFiller.gameObject.SetActive(true);
 			if (itemToInspect.ItemType.ActionType == ItemInventoryActionType.cook)
 			{
-				isInteractable = currentInventory.hasIngredients(itemToInspect.IngredientsList) && isNearPot
-					;
+				isInteractable = currentInventory.hasIngredients(itemToInspect.IngredientsList) && isNearPot;
 
 			}
 			else if (itemToInspect.ItemType.ActionType == ItemInventoryActionType.doNothing)
 			{
 				isInteractable = false;
-
+				buttonFiller.gameObject.SetActive(false);
 			}
 
 			//set button
 			buttonFiller.FillInventoryButtons(itemToInspect.ItemType, isInteractable);
+
 
 		}
 
@@ -281,7 +321,7 @@ public class UIInventoryManager : MonoBehaviour
 	}
 	void HideItemInformation()
 	{
-
+		buttonFiller.gameObject.SetActive(false);
 		inspectorFiller.HideItemInspector();
 
 	}
@@ -290,9 +330,9 @@ public class UIInventoryManager : MonoBehaviour
 	void UnselectItem(int itemIndex)
 	{
 
-		if (instantiatedGameObjects.Count > itemIndex)
+		if (_instanciatedItems.Count > itemIndex)
 		{
-			instantiatedGameObjects[itemIndex].UnselectItem();
+			_instanciatedItems[itemIndex].UnselectItem();
 
 		}
 	}
@@ -302,11 +342,11 @@ public class UIInventoryManager : MonoBehaviour
 		if (ActionButtonClicked != null)
 		{
 			//find the selected Item
-			if (instantiatedGameObjects.Count > selectedItemId && selectedItemId > -1)
+			if (_instanciatedItems.Count > selectedItemId && selectedItemId > -1)
 			{
 				//find the item 
 				Item itemToActOn = new Item();
-				itemToActOn = instantiatedGameObjects[selectedItemId]._currentItem.Item;
+				itemToActOn = _instanciatedItems[selectedItemId]._currentItem.Item;
 
 				//check the selected Item type
 				//call action function depending on the itemType

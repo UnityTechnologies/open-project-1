@@ -7,7 +7,7 @@
 public class LocationExit : MonoBehaviour
 {
 	[Header("Loading settings")]
-	[SerializeField] private GameSceneSO[] _locationsToLoad = default;
+	[SerializeField] private GameSceneSO _locationToLoad = default;
 	[SerializeField] private bool _showLoadScreen = default;
 	[SerializeField] private PathAnchor _pathTaken = default;
 	[SerializeField] private PathSO _exitPath = default;
@@ -20,7 +20,7 @@ public class LocationExit : MonoBehaviour
 		if (other.CompareTag("Player"))
 		{
 			UpdatePathTaken();
-			_locationExitLoadChannel.RaiseEvent(_locationsToLoad, _showLoadScreen);
+			_locationExitLoadChannel.RaiseEvent(_locationToLoad, _showLoadScreen);
 		}
 	}
 

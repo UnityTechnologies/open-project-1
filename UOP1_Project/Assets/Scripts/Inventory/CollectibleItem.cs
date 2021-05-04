@@ -1,22 +1,16 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using DG.Tweening; 
 public class CollectibleItem : MonoBehaviour
 {
 
 	[SerializeField] private Item _currentItem = default;
-	[SerializeField] private SpriteRenderer[] _itemImages = default;
+	[SerializeField] private GameObject _itemGO = default; 
+
 	private void Start()
 	{
-		if (_itemImages != null)
-			SetCubeItem();
-	}
-
-	public void PickedItem()
-	{
-
-
+		AnimateItem(); 
 	}
 
 	public Item GetItem()
@@ -30,14 +24,14 @@ public class CollectibleItem : MonoBehaviour
 		_currentItem = item;
 
 	}
-	//this function is only for testing 
-	public void SetCubeItem()
+	public void AnimateItem()
 	{
-		for (int i = 0; i < _itemImages.Length; i++)
-		{
-			_itemImages[i].sprite = _currentItem.PreviewImage;
-		}
 
+		if(_itemGO!=null)
+		{
+			_itemGO.transform.DORotate(Vector3.one * 180, 5, RotateMode.Fast).SetLoops(-1,LoopType.Incremental); 
+
+		}
 	}
 
 }
