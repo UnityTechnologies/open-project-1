@@ -5,13 +5,14 @@ using System.Collections;
 
 public class CameraManager : MonoBehaviour
 {
-	public InputReader inputReader;
+	[SerializeField] private UnityEventBusSO eventBus;
+
 	public Camera mainCamera;
 	public CinemachineFreeLook freeLookVCam;
 	private bool _isRMBPressed;
 
 	[SerializeField, Range(.5f, 3f)]
-	private float _speedMultiplier = 1f; //TODO: make this modifiable in the game settings											
+	private float _speedMultiplier = 1f; //TODO: make this modifiable in the game settings
 	[SerializeField] private TransformAnchor _cameraTransformAnchor = default;
 
 	[Header("Listening on channels")]
@@ -30,9 +31,9 @@ public class CameraManager : MonoBehaviour
 
 	private void OnEnable()
 	{
-		inputReader.cameraMoveEvent += OnCameraMove;
-		inputReader.enableMouseControlCameraEvent += OnEnableMouseControlCamera;
-		inputReader.disableMouseControlCameraEvent += OnDisableMouseControlCamera;
+		eventBus.Subscribe<CameraMoveEvent>(OnCameraMove);
+		eventBus.Subscribe<EnableMouseControlEvent>(OnEnableMouseControlCamera);
+		eventBus.Subscribe<DisableMouseControlEvent>(OnDisableMouseControlCamera);
 
 		if (_frameObjectChannel != null)
 			_frameObjectChannel.OnEventRaised += OnFrameObjectEvent;
@@ -42,15 +43,15 @@ public class CameraManager : MonoBehaviour
 
 	private void OnDisable()
 	{
-		inputReader.cameraMoveEvent -= OnCameraMove;
-		inputReader.enableMouseControlCameraEvent -= OnEnableMouseControlCamera;
-		inputReader.disableMouseControlCameraEvent -= OnDisableMouseControlCamera;
+		eventBus.Unsubscribe<CameraMoveEvent>(OnCameraMove);
+		eventBus.Unsubscribe<EnableMouseControlEvent>(OnEnableMouseControlCamera);
+		eventBus.Unsubscribe<DisableMouseControlEvent>(OnDisableMouseControlCamera);
 
 		if (_frameObjectChannel != null)
 			_frameObjectChannel.OnEventRaised -= OnFrameObjectEvent;
 	}
 
-	private void OnEnableMouseControlCamera()
+	private void OnEnableMouseControlCamera(EnableMouseControlEvent evt)
 	{
 		_isRMBPressed = true;
 
@@ -67,7 +68,7 @@ public class CameraManager : MonoBehaviour
 		_cameraMovementLock = false;
 	}
 
-	private void OnDisableMouseControlCamera()
+	private void OnDisableMouseControlCamera(DisableMouseControlEvent evt)
 	{
 		_isRMBPressed = false;
 
@@ -80,16 +81,16 @@ public class CameraManager : MonoBehaviour
 		freeLookVCam.m_YAxis.m_InputAxisValue = 0;
 	}
 
-	private void OnCameraMove(Vector2 cameraMovement, bool isDeviceMouse)
+	private void OnCameraMove(CameraMoveEvent moveEvent)
 	{
 		if (_cameraMovementLock)
 			return;
 
-		if (isDeviceMouse && !_isRMBPressed)
+		if (moveEvent.IsDeviceMouse && !_isRMBPressed)
 			return;
 
-		freeLookVCam.m_XAxis.m_InputAxisValue = cameraMovement.x * Time.deltaTime * _speedMultiplier;
-		freeLookVCam.m_YAxis.m_InputAxisValue = cameraMovement.y * Time.deltaTime * _speedMultiplier;
+		freeLookVCam.m_XAxis.m_InputAxisValue = moveEvent.Movement.x * Time.deltaTime * _speedMultiplier;
+		freeLookVCam.m_YAxis.m_InputAxisValue = moveEvent.Movement.y * Time.deltaTime * _speedMultiplier;
 	}
 
 	private void OnFrameObjectEvent(Transform value)

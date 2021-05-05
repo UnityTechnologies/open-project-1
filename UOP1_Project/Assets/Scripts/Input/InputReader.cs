@@ -1,29 +1,26 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Events;
 
 [CreateAssetMenu(fileName = "InputReader", menuName = "Game/Input Reader")]
 public class InputReader : ScriptableObject, GameInput.IGameplayActions, GameInput.IDialoguesActions, GameInput.IMenusActions
 {
+	[SerializeField] private EventAggregatorSO eventAggregator;
+
+	[SerializeField] private UnityEventBusSO eventBus;
+
+	private readonly MoveEvent _moveEvent = new MoveEvent();
+	private readonly CameraMoveEvent _cameraMoveEvent = new CameraMoveEvent();
+
 	// Assign delegate{} to events to initialise them with an empty delegate
 	// so we can skip the null check when we use them
 
 	// Gameplay
-	public event UnityAction jumpEvent = delegate { };
-	public event UnityAction jumpCanceledEvent = delegate { };
-	public event UnityAction attackEvent = delegate { };
-	public event UnityAction attackCanceledEvent = delegate { };
 	public event UnityAction interactEvent = delegate { }; // Used to talk, pickup objects, interact with tools like the cooking cauldron
-	public event UnityAction openInventoryEvent = delegate { }; // Used to bring up the inventory
 	public event UnityAction closeInventoryEvent = delegate { };// Used to bring up the inventory
 	public event UnityAction inventoryActionButtonEvent = delegate { };
 	public event UnityAction pauseEvent = delegate { };
-	public event UnityAction<Vector2> moveEvent = delegate { };
-	public event UnityAction<Vector2, bool> cameraMoveEvent = delegate { };
-	public event UnityAction enableMouseControlCameraEvent = delegate { };
-	public event UnityAction disableMouseControlCameraEvent = delegate { };
-	public event UnityAction startedRunning = delegate { };
-	public event UnityAction stoppedRunning = delegate { };
 
 	// Shared between menus and dialogues
 	public event UnityAction moveSelectionEvent = delegate { };
@@ -65,10 +62,10 @@ public class InputReader : ScriptableObject, GameInput.IGameplayActions, GameInp
 		switch (context.phase)
 		{
 			case InputActionPhase.Performed:
-				attackEvent.Invoke();
+				eventAggregator.Publish(AttackEvent.Event);
 				break;
 			case InputActionPhase.Canceled:
-				attackCanceledEvent.Invoke();
+				eventAggregator.Publish(AttackCancelledEvent.Event);
 				break;
 		}
 	}
@@ -76,7 +73,7 @@ public class InputReader : ScriptableObject, GameInput.IGameplayActions, GameInp
 	public void OnOpenInventory(InputAction.CallbackContext context)
 	{
 		if (context.phase == InputActionPhase.Performed)
-			openInventoryEvent.Invoke();
+			eventAggregator.Publish(OpenInventoryEvent.Event);
 	}
 	public void OnCancel(InputAction.CallbackContext context)
 	{
@@ -100,16 +97,21 @@ public class InputReader : ScriptableObject, GameInput.IGameplayActions, GameInp
 
 	public void OnJump(InputAction.CallbackContext context)
 	{
-		if (context.phase == InputActionPhase.Performed)
-			jumpEvent.Invoke();
-
-		if (context.phase == InputActionPhase.Canceled)
-			jumpCanceledEvent.Invoke();
+		switch (context.phase)
+		{
+			case InputActionPhase.Performed:
+				eventAggregator.Publish(JumpEvent.Event);
+				break;
+			case InputActionPhase.Canceled:
+				eventAggregator.Publish(JumpCancelledEvent.Event);
+				break;
+		}
 	}
 
 	public void OnMove(InputAction.CallbackContext context)
 	{
-		moveEvent.Invoke(context.ReadValue<Vector2>());
+		_moveEvent.Movement = context.ReadValue<Vector2>();
+		eventAggregator.Publish(_moveEvent);
 	}
 
 	public void OnRun(InputAction.CallbackContext context)
@@ -117,10 +119,10 @@ public class InputReader : ScriptableObject, GameInput.IGameplayActions, GameInp
 		switch (context.phase)
 		{
 			case InputActionPhase.Performed:
-				startedRunning.Invoke();
+				eventAggregator.Publish(StartedRunningEvent.Event);
 				break;
 			case InputActionPhase.Canceled:
-				stoppedRunning.Invoke();
+				eventAggregator.Publish(StoppedRunningEvent.Event);
 				break;
 		}
 	}
@@ -133,16 +135,22 @@ public class InputReader : ScriptableObject, GameInput.IGameplayActions, GameInp
 
 	public void OnRotateCamera(InputAction.CallbackContext context)
 	{
-		cameraMoveEvent.Invoke(context.ReadValue<Vector2>(), IsDeviceMouse(context));
+		_cameraMoveEvent.Movement = context.ReadValue<Vector2>();
+		_cameraMoveEvent.IsDeviceMouse = IsDeviceMouse(context);
+		eventBus.Publish(_cameraMoveEvent);
 	}
 
 	public void OnMouseControlCamera(InputAction.CallbackContext context)
 	{
-		if (context.phase == InputActionPhase.Performed)
-			enableMouseControlCameraEvent.Invoke();
-
-		if (context.phase == InputActionPhase.Canceled)
-			disableMouseControlCameraEvent.Invoke();
+		switch (context.phase)
+		{
+			case InputActionPhase.Performed:
+				eventBus.Publish(EnableMouseControlEvent.Event);
+				break;
+			case InputActionPhase.Canceled:
+				eventBus.Publish(DisableMouseControlEvent.Event);
+				break;
+		}
 	}
 
 	private bool IsDeviceMouse(InputAction.CallbackContext context) => context.control.device.name == "Mouse";
@@ -216,7 +224,7 @@ public class InputReader : ScriptableObject, GameInput.IGameplayActions, GameInp
 	public void OnChangeTab(InputAction.CallbackContext context)
 	{
 		if (context.phase == InputActionPhase.Performed)
-			menuSwitchTab.Invoke(context.ReadValue<float>()); 
+			menuSwitchTab.Invoke(context.ReadValue<float>());
 
 	}
 
