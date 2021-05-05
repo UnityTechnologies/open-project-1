@@ -31,24 +31,19 @@ public class CutsceneManager : MonoBehaviour
 	}
 	private void Start()
 	{
-		if (_playCutsceneEvent != null)
-		{
+		
 
 			_playCutsceneEvent.OnEventRaised += PlayCutscene;
 
-		}
-		if (_playDialogueEvent != null)
-		{
+		
 
 			_playDialogueEvent.OnEventRaised += PlayDialogueFromClip;
 
-		}
-		if (_pauseTimelineEvent != null)
-		{
-
+		
+		
 			_pauseTimelineEvent.OnEventRaised += PauseTimeline;
 
-		}
+		
 	}
 	void PlayCutscene(PlayableDirector activePlayableDirector)
 	{

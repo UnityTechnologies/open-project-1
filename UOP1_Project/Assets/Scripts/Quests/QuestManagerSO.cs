@@ -17,9 +17,7 @@ public class QuestManagerSO : ScriptableObject
 	[SerializeField] private DialogueDataChannelSO _endDialogueEvent = default;
 
 	[Header("Broadcasting on channels")]
-	[FormerlySerializedAs("_winDialogueEvent")]
 	[SerializeField] private VoidEventChannelSO _completeDialogueEvent = default;
-	[FormerlySerializedAs("_loseDialogueEvent")]
 	[SerializeField] private VoidEventChannelSO _incompleteDialogueEvent = default;
 
 	[SerializeField] private ItemEventChannelSO _giveItemEvent = default;
@@ -34,14 +32,9 @@ public class QuestManagerSO : ScriptableObject
 
 	public void StartGame()
 	{//Add code for saved information
-		if (_checkStepValidityEvent != null)
-		{
 			_checkStepValidityEvent.OnEventRaised += CheckStepValidity;
-		}
-		if (_endDialogueEvent != null)
-		{
 			_endDialogueEvent.OnEventRaised += EndDialogue;
-		}
+		
 		StartQuestline();
 	}
 	void StartQuestline()
@@ -57,7 +50,7 @@ public class QuestManagerSO : ScriptableObject
 
 		}
 	}
-	bool hasStep(ActorSO actorToCheckWith)
+	bool HasStep(ActorSO actorToCheckWith)
 	{
 		if (_currentStep != null)
 		{
@@ -96,7 +89,7 @@ public class QuestManagerSO : ScriptableObject
 
 		}
 
-		if (hasStep(actor))
+		if (HasStep(actor))
 		{
 			if (isCheckValidity)
 			{
@@ -165,7 +158,7 @@ public class QuestManagerSO : ScriptableObject
 		{
 			switch (_currentStep.Type)
 			{
-				case stepType.checkItem:
+				case StepType.CheckItem:
 
 					if (_inventory.Contains(_currentStep.Item))
 					{
@@ -179,7 +172,7 @@ public class QuestManagerSO : ScriptableObject
 						_incompleteDialogueEvent.RaiseEvent();
 					}
 					break;
-				case stepType.giveItem:
+				case StepType.GiveItem:
 					if (_inventory.Contains(_currentStep.Item))
 					{
 						_giveItemEvent.RaiseEvent(_currentStep.Item);
@@ -192,7 +185,7 @@ public class QuestManagerSO : ScriptableObject
 
 					}
 					break;
-				case stepType.rewardItem:
+				case StepType.RewardItem:
 					_rewardItemEvent.RaiseEvent(_currentStep.Item);
 					//no dialogue is needed after Reward Item
 					if (_currentStep.CompleteDialogue != null)
@@ -204,7 +197,7 @@ public class QuestManagerSO : ScriptableObject
 						EndStep();
 					}
 					break;
-				case stepType.dialogue:
+				case StepType.Dialogue:
 					//dialogue has already been played
 					if (_currentStep.CompleteDialogue != null)
 					{

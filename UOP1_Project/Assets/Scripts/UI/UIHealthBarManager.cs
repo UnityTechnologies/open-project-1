@@ -27,18 +27,23 @@ public class UIHealthBarManager : MonoBehaviour
 	}
 	private void Start()
 	{
-		if (_setHealthBar != null)
-		{
+		
 			_setHealthBar.OnEventRaised += SetHealthBar;
-		}
-		if (_inflictDamage != null)
-		{
+		
 			_inflictDamage.OnEventRaised += InflictDamage;
-		}
-		if (_restoreHealth != null)
-		{
+		
 			_restoreHealth.OnEventRaised += RestoreHealth;
-		}
+		
+	}
+	private void OnDestroy()
+	{
+
+		_setHealthBar.OnEventRaised -= SetHealthBar;
+
+		_inflictDamage.OnEventRaised -= InflictDamage;
+
+		_restoreHealth.OnEventRaised -= RestoreHealth;
+
 	}
 	public void SetHealthBar(int _maxHealth)
 	{

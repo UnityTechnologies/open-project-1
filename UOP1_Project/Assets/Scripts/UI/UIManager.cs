@@ -34,39 +34,45 @@ public class UIManager : MonoBehaviour
 	private void OnEnable()
 	{
 		//Check if the event exists to avoid errors
-		if (_openUIDialogueEvent != null)
-		{
+		
 			_openUIDialogueEvent.OnEventRaised += OpenUIDialogue;
-		}
-		if (_closeUIDialogueEvent != null)
-		{
+		
 			_closeUIDialogueEvent.OnEventRaised += CloseUIDialogue;
-		}
-		if (_openInventoryScreenForCookingEvent != null)
-		{
+		
 			_openInventoryScreenForCookingEvent.OnEventRaised += SetInventoryScreenForCooking;
-		}
-		if (_openInventoryScreenEvent != null)
-		{
+		
 			_openInventoryScreenEvent.OnEventRaised += SetInventoryScreen;
-		}
-		if (_closeInventoryScreenEvent != null)
-		{
+		
 			_closeInventoryScreenEvent.OnEventRaised += CloseInventoryScreen;
-		}
-		if (_setInteractionEvent != null)
-		{
+		
 			_setInteractionEvent.OnEventRaised += SetInteractionPanel;
-		}
-		if (_onSceneReady != null)
-		{
+		
 			_onSceneReady.OnEventRaised += ResetUI;
-			
-		}
+		
 
 		
 	}
+	private void OnDestroy()
+	{
+		//Check if the event exists to avoid errors
 
+		_openUIDialogueEvent.OnEventRaised -= OpenUIDialogue;
+
+		_closeUIDialogueEvent.OnEventRaised -= CloseUIDialogue;
+
+		_openInventoryScreenForCookingEvent.OnEventRaised -= SetInventoryScreenForCooking;
+
+		_openInventoryScreenEvent.OnEventRaised -= SetInventoryScreen;
+
+		_closeInventoryScreenEvent.OnEventRaised -= CloseInventoryScreen;
+
+		_setInteractionEvent.OnEventRaised -= SetInteractionPanel;
+
+		_onSceneReady.OnEventRaised -= ResetUI;
+
+
+
+	}
 	private void Start()
 	{
 		
