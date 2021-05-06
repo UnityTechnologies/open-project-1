@@ -96,10 +96,16 @@ public class Protagonist : MonoBehaviour
 
 		//Accelerate/decelerate
 		targetSpeed = Mathf.Clamp01(_inputVector.magnitude);
-		// This is used to set the speed to the maximum if holding the Shift key,
-		// to allow keyboard players to "run"
-		if (targetSpeed > 0f && isRunning)
-			targetSpeed = 1f;
+		if (targetSpeed > 0f)
+		{
+			// This is used to set the speed to the maximum if holding the Shift key,
+			// to allow keyboard players to "run"
+			if(isRunning)
+				targetSpeed = 1f;
+
+			if (attackInput)
+				targetSpeed = .05f;
+		}
 		targetSpeed = Mathf.Lerp(_previousSpeed, targetSpeed, Time.deltaTime * 4f);
 
 		movementInput = adjustedMovement.normalized * targetSpeed;
@@ -131,7 +137,10 @@ public class Protagonist : MonoBehaviour
 	private void OnOpenInventory()
 	{
 		_openInventoryChannel.RaiseEvent();
+
+
 	}
+
 
 	private void OnStartedAttack() => attackInput = true;
 

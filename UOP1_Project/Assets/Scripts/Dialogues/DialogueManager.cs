@@ -34,10 +34,9 @@ public class DialogueManager : MonoBehaviour
 
 	private void Start()
 	{
-		if (_startDialogue != null)
-		{
+		
 			_startDialogue.OnEventRaised += DisplayDialogueData;
-		}
+		
 
 	}
 
@@ -69,10 +68,9 @@ public class DialogueManager : MonoBehaviour
 	/// <param name="dialogueLine"></param>
 	public void DisplayDialogueLine(LocalizedString dialogueLine, ActorSO actor)
 	{
-		if (_openUIDialogueEvent != null)
-		{
+		
 			_openUIDialogueEvent.RaiseEvent(dialogueLine, actor);
-		}
+		
 	}
 
 	private void OnAdvance()
@@ -99,24 +97,21 @@ public class DialogueManager : MonoBehaviour
 	private void DisplayChoices(List<Choice> choices)
 	{
 		_inputReader.advanceDialogueEvent -= OnAdvance;
-		if (_makeDialogueChoiceEvent != null)
-		{
+		
 			_makeDialogueChoiceEvent.OnEventRaised += MakeDialogueChoice;
-		}
+		
 
-		if (_showChoicesUIEvent != null)
-		{
+		
 			_showChoicesUIEvent.RaiseEvent(choices);
-		}
+		
 	}
 
 	private void MakeDialogueChoice(Choice choice)
 	{
 
-		if (_makeDialogueChoiceEvent != null)
-		{
+		
 			_makeDialogueChoiceEvent.OnEventRaised -= MakeDialogueChoice;
-		}
+		
 		if (choice.ActionType == ChoiceActionType.continueWithStep)
 		{
 			if (_continueWithStep != null)

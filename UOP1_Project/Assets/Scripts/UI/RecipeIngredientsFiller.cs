@@ -11,10 +11,6 @@ public class RecipeIngredientsFiller : MonoBehaviour
 	public void FillIngredients(List<ItemStack> listofIngredients, bool[] availabilityArray)
 	{
 
-		if (gameObject.GetComponent<VerticalLayoutGroup>() != null)
-			gameObject.GetComponent<VerticalLayoutGroup>().enabled = true;
-
-
 		int maxCount = Mathf.Max(listofIngredients.Count, instantiatedGameObjects.Count);
 
 		for (int i = 0; i < maxCount; i++)
@@ -44,16 +40,7 @@ public class RecipeIngredientsFiller : MonoBehaviour
 
 		}
 
-		StartCoroutine(waitBeforeDesactiveLayout());
 
 	}
-	IEnumerator waitBeforeDesactiveLayout()
-	{
 
-
-		yield return new WaitForSeconds(1);
-		//disable layout group after layout calculation
-		if (gameObject.GetComponent<VerticalLayoutGroup>() != null)
-			gameObject.GetComponent<VerticalLayoutGroup>().enabled = false;
-	}
 }

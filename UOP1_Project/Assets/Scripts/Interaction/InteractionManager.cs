@@ -41,7 +41,7 @@ public class InteractionManager : MonoBehaviour
 
 		if (_onObjectPickUp != null)
 		{
-			Item currentItem = itemObject.GetComponent<CollectibleItem>().GetItem();
+			Item currentItem = itemObject.GetComponent<CollectableItem>().GetItem();
 			_onObjectPickUp.RaiseEvent(currentItem);
 		}
 

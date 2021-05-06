@@ -281,7 +281,7 @@ public class QuestEditorWindow : EditorWindow
 			LoadAndInitOptionsDialogueLineUXML(step.CompleteDialogue, step.IncompleteDialogue, dialogueAreaVE);
 
 		//Type (Check Item etc)
-		if (step.Type == stepType.dialogue)
+		if (step.Type == StepType.Dialogue)
 		{
 			VisualElement itemValidateVE = stepVE.Q<VisualElement>("item-validate");
 			itemValidateVE.style.display = DisplayStyle.None;

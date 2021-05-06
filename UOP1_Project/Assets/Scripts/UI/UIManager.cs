@@ -5,7 +5,19 @@ using UnityEngine.Localization;
 
 public class UIManager : MonoBehaviour
 {
+	[SerializeField]
+	private UIDialogueManager _dialogueController = default;
+
+	[SerializeField]
+	private UIInventoryManager _inventoryPanel = default;
+
+	[SerializeField]
+	private UIInteractionManager _interactionPanel = default;
+
+	[SerializeField] private InputReader _inputReader = default;
 	[Header("Listening on channels")]
+	[SerializeField] private VoidEventChannelSO _onSceneReady = default;
+
 	[Header("Dialogue Events")]
 	[SerializeField] private DialogueLineChannelSO _openUIDialogueEvent = default;
 	[SerializeField] private VoidEventChannelSO _closeUIDialogueEvent = default;
@@ -22,57 +34,67 @@ public class UIManager : MonoBehaviour
 	private void OnEnable()
 	{
 		//Check if the event exists to avoid errors
-		if (_openUIDialogueEvent != null)
-		{
+		
 			_openUIDialogueEvent.OnEventRaised += OpenUIDialogue;
-		}
-		if (_closeUIDialogueEvent != null)
-		{
+		
 			_closeUIDialogueEvent.OnEventRaised += CloseUIDialogue;
-		}
-		if (_openInventoryScreenForCookingEvent != null)
-		{
+		
 			_openInventoryScreenForCookingEvent.OnEventRaised += SetInventoryScreenForCooking;
-		}
-		if (_openInventoryScreenEvent != null)
-		{
+		
 			_openInventoryScreenEvent.OnEventRaised += SetInventoryScreen;
-		}
-		if (_closeInventoryScreenEvent != null)
-		{
+		
 			_closeInventoryScreenEvent.OnEventRaised += CloseInventoryScreen;
-		}
-		if (_setInteractionEvent != null)
-		{
+		
 			_setInteractionEvent.OnEventRaised += SetInteractionPanel;
-		}
+		
+			_onSceneReady.OnEventRaised += ResetUI;
+		
+
+		
+	}
+	private void OnDestroy()
+	{
+		//Check if the event exists to avoid errors
+
+		_openUIDialogueEvent.OnEventRaised -= OpenUIDialogue;
+
+		_closeUIDialogueEvent.OnEventRaised -= CloseUIDialogue;
+
+		_openInventoryScreenForCookingEvent.OnEventRaised -= SetInventoryScreenForCooking;
+
+		_openInventoryScreenEvent.OnEventRaised -= SetInventoryScreen;
+
+		_closeInventoryScreenEvent.OnEventRaised -= CloseInventoryScreen;
+
+		_setInteractionEvent.OnEventRaised -= SetInteractionPanel;
+
+		_onSceneReady.OnEventRaised -= ResetUI;
+
+
 
 	}
-
 	private void Start()
 	{
-		CloseUIDialogue();
+		
 	}
 
-	[SerializeField]
-	private UIDialogueManager dialogueController = default;
-
-	[SerializeField]
-	private UIInventoryManager inventoryPanel = default;
-
-	[SerializeField]
-	private UIInteractionManager interactionPanel = default;
+	void ResetUI()
+	{
+		CloseUIDialogue();
+		CloseInventoryScreen();
+		SetInteractionPanel(false, InteractionType.None); 
+	}
 
 	public void OpenUIDialogue(LocalizedString dialogueLine, ActorSO actor)
 	{
 
-		dialogueController.SetDialogue(dialogueLine, actor);
-		dialogueController.gameObject.SetActive(true);
+		_dialogueController.SetDialogue(dialogueLine, actor);
+		_dialogueController.gameObject.SetActive(true);
 	}
 	public void CloseUIDialogue()
 	{
 
-		dialogueController.gameObject.SetActive(false);
+		_dialogueController.gameObject.SetActive(false);
 	}
 
 	public void SetInventoryScreenForCooking()
@@ -90,16 +112,18 @@ public class UIManager : MonoBehaviour
 	bool isForCooking = false;
 	void OpenInventoryScreen()
 	{
-		inventoryPanel.gameObject.SetActive(true);
+		_inventoryPanel.gameObject.SetActive(true);
 
+		_inputReader.EnableMenuInput();
+		_inputReader.closeInventoryEvent += CloseInventoryScreen;
 		if (isForCooking)
 		{
-			inventoryPanel.FillInventory(TabType.recipe, true);
+			_inventoryPanel.FillInventory(TabType.recipe, true);
 
 		}
 		else
 		{
-			inventoryPanel.FillInventory();
+			_inventoryPanel.FillInventory();
 		}
 
 	}
@@ -107,22 +131,25 @@ public class UIManager : MonoBehaviour
 
 	public void CloseInventoryScreen()
 	{
-		inventoryPanel.gameObject.SetActive(false);
+		_inventoryPanel.gameObject.SetActive(false);
 
+		_inputReader.EnableGameplayInput();
 		if (isForCooking)
 		{
 			_onInteractionEndedEvent.RaiseEvent();
 
 		}
+
+		_inputReader.closeInventoryEvent -= CloseInventoryScreen;
 	}
 
 	public void SetInteractionPanel(bool isOpenEvent, InteractionType interactionType)
 	{
 		if (isOpenEvent)
 		{
-			interactionPanel.FillInteractionPanel(interactionType);
+			_interactionPanel.FillInteractionPanel(interactionType);
 		}
-		interactionPanel.gameObject.SetActive(isOpenEvent);
+		_interactionPanel.gameObject.SetActive(isOpenEvent);
 
 	}
 }
