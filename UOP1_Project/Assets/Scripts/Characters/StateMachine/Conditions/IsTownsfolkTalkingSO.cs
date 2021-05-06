@@ -3,7 +3,7 @@ using UOP1.StateMachine;
 using UOP1.StateMachine.ScriptableObjects;
 
 [CreateAssetMenu(menuName = "State Machines/Conditions/Is Townsfolk Talking")]
-public class IsTalkingSO : StateConditionSO<IsTownsfolkTalkingCondition> { }
+public class IsTownsfolkTalkingSO : StateConditionSO<IsTownsfolkTalkingCondition> { }
 
 public class IsTownsfolkTalkingCondition : Condition
 {

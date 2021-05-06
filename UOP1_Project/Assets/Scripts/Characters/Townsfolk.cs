@@ -5,6 +5,7 @@ using UnityEngine;
 public class Townsfolk : MonoBehaviour
 {
 	public bool isTalking; //This is checked by conditions in the StateMachine
+	public bool isIdle; //This is checked by conditions in the StateMachine
 
 	void Start()
     {
