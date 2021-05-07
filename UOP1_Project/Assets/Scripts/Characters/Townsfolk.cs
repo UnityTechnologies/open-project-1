@@ -2,10 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+public enum InitialState { Idle = 0, Walk, Talk };
+
+
 public class Townsfolk : MonoBehaviour
 {
-	public bool isTalking; //This is checked by conditions in the StateMachine
-	public bool isIdle; //This is checked by conditions in the StateMachine
+	public InitialState townsfolkInitialState; //This is checked by conditions in the StateMachine
 
 	void Start()
     {

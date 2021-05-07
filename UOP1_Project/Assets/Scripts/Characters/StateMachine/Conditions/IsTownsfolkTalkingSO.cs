@@ -18,11 +18,8 @@ public class IsTownsfolkTalkingCondition : Condition
 	protected override bool Statement()
 	{
 
-		if (_townsfolkScript.isTalking)
+		if (_townsfolkScript.townsfolkInitialState == InitialState.Talk)
 		{
-			// Consume it
-			_townsfolkScript.isTalking = false;
-
 			return true;
 		}
 		else
