@@ -23,8 +23,6 @@ public class IsTownsfolkIdleCondition : Condition
 		if (_townsfolkScript.isIdle)
 		{
 			// We don't want to consume it because we want the townsfolk to stay idle
-			//_townsfolkScript.isIdle = false;
-
 			return true;
 		}
 		else
