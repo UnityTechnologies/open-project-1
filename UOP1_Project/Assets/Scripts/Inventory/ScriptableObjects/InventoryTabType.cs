@@ -18,10 +18,15 @@ public class InventoryTabType : ScriptableObject
 	[SerializeField]
 	private LocalizedString _tabName = default;
 
+	[Tooltip("The tab Picture that will be displayed in the inventory")]
+	[SerializeField]
+	private Sprite _tabIcon = default;
+
 
 	[Tooltip("The tab type used to reference the item")]
 	[SerializeField] private TabType _tabType = default;
 
 	public LocalizedString TabName => _tabName;
+	public Sprite TabIcon => _tabIcon;
 	public TabType TabType => _tabType;
 }

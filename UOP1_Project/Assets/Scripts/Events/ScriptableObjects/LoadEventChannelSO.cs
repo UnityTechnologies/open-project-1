@@ -2,19 +2,19 @@
 using UnityEngine.Events;
 
 /// <summary>
-/// This class is a used for scene loading events.
-/// Takes an array of the scenes we want to load and a bool to specify if we want to show a loading screen.
+/// This class is used for scene-loading events.
+/// Takes a GameSceneSO of the location or menu that needs to be loaded, and a bool to specify if a loading screen needs to display.
 /// </summary>
 [CreateAssetMenu(menuName = "Events/Load Event Channel")]
 public class LoadEventChannelSO : EventChannelBaseSO
 {
-	public UnityAction<GameSceneSO[], bool> OnLoadingRequested;
+	public UnityAction<GameSceneSO, bool> OnLoadingRequested;
 
-	public void RaiseEvent(GameSceneSO[] locationsToLoad, bool showLoadingScreen = false)
+	public void RaiseEvent(GameSceneSO locationToLoad, bool showLoadingScreen = false)
 	{
 		if (OnLoadingRequested != null)
 		{
-			OnLoadingRequested.Invoke(locationsToLoad, showLoadingScreen);
+			OnLoadingRequested.Invoke(locationToLoad, showLoadingScreen);
 		}
 		else
 		{

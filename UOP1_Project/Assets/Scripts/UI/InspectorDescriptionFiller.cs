@@ -13,13 +13,16 @@ public class InspectorDescriptionFiller : MonoBehaviour
 
 	public void FillDescription(Item itemToInspect)
 	{
+
+		_textName.StringReference = itemToInspect.Name;
+		_textName.StringReference.Arguments = new[] { new { Purpose = 0, Amount = 1 } };
+		_textDescription.StringReference = itemToInspect.Description;
+
 		_textName.gameObject.SetActive(true);
 		_textDescription.gameObject.SetActive(true);
 
 
-		_textName.StringReference = itemToInspect.Name;
-		_textDescription.StringReference = itemToInspect.Description;
-
 	}
+
 
 }

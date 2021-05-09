@@ -7,7 +7,7 @@ public class Damageable : MonoBehaviour
 	[SerializeField] private GetHitEffectConfigSO _getHitEffectSO;
 	[SerializeField] private Renderer _mainMeshRenderer;
 	[SerializeField] private DroppableRewardConfigSO _droppableRewardSO;
-	public DroppableRewardConfigSO DropableRewardConfig => _droppableRewardSO;
+	public DroppableRewardConfigSO DroppableRewardConfig => _droppableRewardSO;
 
 	private int _currentHealth = default;
 

@@ -38,6 +38,11 @@ public class UIDialogueChoicesManager : MonoBehaviour
 				}
 
 			}
+			if (choices.Count > 0)
+			{
+				listChoiceButtons[0].SetSelected();
+
+			}
 
 		}
 

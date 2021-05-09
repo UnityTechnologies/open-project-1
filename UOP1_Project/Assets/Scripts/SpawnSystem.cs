@@ -21,18 +21,16 @@ public class SpawnSystem : MonoBehaviour
 
 	private void OnEnable()
 	{
-		if (_OnSceneReady != null)
-		{
+		
 			_OnSceneReady.OnEventRaised += SpawnPlayer;
-		}
+		
 	}
 
 	private void OnDisable()
 	{
-		if (_OnSceneReady != null)
-		{
+		
 			_OnSceneReady.OnEventRaised -= SpawnPlayer;
-		}
+		
 	}
 
 	private void SpawnPlayer()

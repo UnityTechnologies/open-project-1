@@ -1,0 +1,16 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement name="line-box" style="flex-direction: column; padding-left: 2px; padding-right: 2px; padding-top: 2px; padding-bottom: 2px;">
+        <ui:VisualElement name="lines" style="flex-direction: row; width: 100%;">
+            <ui:VisualElement name="left-line" style="margin-left: 5px; margin-right: 5px; margin-top: 5px; margin-bottom: 5px; width: 50%; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0;">
+                <ui:Label text="This is line 1." display-tooltip-when-elided="true" name="left-line-label" style="background-color: rgb(158, 222, 115); white-space: normal; color: rgba(73, 94, 0, 255);" />
+            </ui:VisualElement>
+            <ui:VisualElement name="right-line" style="width: 50%; margin-left: 5px; margin-right: 5px; margin-top: 5px; margin-bottom: 5px;">
+                <ui:Label text="This is line 2." display-tooltip-when-elided="true" name="right-line-label" style="background-color: rgb(243, 145, 137); white-space: normal; color: rgb(106, 9, 0);" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="buttons" style="flex-direction: row; justify-content: space-around;">
+            <ui:Button text="Yes" name="btn-0" style="width: 45%; background-color: rgb(115, 115, 115);" />
+            <ui:Button text="No" name="btn-1" style="width: 45%; background-color: rgb(115, 115, 115);" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
