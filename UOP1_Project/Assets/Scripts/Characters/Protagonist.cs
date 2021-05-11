@@ -41,7 +41,6 @@ public class Protagonist : MonoBehaviour
 		_inputReader.jumpEvent += OnJumpInitiated;
 		_inputReader.jumpCanceledEvent += OnJumpCanceled;
 		_inputReader.moveEvent += OnMove;
-		_inputReader.openInventoryEvent += OnOpenInventory;
 		_inputReader.startedRunning += OnStartedRunning;
 		_inputReader.stoppedRunning += OnStoppedRunning;
 		_inputReader.attackEvent += OnStartedAttack;
@@ -54,7 +53,6 @@ public class Protagonist : MonoBehaviour
 		_inputReader.jumpEvent -= OnJumpInitiated;
 		_inputReader.jumpCanceledEvent -= OnJumpCanceled;
 		_inputReader.moveEvent -= OnMove;
-		_inputReader.openInventoryEvent -= OnOpenInventory;
 		_inputReader.startedRunning -= OnStartedRunning;
 		_inputReader.stoppedRunning -= OnStoppedRunning;
 		_inputReader.attackEvent -= OnStartedAttack;
@@ -134,14 +132,7 @@ public class Protagonist : MonoBehaviour
 
 	private void OnStartedRunning() => isRunning = true;
 
-	private void OnOpenInventory()
-	{
-		_openInventoryChannel.RaiseEvent();
-
-
-	}
-
-
+	
 	private void OnStartedAttack() => attackInput = true;
 
 	// Triggered from Animation Event

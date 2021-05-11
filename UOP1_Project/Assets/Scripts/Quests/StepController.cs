@@ -18,11 +18,13 @@ public class StepController : MonoBehaviour
 
 	[Header("Broadcasting on channels")]
 	[SerializeField] private DialogueDataChannelSO _startDialogueEvent = default;
+	[Header("Listening to")]
+	[SerializeField] private VoidEventChannelSO _endDialogueEvent = default;
 
 	//check if character is actif. An actif character is the character concerned by the step.
 
 	private DialogueDataSO _currentDialogue;
-
+	public bool IsInDialogue = false; 
 	private void Start()
 	{
 
@@ -68,10 +70,20 @@ public class StepController : MonoBehaviour
 	void StartDialogue()
 	{
 		
-			_startDialogueEvent.RaiseEvent(_currentDialogue);
-		
+	    _startDialogueEvent.RaiseEvent(_currentDialogue);
+		IsInDialogue = true;
+		_endDialogueEvent.OnEventRaised += EndDialogue; 
+
+
 	}
-	void PlayLoseDialogue()
+	void EndDialogue()
+	{
+		IsInDialogue = false;
+		_endDialogueEvent.OnEventRaised -= EndDialogue;
+
+	}
+
+		void PlayLoseDialogue()
 	{
 		if (_questData != null)
 		{

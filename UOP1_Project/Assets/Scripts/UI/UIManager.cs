@@ -13,6 +13,13 @@ public class UIManager : MonoBehaviour
 
 	[SerializeField]
 	private UIInteractionManager _interactionPanel = default;
+	
+	[SerializeField]
+	private GameObject _pausePanel = default;
+
+	[Header("Gameplay Components")]
+	[SerializeField]
+	private GameStateSO _gameState = default;
 
 	[SerializeField] private InputReader _inputReader = default;
 	[Header("Listening on channels")]
@@ -23,9 +30,7 @@ public class UIManager : MonoBehaviour
 	[SerializeField] private VoidEventChannelSO _closeUIDialogueEvent = default;
 
 	[Header("Inventory Events")]
-	[SerializeField] private VoidEventChannelSO _openInventoryScreenEvent = default;
 	[SerializeField] private VoidEventChannelSO _openInventoryScreenForCookingEvent = default;
-	[SerializeField] private VoidEventChannelSO _closeInventoryScreenEvent = default;
 
 	[Header("Interaction Events")]
 	[SerializeField] private VoidEventChannelSO _onInteractionEndedEvent = default;
@@ -34,23 +39,22 @@ public class UIManager : MonoBehaviour
 	private void OnEnable()
 	{
 		//Check if the event exists to avoid errors
-		
-			_openUIDialogueEvent.OnEventRaised += OpenUIDialogue;
-		
-			_closeUIDialogueEvent.OnEventRaised += CloseUIDialogue;
-		
-			_openInventoryScreenForCookingEvent.OnEventRaised += SetInventoryScreenForCooking;
-		
-			_openInventoryScreenEvent.OnEventRaised += SetInventoryScreen;
-		
-			_closeInventoryScreenEvent.OnEventRaised += CloseInventoryScreen;
-		
-			_setInteractionEvent.OnEventRaised += SetInteractionPanel;
-		
-			_onSceneReady.OnEventRaised += ResetUI;
-		
+		_inputReader.openInventoryEvent += SetInventoryScreen;
+		_openUIDialogueEvent.OnEventRaised += OpenUIDialogue;
 
-		
+		_closeUIDialogueEvent.OnEventRaised += CloseUIDialogue;
+
+		_openInventoryScreenForCookingEvent.OnEventRaised += SetInventoryScreenForCooking;
+
+		_setInteractionEvent.OnEventRaised += SetInteractionPanel;
+
+		_onSceneReady.OnEventRaised += ResetUI;
+
+		_inputReader.pauseEvent += OpenUIPause;
+
+		_inputReader.menuUnpauseEvent += CloseUIPause;
+
+
 	}
 	private void OnDestroy()
 	{
@@ -62,22 +66,30 @@ public class UIManager : MonoBehaviour
 
 		_openInventoryScreenForCookingEvent.OnEventRaised -= SetInventoryScreenForCooking;
 
-		_openInventoryScreenEvent.OnEventRaised -= SetInventoryScreen;
-
-		_closeInventoryScreenEvent.OnEventRaised -= CloseInventoryScreen;
+		_inputReader.openInventoryEvent -= SetInventoryScreen;
 
 		_setInteractionEvent.OnEventRaised -= SetInteractionPanel;
 
 		_onSceneReady.OnEventRaised -= ResetUI;
 
+		_inputReader.pauseEvent -= OpenUIPause;
+
+		_inputReader.menuUnpauseEvent -= CloseUIPause;
+
 
 
 	}
-	private void Start()
+	void OpenUIPause()
 	{
-		
+		_pausePanel.SetActive(true); 
+
 	}
 
+	void CloseUIPause()
+	{
+		_pausePanel.SetActive(false);
+
+	}
 	void ResetUI()
 	{
 		CloseUIDialogue();
@@ -116,6 +128,9 @@ public class UIManager : MonoBehaviour
 
 		_inputReader.EnableMenuInput();
 		_inputReader.closeInventoryEvent += CloseInventoryScreen;
+
+		_gameState.UpdateGameState(GameState.Inventory); 
+
 		if (isForCooking)
 		{
 			_inventoryPanel.FillInventory(TabType.recipe, true);
@@ -139,6 +154,8 @@ public class UIManager : MonoBehaviour
 			_onInteractionEndedEvent.RaiseEvent();
 
 		}
+
+		_gameState.ResetToPreviousGameState();
 
 		_inputReader.closeInventoryEvent -= CloseInventoryScreen;
 	}
