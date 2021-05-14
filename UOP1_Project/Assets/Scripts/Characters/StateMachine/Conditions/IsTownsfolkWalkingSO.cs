@@ -18,7 +18,7 @@ public class IsTownsfolkWalkingCondition : Condition
 	protected override bool Statement()
 	{
 
-		if (_townsfolkScript.InitialState == InitialState.Walk)
+		if (_townsfolkScript.townsfolkState == TownsfolkState.Walk)
 		{
 			return true;
 		}

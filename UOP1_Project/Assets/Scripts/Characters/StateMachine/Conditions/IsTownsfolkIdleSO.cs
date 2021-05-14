@@ -20,7 +20,7 @@ public class IsTownsfolkIdleCondition : Condition
 	protected override bool Statement()
 	{
 
-		if (_townsfolkScript.InitialState == InitialState.Idle)
+		if (_townsfolkScript.townsfolkState == TownsfolkState.Idle)
 		{
 			// We don't want to consume it because we want the townsfolk to stay idle
 			return true;

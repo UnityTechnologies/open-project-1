@@ -18,7 +18,7 @@ public class IsTownsfolkTalkingCondition : Condition
 	protected override bool Statement()
 	{
 
-		if (_townsfolkScript.InitialState == InitialState.Talk)
+		if (_townsfolkScript.townsfolkState == TownsfolkState.Talk)
 		{
 			return true;
 		}
