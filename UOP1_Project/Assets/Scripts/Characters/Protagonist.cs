@@ -1,12 +1,21 @@
 ﻿using System;
 using UnityEngine;
+using static EventAggregator;
 
 /// <summary>
 /// <para>This component consumes input on the InputReader and stores its values. The input is then read, and manipulated, by the StateMachines's Actions.</para>
 /// </summary>
-public class Protagonist : MonoBehaviour
+public class Protagonist : MonoBehaviour,
+	IHandle<AttackEvent>,
+	IHandle<JumpEvent>,
+	IHandle<JumpCancelledEvent>,
+	IHandle<MoveEvent>,
+	IHandle<StartedRunningEvent>,
+	IHandle<StoppedRunningEvent>,
+	IHandle<OpenInventoryEvent>
 {
-	[SerializeField] private InputReader _inputReader = default;
+	[SerializeField] private EventAggregatorSO _eventAggregator;
+
 	public TransformAnchor gameplayCameraTransform;
 
 	[SerializeField] private VoidEventChannelSO _openInventoryChannel = default;
@@ -38,27 +47,13 @@ public class Protagonist : MonoBehaviour
 	//Adds listeners for events being triggered in the InputReader script
 	private void OnEnable()
 	{
-		_inputReader.jumpEvent += OnJumpInitiated;
-		_inputReader.jumpCanceledEvent += OnJumpCanceled;
-		_inputReader.moveEvent += OnMove;
-		_inputReader.openInventoryEvent += OnOpenInventory;
-		_inputReader.startedRunning += OnStartedRunning;
-		_inputReader.stoppedRunning += OnStoppedRunning;
-		_inputReader.attackEvent += OnStartedAttack;
-		//...
+		_eventAggregator.Subscribe(this);
 	}
 
 	//Removes all listeners to the events coming from the InputReader script
 	private void OnDisable()
 	{
-		_inputReader.jumpEvent -= OnJumpInitiated;
-		_inputReader.jumpCanceledEvent -= OnJumpCanceled;
-		_inputReader.moveEvent -= OnMove;
-		_inputReader.openInventoryEvent -= OnOpenInventory;
-		_inputReader.startedRunning -= OnStartedRunning;
-		_inputReader.stoppedRunning -= OnStoppedRunning;
-		_inputReader.attackEvent -= OnStartedAttack;
-		//...
+		_eventAggregator.Unsubscribe(this);
 	}
 
 	private void Update()
@@ -113,37 +108,42 @@ public class Protagonist : MonoBehaviour
 		_previousSpeed = targetSpeed;
 	}
 
-	//---- EVENT LISTENERS ----
+	// Triggered from Animation Event
+	public void ConsumeAttackInput() => attackInput = false;
 
-	private void OnMove(Vector2 movement)
+	public void Handle(AttackEvent msg)
 	{
-		_inputVector = movement;
+		attackInput = true;
 	}
 
-	private void OnJumpInitiated()
+	public void Handle(JumpEvent msg)
 	{
 		jumpInput = true;
 	}
 
-	private void OnJumpCanceled()
+	public void Handle(JumpCancelledEvent msg)
 	{
 		jumpInput = false;
 	}
 
-	private void OnStoppedRunning() => isRunning = false;
-
-	private void OnStartedRunning() => isRunning = true;
-
-	private void OnOpenInventory()
+	public void Handle(MoveEvent msg)
 	{
-		_openInventoryChannel.RaiseEvent();
-
-
+		_inputVector = msg.Movement;
 	}
 
+	public void Handle(StartedRunningEvent msg)
+	{
+		isRunning = true;
+	}
 
-	private void OnStartedAttack() => attackInput = true;
+	public void Handle(StoppedRunningEvent msg)
+	{
+		isRunning = false;
+	}
 
-	// Triggered from Animation Event
-	public void ConsumeAttackInput() => attackInput = false;
+	public void Handle(OpenInventoryEvent msg)
+	{	// Clearly this event should be handled elsewhere and not on the
+		// protagonist but for now limited changes.
+		_openInventoryChannel.RaiseEvent();
+	}
 }
