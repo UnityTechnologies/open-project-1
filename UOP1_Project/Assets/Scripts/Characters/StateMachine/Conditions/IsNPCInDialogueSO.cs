@@ -2,10 +2,10 @@
 using UOP1.StateMachine;
 using UOP1.StateMachine.ScriptableObjects;
 
-[CreateAssetMenu(menuName = "State Machines/Conditions/Is Townsfolk In Dialogue")]
-public class IsTownsfolkInDialogueSO : StateConditionSO<IsTownsfolkDialogueCondition> { }
+[CreateAssetMenu(menuName = "State Machines/Conditions/Is NPC In Dialogue")]
+public class IsNPCInDialogueSO : StateConditionSO<IsNPCDialogueCondition> { }
 
-public class IsTownsfolkDialogueCondition : Condition
+public class IsNPCDialogueCondition : Condition
 {
 	//Component references
 	private StepController _stepControllerScript;
