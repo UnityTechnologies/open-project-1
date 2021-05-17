@@ -24,8 +24,8 @@ public class HasReachedRoamingDestination : Condition
 
 	protected override bool Statement()
 	{
-		Debug.Log("This agent is defined" + _agentDefined);
-		Debug.Log("This agent has path " + _agent.hasPath);
+		//Debug.Log("This agent is defined" + _agentDefined);
+		//Debug.Log("This agent has path " + _agent.hasPath);
 
 		return !_agentDefined || !_agent.hasPath;
 	}
