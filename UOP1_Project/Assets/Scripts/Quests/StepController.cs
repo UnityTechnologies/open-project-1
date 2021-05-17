@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 //this script needs to be put on the actor, and takes care of the current step to accomplish.
 //the step contains a dialogue and maybe an event.
 
@@ -17,21 +18,21 @@ public class StepController : MonoBehaviour
 	[SerializeField] private VoidEventChannelSO _loseDialogueEvent = default;
 
 	[Header("Broadcasting on channels")]
-	[SerializeField] private DialogueDataChannelSO _startDialogueEvent = default;
+	//[SerializeField]
+	public DialogueDataChannelSO _startDialogueEvent = default;
 	[Header("Listening to")]
-	[SerializeField] private VoidEventChannelSO _endDialogueEvent = default;
+	//[SerializeField]
+	public VoidEventChannelSO _endDialogueEvent = default;
 
 	//check if character is actif. An actif character is the character concerned by the step.
-
 	private DialogueDataSO _currentDialogue;
-	public bool IsInDialogue = false;
+
+	public bool isInDialogue; //Consumed by the state machine
+
 	private void Start()
 	{
-
 		_winDialogueEvent.OnEventRaised += PlayWinDialogue;
 		_loseDialogueEvent.OnEventRaised += PlayLoseDialogue;
-
-
 	}
 
 	void PlayDefaultDialogue()
@@ -69,18 +70,16 @@ public class StepController : MonoBehaviour
 
 	void StartDialogue()
 	{
-
 		_startDialogueEvent.RaiseEvent(_currentDialogue);
-		IsInDialogue = true;
 		_endDialogueEvent.OnEventRaised += EndDialogue;
-
-
+		StopTalkingToCurrentActor();
+		isInDialogue = true;
 	}
 	void EndDialogue()
 	{
-		IsInDialogue = false;
 		_endDialogueEvent.OnEventRaised -= EndDialogue;
-
+		ResumeTalkingToCurrentActor();
+		isInDialogue = false;
 	}
 
 	void PlayLoseDialogue()
@@ -95,10 +94,8 @@ public class StepController : MonoBehaviour
 			}
 
 		}
-
-
-
 	}
+
 	void PlayWinDialogue()
 	{
 		if (_questData != null)
@@ -109,7 +106,24 @@ public class StepController : MonoBehaviour
 				_currentDialogue = displayDialogue;
 				StartDialogue();
 			}
+		}
+	}
 
+	private void StopTalkingToCurrentActor()
+	{
+		GameObject[] talkingTo = gameObject.GetComponent<Townsfolk>().talkingTo;
+		for (int i = 0; i < talkingTo.Length; ++i)
+		{
+			talkingTo[i].GetComponent<Townsfolk>().townsfolkState = TownsfolkState.Idle;
+		}
+	}
+
+	private void ResumeTalkingToCurrentActor()
+	{
+		GameObject[] talkingTo = GetComponent<Townsfolk>().talkingTo;
+		for (int i = 0; i < talkingTo.Length; ++i)
+		{
+			talkingTo[i].GetComponent<Townsfolk>().townsfolkState = TownsfolkState.Talk;
 		}
 	}
 
