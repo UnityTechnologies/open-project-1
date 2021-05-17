@@ -18,7 +18,7 @@ public class IsTownsfolkDialogueCondition : Condition
 	protected override bool Statement()
 	{
 
-		if (_stepControllerScript.IsInDialogue)
+		if (_stepControllerScript.isInDialogue)
 		{
 			return true;
 		}
