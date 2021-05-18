@@ -535,6 +535,14 @@ public class @GameInput : IInputActionCollection, IDisposable
                     ""interactions"": """"
                 },
                 {
+                    ""name"": ""ClosePopupEvent"",
+                    ""type"": ""Button"",
+                    ""id"": ""efe86ed9-53ac-4a9f-8894-0936a1bc3319"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
                     ""name"": ""ChangeTab"",
                     ""type"": ""Button"",
                     ""id"": ""abff37db-1fb3-4f26-bceb-8ecdfc99fdef"",
@@ -951,7 +959,7 @@ public class @GameInput : IInputActionCollection, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""4306a7b2-67e8-4e85-9264-99218bea9eb4"",
-                    ""path"": ""<Keyboard>/a"",
+                    ""path"": ""<Keyboard>/q"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""KeyboardOrGamepad"",
@@ -967,6 +975,28 @@ public class @GameInput : IInputActionCollection, IDisposable
                     ""processors"": """",
                     ""groups"": ""KeyboardOrGamepad"",
                     ""action"": ""InventoryActionButton"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8de239c2-a886-4c69-8890-06ba68d86a9a"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardOrGamepad"",
+                    ""action"": ""ClosePopupEvent"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""fb9d51ec-83a8-43f2-ae0c-2872920cbbc9"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardOrGamepad"",
+                    ""action"": ""ClosePopupEvent"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1292,6 +1322,7 @@ public class @GameInput : IInputActionCollection, IDisposable
         m_Menus_Cancel = m_Menus.FindAction("Cancel", throwIfNotFound: true);
         m_Menus_MouseMove = m_Menus.FindAction("MouseMove", throwIfNotFound: true);
         m_Menus_Unpause = m_Menus.FindAction("Unpause", throwIfNotFound: true);
+        m_Menus_ClosePopupEvent = m_Menus.FindAction("ClosePopupEvent", throwIfNotFound: true);
         m_Menus_ChangeTab = m_Menus.FindAction("ChangeTab", throwIfNotFound: true);
         m_Menus_InventoryActionButton = m_Menus.FindAction("InventoryActionButton", throwIfNotFound: true);
         // Dialogues
@@ -1449,6 +1480,7 @@ public class @GameInput : IInputActionCollection, IDisposable
     private readonly InputAction m_Menus_Cancel;
     private readonly InputAction m_Menus_MouseMove;
     private readonly InputAction m_Menus_Unpause;
+    private readonly InputAction m_Menus_ClosePopupEvent;
     private readonly InputAction m_Menus_ChangeTab;
     private readonly InputAction m_Menus_InventoryActionButton;
     public struct MenusActions
@@ -1460,6 +1492,7 @@ public class @GameInput : IInputActionCollection, IDisposable
         public InputAction @Cancel => m_Wrapper.m_Menus_Cancel;
         public InputAction @MouseMove => m_Wrapper.m_Menus_MouseMove;
         public InputAction @Unpause => m_Wrapper.m_Menus_Unpause;
+        public InputAction @ClosePopupEvent => m_Wrapper.m_Menus_ClosePopupEvent;
         public InputAction @ChangeTab => m_Wrapper.m_Menus_ChangeTab;
         public InputAction @InventoryActionButton => m_Wrapper.m_Menus_InventoryActionButton;
         public InputActionMap Get() { return m_Wrapper.m_Menus; }
@@ -1486,6 +1519,9 @@ public class @GameInput : IInputActionCollection, IDisposable
                 @Unpause.started -= m_Wrapper.m_MenusActionsCallbackInterface.OnUnpause;
                 @Unpause.performed -= m_Wrapper.m_MenusActionsCallbackInterface.OnUnpause;
                 @Unpause.canceled -= m_Wrapper.m_MenusActionsCallbackInterface.OnUnpause;
+                @ClosePopupEvent.started -= m_Wrapper.m_MenusActionsCallbackInterface.OnClosePopupEvent;
+                @ClosePopupEvent.performed -= m_Wrapper.m_MenusActionsCallbackInterface.OnClosePopupEvent;
+                @ClosePopupEvent.canceled -= m_Wrapper.m_MenusActionsCallbackInterface.OnClosePopupEvent;
                 @ChangeTab.started -= m_Wrapper.m_MenusActionsCallbackInterface.OnChangeTab;
                 @ChangeTab.performed -= m_Wrapper.m_MenusActionsCallbackInterface.OnChangeTab;
                 @ChangeTab.canceled -= m_Wrapper.m_MenusActionsCallbackInterface.OnChangeTab;
@@ -1511,6 +1547,9 @@ public class @GameInput : IInputActionCollection, IDisposable
                 @Unpause.started += instance.OnUnpause;
                 @Unpause.performed += instance.OnUnpause;
                 @Unpause.canceled += instance.OnUnpause;
+                @ClosePopupEvent.started += instance.OnClosePopupEvent;
+                @ClosePopupEvent.performed += instance.OnClosePopupEvent;
+                @ClosePopupEvent.canceled += instance.OnClosePopupEvent;
                 @ChangeTab.started += instance.OnChangeTab;
                 @ChangeTab.performed += instance.OnChangeTab;
                 @ChangeTab.canceled += instance.OnChangeTab;
@@ -1590,6 +1629,7 @@ public class @GameInput : IInputActionCollection, IDisposable
         void OnCancel(InputAction.CallbackContext context);
         void OnMouseMove(InputAction.CallbackContext context);
         void OnUnpause(InputAction.CallbackContext context);
+        void OnClosePopupEvent(InputAction.CallbackContext context);
         void OnChangeTab(InputAction.CallbackContext context);
         void OnInventoryActionButton(InputAction.CallbackContext context);
     }
