@@ -13,9 +13,12 @@ public class UIManager : MonoBehaviour
 
 	[SerializeField]
 	private UIInteractionManager _interactionPanel = default;
-	
-	[SerializeField]
-	private GameObject _pausePanel = default;
+
+	[Header("Pause Screen")]
+	[SerializeField] private UIPauseScreenSetter _pauseScreen = default;
+
+	[Header("Pause Screen")]
+	[SerializeField] private UISettingManager _settingScreen = default;
 
 	[Header("Gameplay Components")]
 	[SerializeField]
@@ -38,6 +41,13 @@ public class UIManager : MonoBehaviour
 	[SerializeField] private VoidEventChannelSO _onInteractionEndedEvent = default;
 	[SerializeField] private InteractionUIEventChannelSO _setInteractionEvent = default;
 
+	[Header("Pause Events")]
+	[SerializeField] private VoidEventChannelSO _clickUnpauseEvent = default;
+	[SerializeField] private VoidEventChannelSO _clickBackToMenuEvent = default;
+	[Header("Setting Events")]
+	[SerializeField] private VoidEventChannelSO _openSettingEvent = default;
+	[SerializeField] private VoidEventChannelSO _closeSettingScreenEvent = default;
+
 	private void OnEnable()
 	{
 		//Check if the event exists to avoid errors
@@ -53,9 +63,13 @@ public class UIManager : MonoBehaviour
 		_onSceneReady.OnEventRaised += ResetUI;
 
 		_inputReader.pauseEvent += OpenUIPause;
-
+		
 		_inputReader.menuUnpauseEvent += CloseUIPause;
 
+		_clickUnpauseEvent.OnEventRaised += CloseUIPause;
+		_openSettingEvent.OnEventRaised += OpenSettingScreen;
+		_clickBackToMenuEvent.OnEventRaised += BackToMenu;
+		_closeSettingScreenEvent.OnEventRaised += CloseSettingScreen; 
 
 	}
 	private void OnDestroy()
@@ -82,18 +96,50 @@ public class UIManager : MonoBehaviour
 
 		_closeUIDialogueEvent.OnEventRaised -= CloseUIDialogue;
 
+		_clickUnpauseEvent.OnEventRaised -= CloseUIPause;
+		_openSettingEvent.OnEventRaised -= OpenSettingScreen;
+		_clickBackToMenuEvent.OnEventRaised -= BackToMenu;
+		_closeSettingScreenEvent.OnEventRaised -= CloseSettingScreen;
+
 
 
 	}
+	void BackToMenu()
+	{
+		Debug.Log("Back to Menu "); 
+	}
 	void OpenUIPause()
 	{
-		_pausePanel.SetActive(true); 
-
+		_inputReader.pauseEvent -= OpenUIPause;
+		_inputReader.pauseEvent += CloseUIPause;
+		_inputReader.EnableMenuInput();
+		_pauseScreen.gameObject.SetActive(true);
+		_pauseScreen.SetPauseScreen(); 
 	}
 
 	void CloseUIPause()
 	{
-		_pausePanel.SetActive(false);
+		
+		_inputReader.pauseEvent += OpenUIPause;
+		_inputReader.pauseEvent -= CloseUIPause;
+		_pauseScreen.gameObject.SetActive(false);
+		_inputReader.EnableGameplayInput();
+
+	}
+	void OpenSettingScreen()
+	{
+		CloseUIPause();
+		_inputReader.EnableMenuInput();
+		_inputReader.pauseEvent += CloseSettingScreen;
+		_settingScreen.gameObject.SetActive(true);
+
+	}
+
+	void CloseSettingScreen()
+	{
+		_inputReader.EnableGameplayInput();
+		_inputReader.pauseEvent -= CloseSettingScreen;
+		_settingScreen.gameObject.SetActive(false);
 
 	}
 	void ResetUI()
@@ -105,13 +151,11 @@ public class UIManager : MonoBehaviour
 
 	public void OpenUIDialogue(LocalizedString dialogueLine, ActorSO actor)
 	{
-
 		_dialogueController.SetDialogue(dialogueLine, actor);
 		_dialogueController.gameObject.SetActive(true);
 	}
 	public void CloseUIDialogue()
 	{
-
 		_dialogueController.gameObject.SetActive(false);
 	}
 
@@ -175,4 +219,6 @@ public class UIManager : MonoBehaviour
 		_interactionPanel.gameObject.SetActive(isOpenEvent);
 
 	}
+
+	
 }
