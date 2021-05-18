@@ -25,6 +25,10 @@ public class UIMenuManager : MonoBehaviour
 	[Header("Listening to")]
 	[SerializeField]
 	private VoidEventChannelSO _closePopupEvent = default;
+	[SerializeField]
+	private VoidEventChannelSO _closeSettingsEvent = default;
+	[SerializeField]
+	private VoidEventChannelSO _closeCreditsEvent = default;
 
 	[SerializeField]
 	private BoolEventChannelSO _confirmPopupEvent = default;
@@ -39,7 +43,12 @@ public class UIMenuManager : MonoBehaviour
 	private void Start()
 	{
 		_inputReader.EnableMenuInput();
+
 		_closePopupEvent.OnEventRaised += HidePopup;
+
+		_closeSettingsEvent.OnEventRaised += CloseSettingsScreen;
+
+		_closeCreditsEvent.OnEventRaised += CloseCreditsScreen;
 
 		SetMenuScreen(); 
 	}
@@ -117,22 +126,28 @@ public class UIMenuManager : MonoBehaviour
 	}
 	public void OpenSettingsScreen()
 	{
-		_settingsPanel.SetActive(true); 
+		_settingsPanel.SetActive(true);
+		_inputReader.closePopupEvent += CloseSettingsScreen;
 
 	}
 	public void CloseSettingsScreen()
 	{
+		_inputReader.closePopupEvent -= CloseSettingsScreen;
 		_settingsPanel.SetActive(false);
 		SetMenuScreen();
 
 	}
 	public void OpenCreditsScreen()
 	{
-		_creditsPanel.SetActive(true); 
+		_creditsPanel.SetActive(true);
+		_inputReader.closePopupEvent += CloseCreditsScreen;
+
+		
 
 	}
 	public void CloseCreditsScreen()
 	{
+		_inputReader.closePopupEvent -= CloseCreditsScreen;
 		_creditsPanel.SetActive(false);
 		SetMenuScreen();
 
