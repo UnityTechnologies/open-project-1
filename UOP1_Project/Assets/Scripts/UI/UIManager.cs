@@ -28,6 +28,8 @@ public class UIManager : MonoBehaviour
 	[Header("Dialogue Events")]
 	[SerializeField] private DialogueLineChannelSO _openUIDialogueEvent = default;
 	[SerializeField] private VoidEventChannelSO _closeUIDialogueEvent = default;
+	[SerializeField] private VoidEventChannelSO _closeUIInventoryEvent = default;
+
 
 	[Header("Inventory Events")]
 	[SerializeField] private VoidEventChannelSO _openInventoryScreenForCookingEvent = default;
@@ -64,6 +66,8 @@ public class UIManager : MonoBehaviour
 
 		_closeUIDialogueEvent.OnEventRaised -= CloseUIDialogue;
 
+		_closeUIInventoryEvent.OnEventRaised -= CloseInventoryScreen;
+
 		_openInventoryScreenForCookingEvent.OnEventRaised -= SetInventoryScreenForCooking;
 
 		_inputReader.openInventoryEvent -= SetInventoryScreen;
@@ -75,6 +79,8 @@ public class UIManager : MonoBehaviour
 		_inputReader.pauseEvent -= OpenUIPause;
 
 		_inputReader.menuUnpauseEvent -= CloseUIPause;
+
+		_closeUIDialogueEvent.OnEventRaised -= CloseUIDialogue;
 
 
 
@@ -144,7 +150,7 @@ public class UIManager : MonoBehaviour
 	}
 
 
-	public void CloseInventoryScreen()
+	 void CloseInventoryScreen()
 	{
 		_inventoryPanel.gameObject.SetActive(false);
 

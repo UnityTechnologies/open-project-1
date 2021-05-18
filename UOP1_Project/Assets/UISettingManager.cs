@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Localization;
 using UnityEngine.Serialization; 
 [System.Serializable]
-public enum settingTabType
+public enum SettingTabType
 {
     Language,
     Audio,
@@ -12,7 +12,7 @@ public enum settingTabType
 
 }
 [System.Serializable]
-public enum settingFieldType
+public enum SettingFieldType
 {
     Language,
     Volume_SFx,
@@ -27,15 +27,15 @@ public enum settingFieldType
 [System.Serializable]
 public class settingTab
 {
-    public settingTabType settingTabsType;
+    public SettingTabType settingTabsType;
     public LocalizedString title; 
 }
 
 [System.Serializable]
-public class settingField
+public class SettingField
 {
-    public settingTabType settingTabsType;
-    public settingFieldType settingFieldType; 
+    public SettingTabType settingTabsType;
+    public SettingFieldType settingFieldType; 
     public LocalizedString title;
 }
 
@@ -45,13 +45,13 @@ public class UISettingManager : MonoBehaviour
     [SerializeField]
     private UISettingTabsFiller _settingTabFiller = default;
     [SerializeField]
-    private List<settingField> _settingFieldsList = default;
+    private List<SettingField> _settingFieldsList = default;
     [SerializeField]
     private UISettingFieldsFiller _settingFieldsFiller = default;
     private void Start()
 	{
         SetTabs();
-        SetFields(settingTabType.Graphics); 
+        SetFields(SettingTabType.Graphics); 
 
     }
 	public void SetTabs()
@@ -59,14 +59,14 @@ public class UISettingManager : MonoBehaviour
         _settingTabFiller.FillTabs(settingTabsList); 
     }
 
-    public void SelectTab(settingTabType selectedTab)
+    public void SelectTab(SettingTabType selectedTab)
 	{
         _settingTabFiller.SelectTab(selectedTab);
     }
 
-    public void SetFields(settingTabType selectedTab)
+    public void SetFields(SettingTabType selectedTab)
 	{
-      List<settingField> fields=  _settingFieldsList.FindAll(o => o.settingTabsType == selectedTab);
+      List<SettingField> fields=  _settingFieldsList.FindAll(o => o.settingTabsType == selectedTab);
         _settingFieldsFiller.FillFields(fields); 
 
 

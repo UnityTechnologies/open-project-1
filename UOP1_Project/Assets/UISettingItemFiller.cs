@@ -23,13 +23,13 @@ public class UISettingItemFiller : MonoBehaviour
 	[SerializeField] private Sprite _bgSelected = default;
 	[SerializeField] private Sprite _bgUnselected = default;
 
-	 private settingFieldType _fieldType = default;
+	 private SettingFieldType _fieldType = default;
 
 
 	public event UnityAction _nextOption = delegate { };
 	public event UnityAction _previousOption = delegate { };
 	
-	public void SetSettingField(int paginationCount, int selectedPaginationIndex, string selectedOption, LocalizedString fieldTitle, settingFieldType fieldType)
+	public void SetSettingField(int paginationCount, int selectedPaginationIndex, string selectedOption, LocalizedString fieldTitle, SettingFieldType fieldType)
 	{
 		_fieldType = fieldType; 
 		_pagination.SetPagination(paginationCount, selectedPaginationIndex);

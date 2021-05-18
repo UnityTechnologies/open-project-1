@@ -8,7 +8,7 @@ public class UISettingFieldsFiller : MonoBehaviour
 {
 	[SerializeField]
 	private UISettingItemFiller[] _settingfieldsList = default;
-	public void FillFields(List<settingField> settingItems)
+	public void FillFields(List<SettingField> settingItems)
 	{
 		for (int i = 0; i < _settingfieldsList.Length; i++)
 		{
@@ -25,31 +25,31 @@ public class UISettingFieldsFiller : MonoBehaviour
 		}
 
 	}
-	public void SelectFields(settingTabType tabType)
+	public void SelectFields(SettingTabType tabType)
 	{
 		
 
 	}
 
-	public void SetField(settingField field, UISettingItemFiller uiField)
+	public void SetField(SettingField field, UISettingItemFiller uiField)
 	{
 		int paginationCount=0;
 		int selectedPaginationIndex=0;
 		string selectedOption=default;
 		LocalizedString fieldTitle=field.title;
-		settingFieldType fieldType= field.settingFieldType;
+		SettingFieldType fieldType= field.settingFieldType;
 		
 			switch (field.settingFieldType)
 		{
-			case settingFieldType.Language:
+			case SettingFieldType.Language:
 				paginationCount = LocalizationSettings.AvailableLocales.Locales.Count;
 				selectedPaginationIndex = LocalizationSettings.AvailableLocales.Locales.FindIndex(o => o == LocalizationSettings.SelectedLocale);
 				selectedOption = LocalizationSettings.SelectedLocale.LocaleName; 
 				break;
-			case settingFieldType.AntiAliasing:
+			case SettingFieldType.AntiAliasing:
 
 				break;
-			case settingFieldType.FullScreen:
+			case SettingFieldType.FullScreen:
 				selectedPaginationIndex = IsFullscreen();
 				paginationCount = 2;
 				if (Screen.fullScreen)
@@ -57,19 +57,19 @@ public class UISettingFieldsFiller : MonoBehaviour
 				else
 					selectedOption = "Off";
 				break;
-			case settingFieldType.GraphicQuality:
+			case SettingFieldType.GraphicQuality:
 				selectedPaginationIndex = QualitySettings.GetQualityLevel(); 
 				paginationCount = 6;
 				selectedOption = QualitySettings.names[QualitySettings.GetQualityLevel()]; 
 				break;
-			case settingFieldType.Resolution:
+			case SettingFieldType.Resolution:
 
 				break;
-			case settingFieldType.Shadow:
+			case SettingFieldType.Shadow:
 
 				break;
-			case settingFieldType.Volume_Music:
-			case settingFieldType.Volume_SFx:
+			case SettingFieldType.Volume_Music:
+			case SettingFieldType.Volume_SFx:
 				 paginationCount = 10;
 				 selectedPaginationIndex = 5;
 				 selectedOption = "5"; 

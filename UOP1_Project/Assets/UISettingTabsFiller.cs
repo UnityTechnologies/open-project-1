@@ -14,7 +14,7 @@ public class UISettingTabsFiller : MonoBehaviour
 		}
 
 	}
-	public void SelectTab(settingTabType tabType)
+	public void SelectTab(SettingTabType tabType)
 	{
 		for (int i = 0; i < _settingTabsList.Length; i++)
 		{

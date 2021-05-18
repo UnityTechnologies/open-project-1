@@ -11,7 +11,7 @@ using TMPro;
 	[SerializeField] private Color _colorSelectedTab;
 	[SerializeField] private Color _colorUnselectedTab;
 
-	settingTabType _currentTabType; 
+	SettingTabType _currentTabType; 
 	public void SetTab(settingTab settingTab, bool isSelected)
 	{
 		_localizedTabTitle.StringReference = settingTab.title;
@@ -21,7 +21,7 @@ using TMPro;
 		else
 		{ UnselectTab();  }
 	}
-	public void SetTab(settingTabType tabType)
+	public void SetTab(SettingTabType tabType)
 	{
 		bool isSelected = (_currentTabType == tabType);
 		if (isSelected)

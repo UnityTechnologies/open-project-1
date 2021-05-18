@@ -37,6 +37,8 @@ public class InputReader : ScriptableObject, GameInput.IGameplayActions, GameInp
 	public event UnityAction menuCancelEvent = delegate { };
 	public event UnityAction menuUnpauseEvent = delegate { };
 
+	public event UnityAction closePopupEvent = delegate { };
+
 	public event UnityAction<float> menuSwitchTab = delegate { };
 
 
@@ -96,6 +98,13 @@ public class InputReader : ScriptableObject, GameInput.IGameplayActions, GameInp
 	{
 		if (context.phase == InputActionPhase.Performed)
 			interactEvent.Invoke();
+	}
+
+	public void OnClosePopupEvent(InputAction.CallbackContext context)
+	{
+		if (context.phase == InputActionPhase.Performed)
+			closePopupEvent.Invoke(); 
+
 	}
 
 	public void OnJump(InputAction.CallbackContext context)
