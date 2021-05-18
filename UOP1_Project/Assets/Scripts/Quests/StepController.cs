@@ -112,19 +112,25 @@ public class StepController : MonoBehaviour
 	private void StopTalkingToCurrentActor()
 	{
 		GameObject[] talkingTo = gameObject.GetComponent<NPC>().talkingTo;
-		for (int i = 0; i < talkingTo.Length; ++i)
+		if(talkingTo != null)
 		{
-			talkingTo[i].GetComponent<NPC>().npcState = NPCState.Idle;
+			for (int i = 0; i < talkingTo.Length; ++i)
+			{
+				talkingTo[i].GetComponent<NPC>().npcState = NPCState.Idle;
+			}
 		}
 	}
 
 	private void ResumeTalkingToCurrentActor()
 	{
 		GameObject[] talkingTo = GetComponent<NPC>().talkingTo;
-		for (int i = 0; i < talkingTo.Length; ++i)
+		if (talkingTo != null)
 		{
-			talkingTo[i].GetComponent<NPC>().npcState = NPCState.Talk;
+
+			for (int i = 0; i < talkingTo.Length; ++i)
+			{
+				talkingTo[i].GetComponent<NPC>().npcState = NPCState.Talk;
+			}
 		}
 	}
-
 }
