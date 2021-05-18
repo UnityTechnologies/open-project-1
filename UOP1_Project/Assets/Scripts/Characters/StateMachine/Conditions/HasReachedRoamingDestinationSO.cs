@@ -26,7 +26,9 @@ public class HasReachedRoamingDestination : Condition
 	{
 		//Debug.Log("This agent is defined" + _agentDefined);
 		//Debug.Log("This agent has path " + _agent.hasPath);
-
-		return !_agentDefined || !_agent.hasPath;
+		Debug.Log("distance remaining" + _agent.remainingDistance);
+		return _agent.remainingDistance < 0.01;
+		//value to use 0.1?  and has path 
+		//!_agent.hasPath ||
 	}
 }
