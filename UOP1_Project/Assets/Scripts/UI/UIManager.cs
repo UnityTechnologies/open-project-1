@@ -63,13 +63,13 @@ public class UIManager : MonoBehaviour
 		_onSceneReady.OnEventRaised += ResetUI;
 
 		_inputReader.pauseEvent += OpenUIPause;
-		
+
 		_inputReader.menuUnpauseEvent += CloseUIPause;
 
 		_clickUnpauseEvent.OnEventRaised += CloseUIPause;
 		_openSettingEvent.OnEventRaised += OpenSettingScreen;
 		_clickBackToMenuEvent.OnEventRaised += BackToMenu;
-		_closeSettingScreenEvent.OnEventRaised += CloseSettingScreen; 
+		_closeSettingScreenEvent.OnEventRaised += CloseSettingScreen;
 
 	}
 	private void OnDestroy()
@@ -106,7 +106,7 @@ public class UIManager : MonoBehaviour
 	}
 	void BackToMenu()
 	{
-		Debug.Log("Back to Menu "); 
+		Debug.Log("Back to Menu ");
 	}
 	void OpenUIPause()
 	{
@@ -115,12 +115,13 @@ public class UIManager : MonoBehaviour
 		_inputReader.pauseEvent += CloseUIPause;
 		_inputReader.EnableMenuInput();
 		_pauseScreen.gameObject.SetActive(true);
-		_pauseScreen.SetPauseScreen(); 
+		_pauseScreen.SetPauseScreen();
 	}
 
 	void CloseUIPause()
 	{
 		Time.timeScale = 1;
+
 		_inputReader.pauseEvent += OpenUIPause;
 		_inputReader.pauseEvent -= CloseUIPause;
 		_pauseScreen.gameObject.SetActive(false);
@@ -147,7 +148,7 @@ public class UIManager : MonoBehaviour
 	{
 		CloseUIDialogue();
 		CloseInventoryScreen();
-		SetInteractionPanel(false, InteractionType.None); 
+		SetInteractionPanel(false, InteractionType.None);
 	}
 
 	public void OpenUIDialogue(LocalizedString dialogueLine, ActorSO actor)
@@ -180,7 +181,7 @@ public class UIManager : MonoBehaviour
 		_inputReader.EnableMenuInput();
 		_inputReader.closeInventoryEvent += CloseInventoryScreen;
 
-		_gameState.UpdateGameState(GameState.Inventory); 
+		_gameState.UpdateGameState(GameState.Inventory);
 
 		if (isForCooking)
 		{
@@ -213,6 +214,13 @@ public class UIManager : MonoBehaviour
 
 	public void SetInteractionPanel(bool isOpenEvent, InteractionType interactionType)
 	{
+		// show interaction UI only if Game is in Gameplay state now
+		if (_gameState.CurrentGameState != GameState.Gameplay)
+		{
+			Debug.Log("Game is not in the Gameplay mode, cannot show interaction panel");
+			return;
+		}
+
 		if (isOpenEvent)
 		{
 			_interactionPanel.FillInteractionPanel(interactionType);
@@ -221,5 +229,5 @@ public class UIManager : MonoBehaviour
 
 	}
 
-	
+
 }
