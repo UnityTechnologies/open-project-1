@@ -37,8 +37,7 @@ public class DialogueManager : MonoBehaviour
 
 	private void Start()
 	{
-			_startDialogue.OnEventRaised += DisplayDialogueData;
-
+		_startDialogue.OnEventRaised += DisplayDialogueData;
 	}
 
 	/// <summary>
@@ -48,11 +47,14 @@ public class DialogueManager : MonoBehaviour
 	public void DisplayDialogueData(DialogueDataSO dialogueDataSO)
 	{
 		// start dialogue only if Game is in Gameplay state now
-		if(_gameState.CurrentGameState != GameState.Gameplay){
+		if (_gameState.CurrentGameState != GameState.Gameplay && !_currentDialogue)
+		{
 			return;
 		}
 
-		_gameState.UpdateGameState(GameState.Dialogue);
+		if (_gameState.CurrentGameState != GameState.Cutscene)
+			_gameState.UpdateGameState(GameState.Dialogue);
+
 		BeginDialogueData(dialogueDataSO);
 		DisplayDialogueLine(_currentDialogue.DialogueLines[_counter], dialogueDataSO.Actor);
 	}
@@ -75,9 +77,7 @@ public class DialogueManager : MonoBehaviour
 	/// <param name="dialogueLine"></param>
 	public void DisplayDialogueLine(LocalizedString dialogueLine, ActorSO actor)
 	{
-
-			_openUIDialogueEvent.RaiseEvent(dialogueLine, actor);
-
+		_openUIDialogueEvent.RaiseEvent(dialogueLine, actor);
 	}
 
 	private void OnAdvance()
@@ -105,14 +105,13 @@ public class DialogueManager : MonoBehaviour
 	{
 		_inputReader.advanceDialogueEvent -= OnAdvance;
 
-			_makeDialogueChoiceEvent.OnEventRaised += MakeDialogueChoice;
-			_showChoicesUIEvent.RaiseEvent(choices);
-
+		_makeDialogueChoiceEvent.OnEventRaised += MakeDialogueChoice;
+		_showChoicesUIEvent.RaiseEvent(choices);
 	}
 
 	private void MakeDialogueChoice(Choice choice)
 	{
-			_makeDialogueChoiceEvent.OnEventRaised -= MakeDialogueChoice;
+		_makeDialogueChoiceEvent.OnEventRaised -= MakeDialogueChoice;
 
 		if (choice.ActionType == ChoiceActionType.continueWithStep)
 		{
@@ -137,6 +136,7 @@ public class DialogueManager : MonoBehaviour
 
 		_gameState.ResetToPreviousGameState();
 	}
+
 	public void DialogueEndedAndCloseDialogueUI()
 	{
 
@@ -147,8 +147,7 @@ public class DialogueManager : MonoBehaviour
 		_gameState.ResetToPreviousGameState();
 		_inputReader.advanceDialogueEvent -= OnAdvance;
 		_inputReader.EnableGameplayInput();
-
-
+		_currentDialogue = null;
 	}
 }
 
