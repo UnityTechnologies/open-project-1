@@ -18,7 +18,7 @@ public class GameStateSO : ScriptableObject
 {
 	private GameState _currentGameState = default;
 	private GameState _previousGameState = default;
-	public GameState CurrentGameState => _currentGameState;
+	public GameState CurrentGameState => CurrentGameState;
 
 	public void UpdateGameState(GameState newGameState)
 	{
