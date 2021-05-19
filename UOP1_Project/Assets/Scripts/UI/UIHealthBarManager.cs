@@ -6,8 +6,8 @@ using UnityEngine.UI;
 public class UIHealthBarManager : MonoBehaviour
 {
 	Transform target;
-	int maxHealth=0;
-	int currentHealth=0;
+	int maxHealth = 0;
+	int currentHealth = 0;
 	[SerializeField] private Slider _healthBar = default;
 
 	[Header("Listening to")]
@@ -18,22 +18,22 @@ public class UIHealthBarManager : MonoBehaviour
 	private void OnEnable()
 	{
 
-		if((GetComponent<Canvas>()!=null)&&(Camera.main!=null))
+		if ((GetComponent<Canvas>() != null) && (Camera.main != null))
 		{
 			GetComponent<Canvas>().worldCamera = Camera.main;
-			target = Camera.main.transform; 
+			target = Camera.main.transform;
 
 		}
 	}
 	private void Start()
 	{
-		
-			_setHealthBar.OnEventRaised += SetHealthBar;
-		
-			_inflictDamage.OnEventRaised += InflictDamage;
-		
-			_restoreHealth.OnEventRaised += RestoreHealth;
-		
+
+		_setHealthBar.OnEventRaised += SetHealthBar;
+
+		_inflictDamage.OnEventRaised += InflictDamage;
+
+		_restoreHealth.OnEventRaised += RestoreHealth;
+
 	}
 	private void OnDestroy()
 	{
@@ -49,7 +49,7 @@ public class UIHealthBarManager : MonoBehaviour
 	{
 		maxHealth = _maxHealth;
 		currentHealth = _maxHealth;
-		setSlider(); 
+		setSlider();
 
 	}
 	public void InflictDamage(int _damage)
@@ -70,7 +70,7 @@ public class UIHealthBarManager : MonoBehaviour
 		//find new slider value
 		float sliderValue = 0;
 		sliderValue = currentHealth / maxHealth;
-		_healthBar.value = sliderValue; 
+		_healthBar.value = sliderValue;
 
 	}
 

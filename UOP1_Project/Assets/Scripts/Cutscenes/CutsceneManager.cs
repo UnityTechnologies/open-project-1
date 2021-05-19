@@ -35,15 +35,15 @@ public class CutsceneManager : MonoBehaviour
 	}
 	private void Start()
 	{
-			_playCutsceneEvent.OnEventRaised += PlayCutscene;
-			_playDialogueEvent.OnEventRaised += PlayDialogueFromClip;
-			_pauseTimelineEvent.OnEventRaised += PauseTimeline;
+		_playCutsceneEvent.OnEventRaised += PlayCutscene;
+		_playDialogueEvent.OnEventRaised += PlayDialogueFromClip;
+		_pauseTimelineEvent.OnEventRaised += PauseTimeline;
 
 	}
 	void PlayCutscene(PlayableDirector activePlayableDirector)
 	{
 		_inputReader.EnableDialogueInput();
-		_gameState.UpdateGameState(GameState.Cutscene); 
+		_gameState.UpdateGameState(GameState.Cutscene);
 		_activePlayableDirector = activePlayableDirector;
 
 		_isPaused = false;
@@ -53,7 +53,7 @@ public class CutsceneManager : MonoBehaviour
 
 	void CutsceneEnded()
 	{
-		_gameState.ResetToPreviousGameState(); 
+		_gameState.ResetToPreviousGameState();
 		if (_activePlayableDirector != null)
 			_activePlayableDirector.stopped -= HandleDirectorStopped;
 
