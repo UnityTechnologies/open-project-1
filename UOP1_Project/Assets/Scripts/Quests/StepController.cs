@@ -24,12 +24,12 @@ public class StepController : MonoBehaviour
 	//check if character is actif. An actif character is the character concerned by the step.
 
 	private DialogueDataSO _currentDialogue;
-	public bool IsInDialogue = false; 
+	public bool IsInDialogue = false;
 	private void Start()
 	{
 
 		_winDialogueEvent.OnEventRaised += PlayWinDialogue;
-		_loseDialogueEvent.OnEventRaised += PlayLoseDialogue; 
+		_loseDialogueEvent.OnEventRaised += PlayLoseDialogue;
 
 
 	}
@@ -69,12 +69,14 @@ public class StepController : MonoBehaviour
 
 	void StartDialogue()
 	{
-		
-	    _startDialogueEvent.RaiseEvent(_currentDialogue);
+
+		_startDialogueEvent.RaiseEvent(_currentDialogue);
 		IsInDialogue = true;
-		_endDialogueEvent.OnEventRaised += EndDialogue; 
 
-
+		if (_endDialogueEvent)
+		{
+			_endDialogueEvent.OnEventRaised += EndDialogue;
+		}
 	}
 	void EndDialogue()
 	{
@@ -83,7 +85,7 @@ public class StepController : MonoBehaviour
 
 	}
 
-		void PlayLoseDialogue()
+	void PlayLoseDialogue()
 	{
 		if (_questData != null)
 		{
