@@ -31,8 +31,7 @@ public class StepController : MonoBehaviour
 
 	private void Start()
 	{
-		_winDialogueEvent.OnEventRaised += PlayWinDialogue;
-		_loseDialogueEvent.OnEventRaised += PlayLoseDialogue;
+
 	}
 
 	void PlayDefaultDialogue()
@@ -73,11 +72,15 @@ public class StepController : MonoBehaviour
 		_startDialogueEvent.RaiseEvent(_currentDialogue);
 		_endDialogueEvent.OnEventRaised += EndDialogue;
 		StopTalkingToCurrentActor();
+		_winDialogueEvent.OnEventRaised += PlayWinDialogue;
+		_loseDialogueEvent.OnEventRaised += PlayLoseDialogue;
 		isInDialogue = true;
 	}
 	void EndDialogue()
 	{
 		_endDialogueEvent.OnEventRaised -= EndDialogue;
+		_winDialogueEvent.OnEventRaised -= PlayWinDialogue;
+		_loseDialogueEvent.OnEventRaised -= PlayLoseDialogue;
 		ResumeTalkingToCurrentActor();
 		isInDialogue = false;
 	}
@@ -112,7 +115,7 @@ public class StepController : MonoBehaviour
 	private void StopTalkingToCurrentActor()
 	{
 		GameObject[] talkingTo = gameObject.GetComponent<NPC>().talkingTo;
-		if(talkingTo != null)
+		if (talkingTo != null)
 		{
 			for (int i = 0; i < talkingTo.Length; ++i)
 			{
