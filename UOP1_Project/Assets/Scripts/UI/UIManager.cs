@@ -110,6 +110,7 @@ public class UIManager : MonoBehaviour
 	}
 	void OpenUIPause()
 	{
+		Time.timeScale = 0;
 		_inputReader.pauseEvent -= OpenUIPause;
 		_inputReader.pauseEvent += CloseUIPause;
 		_inputReader.EnableMenuInput();
@@ -119,7 +120,7 @@ public class UIManager : MonoBehaviour
 
 	void CloseUIPause()
 	{
-		
+		Time.timeScale = 1;
 		_inputReader.pauseEvent += OpenUIPause;
 		_inputReader.pauseEvent -= CloseUIPause;
 		_pauseScreen.gameObject.SetActive(false);
