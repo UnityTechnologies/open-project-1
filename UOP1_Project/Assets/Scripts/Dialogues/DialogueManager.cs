@@ -37,8 +37,8 @@ public class DialogueManager : MonoBehaviour
 
 	private void Start()
 	{
-			_startDialogue.OnEventRaised += DisplayDialogueData;
-		
+		_startDialogue.OnEventRaised += DisplayDialogueData;
+
 	}
 
 	/// <summary>
@@ -47,8 +47,8 @@ public class DialogueManager : MonoBehaviour
 	/// <param name="dialogueDataSO"></param>
 	public void DisplayDialogueData(DialogueDataSO dialogueDataSO)
 	{
-		if(_gameState.CurrentGameState != GameState.Cutscene)
-		_gameState.UpdateGameState(GameState.Dialogue);
+		if (_gameState.CurrentGameState != GameState.Cutscene)
+			_gameState.UpdateGameState(GameState.Dialogue);
 		BeginDialogueData(dialogueDataSO);
 		DisplayDialogueLine(_currentDialogue.DialogueLines[_counter], dialogueDataSO.Actor);
 	}
@@ -71,9 +71,9 @@ public class DialogueManager : MonoBehaviour
 	/// <param name="dialogueLine"></param>
 	public void DisplayDialogueLine(LocalizedString dialogueLine, ActorSO actor)
 	{
-		
-			_openUIDialogueEvent.RaiseEvent(dialogueLine, actor);
-		
+
+		_openUIDialogueEvent.RaiseEvent(dialogueLine, actor);
+
 	}
 
 	private void OnAdvance()
@@ -100,16 +100,16 @@ public class DialogueManager : MonoBehaviour
 	private void DisplayChoices(List<Choice> choices)
 	{
 		_inputReader.advanceDialogueEvent -= OnAdvance;
-		
-			_makeDialogueChoiceEvent.OnEventRaised += MakeDialogueChoice;
-			_showChoicesUIEvent.RaiseEvent(choices);
-		
+
+		_makeDialogueChoiceEvent.OnEventRaised += MakeDialogueChoice;
+		_showChoicesUIEvent.RaiseEvent(choices);
+
 	}
 
 	private void MakeDialogueChoice(Choice choice)
 	{
-			_makeDialogueChoiceEvent.OnEventRaised -= MakeDialogueChoice;
-		
+		_makeDialogueChoiceEvent.OnEventRaised -= MakeDialogueChoice;
+
 		if (choice.ActionType == ChoiceActionType.continueWithStep)
 		{
 			if (_continueWithStep != null)
@@ -135,12 +135,12 @@ public class DialogueManager : MonoBehaviour
 	}
 	public void DialogueEndedAndCloseDialogueUI()
 	{
-		
+
 		if (_endDialogue != null)
 			_endDialogue.RaiseEvent(_currentDialogue);
 		if (_closeDialogueUIEvent != null)
 			_closeDialogueUIEvent.RaiseEvent();
-		_gameState.ResetToPreviousGameState(); 
+		_gameState.ResetToPreviousGameState();
 		_inputReader.advanceDialogueEvent -= OnAdvance;
 		_inputReader.EnableGameplayInput();
 

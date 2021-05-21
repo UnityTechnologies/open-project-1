@@ -9,13 +9,13 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 /// This class contains the function to call when play button is pressed
 /// </summary>
 public class StartGame : MonoBehaviour
-{	
+{
 	[SerializeField]
 	private GameSceneSO _locationsToLoad;
 	[SerializeField]
-	private  bool _showLoadScreen = default;
+	private bool _showLoadScreen = default;
 	[SerializeField]
-	private SaveSystem _saveSystem = default ;
+	private SaveSystem _saveSystem = default;
 	private bool _hasSaveData;
 	[Header("Broadcasting on ")]
 	[SerializeField]
@@ -31,7 +31,7 @@ public class StartGame : MonoBehaviour
 	{
 		_hasSaveData = _saveSystem.LoadSaveDataFromDisk();
 		_startNewGameEvent.OnEventRaised += StartNewGame;
-		_continueGameEvent.OnEventRaised += ContinuePreviousGame; 
+		_continueGameEvent.OnEventRaised += ContinuePreviousGame;
 	}
 	void StartNewGame()
 	{
@@ -39,22 +39,22 @@ public class StartGame : MonoBehaviour
 		_saveSystem.WriteEmptySaveFile();
 		//Start new game
 		_startGameEvent.RaiseEvent(_locationsToLoad, _showLoadScreen);
-		
-		
+
+
 	}
 	void ContinuePreviousGame()
 	{
 		StartCoroutine(LoadSaveGame());
 	}
-	
 
-	 void OnResetSaveDataPress()
+
+	void OnResetSaveDataPress()
 	{
 		_hasSaveData = false;
 
 	}
 
-	 IEnumerator LoadSaveGame()
+	IEnumerator LoadSaveGame()
 	{
 		yield return StartCoroutine(_saveSystem.LoadSavedInventory());
 

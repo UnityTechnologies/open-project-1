@@ -17,9 +17,9 @@ public class UIDialogueManager : MonoBehaviour
 	[SerializeField] private DialogueChoicesChannelSO _showChoicesEvent = default;
 	private void Start()
 	{
-		
-			_showChoicesEvent.OnEventRaised += ShowChoices;
-		
+
+		_showChoicesEvent.OnEventRaised += ShowChoices;
+
 	}
 	public void SetDialogue(LocalizedString dialogueLine, ActorSO actor)
 	{
