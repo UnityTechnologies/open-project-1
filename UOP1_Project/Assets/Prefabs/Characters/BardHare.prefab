@@ -19,6 +19,20 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &-2594107008406275151
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3351096123413661336}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ca3eae09f3fc4d48bb4b74aa34cd4a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  npcState: 0
+  talkingTo: []
 --- !u!114 &765271293
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -41,20 +55,19 @@ MonoBehaviour:
     type: 2}
   _endDialogueEvent: {fileID: 11400000, guid: 53a7f1f01ef364704b1d45d01f2421ae, type: 2}
   isInDialogue: 0
---- !u!114 &-2594107008406275151
-MonoBehaviour:
+--- !u!65 &5574947304435907499
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3351096123413661336}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
   m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7ca3eae09f3fc4d48bb4b74aa34cd4a0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  npcState: 0
-  talkingTo: []
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0.57, z: 0}
 --- !u!1001 &2467996762377272265
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -751,6 +764,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: BardHare
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 397ae3410a140c04091159b107d04d37,
+        type: 3}
+      propertyPath: m_TagString
+      value: NPC
       objectReference: {fileID: 0}
     - target: {fileID: 933872504445524348, guid: 397ae3410a140c04091159b107d04d37,
         type: 3}
