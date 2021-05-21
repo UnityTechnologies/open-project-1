@@ -23,7 +23,7 @@ public class InventoryButtonFiller : MonoBehaviour
 	[SerializeField]
 	VoidEventChannelSO _inventoryActionEvent = default;
 
-	bool hasEvent = false; 
+	bool hasEvent = false;
 
 
 	public void FillInventoryButtons(ItemType itemType, bool isInteractable = true)
@@ -32,7 +32,7 @@ public class InventoryButtonFiller : MonoBehaviour
 		_buttonActionText.StringReference = itemType.ActionName;
 		//bool isKeyboard = !(Input.GetJoystickNames() != null && Input.GetJoystickNames().Length > 0);
 
-		bool isKeyboard =true;
+		bool isKeyboard = true;
 		buttonPromptSetter.SetButtonPrompt(isKeyboard);
 		if (isInteractable)
 		{
@@ -46,17 +46,17 @@ public class InventoryButtonFiller : MonoBehaviour
 		else
 		{
 			if (_inputReader != null)
-				if (hasEvent )
-				_inputReader.inventoryActionButtonEvent -= ActionButtonEventRaised;
+				if (hasEvent)
+					_inputReader.inventoryActionButtonEvent -= ActionButtonEventRaised;
 
 		}
 
 	}
 	public void ActionButtonEventRaised()
 	{
-		if(_inventoryActionEvent!=null)
+		if (_inventoryActionEvent != null)
 		{
-			_inventoryActionEvent.RaiseEvent(); 
+			_inventoryActionEvent.RaiseEvent();
 		}
 
 
