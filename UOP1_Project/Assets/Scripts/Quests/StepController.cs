@@ -16,13 +16,12 @@ public class StepController : MonoBehaviour
 	[SerializeField] private DialogueActorChannelSO _interactionEvent = default;
 	[SerializeField] private VoidEventChannelSO _winDialogueEvent = default;
 	[SerializeField] private VoidEventChannelSO _loseDialogueEvent = default;
-
+	//[SerializeField]
+	public VoidEventChannelSO _endDialogueEvent = default;
 	[Header("Broadcasting on channels")]
 	//[SerializeField]
 	public DialogueDataChannelSO _startDialogueEvent = default;
-	[Header("Listening to")]
-	//[SerializeField]
-	public VoidEventChannelSO _endDialogueEvent = default;
+	
 
 	//check if character is actif. An actif character is the character concerned by the step.
 	private DialogueDataSO _currentDialogue;
@@ -71,7 +70,7 @@ public class StepController : MonoBehaviour
 	{
 		_startDialogueEvent.RaiseEvent(_currentDialogue);
 		_endDialogueEvent.OnEventRaised += EndDialogue;
-		StopTalkingToCurrentActor();
+		StopConversation();
 		_winDialogueEvent.OnEventRaised += PlayWinDialogue;
 		_loseDialogueEvent.OnEventRaised += PlayLoseDialogue;
 		isInDialogue = true;
@@ -82,7 +81,7 @@ public class StepController : MonoBehaviour
 		_endDialogueEvent.OnEventRaised -= EndDialogue;
 		_winDialogueEvent.OnEventRaised -= PlayWinDialogue;
 		_loseDialogueEvent.OnEventRaised -= PlayLoseDialogue;
-		ResumeTalkingToCurrentActor();
+		ResumeConversation();
 		isInDialogue = false;
 	}
 
@@ -114,7 +113,7 @@ public class StepController : MonoBehaviour
 		}
 	}
 
-	private void StopTalkingToCurrentActor()
+	private void StopConversation()
 	{
 		GameObject[] talkingTo = gameObject.GetComponent<NPC>().talkingTo;
 		if (talkingTo != null)
@@ -126,7 +125,7 @@ public class StepController : MonoBehaviour
 		}
 	}
 
-	private void ResumeTalkingToCurrentActor()
+	private void ResumeConversation()
 	{
 		GameObject[] talkingTo = GetComponent<NPC>().talkingTo;
 		if (talkingTo != null)

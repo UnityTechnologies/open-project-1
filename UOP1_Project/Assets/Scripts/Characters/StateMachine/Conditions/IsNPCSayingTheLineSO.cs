@@ -6,10 +6,10 @@ using UOP1.StateMachine.ScriptableObjects;
 [CreateAssetMenu(fileName = "IsNPCSayingTheLine", menuName = "State Machines/Conditions/Is NPC Saying The Line")]
 public class IsNPCSayingTheLineSO : StateConditionSO {
 
-	[SerializeField] private DialogueLineChannelSO _sayLineEvent = default;
+	[SerializeField] private DialogueLineChannelSO _onLineDisplayed = default;
 	[SerializeField] private ActorSO _protagonistActor;
 
-	protected override Condition CreateCondition() => new IsNPCSayingTheLineCondition(_sayLineEvent, _protagonistActor);
+	protected override Condition CreateCondition() => new IsNPCSayingTheLineCondition(_onLineDisplayed, _protagonistActor);
 
 }
 
@@ -28,7 +28,7 @@ public class IsNPCSayingTheLineCondition : Condition
 
 	public override void Awake(StateMachine stateMachine)
 	{
-		_npcScript = stateMachine.gameObject.GetComponent<NPC>();
+		_npcScript = stateMachine.GetComponent<NPC>();
 	}
 
 	protected override bool Statement()
@@ -41,7 +41,7 @@ public class IsNPCSayingTheLineCondition : Condition
 	{
 		if (_sayLineEvent != null)
 		{
-			_sayLineEvent.OnEventRaised += OnLineDisplay;
+			_sayLineEvent.OnEventRaised += OnLineDisplayed;
 		}
 	}
 
@@ -49,17 +49,17 @@ public class IsNPCSayingTheLineCondition : Condition
 	{
 		if (_sayLineEvent != null)
 		{
-			_sayLineEvent.OnEventRaised -= OnLineDisplay;
+			_sayLineEvent.OnEventRaised -= OnLineDisplayed;
 		}
 	}
 
-	private void OnLineDisplay(LocalizedString line, ActorSO actor)
+	private void OnLineDisplayed(LocalizedString line, ActorSO actor)
 	{
 		//why is it not possible to do this from here?
-		//SetTheLineToNotSaidYet();
+		SetTheLineToNotSaidYet();
 		if (actor.ActorName == _protagonistActor.ActorName)
 		{
-			_isNPCSayingTheLine = true;
+			_isNPCSayingTheLine = false;
 		}
 		else
 		{
