@@ -54,7 +54,6 @@ public class DialogueManager : MonoBehaviour
 
 		if (_gameState.CurrentGameState != GameState.Cutscene)
 			_gameState.UpdateGameState(GameState.Dialogue);
-
 		BeginDialogueData(dialogueDataSO);
 		DisplayDialogueLine(_currentDialogue.DialogueLines[_counter], dialogueDataSO.Actor);
 	}
@@ -77,7 +76,9 @@ public class DialogueManager : MonoBehaviour
 	/// <param name="dialogueLine"></param>
 	public void DisplayDialogueLine(LocalizedString dialogueLine, ActorSO actor)
 	{
+
 		_openUIDialogueEvent.RaiseEvent(dialogueLine, actor);
+
 	}
 
 	private void OnAdvance()

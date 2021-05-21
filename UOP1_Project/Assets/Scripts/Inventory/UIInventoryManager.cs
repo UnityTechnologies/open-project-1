@@ -53,38 +53,38 @@ public class UIInventoryManager : MonoBehaviour
 	private VoidEventChannelSO _onInteractionEndedEvent = default;
 
 	[SerializeField]
-	private InputReader _inputReader = default; 
+	private InputReader _inputReader = default;
 
 	private void OnEnable()
 	{
 		//Check if the event exists to avoid errors
-		
-			_actionButtonClicked.OnEventRaised += ActionButtonEventRaised;
-		
-			_changeTabEvent.OnEventRaised += ChangeTabEventRaised;
-		
-			_selectItemEvent.OnEventRaised += InspectItem;
-		
-			_onInteractionEndedEvent.OnEventRaised += InteractionEnded;
-		
+
+		_actionButtonClicked.OnEventRaised += ActionButtonEventRaised;
+
+		_changeTabEvent.OnEventRaised += ChangeTabEventRaised;
+
+		_selectItemEvent.OnEventRaised += InspectItem;
+
+		_onInteractionEndedEvent.OnEventRaised += InteractionEnded;
+
 		_inputReader.menuSwitchTab += SwitchTab;
-		
+
 	}
 
 	private void OnDisable()
 	{
-			_actionButtonClicked.OnEventRaised -= ActionButtonEventRaised;
-		
-			_changeTabEvent.OnEventRaised -= ChangeTabEventRaised;
-		
-			_selectItemEvent.OnEventRaised -= InspectItem;
-		
+		_actionButtonClicked.OnEventRaised -= ActionButtonEventRaised;
+
+		_changeTabEvent.OnEventRaised -= ChangeTabEventRaised;
+
+		_selectItemEvent.OnEventRaised -= InspectItem;
+
 	}
 
 	public void SwitchTab(float orientation)
 	{
-	
-		if(orientation!=0)
+
+		if (orientation != 0)
 		{
 			bool isLeft = orientation < 0;
 			int initialIndex = _tabTypesList.FindIndex(o => o == _selectedTab);
@@ -99,10 +99,10 @@ public class UIInventoryManager : MonoBehaviour
 					initialIndex++;
 				}
 
-				initialIndex= Mathf.Clamp(initialIndex, 0, _tabTypesList.Count-1); 
+				initialIndex = Mathf.Clamp(initialIndex, 0, _tabTypesList.Count - 1);
 			}
-			
-			ChangeTabEventRaised(_tabTypesList[initialIndex]); 
+
+			ChangeTabEventRaised(_tabTypesList[initialIndex]);
 		}
 
 
@@ -136,7 +136,7 @@ public class UIInventoryManager : MonoBehaviour
 			FillTypeTabs(_tabTypesList, _selectedTab);
 			List<ItemStack> listItemsToShow = new List<ItemStack>();
 			listItemsToShow = _currentInventory.Items.FindAll(o => o.Item.ItemType.TabType == _selectedTab);
-			
+
 			FillItems(listItemsToShow);
 		}
 		else
@@ -202,7 +202,7 @@ public class UIInventoryManager : MonoBehaviour
 		{
 			_instanciatedItems[0].SelectFirstElement();
 		}
-		 
+
 	}
 	public void UpdateOnItemInInventory(ItemStack itemToUpdate, bool removeItem)
 	{

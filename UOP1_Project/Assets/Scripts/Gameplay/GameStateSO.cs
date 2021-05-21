@@ -26,7 +26,7 @@ public class GameStateSO : ScriptableObject
 		{
 			return;
 		}
-
+		
 		_previousGameState = _currentGameState;
 		_currentGameState = newGameState;
 

@@ -32,9 +32,9 @@ public class QuestManagerSO : ScriptableObject
 
 	public void StartGame()
 	{//Add code for saved information
-			_checkStepValidityEvent.OnEventRaised += CheckStepValidity;
-			_endDialogueEvent.OnEventRaised += EndDialogue;
-		
+		_checkStepValidityEvent.OnEventRaised += CheckStepValidity;
+		_endDialogueEvent.OnEventRaised += EndDialogue;
+
 		StartQuestline();
 	}
 	void StartQuestline()
@@ -80,7 +80,8 @@ public class QuestManagerSO : ScriptableObject
 	}
 
 	public DialogueDataSO InteractWithCharacter(ActorSO actor, bool isCheckValidity, bool isValid)
-	{	if (_currentQuest == null)
+	{
+		if (_currentQuest == null)
 		{
 			if (CheckQuestlineForQuestWithActor(actor))
 			{

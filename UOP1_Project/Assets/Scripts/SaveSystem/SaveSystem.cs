@@ -64,7 +64,7 @@ public class SaveSystem : ScriptableObject
 		saveData._itemStacks.Clear();
 		foreach (var itemStack in _playerInventory.Items)
 		{
-		//	saveData._itemStacks.Add(new SerializedItemStack(itemStack.Item.Guid, itemStack.Amount));
+			//	saveData._itemStacks.Add(new SerializedItemStack(itemStack.Item.Guid, itemStack.Amount));
 		}
 
 		if (FileManager.MoveFile(saveFilename, backupSaveFilename))

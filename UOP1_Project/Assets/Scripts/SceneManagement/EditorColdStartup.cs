@@ -13,6 +13,7 @@ public class EditorColdStartup : MonoBehaviour
 	[SerializeField] private GameSceneSO _thisSceneSO = default;
 	[SerializeField] private GameSceneSO _persistentManagersSO = default;
 	[SerializeField] private AssetReference _notifyColdStartupChannel = default;
+	[SerializeField] private VoidEventChannelSO _onSceneReadyChannel = default;
 
 	private void Start()
 	{
@@ -29,8 +30,16 @@ public class EditorColdStartup : MonoBehaviour
 
 	private void OnNotifyChannelLoaded(AsyncOperationHandle<LoadEventChannelSO> obj)
 	{
-		LoadEventChannelSO loadEventChannelSO = (LoadEventChannelSO)_notifyColdStartupChannel.Asset;
-		loadEventChannelSO.RaiseEvent(_thisSceneSO);
+		if(_thisSceneSO != null)
+		{
+			obj.Result.RaiseEvent(_thisSceneSO);
+		}
+		else
+		{
+			//Raise a fake scene ready event, so the player is spawned
+			_onSceneReadyChannel.RaiseEvent();
+			//When this happens, the player won't be able to move between scenes because the SceneLoader has no conception of which scene we are in
+		}
 	}
 #endif
 }
