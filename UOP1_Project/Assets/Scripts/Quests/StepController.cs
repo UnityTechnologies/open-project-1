@@ -74,7 +74,6 @@ public class StepController : MonoBehaviour
 		_winDialogueEvent.OnEventRaised += PlayWinDialogue;
 		_loseDialogueEvent.OnEventRaised += PlayLoseDialogue;
 		isInDialogue = true;
-		gameObject.GetComponent<NPC>().hasSaidLine = false;
 	}
 	void EndDialogue()
 	{
