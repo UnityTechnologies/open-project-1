@@ -18,7 +18,7 @@ public class IsNPCSayingTheLineCondition : Condition
 	private DialogueLineChannelSO _sayLineEvent;
 	private ActorSO _protagonistActor;
 	private bool _isNPCSayingTheLine = false;
-
+	private NPC _npcScript;
 
 	public IsNPCSayingTheLineCondition(DialogueLineChannelSO sayLineEvent, ActorSO protagonistActor)
 	{
@@ -26,8 +26,14 @@ public class IsNPCSayingTheLineCondition : Condition
 		_protagonistActor = protagonistActor;
 	}
 
+	public override void Awake(StateMachine stateMachine)
+	{
+		_npcScript = stateMachine.gameObject.GetComponent<NPC>();
+	}
+
 	protected override bool Statement()
 	{
+
 		return _isNPCSayingTheLine;
 	}
 
@@ -35,7 +41,7 @@ public class IsNPCSayingTheLineCondition : Condition
 	{
 		if (_sayLineEvent != null)
 		{
-			_sayLineEvent.OnEventRaised += OnLineSaid;
+			_sayLineEvent.OnEventRaised += OnLineDisplay;
 		}
 	}
 
@@ -43,23 +49,28 @@ public class IsNPCSayingTheLineCondition : Condition
 	{
 		if (_sayLineEvent != null)
 		{
-			_sayLineEvent.OnEventRaised -= OnLineSaid;
+			_sayLineEvent.OnEventRaised -= OnLineDisplay;
 		}
 	}
 
-	private void OnLineSaid(LocalizedString line, ActorSO actor)
+	private void OnLineDisplay(LocalizedString line, ActorSO actor)
 	{
-		Debug.Log("name of the actor " + actor);
-
-		if(actor.ActorName == _protagonistActor.ActorName)
+		//why is it not possible to do this from here?
+		//SetTheLineToNotSaidYet();
+		if (actor.ActorName == _protagonistActor.ActorName)
 		{
-			_isNPCSayingTheLine = false;
+			_isNPCSayingTheLine = true;
 		}
 		else
 		{
 			_isNPCSayingTheLine = true;
 		}
-		Debug.Log("is it true " + _isNPCSayingTheLine);
 	}
+
+	private void SetTheLineToNotSaidYet()
+	{
+		_npcScript.hasSaidLine = false;
+	}
+
 
 }
