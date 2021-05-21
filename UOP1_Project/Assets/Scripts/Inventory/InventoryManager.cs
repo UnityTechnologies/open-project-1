@@ -18,36 +18,36 @@ public class InventoryManager : MonoBehaviour
 	private void OnEnable()
 	{
 		//Check if the event exists to avoid errors
-		
-			_cookRecipeEvent.OnEventRaised += CookRecipeEventRaised;
-		
-			_useItemEvent.OnEventRaised += UseItemEventRaised;
-		
-			_equipItemEvent.OnEventRaised += EquipItemEventRaised;
-		
-			_addItemEvent.OnEventRaised += AddItem;
-		
-			_removeItemEvent.OnEventRaised += RemoveItem;
-		
-			_rewardItemEvent.OnEventRaised += AddItem;
-		
-			_giveItemEvent.OnEventRaised += RemoveItem;
-		
+
+		_cookRecipeEvent.OnEventRaised += CookRecipeEventRaised;
+
+		_useItemEvent.OnEventRaised += UseItemEventRaised;
+
+		_equipItemEvent.OnEventRaised += EquipItemEventRaised;
+
+		_addItemEvent.OnEventRaised += AddItem;
+
+		_removeItemEvent.OnEventRaised += RemoveItem;
+
+		_rewardItemEvent.OnEventRaised += AddItem;
+
+		_giveItemEvent.OnEventRaised += RemoveItem;
+
 	}
 
 	private void OnDisable()
 	{
-		
-			_cookRecipeEvent.OnEventRaised -= CookRecipeEventRaised;
-		
-			_useItemEvent.OnEventRaised -= UseItemEventRaised;
-		
-			_equipItemEvent.OnEventRaised -= EquipItemEventRaised;
-		
-			_addItemEvent.OnEventRaised -= AddItem;
-		
-			_removeItemEvent.OnEventRaised -= RemoveItem;
-		
+
+		_cookRecipeEvent.OnEventRaised -= CookRecipeEventRaised;
+
+		_useItemEvent.OnEventRaised -= UseItemEventRaised;
+
+		_equipItemEvent.OnEventRaised -= EquipItemEventRaised;
+
+		_addItemEvent.OnEventRaised -= AddItem;
+
+		_removeItemEvent.OnEventRaised -= RemoveItem;
+
 	}
 
 

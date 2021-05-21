@@ -22,12 +22,12 @@ public class UIButtonPromptSetter : MonoBehaviour
 		if (!isKeyboard)
 		{
 			_interactionKeyBG.sprite = _controllerSprite;
-			_interactionKeyText.text = _interactionJoystickKeyCode; 
+			_interactionKeyText.text = _interactionJoystickKeyCode;
 		}
 		else
 		{
 			_interactionKeyBG.sprite = _keyboardSprite;
-			_interactionKeyText.text = _interactionKeyboardCode; 
+			_interactionKeyText.text = _interactionKeyboardCode;
 
 
 		}
