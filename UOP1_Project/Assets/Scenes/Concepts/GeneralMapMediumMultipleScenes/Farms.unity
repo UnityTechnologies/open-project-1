@@ -43,7 +43,7 @@ RenderSettings:
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
-  serializedVersion: 11
+  serializedVersion: 12
   m_GIWorkflowMode: 1
   m_GISettings:
     serializedVersion: 2
@@ -99,7 +99,8 @@ LightmapSettings:
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 112000002, guid: bebda1d08bb502b4fa34dfa561c97e1b,
     type: 2}
-  m_UseShadowmask: 0
+  m_LightingSettings: {fileID: 4890085278179872738, guid: e8caaf6bfb01b9c4d917d844d4bd6f9c,
+    type: 2}
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -119,6 +120,8 @@ NavMeshSettings:
     manualTileSize: 0
     tileSize: 256
     accuratePlacement: 0
+    maxJobWorkers: 0
+    preserveTilesOutsideBounds: 0
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
@@ -538,6 +541,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -562,6 +566,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!33 &616203066
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -835,6 +840,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: streamFarms
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 7ae178c9ad4dddf4fa0af5c4d5367dde,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7ae178c9ad4dddf4fa0af5c4d5367dde, type: 3}
@@ -1274,6 +1284,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: FarmsUnloadCollider
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: d74bf1ca18d9bdc4cafba07e1c2245c4,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d74bf1ca18d9bdc4cafba07e1c2245c4, type: 3}
