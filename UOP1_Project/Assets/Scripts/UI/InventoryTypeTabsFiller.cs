@@ -32,7 +32,7 @@ public class InventoryTypeTabsFiller : MonoBehaviour
 				}
 				bool isSelected = typesList[i] == selectedType;
 				//fill
-				instantiatedGameObjects[i].fillTab(typesList[i], isSelected, changeTabEvent);
+				instantiatedGameObjects[i].fillTab(typesList[i], isSelected);
 				instantiatedGameObjects[i].gameObject.SetActive(true);
 
 			}

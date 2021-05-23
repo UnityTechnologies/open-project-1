@@ -15,6 +15,8 @@ public class InputReader : ScriptableObject, GameInput.IGameplayActions, GameInp
 	public event UnityAction attackCanceledEvent = delegate { };
 	public event UnityAction interactEvent = delegate { }; // Used to talk, pickup objects, interact with tools like the cooking cauldron
 	public event UnityAction openInventoryEvent = delegate { }; // Used to bring up the inventory
+	public event UnityAction closeInventoryEvent = delegate { };// Used to bring up the inventory
+	public event UnityAction inventoryActionButtonEvent = delegate { };
 	public event UnityAction pauseEvent = delegate { };
 	public event UnityAction<Vector2> moveEvent = delegate { };
 	public event UnityAction<Vector2, bool> cameraMoveEvent = delegate { };
@@ -34,6 +36,10 @@ public class InputReader : ScriptableObject, GameInput.IGameplayActions, GameInp
 	public event UnityAction menuConfirmEvent = delegate { };
 	public event UnityAction menuCancelEvent = delegate { };
 	public event UnityAction menuUnpauseEvent = delegate { };
+
+	public event UnityAction closePopupEvent = delegate { };
+
+	public event UnityAction<float> menuSwitchTab = delegate { };
 
 
 	private GameInput gameInput;
@@ -74,11 +80,31 @@ public class InputReader : ScriptableObject, GameInput.IGameplayActions, GameInp
 		if (context.phase == InputActionPhase.Performed)
 			openInventoryEvent.Invoke();
 	}
+	public void OnCancel(InputAction.CallbackContext context)
+	{
+
+		if (context.phase == InputActionPhase.Performed)
+			closeInventoryEvent.Invoke();
+	}
+
+	public void OnInventoryActionButton(InputAction.CallbackContext context)
+	{
+		if (context.phase == InputActionPhase.Performed)
+			inventoryActionButtonEvent.Invoke();
+
+	}
 
 	public void OnInteract(InputAction.CallbackContext context)
 	{
 		if (context.phase == InputActionPhase.Performed)
 			interactEvent.Invoke();
+	}
+
+	public void OnClosePopupEvent(InputAction.CallbackContext context)
+	{
+		if (context.phase == InputActionPhase.Performed)
+			closePopupEvent.Invoke();
+
 	}
 
 	public void OnJump(InputAction.CallbackContext context)
@@ -148,11 +174,11 @@ public class InputReader : ScriptableObject, GameInput.IGameplayActions, GameInp
 			menuConfirmEvent();
 	}
 
-	public void OnCancel(InputAction.CallbackContext context)
-	{
-		if (context.phase == InputActionPhase.Performed)
-			menuCancelEvent();
-	}
+	/*	public void OnCancel(InputAction.CallbackContext context)
+		{
+			if (context.phase == InputActionPhase.Performed)
+				menuCancelEvent();
+		}*/
 
 	public void OnMouseMove(InputAction.CallbackContext context)
 	{
@@ -195,6 +221,12 @@ public class InputReader : ScriptableObject, GameInput.IGameplayActions, GameInp
 		gameInput.Gameplay.Disable();
 		gameInput.Menus.Disable();
 		gameInput.Dialogues.Disable();
+	}
+	public void OnChangeTab(InputAction.CallbackContext context)
+	{
+		if (context.phase == InputActionPhase.Performed)
+			menuSwitchTab.Invoke(context.ReadValue<float>());
+
 	}
 
 	public bool LeftMouseDown() => Mouse.current.leftButton.isPressed;

@@ -20,9 +20,9 @@ RenderSettings:
   m_FogDensity: 0.01
   m_LinearFogStart: 0
   m_LinearFogEnd: 300
-  m_AmbientSkyColor: {r: 0.69312924, g: 0.74798965, b: 0.8301887, a: 1}
-  m_AmbientEquatorColor: {r: 0.13768244, g: 0.20941618, b: 0.24528301, a: 1}
-  m_AmbientGroundColor: {r: 0.29276434, g: 0.4811321, b: 0.4229333, a: 1}
+  m_AmbientSkyColor: {r: 0.58495647, g: 0.6171428, b: 0.6698113, a: 1}
+  m_AmbientEquatorColor: {r: 0.11133855, g: 0.16712224, b: 0.1981132, a: 1}
+  m_AmbientGroundColor: {r: 0.11814701, g: 0.14150941, b: 0.11814701, a: 1}
   m_AmbientIntensity: 1
   m_AmbientMode: 1
   m_SubtractiveShadowColor: {r: 0.32489324, g: 0.36377177, b: 0.46226418, a: 1}
@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.14537816, g: 0.3328799, b: 0.6830239, a: 1}
+  m_IndirectSpecularColor: {r: 0.08491031, g: 0.35500968, b: 0.6394321, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -793,8 +793,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02e6b73898a4a52438d630a7ba29da77, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _locationsToLoad:
-  - {fileID: 11400000, guid: d102ba8fe3b291249aeb9de4b95c1904, type: 2}
+  _locationToLoad: {fileID: 11400000, guid: d102ba8fe3b291249aeb9de4b95c1904, type: 2}
   _showLoadScreen: 1
   _pathTaken: {fileID: 11400000, guid: a9ec09853cba047a8a58f5881053cfc6, type: 2}
   _exitPath: {fileID: 11400000, guid: 050fcf2d8a1044670b51fc2358167588, type: 2}
@@ -1205,8 +1204,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02e6b73898a4a52438d630a7ba29da77, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _locationsToLoad:
-  - {fileID: 11400000, guid: 3902a4362b3a4fb4ab5ce5dcc07d8427, type: 2}
+  _locationToLoad: {fileID: 11400000, guid: 3902a4362b3a4fb4ab5ce5dcc07d8427, type: 2}
   _showLoadScreen: 1
   _pathTaken: {fileID: 11400000, guid: a9ec09853cba047a8a58f5881053cfc6, type: 2}
   _exitPath: {fileID: 11400000, guid: 447b413e95f8c95489b5385f03982ec5, type: 2}
@@ -1542,8 +1540,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02e6b73898a4a52438d630a7ba29da77, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _locationsToLoad:
-  - {fileID: 11400000, guid: 1514f833150a79e4c9d242f58bdbcbc0, type: 2}
+  _locationToLoad: {fileID: 11400000, guid: 1514f833150a79e4c9d242f58bdbcbc0, type: 2}
   _showLoadScreen: 0
   _pathTaken: {fileID: 11400000, guid: a9ec09853cba047a8a58f5881053cfc6, type: 2}
   _exitPath: {fileID: 11400000, guid: 02c13d612a86149a8b354b877b9f261f, type: 2}
@@ -1802,6 +1799,26 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 463132372906762298, guid: 45632f0a227c860489bcba0eb1f4ec3e,
+        type: 3}
+      propertyPath: m_FollowOffset.y
+      value: 3.812058
+      objectReference: {fileID: 0}
+    - target: {fileID: 463132372906762298, guid: 45632f0a227c860489bcba0eb1f4ec3e,
+        type: 3}
+      propertyPath: m_FollowOffset.z
+      value: -10.25139
+      objectReference: {fileID: 0}
+    - target: {fileID: 1210564933096074019, guid: 45632f0a227c860489bcba0eb1f4ec3e,
+        type: 3}
+      propertyPath: m_FollowOffset.y
+      value: 3.812058
+      objectReference: {fileID: 0}
+    - target: {fileID: 1210564933096074019, guid: 45632f0a227c860489bcba0eb1f4ec3e,
+        type: 3}
+      propertyPath: m_FollowOffset.z
+      value: -10.25139
+      objectReference: {fileID: 0}
     - target: {fileID: 1657732992883833910, guid: 45632f0a227c860489bcba0eb1f4ec3e,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1837,6 +1854,16 @@ PrefabInstance:
       propertyPath: m_LocalRotation.z
       value: -0.118545376
       objectReference: {fileID: 0}
+    - target: {fileID: 2678045054851453813, guid: 45632f0a227c860489bcba0eb1f4ec3e,
+        type: 3}
+      propertyPath: m_FollowOffset.y
+      value: 3.812058
+      objectReference: {fileID: 0}
+    - target: {fileID: 2678045054851453813, guid: 45632f0a227c860489bcba0eb1f4ec3e,
+        type: 3}
+      propertyPath: m_FollowOffset.z
+      value: -10.25139
+      objectReference: {fileID: 0}
     - target: {fileID: 2808035858438402709, guid: 45632f0a227c860489bcba0eb1f4ec3e,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1895,17 +1922,17 @@ PrefabInstance:
     - target: {fileID: 2955398947125553842, guid: 45632f0a227c860489bcba0eb1f4ec3e,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.19680798
+      value: 0.196808
       objectReference: {fileID: 0}
     - target: {fileID: 2955398947125553842, guid: 45632f0a227c860489bcba0eb1f4ec3e,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.5021664
+      value: 0.50216645
       objectReference: {fileID: 0}
     - target: {fileID: 2955398947125553842, guid: 45632f0a227c860489bcba0eb1f4ec3e,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.118545376
+      value: -0.1185454
       objectReference: {fileID: 0}
     - target: {fileID: 8745341640208226293, guid: 45632f0a227c860489bcba0eb1f4ec3e,
         type: 3}

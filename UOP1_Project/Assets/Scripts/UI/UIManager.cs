@@ -5,74 +5,159 @@ using UnityEngine.Localization;
 
 public class UIManager : MonoBehaviour
 {
+	[SerializeField]
+	private UIDialogueManager _dialogueController = default;
+
+	[SerializeField]
+	private UIInventoryManager _inventoryPanel = default;
+
+	[SerializeField]
+	private UIInteractionManager _interactionPanel = default;
+
+	[Header("Pause Screen")]
+	[SerializeField] private UIPauseScreenSetter _pauseScreen = default;
+
+	[Header("Pause Screen")]
+	[SerializeField] private UISettingManager _settingScreen = default;
+
+	[Header("Gameplay Components")]
+	[SerializeField]
+	private GameStateSO _gameState = default;
+
+	[SerializeField] private InputReader _inputReader = default;
 	[Header("Listening on channels")]
+	[SerializeField] private VoidEventChannelSO _onSceneReady = default;
+
 	[Header("Dialogue Events")]
 	[SerializeField] private DialogueLineChannelSO _openUIDialogueEvent = default;
 	[SerializeField] private VoidEventChannelSO _closeUIDialogueEvent = default;
+	[SerializeField] private VoidEventChannelSO _closeUIInventoryEvent = default;
+
 
 	[Header("Inventory Events")]
-	[SerializeField] private VoidEventChannelSO _openInventoryScreenEvent = default;
 	[SerializeField] private VoidEventChannelSO _openInventoryScreenForCookingEvent = default;
-	[SerializeField] private VoidEventChannelSO _closeInventoryScreenEvent = default;
 
 	[Header("Interaction Events")]
 	[SerializeField] private VoidEventChannelSO _onInteractionEndedEvent = default;
 	[SerializeField] private InteractionUIEventChannelSO _setInteractionEvent = default;
 
+	[Header("Pause Events")]
+	[SerializeField] private VoidEventChannelSO _clickUnpauseEvent = default;
+	[SerializeField] private VoidEventChannelSO _clickBackToMenuEvent = default;
+	[Header("Setting Events")]
+	[SerializeField] private VoidEventChannelSO _openSettingEvent = default;
+	[SerializeField] private VoidEventChannelSO _closeSettingScreenEvent = default;
+
 	private void OnEnable()
 	{
 		//Check if the event exists to avoid errors
-		if (_openUIDialogueEvent != null)
-		{
-			_openUIDialogueEvent.OnEventRaised += OpenUIDialogue;
-		}
-		if (_closeUIDialogueEvent != null)
-		{
-			_closeUIDialogueEvent.OnEventRaised += CloseUIDialogue;
-		}
-		if (_openInventoryScreenForCookingEvent != null)
-		{
-			_openInventoryScreenForCookingEvent.OnEventRaised += SetInventoryScreenForCooking;
-		}
-		if (_openInventoryScreenEvent != null)
-		{
-			_openInventoryScreenEvent.OnEventRaised += SetInventoryScreen;
-		}
-		if (_closeInventoryScreenEvent != null)
-		{
-			_closeInventoryScreenEvent.OnEventRaised += CloseInventoryScreen;
-		}
-		if (_setInteractionEvent != null)
-		{
-			_setInteractionEvent.OnEventRaised += SetInteractionPanel;
-		}
+		_inputReader.openInventoryEvent += SetInventoryScreen;
+		_openUIDialogueEvent.OnEventRaised += OpenUIDialogue;
+
+		_closeUIDialogueEvent.OnEventRaised += CloseUIDialogue;
+
+		_openInventoryScreenForCookingEvent.OnEventRaised += SetInventoryScreenForCooking;
+
+		_setInteractionEvent.OnEventRaised += SetInteractionPanel;
+
+		_onSceneReady.OnEventRaised += ResetUI;
+
+		_inputReader.pauseEvent += OpenUIPause;
+		
+		_inputReader.menuUnpauseEvent += CloseUIPause;
+
+		_clickUnpauseEvent.OnEventRaised += CloseUIPause;
+		_openSettingEvent.OnEventRaised += OpenSettingScreen;
+		_clickBackToMenuEvent.OnEventRaised += BackToMenu;
+		_closeSettingScreenEvent.OnEventRaised += CloseSettingScreen; 
+
+	}
+	private void OnDestroy()
+	{
+		//Check if the event exists to avoid errors
+
+		_openUIDialogueEvent.OnEventRaised -= OpenUIDialogue;
+
+		_closeUIDialogueEvent.OnEventRaised -= CloseUIDialogue;
+
+		_closeUIInventoryEvent.OnEventRaised -= CloseInventoryScreen;
+
+		_openInventoryScreenForCookingEvent.OnEventRaised -= SetInventoryScreenForCooking;
+
+		_inputReader.openInventoryEvent -= SetInventoryScreen;
+
+		_setInteractionEvent.OnEventRaised -= SetInteractionPanel;
+
+		_onSceneReady.OnEventRaised -= ResetUI;
+
+		_inputReader.pauseEvent -= OpenUIPause;
+
+		_inputReader.menuUnpauseEvent -= CloseUIPause;
+
+		_closeUIDialogueEvent.OnEventRaised -= CloseUIDialogue;
+
+		_clickUnpauseEvent.OnEventRaised -= CloseUIPause;
+		_openSettingEvent.OnEventRaised -= OpenSettingScreen;
+		_clickBackToMenuEvent.OnEventRaised -= BackToMenu;
+		_closeSettingScreenEvent.OnEventRaised -= CloseSettingScreen;
+
+
+
+	}
+	void BackToMenu()
+	{
+		Debug.Log("Back to Menu "); 
+	}
+	void OpenUIPause()
+	{
+		Time.timeScale = 0;
+		_inputReader.pauseEvent -= OpenUIPause;
+		_inputReader.pauseEvent += CloseUIPause;
+		_inputReader.EnableMenuInput();
+		_pauseScreen.gameObject.SetActive(true);
+		_pauseScreen.SetPauseScreen(); 
+	}
+
+	void CloseUIPause()
+	{
+		Time.timeScale = 1;
+		_inputReader.pauseEvent += OpenUIPause;
+		_inputReader.pauseEvent -= CloseUIPause;
+		_pauseScreen.gameObject.SetActive(false);
+		_inputReader.EnableGameplayInput();
+
+	}
+	void OpenSettingScreen()
+	{
+		CloseUIPause();
+		_inputReader.EnableMenuInput();
+		_inputReader.pauseEvent += CloseSettingScreen;
+		_settingScreen.gameObject.SetActive(true);
 
 	}
 
-	private void Start()
+	void CloseSettingScreen()
+	{
+		_inputReader.EnableGameplayInput();
+		_inputReader.pauseEvent -= CloseSettingScreen;
+		_settingScreen.gameObject.SetActive(false);
+
+	}
+	void ResetUI()
 	{
 		CloseUIDialogue();
+		CloseInventoryScreen();
+		SetInteractionPanel(false, InteractionType.None); 
 	}
-
-	[SerializeField]
-	private UIDialogueManager dialogueController = default;
-
-	[SerializeField]
-	private UIInventoryManager inventoryPanel = default;
-
-	[SerializeField]
-	private UIInteractionManager interactionPanel = default;
 
 	public void OpenUIDialogue(LocalizedString dialogueLine, ActorSO actor)
 	{
-
-		dialogueController.SetDialogue(dialogueLine, actor);
-		dialogueController.gameObject.SetActive(true);
+		_dialogueController.SetDialogue(dialogueLine, actor);
+		_dialogueController.gameObject.SetActive(true);
 	}
 	public void CloseUIDialogue()
 	{
-
-		dialogueController.gameObject.SetActive(false);
+		_dialogueController.gameObject.SetActive(false);
 	}
 
 	public void SetInventoryScreenForCooking()
@@ -90,39 +175,51 @@ public class UIManager : MonoBehaviour
 	bool isForCooking = false;
 	void OpenInventoryScreen()
 	{
-		inventoryPanel.gameObject.SetActive(true);
+		_inventoryPanel.gameObject.SetActive(true);
+
+		_inputReader.EnableMenuInput();
+		_inputReader.closeInventoryEvent += CloseInventoryScreen;
+
+		_gameState.UpdateGameState(GameState.Inventory); 
 
 		if (isForCooking)
 		{
-			inventoryPanel.FillInventory(TabType.recipe, true);
+			_inventoryPanel.FillInventory(TabType.recipe, true);
 
 		}
 		else
 		{
-			inventoryPanel.FillInventory();
+			_inventoryPanel.FillInventory();
 		}
 
 	}
 
 
-	public void CloseInventoryScreen()
+	 void CloseInventoryScreen()
 	{
-		inventoryPanel.gameObject.SetActive(false);
+		_inventoryPanel.gameObject.SetActive(false);
 
+		_inputReader.EnableGameplayInput();
 		if (isForCooking)
 		{
 			_onInteractionEndedEvent.RaiseEvent();
 
 		}
+
+		_gameState.ResetToPreviousGameState();
+
+		_inputReader.closeInventoryEvent -= CloseInventoryScreen;
 	}
 
 	public void SetInteractionPanel(bool isOpenEvent, InteractionType interactionType)
 	{
 		if (isOpenEvent)
 		{
-			interactionPanel.FillInteractionPanel(interactionType);
+			_interactionPanel.FillInteractionPanel(interactionType);
 		}
-		interactionPanel.gameObject.SetActive(isOpenEvent);
+		_interactionPanel.gameObject.SetActive(isOpenEvent);
 
 	}
+
+	
 }

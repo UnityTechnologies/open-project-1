@@ -359,7 +359,7 @@ public class @GameInput : IInputActionCollection, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""937b421c-9467-4b47-a1fd-445b9b44d5c9"",
-                    ""path"": ""<Keyboard>/q"",
+                    ""path"": ""<Keyboard>/tab"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""KeyboardOrGamepad"",
@@ -530,6 +530,30 @@ public class @GameInput : IInputActionCollection, IDisposable
                     ""name"": ""Unpause"",
                     ""type"": ""Button"",
                     ""id"": ""a33f8309-65f3-4f8a-8671-c7cb90ef798e"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""ClosePopupEvent"",
+                    ""type"": ""Button"",
+                    ""id"": ""efe86ed9-53ac-4a9f-8894-0936a1bc3319"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""ChangeTab"",
+                    ""type"": ""Button"",
+                    ""id"": ""abff37db-1fb3-4f26-bceb-8ecdfc99fdef"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""InventoryActionButton"",
+                    ""type"": ""Button"",
+                    ""id"": ""60a66e41-5063-4c5c-b8db-de7aa1aaa1de"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
@@ -865,6 +889,116 @@ public class @GameInput : IInputActionCollection, IDisposable
                     ""action"": ""MouseMove"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""LeftRight Shoulder"",
+                    ""id"": ""97d06ecb-7982-4ca0-8cc2-3b6ad8c1a4da"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChangeTab"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""Negative"",
+                    ""id"": ""d5251bc5-8e6d-4a72-ae0d-daf1dfb91ec1"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardOrGamepad"",
+                    ""action"": ""ChangeTab"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Positive"",
+                    ""id"": ""7ef21289-1815-4412-9169-7c38cb932530"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardOrGamepad"",
+                    ""action"": ""ChangeTab"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""LeftRight [Keyboard]"",
+                    ""id"": ""f5ee1475-34c9-440e-97c2-81c7ba9165c9"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChangeTab"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""bffa4ad8-a1e1-492b-bcad-c12571cac8c4"",
+                    ""path"": ""<Keyboard>/t"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardOrGamepad"",
+                    ""action"": ""ChangeTab"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""23952932-013c-4b7c-ae49-c5c1fd00f5e8"",
+                    ""path"": ""<Keyboard>/y"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardOrGamepad"",
+                    ""action"": ""ChangeTab"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4306a7b2-67e8-4e85-9264-99218bea9eb4"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardOrGamepad"",
+                    ""action"": ""InventoryActionButton"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""56d69440-226f-4a0e-bdfe-c5009b83d8cd"",
+                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardOrGamepad"",
+                    ""action"": ""InventoryActionButton"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8de239c2-a886-4c69-8890-06ba68d86a9a"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardOrGamepad"",
+                    ""action"": ""ClosePopupEvent"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""fb9d51ec-83a8-43f2-ae0c-2872920cbbc9"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardOrGamepad"",
+                    ""action"": ""ClosePopupEvent"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -1188,6 +1322,9 @@ public class @GameInput : IInputActionCollection, IDisposable
 		m_Menus_Cancel = m_Menus.FindAction("Cancel", throwIfNotFound: true);
 		m_Menus_MouseMove = m_Menus.FindAction("MouseMove", throwIfNotFound: true);
 		m_Menus_Unpause = m_Menus.FindAction("Unpause", throwIfNotFound: true);
+		m_Menus_ClosePopupEvent = m_Menus.FindAction("ClosePopupEvent", throwIfNotFound: true);
+		m_Menus_ChangeTab = m_Menus.FindAction("ChangeTab", throwIfNotFound: true);
+		m_Menus_InventoryActionButton = m_Menus.FindAction("InventoryActionButton", throwIfNotFound: true);
 		// Dialogues
 		m_Dialogues = asset.FindActionMap("Dialogues", throwIfNotFound: true);
 		m_Dialogues_MoveSelection = m_Dialogues.FindAction("MoveSelection", throwIfNotFound: true);
@@ -1343,6 +1480,9 @@ public class @GameInput : IInputActionCollection, IDisposable
 	private readonly InputAction m_Menus_Cancel;
 	private readonly InputAction m_Menus_MouseMove;
 	private readonly InputAction m_Menus_Unpause;
+	private readonly InputAction m_Menus_ClosePopupEvent;
+	private readonly InputAction m_Menus_ChangeTab;
+	private readonly InputAction m_Menus_InventoryActionButton;
 	public struct MenusActions
 	{
 		private @GameInput m_Wrapper;
@@ -1352,6 +1492,9 @@ public class @GameInput : IInputActionCollection, IDisposable
 		public InputAction @Cancel => m_Wrapper.m_Menus_Cancel;
 		public InputAction @MouseMove => m_Wrapper.m_Menus_MouseMove;
 		public InputAction @Unpause => m_Wrapper.m_Menus_Unpause;
+		public InputAction @ClosePopupEvent => m_Wrapper.m_Menus_ClosePopupEvent;
+		public InputAction @ChangeTab => m_Wrapper.m_Menus_ChangeTab;
+		public InputAction @InventoryActionButton => m_Wrapper.m_Menus_InventoryActionButton;
 		public InputActionMap Get() { return m_Wrapper.m_Menus; }
 		public void Enable() { Get().Enable(); }
 		public void Disable() { Get().Disable(); }
@@ -1376,6 +1519,15 @@ public class @GameInput : IInputActionCollection, IDisposable
 				@Unpause.started -= m_Wrapper.m_MenusActionsCallbackInterface.OnUnpause;
 				@Unpause.performed -= m_Wrapper.m_MenusActionsCallbackInterface.OnUnpause;
 				@Unpause.canceled -= m_Wrapper.m_MenusActionsCallbackInterface.OnUnpause;
+				@ClosePopupEvent.started -= m_Wrapper.m_MenusActionsCallbackInterface.OnClosePopupEvent;
+				@ClosePopupEvent.performed -= m_Wrapper.m_MenusActionsCallbackInterface.OnClosePopupEvent;
+				@ClosePopupEvent.canceled -= m_Wrapper.m_MenusActionsCallbackInterface.OnClosePopupEvent;
+				@ChangeTab.started -= m_Wrapper.m_MenusActionsCallbackInterface.OnChangeTab;
+				@ChangeTab.performed -= m_Wrapper.m_MenusActionsCallbackInterface.OnChangeTab;
+				@ChangeTab.canceled -= m_Wrapper.m_MenusActionsCallbackInterface.OnChangeTab;
+				@InventoryActionButton.started -= m_Wrapper.m_MenusActionsCallbackInterface.OnInventoryActionButton;
+				@InventoryActionButton.performed -= m_Wrapper.m_MenusActionsCallbackInterface.OnInventoryActionButton;
+				@InventoryActionButton.canceled -= m_Wrapper.m_MenusActionsCallbackInterface.OnInventoryActionButton;
 			}
 			m_Wrapper.m_MenusActionsCallbackInterface = instance;
 			if (instance != null)
@@ -1395,6 +1547,15 @@ public class @GameInput : IInputActionCollection, IDisposable
 				@Unpause.started += instance.OnUnpause;
 				@Unpause.performed += instance.OnUnpause;
 				@Unpause.canceled += instance.OnUnpause;
+				@ClosePopupEvent.started += instance.OnClosePopupEvent;
+				@ClosePopupEvent.performed += instance.OnClosePopupEvent;
+				@ClosePopupEvent.canceled += instance.OnClosePopupEvent;
+				@ChangeTab.started += instance.OnChangeTab;
+				@ChangeTab.performed += instance.OnChangeTab;
+				@ChangeTab.canceled += instance.OnChangeTab;
+				@InventoryActionButton.started += instance.OnInventoryActionButton;
+				@InventoryActionButton.performed += instance.OnInventoryActionButton;
+				@InventoryActionButton.canceled += instance.OnInventoryActionButton;
 			}
 		}
 	}
@@ -1469,6 +1630,9 @@ public class @GameInput : IInputActionCollection, IDisposable
 		void OnCancel(InputAction.CallbackContext context);
 		void OnMouseMove(InputAction.CallbackContext context);
 		void OnUnpause(InputAction.CallbackContext context);
+		void OnClosePopupEvent(InputAction.CallbackContext context);
+		void OnChangeTab(InputAction.CallbackContext context);
+		void OnInventoryActionButton(InputAction.CallbackContext context);
 	}
 	public interface IDialoguesActions
 	{

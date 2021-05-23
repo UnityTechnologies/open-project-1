@@ -15,7 +15,7 @@ public static class FileManager
 		}
 		catch (Exception e)
 		{
-			//Debug.LogError($"Failed to write to {fullPath} with exception {e}");
+			Debug.LogError($"Failed to write to {fullPath} with exception {e}");
 			return false;
 		}
 	}
@@ -31,7 +31,7 @@ public static class FileManager
 		}
 		catch (Exception e)
 		{
-			//Debug.LogError($"Failed to read from {fullPath} with exception {e}");
+			Debug.LogError($"Failed to read from {fullPath} with exception {e}");
 			result = "";
 			return false;
 		}
@@ -52,7 +52,7 @@ public static class FileManager
 		}
 		catch (Exception e)
 		{
-			Debug.LogError($"Failed to move file from {fullPath} to {newFullPath} with exception {e}");
+			//Debug.LogError($"Failed to move file from {fullPath} to {newFullPath} with exception {e}");
 			return false;
 		}
 
