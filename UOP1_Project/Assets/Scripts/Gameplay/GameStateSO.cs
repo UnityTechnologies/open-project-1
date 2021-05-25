@@ -16,9 +16,9 @@ public enum GameState
 //[CreateAssetMenu(fileName = "GameState", menuName = "Gameplay/GameState", order = 51)]
 public class GameStateSO : ScriptableObject
 {
-	private GameState _currentGameState = default;
-	private GameState _previousGameState = default;
-	public GameState CurrentGameState => CurrentGameState;
+    private GameState _currentGameState = default;
+    private GameState _previousGameState = default; 
+    public GameState CurrentGameState => _currentGameState;
 
 	public void UpdateGameState(GameState newGameState)
 	{
