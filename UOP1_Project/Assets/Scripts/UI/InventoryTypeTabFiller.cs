@@ -14,6 +14,9 @@ public class InventoryTypeTabFiller : MonoBehaviour
 	[SerializeField] private Color _selectedIconColor = default;
 	[SerializeField] private Color _deselectedIconColor = default;
 
+	[SerializeField] private TabEventChannelSO _changeTabEvent = default;
+
+
 
 	public void fillTab(InventoryTabType tabType, bool isSelected)
 	{
@@ -30,8 +33,8 @@ public class InventoryTypeTabFiller : MonoBehaviour
 			_tabImage.color = _deselectedIconColor;
 		}
 
-	/*	_actionButton.onClick.RemoveAllListeners();
-		_actionButton.onClick.AddListener(() => changeTabEvent.RaiseEvent(tabType));*/
+		_actionButton.onClick.RemoveAllListeners();
+		_actionButton.onClick.AddListener(() => _changeTabEvent.RaiseEvent(tabType));
 	}
 
 }
