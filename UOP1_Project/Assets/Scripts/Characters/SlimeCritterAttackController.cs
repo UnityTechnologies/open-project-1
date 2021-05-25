@@ -40,4 +40,10 @@ public class SlimeCritterAttackController : MonoBehaviour
 			_innerTime -= Time.deltaTime;
 		}
 	}
+
+	public void StopAttack()
+	{
+		// Reset innerTime
+		_innerTime = 0.0f;
+	}
 }
