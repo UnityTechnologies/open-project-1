@@ -52,7 +52,7 @@ public class StepController : MonoBehaviour
 	{
 
 		DialogueDataSO displayDialogue = _questData.InteractWithCharacter(_actor, false, false);
-		Debug.Log("dialogue " + displayDialogue + "actor" + _actor);
+		//Debug.Log("dialogue " + displayDialogue + "actor" + _actor);
 		if (displayDialogue != null)
 		{
 			_currentDialogue = displayDialogue;
