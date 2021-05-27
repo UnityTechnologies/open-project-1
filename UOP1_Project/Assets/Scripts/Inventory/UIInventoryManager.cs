@@ -200,6 +200,7 @@ public class UIInventoryManager : MonoBehaviour
 		//hover First Element
 		if (_instanciatedItems.Count > 0)
 		{
+			Debug.Log("SelectItem " + _instanciatedItems[0]._currentItem.Item); 
 			_instanciatedItems[0].SelectFirstElement();
 		}
 		 

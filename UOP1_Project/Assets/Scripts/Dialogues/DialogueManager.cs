@@ -37,8 +37,8 @@ public class DialogueManager : MonoBehaviour
 
 	private void Start()
 	{
-			_startDialogue.OnEventRaised += DisplayDialogueData;
-		
+		_startDialogue.OnEventRaised += DisplayDialogueData;
+
 	}
 
 	/// <summary>
@@ -47,8 +47,8 @@ public class DialogueManager : MonoBehaviour
 	/// <param name="dialogueDataSO"></param>
 	public void DisplayDialogueData(DialogueDataSO dialogueDataSO)
 	{
-		if(_gameState.CurrentGameState != GameState.Cutscene)
-		_gameState.UpdateGameState(GameState.Dialogue);
+		if (_gameState.CurrentGameState != GameState.Cutscene)
+			_gameState.UpdateGameState(GameState.Dialogue);
 		BeginDialogueData(dialogueDataSO);
 		DisplayDialogueLine(_currentDialogue.DialogueLines[_counter], dialogueDataSO.Actor);
 	}
@@ -71,10 +71,9 @@ public class DialogueManager : MonoBehaviour
 	/// <param name="dialogueLine"></param>
 	public void DisplayDialogueLine(LocalizedString dialogueLine, ActorSO actor)
 	{
-		
-			_openUIDialogueEvent.RaiseEvent(dialogueLine, actor);
-		
+		_openUIDialogueEvent.RaiseEvent(dialogueLine, actor);
 	}
+	
 
 	private void OnAdvance()
 	{

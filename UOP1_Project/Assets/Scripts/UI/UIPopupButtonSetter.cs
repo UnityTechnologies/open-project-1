@@ -28,7 +28,6 @@ public class UIPopupButtonSetter : MonoBehaviour
 	public void ButtonClicked()
 	{
 		int idType = (int)_currentType;
-		Debug.Log(idType); 
 		_buttonClickedEvent.RaiseEvent(idType); 
 	}
 }

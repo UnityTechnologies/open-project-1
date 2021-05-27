@@ -8,14 +8,14 @@ public class MenuController : MonoBehaviour
 
 	private void OnEnable()
 	{
-		_inputReader.pauseEvent += OpenMenu;
-		_inputReader.menuUnpauseEvent += UnpauseMenu;
+		//_inputReader.menuPauseEvent += OpenMenu;
+		//_inputReader.menuUnpauseEvent += UnpauseMenu;
 	}
 
 	private void OnDisable()
 	{
-		_inputReader.pauseEvent -= OpenMenu;
-		_inputReader.menuUnpauseEvent -= UnpauseMenu;
+		//_inputReader.menuPauseEvent -= OpenMenu;
+		//_inputReader.menuUnpauseEvent -= UnpauseMenu;
 	}
 
 	private void OpenMenu()

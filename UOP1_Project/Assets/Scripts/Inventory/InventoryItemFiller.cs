@@ -86,6 +86,7 @@ public class InventoryItemFiller : MonoBehaviour
 	public void SelectItem()
 	{
 		_imgSelected.gameObject.SetActive(true);
+		if(_currentItemEvent!=null && _currentItem.Item!=null )
 		_currentItemEvent.RaiseEvent(_currentItem.Item);
 
 	}

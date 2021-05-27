@@ -14,7 +14,8 @@ public enum PopupButtonType{
 public enum PopupType
 {
 	Quit,
-	NewGame, 
+	NewGame,
+	BackToMenu, 
 }
 public class UIPopupSetter : MonoBehaviour
 {
@@ -62,6 +63,12 @@ public class UIPopupSetter : MonoBehaviour
 				_popupButton2.SetButton(PopupButtonType.Cancel, actualType);
 				hasExitButton = true;
 				break;
+			case PopupType.BackToMenu:
+				isConfirmation = true;
+				_popupButton1.SetButton(PopupButtonType.Confirm, actualType);
+				_popupButton2.SetButton(PopupButtonType.Cancel, actualType);
+				hasExitButton = true;
+				break;
 			case PopupType.Quit:
 				isConfirmation = true;
 				_popupButton1.SetButton(PopupButtonType.Confirm, actualType);
@@ -95,9 +102,14 @@ public class UIPopupSetter : MonoBehaviour
 		if (hasExitButton) // can exit : Has to take the decision or aknowledge the information
 		{
 			
-			_inputReader.closePopupEvent += _closePopupEvent.RaiseEvent;
+			_inputReader.menuCloseEvent += _closePopupEvent.RaiseEvent;
 		
 		}
+	}
+	private void OnDestroy()
+	{
+		_inputReader.menuCloseEvent -= _closePopupEvent.RaiseEvent;
+
 	}
 
 	public void ButtonClicked(int buttonTypeIndex)
@@ -106,14 +118,15 @@ public class UIPopupSetter : MonoBehaviour
 
 		switch (popupButtonType)
 		{
-			case PopupButtonType.Cancel:
-				_confirmPopupEvent.RaiseEvent(false);
-				break;
+			
 			case PopupButtonType.Close:
 				_closePopupEvent.RaiseEvent();
 				break;
+			case PopupButtonType.Cancel:
+				_confirmPopupEvent.RaiseEvent(false);
+				break;
 			case PopupButtonType.Confirm:
-					_confirmPopupEvent.RaiseEvent(true); 
+				_confirmPopupEvent.RaiseEvent(true); 
 				break;
 			default:
 				Debug.Log("Default");

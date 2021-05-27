@@ -17,10 +17,11 @@ public class UIPaginationFiller : MonoBehaviour
 	}
 	public void SetPagination(int paginationCount, int selectedPaginationIndex)
 	{
+		if (_instantiatedImages == null)
+			_instantiatedImages = new List<Image>();
 
 		//instanciate pagination images from the prefab
 		int maxCount = Mathf.Max(paginationCount, _instantiatedImages.Count);
-		Debug.Log(maxCount); 
 		if (maxCount > 0)
 		{
 			for (int i = 0; i < maxCount; i++)

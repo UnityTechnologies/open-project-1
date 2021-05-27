@@ -11,13 +11,11 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private GameStateSO _gameState = default;
     [SerializeField]
-    private InputReader _inputReader = default; 
+    private InputReader _inputReader = default;
 
     private void Start()
-	{
+    {
         StartGame();
-
-        _inputReader.pauseEvent += PauseGame; 
 
     }
 	// Start is called before the first frame update
@@ -28,9 +26,8 @@ public class GameManager : MonoBehaviour
     }
     public void PauseGame()
 	{
-        _gameState.UpdateGameState(GameState.Pause); 
-	}
-    public void UnauseGame()
+        	}
+    public void UnpauseGame()
     {
         _gameState.ResetToPreviousGameState(); 
     }

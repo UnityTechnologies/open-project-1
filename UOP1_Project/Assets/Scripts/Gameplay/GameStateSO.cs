@@ -10,7 +10,6 @@ Dialogue,
 Cutscene, 
 LocationTransition,// when the character steps into LocationExit trigger, fade to black begins and control is removed from the player
 Combat,//enemy is nearby and alert, player can't open Inventory or initiate dialogues, but can pause the game
-
 }
 
 //[CreateAssetMenu(fileName = "GameState", menuName = "Gameplay/GameState", order = 51)]
