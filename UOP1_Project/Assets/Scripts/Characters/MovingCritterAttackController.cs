@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SlimeCritterAttackController : MonoBehaviour
+public class MovingCritterAttackController : MonoBehaviour
 {
 	// Reference of the player transform to compute the propel target position
 	[SerializeField]
