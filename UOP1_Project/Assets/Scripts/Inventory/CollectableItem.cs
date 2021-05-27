@@ -1,16 +1,16 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using DG.Tweening; 
+using DG.Tweening;
 public class CollectableItem : MonoBehaviour
 {
 
 	[SerializeField] private Item _currentItem = default;
-	[SerializeField] private GameObject _itemGO = default; 
+	[SerializeField] private GameObject _itemGO = default;
 
 	private void Start()
 	{
-		AnimateItem(); 
+		AnimateItem();
 	}
 
 	public Item GetItem()
@@ -27,9 +27,9 @@ public class CollectableItem : MonoBehaviour
 	public void AnimateItem()
 	{
 
-		if(_itemGO!=null)
+		if (_itemGO != null)
 		{
-			_itemGO.transform.DORotate(Vector3.one * 180, 5, RotateMode.Fast).SetLoops(-1,LoopType.Incremental); 
+			_itemGO.transform.DORotate(Vector3.one * 180, 5, RotateMode.Fast).SetLoops(-1, LoopType.Incremental);
 
 		}
 	}

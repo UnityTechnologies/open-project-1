@@ -13,11 +13,12 @@ public class FaceProtagonist : StateAction
 {
 	TransformAnchor _protagonist;
 	Transform _actor;
-
+	Quaternion rotationOnEnter;
 	public override void Awake(StateMachine stateMachine)
 	{
 		_actor = stateMachine.transform;
 		_protagonist = ((FaceProtagonistSO)OriginSO).playerAnchor;
+		rotationOnEnter = _actor.rotation;
 	}
 
 	public override void OnUpdate()
@@ -35,5 +36,10 @@ public class FaceProtagonist : StateAction
 	public override void OnStateEnter()
 	{
 
+	}
+
+	public override void OnStateExit()
+	{
+		_actor.rotation = rotationOnEnter;
 	}
 }
