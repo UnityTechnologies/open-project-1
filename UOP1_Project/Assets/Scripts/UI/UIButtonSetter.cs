@@ -13,10 +13,13 @@ public class UIButtonSetter : MonoBehaviour
 	public void SetButton(VoidEventChannelSO buttonEvent, bool select)
 	{
 		_buttonClickedEvent = buttonEvent;
-		_button.onClick.RemoveAllListeners();
-		_button.onClick.AddListener(()=>{ Debug.Log("Button");  _buttonClickedEvent.RaiseEvent();});
 		if(select)
 		_button.Select(); 
+	}
+	public void Click()
+	{
+		_buttonClickedEvent.RaiseEvent();
+
 	}
 
 }

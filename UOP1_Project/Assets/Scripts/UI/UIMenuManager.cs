@@ -29,10 +29,8 @@ public class UIMenuManager : MonoBehaviour
 	private VoidEventChannelSO _closeSettingsEvent = default;
 	[SerializeField]
 	private VoidEventChannelSO _closeCreditsEvent = default;
-
 	[SerializeField]
 	private BoolEventChannelSO _confirmPopupEvent = default;
-
 	[SerializeField]
 	private VoidEventChannelSO _onGameExitEvent = default;
 
@@ -40,16 +38,10 @@ public class UIMenuManager : MonoBehaviour
 	private bool _hasSaveData;
 
 	[SerializeField] private InputReader _inputReader = default;
-	private void Start()
+	private IEnumerator Start()
 	{
 		_inputReader.EnableMenuInput();
-
-		_closePopupEvent.OnEventRaised += HidePopup;
-
-		_closeSettingsEvent.OnEventRaised += CloseSettingsScreen;
-
-		_closeCreditsEvent.OnEventRaised += CloseCreditsScreen;
-
+		yield return new WaitForSeconds(0.4f); //waiting time for all scenes to be loaded 
 		SetMenuScreen(); 
 	}
 	void SetMenuScreen()
@@ -58,10 +50,13 @@ public class UIMenuManager : MonoBehaviour
 		_continueButton.interactable = _hasSaveData;
 		if(_hasSaveData)
 		{
-	     _continueButton.Select(); 
+	     _continueButton.Select();
+
 		}
 		else
-		{ _NewGameButton.Select();  }
+		{
+			_NewGameButton.Select();
+		}
 
 
 	}
@@ -93,6 +88,8 @@ public class UIMenuManager : MonoBehaviour
 	void ShowStartNewGameConfirmationPopup()
 	{
 		_confirmPopupEvent.OnEventRaised += StartNewGamePopupResponse;
+		_closePopupEvent.OnEventRaised += HidePopup;
+
 		_popupPanel.gameObject.SetActive(true);
 		_popupPanel.SetPopup(PopupType.NewGame);
 
@@ -100,7 +97,10 @@ public class UIMenuManager : MonoBehaviour
 
 	 void StartNewGamePopupResponse(bool startNewGameConfirmed)
 	{
+
 		_confirmPopupEvent.OnEventRaised -= StartNewGamePopupResponse;
+
+		_closePopupEvent.OnEventRaised -= HidePopup;
 		_popupPanel.gameObject.SetActive(false);
 
 		if(startNewGameConfirmed)
@@ -119,20 +119,24 @@ public class UIMenuManager : MonoBehaviour
 
 	void HidePopup()
 	{
-	
+	    _closePopupEvent.OnEventRaised -= HidePopup;
+		_confirmPopupEvent.UnsubscribeAll();
 		_popupPanel.gameObject.SetActive(false);
 		SetMenuScreen(); 
 
 	}
+	
 	public void OpenSettingsScreen()
 	{
 		_settingsPanel.SetActive(true);
-		_inputReader.closePopupEvent += CloseSettingsScreen;
+		_inputReader.menuCloseEvent += CloseSettingsScreen;
+		_closeSettingsEvent.OnEventRaised += CloseSettingsScreen;
 
 	}
 	public void CloseSettingsScreen()
 	{
-		_inputReader.closePopupEvent -= CloseSettingsScreen;
+		_inputReader.menuCloseEvent -= CloseSettingsScreen;
+		_closeSettingsEvent.OnEventRaised -= CloseSettingsScreen;
 		_settingsPanel.SetActive(false);
 		SetMenuScreen();
 
@@ -140,14 +144,17 @@ public class UIMenuManager : MonoBehaviour
 	public void OpenCreditsScreen()
 	{
 		_creditsPanel.SetActive(true);
-		_inputReader.closePopupEvent += CloseCreditsScreen;
+		_inputReader.menuCloseEvent += CloseCreditsScreen;
+		_closeCreditsEvent.OnEventRaised += CloseCreditsScreen; 
 
-		
+
+
 
 	}
 	public void CloseCreditsScreen()
 	{
-		_inputReader.closePopupEvent -= CloseCreditsScreen;
+		_inputReader.menuCloseEvent -= CloseCreditsScreen;
+		_closeCreditsEvent.OnEventRaised -= CloseCreditsScreen;
 		_creditsPanel.SetActive(false);
 		SetMenuScreen();
 
