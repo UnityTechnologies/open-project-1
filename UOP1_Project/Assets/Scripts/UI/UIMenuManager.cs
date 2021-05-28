@@ -41,7 +41,7 @@ public class UIMenuManager : MonoBehaviour
 	private IEnumerator Start()
 	{
 		_inputReader.EnableMenuInput();
-		yield return new WaitForSeconds(1); //waiting time for all scenes to be loaded 
+		yield return new WaitForSeconds(0.4f); //waiting time for all scenes to be loaded 
 		SetMenuScreen(); 
 	}
 	void SetMenuScreen()

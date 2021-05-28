@@ -105,11 +105,19 @@ public class MenuSelectionHandler : MonoBehaviour
 		}
 		
 	}
-	
+
 	// Debug
 	// private void OnGUI()
 	// {
 	//	 	GUILayout.Box($"_currentSelection: {(_currentSelection != null ? _currentSelection.name : "null")}");
 	//	 	GUILayout.Box($"_mouseSelection: {(_mouseSelection != null ? _mouseSelection.name : "null")}");
 	// }
+	private void Update()
+	{
+		if ((EventSystem.current!=null)&& (currentSelection != null)&&(EventSystem.current.currentSelectedGameObject!=currentSelection) )
+		{
+			EventSystem.current.SetSelectedGameObject(currentSelection);
+		}
+
+	}
 }
