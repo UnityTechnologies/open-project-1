@@ -66,7 +66,7 @@ public class UIManager : MonoBehaviour
 	
 		_inputReader.openInventoryEvent += SetInventoryScreen;
 
-
+		
 
 	}
 	void ResetUI()
@@ -166,7 +166,6 @@ public class UIManager : MonoBehaviour
 
 	void CloseSettingScreen()
 	{
-		Debug.Log("Close Setting screen"); 
 		//unsub from close setting events 
 		_inputReader.menuCloseEvent -= CloseSettingScreen;
 		_closeSettingScreenEvent.OnEventRaised -= CloseSettingScreen;
@@ -294,5 +293,6 @@ public class UIManager : MonoBehaviour
 		_interactionPanel.gameObject.SetActive(isOpenEvent);
 
 	}
+
 	
 }

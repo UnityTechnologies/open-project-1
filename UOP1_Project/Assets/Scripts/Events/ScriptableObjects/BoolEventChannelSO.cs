@@ -18,7 +18,8 @@ public class BoolEventChannelSO : ScriptableObject
 	public void UnsubscribeAll()
 	{
 		if (OnEventRaised != null)
-			{if (OnEventRaised.GetInvocationList() != null)
+			{
+			if (OnEventRaised.GetInvocationList() != null)
 			
 				foreach (System.Delegate d in OnEventRaised.GetInvocationList())
 				{
@@ -26,10 +27,7 @@ public class BoolEventChannelSO : ScriptableObject
 
 				}
 		}
-		else
-		{
-			Debug.Log("WHAT IS THIS and why is it null "); 
-		}
+		
 
 	}
 }

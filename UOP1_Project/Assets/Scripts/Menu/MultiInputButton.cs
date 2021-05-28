@@ -36,4 +36,5 @@ public class MultiInputButton : Button
 		if (_menuSelectionHandler.AllowsSubmit())
 			base.OnSubmit(eventData);
 	}
+
 }

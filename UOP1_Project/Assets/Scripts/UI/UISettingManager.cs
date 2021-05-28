@@ -50,8 +50,13 @@ public class UISettingManager : MonoBehaviour
     private UISettingFieldsFiller _settingFieldsFiller = default;
     private void Start()
 	{
-        SetTabs();
-        SetFields(SettingTabType.Graphics); 
+      
+        if (settingTabsList.Count > 0)
+        {
+            SetTabs();
+            SettingTabType defaultTabType = settingTabsList[0].settingTabsType;
+            SelectTab(defaultTabType);
+        }
 
     }
 	public void SetTabs()
@@ -62,6 +67,7 @@ public class UISettingManager : MonoBehaviour
     public void SelectTab(SettingTabType selectedTab)
 	{
         _settingTabFiller.SelectTab(selectedTab);
+        SetFields(selectedTab); 
     }
 
     public void SetFields(SettingTabType selectedTab)

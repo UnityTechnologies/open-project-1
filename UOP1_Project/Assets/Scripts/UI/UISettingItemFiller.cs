@@ -29,14 +29,14 @@ public class UISettingItemFiller : MonoBehaviour
 	public event UnityAction _nextOption = delegate { };
 	public event UnityAction _previousOption = delegate { };
 	
-	public void SetSettingField(int paginationCount, int selectedPaginationIndex, string selectedOption, LocalizedString fieldTitle, SettingFieldType fieldType)
+	public void FillSettingField(int paginationCount, int selectedPaginationIndex, string selectedOption, LocalizedString fieldTitle, SettingFieldType fieldType)
 	{
 		_fieldType = fieldType; 
 		_pagination.SetPagination(paginationCount, selectedPaginationIndex);
 		_currentSelectedOption.text = selectedOption;
 		_title.StringReference= fieldTitle; 
 	}
-	public void SetSettingNewOption(int selectedPaginationIndex, string selectedOption)
+	public void FillSettingNewOption(int selectedPaginationIndex, string selectedOption)
 	{
 		_pagination.SetCurrentPagination(selectedPaginationIndex);
 		_currentSelectedOption.text = selectedOption;

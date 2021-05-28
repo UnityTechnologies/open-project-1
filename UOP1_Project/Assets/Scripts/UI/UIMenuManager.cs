@@ -38,10 +38,10 @@ public class UIMenuManager : MonoBehaviour
 	private bool _hasSaveData;
 
 	[SerializeField] private InputReader _inputReader = default;
-	private void OnEnable()
+	private IEnumerator Start()
 	{
 		_inputReader.EnableMenuInput();
-		
+		yield return new WaitForSeconds(1); //waiting time for all scenes to be loaded 
 		SetMenuScreen(); 
 	}
 	void SetMenuScreen()
@@ -50,10 +50,13 @@ public class UIMenuManager : MonoBehaviour
 		_continueButton.interactable = _hasSaveData;
 		if(_hasSaveData)
 		{
-	     _continueButton.Select(); 
+	     _continueButton.Select();
+
 		}
 		else
-		{ _NewGameButton.Select();  }
+		{
+			_NewGameButton.Select();
+		}
 
 
 	}
@@ -127,11 +130,13 @@ public class UIMenuManager : MonoBehaviour
 	{
 		_settingsPanel.SetActive(true);
 		_inputReader.menuCloseEvent += CloseSettingsScreen;
+		_closeSettingsEvent.OnEventRaised += CloseSettingsScreen;
 
 	}
 	public void CloseSettingsScreen()
 	{
 		_inputReader.menuCloseEvent -= CloseSettingsScreen;
+		_closeSettingsEvent.OnEventRaised -= CloseSettingsScreen;
 		_settingsPanel.SetActive(false);
 		SetMenuScreen();
 
@@ -140,13 +145,16 @@ public class UIMenuManager : MonoBehaviour
 	{
 		_creditsPanel.SetActive(true);
 		_inputReader.menuCloseEvent += CloseCreditsScreen;
+		_closeCreditsEvent.OnEventRaised += CloseCreditsScreen; 
 
-		
+
+
 
 	}
 	public void CloseCreditsScreen()
 	{
 		_inputReader.menuCloseEvent -= CloseCreditsScreen;
+		_closeCreditsEvent.OnEventRaised -= CloseCreditsScreen;
 		_creditsPanel.SetActive(false);
 		SetMenuScreen();
 
