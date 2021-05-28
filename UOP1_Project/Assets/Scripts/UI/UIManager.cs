@@ -58,15 +58,17 @@ public class UIManager : MonoBehaviour
 	{
 		_onSceneReady.OnEventRaised += ResetUI;
 		_openUIDialogueEvent.OnEventRaised += OpenUIDialogue;
-
+		_closeUIDialogueEvent.OnEventRaised += CloseUIDialogue;
 		_inputReader.menuPauseEvent += OpenUIPause; // subscription to open Pause UI event happens in OnEnabled, but the close Event is only subscribed to when the popup is open
 
 		_openInventoryScreenForCookingEvent.OnEventRaised += SetInventoryScreenForCooking;
 		_setInteractionEvent.OnEventRaised += SetInteractionPanel;
 	
 		_inputReader.openInventoryEvent += SetInventoryScreen;
+		_closeUIInventoryEvent.OnEventRaised += CloseInventoryScreen; 
 
-		
+
+
 
 	}
 	void ResetUI()
@@ -107,6 +109,8 @@ public class UIManager : MonoBehaviour
 		_openInventoryScreenForCookingEvent.OnEventRaised -= SetInventoryScreenForCooking;
 		_setInteractionEvent.OnEventRaised -= SetInteractionPanel;
 		_inputReader.openInventoryEvent -= SetInventoryScreen;
+
+		_closeUIInventoryEvent.OnEventRaised -= CloseInventoryScreen;
 
 	}
 	void OpenUIPause()
