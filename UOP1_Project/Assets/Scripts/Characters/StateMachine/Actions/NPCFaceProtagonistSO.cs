@@ -2,14 +2,14 @@
 using UOP1.StateMachine;
 using UOP1.StateMachine.ScriptableObjects;
 
-[CreateAssetMenu(fileName = "FaceProtagonist", menuName = "State Machines/Actions/Face Protagonist")]
-public class FaceProtagonistSO : StateActionSO
+[CreateAssetMenu(fileName = "NPCFaceProtagonist", menuName = "State Machines/Actions/NPC Face Protagonist")]
+public class NPCFaceProtagonistSO : StateActionSO
 {
 	public TransformAnchor playerAnchor;
-	protected override StateAction CreateAction() => new FaceProtagonist();
+	protected override StateAction CreateAction() => new NPCFaceProtagonist();
 }
 
-public class FaceProtagonist : StateAction
+public class NPCFaceProtagonist : StateAction
 {
 	TransformAnchor _protagonist;
 	Transform _actor;
@@ -17,7 +17,7 @@ public class FaceProtagonist : StateAction
 	public override void Awake(StateMachine stateMachine)
 	{
 		_actor = stateMachine.transform;
-		_protagonist = ((FaceProtagonistSO)OriginSO).playerAnchor;
+		_protagonist = ((NPCFaceProtagonistSO)OriginSO).playerAnchor;
 		rotationOnEnter = _actor.rotation;
 	}
 
