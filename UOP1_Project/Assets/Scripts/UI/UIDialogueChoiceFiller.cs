@@ -10,25 +10,25 @@ public class UIDialogueChoiceFiller : MonoBehaviour
 
 	[SerializeField] private LocalizeStringEvent _choiceText = default;
 	[SerializeField] private DialogueChoiceChannelSO _makeAChoiceEvent = default;
-	[SerializeField] private Button _actionButton = default;
+	[SerializeField] private MultiInputButton _actionButton = default;
 
 	Choice currentChoice;
 
-	public void FillChoice(Choice choiceToFill)
+	public void FillChoice(Choice choiceToFill, bool isSelected)
 	{
 		currentChoice = choiceToFill;
 		_choiceText.StringReference = choiceToFill.Response;
+
+		if(isSelected)
+		{
+			_actionButton.Select();
+		}
 	}
 
 	public void ButtonClicked()
 	{
-		if (_makeAChoiceEvent != null)
 			_makeAChoiceEvent.RaiseEvent(currentChoice);
 	}
-	public void SetSelected()
-	{
-		if (_actionButton != null)
-			_actionButton.Select();
 
-	}
+	
 }
