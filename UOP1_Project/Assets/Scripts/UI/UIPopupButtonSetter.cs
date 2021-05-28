@@ -8,21 +8,26 @@ using UnityEngine.Localization.Tables;
 public class UIPopupButtonSetter : MonoBehaviour
 {
 	[SerializeField] private LocalizeStringEvent _buttonText = default;
-	[SerializeField] private Button _button = default;
+	[SerializeField] private MultiInputButton _button = default;
 
 	PopupButtonType _currentType = default;
 
 	[SerializeField]
 	private IntEventChannelSO _buttonClickedEvent = default;
 
-	public void SetButton(PopupButtonType _type, PopupType popupType)
+	public void SetButton(PopupButtonType _type, PopupType popupType, bool isSelected)
 	{
 		_currentType = _type;
 		_buttonText.StringReference.TableEntryReference = _currentType.ToString() + "_"+ popupType.ToString();
+
+		if(isSelected)
+		  SelectButton(); 
+
 	}
-	public void SelectButton()
+
+    void SelectButton()
 	{
-		_button.Select();
+		_button.UpdateDefault();
 	}
 
 	public void ButtonClicked()

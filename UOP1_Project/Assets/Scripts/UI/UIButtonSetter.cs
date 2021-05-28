@@ -7,15 +7,20 @@ using UnityEngine.UI;
 public class UIButtonSetter : MonoBehaviour
 {
 	[SerializeField] private LocalizeStringEvent _buttonText = default;
-	[SerializeField] private Button _button = default;
+	[SerializeField] private MultiInputButton _button = default;
 	 private VoidEventChannelSO _buttonClickedEvent = default;
 
 	public void SetButton(VoidEventChannelSO buttonEvent, bool select)
 	{
 		_buttonClickedEvent = buttonEvent;
-		if(select)
-		_button.Select(); 
+		if (select)
+			_button.UpdateDefault();
 	}
+	public void SelectButton()
+	{
+		_button.UpdateDefault();
+	}
+
 	public void Click()
 	{
 		_buttonClickedEvent.RaiseEvent();

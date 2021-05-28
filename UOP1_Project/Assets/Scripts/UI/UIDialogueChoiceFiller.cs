@@ -18,10 +18,16 @@ public class UIDialogueChoiceFiller : MonoBehaviour
 	{
 		currentChoice = choiceToFill;
 		_choiceText.StringReference = choiceToFill.Response;
-
-		if(isSelected)
+		_actionButton.interactable = true; 
+		if (isSelected)
 		{
-			_actionButton.Select();
+			Debug.Log("Select");
+			_actionButton.UpdateDefault();  
+		}
+		else
+		{
+			Debug.Log("Not selected");
+
 		}
 	}
 

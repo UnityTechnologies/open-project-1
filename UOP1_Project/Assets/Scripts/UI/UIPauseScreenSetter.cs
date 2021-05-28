@@ -14,15 +14,20 @@ public class UIPauseScreenSetter : MonoBehaviour
 
 	[SerializeField] private InputReader _inputReader = default;
 
-	private void OnEnable()
+	private void Start()
 	{
 		_inputReader.menuCloseEvent += _clickUnpauseEvent.RaiseEvent;
-
+		SetPauseScreen(); 
 	}
+
 	private void OnDestroy()
 	{
 		_inputReader.menuCloseEvent -= _clickUnpauseEvent.RaiseEvent;
 
+	}
+	private void OnEnable()
+	{
+		_unpauseButton.SelectButton(); 
 	}
 	public void SetPauseScreen()
 	{

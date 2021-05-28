@@ -192,7 +192,7 @@ public class InputReader : ScriptableObject, GameInput.IGameplayActions, GameInp
 
 	public void EnableDialogueInput()
 	{
-		gameInput.Menus.Disable();
+		gameInput.Menus.Enable();
 		gameInput.Gameplay.Disable();
 
 		gameInput.Dialogues.Enable();

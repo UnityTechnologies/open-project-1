@@ -59,20 +59,20 @@ public class UIPopupSetter : MonoBehaviour
 		{
 			case PopupType.NewGame:
 				isConfirmation = true;
-				_popupButton1.SetButton(PopupButtonType.Confirm, actualType);
-				_popupButton2.SetButton(PopupButtonType.Cancel, actualType);
+				_popupButton1.SetButton(PopupButtonType.Confirm, actualType, true);
+				_popupButton2.SetButton(PopupButtonType.Cancel, actualType, false);
 				hasExitButton = true;
 				break;
 			case PopupType.BackToMenu:
 				isConfirmation = true;
-				_popupButton1.SetButton(PopupButtonType.Confirm, actualType);
-				_popupButton2.SetButton(PopupButtonType.Cancel, actualType);
+				_popupButton1.SetButton(PopupButtonType.Confirm, actualType, true);
+				_popupButton2.SetButton(PopupButtonType.Cancel, actualType, false);
 				hasExitButton = true;
 				break;
 			case PopupType.Quit:
 				isConfirmation = true;
-				_popupButton1.SetButton(PopupButtonType.Confirm, actualType);
-				_popupButton2.SetButton(PopupButtonType.Cancel, actualType);
+				_popupButton1.SetButton(PopupButtonType.Confirm, actualType, true);
+				_popupButton2.SetButton(PopupButtonType.Cancel, actualType, false);
 				hasExitButton = false;
 				break;
 			default:
@@ -87,14 +87,12 @@ public class UIPopupSetter : MonoBehaviour
 		{
 			_popupButton1.gameObject.SetActive(true); 
 			_popupButton2.gameObject.SetActive(true);
-			_popupButton1.SelectButton(); 
 		}
 		else // needs only one button : Is an information 
 		{
 
 			_popupButton1.gameObject.SetActive(true);
-			_popupButton2.gameObject.SetActive(false);
-			_popupButton1.SelectButton();
+			_popupButton2.gameObject.SetActive(false); 
 
 		}
 

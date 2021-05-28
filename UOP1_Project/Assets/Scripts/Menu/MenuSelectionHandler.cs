@@ -22,7 +22,11 @@ public class MenuSelectionHandler : MonoBehaviour
 		_inputReader.menuMouseMoveEvent -= HandleMoveCursor;
 		_inputReader.moveSelectionEvent -= HandleMoveSelection;
 	}
+	public void UpdateDefault(GameObject newDefault)
+	{
+		_defaultSelection = newDefault; 
 
+	}
 	/// <summary>
 	/// Highlights the default element
 	/// </summary>
@@ -34,7 +38,12 @@ public class MenuSelectionHandler : MonoBehaviour
 			EventSystem.current.SetSelectedGameObject(_defaultSelection);
 	}
 
-	
+	public void Unselect()
+	{
+		currentSelection = null;
+		EventSystem.current.SetSelectedGameObject(null); 
+	}
+
 	/// <summary>
 	/// Fired by keyboard and gamepad inputs. Current selected UI element will be the ui Element that was selected
 	/// when the event was fired. The _currentSelection is updated later on, after the EventSystem moves to the
@@ -98,7 +107,7 @@ public class MenuSelectionHandler : MonoBehaviour
 	public void UpdateSelection(GameObject UIElement)
 	{
 
-		if (UIElement.GetComponent<MultiInputSelectableElement>() != null)
+		if ((UIElement.GetComponent<MultiInputSelectableElement>() != null)|| (UIElement.GetComponent<MultiInputButton>() != null))
 		{
 			mouseSelection = UIElement;
 			currentSelection = UIElement;
@@ -114,10 +123,12 @@ public class MenuSelectionHandler : MonoBehaviour
 	// }
 	private void Update()
 	{
-		if ((EventSystem.current!=null)&& (currentSelection != null)&&(EventSystem.current.currentSelectedGameObject!=currentSelection) )
+		if ((EventSystem.current!=null)&& (EventSystem.current.currentSelectedGameObject == null)&& (currentSelection != null))
 		{
+		
 			EventSystem.current.SetSelectedGameObject(currentSelection);
 		}
+		
 
 	}
 }

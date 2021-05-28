@@ -7,6 +7,8 @@ using UnityEngine.Localization;
 public class UIManager : MonoBehaviour
 {
 	[Header("Scene UI")]
+	[SerializeField]
+	private MenuSelectionHandler _selectionHandler = default;
 	[SerializeField] private UIPopupSetter _popupPanel = default;
 
 	[SerializeField]private UIDialogueManager _dialogueController = default;
@@ -93,6 +95,7 @@ public class UIManager : MonoBehaviour
 	}
 	void CloseUIDialogue()
 	{
+		_selectionHandler.Unselect();
 		_dialogueController.gameObject.SetActive(false);
 	}
 
@@ -128,7 +131,6 @@ public class UIManager : MonoBehaviour
 
 
 		_pauseScreen.gameObject.SetActive(true);
-		_pauseScreen.SetPauseScreen();
 
 		_inputReader.EnableMenuInput();
 		_gameState.UpdateGameState(GameState.Pause);
@@ -147,8 +149,9 @@ public class UIManager : MonoBehaviour
 		_clickUnpauseEvent.OnEventRaised -= CloseUIPause;
 
 		_pauseScreen.gameObject.SetActive(false);
-		_inputReader.EnableGameplayInput();
 
+		_inputReader.EnableGameplayInput();
+		_selectionHandler.Unselect(); 
 		_gameState.ResetToPreviousGameState(); 
 	}
 
@@ -160,9 +163,8 @@ public class UIManager : MonoBehaviour
 		_closeSettingScreenEvent.OnEventRaised += CloseSettingScreen; // sub to close setting event with event 
 
 		_pauseScreen.gameObject.SetActive(false); // Set pause screen to inactive
-		
 
-		_settingScreen.gameObject.SetActive(true);// set pause screen to active 
+		_settingScreen.gameObject.SetActive(true);// set Setting screen to active 
 
 		// time is still set to 0 and Input is still set to menuInput 
 
@@ -173,7 +175,7 @@ public class UIManager : MonoBehaviour
 		//unsub from close setting events 
 		_inputReader.menuCloseEvent -= CloseSettingScreen;
 		_closeSettingScreenEvent.OnEventRaised -= CloseSettingScreen;
-
+		_selectionHandler.Unselect();
 		_pauseScreen.gameObject.SetActive(true); // Set pause screen to inactive
 		_clickUnpauseEvent.OnEventRaised += CloseUIPause; // unsub from clause pause popup since it's inactive
 
@@ -220,7 +222,7 @@ public class UIManager : MonoBehaviour
 	{
 		_inputReader.menuCloseEvent -= HideBackToMenuConfirmationPopup;
 		_closePopupEvent.OnEventRaised -= HideBackToMenuConfirmationPopup;
-
+		
 		_pauseScreen.gameObject.SetActive(true); // Set pause screen to inactive
 		_clickUnpauseEvent.OnEventRaised += CloseUIPause; // unsub from clause pause popup since it's inactive 
 
@@ -282,7 +284,7 @@ public class UIManager : MonoBehaviour
 			_onInteractionEndedEvent.RaiseEvent();
 
 		}
-
+		_selectionHandler.Unselect();
 		_inputReader.EnableGameplayInput();
 		_gameState.ResetToPreviousGameState();
 	}
@@ -292,7 +294,7 @@ public class UIManager : MonoBehaviour
 	{
 		if (isOpenEvent)
 		{
-			_interactionPanel.FillInteractionPanel(interactionType);
+	    	_interactionPanel.FillInteractionPanel(interactionType);
 		}
 		_interactionPanel.gameObject.SetActive(isOpenEvent);
 

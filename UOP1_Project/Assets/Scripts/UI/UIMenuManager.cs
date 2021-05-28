@@ -55,7 +55,7 @@ public class UIMenuManager : MonoBehaviour
 		}
 		else
 		{
-			_NewGameButton.Select();
+		_NewGameButton.Select();
 		}
 
 

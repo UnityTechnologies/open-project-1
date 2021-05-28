@@ -18,7 +18,7 @@ public class UIDialogueChoicesManager : MonoBehaviour
 				{
 					if (i < choices.Count)
 					{
-						listChoiceButtons[i].FillChoice(choices[i], i==0);
+						listChoiceButtons[i].FillChoice(choices[i], i == 0);
 						listChoiceButtons[i].gameObject.SetActive(true);
 
 					}
