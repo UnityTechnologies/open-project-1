@@ -57,11 +57,10 @@ public class DialogueManager : MonoBehaviour
 			_gameState.UpdateGameState(GameState.Dialogue);
 		BeginDialogueData(dialogueDataSO);
 		DisplayDialogueLine(_currentDialogue.DialogueLines[_counter], dialogueDataSO.Actor);
-
 	}
 
 	/// <summary>
-	/// Prepare DialogueManager when first time displaying DialogueData.
+	/// Prepare DialogueManager when first time displaying DialogueData. 
 	/// <param name="dialogueDataSO"></param>
 	private void BeginDialogueData(DialogueDataSO dialogueDataSO)
 	{
