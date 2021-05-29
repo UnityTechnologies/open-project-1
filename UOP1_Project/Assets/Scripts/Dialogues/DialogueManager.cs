@@ -60,7 +60,7 @@ public class DialogueManager : MonoBehaviour
 	}
 
 	/// <summary>
-	/// Prepare DialogueManager when first time displaying DialogueData. 
+	/// Prepare DialogueManager when first time displaying DialogueData.
 	/// <param name="dialogueDataSO"></param>
 	private void BeginDialogueData(DialogueDataSO dialogueDataSO)
 	{
@@ -108,7 +108,7 @@ public class DialogueManager : MonoBehaviour
 
 			_makeDialogueChoiceEvent.OnEventRaised += MakeDialogueChoice;
 			_showChoicesUIEvent.RaiseEvent(choices);
-
+        
 	}
 
 	private void MakeDialogueChoice(Choice choice)
