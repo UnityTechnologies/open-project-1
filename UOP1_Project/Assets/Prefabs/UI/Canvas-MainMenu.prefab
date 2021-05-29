@@ -284,6 +284,7 @@ GameObject:
   - component: {fileID: 31749702957475743}
   - component: {fileID: 31749702957475736}
   - component: {fileID: 381379602}
+  - component: {fileID: 8312508109763636281}
   m_Layer: 5
   m_Name: Canvas-MainMenu
   m_TagString: Untagged
@@ -398,11 +399,28 @@ MonoBehaviour:
   _startNewGameEvent: {fileID: 11400000, guid: 2d8265bc91f6244e49560195fe2ca5e9, type: 2}
   _continueGameEvent: {fileID: 11400000, guid: c6438460769bc46b7a96bd3c7233a68a, type: 2}
   _closePopupEvent: {fileID: 11400000, guid: 849b97e2c22a94f13b2c9870145abc4c, type: 2}
-  _closeSettingsEvent: {fileID: 0}
-  _closeCreditsEvent: {fileID: 0}
+  _closeSettingsEvent: {fileID: 11400000, guid: c42d49d01efc749a9a5326b51dcc32af,
+    type: 2}
+  _closeCreditsEvent: {fileID: 11400000, guid: e254a2d838f7f4c869b9b8ddf049f4b4, type: 2}
   _confirmPopupEvent: {fileID: 11400000, guid: 2b8629cd2aced42e5a2b0d0cb5fb1af4, type: 2}
   _onGameExitEvent: {fileID: 11400000, guid: d570e16f713770a4a94310999866e0e0, type: 2}
   _inputReader: {fileID: 11400000, guid: 945ec0365077176418488737deed54be, type: 2}
+--- !u!114 &8312508109763636281
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 31749702957475737}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af38c0740d43a4f419a21ea970c9cf53, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _inputReader: {fileID: 11400000, guid: 945ec0365077176418488737deed54be, type: 2}
+  _defaultSelection: {fileID: 0}
+  currentSelection: {fileID: 0}
+  mouseSelection: {fileID: 0}
 --- !u!1 &31749703055482844
 GameObject:
   m_ObjectHideFlags: 0
@@ -704,11 +722,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 31749702957475741}
     m_Modifications:
-    - target: {fileID: 1247507422823214019, guid: d04aa2fb2a8564a6eadbda82be8b64ee,
-        type: 3}
-      propertyPath: _settingfieldsList.Array.size
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 1847093150474249088, guid: d04aa2fb2a8564a6eadbda82be8b64ee,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -2144,6 +2157,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Credits_Panel
+      objectReference: {fileID: 0}
+    - target: {fileID: 8357250151446615845, guid: 94ca6d0c15c4b4a2cbbe4758a17b8dfb,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8357250151446615846, guid: 94ca6d0c15c4b4a2cbbe4758a17b8dfb,
         type: 3}

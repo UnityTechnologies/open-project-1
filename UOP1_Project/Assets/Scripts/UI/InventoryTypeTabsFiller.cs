@@ -10,6 +10,8 @@ public class InventoryTypeTabsFiller : MonoBehaviour
 	[SerializeField]
 	private List<InventoryTypeTabFiller> instantiatedGameObjects;
 
+	bool canDisableLayout = false; 
+
 	public void FillTabs(List<InventoryTabType> typesList, InventoryTabType selectedType, TabEventChannelSO changeTabEvent)
 	{
 
@@ -43,7 +45,15 @@ public class InventoryTypeTabsFiller : MonoBehaviour
 			}
 
 		}
-		StartCoroutine(waitBeforeDesactiveLayout());
+		if (isActiveAndEnabled) // check if the game object is active and enabled so that we could start the coroutine. 
+		{
+			StartCoroutine(waitBeforeDesactiveLayout());
+
+		}
+		else // if the game object is inactive, disabling the layout will happen on onEnable 
+		{
+			canDisableLayout = true;
+		}
 
 	}
 	IEnumerator waitBeforeDesactiveLayout()
@@ -53,7 +63,19 @@ public class InventoryTypeTabsFiller : MonoBehaviour
 		yield return new WaitForSeconds(1);
 		//disable layout group after layout calculation
 		if (gameObject.GetComponent<VerticalLayoutGroup>() != null)
+		{
 			gameObject.GetComponent<VerticalLayoutGroup>().enabled = false;
+			canDisableLayout = false;
+		}
+	}
+
+	private void OnEnable()
+	{
+		if ((gameObject.GetComponent<VerticalLayoutGroup>() != null) && canDisableLayout)
+		{
+			gameObject.GetComponent<VerticalLayoutGroup>().enabled = false;
+			canDisableLayout = false;
+		}
 	}
 
 }

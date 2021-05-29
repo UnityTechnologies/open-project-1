@@ -38,6 +38,7 @@ public class DialogueManager : MonoBehaviour
 	private void Start()
 	{
 		_startDialogue.OnEventRaised += DisplayDialogueData;
+
 	}
 
 	/// <summary>
@@ -56,6 +57,7 @@ public class DialogueManager : MonoBehaviour
 			_gameState.UpdateGameState(GameState.Dialogue);
 		BeginDialogueData(dialogueDataSO);
 		DisplayDialogueLine(_currentDialogue.DialogueLines[_counter], dialogueDataSO.Actor);
+
 	}
 
 	/// <summary>
@@ -76,10 +78,9 @@ public class DialogueManager : MonoBehaviour
 	/// <param name="dialogueLine"></param>
 	public void DisplayDialogueLine(LocalizedString dialogueLine, ActorSO actor)
 	{
-
 		_openUIDialogueEvent.RaiseEvent(dialogueLine, actor);
-
 	}
+
 
 	private void OnAdvance()
 	{
@@ -106,13 +107,14 @@ public class DialogueManager : MonoBehaviour
 	{
 		_inputReader.advanceDialogueEvent -= OnAdvance;
 
-		_makeDialogueChoiceEvent.OnEventRaised += MakeDialogueChoice;
-		_showChoicesUIEvent.RaiseEvent(choices);
+			_makeDialogueChoiceEvent.OnEventRaised += MakeDialogueChoice;
+			_showChoicesUIEvent.RaiseEvent(choices);
+
 	}
 
 	private void MakeDialogueChoice(Choice choice)
 	{
-		_makeDialogueChoiceEvent.OnEventRaised -= MakeDialogueChoice;
+			_makeDialogueChoiceEvent.OnEventRaised -= MakeDialogueChoice;
 
 		if (choice.ActionType == ChoiceActionType.continueWithStep)
 		{
@@ -137,7 +139,6 @@ public class DialogueManager : MonoBehaviour
 
 		_gameState.ResetToPreviousGameState();
 	}
-
 	public void DialogueEndedAndCloseDialogueUI()
 	{
 

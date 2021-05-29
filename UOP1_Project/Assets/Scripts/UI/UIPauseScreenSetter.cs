@@ -16,15 +16,24 @@ public class UIPauseScreenSetter : MonoBehaviour
 
 	private void Start()
 	{
-		_closeButton.onClick.RemoveAllListeners();
-		_closeButton.onClick.AddListener(() => { _clickUnpauseEvent.RaiseEvent(); });
-		_inputReader.closePopupEvent += _clickUnpauseEvent.RaiseEvent;
-
+		_inputReader.menuCloseEvent += _clickUnpauseEvent.RaiseEvent;
+		SetPauseScreen(); 
 	}
 
+	private void OnDestroy()
+	{
+		_inputReader.menuCloseEvent -= _clickUnpauseEvent.RaiseEvent;
+
+	}
+	private void OnEnable()
+	{
+		_unpauseButton.SelectButton(); 
+	}
 	public void SetPauseScreen()
 	{
-		
+		_closeButton.onClick.RemoveAllListeners();
+		_closeButton.onClick.AddListener(() => { _clickUnpauseEvent.RaiseEvent(); });
+
 		_unpauseButton.SetButton(_clickUnpauseEvent, true);
 
 		_settingsButton.SetButton(_clickSettingsEvent, false);

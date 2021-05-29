@@ -8,28 +8,25 @@ public class UISettingFieldsFiller : MonoBehaviour
 {
 	[SerializeField]
 	private UISettingItemFiller[] _settingfieldsList = default;
+	[SerializeField]
+	private InputReader _inputReader = default; 
 	public void FillFields(List<SettingField> settingItems)
 	{
 		for (int i = 0; i < _settingfieldsList.Length; i++)
 		{
-			if(i< settingItems.Count)
+			if(i < settingItems.Count)
 			{
 				SetField(settingItems[i], _settingfieldsList[i]);
 				_settingfieldsList[i].gameObject.SetActive(true);
 			}
 			else
 			{
-
 				_settingfieldsList[i].gameObject.SetActive(false);
 			}
 		}
 
 	}
-	public void SelectFields(SettingTabType tabType)
-	{
-		
-
-	}
+	
 
 	public void SetField(SettingField field, UISettingItemFiller uiField)
 	{
@@ -78,7 +75,7 @@ public class UISettingFieldsFiller : MonoBehaviour
 
 
 		}
-		uiField.SetSettingField(paginationCount, selectedPaginationIndex, selectedOption, fieldTitle, fieldType); 
+		uiField.FillSettingField(paginationCount, selectedPaginationIndex, selectedOption, fieldTitle, fieldType); 
 
 
 	}
@@ -127,6 +124,17 @@ public class UISettingFieldsFiller : MonoBehaviour
 		{
 			return 1; 
 		}
+
+	}
+	int _selectedFieldIndex;
+
+	void NextField()
+	{
+
+	}
+	void PreviousField()
+	{
+
 
 	}
 }

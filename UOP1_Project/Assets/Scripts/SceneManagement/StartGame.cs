@@ -33,6 +33,12 @@ public class StartGame : MonoBehaviour
 		_startNewGameEvent.OnEventRaised += StartNewGame;
 		_continueGameEvent.OnEventRaised += ContinuePreviousGame;
 	}
+	private void OnDestroy()
+	{
+		_startNewGameEvent.OnEventRaised -= StartNewGame;
+		_continueGameEvent.OnEventRaised -= ContinuePreviousGame;
+
+	}
 	void StartNewGame()
 	{
 		_hasSaveData = false;
