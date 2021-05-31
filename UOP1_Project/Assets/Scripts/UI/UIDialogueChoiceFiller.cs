@@ -21,14 +21,9 @@ public class UIDialogueChoiceFiller : MonoBehaviour
 		_actionButton.interactable = true; 
 		if (isSelected)
 		{
-			Debug.Log("Select");
-			_actionButton.UpdateDefault();  
+			_actionButton.UpdateSelected();  
 		}
-		else
-		{
-			Debug.Log("Not selected");
-
-		}
+		
 	}
 
 	public void ButtonClicked()

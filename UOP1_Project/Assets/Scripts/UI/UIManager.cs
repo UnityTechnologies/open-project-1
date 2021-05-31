@@ -223,10 +223,10 @@ public class UIManager : MonoBehaviour
 		_inputReader.menuCloseEvent -= HideBackToMenuConfirmationPopup;
 		_closePopupEvent.OnEventRaised -= HideBackToMenuConfirmationPopup;
 		
-		_pauseScreen.gameObject.SetActive(true); // Set pause screen to inactive
-		_clickUnpauseEvent.OnEventRaised += CloseUIPause; // unsub from clause pause popup since it's inactive 
-
 		_popupPanel.gameObject.SetActive(false);
+		_selectionHandler.Unselect(); 
+        _pauseScreen.gameObject.SetActive(true); // Set pause screen to inactive
+		_clickUnpauseEvent.OnEventRaised += CloseUIPause; // unsub from clause pause popup since it's inactive 
 
 		// time is still set to 0 and Input is still set to menuInput 
 		//going out from confirmaiton popup screen gets us back to the pause screen

@@ -31,13 +31,12 @@ public class MultiInputButton : Button
 		_menuSelectionHandler.UpdateSelection(gameObject);
 		base.OnSelect(eventData);
 	}
-	public  void UpdateDefault()
+	public  void UpdateSelected()
 	{
-		Debug.Log("Select");
 		if(_menuSelectionHandler==null)
 			_menuSelectionHandler = transform.root.gameObject.GetComponentInChildren<MenuSelectionHandler>();
 
-	    _menuSelectionHandler.UpdateSelection(gameObject);
+		_menuSelectionHandler.UpdateSelection(gameObject);
 		
 	}
 

@@ -27,7 +27,8 @@ public class UIPopupButtonSetter : MonoBehaviour
 
     void SelectButton()
 	{
-		_button.UpdateDefault();
+		_button.Select(); 
+		_button.UpdateSelected();
 	}
 
 	public void ButtonClicked()

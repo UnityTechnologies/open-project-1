@@ -14,11 +14,11 @@ public class UIButtonSetter : MonoBehaviour
 	{
 		_buttonClickedEvent = buttonEvent;
 		if (select)
-			_button.UpdateDefault();
+			_button.UpdateSelected();
 	}
 	public void SelectButton()
 	{
-		_button.UpdateDefault();
+		_button.UpdateSelected();
 	}
 
 	public void Click()
