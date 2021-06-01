@@ -14,10 +14,24 @@ public class EditorColdStartup : MonoBehaviour
 	[SerializeField] private GameSceneSO _persistentManagersSO = default;
 	[SerializeField] private AssetReference _notifyColdStartupChannel = default;
 	[SerializeField] private VoidEventChannelSO _onSceneReadyChannel = default;
+	[SerializeField] private PathStorageSO _pathStorage = default;
+
+	private bool isColdStart = false;
+
+	private void Awake()
+	{
+		if (!SceneManager.GetSceneByName(_persistentManagersSO.sceneReference.editorAsset.name).isLoaded)
+		{
+			isColdStart = true;
+
+			//Reset the path taken, so the character will spawn in this location's default spawn point
+			_pathStorage.lastPathTaken = null;
+		}
+	}
 
 	private void Start()
 	{
-		if (!SceneManager.GetSceneByName(_persistentManagersSO.sceneReference.editorAsset.name).isLoaded)
+		if (isColdStart)
 		{
 			_persistentManagersSO.sceneReference.LoadSceneAsync(LoadSceneMode.Additive, true).Completed += LoadEventChannel;
 		}
