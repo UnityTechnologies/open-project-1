@@ -74,8 +74,6 @@ public class UIInventoryItem : MonoBehaviour
 	public void HoverItem()
 	{
 		_imgHover.gameObject.SetActive(true);
-
-
 	}
 	public void UnhoverItem()
 	{
@@ -86,9 +84,16 @@ public class UIInventoryItem : MonoBehaviour
 
 	public void SelectItem()
 	{
-		_imgSelected.gameObject.SetActive(true);
-		if (ItemSelected != null && _currentItem.Item != null)
+		if (ItemSelected != null && _currentItem != null && _currentItem.Item != null)
+
+		{
+			_imgSelected.gameObject.SetActive(true);
 			ItemSelected.Invoke(_currentItem.Item);
+		}
+		else
+		{
+			_imgSelected.gameObject.SetActive(false);
+		}
 
 	}
 
