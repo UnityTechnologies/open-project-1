@@ -37,8 +37,9 @@ public class InputReader : ScriptableObject, GameInput.IGameplayActions, GameInp
 	public event UnityAction menuPauseEvent = delegate { };
 	public event UnityAction menuCloseEvent = delegate { };
 	public event UnityAction openInventoryEvent = delegate { }; // Used to bring up the inventory
+	public event UnityAction closeInventoryEvent = delegate { }; // Used to bring up the inventory
 
-	public event UnityAction<float> menuSwitchTab = delegate { };
+	public event UnityAction<float> TabSwitched = delegate { };
 
 
 	private GameInput gameInput;
@@ -55,7 +56,7 @@ public class InputReader : ScriptableObject, GameInput.IGameplayActions, GameInp
 
 		EnableGameplayInput();
 	}
-	
+
 	private void OnDisable()
 	{
 		DisableAllInput();
@@ -76,11 +77,11 @@ public class InputReader : ScriptableObject, GameInput.IGameplayActions, GameInp
 
 	public void OnOpenInventory(InputAction.CallbackContext context)
 	{
-		
+
 		if (context.phase == InputActionPhase.Performed)
 		{
 			openInventoryEvent.Invoke();
-			
+
 		}
 
 	}
@@ -88,9 +89,10 @@ public class InputReader : ScriptableObject, GameInput.IGameplayActions, GameInp
 	{
 
 		if (context.phase == InputActionPhase.Performed)
-		{ menuCloseEvent.Invoke();
+		{
+			menuCloseEvent.Invoke();
+		}
 	}
-}
 
 	public void OnInventoryActionButton(InputAction.CallbackContext context)
 	{
@@ -105,7 +107,7 @@ public class InputReader : ScriptableObject, GameInput.IGameplayActions, GameInp
 			interactEvent.Invoke();
 	}
 
-	
+
 
 	public void OnJump(InputAction.CallbackContext context)
 	{
@@ -137,9 +139,10 @@ public class InputReader : ScriptableObject, GameInput.IGameplayActions, GameInp
 	public void OnPause(InputAction.CallbackContext context)
 	{
 		if (context.phase == InputActionPhase.Performed)
-		{ menuPauseEvent.Invoke();
+		{
+			menuPauseEvent.Invoke();
+		}
 	}
-}
 
 	public void OnRotateCamera(InputAction.CallbackContext context)
 	{
@@ -172,7 +175,7 @@ public class InputReader : ScriptableObject, GameInput.IGameplayActions, GameInp
 	public void OnConfirm(InputAction.CallbackContext context)
 	{
 		if (context.phase == InputActionPhase.Performed)
-			menuClickButtonEvent.Invoke(); 
+			menuClickButtonEvent.Invoke();
 	}
 
 
@@ -187,8 +190,8 @@ public class InputReader : ScriptableObject, GameInput.IGameplayActions, GameInp
 		if (context.phase == InputActionPhase.Performed)
 		{
 			menuUnpauseEvent.Invoke();
+		}
 	}
-}
 
 	public void EnableDialogueInput()
 	{
@@ -223,17 +226,17 @@ public class InputReader : ScriptableObject, GameInput.IGameplayActions, GameInp
 	public void OnChangeTab(InputAction.CallbackContext context)
 	{
 		if (context.phase == InputActionPhase.Performed)
-			menuSwitchTab.Invoke(context.ReadValue<float>()); 
+			TabSwitched.Invoke(context.ReadValue<float>());
 
 	}
 
 	public bool LeftMouseDown() => Mouse.current.leftButton.isPressed;
 
-	
+
 
 	public void OnClick(InputAction.CallbackContext context)
 	{
-		
+
 	}
 	public void OnSubmit(InputAction.CallbackContext context)
 	{
@@ -241,7 +244,7 @@ public class InputReader : ScriptableObject, GameInput.IGameplayActions, GameInp
 	}
 	public void OnPoint(InputAction.CallbackContext context)
 	{
-		
+
 	}
 	public void OnRightClick(InputAction.CallbackContext context)
 	{
@@ -250,6 +253,11 @@ public class InputReader : ScriptableObject, GameInput.IGameplayActions, GameInp
 	public void OnNavigate(InputAction.CallbackContext context)
 	{
 
+
+	}
+	public void OnCloseInventory(InputAction.CallbackContext context)
+	{
+		closeInventoryEvent.Invoke();
 
 	}
 }

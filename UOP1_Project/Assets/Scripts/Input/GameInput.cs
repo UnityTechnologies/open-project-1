@@ -589,6 +589,14 @@ public class @GameInput : IInputActionCollection, IDisposable
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""CloseInventory"",
+                    ""type"": ""Button"",
+                    ""id"": ""43e7e8b3-1957-4ce6-9d0e-92ed54cb4e41"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -1317,6 +1325,28 @@ public class @GameInput : IInputActionCollection, IDisposable
                     ""action"": ""Navigate"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0c4a1130-8e0c-4035-a7ea-22f8e8e802b8"",
+                    ""path"": ""<Keyboard>/tab"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardOrGamepad"",
+                    ""action"": ""CloseInventory"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f135a32f-88e8-4fc1-807b-4d428a2da2e0"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardOrGamepad"",
+                    ""action"": ""CloseInventory"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -1647,6 +1677,7 @@ public class @GameInput : IInputActionCollection, IDisposable
         m_Menus_Click = m_Menus.FindAction("Click", throwIfNotFound: true);
         m_Menus_Point = m_Menus.FindAction("Point", throwIfNotFound: true);
         m_Menus_RightClick = m_Menus.FindAction("RightClick", throwIfNotFound: true);
+        m_Menus_CloseInventory = m_Menus.FindAction("CloseInventory", throwIfNotFound: true);
         // Dialogues
         m_Dialogues = asset.FindActionMap("Dialogues", throwIfNotFound: true);
         m_Dialogues_MoveSelection = m_Dialogues.FindAction("MoveSelection", throwIfNotFound: true);
@@ -1809,6 +1840,7 @@ public class @GameInput : IInputActionCollection, IDisposable
     private readonly InputAction m_Menus_Click;
     private readonly InputAction m_Menus_Point;
     private readonly InputAction m_Menus_RightClick;
+    private readonly InputAction m_Menus_CloseInventory;
     public struct MenusActions
     {
         private @GameInput m_Wrapper;
@@ -1825,6 +1857,7 @@ public class @GameInput : IInputActionCollection, IDisposable
         public InputAction @Click => m_Wrapper.m_Menus_Click;
         public InputAction @Point => m_Wrapper.m_Menus_Point;
         public InputAction @RightClick => m_Wrapper.m_Menus_RightClick;
+        public InputAction @CloseInventory => m_Wrapper.m_Menus_CloseInventory;
         public InputActionMap Get() { return m_Wrapper.m_Menus; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1870,6 +1903,9 @@ public class @GameInput : IInputActionCollection, IDisposable
                 @RightClick.started -= m_Wrapper.m_MenusActionsCallbackInterface.OnRightClick;
                 @RightClick.performed -= m_Wrapper.m_MenusActionsCallbackInterface.OnRightClick;
                 @RightClick.canceled -= m_Wrapper.m_MenusActionsCallbackInterface.OnRightClick;
+                @CloseInventory.started -= m_Wrapper.m_MenusActionsCallbackInterface.OnCloseInventory;
+                @CloseInventory.performed -= m_Wrapper.m_MenusActionsCallbackInterface.OnCloseInventory;
+                @CloseInventory.canceled -= m_Wrapper.m_MenusActionsCallbackInterface.OnCloseInventory;
             }
             m_Wrapper.m_MenusActionsCallbackInterface = instance;
             if (instance != null)
@@ -1910,6 +1946,9 @@ public class @GameInput : IInputActionCollection, IDisposable
                 @RightClick.started += instance.OnRightClick;
                 @RightClick.performed += instance.OnRightClick;
                 @RightClick.canceled += instance.OnRightClick;
+                @CloseInventory.started += instance.OnCloseInventory;
+                @CloseInventory.performed += instance.OnCloseInventory;
+                @CloseInventory.canceled += instance.OnCloseInventory;
             }
         }
     }
@@ -1990,6 +2029,7 @@ public class @GameInput : IInputActionCollection, IDisposable
         void OnClick(InputAction.CallbackContext context);
         void OnPoint(InputAction.CallbackContext context);
         void OnRightClick(InputAction.CallbackContext context);
+        void OnCloseInventory(InputAction.CallbackContext context);
     }
     public interface IDialoguesActions
     {

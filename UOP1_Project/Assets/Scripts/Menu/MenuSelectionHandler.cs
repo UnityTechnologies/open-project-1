@@ -24,7 +24,7 @@ public class MenuSelectionHandler : MonoBehaviour
 	}
 	public void UpdateDefault(GameObject newDefault)
 	{
-		_defaultSelection = newDefault; 
+		_defaultSelection = newDefault;
 
 	}
 	/// <summary>
@@ -35,14 +35,13 @@ public class MenuSelectionHandler : MonoBehaviour
 		yield return new WaitForSeconds(.03f); // Necessary wait otherwise the highlight won't show up
 
 		if (_defaultSelection != null)
-			UpdateSelection(_defaultSelection); 
+			UpdateSelection(_defaultSelection);
 	}
 
 	public void Unselect()
 	{
-		Debug.Log("Unselect");
 		currentSelection = null;
-		EventSystem.current.SetSelectedGameObject(null); 
+		EventSystem.current.SetSelectedGameObject(null);
 	}
 
 	/// <summary>
@@ -53,7 +52,7 @@ public class MenuSelectionHandler : MonoBehaviour
 	private void HandleMoveSelection()
 	{
 		Cursor.visible = false;
-		
+
 		// Handle case where no UI element is selected because mouse left selectable bounds
 		if (EventSystem.current.currentSelectedGameObject == null)
 			EventSystem.current.SetSelectedGameObject(currentSelection);
@@ -77,7 +76,7 @@ public class MenuSelectionHandler : MonoBehaviour
 
 	public void HandleMouseExit(GameObject UIElement)
 	{
-		
+
 		if (EventSystem.current.currentSelectedGameObject != UIElement)
 		{
 			return;
@@ -94,7 +93,7 @@ public class MenuSelectionHandler : MonoBehaviour
 	/// <returns></returns>
 	public bool AllowsSubmit()
 	{
-		
+
 		// if LMB is not down, there is no edge case to handle, allow the event to continue
 		return !_inputReader.LeftMouseDown()
 			   // if we know mouse & keyboard are on different elements, do not allow interaction to continue
@@ -108,12 +107,12 @@ public class MenuSelectionHandler : MonoBehaviour
 	public void UpdateSelection(GameObject UIElement)
 	{
 
-		if ((UIElement.GetComponent<MultiInputSelectableElement>() != null)|| (UIElement.GetComponent<MultiInputButton>() != null))
+		if ((UIElement.GetComponent<MultiInputSelectableElement>() != null) || (UIElement.GetComponent<MultiInputButton>() != null))
 		{
 			mouseSelection = UIElement;
 			currentSelection = UIElement;
 		}
-		
+
 	}
 
 	// Debug
@@ -124,12 +123,12 @@ public class MenuSelectionHandler : MonoBehaviour
 	// }
 	private void Update()
 	{
-		if ((EventSystem.current!=null)&& (EventSystem.current.currentSelectedGameObject == null)&& (currentSelection != null))
+		if ((EventSystem.current != null) && (EventSystem.current.currentSelectedGameObject == null) && (currentSelection != null))
 		{
-		
+
 			EventSystem.current.SetSelectedGameObject(currentSelection);
 		}
-		
+
 
 	}
 }

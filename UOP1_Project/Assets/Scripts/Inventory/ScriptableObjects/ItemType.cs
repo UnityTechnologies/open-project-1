@@ -42,12 +42,12 @@ public class ItemType : ScriptableObject
 
 
 	[Tooltip("The tab type under which the item will be added")]
-	[SerializeField] private InventoryTabType _tabType = default;
+	[SerializeField] private InventoryTabSO _tabType = default;
 
 	public LocalizedString ActionName => _actionName;
 	public LocalizedString TypeName => _typeName;
 	public Color TypeColor => _typeColor;
 	public ItemInventoryActionType ActionType => _actionType;
 	public itemInventoryType Type => _type;
-	public InventoryTabType TabType => _tabType;
+	public InventoryTabSO TabType => _tabType;
 }
