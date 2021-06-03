@@ -44,7 +44,9 @@ public class DialogueDataSO : ScriptableObject
 	// Each line would also have an event associated, or another Dialogue
 	private void OnEnable()
 	{
-		SetDialogueLines();
+		//Only enabled when the dialogue table is changed
+		//Make sure the name of the SO is the same as the one used in the string table
+		//SetDialogueLines();
 	}
 	void SetDialogueLines()
 	{
