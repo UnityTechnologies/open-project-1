@@ -20,9 +20,9 @@ RenderSettings:
   m_FogDensity: 0.01
   m_LinearFogStart: 0
   m_LinearFogEnd: 300
-  m_AmbientSkyColor: {r: 0.69312924, g: 0.74798965, b: 0.8301887, a: 1}
-  m_AmbientEquatorColor: {r: 0.13768244, g: 0.20941618, b: 0.24528301, a: 1}
-  m_AmbientGroundColor: {r: 0.29276434, g: 0.4811321, b: 0.4229333, a: 1}
+  m_AmbientSkyColor: {r: 0.58495647, g: 0.6171428, b: 0.6698113, a: 1}
+  m_AmbientEquatorColor: {r: 0.11133855, g: 0.16712224, b: 0.1981132, a: 1}
+  m_AmbientGroundColor: {r: 0.11814701, g: 0.14150941, b: 0.11814701, a: 1}
   m_AmbientIntensity: 1
   m_AmbientMode: 1
   m_SubtractiveShadowColor: {r: 0.32489324, g: 0.36377177, b: 0.46226418, a: 1}
@@ -43,7 +43,7 @@ RenderSettings:
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
-  serializedVersion: 11
+  serializedVersion: 12
   m_GIWorkflowMode: 1
   m_GISettings:
     serializedVersion: 2
@@ -99,7 +99,8 @@ LightmapSettings:
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 112000000, guid: c3913723b7bf6b142a8b67d27c5b0761,
     type: 2}
-  m_UseShadowmask: 0
+  m_LightingSettings: {fileID: 4890085278179872738, guid: 52681ab8c7077404792ac20ee851382d,
+    type: 2}
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -119,6 +120,8 @@ NavMeshSettings:
     manualTileSize: 0
     tileSize: 256
     accuratePlacement: 0
+    maxJobWorkers: 0
+    preserveTilesOutsideBounds: 0
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
@@ -4297,8 +4300,9 @@ Light:
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 0, y: 2.3688e-41, z: 0, w: 0}
+  m_BoundingSphereOverride: {x: 7.2e-43, y: 0, z: 0, w: 1e-45}
   m_UseBoundingSphereOverride: 0
+  m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
   m_ShadowAngle: 0
 --- !u!4 &278032135
@@ -9724,6 +9728,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -9748,6 +9753,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!33 &562922804
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -20753,6 +20759,7 @@ Mesh:
   m_MeshMetrics[1]: 1
   m_MeshOptimizationFlags: 1
   m_StreamData:
+    serializedVersion: 2
     offset: 0
     size: 0
     path: 
@@ -21672,6 +21679,7 @@ Mesh:
   m_MeshMetrics[1]: 1
   m_MeshOptimizationFlags: 1
   m_StreamData:
+    serializedVersion: 2
     offset: 0
     size: 0
     path: 
@@ -23175,6 +23183,7 @@ Mesh:
   m_MeshMetrics[1]: 1
   m_MeshOptimizationFlags: 1
   m_StreamData:
+    serializedVersion: 2
     offset: 0
     size: 0
     path: 
@@ -32020,6 +32029,7 @@ Mesh:
   m_MeshMetrics[1]: 1
   m_MeshOptimizationFlags: 1
   m_StreamData:
+    serializedVersion: 2
     offset: 0
     size: 0
     path: 
@@ -33567,8 +33577,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02e6b73898a4a52438d630a7ba29da77, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _locationsToLoad:
-  - {fileID: 11400000, guid: 2f386bbc670c05145834a0f9c7d55798, type: 2}
+  _locationToLoad: {fileID: 11400000, guid: 2f386bbc670c05145834a0f9c7d55798, type: 2}
   _showLoadScreen: 1
   _pathTaken: {fileID: 11400000, guid: a9ec09853cba047a8a58f5881053cfc6, type: 2}
   _exitPath: {fileID: 11400000, guid: 447b413e95f8c95489b5385f03982ec5, type: 2}
@@ -33602,6 +33611,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -33626,6 +33636,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!33 &1786980534
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -39460,6 +39471,7 @@ Mesh:
   m_MeshMetrics[1]: 1
   m_MeshOptimizationFlags: 1
   m_StreamData:
+    serializedVersion: 2
     offset: 0
     size: 0
     path: 

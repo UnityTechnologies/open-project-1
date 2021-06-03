@@ -22,12 +22,12 @@ public class SaveSystem : ScriptableObject
 		_loadLocation.OnLoadingRequested -= CacheLoadLocations;
 	}
 
-	private void CacheLoadLocations(GameSceneSO[] locationsToLoad, bool showLoadingScreen)
+	private void CacheLoadLocations(GameSceneSO locationsToLoad, bool showLoadingScreen)
 	{
-		LocationSO locationSo = locationsToLoad[0] as LocationSO;
-		if (locationSo)
+		LocationSO locationSO = locationsToLoad as LocationSO;
+		if (locationSO)
 		{
-			saveData._locationId = locationSo.Guid;
+			saveData._locationId = locationSO.Guid;
 		}
 
 		SaveDataToDisk();
@@ -53,8 +53,8 @@ public class SaveSystem : ScriptableObject
 			yield return loadItemOperationHandle;
 			if (loadItemOperationHandle.Status == AsyncOperationStatus.Succeeded)
 			{
-				var itemSo = loadItemOperationHandle.Result;
-				_playerInventory.Add(itemSo, serializedItemStack.amount);
+				var itemSO = loadItemOperationHandle.Result;
+				_playerInventory.Add(itemSO, serializedItemStack.amount);
 			}
 		}
 	}
@@ -64,7 +64,7 @@ public class SaveSystem : ScriptableObject
 		saveData._itemStacks.Clear();
 		foreach (var itemStack in _playerInventory.Items)
 		{
-			saveData._itemStacks.Add(new SerializedItemStack(itemStack.Item.Guid, itemStack.Amount));
+			//	saveData._itemStacks.Add(new SerializedItemStack(itemStack.Item.Guid, itemStack.Amount));
 		}
 
 		if (FileManager.MoveFile(saveFilename, backupSaveFilename))

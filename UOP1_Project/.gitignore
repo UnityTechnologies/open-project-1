@@ -9,6 +9,7 @@
 /[Bb]uilds/
 /[Ll]ogs/
 /[Mm]emoryCaptures/
+/UserSettings/
 
 # Asset meta data should only be ignored when the corresponding asset is also ignored
 !/[Aa]ssets/**/*.meta
@@ -54,6 +55,7 @@ ExportedObj/
 
 # Unity3D generated file on crash reports
 sysinfo.txt
+debug.log
 
 # Builds
 *.apk
@@ -69,9 +71,16 @@ crashlytics-build.properties
 ProjectSettings/Packages/com.unity.probuilder/Settings.json
 ProjectSettings/Packages/com.unity.polybrush/Settings.json
 /ProjectSettings/Packages/com.unity.progrids/Settings.json
+/ProjectSettings/Packages/com.unity.learn.iet-framework/Settings.json
 Assets/Polybrush Data*
 Assets/PolybrushData*
 
 # Asset Bundles folder and .bin file
 /Assets/StreamingAssets
 *.bin
+
+# A marker file of which existence is used to decide whether to run the first-launch experience, for example show the welcome dialog.
+InitCodeMarker
+
+# Tutorial Framework has a backup option for the project's content, let's ignore the possible backup folder.
+/Tutorial Defaults/

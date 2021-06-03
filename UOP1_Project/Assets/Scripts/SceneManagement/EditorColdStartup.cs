@@ -12,7 +12,8 @@ public class EditorColdStartup : MonoBehaviour
 #if UNITY_EDITOR
 	[SerializeField] private GameSceneSO _thisSceneSO = default;
 	[SerializeField] private GameSceneSO _persistentManagersSO = default;
-	[SerializeField] private AssetReference _loadSceneEventChannel = default;
+	[SerializeField] private AssetReference _notifyColdStartupChannel = default;
+	[SerializeField] private VoidEventChannelSO _onSceneReadyChannel = default;
 
 	private void Start()
 	{
@@ -24,15 +25,21 @@ public class EditorColdStartup : MonoBehaviour
 
 	private void LoadEventChannel(AsyncOperationHandle<SceneInstance> obj)
 	{
-		_loadSceneEventChannel.LoadAssetAsync<LoadEventChannelSO>().Completed += ReloadScene;
+		_notifyColdStartupChannel.LoadAssetAsync<LoadEventChannelSO>().Completed += OnNotifyChannelLoaded;
 	}
 
-	private void ReloadScene(AsyncOperationHandle<LoadEventChannelSO> obj)
+	private void OnNotifyChannelLoaded(AsyncOperationHandle<LoadEventChannelSO> obj)
 	{
-		LoadEventChannelSO loadEventChannelSO = (LoadEventChannelSO)_loadSceneEventChannel.Asset;
-		loadEventChannelSO.RaiseEvent(new GameSceneSO[] { _thisSceneSO });
-
-		SceneManager.UnloadSceneAsync(_thisSceneSO.sceneReference.editorAsset.name);
+		if(_thisSceneSO != null)
+		{
+			obj.Result.RaiseEvent(_thisSceneSO);
+		}
+		else
+		{
+			//Raise a fake scene ready event, so the player is spawned
+			_onSceneReadyChannel.RaiseEvent();
+			//When this happens, the player won't be able to move between scenes because the SceneLoader has no conception of which scene we are in
+		}
 	}
 #endif
 }
