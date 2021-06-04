@@ -49,12 +49,12 @@ public class DialogueDataSO : ScriptableObject
 	// Each line would also have an event associated, or another Dialogue
 	private void OnEnable()
 	{
-		//Only enabled when the dialogue table is changed
-		//Make sure the name of the SO is the same as the one used in the string table
-		//SetDialogueLines();
+		SetDialogueLines();
 	}
 	void SetDialogueLines()
 	{
+		if (_dialogueLines == null)
+			_dialogueLines = new List<LocalizedString>();
 		_dialogueLines.Clear();
 
 		StringTableCollection collection = LocalizationEditorSettings.GetStringTableCollection("Questline Dialogue");
