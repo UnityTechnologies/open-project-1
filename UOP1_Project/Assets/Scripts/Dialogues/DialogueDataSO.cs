@@ -37,6 +37,11 @@ public class DialogueDataSO : ScriptableObject
 	public List<Choice> Choices => _choices;
 	public DialogueType DialogueType => _dialogueType;
 
+	public void SetActor(ActorSO newActor)
+	{
+		_actor = newActor;
+
+	}
 #if UNITY_EDITOR
 
 	//TODO: Add support for branching conversations
@@ -79,6 +84,7 @@ public class DialogueDataSO : ScriptableObject
 		}
 	}
 #endif
+
 }
 
 
@@ -91,4 +97,8 @@ public class Choice
 	public LocalizedString Response => _response;
 	public DialogueDataSO NextDialogue => _nextDialogue;
 	public ChoiceActionType ActionType => _actionType;
+	public void SetNextDialogue(DialogueDataSO dialogue)
+	{
+		_nextDialogue = dialogue;
+	}
 }

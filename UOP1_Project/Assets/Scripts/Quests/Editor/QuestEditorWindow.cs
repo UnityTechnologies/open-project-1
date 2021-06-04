@@ -15,7 +15,6 @@ public enum selectionType
 }
 public class QuestEditorWindow : EditorWindow
 {
-	private Image actorPreview;
 	private QuestSO currentSeletedQuest;
 	QuestlineSO selectedQuestLine;
 	int idQuestlineSelected;
@@ -52,11 +51,6 @@ public class QuestEditorWindow : EditorWindow
 		// Import UXML
 		var visualTree = Resources.Load<VisualTreeAsset>("QuestEditorWindow");
 		root.Add(visualTree.CloneTree());
-
-		//Add Image
-		VisualElement preview = root.Q<VisualElement>("actor-preview");
-		actorPreview = new Image();
-		preview.Add(actorPreview);
 
 		//Import USS
 		var styleSheet = Resources.Load<StyleSheet>("QuestEditorWindow");
@@ -244,10 +238,7 @@ public class QuestEditorWindow : EditorWindow
 			return;
 		if (quest.Steps == null)
 			return;
-		if (quest.Steps.Count > 0 && quest.Steps[0].Actor != null)
-			LoadActorImage(quest.Steps[0].Actor.name);
 
-		//Clear actor conversations area
 		rootVisualElement.Q<VisualElement>("actor-conversations").Clear();
 
 		foreach (StepSO step in quest.Steps)
@@ -257,8 +248,7 @@ public class QuestEditorWindow : EditorWindow
 	private void LoadAndInitStepUXML(StepSO step)
 	{
 		//Clear actor conversations area
-		VisualElement actorConversationsVE = rootVisualElement.Q<VisualElement>("actor-conversations");
-
+		ScrollView actorConversationsVE = rootVisualElement.Q<ScrollView>("actor-conversations");
 		// Import UXML
 		var stepVisualTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/Scripts/Quests/Editor/StepDetail.uxml");
 		VisualElement stepVE = stepVisualTree.CloneTree();
@@ -272,13 +262,19 @@ public class QuestEditorWindow : EditorWindow
 		isDoneToggle.value = step.IsDone;
 		isDoneToggle.SetEnabled(false);
 
-		//SD
-		if (step.DialogueBeforeStep != null)
-			LoadAndInitStartDialogueLineUXML(step.DialogueBeforeStep, dialogueAreaVE);
+		DialogueDataSO dialogueToPreview = new DialogueDataSO();
+		dialogueToPreview = step.StepToDialogue();
+		if (dialogueToPreview != null)
+		{
+			//setPreview Actor for each step
+			Image actorPreview = LoadActorImage(step.Actor.name);
+			//Add Image
+			VisualElement preview = stepVE.Q<VisualElement>("actor-preview");
+			preview.Add(actorPreview);
 
-		//CD ID if any
-		if (step.CompleteDialogue != null)
-			LoadAndInitOptionsDialogueLineUXML(step.CompleteDialogue, step.IncompleteDialogue, dialogueAreaVE);
+			VisualElement VE = CreateDialoguePreviewWithBranching(dialogueToPreview);
+			dialogueAreaVE.Add(VE);
+		}
 
 		//Type (Check Item etc)
 		if (step.Type == StepType.Dialogue)
@@ -298,39 +294,7 @@ public class QuestEditorWindow : EditorWindow
 
 	private void LoadAndInitStartDialogueLineUXML(DialogueDataSO startDialogue, VisualElement parent)
 	{
-		// Import UXML
-		var dialogueVisualTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/Scripts/Quests/Editor/DialogueLine.uxml");
 
-		// Set line
-		foreach (LocalizedString line in startDialogue.DialogueLines)
-		{
-			VisualElement dialogueVE = dialogueVisualTree.CloneTree();
-
-			Label leftLineLabel = dialogueVE.Q<Label>("left-line-label");
-			leftLineLabel.text = line.GetLocalizedStringImmediateSafe();
-
-			Label rightLineLabel = dialogueVE.Q<Label>("right-line-label");
-			rightLineLabel.style.display = DisplayStyle.None;
-
-			// Set options
-			VisualElement buttonArea = dialogueVE.Q<VisualElement>("buttons");
-			if (startDialogue.Choices.Count == 0)
-			{
-				buttonArea.style.display = DisplayStyle.None;
-			}
-			else if (startDialogue.Choices.Count <= 2)
-			{
-				for (int i = 0; i < 2; i++)
-				{
-					Button btn = buttonArea.Q<Button>($"btn-{i}");
-					if (i < startDialogue.Choices.Count)
-						btn.text = startDialogue.Choices[i].Response.GetLocalizedStringImmediateSafe();
-					else
-						btn.style.display = DisplayStyle.None;
-				}
-			}
-			parent.Add(dialogueVE);
-		}
 	}
 
 	private void LoadAndInitOptionsDialogueLineUXML(DialogueDataSO completeDialogue, DialogueDataSO incompleteDialogue, VisualElement parent)
@@ -342,6 +306,7 @@ public class QuestEditorWindow : EditorWindow
 		// Set line
 		Label leftLineLabel = dialogueVE.Q<Label>("left-line-label");
 		Label rightLineLabel = dialogueVE.Q<Label>("right-line-label");
+
 
 		leftLineLabel.text = completeDialogue.DialogueLines[0].GetLocalizedStringImmediateSafe();
 		if (incompleteDialogue != null)
@@ -410,10 +375,12 @@ public class QuestEditorWindow : EditorWindow
 
 	}
 
-	private void LoadActorImage(string actorName)
+	private Image LoadActorImage(string actorName)
 	{
+		Image actorPreview = new Image();
 		Texture2D texture = (Texture2D)AssetDatabase.LoadAssetAtPath($"Assets/Scripts/Quests/Editor/ActorImages/{actorName}.png", typeof(Texture2D));
 		actorPreview.image = texture;
+		return actorPreview;
 	}
 
 	private void DisplayAllProperties(Object data, string visualElementName)
@@ -501,4 +468,45 @@ public class QuestEditorWindow : EditorWindow
 
 
 	}
+
+	private VisualElement CreateDialoguePreviewWithBranching(DialogueDataSO dialogueDataSO)
+	{
+		VisualElement dialoguePreviewVE = new VisualElement();
+		dialoguePreviewVE.name = "Dialogue";
+		foreach (LocalizedString localizedString in dialogueDataSO.DialogueLines)
+		{
+			Label dialogueLine = new Label();
+			dialogueLine.name = dialogueDataSO.DialogueType.ToString();
+			dialogueLine.text = localizedString.GetLocalizedStringImmediateSafe();
+			dialoguePreviewVE.Add(dialogueLine);
+		}
+		if (dialogueDataSO.Choices != null)
+		{
+			VisualElement choicesVE = new VisualElement();
+			choicesVE.name = "Choices";
+			for (int i = 0; i < dialogueDataSO.Choices.Count; i++)
+			{
+				VisualElement choiceVE = new VisualElement();
+				Choice choice = dialogueDataSO.Choices[i];
+				Button dialogueButton = new Button();
+				dialogueButton.name = "Button" + idQuestlineSelected;
+				dialogueButton.text = choice.Response.GetLocalizedStringImmediateSafe();
+				choiceVE.Add(dialogueButton);
+				if (choice.NextDialogue != null)
+					choiceVE.Add(CreateDialoguePreviewWithBranching(choice.NextDialogue));
+
+				choiceVE.name = "Choice";
+				choicesVE.Add(choiceVE);
+			}
+			dialoguePreviewVE.Add(choicesVE);
+		}
+
+		return dialoguePreviewVE;
+	}
+
+}
+class Lines
+{
+	public string line;
+	public bool isText;//or is Button
 }
