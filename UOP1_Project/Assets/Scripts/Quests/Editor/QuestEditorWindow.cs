@@ -22,7 +22,6 @@ public class QuestEditorWindow : EditorWindow
 	[MenuItem("ChopChop/QuestEditorWindow")]
 	public static void ShowWindow()
 	{
-		Debug.Log("Show Window");
 		QuestEditorWindow wnd = GetWindow<QuestEditorWindow>();
 		wnd.titleContent = new GUIContent("QuestEditorWindow");
 
@@ -36,7 +35,7 @@ public class QuestEditorWindow : EditorWindow
 		QuestEditorWindow window = GetWindow<QuestEditorWindow>();
 		// Adds a title to the window.
 
-		Debug.Log("Show Window");
+
 		window.titleContent = new GUIContent("QuestEditorWindow");
 
 		// Sets a minimum size to the window.
@@ -47,7 +46,7 @@ public class QuestEditorWindow : EditorWindow
 	public void CreateGUI()
 	{
 		VisualElement root = rootVisualElement;
-		Debug.Log("Create GUI");
+
 		// Import UXML
 		var visualTree = Resources.Load<VisualTreeAsset>("QuestEditorWindow");
 		root.Add(visualTree.CloneTree());
@@ -134,7 +133,6 @@ public class QuestEditorWindow : EditorWindow
 
 	private void LoadAllQuestsData()
 	{
-		Debug.Log("LoadAllQuestsData");
 		//Load all questlines
 		FindAllSOByType(out QuestlineSO[] questLineSOs);
 		RefreshListView(out ListView allQuestlinesListView, "questlines-list", questLineSOs);
@@ -227,7 +225,7 @@ public class QuestEditorWindow : EditorWindow
 			}
 
 		}
-		Debug.Log("AllDialogueList" + AllDialogueList.ToArray());
+
 		if (AllDialogueList != null)
 			AllDialogue = AllDialogueList.ToArray();
 

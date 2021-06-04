@@ -49,10 +49,12 @@ public class DialogueDataSO : ScriptableObject
 	// Each line would also have an event associated, or another Dialogue
 	private void OnEnable()
 	{
-		//SetDialogueLines();
+		SetDialogueLines();
 	}
 	void SetDialogueLines()
 	{
+		if (_dialogueLines == null)
+			_dialogueLines = new List<LocalizedString>();
 		_dialogueLines.Clear();
 
 		StringTableCollection collection = LocalizationEditorSettings.GetStringTableCollection("Questline Dialogue");
