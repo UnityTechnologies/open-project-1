@@ -9,7 +9,7 @@ using UnityEngine.UI;
 public class MultiInputButton : Button
 {
 	private MenuSelectionHandler _menuSelectionHandler;
-
+	public bool IsSelected;
 	private new void Awake()
 	{
 		_menuSelectionHandler = transform.root.gameObject.GetComponentInChildren<MenuSelectionHandler>();
@@ -27,18 +27,19 @@ public class MultiInputButton : Button
 
 	public override void OnSelect(BaseEventData eventData)
 	{
-		
+		Debug.Log("Onselect ");
+		IsSelected = true;
 		_menuSelectionHandler.UpdateSelection(gameObject);
 		base.OnSelect(eventData);
 	}
-	public  void UpdateDefault()
-	{
-		Debug.Log("Select");
-		if(_menuSelectionHandler==null)
-			_menuSelectionHandler = transform.root.gameObject.GetComponentInChildren<MenuSelectionHandler>();
 
-	    _menuSelectionHandler.UpdateSelection(gameObject);
-		
+	public void UpdateSelected()
+	{
+		if (_menuSelectionHandler == null)
+			_menuSelectionHandler = transform.root.gameObject.GetComponentInChildren<MenuSelectionHandler>();
+		Debug.Log("UpdateSelected");
+		_menuSelectionHandler.UpdateSelection(gameObject);
+
 	}
 
 	public override void OnSubmit(BaseEventData eventData)
