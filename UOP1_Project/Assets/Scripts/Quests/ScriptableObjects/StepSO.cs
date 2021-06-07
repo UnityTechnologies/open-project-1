@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Localization;
 using UnityEngine.Serialization;
 public enum StepType
 {
@@ -46,6 +47,40 @@ public class StepSO : ScriptableObject
 		_isDone = true;
 
 	}
+	public DialogueDataSO StepToDialogue()
+	{
+		DialogueDataSO dialogueData = new DialogueDataSO();
+		dialogueData.SetActor(Actor);
+		if (DialogueBeforeStep != null)
+		{
+			dialogueData = DialogueBeforeStep;
+			if (DialogueBeforeStep.Choices != null)
+			{
+				if (CompleteDialogue != null)
+				{
+					if (dialogueData.Choices.Count > 0)
+					{
 
+						if (dialogueData.Choices[0].NextDialogue == null)
+							dialogueData.Choices[0].SetNextDialogue(CompleteDialogue);
+					}
+				}
+				if (IncompleteDialogue != null)
+				{
+					if (dialogueData.Choices.Count > 1)
+					{
+						if (dialogueData.Choices[1].NextDialogue == null)
+							dialogueData.Choices[1].SetNextDialogue(IncompleteDialogue);
+					}
+
+				}
+
+			}
+
+		}
+
+
+		return dialogueData;
+	}
 
 }
