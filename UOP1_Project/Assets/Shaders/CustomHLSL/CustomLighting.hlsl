@@ -41,6 +41,21 @@ void DirectSpecular_float(float Smoothness, float3 Direction, float3 WorldNormal
 #endif
 }
 
+half4 GetShadowMask()
+{
+    // TODO: not sure if/how we can access inputData.shadowMask here.
+    // Should only be relevant for lightmapped surfaces receiving additional light shadows
+    // #if defined(SHADOWS_SHADOWMASK) && defined(LIGHTMAP_ON)
+    // half4 shadowMask = inputData.shadowMask;
+    // #elif !defined (LIGHTMAP_ON)
+    #if !defined (LIGHTMAP_ON)
+    half4 shadowMask = unity_ProbesOcclusion;
+    #else
+    half4 shadowMask = half4(1, 1, 1, 1);
+    #endif
+    return shadowMask;
+}
+
 void AdditionalLights_float(float Smoothness, float3 WorldPosition, float3 WorldNormal, float3 WorldView, out float3 Diffuse, out float3 Specular)
 {
     float3 diffuseColor = 0;
@@ -48,13 +63,14 @@ void AdditionalLights_float(float Smoothness, float3 WorldPosition, float3 World
     float4 White = 1;
 
 #if !defined(SHADERGRAPH_PREVIEW)
+    half4 shadowMask = GetShadowMask();
     Smoothness = exp2(10 * Smoothness + 1);
     WorldNormal = normalize(WorldNormal);
     WorldView = SafeNormalize(WorldView);
     int pixelLightCount = GetAdditionalLightsCount();
     for (int i = 0; i < pixelLightCount; ++i)
     {
-        Light light = GetAdditionalLight(i, WorldPosition);
+        Light light = GetAdditionalLight(i, WorldPosition, shadowMask);
         half3 attenuatedLightColor = light.color * (light.distanceAttenuation * light.shadowAttenuation);
         diffuseColor += LightingLambert(attenuatedLightColor, light.direction, WorldNormal);
         specularColor += LightingSpecular(attenuatedLightColor, light.direction, WorldNormal, WorldView, White, Smoothness);
