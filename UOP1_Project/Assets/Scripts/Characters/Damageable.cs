@@ -28,6 +28,9 @@ public class Damageable : MonoBehaviour
 
 	public void ReceiveAnAttack(int damage)
 	{
+		if (IsDead)
+			return;
+
 		_currentHealth -= damage;
 		GetHit = true;
 		if (_currentHealth <= 0)
