@@ -37,4 +37,10 @@ public class Damageable : MonoBehaviour
 				OnDie.Invoke();
 		}
 	}
+
+	public void ResetHealth()
+	{
+		_currentHealth = _healthConfigSO.MaxHealth;
+		IsDead = false;
+	}
 }
