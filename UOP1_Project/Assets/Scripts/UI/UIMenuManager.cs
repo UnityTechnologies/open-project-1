@@ -5,16 +5,14 @@ using UnityEngine.UI;
 
 public class UIMenuManager : MonoBehaviour
 {
-	[SerializeField] private UIPopupSetter _popupPanel = default;
-	[SerializeField] private GameObject _settingsPanel = default;
-	[SerializeField] private GameObject _creditsPanel = default;
-	[SerializeField] private GameObject _mainMenuPanel = default;
-
-	[SerializeField] private Button _continueButton = default;
-	[SerializeField] private Button _NewGameButton = default;
+	[SerializeField] private UIPopup _popupPanel = default;
+	[SerializeField] private UISettings _settingsPanel = default;
+	[SerializeField] private UICredits _creditsPanel = default;
+	[SerializeField] private UIMainMenu _mainMenuPanel = default;
 
 	[SerializeField] private SaveSystem _saveSystem = default;
 
+	[SerializeField] private InputReader _inputReader = default;
 
 
 	[Header("Broadcasting on")]
@@ -22,69 +20,46 @@ public class UIMenuManager : MonoBehaviour
 	private VoidEventChannelSO _startNewGameEvent = default;
 	[SerializeField]
 	private VoidEventChannelSO _continueGameEvent = default;
-	[Header("Listening to")]
-	[SerializeField]
-	private VoidEventChannelSO _closePopupEvent = default;
-	[SerializeField]
-	private VoidEventChannelSO _closeSettingsEvent = default;
-	[SerializeField]
-	private VoidEventChannelSO _closeCreditsEvent = default;
-
-	[SerializeField]
-	private BoolEventChannelSO _confirmPopupEvent = default;
-
 	[SerializeField]
 	private VoidEventChannelSO _onGameExitEvent = default;
 
 
+
 	private bool _hasSaveData;
 
-	[SerializeField] private InputReader _inputReader = default;
-	private void Start()
+	private IEnumerator Start()
 	{
 		_inputReader.EnableMenuInput();
-
-		_closePopupEvent.OnEventRaised += HidePopup;
-
-		_closeSettingsEvent.OnEventRaised += CloseSettingsScreen;
-
-		_closeCreditsEvent.OnEventRaised += CloseCreditsScreen;
-
-		SetMenuScreen(); 
+		yield return new WaitForSeconds(0.4f); //waiting time for all scenes to be loaded 
+		SetMenuScreen();
 	}
 	void SetMenuScreen()
 	{
 		_hasSaveData = _saveSystem.LoadSaveDataFromDisk();
-		_continueButton.interactable = _hasSaveData;
-		if(_hasSaveData)
-		{
-	     _continueButton.Select(); 
-		}
-		else
-		{ _NewGameButton.Select();  }
-
+		_mainMenuPanel.SetMenuScreen(_hasSaveData);
+		_mainMenuPanel.ContinueButtonAction += _continueGameEvent.RaiseEvent;
+		_mainMenuPanel.NewGameButtonAction += ButtonStartNewGameClicked;
+		_mainMenuPanel.SettingsButtonAction += OpenSettingsScreen;
+		_mainMenuPanel.CreditsButtonAction += OpenCreditsScreen;
+		_mainMenuPanel.ExitButtonAction += ShowExitConfirmationPopup;
 
 	}
 
-	public void ButtonContinueGameClicked()
+	void ButtonStartNewGameClicked()
 	{
-		_continueGameEvent.RaiseEvent();
-
-	}
-	public void ButtonStartNewGameClicked()
-	{
-		if(!_hasSaveData)
+		if (!_hasSaveData)
 		{
-			ConfirmStartNewGame(); 
+			ConfirmStartNewGame();
 
 		}
 		else
 		{
-			ShowStartNewGameConfirmationPopup(); 
+			ShowStartNewGameConfirmationPopup();
 
 		}
-		
+
 	}
+
 	void ConfirmStartNewGame()
 	{
 		_startNewGameEvent.RaiseEvent();
@@ -92,94 +67,102 @@ public class UIMenuManager : MonoBehaviour
 
 	void ShowStartNewGameConfirmationPopup()
 	{
-		_confirmPopupEvent.OnEventRaised += StartNewGamePopupResponse;
+		_popupPanel.ConfirmationResponseAction += StartNewGamePopupResponse;
+		_popupPanel.ClosePopupAction += HidePopup;
+
 		_popupPanel.gameObject.SetActive(true);
 		_popupPanel.SetPopup(PopupType.NewGame);
 
 	}
 
-	 void StartNewGamePopupResponse(bool startNewGameConfirmed)
+	void StartNewGamePopupResponse(bool startNewGameConfirmed)
 	{
-		_confirmPopupEvent.OnEventRaised -= StartNewGamePopupResponse;
+
+		_popupPanel.ConfirmationResponseAction -= StartNewGamePopupResponse;
+		_popupPanel.ClosePopupAction -= HidePopup;
+
 		_popupPanel.gameObject.SetActive(false);
 
-		if(startNewGameConfirmed)
+		if (startNewGameConfirmed)
 		{
 			ConfirmStartNewGame();
-
 		}
 		else
 		{
-			_continueGameEvent.RaiseEvent(); 
+			_continueGameEvent.RaiseEvent();
 		}
 
-		SetMenuScreen();
+		_mainMenuPanel.SetMenuScreen(_hasSaveData);
 
 	}
 
 	void HidePopup()
 	{
-	
+		_popupPanel.ClosePopupAction -= HidePopup;
 		_popupPanel.gameObject.SetActive(false);
-		SetMenuScreen(); 
+		_mainMenuPanel.SetMenuScreen(_hasSaveData);
 
 	}
+
 	public void OpenSettingsScreen()
 	{
-		_settingsPanel.SetActive(true);
-		_inputReader.closePopupEvent += CloseSettingsScreen;
+		_settingsPanel.gameObject.SetActive(true);
+		_settingsPanel.SetSettingsScreen();
+		_settingsPanel.Closed += CloseSettingsScreen;
 
 	}
 	public void CloseSettingsScreen()
 	{
-		_inputReader.closePopupEvent -= CloseSettingsScreen;
-		_settingsPanel.SetActive(false);
-		SetMenuScreen();
+		_settingsPanel.Closed -= CloseSettingsScreen;
+		_settingsPanel.gameObject.SetActive(false);
+		_mainMenuPanel.SetMenuScreen(_hasSaveData);
 
 	}
 	public void OpenCreditsScreen()
 	{
-		_creditsPanel.SetActive(true);
-		_inputReader.closePopupEvent += CloseCreditsScreen;
+		_creditsPanel.gameObject.SetActive(true);
+		_creditsPanel.closeCreditsAction += CloseCreditsScreen;
 
-		
+
+
 
 	}
 	public void CloseCreditsScreen()
 	{
-		_inputReader.closePopupEvent -= CloseCreditsScreen;
-		_creditsPanel.SetActive(false);
-		SetMenuScreen();
-
+		_creditsPanel.closeCreditsAction -= CloseCreditsScreen;
+		_creditsPanel.gameObject.SetActive(false);
+		_mainMenuPanel.SetMenuScreen(_hasSaveData);
 
 	}
 
 
-	public void ShowQuitPopup()
+	public void ShowExitConfirmationPopup()
 	{
+		_popupPanel.ConfirmationResponseAction += HideExitConfirmationPopup;
 		_popupPanel.gameObject.SetActive(true);
 		_popupPanel.SetPopup(PopupType.Quit);
-		_confirmPopupEvent.OnEventRaised += HideQuitPopup; 
+
+
 
 	}
-	void HideQuitPopup(bool quitConfirmed)
+	void HideExitConfirmationPopup(bool quitConfirmed)
 	{
-		_confirmPopupEvent.OnEventRaised -= HideQuitPopup;
-		_popupPanel.gameObject.SetActive(false); 
-		if(quitConfirmed)
+		_popupPanel.ConfirmationResponseAction -= HideExitConfirmationPopup;
+		_popupPanel.gameObject.SetActive(false);
+		if (quitConfirmed)
 		{
 			Application.Quit();
-			_onGameExitEvent.OnEventRaised(); 
+			_onGameExitEvent.OnEventRaised();
 		}
-		SetMenuScreen();
+		_mainMenuPanel.SetMenuScreen(_hasSaveData);
 
 
 	}
 	private void OnDestroy()
 	{
-		_confirmPopupEvent.OnEventRaised -= HideQuitPopup;
+		_popupPanel.ConfirmationResponseAction -= HideExitConfirmationPopup;
+		_popupPanel.ConfirmationResponseAction -= StartNewGamePopupResponse;
 
-		_confirmPopupEvent.OnEventRaised -= StartNewGamePopupResponse;
 	}
 
 

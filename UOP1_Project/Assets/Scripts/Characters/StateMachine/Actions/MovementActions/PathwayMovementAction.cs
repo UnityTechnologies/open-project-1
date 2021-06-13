@@ -15,7 +15,7 @@ public class PathwayMovementAction : NPCMovementAction
 	{
 		_agent = agent;
 		_isActiveAgent = _agent != null && _agent.isActiveAndEnabled && _agent.isOnNavMesh;
-		_wayPointIndex = 0;
+		_wayPointIndex = - 1; //Initialized to -1 so we don't skip the first element from the waypoint list
 		_roamingSpeed = config.Speed;
 		_wayppoints = config.Waypoints;
 	}
@@ -42,12 +42,14 @@ public class PathwayMovementAction : NPCMovementAction
 
 	private Vector3 GetNextDestination()
 	{
-		Vector3 result = _agent.transform.position;
+		Vector3 nextDestination = _agent.transform.position;
 		if (_wayppoints.Count > 0)
 		{
+			//We check the modulo so when we reach the end of the array we go back to the first element
 			_wayPointIndex = (_wayPointIndex + 1) % _wayppoints.Count;
-			result = _wayppoints[_wayPointIndex].waypoint;
+			nextDestination = _wayppoints[_wayPointIndex].waypoint;
 		}
-		return result;
+		//Debug.Log("the next destination index = " +_wayPointIndex + "value = " + nextDestination);
+		return nextDestination;
 	}
 }

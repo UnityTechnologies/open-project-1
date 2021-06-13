@@ -53,6 +53,7 @@ public static class LocalizationUtils
 			{
 				StringTable table = (StringTable)tableCollection.GetTable(locale.Identifier);
 				if (table != null)
+					if (table.GetEntryFromReference(localizedStringReference.TableEntryReference)!=null)
 					text = table.GetEntryFromReference(localizedStringReference.TableEntryReference).LocalizedValue;
 			}
 		}
