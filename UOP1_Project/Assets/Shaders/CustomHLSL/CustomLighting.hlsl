@@ -1,6 +1,19 @@
 ﻿#ifndef CUSTOM_LIGHTING_INCLUDED
 #define CUSTOM_LIGHTING_INCLUDED
 
+#if defined(SHADERGRAPH_PREVIEW)
+#else
+#pragma multi_compile _ _MAIN_LIGHT_SHADOWS
+#pragma multi_compile _ _MAIN_LIGHT_SHADOWS_CASCADE
+#pragma multi_compile _ _ADDITIONAL_LIGHTS_VERTEX _ADDITIONAL_LIGHTS
+#pragma multi_compile_fragment _ _ADDITIONAL_LIGHT_SHADOWS
+#pragma multi_compile_fragment _ _SHADOWS_SOFT
+#pragma multi_compile _ SHADOWS_SHADOWMASK
+#pragma multi_compile_fragment _ _SCREEN_SPACE_OCCLUSION
+#pragma multi_compile _ LIGHTMAP_ON
+#pragma multi_compile _ LIGHTMAP_SHADOW_MIXING
+#endif
+
 void MainLight_float(float3 WorldPos, out float3 Direction, out float3 Color, out float ShadowAtten)
 {
 #if defined(SHADERGRAPH_PREVIEW)
