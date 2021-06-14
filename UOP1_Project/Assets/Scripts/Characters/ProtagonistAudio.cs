@@ -2,11 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ProtagonistAudio : MonoBehaviour
+public class ProtagonistAudio : CharacterAudio
 {
-	[SerializeField] private AudioCueEventChannelSO _sfxEventChannel = default;
-	[SerializeField] private AudioConfigurationSO _audioConfig = default;
-
 	[SerializeField] private AudioCueSO caneSwing, objectPickup, footstep;
 
 	public void PlayFootstep() => _sfxEventChannel.RaisePlayEvent(footstep, _audioConfig, transform.position);
