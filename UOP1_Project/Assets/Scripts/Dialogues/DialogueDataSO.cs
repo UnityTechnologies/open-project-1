@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.Timeline;
 using UnityEngine.Localization;
 using UnityEditor.Localization;
+using UnityEditor;
 
 public enum DialogueType
 {
@@ -35,7 +36,11 @@ public class DialogueDataSO : ScriptableObject
 	public ActorSO Actor => _actor;
 	public List<LocalizedString> DialogueLines => _dialogueLines;
 	public List<Choice> Choices => _choices;
-	public DialogueType DialogueType => _dialogueType;
+	public DialogueType DialogueType
+	{
+		get { return _dialogueType; }
+		set { _dialogueType = value; }
+	}
 
 	public void SetActor(ActorSO newActor)
 	{
@@ -63,6 +68,7 @@ public class DialogueDataSO : ScriptableObject
 		{
 			int index = 0;
 			LocalizedString _dialogueLine = null;
+
 			do
 			{
 				index++;
@@ -75,7 +81,6 @@ public class DialogueDataSO : ScriptableObject
 				}
 				else
 				{
-
 					_dialogueLine = null;
 				}
 
@@ -83,6 +88,63 @@ public class DialogueDataSO : ScriptableObject
 
 		}
 	}
+public void CreateLine()
+	{
+		if (_dialogueLines == null)
+			_dialogueLines = new List<LocalizedString>();
+		_dialogueLines.Clear(); 
+		StringTableCollection collection = LocalizationEditorSettings.GetStringTableCollection("Questline Dialogue");
+
+		if (collection != null)
+		{
+
+			string DefaultKey = "L" + 1 + "-" + this.name;
+			if (!collection.SharedData.Contains(DefaultKey))
+			{
+
+				collection.SharedData.AddKey(DefaultKey);
+
+
+			}
+		}
+		SetDialogueLines(); 
+		}
+	public void RemoveLineFromSharedTable()
+	{
+		
+		StringTableCollection collection = LocalizationEditorSettings.GetStringTableCollection("Questline Dialogue");
+
+		if (collection != null)
+		{
+			int index = 0;
+			LocalizedString _dialogueLine = null;
+
+
+			
+
+			do
+			{
+				index++;
+				string key = "L" + index + "-" + this.name;
+
+				if (collection.SharedData.Contains(key))
+				{
+					collection.SharedData.RemoveKey(key); 
+				}
+				else
+				{
+					_dialogueLine = null;
+				}
+
+			} while (_dialogueLine != null);
+
+		}
+	}
+	public string GetPath()
+	{
+		return AssetDatabase.GetAssetPath(this);
+	}
+
 #endif
 
 }

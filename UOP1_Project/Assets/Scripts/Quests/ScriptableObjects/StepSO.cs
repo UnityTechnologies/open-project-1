@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Localization;
 using UnityEngine.Serialization;
@@ -33,17 +34,33 @@ public class StepSO : ScriptableObject
 	private StepType _type = default;
 	[SerializeField]
 	bool _isDone = false;
-	public DialogueDataSO DialogueBeforeStep => _dialogueBeforeStep;
-	public DialogueDataSO CompleteDialogue => _completeDialogue;
-	public DialogueDataSO IncompleteDialogue => _incompleteDialogue;
+	[SerializeField]
+	VoidEventChannelSO _endStepEvent = default;
+	public DialogueDataSO DialogueBeforeStep {
+		get { return _dialogueBeforeStep; }
+		set { _dialogueBeforeStep = value; }
+	}
+	public DialogueDataSO CompleteDialogue
+	{
+		get { return _completeDialogue; }
+		set { _completeDialogue = value; }
+	}
+	public DialogueDataSO IncompleteDialogue
+	{
+		get { return _incompleteDialogue; }
+		set { _incompleteDialogue = value; }
+	}
 	public Item Item => _item;
+
+	public VoidEventChannelSO EndStepEvent => _endStepEvent; 
 	public StepType Type => _type;
 	public bool IsDone => _isDone;
 	public ActorSO Actor => _actor;
 
 	public void FinishStep()
 	{
-
+		if(_endStepEvent!=null)
+		_endStepEvent.RaiseEvent(); 
 		_isDone = true;
 
 	}
@@ -82,5 +99,11 @@ public class StepSO : ScriptableObject
 
 		return dialogueData;
 	}
+	public string GetPath()
+	{
+		return AssetDatabase.GetAssetPath(this);
+	}
+
+
 
 }
