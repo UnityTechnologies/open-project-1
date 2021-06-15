@@ -561,9 +561,9 @@ public class QuestEditorWindow : EditorWindow
 		if (!AssetDatabase.IsValidFolder("Assets/ScriptableObjects/Quests/Questline" + questlineId + "/Quest" + questId ))
 			AssetDatabase.CreateFolder("Assets/ScriptableObjects/Quests/Questline" + questlineId, "Quest" + questId);
 		AssetDatabase.CreateAsset(asset, "Assets/ScriptableObjects/Quests/Questline" + questlineId + "/Quest" + questId + "/Q" + questId + "-QL" + questlineId + ".asset");
-		AssetDatabase.SaveAssets();
 		asset.SetQuestId(questId);
 		_currentSelectedQuestLine.Quests.Add(asset);
+		AssetDatabase.SaveAssets();
 		//refresh
 		rootVisualElement.Q<VisualElement>("questlines-list").Q<ListView>().SetSelection(_idQuestlineSelected);
 
@@ -614,8 +614,8 @@ public class QuestEditorWindow : EditorWindow
 		if (!AssetDatabase.IsValidFolder("Assets/ScriptableObjects/Quests/Questline" + questlineId + "/Quest" + questId+"/Step" + stepId))
 		AssetDatabase.CreateFolder("Assets/ScriptableObjects/Quests/Questline" + questlineId + "/Quest" + questId, "Step" + stepId);
 		AssetDatabase.CreateAsset(asset, "Assets/ScriptableObjects/Quests/Questline" + questlineId + "/Quest" + questId + "/Step" + stepId + "/S" + stepId + "-Q" + questId + "-QL" + questlineId + ".asset");
-		AssetDatabase.SaveAssets();
 		_currentSeletedQuest.Steps.Add(asset);
+		AssetDatabase.SaveAssets();
 		//refresh
 		rootVisualElement.Q<VisualElement>("quests-list").Q<ListView>().SetSelection(_idQuestSelected);
 
