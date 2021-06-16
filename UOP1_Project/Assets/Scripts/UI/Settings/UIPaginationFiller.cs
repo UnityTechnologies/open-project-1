@@ -11,10 +11,12 @@ public class UIPaginationFiller : MonoBehaviour
 	[SerializeField] private Sprite _filledPagination = default;
 
 	private List<Image> _instantiatedImages = default;
+
 	private void Start()
 	{
-		_instantiatedImages = new List<Image>(); 
+		//_instantiatedImages = new List<Image>(); 
 	}
+
 	public void SetPagination(int paginationCount, int selectedPaginationIndex)
 	{
 		if (_instantiatedImages == null)
@@ -43,7 +45,6 @@ public class UIPaginationFiller : MonoBehaviour
 
 				}
 			}
-
 			SetCurrentPagination(selectedPaginationIndex);
 		} 
 	}
@@ -61,12 +62,9 @@ public class UIPaginationFiller : MonoBehaviour
 				else
 				{
 					_instantiatedImages[i].sprite = _emptyPagination;
-
-
 				}
 			}
 		else
 			Debug.LogError("Error in pagination number"); 
-
 	}
 }
