@@ -32,7 +32,12 @@ public class StepController : MonoBehaviour
 
 	private void Start()
 	{
-		if (dialogueShot)	dialogueShot.SetActive(false);
+		if (dialogueShot)
+		{
+			dialogueShot.transform.parent = null;
+			dialogueShot.SetActive(false);
+		}
+
 	}
 
 	void PlayDefaultDialogue()
