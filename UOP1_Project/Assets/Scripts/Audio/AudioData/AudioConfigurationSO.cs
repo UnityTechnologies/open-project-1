@@ -26,7 +26,7 @@ public class AudioConfigurationSO : ScriptableObject
 	[Header("Spatialisation")]
 	[Range(0f, 1f)] public float SpatialBlend = 1f;
 	public AudioRolloffMode RolloffMode = AudioRolloffMode.Logarithmic;
-	[Range(0.1f, 5f)] public float MinDistance = 0.1f;
+	[Range(0.01f, 5f)] public float MinDistance = 0.1f;
 	[Range(5f, 100f)] public float MaxDistance = 50f;
 	[Range(0, 360)] public int Spread = 0;
 	[Range(0f, 5f)] public float DopplerLevel = 1f;
