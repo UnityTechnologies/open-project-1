@@ -32,7 +32,6 @@ public class DialogueDataSO : ScriptableObject
 	[SerializeField] private List<LocalizedString> _dialogueLines = default;
 	[SerializeField] private List<Choice> _choices = default;
 	[SerializeField] private DialogueType _dialogueType = default;
-
 	public ActorSO Actor => _actor;
 	public List<LocalizedString> DialogueLines => _dialogueLines;
 	public List<Choice> Choices => _choices;
@@ -45,6 +44,26 @@ public class DialogueDataSO : ScriptableObject
 	public void SetActor(ActorSO newActor)
 	{
 		_actor = newActor;
+
+	}
+	public DialogueDataSO()
+	{
+
+
+	}
+	public DialogueDataSO(DialogueDataSO dialogue)
+	{
+
+		_actor = dialogue.Actor;
+		_dialogueLines = new List<LocalizedString>(dialogue.DialogueLines);
+		_choices = new List<Choice>(); 
+		for (int i=0; i<dialogue.Choices.Count; i++)
+		{
+
+			_choices.Add(new Choice(dialogue.Choices[i])); 
+
+		}
+		_dialogueType = dialogue.DialogueType;
 
 	}
 #if UNITY_EDITOR
@@ -166,5 +185,17 @@ public class Choice
 	public void SetNextDialogue(DialogueDataSO dialogue)
 	{
 		_nextDialogue = dialogue;
+	}
+	public Choice()
+	{
+
+
+	}
+	public Choice(Choice choice)
+	{
+		_response = choice.Response;
+		_nextDialogue = choice.NextDialogue;
+		_actionType = ActionType; 
+
 	}
 }

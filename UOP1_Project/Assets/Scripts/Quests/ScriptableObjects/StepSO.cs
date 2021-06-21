@@ -64,13 +64,15 @@ public class StepSO : ScriptableObject
 		_isDone = true;
 
 	}
+	
 	public DialogueDataSO StepToDialogue()
 	{
 		DialogueDataSO dialogueData = new DialogueDataSO();
+
 		dialogueData.SetActor(Actor);
 		if (DialogueBeforeStep != null)
 		{
-			dialogueData = DialogueBeforeStep;
+			 dialogueData = new DialogueDataSO(DialogueBeforeStep);
 			if (DialogueBeforeStep.Choices != null)
 			{
 				if (CompleteDialogue != null)
