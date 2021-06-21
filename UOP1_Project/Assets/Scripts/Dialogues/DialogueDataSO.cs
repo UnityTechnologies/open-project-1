@@ -140,11 +140,15 @@ public void CreateLine()
 
 		}
 	}
+
+	/// <summary>
+	/// This function is only useful for the Questline Tool in Editor to remove a Questline
+	/// </summary>
+	/// <returns>The local path</returns>
 	public string GetPath()
 	{
 		return AssetDatabase.GetAssetPath(this);
 	}
-
 #endif
 
 }

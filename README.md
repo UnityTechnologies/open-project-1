@@ -21,7 +21,7 @@ In addition to that, make sure you read the [Contribution Guidelines](https://do
 
 If you feel like taking on some **bugs**, check out the [Issues page](https://github.com/UnityTechnologies/open-project-1/issues) on this very repo. In fact, another thing you could help with is by doing some **QA testing**: download the [latest release](https://github.com/UnityTechnologies/open-project-1/releases) of the game, play it, and report issues in the appropriate page. That's also a great way to be part of this project!
 
-This project is built on **Unity 2020.3 LTS**, whatever latest patch is available.
+This project is built on **Unity 2020.3 LTS**, whatever latest patch is available (you can see exactly which version [here](https://github.com/UnityTechnologies/open-project-1/blob/main/UOP1_Project/ProjectSettings/ProjectVersion.txt)).
 
 ![OP1 WIP Screenshot](/Docs/ReadmeImages/Jumping.png)
 _A work in progress screenshot_

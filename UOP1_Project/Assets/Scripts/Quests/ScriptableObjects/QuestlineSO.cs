@@ -29,9 +29,15 @@ public class QuestlineSO : ScriptableObject
 	{
 		_idQuestLine = id;
 	}
+#if UNITY_EDITOR
+	/// <summary>
+	/// This function is only useful for the Questline Tool in Editor to remove a Questline
+	/// </summary>
+	/// <returns>The local path</returns>
 	public string GetPath()
 	{
-		return AssetDatabase.GetAssetPath(this); 
+		return AssetDatabase.GetAssetPath(this);
 	}
+#endif
 
 }

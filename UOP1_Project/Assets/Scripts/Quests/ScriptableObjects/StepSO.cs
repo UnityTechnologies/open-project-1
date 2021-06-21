@@ -99,10 +99,16 @@ public class StepSO : ScriptableObject
 
 		return dialogueData;
 	}
+#if UNITY_EDITOR
+	/// <summary>
+	/// This function is only useful for the Questline Tool in Editor to remove a Step
+	/// </summary>
+	/// <returns>The local path</returns>
 	public string GetPath()
 	{
 		return AssetDatabase.GetAssetPath(this);
 	}
+#endif
 
 
 
