@@ -53,6 +53,7 @@ public static class LocalizationUtils
 			{
 				StringTable table = (StringTable)tableCollection.GetTable(locale.Identifier);
 				if (table != null)
+					if (table.GetEntryFromReference(localizedStringReference.TableEntryReference)!=null)
 					text = table.GetEntryFromReference(localizedStringReference.TableEntryReference).LocalizedValue;
 			}
 		}
@@ -60,6 +61,6 @@ public static class LocalizationUtils
 #endif
 
 		// At runtime (build or editor in play mode), we just get the localized string normally:
-		return localizedStringReference.GetLocalizedString().Result;
+		return localizedStringReference.GetLocalizedString();
 	}
 }

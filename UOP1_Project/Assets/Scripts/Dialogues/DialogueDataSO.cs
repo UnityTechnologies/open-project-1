@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.Timeline;
 using UnityEngine.Localization;
 using UnityEditor.Localization;
+using UnityEditor;
 
 public enum DialogueType
 {
@@ -31,12 +32,40 @@ public class DialogueDataSO : ScriptableObject
 	[SerializeField] private List<LocalizedString> _dialogueLines = default;
 	[SerializeField] private List<Choice> _choices = default;
 	[SerializeField] private DialogueType _dialogueType = default;
-
 	public ActorSO Actor => _actor;
 	public List<LocalizedString> DialogueLines => _dialogueLines;
 	public List<Choice> Choices => _choices;
-	public DialogueType DialogueType => _dialogueType;
+	public DialogueType DialogueType
+	{
+		get { return _dialogueType; }
+		set { _dialogueType = value; }
+	}
 
+	public void SetActor(ActorSO newActor)
+	{
+		_actor = newActor;
+
+	}
+	public DialogueDataSO()
+	{
+
+
+	}
+	public DialogueDataSO(DialogueDataSO dialogue)
+	{
+
+		_actor = dialogue.Actor;
+		_dialogueLines = new List<LocalizedString>(dialogue.DialogueLines);
+		_choices = new List<Choice>(); 
+		for (int i=0; i<dialogue.Choices.Count; i++)
+		{
+
+			_choices.Add(new Choice(dialogue.Choices[i])); 
+
+		}
+		_dialogueType = dialogue.DialogueType;
+
+	}
 #if UNITY_EDITOR
 
 	//TODO: Add support for branching conversations
@@ -48,6 +77,8 @@ public class DialogueDataSO : ScriptableObject
 	}
 	void SetDialogueLines()
 	{
+		if (_dialogueLines == null)
+			_dialogueLines = new List<LocalizedString>();
 		_dialogueLines.Clear();
 
 		StringTableCollection collection = LocalizationEditorSettings.GetStringTableCollection("Questline Dialogue");
@@ -56,6 +87,7 @@ public class DialogueDataSO : ScriptableObject
 		{
 			int index = 0;
 			LocalizedString _dialogueLine = null;
+
 			do
 			{
 				index++;
@@ -68,7 +100,6 @@ public class DialogueDataSO : ScriptableObject
 				}
 				else
 				{
-
 					_dialogueLine = null;
 				}
 
@@ -76,7 +107,69 @@ public class DialogueDataSO : ScriptableObject
 
 		}
 	}
+public void CreateLine()
+	{
+		if (_dialogueLines == null)
+			_dialogueLines = new List<LocalizedString>();
+		_dialogueLines.Clear(); 
+		StringTableCollection collection = LocalizationEditorSettings.GetStringTableCollection("Questline Dialogue");
+
+		if (collection != null)
+		{
+
+			string DefaultKey = "L" + 1 + "-" + this.name;
+			if (!collection.SharedData.Contains(DefaultKey))
+			{
+
+				collection.SharedData.AddKey(DefaultKey);
+
+
+			}
+		}
+		SetDialogueLines(); 
+		}
+	public void RemoveLineFromSharedTable()
+	{
+		
+		StringTableCollection collection = LocalizationEditorSettings.GetStringTableCollection("Questline Dialogue");
+
+		if (collection != null)
+		{
+			int index = 0;
+			LocalizedString _dialogueLine = null;
+
+
+			
+
+			do
+			{
+				index++;
+				string key = "L" + index + "-" + this.name;
+
+				if (collection.SharedData.Contains(key))
+				{
+					collection.SharedData.RemoveKey(key); 
+				}
+				else
+				{
+					_dialogueLine = null;
+				}
+
+			} while (_dialogueLine != null);
+
+		}
+	}
+
+	/// <summary>
+	/// This function is only useful for the Questline Tool in Editor to remove a Questline
+	/// </summary>
+	/// <returns>The local path</returns>
+	public string GetPath()
+	{
+		return AssetDatabase.GetAssetPath(this);
+	}
 #endif
+
 }
 
 
@@ -89,4 +182,20 @@ public class Choice
 	public LocalizedString Response => _response;
 	public DialogueDataSO NextDialogue => _nextDialogue;
 	public ChoiceActionType ActionType => _actionType;
+	public void SetNextDialogue(DialogueDataSO dialogue)
+	{
+		_nextDialogue = dialogue;
+	}
+	public Choice()
+	{
+
+
+	}
+	public Choice(Choice choice)
+	{
+		_response = choice.Response;
+		_nextDialogue = choice.NextDialogue;
+		_actionType = ActionType; 
+
+	}
 }
