@@ -11,6 +11,10 @@ public class QuestManagerSO : ScriptableObject
 	[SerializeField] private Inventory _inventory = default;
 
 
+	[SerializeField] private VoidEventChannelSO _playWinningQuest = default;
+	[SerializeField] private VoidEventChannelSO _playLosingQuest = default;
+	[SerializeField] private QuestSO _winningQuest = default;
+	[SerializeField] private QuestSO _losingQuest = default;
 
 	[Header("Linstening to channels")]
 	[SerializeField] private VoidEventChannelSO _checkStepValidityEvent = default;
@@ -29,13 +33,21 @@ public class QuestManagerSO : ScriptableObject
 	private int _currentQuestIndex = 0;
 	private int _currentQuestlineIndex = 0;
 	private int _currentStepIndex = 0;
-
+	public void OnDisable()
+	{
+		_checkStepValidityEvent.OnEventRaised -= CheckStepValidity;
+		_endDialogueEvent.OnEventRaised -= EndDialogue;
+		_playWinningQuest.OnEventRaised -= SetWinningSteps;
+		_playLosingQuest.OnEventRaised -= SetLosingSteps;
+	}
 	public void StartGame()
 	{//Add code for saved information
 		_checkStepValidityEvent.OnEventRaised += CheckStepValidity;
 		_endDialogueEvent.OnEventRaised += EndDialogue;
 
-		StartQuestline();
+		_playWinningQuest.OnEventRaised += SetWinningSteps;
+		_playLosingQuest.OnEventRaised += SetLosingSteps;
+		StartQuestline(); 
 	}
 	void StartQuestline()
 	{
@@ -141,7 +153,18 @@ public class QuestManagerSO : ScriptableObject
 		}
 
 	}
+	void SetWinningSteps()
+	{
+		for (int i = 0; i < _winningQuest.Steps.Count; i++)
+			_currentQuest.Steps.Add(_winningQuest.Steps[i]);
 
+
+	}
+    void SetLosingSteps()
+	{
+		for (int i = 0; i < _losingQuest.Steps.Count; i++)
+			_currentQuest.Steps.Add(_losingQuest.Steps[i]);
+	}
 	void StartStep()
 	{
 		if (_currentQuest.Steps != null)
@@ -156,7 +179,7 @@ public class QuestManagerSO : ScriptableObject
 	{
 
 		if (_currentStep != null)
-		{
+		{	
 			switch (_currentStep.Type)
 			{
 				case StepType.CheckItem:
@@ -202,7 +225,6 @@ public class QuestManagerSO : ScriptableObject
 					//dialogue has already been played
 					if (_currentStep.CompleteDialogue != null)
 					{
-
 						_completeDialogueEvent.RaiseEvent();
 					}
 					else
@@ -235,9 +257,7 @@ public class QuestManagerSO : ScriptableObject
 	}
 	void EndStep()
 	{
-
 		_currentStep = null;
-
 		if (_currentQuest != null)
 			if (_currentQuest.Steps.Count > _currentStepIndex)
 			{
@@ -246,7 +266,6 @@ public class QuestManagerSO : ScriptableObject
 				{
 					_currentStepIndex++;
 					StartStep();
-
 				}
 				else
 				{
