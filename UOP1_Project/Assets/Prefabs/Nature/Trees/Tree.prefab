@@ -1,5 +1,19 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!136 &4744890041706611347
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5910745251271710401}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.6191793
+  m_Height: 8.660096
+  m_Direction: 1
+  m_Center: {x: -0.064138055, y: 3.7312171, z: 0.023304084}
 --- !u!1 &5988098909633967672
 GameObject:
   m_ObjectHideFlags: 0
@@ -44,20 +58,55 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 3.34
   m_Center: {x: 0, y: 0, z: 0}
---- !u!136 &4744890041706611347
-CapsuleCollider:
+--- !u!1 &6754956797363694912
+GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5910745251271710401}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1157582014463985259}
+  - component: {fileID: 3240971515933197726}
+  m_Layer: 0
+  m_Name: Light Probe Group
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1157582014463985259
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6754956797363694912}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.22, y: 1.67, z: 0.18}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 6434799244096359547}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!220 &3240971515933197726
+LightProbeGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6754956797363694912}
   m_Enabled: 1
-  m_Radius: 0.6191793
-  m_Height: 8.660096
-  m_Direction: 1
-  m_Center: {x: -0.064138055, y: 3.7312171, z: 0.023304084}
+  m_SourcePositions:
+  - {x: 2.3633652, y: 2.1932707, z: 1.14328}
+  - {x: 1.2525558, y: 1, z: -2.339386}
+  - {x: 1, y: -1, z: 1}
+  - {x: 1, y: -1, z: -1}
+  - {x: -2.4283218, y: 2.210353, z: 1.6678772}
+  - {x: -1.5066528, y: 2.227582, z: -2.3733826}
+  - {x: -1, y: -1, z: 1}
+  - {x: -1, y: -1, z: -1}
+  m_Dering: 1
 --- !u!1001 &6829223592588061584
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -134,6 +183,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 3.1490002
+      objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 0cc589ab20a19e14c9b7c52965ebd4eb,
+        type: 3}
+      propertyPath: m_LightProbeUsage
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 0cc589ab20a19e14c9b7c52965ebd4eb,
+        type: 3}
+      propertyPath: m_ReflectionProbeUsage
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -7511558181221131132, guid: 0cc589ab20a19e14c9b7c52965ebd4eb,
         type: 3}

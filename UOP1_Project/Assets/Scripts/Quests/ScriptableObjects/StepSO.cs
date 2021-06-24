@@ -64,13 +64,15 @@ public class StepSO : ScriptableObject
 		_isDone = true;
 
 	}
+	
 	public DialogueDataSO StepToDialogue()
 	{
 		DialogueDataSO dialogueData = new DialogueDataSO();
+
 		dialogueData.SetActor(Actor);
 		if (DialogueBeforeStep != null)
 		{
-			dialogueData = DialogueBeforeStep;
+			 dialogueData = new DialogueDataSO(DialogueBeforeStep);
 			if (DialogueBeforeStep.Choices != null)
 			{
 				if (CompleteDialogue != null)
@@ -99,10 +101,16 @@ public class StepSO : ScriptableObject
 
 		return dialogueData;
 	}
+#if UNITY_EDITOR
+	/// <summary>
+	/// This function is only useful for the Questline Tool in Editor to remove a Step
+	/// </summary>
+	/// <returns>The local path</returns>
 	public string GetPath()
 	{
 		return AssetDatabase.GetAssetPath(this);
 	}
+#endif
 
 
 

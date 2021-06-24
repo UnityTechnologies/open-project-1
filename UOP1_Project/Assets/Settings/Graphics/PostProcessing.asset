@@ -115,8 +115,46 @@ MonoBehaviour:
   components:
   - {fileID: -928967852137336824}
   - {fileID: -8563005506984977490}
-  - {fileID: 5375911478384493614}
   - {fileID: 8744350878819287839}
+  - {fileID: 1636933497914160572}
+--- !u!114 &1636933497914160572
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66f335fb1ffd8684294ad653bf1c7564, type: 3}
+  m_Name: ColorAdjustments
+  m_EditorClassIdentifier: 
+  active: 1
+  m_AdvancedMode: 0
+  postExposure:
+    m_OverrideState: 1
+    m_Value: 0.2
+  contrast:
+    m_OverrideState: 0
+    m_Value: 3.38
+    min: -100
+    max: 100
+  colorFilter:
+    m_OverrideState: 0
+    m_Value: {r: 1, g: 1, b: 1, a: 1}
+    hdr: 1
+    showAlpha: 0
+    showEyeDropper: 1
+  hueShift:
+    m_OverrideState: 0
+    m_Value: -17
+    min: -180
+    max: 180
+  saturation:
+    m_OverrideState: 1
+    m_Value: 10
+    min: -100
+    max: 100
 --- !u!114 &5108346255176012434
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -156,68 +194,6 @@ MonoBehaviour:
     m_OverrideState: 0
     m_Value: 1
     min: 0
---- !u!114 &5375911478384493614
-MonoBehaviour:
-  m_ObjectHideFlags: 3
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c01700fd266d6914ababb731e09af2eb, type: 3}
-  m_Name: DepthOfField
-  m_EditorClassIdentifier: 
-  active: 0
-  m_AdvancedMode: 0
-  mode:
-    m_OverrideState: 1
-    m_Value: 1
-  gaussianStart:
-    m_OverrideState: 1
-    m_Value: 20.8
-    min: 0
-  gaussianEnd:
-    m_OverrideState: 1
-    m_Value: 72.1
-    min: 0
-  gaussianMaxRadius:
-    m_OverrideState: 1
-    m_Value: 1.5
-    min: 0.5
-    max: 1.5
-  highQualitySampling:
-    m_OverrideState: 1
-    m_Value: 1
-  focusDistance:
-    m_OverrideState: 1
-    m_Value: 4.61
-    min: 0.1
-  aperture:
-    m_OverrideState: 1
-    m_Value: 12
-    min: 1
-    max: 32
-  focalLength:
-    m_OverrideState: 1
-    m_Value: 116
-    min: 1
-    max: 300
-  bladeCount:
-    m_OverrideState: 1
-    m_Value: 3
-    min: 3
-    max: 9
-  bladeCurvature:
-    m_OverrideState: 1
-    m_Value: 0.447
-    min: 0
-    max: 1
-  bladeRotation:
-    m_OverrideState: 1
-    m_Value: -53
-    min: -180
-    max: 180
 --- !u!114 &6060187148454108164
 MonoBehaviour:
   m_ObjectHideFlags: 3

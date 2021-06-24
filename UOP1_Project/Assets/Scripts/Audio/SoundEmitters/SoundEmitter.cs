@@ -49,7 +49,7 @@ public class SoundEmitter : MonoBehaviour
 		if (startTime <= _audioSource.clip.length)
 			_audioSource.time = startTime;
 
-		_audioSource.DOFade(1f, duration);
+		_audioSource.DOFade(settings.Volume, duration);
 	}
 
 	public float FadeMusicOut(float duration)
