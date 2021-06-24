@@ -15,4 +15,19 @@ public class BoolEventChannelSO : ScriptableObject
 		if (OnEventRaised != null)
 			OnEventRaised.Invoke(value);
 	}
+	public void UnsubscribeAll()
+	{
+		if (OnEventRaised != null)
+			{
+			if (OnEventRaised.GetInvocationList() != null)
+			
+				foreach (System.Delegate d in OnEventRaised.GetInvocationList())
+				{
+					OnEventRaised -= d as UnityAction<bool>;
+
+				}
+		}
+		
+
+	}
 }

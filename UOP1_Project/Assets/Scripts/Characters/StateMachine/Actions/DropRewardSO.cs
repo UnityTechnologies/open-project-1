@@ -15,7 +15,7 @@ public class DropReward : StateAction
 
 	public override void Awake(StateMachine stateMachine)
 	{
-		_dropRewardConfig = stateMachine.GetComponent<Damageable>().DropableRewardConfig;
+		_dropRewardConfig = stateMachine.GetComponent<Damageable>().DroppableRewardConfig;
 		_currentTransform = stateMachine.transform;
 	}
 
@@ -29,7 +29,7 @@ public class DropReward : StateAction
 		DropAllRewards(_currentTransform.position);
 	}
 
-	private void DropAllRewards(Vector3 postion)
+	private void DropAllRewards(Vector3 position)
 	{
 		// Drop items
 		foreach (DropGroup dropGroup in _dropRewardConfig.DropGroups)
@@ -37,7 +37,7 @@ public class DropReward : StateAction
 			float randValue = Random.value;
 			if (dropGroup.DropRate >= randValue)
 			{
-				DropOneReward(dropGroup, postion);
+				DropOneReward(dropGroup, position);
 			}
 			else
 			{
@@ -46,7 +46,7 @@ public class DropReward : StateAction
 		}
 	}
 
-	private void DropOneReward(DropGroup dropGroup, Vector3 postion)
+	private void DropOneReward(DropGroup dropGroup, Vector3 position)
 	{
 		float dropDice = Random.value;
 		float _currentRate = 0.0f;
@@ -67,9 +67,9 @@ public class DropReward : StateAction
 
 		float randAngle = Random.value * Mathf.PI * 2;
 		GameObject collectibleItem = GameObject.Instantiate(itemPrefab,
-			postion + itemPrefab.transform.localPosition +
+			position + itemPrefab.transform.localPosition +
 			_dropRewardConfig.ScatteringDistance * (Mathf.Cos(randAngle) * Vector3.forward + Mathf.Sin(randAngle) * Vector3.right),
 			Quaternion.identity);
-		collectibleItem.GetComponent<CollectibleItem>().SetItem(item);
+		collectibleItem.GetComponent<CollectableItem>().AnimateItem();
 	}
 }

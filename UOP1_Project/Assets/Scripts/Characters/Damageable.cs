@@ -7,7 +7,7 @@ public class Damageable : MonoBehaviour
 	[SerializeField] private GetHitEffectConfigSO _getHitEffectSO;
 	[SerializeField] private Renderer _mainMeshRenderer;
 	[SerializeField] private DroppableRewardConfigSO _droppableRewardSO;
-	public DroppableRewardConfigSO DropableRewardConfig => _droppableRewardSO;
+	public DroppableRewardConfigSO DroppableRewardConfig => _droppableRewardSO;
 
 	private int _currentHealth = default;
 
@@ -28,6 +28,9 @@ public class Damageable : MonoBehaviour
 
 	public void ReceiveAnAttack(int damage)
 	{
+		if (IsDead)
+			return;
+
 		_currentHealth -= damage;
 		GetHit = true;
 		if (_currentHealth <= 0)
@@ -36,5 +39,11 @@ public class Damageable : MonoBehaviour
 			if (OnDie != null)
 				OnDie.Invoke();
 		}
+	}
+
+	public void ResetHealth()
+	{
+		_currentHealth = _healthConfigSO.MaxHealth;
+		IsDead = false;
 	}
 }

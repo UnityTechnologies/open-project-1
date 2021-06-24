@@ -1,11 +1,17 @@
 fileFormatVersion: 2
 guid: d55d64a92e5f3d6428133073165df7ba
 ModelImporter:
-  serializedVersion: 19301
+  serializedVersion: 20200
   internalIDToNameTable:
   - first:
       74: -2993534804863918692
-    second: jump
+    second: Jump
+  - first:
+      74: -2702400367771620057
+    second: InAir
+  - first:
+      74: -7497848331705974981
+    second: Land
   externalObjects: {}
   materials:
     materialImportMode: 0
@@ -35,10 +41,75 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: jump
+      name: Jump
       takeName: jump
       internalID: 0
       firstFrame: 7
+      lastFrame: 14
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+      curves: []
+      events:
+      - time: 0.5125
+        functionName: PlayFootstep
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      transformMask: []
+      maskType: 3
+      maskSource: {fileID: 31900000, guid: a428894a8111fb146ab26f98303080df, type: 2}
+      additiveReferencePoseFrame: 1
+    - serializedVersion: 16
+      name: InAir
+      takeName: jump
+      internalID: 0
+      firstFrame: 13
+      lastFrame: 18
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 1
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {fileID: 31900000, guid: a428894a8111fb146ab26f98303080df, type: 2}
+      additiveReferencePoseFrame: 1
+    - serializedVersion: 16
+      name: Land
+      takeName: jump
+      internalID: 0
+      firstFrame: 21
       lastFrame: 40
       wrapMode: 0
       orientationOffsetY: 0
@@ -56,19 +127,12 @@ ModelImporter:
       keepOriginalPositionXZ: 0
       heightFromFeet: 0
       mirror: 0
-      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      bodyMask: 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
       curves: []
-      events:
-      - time: 0.5125
-        functionName: PlayFootstep
-        data: 
-        objectReferenceParameter: {instanceID: 0}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
+      events: []
       transformMask: []
       maskType: 3
-      maskSource: {instanceID: 0}
+      maskSource: {fileID: 31900000, guid: a428894a8111fb146ab26f98303080df, type: 2}
       additiveReferencePoseFrame: 1
     isReadable: 0
   meshes:
@@ -78,16 +142,17 @@ ModelImporter:
     addColliders: 0
     useSRGBMaterialColor: 1
     sortHierarchyByName: 1
-    importVisibility: 0
-    importBlendShapes: 1
-    importCameras: 1
-    importLights: 1
+    importVisibility: 1
+    importBlendShapes: 0
+    importCameras: 0
+    importLights: 0
     fileIdsGeneration: 2
     swapUVChannels: 0
     generateSecondaryUV: 0
     useFileUnits: 1
     keepQuads: 0
     weldVertices: 1
+    bakeAxisConversion: 0
     preserveHierarchy: 0
     skinWeightsMode: 0
     maxBonesPerVertex: 4
@@ -97,6 +162,9 @@ ModelImporter:
     secondaryUVAngleDistortion: 8
     secondaryUVAreaDistortion: 15
     secondaryUVHardAngle: 88
+    secondaryUVMarginMethod: 1
+    secondaryUVMinLightmapResolution: 40
+    secondaryUVMinObjectScale: 1
     secondaryUVPackMargin: 8
     useFileScale: 1
   tangentSpace:
@@ -130,6 +198,7 @@ ModelImporter:
   animationType: 2
   humanoidOversampling: 1
   avatarSetup: 0
+  addHumanoidExtraRootOnlyWhenUsingAvatar: 0
   additionalBone: 0
   userData: 
   assetBundleName: 

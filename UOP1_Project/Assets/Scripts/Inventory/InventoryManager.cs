@@ -13,62 +13,41 @@ public class InventoryManager : MonoBehaviour
 	[SerializeField] private ItemEventChannelSO _giveItemEvent = default;
 	[SerializeField] ItemEventChannelSO _addItemEvent = default;
 	[SerializeField] ItemEventChannelSO _removeItemEvent = default;
+	[SerializeField] private SaveSystem _saveSystem;
 
 	private void OnEnable()
 	{
 		//Check if the event exists to avoid errors
-		if (_cookRecipeEvent != null)
-		{
-			_cookRecipeEvent.OnEventRaised += CookRecipeEventRaised;
-		}
-		if (_useItemEvent != null)
-		{
-			_useItemEvent.OnEventRaised += UseItemEventRaised;
-		}
-		if (_equipItemEvent != null)
-		{
-			_equipItemEvent.OnEventRaised += EquipItemEventRaised;
-		}
-		if (_addItemEvent != null)
-		{
-			_addItemEvent.OnEventRaised += AddItem;
-		}
-		if (_removeItemEvent != null)
-		{
-			_removeItemEvent.OnEventRaised += RemoveItem;
-		}
-		if (_rewardItemEvent != null)
-		{
-			_rewardItemEvent.OnEventRaised += AddItem;
-		}
-		if (_giveItemEvent != null)
-		{
-			_giveItemEvent.OnEventRaised += RemoveItem;
-		}
+
+		_cookRecipeEvent.OnEventRaised += CookRecipeEventRaised;
+
+		_useItemEvent.OnEventRaised += UseItemEventRaised;
+
+		_equipItemEvent.OnEventRaised += EquipItemEventRaised;
+
+		_addItemEvent.OnEventRaised += AddItem;
+
+		_removeItemEvent.OnEventRaised += RemoveItem;
+
+		_rewardItemEvent.OnEventRaised += AddItem;
+
+		_giveItemEvent.OnEventRaised += RemoveItem;
+
 	}
 
 	private void OnDisable()
 	{
-		if (_cookRecipeEvent != null)
-		{
-			_cookRecipeEvent.OnEventRaised -= CookRecipeEventRaised;
-		}
-		if (_useItemEvent != null)
-		{
-			_useItemEvent.OnEventRaised -= UseItemEventRaised;
-		}
-		if (_equipItemEvent != null)
-		{
-			_equipItemEvent.OnEventRaised -= EquipItemEventRaised;
-		}
-		if (_addItemEvent != null)
-		{
-			_addItemEvent.OnEventRaised -= AddItem;
-		}
-		if (_removeItemEvent != null)
-		{
-			_removeItemEvent.OnEventRaised -= RemoveItem;
-		}
+
+		_cookRecipeEvent.OnEventRaised -= CookRecipeEventRaised;
+
+		_useItemEvent.OnEventRaised -= UseItemEventRaised;
+
+		_equipItemEvent.OnEventRaised -= EquipItemEventRaised;
+
+		_addItemEvent.OnEventRaised -= AddItem;
+
+		_removeItemEvent.OnEventRaised -= RemoveItem;
+
 	}
 
 
@@ -104,12 +83,13 @@ public class InventoryManager : MonoBehaviour
 	void AddItem(Item item)
 	{
 		_currentInventory.Add(item);
+		_saveSystem.SaveDataToDisk();
 
 	}
 	void RemoveItem(Item item)
 	{
 		_currentInventory.Remove(item);
-
+		_saveSystem.SaveDataToDisk();
 	}
 
 

@@ -4,7 +4,7 @@ using UnityEngine.Localization;
 // Created with collaboration from:
 // https://forum.unity.com/threads/inventory-system.980646/
 [CreateAssetMenu(fileName = "Item", menuName = "Inventory/Item", order = 51)]
-public class Item : ScriptableObject
+public class Item : SerializableScriptableObject
 {
 	[Tooltip("The name of the item")]
 	[SerializeField] private LocalizedString _name = default;
@@ -34,7 +34,12 @@ public class Item : ScriptableObject
 	[SerializeField]
 	private Item _resultingDish = default;
 
-
+	[Tooltip("a checkbox for localized asset")]
+	[SerializeField]
+	private bool _isLocalized = default;
+	[Tooltip("A localized preview image for the item")]
+	[SerializeField]
+	private LocalizedSprite _localizePreviewImage = default;
 
 	public LocalizedString Name => _name;
 	public Sprite PreviewImage => _previewImage;
@@ -43,5 +48,8 @@ public class Item : ScriptableObject
 	public GameObject Prefab => _prefab;
 	public List<ItemStack> IngredientsList => _ingredientsList;
 	public Item ResultingDish => _resultingDish;
+
+	public bool IsLocalized => _isLocalized;
+	public LocalizedSprite LocalizePreviewImage => _localizePreviewImage;
 
 }

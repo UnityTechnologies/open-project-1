@@ -8,7 +8,7 @@ public class PlayLandParticlesActionSO : StateActionSO<PlayLandParticlesAction> 
 public class PlayLandParticlesAction : StateAction
 {
 	//Component references
-	private DustParticlesController _dustController;
+	private PlayerEffectController _dustController;
 	private Transform _transform;
 
 	private float _coolDown = 0.3f;
@@ -20,7 +20,7 @@ public class PlayLandParticlesAction : StateAction
 
 	public override void Awake(StateMachine stateMachine)
 	{
-		_dustController = stateMachine.GetComponent<DustParticlesController>();
+		_dustController = stateMachine.GetComponent<PlayerEffectController>();
 		_transform = stateMachine.transform;
 	}
 

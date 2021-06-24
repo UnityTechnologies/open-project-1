@@ -1,20 +1,43 @@
 ﻿using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Quest", menuName = "Quests/Quest", order = 51)]
-public class QuestSO : ScriptableObject
+[CreateAssetMenu(fileName = "Questline", menuName = "Quests/Questline", order = 51)]
+public class QuestlineSO : ScriptableObject
 {
-	[Tooltip("The collection of Steps composing the Quest")]
 	[SerializeField]
-	private List<StepSO> _steps = new List<StepSO>();
+	private int _idQuestLine = 0;
+	[Tooltip("The collection of Quests composing the Questline")]
+	[SerializeField]
+	private List<QuestSO> _quests = new List<QuestSO>();
 	[SerializeField]
 	bool _isDone = false;
-	public List<StepSO> Steps => _steps;
+	[SerializeField]
+	VoidEventChannelSO _endQuestlineEvent = default;
+	public int IdQuestline => _idQuestLine;
+	public List<QuestSO> Quests => _quests;
+
+	public VoidEventChannelSO EndQuestlineEvent => _endQuestlineEvent;
 	public bool IsDone => _isDone;
-	public void FinishQuest()
+	public void FinishQuestline()
 	{
+		if(_endQuestlineEvent!=null)
+		{ _endQuestlineEvent.RaiseEvent();  }
 		_isDone = true;
 	}
-
+	public void SetQuestlineId(int id)
+	{
+		_idQuestLine = id;
+	}
+#if UNITY_EDITOR
+	/// <summary>
+	/// This function is only useful for the Questline Tool in Editor to remove a Questline
+	/// </summary>
+	/// <returns>The local path</returns>
+	public string GetPath()
+	{
+		return AssetDatabase.GetAssetPath(this);
+	}
+#endif
 
 }

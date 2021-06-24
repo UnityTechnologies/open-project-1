@@ -36,4 +36,26 @@ public static class FileManager
 			return false;
 		}
 	}
+
+	public static bool MoveFile(string fileName, string newFileName)
+	{
+		var fullPath = Path.Combine(Application.persistentDataPath, fileName);
+		var newFullPath = Path.Combine(Application.persistentDataPath, newFileName);
+
+		try
+		{
+			if (File.Exists(newFullPath))
+			{
+				File.Delete(newFullPath);
+			}
+			File.Move(fullPath, newFullPath);
+		}
+		catch (Exception e)
+		{
+			//Debug.LogError($"Failed to move file from {fullPath} to {newFullPath} with exception {e}");
+			return false;
+		}
+
+		return true;
+	}
 }
