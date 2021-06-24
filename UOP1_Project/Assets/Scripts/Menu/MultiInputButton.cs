@@ -27,7 +27,6 @@ public class MultiInputButton : Button
 
 	public override void OnSelect(BaseEventData eventData)
 	{
-		Debug.Log("Onselect ");
 		IsSelected = true;
 		_menuSelectionHandler.UpdateSelection(gameObject);
 		base.OnSelect(eventData);
@@ -37,7 +36,7 @@ public class MultiInputButton : Button
 	{
 		if (_menuSelectionHandler == null)
 			_menuSelectionHandler = transform.root.gameObject.GetComponentInChildren<MenuSelectionHandler>();
-		Debug.Log("UpdateSelected");
+		
 		_menuSelectionHandler.UpdateSelection(gameObject);
 
 	}

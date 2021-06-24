@@ -11,7 +11,7 @@ public enum StepType
 	RewardItem
 }
 [CreateAssetMenu(fileName = "step", menuName = "Quests/step", order = 51)]
-public class StepSO : ScriptableObject
+public class StepSO : SerializableScriptableObject
 {
 
 	[Tooltip("The Character this mission will need interaction with")]
@@ -54,7 +54,11 @@ public class StepSO : ScriptableObject
 
 	public VoidEventChannelSO EndStepEvent => _endStepEvent; 
 	public StepType Type => _type;
-	public bool IsDone => _isDone;
+	public bool IsDone
+	{
+		get => _isDone;
+		set => _isDone = value;
+	}
 	public ActorSO Actor => _actor;
 
 	public void FinishStep()
@@ -64,13 +68,15 @@ public class StepSO : ScriptableObject
 		_isDone = true;
 
 	}
+	
 	public DialogueDataSO StepToDialogue()
 	{
 		DialogueDataSO dialogueData = new DialogueDataSO();
+
 		dialogueData.SetActor(Actor);
 		if (DialogueBeforeStep != null)
 		{
-			dialogueData = DialogueBeforeStep;
+			 dialogueData = new DialogueDataSO(DialogueBeforeStep);
 			if (DialogueBeforeStep.Choices != null)
 			{
 				if (CompleteDialogue != null)

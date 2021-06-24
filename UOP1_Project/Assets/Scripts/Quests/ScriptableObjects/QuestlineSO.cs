@@ -3,7 +3,7 @@ using UnityEditor;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Questline", menuName = "Quests/Questline", order = 51)]
-public class QuestlineSO : ScriptableObject
+public class QuestlineSO : SerializableScriptableObject
 {
 	[SerializeField]
 	private int _idQuestLine = 0;
@@ -18,7 +18,11 @@ public class QuestlineSO : ScriptableObject
 	public List<QuestSO> Quests => _quests;
 
 	public VoidEventChannelSO EndQuestlineEvent => _endQuestlineEvent;
-	public bool IsDone => _isDone;
+	public bool IsDone
+	{
+		get => _isDone;
+		set => _isDone = value;
+	}
 	public void FinishQuestline()
 	{
 		if(_endQuestlineEvent!=null)

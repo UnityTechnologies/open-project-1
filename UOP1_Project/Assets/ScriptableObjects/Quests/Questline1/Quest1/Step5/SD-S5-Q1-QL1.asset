@@ -15,11 +15,12 @@ MonoBehaviour:
   _actor: {fileID: 11400000, guid: 027d026cf519df04eb8b7bf251472e13, type: 2}
   _dialogueLines:
   - m_TableReference:
-      m_TableCollectionName: GUID:f81a49615d56c1a4fbbd14b4569b06f3
+      m_TableCollectionName: Questline Dialogue
     m_TableEntryReference:
-      m_KeyId: 47047907408207872
-      m_Key: 
+      m_KeyId: 0
+      m_Key: L1-SD-S5-Q1-QL1
     m_FallbackState: 0
+    m_WaitForCompletion: 1
   _choices:
   - _response:
       m_TableReference:
@@ -28,8 +29,9 @@ MonoBehaviour:
         m_KeyId: 20322714321281024
         m_Key: 
       m_FallbackState: 0
-    _nextDialogue: {fileID: 11400000, guid: f1c3b2d99b9627b44904c2d869e9e3e6, type: 2}
-    _actionType: 1
+      m_WaitForCompletion: 1
+    _nextDialogue: {fileID: 0}
+    _actionType: 0
   - _response:
       m_TableReference:
         m_TableCollectionName: GUID:f81a49615d56c1a4fbbd14b4569b06f3
@@ -37,6 +39,7 @@ MonoBehaviour:
         m_KeyId: 20322813445267456
         m_Key: 
       m_FallbackState: 0
+      m_WaitForCompletion: 1
     _nextDialogue: {fileID: 11400000, guid: fb4ddb997f3860d4eaf7024c8a669a6d, type: 2}
     _actionType: 0
   _dialogueType: 0

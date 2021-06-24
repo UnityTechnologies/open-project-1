@@ -15,7 +15,7 @@ public enum selectionType
 }
 public class QuestEditorWindow : EditorWindow
 {
-	private StepSO _currentSeletedStep=default;
+	private StepSO _currentSelectedStep=default;
 	private QuestSO _currentSeletedQuest=default;
 	private QuestlineSO _currentSelectedQuestLine=default;
 	private int _idQuestlineSelected = default;
@@ -184,11 +184,11 @@ public class QuestEditorWindow : EditorWindow
 						allStepsListView.onSelectionChange += (stepEnumerable) =>
 						{
 							_idStepSelected = allStepsListView.selectedIndex;
-							_currentSeletedStep = GetDataFromListViewItem<StepSO>(stepEnumerable);
-							DisplayAllProperties(_currentSeletedStep, "step-info-scroll");
+							_currentSelectedStep = GetDataFromListViewItem<StepSO>(stepEnumerable);
+							DisplayAllProperties(_currentSelectedStep, "step-info-scroll");
 							ClearElements(selectionType.Step);
 							//Find all DialogueDataSOs in the same folder of the StepSO
-							FindAllDialogueInStep(_currentSeletedStep, out DialogueDataSO[] dialogueDataSOs);
+							FindAllDialogueInStep(_currentSelectedStep, out DialogueDataSO[] dialogueDataSOs);
 							if (dialogueDataSOs != null)
 							{
 
@@ -196,8 +196,9 @@ public class QuestEditorWindow : EditorWindow
 
 								dialoguesListView.onSelectionChange += (dialogueEnumerable) =>
 								{
-									DialogueDataSO dialogueData = GetDataFromListViewItem<DialogueDataSO>(dialogueEnumerable);
 
+									
+									DialogueDataSO dialogueData = GetDataFromListViewItem<DialogueDataSO>(dialogueEnumerable);
 									DisplayAllProperties(dialogueData, "dialogue-info-scroll");
 								};
 							}
@@ -213,7 +214,10 @@ public class QuestEditorWindow : EditorWindow
 			}
 		};
 	}
-
+	private void OnDisable()
+	{
+		AssetDatabase.SaveAssets(); 
+	}
 	private T GetDataFromListViewItem<T>(IEnumerable<object> enumberable) where T : ScriptableObject
 	{
 		T data = default;
@@ -257,16 +261,16 @@ public class QuestEditorWindow : EditorWindow
 	private void SetAddDialogueButtonsForStep(out VisualElement ButtonsPanel)
 	{
 		ButtonsPanel = new VisualElement();
-		if (_currentSeletedStep != null)
+		if (_currentSelectedStep != null)
 		{
-			if (_currentSeletedStep.DialogueBeforeStep == null)
+			if (_currentSelectedStep.DialogueBeforeStep == null)
 			{
 				Button AddDialogueBeforeStepButton = new Button();
 				AddDialogueBeforeStepButton.text = "Add Dialogue Before Step";
 				AddDialogueBeforeStepButton.clickable.clicked += AddDialogueBeforeStep;
 				ButtonsPanel.Add(AddDialogueBeforeStepButton);
 			}
-			if (_currentSeletedStep.CompleteDialogue == null)
+			if (_currentSelectedStep.CompleteDialogue == null)
 			{
 				Button AddCompletionDialogueButton = new Button();
 				AddCompletionDialogueButton.text = "Add Completion Dialogue";
@@ -274,7 +278,7 @@ public class QuestEditorWindow : EditorWindow
 				ButtonsPanel.Add(AddCompletionDialogueButton);
 
 			}
-			if (_currentSeletedStep.IncompleteDialogue == null)
+			if (_currentSelectedStep.IncompleteDialogue == null)
 			{
 
 				Button AddIncompletionDialogueButton = new Button();
@@ -290,17 +294,19 @@ public class QuestEditorWindow : EditorWindow
 	}
 	private void AddDialogueBeforeStep()
 	{
-
 		DialogueDataSO asset = ScriptableObject.CreateInstance<DialogueDataSO>();
 		int questlineId = 0;
 		questlineId = _currentSelectedQuestLine.IdQuestline;
 		int questId = 0;
 		questId = _currentSeletedQuest.IdQuest;
 		int stepId = 0;
-		stepId = _currentSeletedQuest.Steps.FindIndex(o=>o==_currentSeletedStep)+1;
+		stepId = _currentSeletedQuest.Steps.FindIndex(o=>o==_currentSelectedStep)+1;
 		AssetDatabase.CreateAsset(asset, "Assets/ScriptableObjects/Quests/Questline" + questlineId + "/Quest" + questId + "/Step" + stepId + "/SD-S" + stepId + "-Q" + questId + "-QL" + questlineId + ".asset");
+
+		EditorUtility.SetDirty(asset);
+		EditorUtility.SetDirty(_currentSeletedQuest);
 		AssetDatabase.SaveAssets();
-		_currentSeletedStep.DialogueBeforeStep=asset;
+		_currentSelectedStep.DialogueBeforeStep=asset;
 		asset.DialogueType = DialogueType.startDialogue;
 		asset.CreateLine(); 
 		rootVisualElement.Q<VisualElement>("steps-list").Q<ListView>().SetSelection(_idStepSelected);
@@ -314,13 +320,16 @@ public class QuestEditorWindow : EditorWindow
 		int questId = 0;
 		questId = _currentSeletedQuest.IdQuest;
 		int stepId = 0;
-		stepId = _currentSeletedQuest.Steps.FindIndex(o => o == _currentSeletedStep)+1;
+		stepId = _currentSeletedQuest.Steps.FindIndex(o => o == _currentSelectedStep)+1;
 		
 		AssetDatabase.CreateAsset(asset, "Assets/ScriptableObjects/Quests/Questline" + questlineId + "/Quest" + questId + "/Step" + stepId + "/CD-S" + stepId + "-Q" + questId + "-QL" + questlineId + ".asset");
-		AssetDatabase.SaveAssets();
-		_currentSeletedStep.CompleteDialogue = asset;
+		_currentSelectedStep.CompleteDialogue = asset;
 		asset.DialogueType = DialogueType.winDialogue;
 		asset.CreateLine();
+		EditorUtility.SetDirty(asset);
+		EditorUtility.SetDirty(_currentSeletedQuest);
+		AssetDatabase.SaveAssets();
+	
 		rootVisualElement.Q<VisualElement>("steps-list").Q<ListView>().SetSelection(_idStepSelected);
 	}
 	private void AddIncompletionDialogue()
@@ -332,12 +341,15 @@ public class QuestEditorWindow : EditorWindow
 		int questId = 0;
 		questId = _currentSeletedQuest.IdQuest;
 		int stepId = 0;
-		stepId = _currentSeletedQuest.Steps.FindIndex(o => o == _currentSeletedStep)+1;
+		stepId = _currentSeletedQuest.Steps.FindIndex(o => o == _currentSelectedStep)+1;
 		AssetDatabase.CreateAsset(asset, "Assets/ScriptableObjects/Quests/Questline" + questlineId + "/Quest" + questId + "/Step" + stepId + "/ID-S" + stepId + "-Q" + questId + "-QL" + questlineId + ".asset");
-		AssetDatabase.SaveAssets();
+
 		asset.DialogueType = DialogueType.loseDialogue;
 		asset.CreateLine();
-		_currentSeletedStep.IncompleteDialogue = asset;
+		_currentSelectedStep.IncompleteDialogue = asset;
+		EditorUtility.SetDirty(asset);
+		EditorUtility.SetDirty(_currentSeletedQuest);
+		AssetDatabase.SaveAssets();
 
 		rootVisualElement.Q<VisualElement>("steps-list").Q<ListView>().SetSelection(_idStepSelected);
 	}
@@ -529,8 +541,8 @@ public class QuestEditorWindow : EditorWindow
 		if (!AssetDatabase.IsValidFolder("Assets/ScriptableObjects/Quests/Questline" + id))
 			AssetDatabase.CreateFolder("Assets/ScriptableObjects/Quests", "Questline" + id);
 		AssetDatabase.CreateAsset(asset, "Assets/ScriptableObjects/Quests/Questline" + id + "/QL" + id + ".asset");
+		EditorUtility.SetDirty(asset);
 		AssetDatabase.SaveAssets();
-		
 		//refresh
 		LoadAllQuestsData();
 	}
@@ -553,16 +565,20 @@ public class QuestEditorWindow : EditorWindow
 	}
 	void AddQuest()
 	{
-		QuestSO asset = ScriptableObject.CreateInstance<QuestSO>();
+		QuestSO asset = CreateInstance<QuestSO>();
 		int questlineId = 0;
 		questlineId = _currentSelectedQuestLine.IdQuestline;
 		int questId = 0;
 		questId = _currentSelectedQuestLine.Quests.Count + 1;
+
+		
 		if (!AssetDatabase.IsValidFolder("Assets/ScriptableObjects/Quests/Questline" + questlineId + "/Quest" + questId ))
 			AssetDatabase.CreateFolder("Assets/ScriptableObjects/Quests/Questline" + questlineId, "Quest" + questId);
 		AssetDatabase.CreateAsset(asset, "Assets/ScriptableObjects/Quests/Questline" + questlineId + "/Quest" + questId + "/Q" + questId + "-QL" + questlineId + ".asset");
 		asset.SetQuestId(questId);
 		_currentSelectedQuestLine.Quests.Add(asset);
+		EditorUtility.SetDirty(asset);
+		EditorUtility.SetDirty(_currentSelectedQuestLine);
 		AssetDatabase.SaveAssets();
 		//refresh
 		rootVisualElement.Q<VisualElement>("questlines-list").Q<ListView>().SetSelection(_idQuestlineSelected);
@@ -615,6 +631,8 @@ public class QuestEditorWindow : EditorWindow
 		AssetDatabase.CreateFolder("Assets/ScriptableObjects/Quests/Questline" + questlineId + "/Quest" + questId, "Step" + stepId);
 		AssetDatabase.CreateAsset(asset, "Assets/ScriptableObjects/Quests/Questline" + questlineId + "/Quest" + questId + "/Step" + stepId + "/S" + stepId + "-Q" + questId + "-QL" + questlineId + ".asset");
 		_currentSeletedQuest.Steps.Add(asset);
+		EditorUtility.SetDirty(asset);
+		EditorUtility.SetDirty(_currentSeletedQuest);
 		AssetDatabase.SaveAssets();
 		//refresh
 		rootVisualElement.Q<VisualElement>("quests-list").Q<ListView>().SetSelection(_idQuestSelected);
@@ -624,25 +642,25 @@ public class QuestEditorWindow : EditorWindow
 	void RemoveStep()
 	{
 
-		if (_currentSeletedStep == null)
+		if (_currentSelectedStep == null)
 			return; 
 		//When removing a step, remove its references in the parent quest
-		if (_currentSeletedQuest.Steps.Exists(o => o == _currentSeletedStep))
-			_currentSeletedQuest.Steps.Remove(_currentSeletedQuest.Steps.Find(o => o == _currentSeletedStep)); 
+		if (_currentSeletedQuest.Steps.Exists(o => o == _currentSelectedStep))
+			_currentSeletedQuest.Steps.Remove(_currentSeletedQuest.Steps.Find(o => o == _currentSelectedStep)); 
 		//when removing a step remove its dialogues
-		if (_currentSeletedStep.DialogueBeforeStep!=null)
+		if (_currentSelectedStep.DialogueBeforeStep!=null)
 		{
-			RemoveDialogue(_currentSeletedStep.DialogueBeforeStep); 
+			RemoveDialogue(_currentSelectedStep.DialogueBeforeStep); 
 		}
-		if (_currentSeletedStep.CompleteDialogue != null)
+		if (_currentSelectedStep.CompleteDialogue != null)
 		{
-			RemoveDialogue(_currentSeletedStep.CompleteDialogue);
+			RemoveDialogue(_currentSelectedStep.CompleteDialogue);
 		}
-		if (_currentSeletedStep.IncompleteDialogue != null)
+		if (_currentSelectedStep.IncompleteDialogue != null)
 		{
-			RemoveDialogue(_currentSeletedStep.IncompleteDialogue);
+			RemoveDialogue(_currentSelectedStep.IncompleteDialogue);
 		}
-		AssetDatabase.DeleteAsset(_currentSeletedStep.GetPath());
+		AssetDatabase.DeleteAsset(_currentSelectedStep.GetPath());
 		_idStepSelected = -1;
 		//refresh List
 		rootVisualElement.Q<VisualElement>("quests-list").Q<ListView>().SetSelection(_idQuestSelected);
