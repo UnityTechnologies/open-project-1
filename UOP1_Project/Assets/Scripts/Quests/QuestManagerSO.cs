@@ -26,7 +26,7 @@ public class QuestManagerSO : ScriptableObject
 
 	[SerializeField] private ItemEventChannelSO _giveItemEvent = default;
 	[SerializeField] private ItemEventChannelSO _rewardItemEvent = default;
-
+	[SerializeField] private SaveSystem saveSystem = default; 
 	private QuestSO _currentQuest = null;
 	private QuestlineSO _currentQuestline;
 	private StepSO _currentStep;
@@ -267,10 +267,12 @@ public class QuestManagerSO : ScriptableObject
 			if (_currentQuest.Steps.Count > _currentStepIndex)
 			{
 				_currentQuest.Steps[_currentStepIndex].FinishStep();
+				saveSystem.SaveDataToDisk();
 				if (_currentQuest.Steps.Count > _currentStepIndex + 1)
 				{
 					_currentStepIndex++;
 					StartStep();
+
 				}
 				else
 				{
@@ -279,15 +281,17 @@ public class QuestManagerSO : ScriptableObject
 				}
 			}
 
-
+		
 
 	}
 	void EndQuest()
 	{
 
 		if (_currentQuest != null)
+		{
 			_currentQuest.FinishQuest();
-
+			saveSystem.SaveDataToDisk();
+		}
 		_currentQuest = null;
 		_currentQuestIndex = -1;
 		if (_currentQuestline != null)
@@ -309,6 +313,7 @@ public class QuestManagerSO : ScriptableObject
 			if (_currentQuestline != null)
 			{
 				_currentQuestline.FinishQuestline();
+				saveSystem.SaveDataToDisk();
 
 			}
 
