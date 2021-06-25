@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
@@ -6,9 +7,10 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 public class SaveSystem : ScriptableObject
 {
 	[SerializeField] private LoadEventChannelSO _loadLocation = default;
-	[SerializeField] private Inventory _playerInventory;
-
-	public string saveFilename = "save.chop";
+	[SerializeField] private Inventory _playerInventory=default;
+	[SerializeField]
+	private QuestManagerSO _questManagerSO = default; 
+    public string saveFilename = "save.chop";
 	public string backupSaveFilename = "save.chop.bak";
 	public Save saveData = new Save();
 
@@ -58,15 +60,26 @@ public class SaveSystem : ScriptableObject
 			}
 		}
 	}
+	public void LoadSavedQuestlineStatus()
+	{
+		_questManagerSO.SetFinishedQuestlineItemsFromSave(saveData._finishedQuestlineItemsGUIds); 
+		
+	}
 
 	public void SaveDataToDisk()
 	{
 		saveData._itemStacks.Clear();
 		foreach (var itemStack in _playerInventory.Items)
 		{
-			//	saveData._itemStacks.Add(new SerializedItemStack(itemStack.Item.Guid, itemStack.Amount));
+				saveData._itemStacks.Add(new SerializedItemStack(itemStack.Item.Guid, itemStack.Amount));
 		}
+		saveData._finishedQuestlineItemsGUIds.Clear();
 
+		foreach (var item in _questManagerSO.GetFinishedQuestlineItemsGUIds())
+		{
+			saveData._finishedQuestlineItemsGUIds.Add(item); 
+
+		}
 		if (FileManager.MoveFile(saveFilename, backupSaveFilename))
 		{
 			if (FileManager.WriteToFile(saveFilename, saveData.ToJson()))
@@ -79,5 +92,14 @@ public class SaveSystem : ScriptableObject
 	public void WriteEmptySaveFile()
 	{
 		FileManager.WriteToFile(saveFilename, "");
+	
+	}
+	public void SetNewGameData()
+	{
+		FileManager.WriteToFile(saveFilename, "");
+		_playerInventory.Items.Clear();
+		_questManagerSO.ResetQuestlines();
+		SaveDataToDisk(); 
+
 	}
 }

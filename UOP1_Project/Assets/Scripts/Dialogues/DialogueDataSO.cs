@@ -17,7 +17,9 @@ public enum DialogueType
 public enum ChoiceActionType
 {
 	doNothing,
-	continueWithStep
+	continueWithStep,
+	winningChoice,
+	losingChoice,
 
 }
 /// <summary>
@@ -56,7 +58,8 @@ public class DialogueDataSO : ScriptableObject
 
 		_actor = dialogue.Actor;
 		_dialogueLines = new List<LocalizedString>(dialogue.DialogueLines);
-		_choices = new List<Choice>(); 
+		_choices = new List<Choice>();
+		if(dialogue.Choices!=null)
 		for (int i=0; i<dialogue.Choices.Count; i++)
 		{
 
@@ -195,7 +198,6 @@ public class Choice
 	{
 		_response = choice.Response;
 		_nextDialogue = choice.NextDialogue;
-		_actionType = ActionType; 
-
+		_actionType = ActionType;
 	}
 }

@@ -11,6 +11,10 @@ public class QuestManagerSO : ScriptableObject
 	[SerializeField] private Inventory _inventory = default;
 
 
+	[SerializeField] private VoidEventChannelSO _playWinningQuest = default;
+	[SerializeField] private VoidEventChannelSO _playLosingQuest = default;
+	[SerializeField] private QuestSO _winningQuest = default;
+	[SerializeField] private QuestSO _losingQuest = default;
 
 	[Header("Linstening to channels")]
 	[SerializeField] private VoidEventChannelSO _checkStepValidityEvent = default;
@@ -22,19 +26,28 @@ public class QuestManagerSO : ScriptableObject
 
 	[SerializeField] private ItemEventChannelSO _giveItemEvent = default;
 	[SerializeField] private ItemEventChannelSO _rewardItemEvent = default;
-
+	[SerializeField] private SaveSystem saveSystem = default; 
 	private QuestSO _currentQuest = null;
 	private QuestlineSO _currentQuestline;
 	private StepSO _currentStep;
 	private int _currentQuestIndex = 0;
 	private int _currentQuestlineIndex = 0;
 	private int _currentStepIndex = 0;
-
+	public void OnDisable()
+	{
+		_checkStepValidityEvent.OnEventRaised -= CheckStepValidity;
+		_endDialogueEvent.OnEventRaised -= EndDialogue;
+		_playWinningQuest.OnEventRaised -= SetWinningSteps;
+		_playLosingQuest.OnEventRaised -= SetLosingSteps;
+	}
 	public void StartGame()
-	{//Add code for saved information
+	{
+		//Add code for saved information
 		_checkStepValidityEvent.OnEventRaised += CheckStepValidity;
 		_endDialogueEvent.OnEventRaised += EndDialogue;
 
+		_playWinningQuest.OnEventRaised += SetWinningSteps;
+		_playLosingQuest.OnEventRaised += SetLosingSteps;
 		StartQuestline();
 	}
 	void StartQuestline()
@@ -44,6 +57,7 @@ public class QuestManagerSO : ScriptableObject
 			if (_questlines.Exists(o => !o.IsDone))
 			{
 				_currentQuestlineIndex = _questlines.FindIndex(o => !o.IsDone);
+
 				if (_currentQuestlineIndex >= 0)
 					_currentQuestline = _questlines.Find(o => !o.IsDone);
 			}
@@ -141,7 +155,18 @@ public class QuestManagerSO : ScriptableObject
 		}
 
 	}
+	void SetWinningSteps()
+	{
+		for (int i = 0; i < _winningQuest.Steps.Count; i++)
+			_currentQuest.Steps.Add(_winningQuest.Steps[i]);
 
+
+	}
+	void SetLosingSteps()
+	{
+		for (int i = 0; i < _losingQuest.Steps.Count; i++)
+			_currentQuest.Steps.Add(_losingQuest.Steps[i]);
+	}
 	void StartStep()
 	{
 		if (_currentQuest.Steps != null)
@@ -202,7 +227,6 @@ public class QuestManagerSO : ScriptableObject
 					//dialogue has already been played
 					if (_currentStep.CompleteDialogue != null)
 					{
-
 						_completeDialogueEvent.RaiseEvent();
 					}
 					else
@@ -235,13 +259,12 @@ public class QuestManagerSO : ScriptableObject
 	}
 	void EndStep()
 	{
-
 		_currentStep = null;
-
 		if (_currentQuest != null)
 			if (_currentQuest.Steps.Count > _currentStepIndex)
 			{
 				_currentQuest.Steps[_currentStepIndex].FinishStep();
+				saveSystem.SaveDataToDisk();
 				if (_currentQuest.Steps.Count > _currentStepIndex + 1)
 				{
 					_currentStepIndex++;
@@ -255,15 +278,17 @@ public class QuestManagerSO : ScriptableObject
 				}
 			}
 
-
+		
 
 	}
 	void EndQuest()
 	{
 
 		if (_currentQuest != null)
+		{
 			_currentQuest.FinishQuest();
-
+			saveSystem.SaveDataToDisk();
+		}
 		_currentQuest = null;
 		_currentQuestIndex = -1;
 		if (_currentQuestline != null)
@@ -285,6 +310,7 @@ public class QuestManagerSO : ScriptableObject
 			if (_currentQuestline != null)
 			{
 				_currentQuestline.FinishQuestline();
+				saveSystem.SaveDataToDisk();
 
 			}
 
@@ -298,6 +324,101 @@ public class QuestManagerSO : ScriptableObject
 
 
 	}
+	public List<string> GetFinishedQuestlineItemsGUIds()
+	{
+		List<string> finishedItemsGUIds = new List<string>();
+
+		foreach (var questline in _questlines)
+		{
+			if (questline.IsDone)
+			{
+				finishedItemsGUIds.Add(questline.Guid);
+
+			}
+
+			foreach (var quest in questline.Quests)
+			{
+				if (quest.IsDone)
+				{
+					finishedItemsGUIds.Add(quest.Guid);
+
+				}
+				foreach (var step in quest.Steps)
+				{
+					if (step.IsDone)
+					{
+						finishedItemsGUIds.Add(step.Guid);
+
+					}
+
+
+				}
+
+			}
+		}
+		return finishedItemsGUIds;
+	}
+	public void SetFinishedQuestlineItemsFromSave(List<string> finishedItemsGUIds)
+	{
+
+
+		foreach (var questline in _questlines)
+		{
+			questline.IsDone = finishedItemsGUIds.Exists(o => o == questline.Guid);
+
+
+			foreach (var quest in questline.Quests)
+			{
+				quest.IsDone = finishedItemsGUIds.Exists(o => o == quest.Guid);
+
+
+				foreach (var step in quest.Steps)
+				{
+					step.IsDone = finishedItemsGUIds.Exists(o => o == step.Guid);
+
+
+
+				}
+
+			}
+		}
+		//Start Questline with the new data 
+		StartQuestline();
+	}
+	public void ResetQuestlines()
+	{
+
+
+		foreach (var questline in _questlines)
+		{
+			questline.IsDone = false;
+
+
+			foreach (var quest in questline.Quests)
+			{
+				quest.IsDone = false;
+
+
+				foreach (var step in quest.Steps)
+				{
+					step.IsDone = false;
+
+
+
+				}
+
+			}
+		}
+		_currentQuest = null;
+		_currentQuestline = null;
+		_currentStep = null;
+		_currentQuestIndex = 0;
+		_currentQuestlineIndex = 0;
+		_currentStepIndex = 0;
+		//Start Questline with the new data 
+		StartQuestline();
+	}
+
 }
 
 

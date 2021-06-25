@@ -27,6 +27,8 @@ public class DialogueManager : MonoBehaviour
 	[SerializeField] private DialogueChoicesChannelSO _showChoicesUIEvent = default;
 	[SerializeField] private DialogueDataChannelSO _endDialogue = default;
 	[SerializeField] private VoidEventChannelSO _continueWithStep = default;
+	[SerializeField] private VoidEventChannelSO _playWinningQuest = default;
+	[SerializeField] private VoidEventChannelSO _playLosingQuest = default;
 	[SerializeField] private VoidEventChannelSO _closeDialogueUIEvent = default;
 
 	[Header("Gameplay Components")]
@@ -50,7 +52,12 @@ public class DialogueManager : MonoBehaviour
 		if (_gameState.CurrentGameState != GameState.Cutscene)
 			_gameState.UpdateGameState(GameState.Dialogue);
 		BeginDialogueData(dialogueDataSO);
+		if(_currentDialogue.DialogueLines!=null)
 		DisplayDialogueLine(_currentDialogue.DialogueLines[_counter], dialogueDataSO.Actor);
+		else
+		{
+			Debug.LogError("Check Dialogue"); 
+		}
 	}
 
 	/// <summary>
@@ -107,24 +114,49 @@ public class DialogueManager : MonoBehaviour
 
 	private void MakeDialogueChoice(Choice choice)
 	{
-			_makeDialogueChoiceEvent.OnEventRaised -= MakeDialogueChoice;
-		
-		if (choice.ActionType == ChoiceActionType.continueWithStep)
+		_makeDialogueChoiceEvent.OnEventRaised -= MakeDialogueChoice;
+
+		switch (choice.ActionType)
 		{
+			case ChoiceActionType.continueWithStep: 
+		
 			if (_continueWithStep != null)
 				_continueWithStep.RaiseEvent();
 			if (choice.NextDialogue != null)
 				DisplayDialogueData(choice.NextDialogue);
-		}
-		else
-		{
+				break;
+			case ChoiceActionType.winningChoice:
+
+				if (_playWinningQuest != null)
+					_playWinningQuest.RaiseEvent();
+				if (choice.NextDialogue != null)
+					DisplayDialogueData(choice.NextDialogue);
+				else
+					DialogueEndedAndCloseDialogueUI();
+				
+				break;
+			case ChoiceActionType.losingChoice:
+
+				if (_playLosingQuest != null)
+					_playLosingQuest.RaiseEvent();
+				if (choice.NextDialogue != null)
+					DisplayDialogueData(choice.NextDialogue);
+				else
+					DialogueEndedAndCloseDialogueUI();
+				
+				break;
+			case ChoiceActionType.doNothing:
 			if (choice.NextDialogue != null)
 				DisplayDialogueData(choice.NextDialogue);
 			else
 				DialogueEndedAndCloseDialogueUI();
-		}
-	}
+				break; 
 
+		}
+
+	
+	
+	}
 	void DialogueEnded()
 	{
 		if (_endDialogue != null)

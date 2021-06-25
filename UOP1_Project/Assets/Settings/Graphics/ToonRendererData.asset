@@ -15,7 +15,7 @@ MonoBehaviour:
   m_Active: 1
   settings:
     passTag: Water
-    Event: 500
+    Event: 450
     filterSettings:
       RenderQueueType: 1
       LayerMask:
@@ -24,14 +24,53 @@ MonoBehaviour:
       PassNames: []
     overrideMaterial: {fileID: 0}
     overrideMaterialPassIndex: 0
-    overrideDepthState: 0
+    overrideDepthState: 1
     depthCompareFunction: 4
-    enableWrite: 1
+    enableWrite: 0
     stencilSettings:
       overrideStencilState: 1
       stencilReference: 5
       stencilCompareFunction: 6
       passOperation: 0
+      failOperation: 0
+      zFailOperation: 0
+    cameraSettings:
+      overrideCamera: 0
+      restoreCamera: 1
+      offset: {x: 0, y: 0, z: 0, w: 0}
+      cameraFieldOfView: 60
+--- !u!114 &-6682913900797327863
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b3d386ba5cd94485973aee1479b272e, type: 3}
+  m_Name: CharacterUnobstructedTransparents
+  m_EditorClassIdentifier: 
+  m_Active: 1
+  settings:
+    passTag: CharacterUnobstructedTransparents
+    Event: 550
+    filterSettings:
+      RenderQueueType: 1
+      LayerMask:
+        serializedVersion: 2
+        m_Bits: 512
+      PassNames: []
+    overrideMaterial: {fileID: 0}
+    overrideMaterialPassIndex: 0
+    overrideDepthState: 0
+    depthCompareFunction: 4
+    enableWrite: 1
+    stencilSettings:
+      overrideStencilState: 0
+      stencilReference: 5
+      stencilCompareFunction: 8
+      passOperation: 2
       failOperation: 0
       zFailOperation: 0
     cameraSettings:
@@ -94,9 +133,10 @@ MonoBehaviour:
   - {fileID: -3777622620742823688}
   - {fileID: 3244698584681819116}
   - {fileID: 5796406753071690752}
+  - {fileID: -6682913900797327863}
   - {fileID: 466668180145458491}
   - {fileID: -8170998572127264418}
-  m_RendererFeatureMap: f8d024bb3d3093cbec2b2cef2b7c072d007483323bf970503b4d8cc13cf079065e61212817c89a8e
+  m_RendererFeatureMap: f8d024bb3d3093cbec2b2cef2b7c072d007483323bf97050098674fe368541a33b4d8cc13cf079065e61212817c89a8e
   postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}
   xrSystemData: {fileID: 11400000, guid: 60e1133243b97e347b653163a8c01b64, type: 2}
   shaders:
@@ -115,7 +155,7 @@ MonoBehaviour:
     m_Bits: 2855
   m_TransparentLayerMask:
     serializedVersion: 2
-    m_Bits: 295
+    m_Bits: 807
   m_DefaultStencilState:
     overrideStencilState: 0
     stencilReference: 0
@@ -150,8 +190,8 @@ MonoBehaviour:
       PassNames: []
     overrideMaterial: {fileID: 0}
     overrideMaterialPassIndex: 0
-    overrideDepthState: 1
-    depthCompareFunction: 4
+    overrideDepthState: 0
+    depthCompareFunction: 7
     enableWrite: 0
     stencilSettings:
       overrideStencilState: 1
@@ -214,25 +254,25 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6b3d386ba5cd94485973aee1479b272e, type: 3}
-  m_Name: CharacterObstructedTransparents
+  m_Name: ObstructedTransparentFiller
   m_EditorClassIdentifier: 
   m_Active: 1
   settings:
-    passTag: CharacterObstructedTransparents
-    Event: 550
+    passTag: ObstructedTransparentFiller
+    Event: 500
     filterSettings:
-      RenderQueueType: 1
+      RenderQueueType: 0
       LayerMask:
         serializedVersion: 2
-        m_Bits: 4608
+        m_Bits: 4096
       PassNames: []
-    overrideMaterial: {fileID: 0}
+    overrideMaterial: {fileID: 2100000, guid: eb537407156894419a7c1586107ced36, type: 2}
     overrideMaterialPassIndex: 0
-    overrideDepthState: 0
+    overrideDepthState: 1
     depthCompareFunction: 7
     enableWrite: 0
     stencilSettings:
-      overrideStencilState: 0
+      overrideStencilState: 1
       stencilReference: 1
       stencilCompareFunction: 3
       passOperation: 0
