@@ -149,8 +149,6 @@ public class QuestManagerSO : ScriptableObject
 				//start Step
 				_currentStepIndex = 0;
 				_currentStepIndex = _currentQuest.Steps.FindIndex(o => o.IsDone == false);
-				Debug.Log("Step " + _currentStepIndex);
-				Debug.Log("Step done" + _currentQuest.Steps.FindIndex(o => o.IsDone));
 				if (_currentStepIndex >= 0)
 					StartStep();
 			}
@@ -171,7 +169,6 @@ public class QuestManagerSO : ScriptableObject
 	}
 	void StartStep()
 	{
-		Debug.Log("StartStep");
 		if (_currentQuest.Steps != null)
 			if (_currentQuest.Steps.Count > _currentStepIndex)
 			{
