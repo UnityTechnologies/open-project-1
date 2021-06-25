@@ -17,5 +17,8 @@ public class LightmapScaleSetter : MonoBehaviour
             _scale = 1f;
         }
         Debug.Log("Lightmap scale set to " + _scale);
+
+        MeshRenderer[] meshRenderers = GetComponentsInChildren<MeshRenderer>();
+        Debug.Log(meshRenderers.Length + " mesh renderers found in component's children.");
     }
 }
