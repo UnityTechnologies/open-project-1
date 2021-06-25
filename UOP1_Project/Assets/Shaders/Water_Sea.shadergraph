@@ -329,6 +329,9 @@
         },
         {
             "m_Id": "ac96170197f14650bb2b389167d6cc57"
+        },
+        {
+            "m_Id": "0b42a60f5ddd4835870a575e9b20794c"
         }
     ],
     "m_GroupDatas": [
@@ -397,6 +400,20 @@
             "m_InputSlot": {
                 "m_Node": {
                     "m_Id": "cc2aa8c5fa354402af7e9a5df5522eda"
+                },
+                "m_SlotId": 0
+            }
+        },
+        {
+            "m_OutputSlot": {
+                "m_Node": {
+                    "m_Id": "0b42a60f5ddd4835870a575e9b20794c"
+                },
+                "m_SlotId": 1
+            },
+            "m_InputSlot": {
+                "m_Node": {
+                    "m_Id": "91c85b099f4c4c92b3ba7d20120b10e6"
                 },
                 "m_SlotId": 0
             }
@@ -1264,9 +1281,9 @@
             },
             "m_InputSlot": {
                 "m_Node": {
-                    "m_Id": "91c85b099f4c4c92b3ba7d20120b10e6"
+                    "m_Id": "0b42a60f5ddd4835870a575e9b20794c"
                 },
-                "m_SlotId": 0
+                "m_SlotId": 1286794315
             }
         },
         {
@@ -1692,8 +1709,8 @@
     ],
     "m_VertexContext": {
         "m_Position": {
-            "x": 6620.00048828125,
-            "y": 716.0
+            "x": 7228.5712890625,
+            "y": 717.1428833007813
         },
         "m_Blocks": [
             {
@@ -1709,8 +1726,8 @@
     },
     "m_FragmentContext": {
         "m_Position": {
-            "x": 6620.00048828125,
-            "y": 916.0
+            "x": 7228.5712890625,
+            "y": 917.1428833007813
         },
         "m_Blocks": [
             {
@@ -2049,6 +2066,48 @@
         "z": 0.0,
         "w": 0.0
     }
+}
+
+{
+    "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.SubGraphNode",
+    "m_ObjectId": "0b42a60f5ddd4835870a575e9b20794c",
+    "m_Group": {
+        "m_Id": ""
+    },
+    "m_Name": "Fog",
+    "m_DrawState": {
+        "m_Expanded": true,
+        "m_Position": {
+            "serializedVersion": "2",
+            "x": 6684.5712890625,
+            "y": 915.4285888671875,
+            "width": 241.71437072753907,
+            "height": 94.28564453125
+        }
+    },
+    "m_Slots": [
+        {
+            "m_Id": "7253132263eb4eac9d3175054f3e51df"
+        },
+        {
+            "m_Id": "3aaa0ae073fb42f8bb621a79a986cdb5"
+        }
+    ],
+    "synonyms": [],
+    "m_Precision": 0,
+    "m_PreviewExpanded": false,
+    "m_PreviewMode": 0,
+    "m_CustomColors": {
+        "m_SerializableColors": []
+    },
+    "m_SerializedSubGraph": "{\n    \"subGraph\": {\n        \"fileID\": -5475051401550479605,\n        \"guid\": \"60e2c18f83dedc84893bfb3cc3b53ed3\",\n        \"type\": 3\n    }\n}",
+    "m_PropertyGuids": [
+        "e78ca178-963e-4dc8-948f-3d7c2d3ec6fb"
+    ],
+    "m_PropertyIds": [
+        1286794315
+    ]
 }
 
 {
@@ -3773,6 +3832,29 @@
     "m_Labels": [
         "Z"
     ]
+}
+
+{
+    "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.Vector3MaterialSlot",
+    "m_ObjectId": "3aaa0ae073fb42f8bb621a79a986cdb5",
+    "m_Id": 1,
+    "m_DisplayName": "ResultDiffuse",
+    "m_SlotType": 1,
+    "m_Hidden": false,
+    "m_ShaderOutputName": "ResultDiffuse",
+    "m_StageCapability": 3,
+    "m_Value": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+    },
+    "m_DefaultValue": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+    },
+    "m_Labels": []
 }
 
 {
@@ -5660,6 +5742,29 @@
     "m_CustomColors": {
         "m_SerializableColors": []
     }
+}
+
+{
+    "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.Vector3MaterialSlot",
+    "m_ObjectId": "7253132263eb4eac9d3175054f3e51df",
+    "m_Id": 1286794315,
+    "m_DisplayName": "CleanDiffuse",
+    "m_SlotType": 0,
+    "m_Hidden": false,
+    "m_ShaderOutputName": "Vector3_636f0a66efea4002b3f63c2ef80b7382",
+    "m_StageCapability": 3,
+    "m_Value": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+    },
+    "m_DefaultValue": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+    },
+    "m_Labels": []
 }
 
 {
