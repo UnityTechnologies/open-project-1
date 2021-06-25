@@ -114,6 +114,7 @@ public class InventoryManager : MonoBehaviour
 
 		}
 
+		_saveSystem.SaveDataToDisk();
 
 
 
