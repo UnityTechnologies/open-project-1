@@ -4,26 +4,26 @@ using UnityEngine;
 
 public class LightmapScaleSetter : MonoBehaviour
 {
-    [SerializeField] private float _scale = 1f;
+    [SerializeField] private float _lightmapScale = 1f;
 
+    // Called when the Lightmap Scale field is changed in the component editor
     private void OnValidate()
     {
-        if (_scale < 0f)
+        // Clamp the lightmap scale to the range [0,1]
+        if (_lightmapScale < 0f)
         {
-            _scale = 0f;
+            _lightmapScale = 0f;
         }
-        else if (_scale > 1f)
+        else if (_lightmapScale > 1f)
         {
-            _scale = 1f;
+            _lightmapScale = 1f;
         }
-        Debug.Log("Lightmap scale set to " + _scale);
 
+        // Update lightmap scale for MeshRenderers within component and all descendants
         MeshRenderer[] meshRenderers = GetComponentsInChildren<MeshRenderer>();
-        Debug.Log(meshRenderers.Length + " mesh renderers found in component's children.");
-
         foreach (MeshRenderer meshRenderer in meshRenderers)
         {
-            meshRenderer.scaleInLightmap = _scale;
+            meshRenderer.scaleInLightmap = _lightmapScale;
         }
     }
 }
