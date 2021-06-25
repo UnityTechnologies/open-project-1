@@ -20,5 +20,10 @@ public class LightmapScaleSetter : MonoBehaviour
 
         MeshRenderer[] meshRenderers = GetComponentsInChildren<MeshRenderer>();
         Debug.Log(meshRenderers.Length + " mesh renderers found in component's children.");
+
+        foreach (MeshRenderer meshRenderer in meshRenderers)
+        {
+            meshRenderer.scaleInLightmap = _scale;
+        }
     }
 }
