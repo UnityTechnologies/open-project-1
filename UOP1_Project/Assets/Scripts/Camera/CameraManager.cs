@@ -8,6 +8,7 @@ public class CameraManager : MonoBehaviour
 	public InputReader inputReader;
 	public Camera mainCamera;
 	public CinemachineFreeLook freeLookVCam;
+	public CinemachineImpulseSource impulseSource;
 	private bool _isRMBPressed;
 
 	[SerializeField, Range(.5f, 3f)]
@@ -17,6 +18,8 @@ public class CameraManager : MonoBehaviour
 	[Header("Listening on channels")]
 	[Tooltip("The CameraManager listens to this event, fired by objects in any scene, to adapt camera position")]
 	[SerializeField] private TransformEventChannelSO _frameObjectChannel = default;
+	[Tooltip("The CameraManager listens to this event, fired by protagonist GettingHit state, to shake camera")]
+	[SerializeField] private VoidEventChannelSO _camShakeEvent = default;
 
 
 	private bool _cameraMovementLock = false;
@@ -36,6 +39,9 @@ public class CameraManager : MonoBehaviour
 
 		if (_frameObjectChannel != null)
 			_frameObjectChannel.OnEventRaised += OnFrameObjectEvent;
+
+		if (_camShakeEvent != null)
+			_camShakeEvent.OnEventRaised += () => impulseSource.GenerateImpulse();
 
 		_cameraTransformAnchor.Transform = mainCamera.transform;
 	}

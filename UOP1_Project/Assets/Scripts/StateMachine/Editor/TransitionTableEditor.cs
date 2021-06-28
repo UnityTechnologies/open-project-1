@@ -301,13 +301,14 @@ namespace UOP1.StateMachine.Editor
 			int count = stateTransitions.Count;
 			int index = stateTransitions.FindIndex(t => t.SerializedTransition.Index == serializedTransition.Index);
 			int deleteIndex = serializedTransition.Index;
+			string fromStateName = serializedTransition.FromState.objectReferenceValue.name;
 
 			if (index == 0 && count > 1)
 				_transitions.MoveArrayElement(stateTransitions[1].SerializedTransition.Index, deleteIndex++);
 
 			_transitions.DeleteArrayElementAtIndex(deleteIndex);
 
-			ApplyModifications($"Deleted transition from {serializedTransition.FromState.objectReferenceValue.name} " +
+			ApplyModifications($"Deleted transition from {fromStateName} " +
 				"to {serializedTransition.ToState.objectReferenceValue.name}");
 
 			if (count > 1)
