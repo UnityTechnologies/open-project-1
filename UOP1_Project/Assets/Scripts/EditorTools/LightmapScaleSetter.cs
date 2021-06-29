@@ -14,10 +14,6 @@ public class LightmapScaleSetter : MonoBehaviour
         {
             _lightmapScale = 0f;
         }
-        else if (_lightmapScale > 1f)
-        {
-            _lightmapScale = 1f;
-        }
 
         // Update lightmap scale for MeshRenderers within component and all descendants
         MeshRenderer[] meshRenderers = GetComponentsInChildren<MeshRenderer>();
