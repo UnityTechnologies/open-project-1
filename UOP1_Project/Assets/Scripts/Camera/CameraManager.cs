@@ -37,11 +37,8 @@ public class CameraManager : MonoBehaviour
 		inputReader.enableMouseControlCameraEvent += OnEnableMouseControlCamera;
 		inputReader.disableMouseControlCameraEvent += OnDisableMouseControlCamera;
 
-		if (_frameObjectChannel != null)
-			_frameObjectChannel.OnEventRaised += OnFrameObjectEvent;
-
-		if (_camShakeEvent != null)
-			_camShakeEvent.OnEventRaised += () => impulseSource.GenerateImpulse();
+		_frameObjectChannel.OnEventRaised += OnFrameObjectEvent;
+		_camShakeEvent.OnEventRaised += impulseSource.GenerateImpulse;
 
 		_cameraTransformAnchor.Transform = mainCamera.transform;
 	}
@@ -52,8 +49,8 @@ public class CameraManager : MonoBehaviour
 		inputReader.enableMouseControlCameraEvent -= OnEnableMouseControlCamera;
 		inputReader.disableMouseControlCameraEvent -= OnDisableMouseControlCamera;
 
-		if (_frameObjectChannel != null)
-			_frameObjectChannel.OnEventRaised -= OnFrameObjectEvent;
+		_frameObjectChannel.OnEventRaised -= OnFrameObjectEvent;
+		_camShakeEvent.OnEventRaised -= impulseSource.GenerateImpulse;
 	}
 
 	private void OnEnableMouseControlCamera()
