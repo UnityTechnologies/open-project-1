@@ -41,7 +41,6 @@ public class InputReader : ScriptableObject, GameInput.IGameplayActions, GameInp
 
 	public event UnityAction<float> TabSwitched = delegate { };
 
-
 	private GameInput gameInput;
 
 	private void OnEnable()
@@ -53,8 +52,6 @@ public class InputReader : ScriptableObject, GameInput.IGameplayActions, GameInp
 			gameInput.Gameplay.SetCallbacks(this);
 			gameInput.Dialogues.SetCallbacks(this);
 		}
-
-		EnableGameplayInput();
 	}
 
 	private void OnDisable()

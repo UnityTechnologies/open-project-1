@@ -20,7 +20,7 @@ public class LocationExit : MonoBehaviour
 			if (_pathStorage != null)
 				_pathStorage.lastPathTaken = _leadsToPath;
 
-			_locationExitLoadChannel.RaiseEvent(_locationToLoad);
+			_locationExitLoadChannel.RaiseEvent(_locationToLoad, false, true);
 		}
 	}
 }
