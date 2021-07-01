@@ -6,8 +6,9 @@ public class LightmapScaleSetter : MonoBehaviour
 {
     [SerializeField] private float _lightmapScale = 1f;
 
-    // Called when the Lightmap Scale field is changed in the component editor
-    private void OnValidate()
+#if UNITY_EDITOR
+	// Called when the Lightmap Scale field is changed in the component editor
+	private void OnValidate()
     {
         // Clamp the lightmap scale to the range [0,1]
         if (_lightmapScale < 0f)
@@ -22,4 +23,5 @@ public class LightmapScaleSetter : MonoBehaviour
             meshRenderer.scaleInLightmap = _lightmapScale;
         }
     }
+#endif
 }
