@@ -3,12 +3,12 @@
 namespace UOP1.Tools
 {
 	/// <summary>
-	/// Attach this script to an empty GameOject in the scene to display a label in the hierarchy window.
+	/// Attach this script to a GameOject in the scene to display a label in the hierarchy window.
 	/// </summary>
 	/// <remarks>
-	/// Use the "GameOject/Create Hierarchy Label" menu option to simplify the creation process.
+	/// Use the "GameOject/Create Hierarchy Label" menu option to automatically create a new label object. 
 	/// </remarks>
-	[ExecuteInEditMode]
+	[DisallowMultipleComponent]
 	public class HierarchyLabel : MonoBehaviour
 	{
 
@@ -21,56 +21,19 @@ namespace UOP1.Tools
 		[SerializeField] private Color _backgroundColor = Color.cyan;
 		[Tooltip("Create new label data in project by right-click > Create > Tooling > Hierarchy Label Data.")]
 		[SerializeField] private HierarchyLabelData _sharedData;
+		[TextArea, Tooltip("Details about this label's purpose and use.")]
+		[SerializeField] private string _labelDescription;
 
-		public string Text
-		{
-			get => _sharedData ? _sharedData.text : _text;
-		}
+		public string Text => _sharedData ? _sharedData.text : _text;
 
-		public Color TextColor
-		{
-			get => _sharedData ? _sharedData.textColor : _textColor;
-		}
+		public Color TextColor => _sharedData ? _sharedData.textColor : _textColor;
 
-		public Color BackgroundColor
-		{
-			get => _sharedData ? _sharedData.backgroundColor : _backgroundColor;
-		}
-
-		private void OnValidate()
-		{
-			gameObject.name = _text + " (Label)";
-		}
+		public Color BackgroundColor => _sharedData ? _sharedData.backgroundColor : _backgroundColor;
 
 		private void Reset()
 		{
-			LockTransform();
-			// Exclude label object from builds.
-			transform.tag = "EditorOnly";
-			// Create label text from object name.
+			// Set label text to object name.
 			_text = gameObject.name;
-		}
-
-		private void OnDestroy()
-		{
-			UnlockTransform();
-		}
-
-		private void LockTransform()
-		{
-			// Disable transform editing.
-			transform.hideFlags = HideFlags.NotEditable;
-			// Reset transform values.
-			transform.position = Vector3.zero;
-			transform.rotation = Quaternion.identity;
-			transform.localScale = Vector3.one;
-		}
-
-		private void UnlockTransform()
-		{
-			transform.tag = "Untagged";
-			// Enable transform editing.
-			transform.hideFlags = HideFlags.None;
 		}
 
 #endif
