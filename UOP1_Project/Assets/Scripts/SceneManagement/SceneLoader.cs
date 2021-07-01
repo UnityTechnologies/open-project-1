@@ -35,6 +35,7 @@ public class SceneLoader : MonoBehaviour
 
 	private SceneInstance _gameplayManagerSceneInstance = new SceneInstance();
 	private float _fadeDuration = .5f;
+	private bool _isLoading = false; //To prevent a new loading request while already loading a new scene
 
 	private void OnEnable()
 	{
@@ -79,8 +80,13 @@ public class SceneLoader : MonoBehaviour
 	/// </summary>
 	private void LoadLocation(GameSceneSO locationToLoad, bool showLoadingScreen, bool fadeScreen)
 	{
+		//Prevent a double-loading, for situations where the player falls in two Exit colliders in one frame
+		if (_isLoading)
+			return;
+
 		_sceneToLoad = locationToLoad;
 		_showLoadingScreen = showLoadingScreen;
+		_isLoading = true;
 
 		//In case we are coming from the main menu, we need to load the Gameplay manager scene first
 		if (_gameplayManagerSceneInstance.Scene == null
@@ -107,8 +113,13 @@ public class SceneLoader : MonoBehaviour
 	/// </summary>
 	private void LoadMenu(GameSceneSO menuToLoad, bool showLoadingScreen, bool fadeScreen)
 	{
+		//Prevent a double-loading, for situations where the player falls in two Exit colliders in one frame
+		if (_isLoading)
+			return;
+
 		_sceneToLoad = menuToLoad;
 		_showLoadingScreen = showLoadingScreen;
+		_isLoading = true;
 
 		//In case we are coming from a Location back to the main menu, we need to get rid of the persistent Gameplay manager scene
 		if (_gameplayManagerSceneInstance.Scene != null
@@ -167,24 +178,18 @@ public class SceneLoader : MonoBehaviour
 	{
 		//Save loaded scenes (to be unloaded at next load request)
 		_currentlyLoadedScene = _sceneToLoad;
-		SetActiveScene();
 
-		if (_showLoadingScreen)
-		{
-			_toggleLoadingScreen.RaiseEvent(false);
-		}
-	}
-
-	/// <summary>
-	/// This function is called when all the scenes have been loaded, to finalise loading and activate the main scene, and rebuild LightProbes as tetrahedrons.
-	/// </summary>
-	private void SetActiveScene()
-	{
-		Scene s = ((SceneInstance)_loadingOperationHandle.Result).Scene;
+		Scene s = obj.Result.Scene;
 		SceneManager.SetActiveScene(s);
 		LightProbes.TetrahedralizeAsync();
 
+		_isLoading = false;
+
+		if (_showLoadingScreen)
+			_toggleLoadingScreen.RaiseEvent(false);
+
 		_fadeRequestChannel.FadeIn(_fadeDuration);
+
 		StartGameplay();
 	}
 
