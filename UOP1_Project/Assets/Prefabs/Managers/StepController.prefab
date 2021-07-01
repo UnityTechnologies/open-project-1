@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8077577191811875363}
   - component: {fileID: 8077577191811875360}
   m_Layer: 0
-  m_Name: TaskManager
+  m_Name: StepController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -45,10 +45,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _actor: {fileID: 0}
   _defaultDialogue: {fileID: 0}
-  _startTaskEvent: {fileID: 11400000, guid: ab5fce85191f90d449e132c92e099476, type: 2}
-  _endDialogueEvent: {fileID: 11400000, guid: 4f783502cf29fc442948914c150c1e05, type: 2}
-  _interactionEvent: {fileID: 11400000, guid: 5f20ccd3e97527a44a6bf34644f85011, type: 2}
-  _checkTaskValidityEvent: {fileID: 11400000, guid: 71375bc63dd705044a6b0fc6ee5f2acd,
+  _questData: {fileID: 0}
+  _immediateInteractionEvent: {fileID: 11400000, guid: 1e813178cd4f39c48a023e2901da5ab5,
     type: 2}
+  _winDialogueEvent: {fileID: 0}
+  _loseDialogueEvent: {fileID: 0}
+  _endDialogueEvent: {fileID: 0}
   _startDialogueEvent: {fileID: 11400000, guid: 5cfe626f5482b914a9e46ebbe35ea1a8,
     type: 2}
+  dialogueShot: {fileID: 0}
+  isInDialogue: 0
