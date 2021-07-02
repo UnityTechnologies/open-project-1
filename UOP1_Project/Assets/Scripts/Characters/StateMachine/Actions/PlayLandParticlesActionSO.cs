@@ -10,6 +10,7 @@ public class PlayLandParticlesAction : StateAction
 	//Component references
 	private PlayerEffectController _dustController;
 	private Transform _transform;
+	private CharacterController _characterController;
 
 	private float _coolDown = 0.3f;
 	private float t = 0f;
@@ -22,6 +23,7 @@ public class PlayLandParticlesAction : StateAction
 	{
 		_dustController = stateMachine.GetComponent<PlayerEffectController>();
 		_transform = stateMachine.transform;
+		_characterController = stateMachine.GetComponent<CharacterController>();
 	}
 
 	public override void OnStateEnter()
@@ -35,7 +37,7 @@ public class PlayLandParticlesAction : StateAction
 		float dY = Mathf.Abs(_fallStartY - _fallEndY);
 		float fallIntensity = Mathf.InverseLerp(0, _maxFallDistance, dY);
 
-		if (Time.time >= t + _coolDown)
+		if (Time.time >= t + _coolDown && _characterController.isGrounded)
 		{
 			_dustController.PlayLandParticles(fallIntensity);
 			t = Time.time;
