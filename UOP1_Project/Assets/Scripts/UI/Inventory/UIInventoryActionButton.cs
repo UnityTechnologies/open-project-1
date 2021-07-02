@@ -24,7 +24,7 @@ public class UIInventoryActionButton : MonoBehaviour
 
 	public UnityAction Clicked;
 
-	public void FillInventoryButton(ItemType itemType, bool isInteractable = true)
+	public void FillInventoryButton(ItemTypeSO itemType, bool isInteractable = true)
 	{
 		_buttonAction.interactable = isInteractable;
 		_buttonActionText.StringReference = itemType.ActionName;

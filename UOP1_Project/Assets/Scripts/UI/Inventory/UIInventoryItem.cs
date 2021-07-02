@@ -17,7 +17,7 @@ public class UIInventoryItem : MonoBehaviour
 	[SerializeField] private Button _itemButton = default;
 	[SerializeField] private Image _bgInactiveImage = default;
 
-	public UnityAction<Item> ItemSelected;
+	public UnityAction<ItemSO> ItemSelected;
 
 	[SerializeField] private LocalizeSpriteEvent _bgLocalizedImage = default;
 

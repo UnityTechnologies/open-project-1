@@ -5,6 +5,8 @@ using UnityEngine;
 public class SpawnSystem : MonoBehaviour
 {
 	[Header("Asset References")]
+
+	[SerializeField] private InputReader _inputReader = default;
 	[SerializeField] private Protagonist _playerPrefab = default;
 	[SerializeField] private TransformAnchor _playerTransformAnchor = default;
 	[SerializeField] private TransformEventChannelSO _playerInstantiatedChannel = default;
@@ -33,14 +35,6 @@ public class SpawnSystem : MonoBehaviour
 		_OnSceneReady.OnEventRaised -= SpawnPlayer;
 	}
 
-	private void SpawnPlayer()
-	{
-		Protagonist playerInstance = InstantiatePlayer(_playerPrefab, GetSpawnLocation());
-
-		_playerInstantiatedChannel.RaiseEvent(playerInstance.transform); // The CameraSystem will pick this up to frame the player
-		_playerTransformAnchor.Transform = playerInstance.transform;
-	}
-
 	private Transform GetSpawnLocation()
 	{
 		if (_pathTaken == null)
@@ -67,5 +61,16 @@ public class SpawnSystem : MonoBehaviour
 		Protagonist playerInstance = Instantiate(playerPrefab, spawnLocation.position, spawnLocation.rotation);
 
 		return playerInstance;
+	}
+
+	private void SpawnPlayer()
+	{
+		Protagonist playerInstance = InstantiatePlayer(_playerPrefab, GetSpawnLocation());
+
+		_playerInstantiatedChannel.RaiseEvent(playerInstance.transform); // The CameraSystem will pick this up to frame the player
+		_playerTransformAnchor.Transform = playerInstance.transform;
+
+		//TODO: Probably move this to the GameManager once it's up and running
+		_inputReader.EnableGameplayInput();
 	}
 }

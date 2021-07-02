@@ -13,6 +13,14 @@ public class DroppableRewardConfigSO : ScriptableObject
 	private List<DropGroup> _dropGroups = new List<DropGroup>();
 
 	public float ScatteringDistance => _scatteringDistance;
+
 	public List<DropGroup> DropGroups => _dropGroups;
+
+	public virtual DropGroup DropSpecialItem()
+	{
+		return null; 
+
+	}
+
 
 }

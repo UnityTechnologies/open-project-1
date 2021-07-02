@@ -27,6 +27,7 @@ public class AudioCue : MonoBehaviour
 	private void OnDisable()
 	{
 		_playOnStart = false;
+		StopAudioCue();
 	}
 
 	private IEnumerator PlayDelayed()

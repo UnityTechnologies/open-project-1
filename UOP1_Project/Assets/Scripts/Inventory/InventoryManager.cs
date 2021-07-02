@@ -5,7 +5,7 @@ using UnityEngine;
 public class InventoryManager : MonoBehaviour
 {
 
-	[SerializeField] private Inventory _currentInventory = default;
+	[SerializeField] private InventorySO _currentInventory = default;
 	[SerializeField] private ItemEventChannelSO _cookRecipeEvent = default;
 	[SerializeField] private ItemEventChannelSO _useItemEvent = default;
 	[SerializeField] private ItemEventChannelSO _equipItemEvent = default;
@@ -54,7 +54,7 @@ public class InventoryManager : MonoBehaviour
 
 
 
-	void AddItemWithUIUpdate(Item item)
+	void AddItemWithUIUpdate(ItemSO item)
 	{
 
 		_currentInventory.Add(item);
@@ -65,7 +65,7 @@ public class InventoryManager : MonoBehaviour
 		}
 	}
 
-	void RemoveItemWithUIUpdate(Item item)
+	void RemoveItemWithUIUpdate(ItemSO item)
 	{
 		ItemStack itemToUpdate = new ItemStack();
 
@@ -80,20 +80,20 @@ public class InventoryManager : MonoBehaviour
 		//	UIManager.Instance.UpdateInventoryScreen(itemToUpdate, removeItem);
 
 	}
-	void AddItem(Item item)
+	void AddItem(ItemSO item)
 	{
 		_currentInventory.Add(item);
 		_saveSystem.SaveDataToDisk();
 
 	}
-	void RemoveItem(Item item)
+	void RemoveItem(ItemSO item)
 	{
 		_currentInventory.Remove(item);
 		_saveSystem.SaveDataToDisk();
 	}
 
 
-	void CookRecipeEventRaised(Item recipe)
+	void CookRecipeEventRaised(ItemSO recipe)
 	{
 
 		//find recipe
@@ -120,12 +120,12 @@ public class InventoryManager : MonoBehaviour
 
 	}
 
-	public void UseItemEventRaised(Item item)
+	public void UseItemEventRaised(ItemSO item)
 	{
 		RemoveItem(item);
 	}
 
-	public void EquipItemEventRaised(Item item)
+	public void EquipItemEventRaised(ItemSO item)
 	{
 
 	}

@@ -5,7 +5,7 @@ using DG.Tweening;
 public class CollectableItem : MonoBehaviour
 {
 
-	[SerializeField] private Item _currentItem = default;
+	[SerializeField] private ItemSO _currentItem = default;
 	[SerializeField] private GameObject _itemGO = default;
 
 	private void Start()
@@ -13,13 +13,13 @@ public class CollectableItem : MonoBehaviour
 		AnimateItem();
 	}
 
-	public Item GetItem()
+	public ItemSO GetItem()
 	{
 
 		return _currentItem;
 
 	}
-	public void SetItem(Item item)
+	public void SetItem(ItemSO item)
 	{
 		_currentItem = item;
 

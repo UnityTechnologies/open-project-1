@@ -5,9 +5,9 @@ using UnityEngine;
 public class ItemStack
 {
 	[SerializeField]
-	private Item _item;
+	private ItemSO _item;
 
-	public Item Item => _item;
+	public ItemSO Item => _item;
 
 	public int Amount;
 	public ItemStack()
@@ -15,7 +15,7 @@ public class ItemStack
 		_item = null;
 		Amount = 0;
 	}
-	public ItemStack(Item item, int amount)
+	public ItemStack(ItemSO item, int amount)
 	{
 		_item = item;
 		Amount = amount;

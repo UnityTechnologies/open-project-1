@@ -145,7 +145,8 @@ public class DialogueManager : MonoBehaviour
 					DialogueEndedAndCloseDialogueUI();
 				
 				break;
-			case ChoiceActionType.doNothing:
+			case ChoiceActionType.doNothing
+			:
 			if (choice.NextDialogue != null)
 				DisplayDialogueData(choice.NextDialogue);
 			else
