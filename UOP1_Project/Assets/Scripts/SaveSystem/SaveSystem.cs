@@ -24,9 +24,9 @@ public class SaveSystem : ScriptableObject
 		_loadLocation.OnLoadingRequested -= CacheLoadLocations;
 	}
 
-	private void CacheLoadLocations(GameSceneSO locationsToLoad, bool showLoadingScreen)
+	private void CacheLoadLocations(GameSceneSO locationToLoad, bool showLoadingScreen, bool fadeScreen)
 	{
-		LocationSO locationSO = locationsToLoad as LocationSO;
+		LocationSO locationSO = locationToLoad as LocationSO;
 		if (locationSO)
 		{
 			saveData._locationId = locationSO.Guid;
