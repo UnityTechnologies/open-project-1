@@ -13,6 +13,7 @@ public class DropReward : StateAction
 	private DroppableRewardConfigSO _dropRewardConfig;
 	private Transform _currentTransform;
 
+
 	public override void Awake(StateMachine stateMachine)
 	{
 		_dropRewardConfig = stateMachine.GetComponent<Damageable>().DroppableRewardConfig;
@@ -31,6 +32,9 @@ public class DropReward : StateAction
 
 	private void DropAllRewards(Vector3 position)
 	{
+		DropGroup specialDropItem = _dropRewardConfig.DropSpecialItem(); 
+		if (specialDropItem != null) // drops a special item if any 
+			DropOneReward(specialDropItem, position);
 		// Drop items
 		foreach (DropGroup dropGroup in _dropRewardConfig.DropGroups)
 		{
@@ -51,7 +55,7 @@ public class DropReward : StateAction
 		float dropDice = Random.value;
 		float _currentRate = 0.0f;
 
-		Item item = null;
+		ItemSO item = null;
 		GameObject itemPrefab = null;
 
 		foreach (DropItem dropItem in dropGroup.Drops)

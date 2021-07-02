@@ -8,7 +8,7 @@ public class QuestManagerSO : ScriptableObject
 {
 	[Header("Data")]
 	[SerializeField] private List<QuestlineSO> _questlines = default;
-	[SerializeField] private Inventory _inventory = default;
+	[SerializeField] private InventorySO _inventory = default;
 
 
 	[SerializeField] private VoidEventChannelSO _playWinningQuest = default;

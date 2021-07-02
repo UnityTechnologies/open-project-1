@@ -6,7 +6,7 @@ public class ItemPicker : MonoBehaviour
 {
 	[SerializeField] ItemEventChannelSO _addItemEvent = default;
 
-	public void PickItem(Item item)
+	public void PickItem(ItemSO item)
 	{
 		Debug.Log("Pick Item");
 		if (_addItemEvent != null)

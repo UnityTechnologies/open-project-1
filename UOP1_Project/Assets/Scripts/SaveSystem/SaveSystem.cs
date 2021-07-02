@@ -7,7 +7,7 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 public class SaveSystem : ScriptableObject
 {
 	[SerializeField] private LoadEventChannelSO _loadLocation = default;
-	[SerializeField] private Inventory _playerInventory=default;
+	[SerializeField] private InventorySO _playerInventory=default;
 	[SerializeField]
 	private QuestManagerSO _questManagerSO = default; 
     public string saveFilename = "save.chop";
@@ -48,10 +48,10 @@ public class SaveSystem : ScriptableObject
 
 	public IEnumerator LoadSavedInventory()
 	{
-		_playerInventory.Items.Clear();
+		_playerInventory.Items.Clear(); 
 		foreach (var serializedItemStack in saveData._itemStacks)
 		{
-			var loadItemOperationHandle = Addressables.LoadAssetAsync<Item>(serializedItemStack.itemGuid);
+			var loadItemOperationHandle = Addressables.LoadAssetAsync<ItemSO>(serializedItemStack.itemGuid);
 			yield return loadItemOperationHandle;
 			if (loadItemOperationHandle.Status == AsyncOperationStatus.Succeeded)
 			{
@@ -97,7 +97,7 @@ public class SaveSystem : ScriptableObject
 	public void SetNewGameData()
 	{
 		FileManager.WriteToFile(saveFilename, "");
-		_playerInventory.Items.Clear();
+		_playerInventory.Init(); 
 		_questManagerSO.ResetQuestlines();
 		SaveDataToDisk(); 
 

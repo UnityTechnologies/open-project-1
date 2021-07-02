@@ -10,14 +10,14 @@ public class UIInventoryInspector : MonoBehaviour
 	[SerializeField] private UIInspectorIngredients _recipeIngredients = default;
 
 
-	public void FillInspector(Item itemToInspect, bool[] availabilityArray = null)
+	public void FillInspector(ItemSO itemToInspect, bool[] availabilityArray = null)
 	{
 
 		bool isForCooking = (itemToInspect.ItemType.ActionType == ItemInventoryActionType.cook);
 
 		_inspectorDescription.FillDescription(itemToInspect);
 
-		if (isForCooking)
+		if (isForCooking && availabilityArray!= null)
 		{
 			_recipeIngredients.FillIngredients(itemToInspect.IngredientsList, availabilityArray);
 			_recipeIngredients.gameObject.SetActive(true);

@@ -28,7 +28,7 @@ public class StepSO : SerializableScriptableObject
 	private DialogueDataSO _incompleteDialogue = default;
 	[Tooltip("The item to check/give/reward")]
 	[SerializeField]
-	private Item _item = default;
+	private ItemSO _item = default;
 	[Tooltip("The type of the step")]
 	[SerializeField]
 	private StepType _type = default;
@@ -50,7 +50,7 @@ public class StepSO : SerializableScriptableObject
 		get { return _incompleteDialogue; }
 		set { _incompleteDialogue = value; }
 	}
-	public Item Item => _item;
+	public ItemSO Item => _item;
 
 	public VoidEventChannelSO EndStepEvent => _endStepEvent; 
 	public StepType Type => _type;

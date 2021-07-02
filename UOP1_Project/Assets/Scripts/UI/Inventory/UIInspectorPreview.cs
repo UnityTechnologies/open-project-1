@@ -9,7 +9,7 @@ public class UIInspectorPreview : MonoBehaviour
 	private Image _previewImage = default;
 
 
-	public void FillPreview(Item ItemToInspect)
+	public void FillPreview(ItemSO ItemToInspect)
 	{
 
 		_previewImage.gameObject.SetActive(true);
