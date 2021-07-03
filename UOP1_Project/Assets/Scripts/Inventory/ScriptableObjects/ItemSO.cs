@@ -32,7 +32,7 @@ public class ItemSO : SerializableScriptableObject
 	public LocalizedString Description => _description;
 	public ItemTypeSO ItemType => _itemType;
 	public GameObject Prefab => _prefab;
-	public virtual List<ItemStack> IngredientsList { get;}
+	public virtual List<ItemStack> IngredientsList { get; }
 	public virtual ItemSO ResultingDish { get; }
 
 	public virtual bool IsLocalized { get; }

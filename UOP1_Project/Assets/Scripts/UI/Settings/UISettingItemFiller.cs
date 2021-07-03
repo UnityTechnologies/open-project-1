@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.Localization.Components;
-using UnityEngine.Localization; 
+using UnityEngine.Localization;
 using UnityEngine.Events;
 
 public class UISettingItemFiller : MonoBehaviour
@@ -23,18 +23,18 @@ public class UISettingItemFiller : MonoBehaviour
 	[SerializeField] private Sprite _bgSelected = default;
 	[SerializeField] private Sprite _bgUnselected = default;
 
-	 private SettingFieldType _fieldType = default;
+	private SettingFieldType _fieldType = default;
 
 
 	public event UnityAction _nextOption = delegate { };
 	public event UnityAction _previousOption = delegate { };
-	
+
 	public void FillSettingField(int paginationCount, int selectedPaginationIndex, string selectedOption, LocalizedString fieldTitle, SettingFieldType fieldType)
 	{
-		_fieldType = fieldType; 
+		_fieldType = fieldType;
 		_pagination.SetPagination(paginationCount, selectedPaginationIndex);
 		_currentSelectedOption.text = selectedOption;
-		_title.StringReference= fieldTitle; 
+		_title.StringReference = fieldTitle;
 	}
 	public void FillSettingNewOption(int selectedPaginationIndex, string selectedOption)
 	{
@@ -58,14 +58,14 @@ public class UISettingItemFiller : MonoBehaviour
 
 	public void NextOption()
 	{
-		_nextOption.Invoke(); 
+		_nextOption.Invoke();
 
 	}
 	public void PreviousOption()
 	{
-		_previousOption.Invoke(); 
+		_previousOption.Invoke();
 	}
-	
+
 
 
 }

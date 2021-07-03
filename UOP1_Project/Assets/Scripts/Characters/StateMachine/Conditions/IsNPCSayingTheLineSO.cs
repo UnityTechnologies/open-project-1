@@ -4,7 +4,8 @@ using UOP1.StateMachine;
 using UOP1.StateMachine.ScriptableObjects;
 
 [CreateAssetMenu(fileName = "IsNPCSayingTheLine", menuName = "State Machines/Conditions/Is NPC Saying The Line")]
-public class IsNPCSayingTheLineSO : StateConditionSO {
+public class IsNPCSayingTheLineSO : StateConditionSO
+{
 
 	[SerializeField] private DialogueLineChannelSO _onLineDisplayed = default;
 	[SerializeField] private ActorSO _protagonistActor;

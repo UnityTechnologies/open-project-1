@@ -22,13 +22,13 @@ public class QuestSO : SerializableScriptableObject
 		get => _isDone;
 		set => _isDone = value;
 	}
-	public VoidEventChannelSO EndQuestEvent => _endQuestEvent; 
+	public VoidEventChannelSO EndQuestEvent => _endQuestEvent;
 	public void FinishQuest()
 	{
 		_isDone = true;
-		if(_endQuestEvent != null)
+		if (_endQuestEvent != null)
 		{
-			_endQuestEvent.RaiseEvent(); 
+			_endQuestEvent.RaiseEvent();
 		}
 	}
 

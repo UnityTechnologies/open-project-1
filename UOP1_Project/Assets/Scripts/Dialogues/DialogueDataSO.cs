@@ -59,13 +59,13 @@ public class DialogueDataSO : ScriptableObject
 		_actor = dialogue.Actor;
 		_dialogueLines = new List<LocalizedString>(dialogue.DialogueLines);
 		_choices = new List<Choice>();
-		if(dialogue.Choices!=null)
-		for (int i=0; i<dialogue.Choices.Count; i++)
-		{
+		if (dialogue.Choices != null)
+			for (int i = 0; i < dialogue.Choices.Count; i++)
+			{
 
-			_choices.Add(new Choice(dialogue.Choices[i])); 
+				_choices.Add(new Choice(dialogue.Choices[i]));
 
-		}
+			}
 		_dialogueType = dialogue.DialogueType;
 
 	}
