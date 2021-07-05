@@ -10,7 +10,6 @@ public class FadeChannelSO : ScriptableObject
 	/// Fade helper function to simplify usage. Fades the screen in to gameplay.
 	/// </summary>
 	/// <param name="duration">How long it takes to the image to fade in.</param>
-	/// <param name="color">Target color for the image to reach.</param>
 	public void FadeIn(float duration)
 	{
 		Fade(true, duration, Color.clear);
