@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.Localization;
 // Created with collaboration from:
 // https://forum.unity.com/threads/inventory-system.980646/
-[CreateAssetMenu(fileName = "ItemRecipe", menuName = "Inventory/Recipe", order = 51)]
+[CreateAssetMenu(fileName = "ItemRecipe", menuName = "Inventory/Recipe")]
 public class ItemRecipeSO : ItemSO
 {
 

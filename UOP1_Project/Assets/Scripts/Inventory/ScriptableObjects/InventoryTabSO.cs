@@ -10,7 +10,7 @@ public enum InventoryTabType
 	Recipe
 
 }
-[CreateAssetMenu(fileName = "InventoryTabType", menuName = "Inventory/Inventory Tab Type", order = 51)]
+[CreateAssetMenu(fileName = "InventoryTabType", menuName = "Inventory/Inventory Tab Type")]
 public class InventoryTabSO : ScriptableObject
 {
 	[Tooltip("The tab Name that will be displayed in the inventory")]

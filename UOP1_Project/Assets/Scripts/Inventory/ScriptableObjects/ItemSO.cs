@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.Localization;
 // Created with collaboration from:
 // https://forum.unity.com/threads/inventory-system.980646/
-[CreateAssetMenu(fileName = "Item", menuName = "Inventory/Item", order = 51)]
+[CreateAssetMenu(fileName = "Item", menuName = "Inventory/Item")]
 public class ItemSO : SerializableScriptableObject
 {
 	[Tooltip("The name of the item")]
