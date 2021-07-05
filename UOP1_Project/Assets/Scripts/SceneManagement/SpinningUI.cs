@@ -1,19 +1,17 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class SpinningUI : MonoBehaviour
 {
-	private RectTransform rectComponent;
-	public float rotateSpeed = 200f;
+	private RectTransform _rectComponent;
+	[SerializeField] private float _rotateSpeed = 200f;
 
 	private void Start()
 	{
-		rectComponent = GetComponent<RectTransform>();
+		_rectComponent = GetComponent<RectTransform>();
 	}
 
 	private void Update()
 	{
-		rectComponent.Rotate(0f, 0f, rotateSpeed * Time.deltaTime);
+		_rectComponent.Rotate(0f, 0f, _rotateSpeed * Time.deltaTime);
 	}
 }
