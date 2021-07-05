@@ -2,7 +2,7 @@
 using UnityEditor;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Questline", menuName = "Quests/Questline", order = 51)]
+[CreateAssetMenu(fileName = "Questline", menuName = "Quests/Questline")]
 public class QuestlineSO : SerializableScriptableObject
 {
 	[SerializeField]
