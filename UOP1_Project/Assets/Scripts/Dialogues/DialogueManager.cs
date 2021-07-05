@@ -52,11 +52,11 @@ public class DialogueManager : MonoBehaviour
 		if (_gameState.CurrentGameState != GameState.Cutscene)
 			_gameState.UpdateGameState(GameState.Dialogue);
 		BeginDialogueData(dialogueDataSO);
-		if (_currentDialogue.DialogueLines != null)
-			DisplayDialogueLine(_currentDialogue.DialogueLines[_counter], dialogueDataSO.Actor);
+		if(_currentDialogue.DialogueLines!=null)
+		DisplayDialogueLine(_currentDialogue.DialogueLines[_counter], dialogueDataSO.Actor);
 		else
 		{
-			Debug.LogError("Check Dialogue");
+			Debug.LogError("Check Dialogue"); 
 		}
 	}
 
@@ -80,7 +80,7 @@ public class DialogueManager : MonoBehaviour
 	{
 		_openUIDialogueEvent.RaiseEvent(dialogueLine, actor);
 	}
-
+	
 
 	private void OnAdvance()
 	{
@@ -106,10 +106,10 @@ public class DialogueManager : MonoBehaviour
 	private void DisplayChoices(List<Choice> choices)
 	{
 		_inputReader.advanceDialogueEvent -= OnAdvance;
-
-		_makeDialogueChoiceEvent.OnEventRaised += MakeDialogueChoice;
-		_showChoicesUIEvent.RaiseEvent(choices);
-
+		
+			_makeDialogueChoiceEvent.OnEventRaised += MakeDialogueChoice;
+			_showChoicesUIEvent.RaiseEvent(choices);
+		
 	}
 
 	private void MakeDialogueChoice(Choice choice)
@@ -118,12 +118,12 @@ public class DialogueManager : MonoBehaviour
 
 		switch (choice.ActionType)
 		{
-			case ChoiceActionType.continueWithStep:
-
-				if (_continueWithStep != null)
-					_continueWithStep.RaiseEvent();
-				if (choice.NextDialogue != null)
-					DisplayDialogueData(choice.NextDialogue);
+			case ChoiceActionType.continueWithStep: 
+		
+			if (_continueWithStep != null)
+				_continueWithStep.RaiseEvent();
+			if (choice.NextDialogue != null)
+				DisplayDialogueData(choice.NextDialogue);
 				break;
 			case ChoiceActionType.winningChoice:
 
@@ -133,7 +133,7 @@ public class DialogueManager : MonoBehaviour
 					DisplayDialogueData(choice.NextDialogue);
 				else
 					DialogueEndedAndCloseDialogueUI();
-
+				
 				break;
 			case ChoiceActionType.losingChoice:
 
@@ -143,20 +143,20 @@ public class DialogueManager : MonoBehaviour
 					DisplayDialogueData(choice.NextDialogue);
 				else
 					DialogueEndedAndCloseDialogueUI();
-
+				
 				break;
 			case ChoiceActionType.doNothing
 			:
-				if (choice.NextDialogue != null)
-					DisplayDialogueData(choice.NextDialogue);
-				else
-					DialogueEndedAndCloseDialogueUI();
-				break;
+			if (choice.NextDialogue != null)
+				DisplayDialogueData(choice.NextDialogue);
+			else
+				DialogueEndedAndCloseDialogueUI();
+				break; 
 
 		}
 
-
-
+	
+	
 	}
 	void DialogueEnded()
 	{
@@ -167,18 +167,14 @@ public class DialogueManager : MonoBehaviour
 	}
 	public void DialogueEndedAndCloseDialogueUI()
 	{
-		//raise the special event for end of dialogue if any 
-		_currentDialogue.FinishDialogue();
-		//raise end dialogue event 
+		
 		if (_endDialogue != null)
 			_endDialogue.RaiseEvent(_currentDialogue);
-		//closes dialogue UI 
 		if (_closeDialogueUIEvent != null)
 			_closeDialogueUIEvent.RaiseEvent();
-		_gameState.ResetToPreviousGameState();
+		_gameState.ResetToPreviousGameState(); 
 		_inputReader.advanceDialogueEvent -= OnAdvance;
 		_inputReader.EnableGameplayInput();
-
 
 
 	}

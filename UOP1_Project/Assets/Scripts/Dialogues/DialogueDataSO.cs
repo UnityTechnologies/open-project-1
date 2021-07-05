@@ -34,10 +34,8 @@ public class DialogueDataSO : ScriptableObject
 	[SerializeField] private List<LocalizedString> _dialogueLines = default;
 	[SerializeField] private List<Choice> _choices = default;
 	[SerializeField] private DialogueType _dialogueType = default;
-	[SerializeField] private VoidEventChannelSO _endOfDialogueEvent = default;
 	public ActorSO Actor => _actor;
 	public List<LocalizedString> DialogueLines => _dialogueLines;
-	public VoidEventChannelSO EndOfDialogueEvent => _endOfDialogueEvent;
 	public List<Choice> Choices => _choices;
 	public DialogueType DialogueType
 	{
@@ -52,6 +50,8 @@ public class DialogueDataSO : ScriptableObject
 	}
 	public DialogueDataSO()
 	{
+
+
 	}
 	public DialogueDataSO(DialogueDataSO dialogue)
 	{
@@ -59,29 +59,25 @@ public class DialogueDataSO : ScriptableObject
 		_actor = dialogue.Actor;
 		_dialogueLines = new List<LocalizedString>(dialogue.DialogueLines);
 		_choices = new List<Choice>();
-		_endOfDialogueEvent = dialogue.EndOfDialogueEvent;
-		if (dialogue.Choices != null)
-			for (int i = 0; i < dialogue.Choices.Count; i++)
-			{
+		if(dialogue.Choices!=null)
+		for (int i=0; i<dialogue.Choices.Count; i++)
+		{
 
-				_choices.Add(new Choice(dialogue.Choices[i]));
+			_choices.Add(new Choice(dialogue.Choices[i])); 
 
-			}
+		}
 		_dialogueType = dialogue.DialogueType;
 
 	}
-	public void FinishDialogue()
-	{
-		if (EndOfDialogueEvent != null)
-			EndOfDialogueEvent.RaiseEvent();
-	}
-
 #if UNITY_EDITOR
+
+	//TODO: Add support for branching conversations
+	// Maybe add 2 (or more) special line slots which represent a choice in a conversation
+	// Each line would also have an event associated, or another Dialogue
 	private void OnEnable()
 	{
 		SetDialogueLines();
 	}
-
 	void SetDialogueLines()
 	{
 		if (_dialogueLines == null)
@@ -114,11 +110,11 @@ public class DialogueDataSO : ScriptableObject
 
 		}
 	}
-	public void CreateLine()
+public void CreateLine()
 	{
 		if (_dialogueLines == null)
 			_dialogueLines = new List<LocalizedString>();
-		_dialogueLines.Clear();
+		_dialogueLines.Clear(); 
 		StringTableCollection collection = LocalizationEditorSettings.GetStringTableCollection("Questline Dialogue");
 
 		if (collection != null)
@@ -133,11 +129,11 @@ public class DialogueDataSO : ScriptableObject
 
 			}
 		}
-		SetDialogueLines();
-	}
+		SetDialogueLines(); 
+		}
 	public void RemoveLineFromSharedTable()
 	{
-
+		
 		StringTableCollection collection = LocalizationEditorSettings.GetStringTableCollection("Questline Dialogue");
 
 		if (collection != null)
@@ -146,7 +142,7 @@ public class DialogueDataSO : ScriptableObject
 			LocalizedString _dialogueLine = null;
 
 
-
+			
 
 			do
 			{
@@ -155,7 +151,7 @@ public class DialogueDataSO : ScriptableObject
 
 				if (collection.SharedData.Contains(key))
 				{
-					collection.SharedData.RemoveKey(key);
+					collection.SharedData.RemoveKey(key); 
 				}
 				else
 				{
@@ -195,6 +191,8 @@ public class Choice
 	}
 	public Choice()
 	{
+
+
 	}
 	public Choice(Choice choice)
 	{

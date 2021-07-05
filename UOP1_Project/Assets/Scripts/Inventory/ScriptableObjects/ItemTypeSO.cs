@@ -21,7 +21,7 @@ public enum ItemInventoryActionType
 
 }
 
-[CreateAssetMenu(fileName = "ItemType", menuName = "Inventory/ItemType")]
+[CreateAssetMenu(fileName = "ItemType", menuName = "Inventory/ItemType", order = 51)]
 public class ItemTypeSO : ScriptableObject
 {
 	[Tooltip("The action associated with the item type")]

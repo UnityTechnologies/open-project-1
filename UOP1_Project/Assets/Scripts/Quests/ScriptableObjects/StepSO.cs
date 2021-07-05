@@ -10,7 +10,7 @@ public enum StepType
 	CheckItem,
 	RewardItem
 }
-[CreateAssetMenu(fileName = "step", menuName = "Quests/Step")]
+[CreateAssetMenu(fileName = "step", menuName = "Quests/step", order = 51)]
 public class StepSO : SerializableScriptableObject
 {
 
