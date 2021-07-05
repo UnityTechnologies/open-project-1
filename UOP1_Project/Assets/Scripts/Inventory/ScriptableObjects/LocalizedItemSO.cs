@@ -9,7 +9,7 @@ public class LocalizedItemSO : ItemSO
 
 
 	[SerializeField]
-	private bool _isLocalized = false; 
+	private bool _isLocalized = false;
 
 	[SerializeField]
 	private LocalizedSprite _localizePreviewImage = default;

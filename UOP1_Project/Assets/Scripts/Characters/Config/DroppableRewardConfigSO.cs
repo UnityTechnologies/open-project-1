@@ -18,7 +18,7 @@ public class DroppableRewardConfigSO : ScriptableObject
 
 	public virtual DropGroup DropSpecialItem()
 	{
-		return null; 
+		return null;
 
 	}
 

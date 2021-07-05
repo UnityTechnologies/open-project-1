@@ -26,7 +26,7 @@ public class QuestManagerSO : ScriptableObject
 
 	[SerializeField] private ItemEventChannelSO _giveItemEvent = default;
 	[SerializeField] private ItemEventChannelSO _rewardItemEvent = default;
-	[SerializeField] private SaveSystem saveSystem = default; 
+	[SerializeField] private SaveSystem saveSystem = default;
 	private QuestSO _currentQuest = null;
 	private QuestlineSO _currentQuestline;
 	private StepSO _currentStep;
@@ -278,7 +278,7 @@ public class QuestManagerSO : ScriptableObject
 				}
 			}
 
-		
+
 
 	}
 	void EndQuest()

@@ -14,7 +14,7 @@ public class IsNPCWalkingCondition : Condition
 	{
 		_npcScript = stateMachine.GetComponent<NPC>();
 	}
-	
+
 	protected override bool Statement()
 	{
 
@@ -27,5 +27,5 @@ public class IsNPCWalkingCondition : Condition
 			return false;
 		}
 	}
-	
+
 }

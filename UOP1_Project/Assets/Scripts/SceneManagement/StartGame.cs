@@ -42,8 +42,8 @@ public class StartGame : MonoBehaviour
 	void StartNewGame()
 	{
 		_hasSaveData = false;
-		
-		_saveSystem. WriteEmptySaveFile();
+
+		_saveSystem.WriteEmptySaveFile();
 		_saveSystem.SetNewGameData();
 		//Start new game 
 		_startGameEvent.RaiseEvent(_locationsToLoad, _showLoadScreen);
@@ -65,7 +65,7 @@ public class StartGame : MonoBehaviour
 	IEnumerator LoadSaveGame()
 	{
 		yield return StartCoroutine(_saveSystem.LoadSavedInventory());
-		_saveSystem.LoadSavedQuestlineStatus(); 
+		_saveSystem.LoadSavedQuestlineStatus();
 		var locationGuid = _saveSystem.saveData._locationId;
 		var asyncOperationHandle = Addressables.LoadAssetAsync<LocationSO>(locationGuid);
 		yield return asyncOperationHandle;

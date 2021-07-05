@@ -16,7 +16,7 @@ public class LocationEntrance : MonoBehaviour
 
 	private void Awake()
 	{
-		if(_pathStorage.lastPathTaken == _entrancePath)
+		if (_pathStorage.lastPathTaken == _entrancePath)
 		{
 			entranceShot.Priority = 100;
 			_onSceneReady.OnEventRaised += PlanTransition;
