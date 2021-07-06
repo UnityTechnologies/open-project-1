@@ -20,7 +20,9 @@ public class Protagonist : MonoBehaviour
 	[NonSerialized] public bool attackInput;
 	[NonSerialized] public Vector3 movementInput; //Initial input coming from the Protagonist script
 	[NonSerialized] public Vector3 movementVector; //Final movement vector, manipulated by the StateMachine actions
-	[NonSerialized] public ControllerColliderHit lastHit;
+	//[NonSerialized] public ControllerColliderHit lastHit;
+	[NonSerialized] public Vector3 rayGroundNormal = Vector3.up;
+	[NonSerialized] public Vector3 spherecastGroundNormal = Vector3.up;
 	[NonSerialized] public bool isRunning; // Used when using the keyboard to run, brings the normalised speed to 1
 
 	public const float GRAVITY_MULTIPLIER = 5f;
@@ -30,10 +32,10 @@ public class Protagonist : MonoBehaviour
 	public const float GRAVITY_DIVIDER = .6f;
 	public const float AIR_RESISTANCE = 5f;
 
-	private void OnControllerColliderHit(ControllerColliderHit hit)
-	{
-		lastHit = hit;
-	}
+	//private void OnControllerColliderHit(ControllerColliderHit hit)
+	//{
+	//	lastHit = hit;
+	//}
 
 	//Adds listeners for events being triggered in the InputReader script
 	private void OnEnable()
@@ -61,12 +63,49 @@ public class Protagonist : MonoBehaviour
 
 	private void Update()
 	{
+		GroundCheck();
 		RecalculateMovement();
+	}
+
+	private void GroundCheck()
+	{
+		Ray ray = new Ray(transform.position + Vector3.up * .3f + transform.forward * .3f, Vector3.down);
+		Ray sphereRay = new Ray(transform.position + Vector3.up * .3f, Vector3.down);
+
+		bool rayFoundGround = Physics.Raycast(ray, out RaycastHit hitResults, .2f);
+		if (rayFoundGround)
+		{
+			rayGroundNormal = hitResults.normal;
+		}
+		else
+		{
+			//This is a "safe" value, in case the character is in the air or other edge cases,
+			//and some script uses the ground normal for calculations.
+			rayGroundNormal = Vector3.up;
+		}
+
+		if (Physics.SphereCast(sphereRay, .3f, out hitResults, 1f))
+		{
+			spherecastGroundNormal = hitResults.normal;
+
+			if(!rayFoundGround)
+			{
+				rayGroundNormal = spherecastGroundNormal;
+			}
+		}
+		else
+		{
+			spherecastGroundNormal = Vector3.up;
+		}
+
+		Vector3 origin = transform.position + Vector3.up * 1.5f;
+		Debug.DrawLine(origin, origin + rayGroundNormal, Color.red);
+		Debug.DrawLine(origin, origin + spherecastGroundNormal, Color.green);
 	}
 
 	private void RecalculateMovement()
 	{
-		float targetSpeed = 0f;
+		float targetSpeed;
 		Vector3 adjustedMovement;
 
 		if (gameplayCameraTransform.isSet)

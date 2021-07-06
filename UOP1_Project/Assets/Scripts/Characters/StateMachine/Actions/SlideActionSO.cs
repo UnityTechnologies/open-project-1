@@ -7,30 +7,29 @@ public class SlideActionSO : StateActionSO<SlideAction> { }
 
 public class SlideAction : StateAction
 {
-	private Protagonist _protagonistScript;
+	private Protagonist _protagonist;
 
 	public override void Awake(StateMachine stateMachine)
 	{
-		_protagonistScript = stateMachine.GetComponent<Protagonist>();
+		_protagonist = stateMachine.GetComponent<Protagonist>();
 	}
 
 	public override void OnUpdate()
 	{
-		Vector3 velocity = _protagonistScript.movementVector;
-		float speed = -Physics.gravity.y * Protagonist.GRAVITY_MULTIPLIER * Time.deltaTime;
+		float speed = -Physics.gravity.y * Protagonist.GRAVITY_MULTIPLIER * .3f;
 
-		Vector3 hitNormal = _protagonistScript.lastHit.normal;
-		var vector = new Vector3(hitNormal.x, -hitNormal.y, hitNormal.z);
-		Vector3.OrthoNormalize(ref hitNormal, ref vector);
+		Vector3 slideDirection = new Vector3(_protagonist.rayGroundNormal.x, -_protagonist.rayGroundNormal.y, _protagonist.rayGroundNormal.z);
+		Vector3.OrthoNormalize(ref _protagonist.rayGroundNormal, ref slideDirection);
 
-		// Cheap way to avoid overshooting the character, which causes it to move away from the slope
-		if (Mathf.Sign(vector.x) == Mathf.Sign(velocity.x))
-			vector.x *= 0.5f;
-		if (Mathf.Sign(vector.z) == Mathf.Sign(velocity.z))
-			vector.z *= 0.5f;
+		//Vector3 slidingMovement = _protagonist.movementVector;
+		//// Cheap way to avoid overshooting the character, which causes it to move away from the slope
+		//if (Mathf.Sign(slideDirection.x) == Mathf.Sign(slidingMovement.x))
+		//	slideDirection.x *= 0.5f;
+		//if (Mathf.Sign(slideDirection.z) == Mathf.Sign(slidingMovement.z))
+		//	slideDirection.z *= 0.5f;
 
-		velocity += vector * speed;
+		//slidingMovement += slideDirection * speed;
 
-		_protagonistScript.movementVector = velocity;
+		_protagonist.movementVector = slideDirection * speed * -slideDirection.y;
 	}
 }
