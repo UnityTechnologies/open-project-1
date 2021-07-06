@@ -25,8 +25,8 @@ public class FadeManager : MonoBehaviour
 	/// <param name="fadeIn">If false, the screen becomes black. If true, rectangle fades out and gameplay is visible.</param>
 	/// <param name="duration">How long it takes to the image to fade in/out.</param>
 	/// <param name="color">Target color for the image to reach. Disregarded when fading out.</param>
-	private void InitiateFade(bool fadeIn, float duration, Color desiredColor)
+	private void InitiateFade(bool fadeIn, float duration, Color color)
 	{
-		_imageComponent.DOBlendableColor(desiredColor, duration);
+		_imageComponent.DOBlendableColor(color, duration);
 	}
 }
