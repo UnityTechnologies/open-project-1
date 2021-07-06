@@ -14,9 +14,11 @@ public class UIPause : MonoBehaviour
 	public UnityAction BackToMainRequested = default;
 
 	[SerializeField] private InputReader _inputReader = default;
+	[SerializeField] private BoolEventChannelSO _onPauseOpened = default;
 
 	private void OnEnable()
 	{
+		_onPauseOpened?.OnEventRaised(true);
 		_resumeButton.SetButton(true);
 		_inputReader.menuCloseEvent += Resume;
 		_resumeButton.Clicked += Resume;
@@ -28,6 +30,7 @@ public class UIPause : MonoBehaviour
 
 	private void OnDisable()
 	{
+		_onPauseOpened?.OnEventRaised(false);
 		_inputReader.menuCloseEvent -= Resume;
 
 		_resumeButton.Clicked -= Resume;
