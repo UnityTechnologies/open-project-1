@@ -158,12 +158,11 @@ public class DialogueManager : MonoBehaviour
 
 
 	}
-	void DialogueEnded()
-	{
-		if (_endDialogue != null)
-			_endDialogue.RaiseEvent(_currentDialogue);
 
-		_gameState.ResetToPreviousGameState();
+	public void CutsceneDialogueEnded()
+	{
+		if (_closeDialogueUIEvent != null)
+			_closeDialogueUIEvent.RaiseEvent();
 	}
 	public void DialogueEndedAndCloseDialogueUI()
 	{
