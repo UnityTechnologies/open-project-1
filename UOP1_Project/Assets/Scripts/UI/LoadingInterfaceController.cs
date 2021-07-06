@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class LoadingScreenManager : MonoBehaviour
+public class LoadingInterfaceController : MonoBehaviour
 {
 	[Header("Loading screen Event")]
 	//The loading screen event we are listening to
@@ -11,18 +11,12 @@ public class LoadingScreenManager : MonoBehaviour
 
 	private void OnEnable()
 	{
-		if (_ToggleLoadingScreen != null)
-		{
-			_ToggleLoadingScreen.OnEventRaised += ToggleLoadingScreen;
-		}
+		_ToggleLoadingScreen.OnEventRaised += ToggleLoadingScreen;
 	}
 
 	private void OnDisable()
 	{
-		if (_ToggleLoadingScreen != null)
-		{
-			_ToggleLoadingScreen.OnEventRaised -= ToggleLoadingScreen;
-		}
+		_ToggleLoadingScreen.OnEventRaised -= ToggleLoadingScreen;
 	}
 
 	private void ToggleLoadingScreen(bool state)
