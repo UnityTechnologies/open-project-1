@@ -158,7 +158,13 @@ public class DialogueManager : MonoBehaviour
 
 	}
 
-	public void DialogueEndedAndCloseDialogueUI()
+	public void CutsceneDialogueEnded()
+	{
+
+		if (_endDialogueEvent != null)
+			_endDialogueEvent.RaiseEvent((int)DialogueType.defaultDialogue);
+	}
+	void DialogueEndedAndCloseDialogueUI()
 	{
 		//raise the special event for end of dialogue if any 
 		_currentDialogue.FinishDialogue();
