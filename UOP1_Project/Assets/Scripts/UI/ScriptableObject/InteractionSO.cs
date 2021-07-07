@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Localization;
 
-[CreateAssetMenu(fileName = "Interaction", menuName = "UI/Interaction", order = 51)]
+[CreateAssetMenu(fileName = "Interaction", menuName = "UI/Interaction")]
 public class InteractionSO : ScriptableObject
 {
 	[Tooltip("The interaction name")]

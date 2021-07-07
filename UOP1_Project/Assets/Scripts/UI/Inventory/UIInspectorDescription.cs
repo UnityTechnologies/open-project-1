@@ -11,7 +11,7 @@ public class UIInspectorDescription : MonoBehaviour
 
 	[SerializeField] private LocalizeStringEvent _textName = default;
 
-	public void FillDescription(Item itemToInspect)
+	public void FillDescription(ItemSO itemToInspect)
 	{
 
 		_textName.StringReference = itemToInspect.Name;

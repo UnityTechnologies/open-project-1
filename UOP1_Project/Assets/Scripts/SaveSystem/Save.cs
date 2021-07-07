@@ -15,7 +15,7 @@ public class Save
 	// The variables need to be public, else we would have to write trivial getter/setter functions.
 	public string _locationId;
 	public List<SerializedItemStack> _itemStacks = new List<SerializedItemStack>();
-
+	public List<string> _finishedQuestlineItemsGUIds = new List<string>();
 	public string ToJson()
 	{
 		return JsonUtility.ToJson(this);

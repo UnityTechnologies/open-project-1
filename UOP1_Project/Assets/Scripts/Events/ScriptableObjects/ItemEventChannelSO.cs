@@ -9,8 +9,8 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Events/UI/Item Event Channel")]
 public class ItemEventChannelSO : ScriptableObject
 {
-	public UnityAction<Item> OnEventRaised;
-	public void RaiseEvent(Item item)
+	public UnityAction<ItemSO> OnEventRaised;
+	public void RaiseEvent(ItemSO item)
 	{
 		if (OnEventRaised != null)
 			OnEventRaised.Invoke(item);

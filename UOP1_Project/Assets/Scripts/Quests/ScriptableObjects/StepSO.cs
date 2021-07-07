@@ -10,8 +10,8 @@ public enum StepType
 	CheckItem,
 	RewardItem
 }
-[CreateAssetMenu(fileName = "step", menuName = "Quests/step", order = 51)]
-public class StepSO : ScriptableObject
+[CreateAssetMenu(fileName = "step", menuName = "Quests/Step")]
+public class StepSO : SerializableScriptableObject
 {
 
 	[Tooltip("The Character this mission will need interaction with")]
@@ -28,7 +28,7 @@ public class StepSO : ScriptableObject
 	private DialogueDataSO _incompleteDialogue = default;
 	[Tooltip("The item to check/give/reward")]
 	[SerializeField]
-	private Item _item = default;
+	private ItemSO _item = default;
 	[Tooltip("The type of the step")]
 	[SerializeField]
 	private StepType _type = default;
@@ -50,11 +50,15 @@ public class StepSO : ScriptableObject
 		get { return _incompleteDialogue; }
 		set { _incompleteDialogue = value; }
 	}
-	public Item Item => _item;
+	public ItemSO Item => _item;
 
 	public VoidEventChannelSO EndStepEvent => _endStepEvent; 
 	public StepType Type => _type;
-	public bool IsDone => _isDone;
+	public bool IsDone
+	{
+		get => _isDone;
+		set => _isDone = value;
+	}
 	public ActorSO Actor => _actor;
 
 	public void FinishStep()

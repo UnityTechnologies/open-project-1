@@ -73,8 +73,6 @@ public class UIManager : MonoBehaviour
 
 		_interactionPanel.gameObject.SetActive(false);
 
-		_inputReader.EnableGameplayInput();
-
 		Time.timeScale = 1;
 
 	}

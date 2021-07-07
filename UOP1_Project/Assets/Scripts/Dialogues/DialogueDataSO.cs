@@ -17,7 +17,9 @@ public enum DialogueType
 public enum ChoiceActionType
 {
 	doNothing,
-	continueWithStep
+	continueWithStep,
+	winningChoice,
+	losingChoice,
 
 }
 /// <summary>
@@ -32,8 +34,10 @@ public class DialogueDataSO : ScriptableObject
 	[SerializeField] private List<LocalizedString> _dialogueLines = default;
 	[SerializeField] private List<Choice> _choices = default;
 	[SerializeField] private DialogueType _dialogueType = default;
+	[SerializeField] private VoidEventChannelSO _endOfDialogueEvent = default;
 	public ActorSO Actor => _actor;
 	public List<LocalizedString> DialogueLines => _dialogueLines;
+	public VoidEventChannelSO EndOfDialogueEvent => _endOfDialogueEvent;
 	public List<Choice> Choices => _choices;
 	public DialogueType DialogueType
 	{
@@ -48,33 +52,36 @@ public class DialogueDataSO : ScriptableObject
 	}
 	public DialogueDataSO()
 	{
-
-
 	}
 	public DialogueDataSO(DialogueDataSO dialogue)
 	{
 
 		_actor = dialogue.Actor;
 		_dialogueLines = new List<LocalizedString>(dialogue.DialogueLines);
-		_choices = new List<Choice>(); 
-		for (int i=0; i<dialogue.Choices.Count; i++)
-		{
+		_choices = new List<Choice>();
+		_endOfDialogueEvent = dialogue.EndOfDialogueEvent;
+		if (dialogue.Choices != null)
+			for (int i = 0; i < dialogue.Choices.Count; i++)
+			{
 
-			_choices.Add(new Choice(dialogue.Choices[i])); 
+				_choices.Add(new Choice(dialogue.Choices[i]));
 
-		}
+			}
 		_dialogueType = dialogue.DialogueType;
 
 	}
-#if UNITY_EDITOR
+	public void FinishDialogue()
+	{
+		if (EndOfDialogueEvent != null)
+			EndOfDialogueEvent.RaiseEvent();
+	}
 
-	//TODO: Add support for branching conversations
-	// Maybe add 2 (or more) special line slots which represent a choice in a conversation
-	// Each line would also have an event associated, or another Dialogue
+#if UNITY_EDITOR
 	private void OnEnable()
 	{
 		SetDialogueLines();
 	}
+
 	void SetDialogueLines()
 	{
 		if (_dialogueLines == null)
@@ -107,11 +114,11 @@ public class DialogueDataSO : ScriptableObject
 
 		}
 	}
-public void CreateLine()
+	public void CreateLine()
 	{
 		if (_dialogueLines == null)
 			_dialogueLines = new List<LocalizedString>();
-		_dialogueLines.Clear(); 
+		_dialogueLines.Clear();
 		StringTableCollection collection = LocalizationEditorSettings.GetStringTableCollection("Questline Dialogue");
 
 		if (collection != null)
@@ -126,11 +133,11 @@ public void CreateLine()
 
 			}
 		}
-		SetDialogueLines(); 
-		}
+		SetDialogueLines();
+	}
 	public void RemoveLineFromSharedTable()
 	{
-		
+
 		StringTableCollection collection = LocalizationEditorSettings.GetStringTableCollection("Questline Dialogue");
 
 		if (collection != null)
@@ -139,7 +146,7 @@ public void CreateLine()
 			LocalizedString _dialogueLine = null;
 
 
-			
+
 
 			do
 			{
@@ -148,7 +155,7 @@ public void CreateLine()
 
 				if (collection.SharedData.Contains(key))
 				{
-					collection.SharedData.RemoveKey(key); 
+					collection.SharedData.RemoveKey(key);
 				}
 				else
 				{
@@ -188,14 +195,11 @@ public class Choice
 	}
 	public Choice()
 	{
-
-
 	}
 	public Choice(Choice choice)
 	{
 		_response = choice.Response;
 		_nextDialogue = choice.NextDialogue;
-		_actionType = ActionType; 
-
+		_actionType = ActionType;
 	}
 }

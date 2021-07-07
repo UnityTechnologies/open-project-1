@@ -27,6 +27,8 @@ public class DialogueManager : MonoBehaviour
 	[SerializeField] private DialogueChoicesChannelSO _showChoicesUIEvent = default;
 	[SerializeField] private DialogueDataChannelSO _endDialogue = default;
 	[SerializeField] private VoidEventChannelSO _continueWithStep = default;
+	[SerializeField] private VoidEventChannelSO _playWinningQuest = default;
+	[SerializeField] private VoidEventChannelSO _playLosingQuest = default;
 	[SerializeField] private VoidEventChannelSO _closeDialogueUIEvent = default;
 
 	[Header("Gameplay Components")]
@@ -50,7 +52,12 @@ public class DialogueManager : MonoBehaviour
 		if (_gameState.CurrentGameState != GameState.Cutscene)
 			_gameState.UpdateGameState(GameState.Dialogue);
 		BeginDialogueData(dialogueDataSO);
-		DisplayDialogueLine(_currentDialogue.DialogueLines[_counter], dialogueDataSO.Actor);
+		if (_currentDialogue.DialogueLines != null)
+			DisplayDialogueLine(_currentDialogue.DialogueLines[_counter], dialogueDataSO.Actor);
+		else
+		{
+			Debug.LogError("Check Dialogue");
+		}
 	}
 
 	/// <summary>
@@ -73,7 +80,7 @@ public class DialogueManager : MonoBehaviour
 	{
 		_openUIDialogueEvent.RaiseEvent(dialogueLine, actor);
 	}
-	
+
 
 	private void OnAdvance()
 	{
@@ -99,49 +106,78 @@ public class DialogueManager : MonoBehaviour
 	private void DisplayChoices(List<Choice> choices)
 	{
 		_inputReader.advanceDialogueEvent -= OnAdvance;
-		
-			_makeDialogueChoiceEvent.OnEventRaised += MakeDialogueChoice;
-			_showChoicesUIEvent.RaiseEvent(choices);
-		
+
+		_makeDialogueChoiceEvent.OnEventRaised += MakeDialogueChoice;
+		_showChoicesUIEvent.RaiseEvent(choices);
+
 	}
 
 	private void MakeDialogueChoice(Choice choice)
 	{
-			_makeDialogueChoiceEvent.OnEventRaised -= MakeDialogueChoice;
-		
-		if (choice.ActionType == ChoiceActionType.continueWithStep)
+		_makeDialogueChoiceEvent.OnEventRaised -= MakeDialogueChoice;
+
+		switch (choice.ActionType)
 		{
-			if (_continueWithStep != null)
-				_continueWithStep.RaiseEvent();
-			if (choice.NextDialogue != null)
-				DisplayDialogueData(choice.NextDialogue);
+			case ChoiceActionType.continueWithStep:
+
+				if (_continueWithStep != null)
+					_continueWithStep.RaiseEvent();
+				if (choice.NextDialogue != null)
+					DisplayDialogueData(choice.NextDialogue);
+				break;
+			case ChoiceActionType.winningChoice:
+
+				if (_playWinningQuest != null)
+					_playWinningQuest.RaiseEvent();
+				if (choice.NextDialogue != null)
+					DisplayDialogueData(choice.NextDialogue);
+				else
+					DialogueEndedAndCloseDialogueUI();
+
+				break;
+			case ChoiceActionType.losingChoice:
+
+				if (_playLosingQuest != null)
+					_playLosingQuest.RaiseEvent();
+				if (choice.NextDialogue != null)
+					DisplayDialogueData(choice.NextDialogue);
+				else
+					DialogueEndedAndCloseDialogueUI();
+
+				break;
+			case ChoiceActionType.doNothing
+			:
+				if (choice.NextDialogue != null)
+					DisplayDialogueData(choice.NextDialogue);
+				else
+					DialogueEndedAndCloseDialogueUI();
+				break;
+
 		}
-		else
-		{
-			if (choice.NextDialogue != null)
-				DisplayDialogueData(choice.NextDialogue);
-			else
-				DialogueEndedAndCloseDialogueUI();
-		}
+
+
+
 	}
 
-	void DialogueEnded()
+	public void CutsceneDialogueEnded()
 	{
-		if (_endDialogue != null)
-			_endDialogue.RaiseEvent(_currentDialogue);
-
-		_gameState.ResetToPreviousGameState();
+		if (_closeDialogueUIEvent != null)
+			_closeDialogueUIEvent.RaiseEvent();
 	}
 	public void DialogueEndedAndCloseDialogueUI()
 	{
-		
+		//raise the special event for end of dialogue if any 
+		_currentDialogue.FinishDialogue();
+		//raise end dialogue event 
 		if (_endDialogue != null)
 			_endDialogue.RaiseEvent(_currentDialogue);
+		//closes dialogue UI 
 		if (_closeDialogueUIEvent != null)
 			_closeDialogueUIEvent.RaiseEvent();
-		_gameState.ResetToPreviousGameState(); 
+		_gameState.ResetToPreviousGameState();
 		_inputReader.advanceDialogueEvent -= OnAdvance;
 		_inputReader.EnableGameplayInput();
+
 
 
 	}

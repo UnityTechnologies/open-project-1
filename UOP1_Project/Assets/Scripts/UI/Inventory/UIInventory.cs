@@ -7,7 +7,7 @@ public class UIInventory : MonoBehaviour
 {
 
 	[SerializeField]
-	private Inventory _currentInventory = default;
+	private InventorySO _currentInventory = default;
 
 	[SerializeField]
 	private UIInventoryItem _itemPrefab = default;
@@ -261,7 +261,7 @@ public class UIInventory : MonoBehaviour
 
 
 
-	public void InspectItem(Item itemToInspect)
+	public void InspectItem(ItemSO itemToInspect)
 	{
 		if (_availableItemSlots.Exists(o => o._currentItem.Item == itemToInspect))
 		{
@@ -300,7 +300,7 @@ public class UIInventory : MonoBehaviour
 
 	}
 
-	void ShowItemInformation(Item item)
+	void ShowItemInformation(ItemSO item)
 	{
 
 		bool[] availabilityArray = _currentInventory.IngredientsAvailability(item.IngredientsList);
@@ -338,7 +338,7 @@ public class UIInventory : MonoBehaviour
 		if (_availableItemSlots.Count > selectedItemId && selectedItemId > -1)
 		{
 			//find the item 
-			Item itemToActOn = new Item();
+			ItemSO itemToActOn = new ItemSO();
 			itemToActOn = _availableItemSlots[selectedItemId]._currentItem.Item;
 
 			//check the selected Item type
@@ -363,7 +363,7 @@ public class UIInventory : MonoBehaviour
 		}
 
 	}
-	void UseItem(Item itemToUse)
+	void UseItem(ItemSO itemToUse)
 	{
 		Debug.Log("USE ITEM " + itemToUse.name);
 
@@ -373,13 +373,13 @@ public class UIInventory : MonoBehaviour
 	}
 
 
-	void EquipItem(Item itemToUse)
+	void EquipItem(ItemSO itemToUse)
 	{
 		Debug.Log("Equip ITEM " + itemToUse.name);
 		_equipItemEvent.OnEventRaised(itemToUse);
 	}
 
-	void CookRecipe(Item recipeToCook)
+	void CookRecipe(ItemSO recipeToCook)
 	{
 
 		//get item
