@@ -32,6 +32,8 @@ public class Protagonist : MonoBehaviour
 	public const float GRAVITY_DIVIDER = .6f;
 	public const float AIR_RESISTANCE = 5f;
 
+	public Transform ray1, ray2, ray3; //Temporary references
+
 	//private void OnControllerColliderHit(ControllerColliderHit hit)
 	//{
 	//	lastHit = hit;
@@ -69,38 +71,40 @@ public class Protagonist : MonoBehaviour
 
 	private void GroundCheck()
 	{
-		Ray ray = new Ray(transform.position + Vector3.up * .3f + transform.forward * .3f, Vector3.down);
-		Ray sphereRay = new Ray(transform.position + Vector3.up * .3f, Vector3.down);
+		rayGroundNormal = Vector3.zero;
+		if(Physics.Raycast(ray1.position, Vector3.down, out RaycastHit hitResults, 1f))
+		{
+			rayGroundNormal += hitResults.normal;
+		}
+		if (Physics.Raycast(ray2.position, Vector3.down, out hitResults, 1f))
+		{
+			rayGroundNormal += hitResults.normal;
+		}
+		if (Physics.Raycast(ray3.position, Vector3.down, out hitResults, 1f))
+		{
+			rayGroundNormal += hitResults.normal;
+		}
 
-		bool rayFoundGround = Physics.Raycast(ray, out RaycastHit hitResults, .2f);
-		if (rayFoundGround)
-		{
-			rayGroundNormal = hitResults.normal;
-		}
-		else
-		{
-			//This is a "safe" value, in case the character is in the air or other edge cases,
-			//and some script uses the ground normal for calculations.
-			rayGroundNormal = Vector3.up;
-		}
+		rayGroundNormal.Normalize();
 
-		if (Physics.SphereCast(sphereRay, .3f, out hitResults, 1f))
-		{
-			spherecastGroundNormal = hitResults.normal;
+		//Ray sphereRay = new Ray(transform.position + Vector3.up * .3f, Vector3.down);
+		//if (Physics.SphereCast(sphereRay, .3f, out hitResults, 1f))
+		//{
+		//	spherecastGroundNormal = hitResults.normal;
 
-			if(!rayFoundGround)
-			{
-				rayGroundNormal = spherecastGroundNormal;
-			}
-		}
-		else
-		{
-			spherecastGroundNormal = Vector3.up;
-		}
+		//	if(!rayFoundGround)
+		//	{
+		//		rayGroundNormal = spherecastGroundNormal;
+		//	}
+		//}
+		//else
+		//{
+		//	spherecastGroundNormal = Vector3.up;
+		//}
 
 		Vector3 origin = transform.position + Vector3.up * 1.5f;
 		Debug.DrawLine(origin, origin + rayGroundNormal, Color.red);
-		Debug.DrawLine(origin, origin + spherecastGroundNormal, Color.green);
+		//Debug.DrawLine(origin, origin + spherecastGroundNormal, Color.green);
 	}
 
 	private void RecalculateMovement()

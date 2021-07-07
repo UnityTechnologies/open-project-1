@@ -18,15 +18,8 @@ public class IsSlidingCondition : Condition
 
 	protected override bool Statement()
 	{
-		float raycastSlope = Vector3.Angle(Vector3.up, _protagonistScript.rayGroundNormal);
-		if (raycastSlope >= _characterController.slopeLimit)
-		{
-			float spherecastSlope = Vector3.Angle(Vector3.up, _protagonistScript.spherecastGroundNormal);
-			return spherecastSlope >= _characterController.slopeLimit;
-		}
-		else
-		{
-			return false;
-		}
+		float slope = Vector3.Angle(Vector3.up, _protagonistScript.rayGroundNormal);
+		Debug.Log(slope);
+		return slope >= _characterController.slopeLimit;
 	}
 }
