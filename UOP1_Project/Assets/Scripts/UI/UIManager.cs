@@ -32,7 +32,7 @@ public class UIManager : MonoBehaviour
 
 	[Header("Dialogue Events")]
 	[SerializeField] private DialogueLineChannelSO _openUIDialogueEvent = default;
-	[SerializeField] private VoidEventChannelSO _closeUIDialogueEvent = default;
+	[SerializeField] private IntEventChannelSO _closeUIDialogueEvent = default;
 
 	[Header("Inventory Events")]
 	[SerializeField] private VoidEventChannelSO _openInventoryScreenForCookingEvent = default;
@@ -81,7 +81,7 @@ public class UIManager : MonoBehaviour
 		_dialogueController.SetDialogue(dialogueLine, actor);
 		_dialogueController.gameObject.SetActive(true);
 	}
-	void CloseUIDialogue()
+	void CloseUIDialogue(int dialogueType)
 	{
 		_selectionHandler.Unselect();
 		_dialogueController.gameObject.SetActive(false);
