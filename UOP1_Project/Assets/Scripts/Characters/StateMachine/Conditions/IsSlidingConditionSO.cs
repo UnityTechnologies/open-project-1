@@ -18,8 +18,30 @@ public class IsSlidingCondition : Condition
 
 	protected override bool Statement()
 	{
-		float slope = Vector3.Angle(Vector3.up, _protagonistScript.rayGroundNormal);
-		Debug.Log(slope);
-		return slope >= _characterController.slopeLimit;
+
+		Vector3 lastHitProj = _protagonistScript.lastHit.point;
+		lastHitProj.y = 0f;
+
+		
+
+		if (_protagonistScript.canMoveForward)
+		{
+
+			float isForward = Vector3.Dot(_protagonistScript.transform.forward, lastHitProj.normalized);
+			if (isForward >= .9f)
+			{
+				return false;
+			}
+			else
+			{
+				float slope = Vector3.Angle(Vector3.up, _protagonistScript.lastHit.normal);
+				return slope >= _characterController.slopeLimit;
+			}
+		}
+		else
+		{
+			float slope = Vector3.Angle(Vector3.up, _protagonistScript.lastHit.normal);
+			return slope >= _characterController.slopeLimit;
+		}
 	}
 }

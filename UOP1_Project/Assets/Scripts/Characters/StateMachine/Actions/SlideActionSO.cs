@@ -17,9 +17,9 @@ public class SlideAction : StateAction
 	public override void OnUpdate()
 	{
 		float speed = -Physics.gravity.y * Protagonist.GRAVITY_MULTIPLIER * .3f;
-
-		Vector3 slideDirection = new Vector3(_protagonist.rayGroundNormal.x, -_protagonist.rayGroundNormal.y, _protagonist.rayGroundNormal.z);
-		Vector3.OrthoNormalize(ref _protagonist.rayGroundNormal, ref slideDirection);
+		Vector3 hitNormal = _protagonist.lastHit.normal;
+		Vector3 slideDirection = new Vector3(hitNormal.x, -hitNormal.y, hitNormal.z);
+		Vector3.OrthoNormalize(ref hitNormal, ref slideDirection);
 
 		//Vector3 slidingMovement = _protagonist.movementVector;
 		//// Cheap way to avoid overshooting the character, which causes it to move away from the slope
