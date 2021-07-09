@@ -11,22 +11,25 @@ public class QuestManagerSO : ScriptableObject
 	[SerializeField] private InventorySO _inventory = default;
 
 
-	[SerializeField] private VoidEventChannelSO _playWinningQuest = default;
-	[SerializeField] private VoidEventChannelSO _playLosingQuest = default;
 	[SerializeField] private QuestSO _winningQuest = default;
 	[SerializeField] private QuestSO _losingQuest = default;
 
 	[Header("Linstening to channels")]
-	[SerializeField] private VoidEventChannelSO _checkStepValidityEvent = default;
-	[SerializeField] private DialogueDataChannelSO _endDialogueEvent = default;
+	[FormerlySerializedAs("_checkStepValidityEvent")]
+	[SerializeField] private VoidEventChannelSO _continueWithStepEvent = default;
+	[SerializeField] private IntEventChannelSO _endDialogueEvent = default;
+	[SerializeField] private VoidEventChannelSO _playWinningQuest = default;
+	[SerializeField] private VoidEventChannelSO _playLosingQuest = default;
 
 	[Header("Broadcasting on channels")]
-	[SerializeField] private VoidEventChannelSO _completeDialogueEvent = default;
-	[SerializeField] private VoidEventChannelSO _incompleteDialogueEvent = default;
+	[FormerlySerializedAs("_completeDialogueEvent")]
+	[SerializeField] private VoidEventChannelSO _playCompletionDialogueEvent = default;
+	[FormerlySerializedAs("_incompleteDialogueEvent")]
+	[SerializeField] private VoidEventChannelSO _playIncompleteDialogueEvent = default;
 
 	[SerializeField] private ItemEventChannelSO _giveItemEvent = default;
 	[SerializeField] private ItemEventChannelSO _rewardItemEvent = default;
-	[SerializeField] private SaveSystem saveSystem = default; 
+	[SerializeField] private SaveSystem saveSystem = default;
 	private QuestSO _currentQuest = null;
 	private QuestlineSO _currentQuestline;
 	private StepSO _currentStep;
@@ -35,7 +38,7 @@ public class QuestManagerSO : ScriptableObject
 	private int _currentStepIndex = 0;
 	public void OnDisable()
 	{
-		_checkStepValidityEvent.OnEventRaised -= CheckStepValidity;
+		_continueWithStepEvent.OnEventRaised -= CheckStepValidity;
 		_endDialogueEvent.OnEventRaised -= EndDialogue;
 		_playWinningQuest.OnEventRaised -= SetWinningSteps;
 		_playLosingQuest.OnEventRaised -= SetLosingSteps;
@@ -43,7 +46,7 @@ public class QuestManagerSO : ScriptableObject
 	public void StartGame()
 	{
 		//Add code for saved information
-		_checkStepValidityEvent.OnEventRaised += CheckStepValidity;
+		_continueWithStepEvent.OnEventRaised += CheckStepValidity;
 		_endDialogueEvent.OnEventRaised += EndDialogue;
 
 		_playWinningQuest.OnEventRaised += SetWinningSteps;
@@ -190,24 +193,24 @@ public class QuestManagerSO : ScriptableObject
 					{
 						_inventory.Contains(_currentStep.Item);
 						//Trigger win dialogue
-						_completeDialogueEvent.RaiseEvent();
+						_playCompletionDialogueEvent.RaiseEvent();
 					}
 					else
 					{
 						//trigger lose dialogue
-						_incompleteDialogueEvent.RaiseEvent();
+						_playIncompleteDialogueEvent.RaiseEvent();
 					}
 					break;
 				case StepType.GiveItem:
 					if (_inventory.Contains(_currentStep.Item))
 					{
 						_giveItemEvent.RaiseEvent(_currentStep.Item);
-						_completeDialogueEvent.RaiseEvent();
+						_playCompletionDialogueEvent.RaiseEvent();
 					}
 					else
 					{
 						//trigger lose dialogue
-						_incompleteDialogueEvent.RaiseEvent();
+						_playIncompleteDialogueEvent.RaiseEvent();
 
 					}
 					break;
@@ -216,7 +219,7 @@ public class QuestManagerSO : ScriptableObject
 					//no dialogue is needed after Reward Item
 					if (_currentStep.CompleteDialogue != null)
 					{
-						_completeDialogueEvent.RaiseEvent();
+						_playCompletionDialogueEvent.RaiseEvent();
 					}
 					else
 					{
@@ -227,7 +230,7 @@ public class QuestManagerSO : ScriptableObject
 					//dialogue has already been played
 					if (_currentStep.CompleteDialogue != null)
 					{
-						_completeDialogueEvent.RaiseEvent();
+						_playCompletionDialogueEvent.RaiseEvent();
 					}
 					else
 					{
@@ -239,11 +242,11 @@ public class QuestManagerSO : ScriptableObject
 			}
 		}
 	}
-	void EndDialogue(DialogueDataSO dialogue)
+	void EndDialogue(int dialogueType)
 	{
 
 		//depending on the dialogue that ended, do something 
-		switch (dialogue.DialogueType)
+		switch ((DialogueType)dialogueType)
 		{
 			case DialogueType.winDialogue:
 				EndStep();
@@ -278,7 +281,7 @@ public class QuestManagerSO : ScriptableObject
 				}
 			}
 
-		
+
 
 	}
 	void EndQuest()

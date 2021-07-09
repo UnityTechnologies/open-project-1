@@ -26,7 +26,7 @@ public class FadeChannelSO : ScriptableObject
 	}
 
 	/// <summary>
-	/// Generic fade function. Communicates with <seealso cref="FadeManager.cs"/>.
+	/// Generic fade function. Communicates with <seealso cref="FadeController.cs"/>.
 	/// </summary>
 	/// <param name="fadeIn">If true, the rectangle fades in. If false, the rectangle fades out.</param>
 	/// <param name="duration">How long it takes to the image to fade in/out.</param>

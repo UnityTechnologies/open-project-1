@@ -17,7 +17,7 @@ public class StepController : MonoBehaviour
 	[SerializeField] private VoidEventChannelSO _winDialogueEvent = default;
 	[SerializeField] private VoidEventChannelSO _loseDialogueEvent = default;
 	//[SerializeField]
-	public VoidEventChannelSO _endDialogueEvent = default;
+	public IntEventChannelSO _endDialogueEvent = default;
 	[Header("Broadcasting on channels")]
 	//[SerializeField]
 	public DialogueDataChannelSO _startDialogueEvent = default;
@@ -81,16 +81,18 @@ public class StepController : MonoBehaviour
 		_winDialogueEvent.OnEventRaised += PlayWinDialogue;
 		_loseDialogueEvent.OnEventRaised += PlayLoseDialogue;
 		isInDialogue = true;
-		if (dialogueShot)	dialogueShot.SetActive(true);
+		if (dialogueShot)
+			dialogueShot.SetActive(true);
 	}
-	void EndDialogue()
+	void EndDialogue(int dialogueType)
 	{
 		_endDialogueEvent.OnEventRaised -= EndDialogue;
 		_winDialogueEvent.OnEventRaised -= PlayWinDialogue;
 		_loseDialogueEvent.OnEventRaised -= PlayLoseDialogue;
 		ResumeConversation();
 		isInDialogue = false;
-		if (dialogueShot)	dialogueShot.SetActive(false);
+		if (dialogueShot)
+			dialogueShot.SetActive(false);
 	}
 
 	void PlayLoseDialogue()
