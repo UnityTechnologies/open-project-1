@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class UISettingTabsFiller : MonoBehaviour
 {
-    [SerializeField]
-    private UISettingTabFiller [] _settingTabsList = default;
-    public void FillTabs(List<SettingTab> settingTabs)
+	[SerializeField]
+	private UISettingTabFiller[] _settingTabsList = default;
+	public void FillTabs(List<SettingTab> settingTabs)
 	{
 		for (int i = 0; i < settingTabs.Count; i++)
 		{

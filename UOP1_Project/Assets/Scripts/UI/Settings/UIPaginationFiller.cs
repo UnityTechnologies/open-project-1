@@ -1,10 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI; 
+using UnityEngine.UI;
 public class UIPaginationFiller : MonoBehaviour
 {
-	[SerializeField] private Image _imagePaginationPrefab= default;
+	[SerializeField] private Image _imagePaginationPrefab = default;
 	[SerializeField] private Transform _parentPagination = default;
 
 	[SerializeField] private Sprite _emptyPagination = default;
@@ -31,7 +31,7 @@ public class UIPaginationFiller : MonoBehaviour
 				if (i >= _instantiatedImages.Count)
 				{
 					Image instantiatedImage = Instantiate(_imagePaginationPrefab, _parentPagination);
-					_instantiatedImages.Add(instantiatedImage); 
+					_instantiatedImages.Add(instantiatedImage);
 				}
 
 				if (i < paginationCount)
@@ -46,7 +46,7 @@ public class UIPaginationFiller : MonoBehaviour
 				}
 			}
 			SetCurrentPagination(selectedPaginationIndex);
-		} 
+		}
 	}
 
 	public void SetCurrentPagination(int selectedPaginationIndex)
@@ -65,6 +65,6 @@ public class UIPaginationFiller : MonoBehaviour
 				}
 			}
 		else
-			Debug.LogError("Error in pagination number"); 
+			Debug.LogError("Error in pagination number");
 	}
 }

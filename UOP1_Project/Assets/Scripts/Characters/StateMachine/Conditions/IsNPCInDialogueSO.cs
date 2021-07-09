@@ -14,7 +14,7 @@ public class IsNPCDialogueCondition : Condition
 	{
 		_stepControllerScript = stateMachine.GetComponent<StepController>();
 	}
-	
+
 	protected override bool Statement()
 	{
 
@@ -27,5 +27,5 @@ public class IsNPCDialogueCondition : Condition
 			return false;
 		}
 	}
-	
+
 }

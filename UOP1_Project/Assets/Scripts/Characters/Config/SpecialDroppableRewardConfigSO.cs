@@ -19,6 +19,6 @@ public class SpecialDroppableRewardConfigSO : DroppableRewardConfigSO
 		if (_specialDroppableCurrentCount >= _specialDroppableMaxCount)
 			return _specialItem;
 		else
-			return null; 
+			return null;
 	}
 }

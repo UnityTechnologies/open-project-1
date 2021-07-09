@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class LightmapScaleSetter : MonoBehaviour
 {
-    [SerializeField] private float _lightmapScale = 1f;
+	[SerializeField] private float _lightmapScale = 1f;
 
 #if UNITY_EDITOR
 	// Called when the Lightmap Scale field is changed in the component editor
