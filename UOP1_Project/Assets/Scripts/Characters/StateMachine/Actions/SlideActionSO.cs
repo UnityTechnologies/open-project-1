@@ -16,10 +16,13 @@ public class SlideAction : StateAction
 
 	public override void OnUpdate()
 	{
-		float speed = -Physics.gravity.y * Protagonist.GRAVITY_MULTIPLIER * .3f;
+		float speed = -Physics.gravity.y * Protagonist.GRAVITY_MULTIPLIER * .4f;
 		Vector3 hitNormal = _protagonist.lastHit.normal;
 		Vector3 slideDirection = new Vector3(hitNormal.x, -hitNormal.y, hitNormal.z);
 		Vector3.OrthoNormalize(ref hitNormal, ref slideDirection);
+
+		//Trick below has been commented because it was pushing the character "into" the ground much too often,
+		//producing a collision, which would result in the character being stuck while in the Sliding state
 
 		//Vector3 slidingMovement = _protagonist.movementVector;
 		//// Cheap way to avoid overshooting the character, which causes it to move away from the slope
@@ -30,6 +33,6 @@ public class SlideAction : StateAction
 
 		//slidingMovement += slideDirection * speed;
 
-		_protagonist.movementVector = slideDirection * speed * -slideDirection.y;
+		_protagonist.movementVector = slideDirection * speed;
 	}
 }

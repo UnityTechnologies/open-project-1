@@ -18,30 +18,21 @@ public class IsSlidingCondition : Condition
 
 	protected override bool Statement()
 	{
+		float stepHeight = _protagonistScript.lastHit.point.y - _protagonistScript.transform.position.y;
+		bool isWalkableStep = stepHeight <= _characterController.stepOffset;
 
-		Vector3 lastHitProj = _protagonistScript.lastHit.point;
-		lastHitProj.y = 0f;
+		float currentSlope = Vector3.Angle(Vector3.up, _protagonistScript.lastHit.normal);
+		bool isSlopeTooSteep = currentSlope >= _characterController.slopeLimit;
 
-		
-
-		if (_protagonistScript.canMoveForward)
+		if (!isSlopeTooSteep)
 		{
-
-			float isForward = Vector3.Dot(_protagonistScript.transform.forward, lastHitProj.normalized);
-			if (isForward >= .9f)
-			{
-				return false;
-			}
-			else
-			{
-				float slope = Vector3.Angle(Vector3.up, _protagonistScript.lastHit.normal);
-				return slope >= _characterController.slopeLimit;
-			}
+			//Pendence is within slope limits
+			return false;
 		}
 		else
 		{
-			float slope = Vector3.Angle(Vector3.up, _protagonistScript.lastHit.normal);
-			return slope >= _characterController.slopeLimit;
+			//If the slope is too steep, we prevent sliding if it's within the step limit
+			return !isWalkableStep;
 		}
 	}
 }

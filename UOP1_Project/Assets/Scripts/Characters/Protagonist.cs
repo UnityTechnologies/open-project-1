@@ -21,8 +21,6 @@ public class Protagonist : MonoBehaviour
 	[NonSerialized] public Vector3 movementInput; //Initial input coming from the Protagonist script
 	[NonSerialized] public Vector3 movementVector; //Final movement vector, manipulated by the StateMachine actions
 	[NonSerialized] public ControllerColliderHit lastHit;
-	[NonSerialized] public Vector3 stepNormal = Vector3.up;
-	[NonSerialized] public Vector3 spherecastGroundNormal = Vector3.up;
 	[NonSerialized] public bool isRunning; // Used when using the keyboard to run, brings the normalised speed to 1
 
 	public const float GRAVITY_MULTIPLIER = 5f;
@@ -31,9 +29,6 @@ public class Protagonist : MonoBehaviour
 	public const float GRAVITY_COMEBACK_MULTIPLIER = .03f;
 	public const float GRAVITY_DIVIDER = .6f;
 	public const float AIR_RESISTANCE = 5f;
-
-	public Transform ray1, ray2, ray3; //Temporary references
-	public bool canMoveForward;
 
 	private void OnControllerColliderHit(ControllerColliderHit hit)
 	{
@@ -72,7 +67,7 @@ public class Protagonist : MonoBehaviour
 
 	private void GroundCheck()
 	{
-		canMoveForward = !Physics.Raycast(ray1.position, transform.forward, out RaycastHit hitResults, .2f);
+		
 	}
 
 	private void RecalculateMovement()
