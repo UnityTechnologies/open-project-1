@@ -32,7 +32,9 @@ public class AscendAction : StateAction
 	{
 		_gravityContributionMultiplier += Protagonist.GRAVITY_COMEBACK_MULTIPLIER;
 		_gravityContributionMultiplier *= Protagonist.GRAVITY_DIVIDER; //Reduce the gravity effect
-		_verticalMovement += Physics.gravity.y * Protagonist.GRAVITY_MULTIPLIER * Time.deltaTime * _gravityContributionMultiplier;
+
+		//Note that deltaTime is used even though it's going to be used in ApplyMovementVectorAction, this is because it represents an acceleration, not a speed
+		_verticalMovement += Physics.gravity.y * Protagonist.GRAVITY_MULTIPLIER * _gravityContributionMultiplier * Time.deltaTime;
 		//Note that even if it's added, the above value is negative due to Physics.gravity.y
 
 		_protagonistScript.movementVector.y = _verticalMovement;
