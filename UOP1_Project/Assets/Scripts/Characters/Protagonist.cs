@@ -115,6 +115,7 @@ public class Protagonist : MonoBehaviour
 
 	private void OnMove(Vector2 movement)
 	{
+		Debug.Log("Move " + movement);
 		_inputVector = movement;
 	}
 

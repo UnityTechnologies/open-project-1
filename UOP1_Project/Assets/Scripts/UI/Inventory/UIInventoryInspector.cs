@@ -13,7 +13,7 @@ public class UIInventoryInspector : MonoBehaviour
 	public void FillInspector(ItemSO itemToInspect, bool[] availabilityArray = null)
 	{
 
-		bool isForCooking = (itemToInspect.ItemType.ActionType == ItemInventoryActionType.cook);
+		bool isForCooking = (itemToInspect.ItemType.ActionType == ItemInventoryActionType.Cook);
 
 		_inspectorDescription.FillDescription(itemToInspect);
 

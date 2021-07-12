@@ -192,22 +192,23 @@ public class InputReader : ScriptableObject, GameInput.IGameplayActions, GameInp
 
 	public void EnableDialogueInput()
 	{
+		Debug.Log("EnableDialogueInput");
 		gameInput.Menus.Enable();
 		gameInput.Gameplay.Disable();
-
 		gameInput.Dialogues.Enable();
 	}
 
 	public void EnableGameplayInput()
 	{
+		Debug.Log("EnableGameplayInput");
 		gameInput.Menus.Disable();
 		gameInput.Dialogues.Disable();
-
 		gameInput.Gameplay.Enable();
 	}
 
 	public void EnableMenuInput()
 	{
+		Debug.Log("EnableMenuInput");
 		gameInput.Dialogues.Disable();
 		gameInput.Gameplay.Disable();
 
@@ -216,6 +217,7 @@ public class InputReader : ScriptableObject, GameInput.IGameplayActions, GameInp
 
 	public void DisableAllInput()
 	{
+		Debug.Log("DisableAllInput");
 		gameInput.Gameplay.Disable();
 		gameInput.Menus.Disable();
 		gameInput.Dialogues.Disable();
