@@ -60,7 +60,7 @@ public class AerialMovementAction : StateAction
 
 			if (signVel != signInput || absVel < targetSpeed)
 			{
-				currentAxisSpeed += axisInput * acceleration * Time.deltaTime;
+				currentAxisSpeed += axisInput * acceleration;
 				currentAxisSpeed = Mathf.Clamp(currentAxisSpeed, -targetSpeed, targetSpeed);
 			}
 			else
