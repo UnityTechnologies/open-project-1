@@ -61,12 +61,18 @@ public class Protagonist : MonoBehaviour
 
 	private void Update()
 	{
+		GroundCheck();
 		RecalculateMovement();
+	}
+
+	private void GroundCheck()
+	{
+		
 	}
 
 	private void RecalculateMovement()
 	{
-		float targetSpeed = 0f;
+		float targetSpeed;
 		Vector3 adjustedMovement;
 
 		if (gameplayCameraTransform.isSet)
