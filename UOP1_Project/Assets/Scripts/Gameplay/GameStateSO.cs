@@ -31,7 +31,6 @@ public class GameStateSO : ScriptableObject
 	public void ResetToPreviousGameState()
 	{
 		_currentGameState = _previousGameState;
-		Debug.Log("Current Game State " + CurrentGameState);
 	}
 
 }

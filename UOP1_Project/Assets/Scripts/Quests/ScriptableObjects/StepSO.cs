@@ -35,6 +35,8 @@ public class StepSO : SerializableScriptableObject
 	[SerializeField]
 	private ItemSO _rewardItem = default;
 	[SerializeField]
+	private int _rewardItemCount = 1; // by default the reward is 1 item (if any)
+	[SerializeField]
 	bool _isDone = false;
 	[SerializeField]
 	VoidEventChannelSO _endStepEvent = default;
@@ -53,10 +55,19 @@ public class StepSO : SerializableScriptableObject
 		get { return _incompleteDialogue; }
 		set { _incompleteDialogue = value; }
 	}
-	public ItemSO Item => _item;
+	public ItemSO Item
+	{
+		get => _item;
+		set => _item = value;
+	}
 	public bool HasReward => _hasReward;
 	public ItemSO RewardItem => _rewardItem;
-	public VoidEventChannelSO EndStepEvent => _endStepEvent;
+	public int RewardItemCount => _rewardItemCount;
+	public VoidEventChannelSO EndStepEvent
+	{
+		set => _endStepEvent = value;
+		get => _endStepEvent;
+	}
 	public StepType Type => _type;
 	public bool IsDone
 	{

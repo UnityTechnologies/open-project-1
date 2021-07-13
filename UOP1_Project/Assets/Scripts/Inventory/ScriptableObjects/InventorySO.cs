@@ -117,7 +117,7 @@ public class InventorySO : ScriptableObject
 		_items.Clear();
 		foreach (ItemStack item in _defaultItems)
 		{
-			_items.Add(item);
+			_items.Add(new ItemStack(item));
 
 		}
 	}

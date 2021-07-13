@@ -246,9 +246,7 @@ public class QuestEditorWindow : EditorWindow
 			}
 			if (step.IncompleteDialogue != null)
 			{
-
 				AllDialogueList.Add(step.IncompleteDialogue);
-
 
 			}
 

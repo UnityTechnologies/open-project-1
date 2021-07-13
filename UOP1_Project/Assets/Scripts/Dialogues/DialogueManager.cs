@@ -152,18 +152,10 @@ public class DialogueManager : MonoBehaviour
 			case ChoiceActionType.WinningChoice:
 				if (_makeWinningChoice != null)
 					_makeWinningChoice.RaiseEvent();
-				if (choice.NextDialogue != null)
-					DisplayDialogueData(choice.NextDialogue);
-				else
-					DialogueEndedAndCloseDialogueUI();
 				break;
 			case ChoiceActionType.LosingChoice:
 				if (_makeLosingChoice != null)
 					_makeLosingChoice.RaiseEvent();
-				if (choice.NextDialogue != null)
-					DisplayDialogueData(choice.NextDialogue);
-				else
-					DialogueEndedAndCloseDialogueUI();
 
 				break;
 			case ChoiceActionType.DoNothing:

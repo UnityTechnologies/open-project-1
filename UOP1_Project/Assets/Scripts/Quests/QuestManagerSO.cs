@@ -18,8 +18,8 @@ public class QuestManagerSO : ScriptableObject
 	[FormerlySerializedAs("_checkStepValidityEvent")]
 	[SerializeField] private VoidEventChannelSO _continueWithStepEvent = default;
 	[SerializeField] private IntEventChannelSO _endDialogueEvent = default;
-	[SerializeField] private VoidEventChannelSO _makeWinningChoice = default;
-	[SerializeField] private VoidEventChannelSO _makeLosingChoice = default;
+	[SerializeField] private VoidEventChannelSO _makeWinningChoiceEvent = default;
+	[SerializeField] private VoidEventChannelSO _makeLosingChoiceEvent = default;
 
 	[Header("Broadcasting on channels")]
 	[SerializeField] private VoidEventChannelSO _playCompletionDialogueEvent = default;
@@ -29,7 +29,7 @@ public class QuestManagerSO : ScriptableObject
 	[SerializeField] private VoidEventChannelSO _startLosingCutscene = default;
 
 	[SerializeField] private ItemEventChannelSO _giveItemEvent = default;
-	[SerializeField] private ItemEventChannelSO _rewardItemEvent = default;
+	[SerializeField] private ItemStackEventChannelSO _rewardItemEvent = default;
 	[SerializeField] private SaveSystem saveSystem = default;
 	private QuestSO _currentQuest = null;
 	private QuestlineSO _currentQuestline;
@@ -41,8 +41,8 @@ public class QuestManagerSO : ScriptableObject
 	{
 		_continueWithStepEvent.OnEventRaised -= CheckStepValidity;
 		_endDialogueEvent.OnEventRaised -= EndDialogue;
-		_makeWinningChoice.OnEventRaised -= PlayWinningQuest;
-		_makeLosingChoice.OnEventRaised -= PlayLosingQuest;
+		_makeWinningChoiceEvent.OnEventRaised -= MakeWinningChoice;
+		_makeLosingChoiceEvent.OnEventRaised -= MakeLosingChoice;
 	}
 	public void StartGame()
 	{
@@ -50,8 +50,8 @@ public class QuestManagerSO : ScriptableObject
 		_continueWithStepEvent.OnEventRaised += CheckStepValidity;
 		_endDialogueEvent.OnEventRaised += EndDialogue;
 
-		_makeWinningChoice.OnEventRaised += PlayWinningQuest;
-		_makeLosingChoice.OnEventRaised += PlayLosingQuest;
+		_makeWinningChoiceEvent.OnEventRaised += MakeWinningChoice;
+		_makeLosingChoiceEvent.OnEventRaised += MakeLosingChoice;
 		StartQuestline();
 	}
 	void StartQuestline()
@@ -159,36 +159,18 @@ public class QuestManagerSO : ScriptableObject
 		}
 
 	}
-	void PlayWinningQuest()
+	void MakeWinningChoice()
 	{
 		//check if has sweet recipe
-
-		if (_inventory.Contains(_winningItem))
-		{
-			//Finish step and play Win cutscene 
-			EndStep();
-			_startWinningCutscene.RaiseEvent();
-		}
-		else
-		{
-			//trigger lose dialogue
-			_playIncompleteDialogueEvent.RaiseEvent();
-		}
+		_currentStep.Item = _winningItem;
+		_currentStep.EndStepEvent = _startWinningCutscene;
+		CheckStepValidity();
 	}
-	void PlayLosingQuest()
+	void MakeLosingChoice()
 	{
-		//check if has savory recipe
-		if (_inventory.Contains(_losingItem))
-		{
-			//Finish step and play lose cutscene 
-			EndStep();
-			_startLosingCutscene.RaiseEvent();
-		}
-		else
-		{
-			//trigger lose dialogue
-			_playIncompleteDialogueEvent.RaiseEvent();
-		}
+		_currentStep.Item = _losingItem;
+		_currentStep.EndStepEvent = _startLosingCutscene;
+		CheckStepValidity();
 	}
 	void StartStep()
 	{
@@ -259,7 +241,10 @@ public class QuestManagerSO : ScriptableObject
 		{
 			case DialogueType.CompletionDialogue:
 				if (_currentStep.HasReward && _currentStep.RewardItem != null)
-					_rewardItemEvent.RaiseEvent(_currentStep.RewardItem);
+				{
+					ItemStack itemStack = new ItemStack(_currentStep.RewardItem, _currentStep.RewardItemCount);
+					_rewardItemEvent.RaiseEvent(itemStack);
+				}
 
 				EndStep();
 				break;
