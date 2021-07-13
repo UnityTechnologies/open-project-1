@@ -36,7 +36,7 @@ public class MultiInputButton : Button
 	{
 		if (_menuSelectionHandler == null)
 			_menuSelectionHandler = transform.root.gameObject.GetComponentInChildren<MenuSelectionHandler>();
-		
+
 		_menuSelectionHandler.UpdateSelection(gameObject);
 
 	}

@@ -16,16 +16,16 @@ public class ShakeCamAction : StateAction
 	public override void Awake(StateMachine stateMachine)
 	{
 	}
-	
+
 	public override void OnUpdate()
 	{
 	}
-	
+
 	public override void OnStateEnter()
 	{
 		OriginSO.camShakeEvent.RaiseEvent();
 	}
-	
+
 	public override void OnStateExit()
 	{
 	}
