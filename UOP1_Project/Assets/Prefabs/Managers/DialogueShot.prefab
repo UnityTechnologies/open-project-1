@@ -16,7 +16,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &201382439289553597
 Transform:
   m_ObjectHideFlags: 0
@@ -61,7 +61,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.1083732, y: 1}
+    m_SensorSize: {x: 1.7789599, y: 1}
   m_Transitions:
     m_BlendHint: 2
     m_InheritPosition: 0
@@ -81,8 +81,8 @@ GameObject:
   - component: {fileID: 7826768985057779497}
   - component: {fileID: 1580901926974113096}
   - component: {fileID: 4309798612613720724}
-  - component: {fileID: 7884585889264118550}
   - component: {fileID: 6230831866616406394}
+  - component: {fileID: 5374472330741316883}
   m_Layer: 0
   m_Name: cm
   m_TagString: Untagged
@@ -133,28 +133,6 @@ MonoBehaviour:
   m_AmplitudeGain: 1
   m_FrequencyGain: 1
   mNoiseOffsets: {x: 0, y: 0, z: 0}
---- !u!114 &7884585889264118550
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8672080997735389061}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fa7155796051b734daa718462081dc5f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_BindingMode: 1
-  m_FollowOffset: {x: 2.7, y: 1.4, z: 0.6}
-  m_XDamping: 1
-  m_YDamping: 1
-  m_ZDamping: 1
-  m_AngularDampingMode: 0
-  m_PitchDamping: 0
-  m_YawDamping: 20
-  m_RollDamping: 0
-  m_AngularDamping: 0
 --- !u!114 &6230831866616406394
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -182,3 +160,25 @@ MonoBehaviour:
   m_BiasX: 0
   m_BiasY: 0
   m_CenterOnActivate: 0
+--- !u!114 &5374472330741316883
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8672080997735389061}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa7155796051b734daa718462081dc5f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_BindingMode: 1
+  m_FollowOffset: {x: 0, y: 0, z: -10}
+  m_XDamping: 1
+  m_YDamping: 1
+  m_ZDamping: 1
+  m_AngularDampingMode: 0
+  m_PitchDamping: 0
+  m_YawDamping: 0
+  m_RollDamping: 0
+  m_AngularDamping: 0
