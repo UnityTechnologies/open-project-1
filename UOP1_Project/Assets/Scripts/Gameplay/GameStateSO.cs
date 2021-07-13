@@ -21,8 +21,11 @@ public class GameStateSO : ScriptableObject
 
 	public void UpdateGameState(GameState newGameState)
 	{
-		_previousGameState = _currentGameState;
-		_currentGameState = newGameState;
+		if (newGameState != CurrentGameState)
+		{
+			_previousGameState = _currentGameState;
+			_currentGameState = newGameState;
+		}
 
 	}
 	public void ResetToPreviousGameState()
