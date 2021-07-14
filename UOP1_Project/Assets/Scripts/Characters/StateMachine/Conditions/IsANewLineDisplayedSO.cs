@@ -4,8 +4,7 @@ using UOP1.StateMachine;
 using UOP1.StateMachine.ScriptableObjects;
 
 [CreateAssetMenu(fileName = "IsANewLineDisplayed", menuName = "State Machines/Conditions/Is A New Line Displayed")]
-public class IsANewLineDisplayedSO : StateConditionSO
-{
+public class IsANewLineDisplayedSO : StateConditionSO {
 
 	[SerializeField] private DialogueLineChannelSO _onLineDisplayed = default;
 

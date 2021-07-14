@@ -87,7 +87,7 @@ public class InventorySO : ScriptableObject
 	public bool[] IngredientsAvailability(List<ItemStack> ingredients)
 	{
 		if (ingredients == null)
-			return null;
+			return null; 
 		bool[] availabilityArray = new bool[ingredients.Count];
 
 		for (int i = 0; i < ingredients.Count; i++)
@@ -110,14 +110,14 @@ public class InventorySO : ScriptableObject
 	}
 	public void Init()
 	{
-		if (_items == null)
+        if(_items == null)
 		{
-			_items = new List<ItemStack>();
+			_items = new List<ItemStack>(); 
 		}
 		_items.Clear();
 		foreach (ItemStack item in _defaultItems)
 		{
-			_items.Add(item);
+			_items.Add(item); 
 
 		}
 	}

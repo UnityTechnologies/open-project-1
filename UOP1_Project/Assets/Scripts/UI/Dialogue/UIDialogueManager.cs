@@ -15,7 +15,7 @@ public class UIDialogueManager : MonoBehaviour
 	[SerializeField] private UIDialogueChoicesManager _choicesManager = default;
 
 	[SerializeField] private DialogueChoicesChannelSO _showChoicesEvent = default;
-	private void OnEnable()
+	private void  OnEnable ()
 	{
 
 		_showChoicesEvent.OnEventRaised += ShowChoices;

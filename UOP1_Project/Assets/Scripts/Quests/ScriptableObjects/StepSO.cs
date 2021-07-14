@@ -36,8 +36,7 @@ public class StepSO : SerializableScriptableObject
 	bool _isDone = false;
 	[SerializeField]
 	VoidEventChannelSO _endStepEvent = default;
-	public DialogueDataSO DialogueBeforeStep
-	{
+	public DialogueDataSO DialogueBeforeStep {
 		get { return _dialogueBeforeStep; }
 		set { _dialogueBeforeStep = value; }
 	}
@@ -53,7 +52,7 @@ public class StepSO : SerializableScriptableObject
 	}
 	public ItemSO Item => _item;
 
-	public VoidEventChannelSO EndStepEvent => _endStepEvent;
+	public VoidEventChannelSO EndStepEvent => _endStepEvent; 
 	public StepType Type => _type;
 	public bool IsDone
 	{
@@ -64,12 +63,12 @@ public class StepSO : SerializableScriptableObject
 
 	public void FinishStep()
 	{
-		if (_endStepEvent != null)
-			_endStepEvent.RaiseEvent();
+		if(_endStepEvent!=null)
+		_endStepEvent.RaiseEvent(); 
 		_isDone = true;
 
 	}
-
+	
 	public DialogueDataSO StepToDialogue()
 	{
 		DialogueDataSO dialogueData = new DialogueDataSO();
@@ -77,7 +76,7 @@ public class StepSO : SerializableScriptableObject
 		dialogueData.SetActor(Actor);
 		if (DialogueBeforeStep != null)
 		{
-			dialogueData = new DialogueDataSO(DialogueBeforeStep);
+			 dialogueData = new DialogueDataSO(DialogueBeforeStep);
 			if (DialogueBeforeStep.Choices != null)
 			{
 				if (CompleteDialogue != null)
