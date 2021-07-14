@@ -328,7 +328,7 @@ public class UIInventory : MonoBehaviour
 	}
 	void UpdateInventory()
 	{
-		FillInventory(_selectedTab.TabType);
+		FillInventory(_selectedTab.TabType, _isNearPot);
 	}
 
 	void OnActionButtonClicked()
@@ -397,7 +397,7 @@ public class UIInventory : MonoBehaviour
 	void OnChangeTab(InventoryTabSO tabType)
 	{
 
-		FillInventory(tabType.TabType);
+		FillInventory(tabType.TabType, _isNearPot);
 
 	}
 	public void CloseInventory()
