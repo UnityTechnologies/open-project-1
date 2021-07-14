@@ -18,7 +18,31 @@ public class GameStateSO : ScriptableObject
 	private GameState _currentGameState = default;
 	private GameState _previousGameState = default;
 	public GameState CurrentGameState => _currentGameState;
+	List<Transform> _enemiesInCombat = new List<Transform>();
+	public void ChangeStateToCombat(Transform enemy)
+	{
+		if (!_enemiesInCombat.Exists(o => o == enemy))
+		{
+			_enemiesInCombat.Add(enemy);
+		}
 
+		UpdateGameState(GameState.Combat);
+	}
+	public void ChangeStateFromCombat(Transform enemy)
+	{
+		if (_enemiesInCombat.Exists(o => o == enemy))
+		{
+			_enemiesInCombat.Remove(enemy);
+		}
+		if (_enemiesInCombat.Count > 0)
+		{
+			UpdateGameState(GameState.Combat);
+		}
+		else
+		{
+			UpdateGameState(GameState.Gameplay);
+		}
+	}
 	public void UpdateGameState(GameState newGameState)
 	{
 		if (newGameState != CurrentGameState)
@@ -26,7 +50,6 @@ public class GameStateSO : ScriptableObject
 			_previousGameState = _currentGameState;
 			_currentGameState = newGameState;
 		}
-
 	}
 	public void ResetToPreviousGameState()
 	{
