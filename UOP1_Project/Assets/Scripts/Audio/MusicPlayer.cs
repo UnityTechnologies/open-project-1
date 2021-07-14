@@ -8,7 +8,7 @@ public class MusicPlayer : MonoBehaviour
 	[SerializeField] private AudioConfigurationSO _audioConfig = default;
 	[Header("Pause music configuration")]
 	[SerializeField] private AudioCueSO _pauseMusic = default;
-	[SerializeField] private BoolEventChannelSO _onPauseOpened = default; 
+	[SerializeField] private BoolEventChannelSO _onPauseOpened = default;
 
 	private void OnEnable()
 	{

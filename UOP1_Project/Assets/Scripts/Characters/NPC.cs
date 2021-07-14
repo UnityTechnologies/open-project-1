@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum NPCState { Idle = 0, Walk, Talk};
+public enum NPCState { Idle = 0, Walk, Talk };
 
 public class NPC : MonoBehaviour
 {

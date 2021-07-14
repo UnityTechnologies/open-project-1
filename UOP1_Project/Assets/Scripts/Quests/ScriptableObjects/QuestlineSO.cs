@@ -25,8 +25,8 @@ public class QuestlineSO : SerializableScriptableObject
 	}
 	public void FinishQuestline()
 	{
-		if(_endQuestlineEvent!=null)
-		{ _endQuestlineEvent.RaiseEvent();  }
+		if (_endQuestlineEvent != null)
+		{ _endQuestlineEvent.RaiseEvent(); }
 		_isDone = true;
 	}
 	public void SetQuestlineId(int id)

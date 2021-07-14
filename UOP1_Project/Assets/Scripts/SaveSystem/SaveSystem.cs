@@ -7,10 +7,10 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 public class SaveSystem : ScriptableObject
 {
 	[SerializeField] private LoadEventChannelSO _loadLocation = default;
-	[SerializeField] private InventorySO _playerInventory=default;
+	[SerializeField] private InventorySO _playerInventory = default;
 	[SerializeField]
-	private QuestManagerSO _questManagerSO = default; 
-    public string saveFilename = "save.chop";
+	private QuestManagerSO _questManagerSO = default;
+	public string saveFilename = "save.chop";
 	public string backupSaveFilename = "save.chop.bak";
 	public Save saveData = new Save();
 
@@ -48,7 +48,7 @@ public class SaveSystem : ScriptableObject
 
 	public IEnumerator LoadSavedInventory()
 	{
-		_playerInventory.Items.Clear(); 
+		_playerInventory.Items.Clear();
 		foreach (var serializedItemStack in saveData._itemStacks)
 		{
 			var loadItemOperationHandle = Addressables.LoadAssetAsync<ItemSO>(serializedItemStack.itemGuid);
@@ -62,8 +62,8 @@ public class SaveSystem : ScriptableObject
 	}
 	public void LoadSavedQuestlineStatus()
 	{
-		_questManagerSO.SetFinishedQuestlineItemsFromSave(saveData._finishedQuestlineItemsGUIds); 
-		
+		_questManagerSO.SetFinishedQuestlineItemsFromSave(saveData._finishedQuestlineItemsGUIds);
+
 	}
 
 	public void SaveDataToDisk()
@@ -71,13 +71,13 @@ public class SaveSystem : ScriptableObject
 		saveData._itemStacks.Clear();
 		foreach (var itemStack in _playerInventory.Items)
 		{
-				saveData._itemStacks.Add(new SerializedItemStack(itemStack.Item.Guid, itemStack.Amount));
+			saveData._itemStacks.Add(new SerializedItemStack(itemStack.Item.Guid, itemStack.Amount));
 		}
 		saveData._finishedQuestlineItemsGUIds.Clear();
 
 		foreach (var item in _questManagerSO.GetFinishedQuestlineItemsGUIds())
 		{
-			saveData._finishedQuestlineItemsGUIds.Add(item); 
+			saveData._finishedQuestlineItemsGUIds.Add(item);
 
 		}
 		if (FileManager.MoveFile(saveFilename, backupSaveFilename))
@@ -92,14 +92,14 @@ public class SaveSystem : ScriptableObject
 	public void WriteEmptySaveFile()
 	{
 		FileManager.WriteToFile(saveFilename, "");
-	
+
 	}
 	public void SetNewGameData()
 	{
 		FileManager.WriteToFile(saveFilename, "");
-		_playerInventory.Init(); 
+		_playerInventory.Init();
 		_questManagerSO.ResetQuestlines();
-		SaveDataToDisk(); 
+		SaveDataToDisk();
 
 	}
 }

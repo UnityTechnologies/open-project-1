@@ -15,7 +15,7 @@ public class PathwayMovementAction : NPCMovementAction
 	{
 		_agent = agent;
 		_isActiveAgent = _agent != null && _agent.isActiveAndEnabled && _agent.isOnNavMesh;
-		_wayPointIndex = - 1; //Initialized to -1 so we don't skip the first element from the waypoint list
+		_wayPointIndex = -1; //Initialized to -1 so we don't skip the first element from the waypoint list
 		_roamingSpeed = config.Speed;
 		_wayppoints = config.Waypoints;
 	}

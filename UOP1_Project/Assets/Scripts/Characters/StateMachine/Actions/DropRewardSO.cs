@@ -32,7 +32,7 @@ public class DropReward : StateAction
 
 	private void DropAllRewards(Vector3 position)
 	{
-		DropGroup specialDropItem = _dropRewardConfig.DropSpecialItem(); 
+		DropGroup specialDropItem = _dropRewardConfig.DropSpecialItem();
 		if (specialDropItem != null) // drops a special item if any 
 			DropOneReward(specialDropItem, position);
 		// Drop items
