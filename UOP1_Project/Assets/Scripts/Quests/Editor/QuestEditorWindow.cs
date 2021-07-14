@@ -246,9 +246,7 @@ public class QuestEditorWindow : EditorWindow
 			}
 			if (step.IncompleteDialogue != null)
 			{
-
 				AllDialogueList.Add(step.IncompleteDialogue);
-
 
 			}
 
@@ -307,8 +305,8 @@ public class QuestEditorWindow : EditorWindow
 		EditorUtility.SetDirty(_currentSeletedQuest);
 		AssetDatabase.SaveAssets();
 		_currentSelectedStep.DialogueBeforeStep = asset;
-		asset.DialogueType = DialogueType.startDialogue;
-		asset.CreateLine();
+		asset.DialogueType = DialogueType.StartDialogue;
+		//	asset.CreateLine(); 
 		rootVisualElement.Q<VisualElement>("steps-list").Q<ListView>().SetSelection(_idStepSelected);
 	}
 	private void AddCompletionDialogue()
@@ -324,8 +322,8 @@ public class QuestEditorWindow : EditorWindow
 
 		AssetDatabase.CreateAsset(asset, "Assets/ScriptableObjects/Quests/Questline" + questlineId + "/Quest" + questId + "/Step" + stepId + "/CD-S" + stepId + "-Q" + questId + "-QL" + questlineId + ".asset");
 		_currentSelectedStep.CompleteDialogue = asset;
-		asset.DialogueType = DialogueType.winDialogue;
-		asset.CreateLine();
+		asset.DialogueType = DialogueType.CompletionDialogue;
+		//	asset.CreateLine();
 		EditorUtility.SetDirty(asset);
 		EditorUtility.SetDirty(_currentSeletedQuest);
 		AssetDatabase.SaveAssets();
@@ -344,8 +342,8 @@ public class QuestEditorWindow : EditorWindow
 		stepId = _currentSeletedQuest.Steps.FindIndex(o => o == _currentSelectedStep) + 1;
 		AssetDatabase.CreateAsset(asset, "Assets/ScriptableObjects/Quests/Questline" + questlineId + "/Quest" + questId + "/Step" + stepId + "/ID-S" + stepId + "-Q" + questId + "-QL" + questlineId + ".asset");
 
-		asset.DialogueType = DialogueType.loseDialogue;
-		asset.CreateLine();
+		asset.DialogueType = DialogueType.IncompletionDialogue;
+		//asset.CreateLine();
 		_currentSelectedStep.IncompleteDialogue = asset;
 		EditorUtility.SetDirty(asset);
 		EditorUtility.SetDirty(_currentSeletedQuest);
@@ -432,9 +430,9 @@ public class QuestEditorWindow : EditorWindow
 		Label rightLineLabel = dialogueVE.Q<Label>("right-line-label");
 
 
-		leftLineLabel.text = completeDialogue.DialogueLines[0].GetLocalizedStringImmediateSafe();
-		if (incompleteDialogue != null)
-			rightLineLabel.text = incompleteDialogue.DialogueLines[0].GetLocalizedStringImmediateSafe();
+		//	leftLineLabel.text = completeDialogue.DialogueLines[0].GetLocalizedStringImmediateSafe();
+		//	if (incompleteDialogue != null)
+		//rightLineLabel.text = incompleteDialogue.DialogueLines[0].GetLocalizedStringImmediateSafe();
 
 		// hide options
 		VisualElement buttonArea = dialogueVE.Q<VisualElement>("buttons");
@@ -689,7 +687,7 @@ public class QuestEditorWindow : EditorWindow
 	}
 	void RemoveDialogue(DialogueDataSO dialogueToRemove)
 	{
-		dialogueToRemove.RemoveLineFromSharedTable();
+		//	dialogueToRemove.RemoveLineFromSharedTable();
 		AssetDatabase.DeleteAsset(dialogueToRemove.GetPath());
 
 	}
@@ -697,7 +695,7 @@ public class QuestEditorWindow : EditorWindow
 	{
 		VisualElement dialoguePreviewVE = new VisualElement();
 		dialoguePreviewVE.name = "Dialogue";
-		foreach (LocalizedString localizedString in dialogueDataSO.DialogueLines)
+		/*foreach (LocalizedString localizedString in dialogueDataSO.DialogueLines)
 		{
 			Label dialogueLine = new Label();
 			dialogueLine.name = dialogueDataSO.DialogueType.ToString();
@@ -723,7 +721,7 @@ public class QuestEditorWindow : EditorWindow
 				choicesVE.Add(choiceVE);
 			}
 			dialoguePreviewVE.Add(choicesVE);
-		}
+		}*/
 
 		return dialoguePreviewVE;
 	}

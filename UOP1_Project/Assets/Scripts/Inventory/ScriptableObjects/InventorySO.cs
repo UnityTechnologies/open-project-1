@@ -24,7 +24,7 @@ public class InventorySO : ScriptableObject
 			if (item == currentItemStack.Item)
 			{
 				//only add to the amount if the item is usable 
-				if (currentItemStack.Item.ItemType.ActionType == ItemInventoryActionType.use)
+				if (currentItemStack.Item.ItemType.ActionType == ItemInventoryActionType.Use)
 				{
 					currentItemStack.Amount += count;
 				}
@@ -117,7 +117,7 @@ public class InventorySO : ScriptableObject
 		_items.Clear();
 		foreach (ItemStack item in _defaultItems)
 		{
-			_items.Add(item);
+			_items.Add(new ItemStack(item));
 
 		}
 	}

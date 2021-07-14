@@ -281,12 +281,12 @@ public class UIInventory : MonoBehaviour
 			//check if interactable
 			bool isInteractable = true;
 			_actionButton.gameObject.SetActive(true);
-			if (itemToInspect.ItemType.ActionType == ItemInventoryActionType.cook)
+			if (itemToInspect.ItemType.ActionType == ItemInventoryActionType.Cook)
 			{
 				isInteractable = _currentInventory.hasIngredients(itemToInspect.IngredientsList) && _isNearPot;
 
 			}
-			else if (itemToInspect.ItemType.ActionType == ItemInventoryActionType.doNothing)
+			else if (itemToInspect.ItemType.ActionType == ItemInventoryActionType.DoNothing)
 			{
 				isInteractable = false;
 				_actionButton.gameObject.SetActive(false);
@@ -346,13 +346,13 @@ public class UIInventory : MonoBehaviour
 			switch (itemToActOn.ItemType.ActionType)
 			{
 
-				case ItemInventoryActionType.cook:
+				case ItemInventoryActionType.Cook:
 					CookRecipe(itemToActOn);
 					break;
-				case ItemInventoryActionType.use:
+				case ItemInventoryActionType.Use:
 					UseItem(itemToActOn);
 					break;
-				case ItemInventoryActionType.equip:
+				case ItemInventoryActionType.Equip:
 					EquipItem(itemToActOn);
 					break;
 				default:

@@ -6,7 +6,7 @@ using UOP1.StateMachine.ScriptableObjects;
 public class IsDialogueActiveConditionSO : StateConditionSO
 {
 	[SerializeField] private DialogueDataChannelSO _startDialogueEvent = default;
-	[SerializeField] private DialogueDataChannelSO _endDialogueEvent = default;
+	[SerializeField] private IntEventChannelSO _endDialogueEvent = default;
 
 	protected override Condition CreateCondition() => new IsDialogueActiveCondition(_startDialogueEvent, _endDialogueEvent);
 
@@ -15,10 +15,10 @@ public class IsDialogueActiveConditionSO : StateConditionSO
 public class IsDialogueActiveCondition : Condition
 {
 	private DialogueDataChannelSO _startDialogueEvent;
-	private DialogueDataChannelSO _endDialogueEvent;
+	private IntEventChannelSO _endDialogueEvent;
 	private bool _isDialogueActive = false;
 
-	public IsDialogueActiveCondition(DialogueDataChannelSO startDialogueEvent, DialogueDataChannelSO endDialogueEvent)
+	public IsDialogueActiveCondition(DialogueDataChannelSO startDialogueEvent, IntEventChannelSO endDialogueEvent)
 	{
 		_startDialogueEvent = startDialogueEvent;
 		_endDialogueEvent = endDialogueEvent;
@@ -60,7 +60,7 @@ public class IsDialogueActiveCondition : Condition
 		_isDialogueActive = true;
 	}
 
-	private void OnDialogueEnd(DialogueDataSO dialogue)
+	private void OnDialogueEnd(int dialogueType)
 	{
 		_isDialogueActive = false;
 	}
