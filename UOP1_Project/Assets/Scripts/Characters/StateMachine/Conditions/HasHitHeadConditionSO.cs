@@ -24,7 +24,7 @@ public class HasHitHeadCondition : Condition
 		bool isMovingUpwards = _protagonistScript.movementVector.y > 0f;
 		if (isMovingUpwards)
 		{
-			if(_characterController.collisionFlags == CollisionFlags.Above)
+			if (_characterController.collisionFlags == CollisionFlags.Above)
 			{
 				_protagonistScript.jumpInput = false;
 				_protagonistScript.movementVector.y = 0f;
