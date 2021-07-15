@@ -123,7 +123,7 @@ MonoBehaviour:
   _popupPanel: {fileID: 2221699335589323001}
   _dialogueController: {fileID: 5434846252492230143}
   _inventoryPanel: {fileID: 3875863410152603130}
-  _interactionPanel: {fileID: 0}
+  _interactionPanel: {fileID: 2999915212724989254}
   _pauseScreen: {fileID: 5235689906329165859}
   _settingScreen: {fileID: 5966779880233791231}
   _gameState: {fileID: 11400000, guid: 159f9c22d98e249ceb08f2c5de2311a4, type: 2}
@@ -132,7 +132,7 @@ MonoBehaviour:
   _onSceneReady: {fileID: 11400000, guid: b729e40fc41dd8b4ea7aaf5c857f7186, type: 2}
   _openUIDialogueEvent: {fileID: 11400000, guid: d987db4881d794f2da0013a89588d890,
     type: 2}
-  _closeUIDialogueEvent: {fileID: 11400000, guid: 53a7f1f01ef364704b1d45d01f2421ae,
+  _closeUIDialogueEvent: {fileID: 11400000, guid: 42c4c250df06bf84b97d11a23c36d47c,
     type: 2}
   _openInventoryScreenForCookingEvent: {fileID: 11400000, guid: 146c579dca5c2f248a607ef66a36d765,
     type: 2}
@@ -141,6 +141,7 @@ MonoBehaviour:
   _loadMenuEvent: {fileID: 11400000, guid: 33cec85652903d245b99985f9cec9841, type: 2}
   _onInteractionEndedEvent: {fileID: 11400000, guid: c499d87f35465124f8fb2751b150430d,
     type: 2}
+  _mainProtagonist: {fileID: 11400000, guid: c7902af5c8e25244f94914ce51e7ea8a, type: 2}
 --- !u!114 &5434846252280455341
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -164,6 +165,31 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 5434846252280455342}
     m_Modifications:
+    - target: {fileID: 5405141848621952428, guid: 1d09c349511c34e2d8b16f139aadb731,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5405141848621952428, guid: 1d09c349511c34e2d8b16f139aadb731,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5405141848621952428, guid: 1d09c349511c34e2d8b16f139aadb731,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 83.05115
+      objectReference: {fileID: 0}
+    - target: {fileID: 5405141848621952428, guid: 1d09c349511c34e2d8b16f139aadb731,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 653.8782
+      objectReference: {fileID: 0}
+    - target: {fileID: 5405141848621952428, guid: 1d09c349511c34e2d8b16f139aadb731,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -93.05115
+      objectReference: {fileID: 0}
     - target: {fileID: 6822594373627009028, guid: 1d09c349511c34e2d8b16f139aadb731,
         type: 3}
       propertyPath: m_Pivot.x
@@ -274,6 +300,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: InGameScreen
       objectReference: {fileID: 0}
+    - target: {fileID: 8320703179963651321, guid: 1d09c349511c34e2d8b16f139aadb731,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1d09c349511c34e2d8b16f139aadb731, type: 3}
 --- !u!224 &5434846252551575277 stripped
@@ -282,6 +313,18 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 1568038478660161257}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2999915212724989254 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4351352784699630511, guid: 1d09c349511c34e2d8b16f139aadb731,
+    type: 3}
+  m_PrefabInstance: {fileID: 1568038478660161257}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f5450ac502f84bd89a993767b4d01e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &3875863411324803208
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1094,8 +1137,7 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 2340965687570063786, guid: 42ed5ae1f90714c4488cfabda2298591, type: 3}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 42ed5ae1f90714c4488cfabda2298591, type: 3}
 --- !u!224 &5434846252994748354 stripped
 RectTransform:

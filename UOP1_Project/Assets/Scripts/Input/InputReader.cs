@@ -194,7 +194,6 @@ public class InputReader : ScriptableObject, GameInput.IGameplayActions, GameInp
 	{
 		gameInput.Menus.Enable();
 		gameInput.Gameplay.Disable();
-
 		gameInput.Dialogues.Enable();
 	}
 
@@ -202,7 +201,6 @@ public class InputReader : ScriptableObject, GameInput.IGameplayActions, GameInp
 	{
 		gameInput.Menus.Disable();
 		gameInput.Dialogues.Disable();
-
 		gameInput.Gameplay.Enable();
 	}
 

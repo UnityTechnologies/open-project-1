@@ -9,8 +9,6 @@ public class Protagonist : MonoBehaviour
 	[SerializeField] private InputReader _inputReader = default;
 	public TransformAnchor gameplayCameraTransform;
 
-	[SerializeField] private VoidEventChannelSO _openInventoryChannel = default;
-
 	private Vector2 _inputVector;
 	private float _previousSpeed;
 
@@ -67,7 +65,7 @@ public class Protagonist : MonoBehaviour
 
 	private void GroundCheck()
 	{
-		
+
 	}
 
 	private void RecalculateMovement()
@@ -121,6 +119,7 @@ public class Protagonist : MonoBehaviour
 
 	private void OnMove(Vector2 movement)
 	{
+
 		_inputVector = movement;
 	}
 

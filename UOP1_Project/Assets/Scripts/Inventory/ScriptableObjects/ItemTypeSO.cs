@@ -5,19 +5,19 @@ using UnityEngine.Localization;
 
 public enum itemInventoryType
 {
-	recipe,
-	utensil,
-	ingredient,
-	customisation,
-	dish,
+	Recipe,
+	Utensil,
+	Ingredient,
+	Customisation,
+	Dish,
 
 }
 public enum ItemInventoryActionType
 {
-	cook,
-	use,
-	equip,
-	doNothing
+	Cook,
+	Use,
+	Equip,
+	DoNothing
 
 }
 
