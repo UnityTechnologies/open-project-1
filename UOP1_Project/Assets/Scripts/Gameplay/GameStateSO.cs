@@ -34,6 +34,7 @@ public class GameStateSO : ScriptableObject
 	}
 	public void ChangeStateFromCombat(Transform enemy)
 	{
+		Debug.Log("ChangeStateFromCombat ::  " + _enemiesInCombat.Count);
 		if (_enemiesInCombat.Exists(o => o == enemy))
 		{
 			_enemiesInCombat.Remove(enemy);
@@ -49,6 +50,7 @@ public class GameStateSO : ScriptableObject
 	}
 	public void UpdateGameState(GameState newGameState)
 	{
+		Debug.Log("Current " + CurrentGameState);
 		if (newGameState != CurrentGameState)
 		{
 			_previousGameState = _currentGameState;

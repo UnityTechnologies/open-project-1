@@ -216,6 +216,7 @@ public class UIManager : MonoBehaviour
 	}
 	void SetInventoryScreenForCooking()
 	{
+
 		if (_gameStateManager.CurrentGameState == GameState.Gameplay)
 		{
 			isForCooking = true;
