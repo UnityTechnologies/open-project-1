@@ -63,6 +63,7 @@ public class DialogueManager : MonoBehaviour
 
 		if (_currentDialogue._Lines != null)
 		{
+
 			ActorSO currentActor = _actorsList.Find(o => o.ActorId == _currentDialogue._Lines[_counterDialogue].Actor); // we don't add a controle, because we need a null reference exeption if the actor is not in the list
 			DisplayDialogueLine(_currentDialogue._Lines[_counterDialogue].TextList[_counterLine], currentActor);
 		}
@@ -100,11 +101,12 @@ public class DialogueManager : MonoBehaviour
 		_counterLine++;
 		if (!_reachedEndOfLine)
 		{
+
 			ActorSO currentActor = _actorsList.Find(o => o.ActorId == _currentDialogue._Lines[_counterDialogue].Actor); // we don't add a controle, because we need a null reference exeption if the actor is not in the list
 			DisplayDialogueLine(_currentDialogue._Lines[_counterDialogue].TextList[_counterLine], currentActor);
 			//do
 		}
-		else if (_currentDialogue._Lines[_counterDialogue].Choices != null)
+		else if (_currentDialogue._Lines[_counterDialogue].Choices != null && _currentDialogue._Lines[_counterDialogue].Choices.Count > 0)
 		{
 			if (_currentDialogue._Lines[_counterDialogue].Choices.Count > 0)
 			{

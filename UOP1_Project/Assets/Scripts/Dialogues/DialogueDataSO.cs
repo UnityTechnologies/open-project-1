@@ -52,10 +52,7 @@ public class DialogueDataSO : ScriptableObject
 	public DialogueDataSO()
 	{
 	}
-	public DialogueDataSO(string dialogueName)
-	{
-		SetDialogueLines(dialogueName);
-	}
+
 	public DialogueDataSO(DialogueDataSO dialogue)
 	{
 
@@ -84,7 +81,10 @@ public class DialogueDataSO : ScriptableObject
 	{
 		SetDialogueLines(this.name);
 	}
-
+	public DialogueDataSO(string dialogueName)
+	{
+		SetDialogueLines(dialogueName);
+	}
 	void SetDialogueLines(string dialogueName)
 	{
 		if (_lines == null)
@@ -157,7 +157,7 @@ public class Line
 {
 	[SerializeField] private ActorID _actorID = default;
 	[SerializeField] private List<LocalizedString> _textList = default;
-	[SerializeField] private List<Choice> _choices = default;
+	[SerializeField] private List<Choice> _choices = null;
 
 	public ActorID Actor => _actorID;
 	public List<LocalizedString> TextList => _textList;
@@ -170,6 +170,7 @@ public class Line
 	{
 		_actorID = (ActorID)Enum.Parse(typeof(ActorID), comment.CommentText);
 	}
+#if UNITY_EDITOR
 	public Line(string _name)
 	{
 		StringTableCollection collection = LocalizationEditorSettings.GetStringTableCollection("Questline Dialogue");
@@ -234,6 +235,6 @@ public class Line
 		}
 
 	}
-
+#endif
 
 }
