@@ -22,7 +22,7 @@ public class UIManager : MonoBehaviour
 	[SerializeField] private UISettings _settingScreen = default;
 
 	[Header("Gameplay Components")]
-	[SerializeField] private GameStateSO _gameState = default;
+	[SerializeField] private GameStateSO _gameStateManager = default;
 	[SerializeField] private MenuSO _mainMenu = default;
 	[SerializeField] private InputReader _inputReader = default;
 
@@ -112,7 +112,7 @@ public class UIManager : MonoBehaviour
 
 		_inputReader.menuPauseEvent -= OpenUIPause; // you can open UI pause menu again, if it's closed
 
-		//	Time.timeScale = 0; // Pause time
+		Time.timeScale = 0; // Pause time
 
 		_pauseScreen.SettingsScreenOpened += OpenSettingScreen;//once the UI Pause popup is open, listen to open Settings 
 		_pauseScreen.BackToMainRequested += ShowBackToMenuConfirmationPopup;//once the UI Pause popup is open, listen to back to menu button
@@ -122,7 +122,7 @@ public class UIManager : MonoBehaviour
 		_pauseScreen.gameObject.SetActive(true);
 
 		_inputReader.EnableMenuInput();
-		_gameState.UpdateGameState(GameState.Pause);
+		_gameStateManager.UpdateGameState(GameState.Pause);
 	}
 
 	void CloseUIPause()
@@ -140,7 +140,7 @@ public class UIManager : MonoBehaviour
 
 		_inputReader.EnableGameplayInput();
 		_selectionHandler.Unselect();
-		_gameState.ResetToPreviousGameState();
+		_gameStateManager.ResetToPreviousGameState();
 	}
 
 	void OpenSettingScreen()
@@ -216,23 +216,27 @@ public class UIManager : MonoBehaviour
 	}
 	void SetInventoryScreenForCooking()
 	{
-		isForCooking = true;
-		OpenInventoryScreen();
+		if (_gameStateManager.CurrentGameState == GameState.Gameplay)
+		{
+			isForCooking = true;
+			OpenInventoryScreen();
+		}
 
 	}
 	void SetInventoryScreen()
 	{
-		isForCooking = false;
-		OpenInventoryScreen();
-
+		if (_gameStateManager.CurrentGameState == GameState.Gameplay)
+		{
+			isForCooking = false;
+			OpenInventoryScreen();
+		}
 	}
 	void OpenInventoryScreen()
 	{
-		_inputReader.menuPauseEvent -= OpenUIPause; // you cant open the UI Pause again when you are in inventory  
-		_inputReader.menuUnpauseEvent -= CloseUIPause; // you can close the UI Pause popup when you are in inventory 
+		_inputReader.menuPauseEvent -= OpenUIPause; // player cant open the UI Pause again when they are in inventory  
+		_inputReader.menuUnpauseEvent -= CloseUIPause; // player can close the UI Pause popup when they are in inventory 
 
 		_inputReader.menuCloseEvent += CloseInventoryScreen;
-
 		_inputReader.closeInventoryEvent += CloseInventoryScreen;
 		if (isForCooking)
 		{
@@ -248,7 +252,7 @@ public class UIManager : MonoBehaviour
 
 		_inputReader.EnableMenuInput();
 
-		_gameState.UpdateGameState(GameState.Inventory);
+		_gameStateManager.UpdateGameState(GameState.Inventory);
 	}
 	void CloseInventoryScreen()
 	{
@@ -268,17 +272,20 @@ public class UIManager : MonoBehaviour
 		}
 		_selectionHandler.Unselect();
 		_inputReader.EnableGameplayInput();
-		_gameState.ResetToPreviousGameState();
+		_gameStateManager.ResetToPreviousGameState();
 	}
 
 
 	void SetInteractionPanel(bool isOpenEvent, InteractionType interactionType)
 	{
-		if (isOpenEvent)
+		if (_gameStateManager.CurrentGameState == GameState.Gameplay)
 		{
-			_interactionPanel.FillInteractionPanel(interactionType);
+			if (isOpenEvent)
+			{
+				_interactionPanel.FillInteractionPanel(interactionType);
+			}
+			_interactionPanel.gameObject.SetActive(isOpenEvent);
 		}
-		_interactionPanel.gameObject.SetActive(isOpenEvent);
 
 	}
 

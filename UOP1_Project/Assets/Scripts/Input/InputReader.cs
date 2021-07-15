@@ -42,7 +42,7 @@ public class InputReader : ScriptableObject, GameInput.IGameplayActions, GameInp
 	public event UnityAction<float> TabSwitched = delegate { };
 
 	private GameInput gameInput;
-
+	public GameStateSO gameStateManager;
 	private void OnEnable()
 	{
 		if (gameInput == null)
@@ -100,7 +100,7 @@ public class InputReader : ScriptableObject, GameInput.IGameplayActions, GameInp
 
 	public void OnInteract(InputAction.CallbackContext context)
 	{
-		if (context.phase == InputActionPhase.Performed)
+		if ((context.phase == InputActionPhase.Performed) && (gameStateManager.CurrentGameState == GameState.Gameplay)) // Interaction is only possible when in gameplay GameState
 			interactEvent.Invoke();
 	}
 

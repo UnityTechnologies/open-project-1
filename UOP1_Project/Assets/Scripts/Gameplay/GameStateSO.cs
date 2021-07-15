@@ -19,6 +19,10 @@ public class GameStateSO : ScriptableObject
 	private GameState _previousGameState = default;
 	public GameState CurrentGameState => _currentGameState;
 	List<Transform> _enemiesInCombat = new List<Transform>();
+	private void Awake()
+	{
+		_enemiesInCombat = new List<Transform>();
+	}
 	public void ChangeStateToCombat(Transform enemy)
 	{
 		if (!_enemiesInCombat.Exists(o => o == enemy))

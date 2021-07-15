@@ -11,6 +11,8 @@ public class StepController : MonoBehaviour
 	[SerializeField] private ActorSO _actor = default;
 	[SerializeField] private DialogueDataSO _defaultDialogue = default;
 	[SerializeField] private QuestManagerSO _questData = default;
+	[SerializeField]
+	private GameStateSO _gameStateManager = default;
 
 	[Header("Listening to channels")]
 	[SerializeField] private DialogueActorChannelSO _interactionEvent = default;
@@ -57,17 +59,19 @@ public class StepController : MonoBehaviour
 	//when interaction again, restart same dialogue.
 	public void InteractWithCharacter()
 	{
-
-		DialogueDataSO displayDialogue = _questData.InteractWithCharacter(_actor, false, false);
-		//Debug.Log("dialogue " + displayDialogue + "actor" + _actor);
-		if (displayDialogue != null)
+		if (_gameStateManager.CurrentGameState == GameState.Gameplay)
 		{
-			_currentDialogue = displayDialogue;
-			StartDialogue();
-		}
-		else
-		{
-			PlayDefaultDialogue();
+			DialogueDataSO displayDialogue = _questData.InteractWithCharacter(_actor, false, false);
+			//Debug.Log("dialogue " + displayDialogue + "actor" + _actor);
+			if (displayDialogue != null)
+			{
+				_currentDialogue = displayDialogue;
+				StartDialogue();
+			}
+			else
+			{
+				PlayDefaultDialogue();
+			}
 		}
 
 	}
