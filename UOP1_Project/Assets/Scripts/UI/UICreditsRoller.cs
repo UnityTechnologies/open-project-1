@@ -1,17 +1,17 @@
 using UnityEngine;
 using TMPro;
 
-public class UICreditsScroller : MonoBehaviour
+public class UICreditsRoller : MonoBehaviour
 {
 
 
-	[SerializeField,Tooltip("Set speed of a scrolling effect")]private float _speedPreset = 100f;//normal scrolling speed
-	[SerializeField,Tooltip("This is actuall speed of scrolling")]private float speed = 100f;//actual speed of scrolling
-	public bool scrolAgain = false;
+	[SerializeField,Tooltip("Set speed of a rolling effect")]private float _speedPreset = 100f;//normal rolling speed
+	[SerializeField,Tooltip("This is actuall speed of rolling")]private float speed = 100f;//actual speed of rolling
+	public bool rollAgain = false;
 
 	[Header("References")]
 	[SerializeField] private InputReader inputReader;
-	[SerializeField]private VoidEventChannelSO creditsScrollEndEvent= default;
+	[SerializeField]private VoidEventChannelSO creditsRollEndEvent= default;
 	[SerializeField]private RectTransform textCredits;
 	[SerializeField]private RectTransform mask;
 	[SerializeField] private UICredits _uiCredits;
@@ -32,14 +32,14 @@ public class UICreditsScroller : MonoBehaviour
 	void Update()
     {
 
-		//This make scrolling effect
+		//This make rolling effect
 		if (textCredits.anchoredPosition.y < expectedFinishingPoint)
 		{
 			textCredits.anchoredPosition = new Vector2(textCredits.anchoredPosition.x, textCredits.anchoredPosition.y + speed * Time.deltaTime);
 		}
-		else if(expectedFinishingPoint != 0)//this happend when scrolling reach to end
+		else if(expectedFinishingPoint != 0)//this happend when rolling reach to end
 		{
-			ScrollingEnd();
+			RollingEnd();
 		}
 	}
 	private void offsetStart() {
@@ -64,12 +64,12 @@ public class UICreditsScroller : MonoBehaviour
 			speed = -_speedPreset;
 		}
 	}
-	private void ScrollingEnd()
+	private void RollingEnd()
 	{
-		creditsScrollEndEvent.RaiseEvent();
+		creditsRollEndEvent.RaiseEvent();
 		//reset postion of an element
 		textCredits.anchoredPosition = new Vector2(textCredits.anchoredPosition.x, -((textCredits.rect.height + mask.rect.height) / 2));
-		if(scrolAgain == false)
+		if(rollAgain == false)
 		{
 			//close credits
 			_uiCredits.CloseCreditsScreen();
