@@ -152,7 +152,7 @@ public class UIMenuManager : MonoBehaviour
 		if (quitConfirmed)
 		{
 			Application.Quit();
-			_onGameExitEvent.OnEventRaised();
+			_onGameExitEvent.RaiseEvent();
 		}
 		_mainMenuPanel.SetMenuScreen(_hasSaveData);
 
