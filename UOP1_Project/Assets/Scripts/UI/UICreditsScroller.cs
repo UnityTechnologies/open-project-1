@@ -3,22 +3,24 @@ using TMPro;
 
 public class UICreditsScroller : MonoBehaviour
 {
+
+
+	[SerializeField,Tooltip("Set speed of a scrolling effect")]private float _speedPreset = 100f;//normal scrolling speed
+	[SerializeField,Tooltip("This is actuall speed of scrolling")]private float speed = 100f;//actual speed of scrolling
+	public bool scrolAgain = false;
+
+	[Header("References")]
 	[SerializeField] private InputReader inputReader;
-
-
-	public RectTransform textCredits;
-	public RectTransform mask;
-	[SerializeField,Tooltip("Set speed of a scrolling effect")]private float _speed = 5f;//normal scrolling speed
-	[SerializeField]private float speed = 5f;//actual speed of scrolling
 	[SerializeField]private VoidEventChannelSO creditsScrollEndEvent= default;
-	private float expectedFinishingPoint;
+	[SerializeField]private RectTransform textCredits;
+	[SerializeField]private RectTransform mask;
 	[SerializeField] private UICredits _uiCredits;
 	
-	public bool scrolAgain = false;
+	private float expectedFinishingPoint;
 	// Start is called before the first frame update
     void Start()
     {
-		speed = _speed;
+		speed = _speedPreset;
 		Invoke("offsetStart",0.01f);//This offset is needed to get true informations about rectangle and his mask
 		inputReader.moveEvent += OnMove;
 	}
@@ -49,28 +51,25 @@ public class UICreditsScroller : MonoBehaviour
 	}
 	private void OnMove(Vector2 direction)
 	{
-		if (direction.y == 0f)
+		if (direction.y == 0f)//no horizontal movment
 		{
-			speed = _speed;
+			speed = _speedPreset;
 		}
-		else if (direction.y > 0f)
+		else if (direction.y > 0f)//upward movment
 		{
 			speed = speed * 2;
 		}
-		else
+		else//downward movment
 		{
-			speed = -_speed;
+			speed = -_speedPreset;
 		}
 	}
 	private void ScrollingEnd()
 	{
 		creditsScrollEndEvent.RaiseEvent();
-		if (scrolAgain == true)//reset postion of an element
-		{
-			textCredits.anchoredPosition = new Vector2(textCredits.anchoredPosition.x, -((textCredits.rect.height + mask.rect.height) / 2));
-
-		}
-		else
+		//reset postion of an element
+		textCredits.anchoredPosition = new Vector2(textCredits.anchoredPosition.x, -((textCredits.rect.height + mask.rect.height) / 2));
+		if(scrolAgain == false)
 		{
 			//close credits
 			_uiCredits.CloseCreditsScreen();
