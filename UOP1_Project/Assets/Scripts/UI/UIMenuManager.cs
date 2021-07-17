@@ -151,10 +151,21 @@ public class UIMenuManager : MonoBehaviour
 		_popupPanel.gameObject.SetActive(false);
 		if (quitConfirmed)
 		{
-			Application.Quit();
-			_onGameExitEvent.OnEventRaised();
+			PerformQuit();
 		}
 		_mainMenuPanel.SetMenuScreen(_hasSaveData);
+
+
+	}
+	void PerformQuit()
+	{
+#if UNITY_EDITOR
+		UnityEditor.EditorApplication.isPlaying = false;
+#else
+		Application.Quit();
+#endif
+
+		_onGameExitEvent.RaiseEvent();
 
 
 	}
