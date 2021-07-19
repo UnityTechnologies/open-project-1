@@ -20,8 +20,6 @@ public class UIMenuManager : MonoBehaviour
 	private VoidEventChannelSO _startNewGameEvent = default;
 	[SerializeField]
 	private VoidEventChannelSO _continueGameEvent = default;
-	[SerializeField]
-	private VoidEventChannelSO _onGameExitEvent = default;
 
 
 
@@ -59,7 +57,10 @@ public class UIMenuManager : MonoBehaviour
 		}
 
 	}
+	void testEvent()
+	{
 
+	}
 	void ConfirmStartNewGame()
 	{
 		_startNewGameEvent.RaiseEvent();
@@ -152,7 +153,6 @@ public class UIMenuManager : MonoBehaviour
 		if (quitConfirmed)
 		{
 			Application.Quit();
-			_onGameExitEvent.OnEventRaised();
 		}
 		_mainMenuPanel.SetMenuScreen(_hasSaveData);
 
