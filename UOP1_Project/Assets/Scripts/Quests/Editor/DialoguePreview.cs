@@ -10,7 +10,7 @@ public class DialoguePreview : MonoBehaviour
 	{
 		VisualElement dialoguePreviewVE = new VisualElement();
 
-		DialogueDataSO currentDialogue = dialogueDataSO;
+		/*DialogueDataSO currentDialogue = dialogueDataSO;
 
 		foreach (LocalizedString localizedString in currentDialogue.DialogueLines)
 		{
@@ -28,7 +28,7 @@ public class DialoguePreview : MonoBehaviour
 				dialoguePreviewVE.Add(CreateDialoguePreviewWithBranching(choice.NextDialogue));
 			}
 		}
-
+		*/
 
 		return dialoguePreviewVE;
 	}

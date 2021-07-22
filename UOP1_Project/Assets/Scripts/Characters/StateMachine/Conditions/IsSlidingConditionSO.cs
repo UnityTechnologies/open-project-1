@@ -18,6 +18,10 @@ public class IsSlidingCondition : Condition
 
 	protected override bool Statement()
 	{
+		//First frame fail check
+		if (_protagonistScript.lastHit == null)
+			return false;
+
 		float stepHeight = _protagonistScript.lastHit.point.y - _protagonistScript.transform.position.y;
 		bool isWalkableStep = stepHeight <= _characterController.stepOffset;
 
