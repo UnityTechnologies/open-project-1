@@ -41,7 +41,8 @@ public class MenuSelectionHandler : MonoBehaviour
 	public void Unselect()
 	{
 		currentSelection = null;
-		EventSystem.current.SetSelectedGameObject(null);
+		if (EventSystem.current != null)
+			EventSystem.current.SetSelectedGameObject(null);
 	}
 
 	/// <summary>
