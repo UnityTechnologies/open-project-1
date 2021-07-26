@@ -18,8 +18,6 @@ public class EditorColdStartup : MonoBehaviour
 	[SerializeField] private SaveSystem _saveSystem = default;
 
 	private bool isColdStart = false;
-
-	[SerializeField] private SaveSystem _saveSystem = default;
 	private void Awake()
 	{
 		if (!SceneManager.GetSceneByName(_persistentManagersSO.sceneReference.editorAsset.name).isLoaded)
@@ -67,12 +65,6 @@ public class EditorColdStartup : MonoBehaviour
 		}
 	}
 
-	private void CreateSaveFileIfNotPresent()
-	{
-		if (_saveSystem != null && !_saveSystem.LoadSaveDataFromDisk())
-		{
-			_saveSystem.WriteEmptySaveFile();
-		}
-	}
+
 #endif
 }
