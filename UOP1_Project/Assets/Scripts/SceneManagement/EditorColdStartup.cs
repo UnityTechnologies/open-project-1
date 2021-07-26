@@ -15,6 +15,7 @@ public class EditorColdStartup : MonoBehaviour
 	[SerializeField] private AssetReference _notifyColdStartupChannel = default;
 	[SerializeField] private VoidEventChannelSO _onSceneReadyChannel = default;
 	[SerializeField] private PathStorageSO _pathStorage = default;
+	[SerializeField] private SaveSystem _saveSystem = default;
 
 	private bool isColdStart = false;
 
@@ -28,6 +29,7 @@ public class EditorColdStartup : MonoBehaviour
 			//Reset the path taken, so the character will spawn in this location's default spawn point
 			_pathStorage.lastPathTaken = null;
 		}
+		CreateSaveFileIfNotPresent();
 	}
 
 	private void Start()
@@ -62,6 +64,14 @@ public class EditorColdStartup : MonoBehaviour
 			//Raise a fake scene ready event, so the player is spawned
 			_onSceneReadyChannel.RaiseEvent();
 			//When this happens, the player won't be able to move between scenes because the SceneLoader has no conception of which scene we are in
+		}
+	}
+
+	private void CreateSaveFileIfNotPresent()
+	{
+		if (_saveSystem != null && !_saveSystem.LoadSaveDataFromDisk())
+		{
+			_saveSystem.WriteEmptySaveFile();
 		}
 	}
 #endif
