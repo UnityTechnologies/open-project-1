@@ -18,6 +18,7 @@ public class EditorColdStartup : MonoBehaviour
 
 	private bool isColdStart = false;
 
+	[SerializeField] private SaveSystem _saveSystem = default;
 	private void Awake()
 	{
 		if (!SceneManager.GetSceneByName(_persistentManagersSO.sceneReference.editorAsset.name).isLoaded)
@@ -34,9 +35,17 @@ public class EditorColdStartup : MonoBehaviour
 		if (isColdStart)
 		{
 			_persistentManagersSO.sceneReference.LoadSceneAsync(LoadSceneMode.Additive, true).Completed += LoadEventChannel;
+
+		}
+		CreateSaveFileIfNotPresent();
+	}
+	private void CreateSaveFileIfNotPresent()
+	{
+		if (_saveSystem != null && !_saveSystem.LoadSaveDataFromDisk())
+		{
+			_saveSystem.SetNewGameData();
 		}
 	}
-
 	private void LoadEventChannel(AsyncOperationHandle<SceneInstance> obj)
 	{
 		_notifyColdStartupChannel.LoadAssetAsync<LoadEventChannelSO>().Completed += OnNotifyChannelLoaded;
@@ -44,7 +53,7 @@ public class EditorColdStartup : MonoBehaviour
 
 	private void OnNotifyChannelLoaded(AsyncOperationHandle<LoadEventChannelSO> obj)
 	{
-		if(_thisSceneSO != null)
+		if (_thisSceneSO != null)
 		{
 			obj.Result.RaiseEvent(_thisSceneSO);
 		}
