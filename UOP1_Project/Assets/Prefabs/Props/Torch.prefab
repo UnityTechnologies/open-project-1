@@ -63,6 +63,50 @@ MonoBehaviour:
     type: 2}
   _audioConfiguration: {fileID: 11400000, guid: 21f9d1bbfe816cd4a930533ced506b0f,
     type: 2}
+--- !u!1 &6580307017271216597
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2762693932476369790}
+  - component: {fileID: 5797921276437449172}
+  m_Layer: 0
+  m_Name: Light Probe Group
+  m_TagString: EditorOnly
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2762693932476369790
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6580307017271216597}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 3639386882481120833}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!220 &5797921276437449172
+LightProbeGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6580307017271216597}
+  m_Enabled: 1
+  m_SourcePositions:
+  - {x: -0.16974011, y: 0.93248296, z: -0.38005453}
+  - {x: 0.30839422, y: 0.93248117, z: 0.1486516}
+  - {x: -0.31543013, y: 0.93248296, z: 0.36063507}
+  m_Dering: 1
 --- !u!1001 &945233447088500677
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -354,16 +398,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 3639386882481120833}
     m_Modifications:
-    - target: {fileID: 4734982731406355516, guid: f38545979646fbf42842e6c368a1f42e,
-        type: 3}
-      propertyPath: m_Range
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 4734982731406355516, guid: f38545979646fbf42842e6c368a1f42e,
-        type: 3}
-      propertyPath: m_Intensity
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 4734982731406355518, guid: f38545979646fbf42842e6c368a1f42e,
         type: 3}
       propertyPath: m_Name
