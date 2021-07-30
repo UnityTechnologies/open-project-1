@@ -192,9 +192,11 @@ public class DialogueManager : MonoBehaviour
 		//raise end dialogue event 
 		if (_endDialogueWithTypeEvent != null)
 			_endDialogueWithTypeEvent.RaiseEvent((int)_currentDialogue.DialogueType);
-		_gameState.ResetToPreviousGameState();
+
 		_inputReader.advanceDialogueEvent -= OnAdvance;
-		_inputReader.EnableGameplayInput();
+		_gameState.ResetToPreviousGameState();
+		if (_gameState.CurrentGameState == GameState.Gameplay || _gameState.CurrentGameState == GameState.Combat)
+			_inputReader.EnableGameplayInput();
 
 
 

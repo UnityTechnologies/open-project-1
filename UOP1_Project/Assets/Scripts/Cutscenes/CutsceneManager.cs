@@ -53,10 +53,11 @@ public class CutsceneManager : MonoBehaviour
 
 	void CutsceneEnded()
 	{
-		_gameState.ResetToPreviousGameState();
+
 		if (_activePlayableDirector != null)
 			_activePlayableDirector.stopped -= HandleDirectorStopped;
 
+		_gameState.UpdateGameState(GameState.Gameplay);
 		_inputReader.EnableGameplayInput();
 		_dialogueManager.CutsceneDialogueEnded();
 	}
