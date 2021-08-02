@@ -21,6 +21,8 @@ public class UIManager : MonoBehaviour
 
 	[SerializeField] private UISettings _settingScreen = default;
 
+	[SerializeField] private UIDebug _debugScreen = default;
+
 	[Header("Gameplay Components")]
 	[SerializeField] private GameStateSO _gameState = default;
 	[SerializeField] private MenuSO _mainMenu = default;
@@ -59,7 +61,9 @@ public class UIManager : MonoBehaviour
 		_inputReader.openInventoryEvent += SetInventoryScreen;
 		_inventoryPanel.Closed += CloseInventoryScreen;
 
+		_debugScreen.Closed += CloseDebugMenu;
 
+		_inputReader.openDebugMenu += SetDebugMenu;
 
 
 	}
@@ -72,6 +76,8 @@ public class UIManager : MonoBehaviour
 		_pauseScreen.gameObject.SetActive(false);
 
 		_interactionPanel.gameObject.SetActive(false);
+
+		_debugScreen.gameObject.SetActive(false);
 
 		Time.timeScale = 1;
 
@@ -102,6 +108,8 @@ public class UIManager : MonoBehaviour
 		_inputReader.openInventoryEvent -= SetInventoryScreen;
 
 		_inventoryPanel.Closed -= CloseInventoryScreen;
+
+		_debugScreen.Closed -= CloseDebugMenu;
 
 	}
 	void OpenUIPause()
@@ -277,6 +285,34 @@ public class UIManager : MonoBehaviour
 		}
 		_interactionPanel.gameObject.SetActive(isOpenEvent);
 
+	}
+
+	void SetDebugMenu()
+	{
+		OpenDebugMenu();
+	}
+
+	void OpenDebugMenu()
+	{
+		_inputReader.menuPauseEvent -= OpenUIPause; // you cant open the UI Pause again when you are in inventory  
+		_inputReader.menuUnpauseEvent -= CloseUIPause; // you can close the UI Pause popup when you are in inventory 
+
+		_debugScreen.gameObject.SetActive(true);
+
+		_inputReader.EnableMenuInput();
+
+		_gameState.UpdateGameState(GameState.Inventory);
+	}
+	void CloseDebugMenu()
+	{
+
+		_inputReader.menuPauseEvent += OpenUIPause; // you cant open the UI Pause again when you are in inventory  
+
+		_debugScreen.gameObject.SetActive(false);
+		
+		_selectionHandler.Unselect();
+		_inputReader.EnableGameplayInput();
+		_gameState.ResetToPreviousGameState();
 	}
 
 
