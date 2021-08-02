@@ -22,6 +22,7 @@ public class InputReader : ScriptableObject, GameInput.IGameplayActions, GameInp
 	public event UnityAction disableMouseControlCameraEvent = delegate { };
 	public event UnityAction startedRunning = delegate { };
 	public event UnityAction stoppedRunning = delegate { };
+	public event UnityAction openDebugMenu = delegate { };
 
 	// Shared between menus and dialogues
 	public event UnityAction moveSelectionEvent = delegate { };
@@ -153,6 +154,12 @@ public class InputReader : ScriptableObject, GameInput.IGameplayActions, GameInp
 
 		if (context.phase == InputActionPhase.Canceled)
 			disableMouseControlCameraEvent.Invoke();
+	}
+
+	public void OnOpenDebugMenu(InputAction.CallbackContext context)
+	{
+		if (context.phase == InputActionPhase.Performed)
+			openDebugMenu.Invoke();
 	}
 
 	private bool IsDeviceMouse(InputAction.CallbackContext context) => context.control.device.name == "Mouse";
