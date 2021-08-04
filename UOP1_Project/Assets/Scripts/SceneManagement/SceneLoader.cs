@@ -80,6 +80,14 @@ public class SceneLoader : MonoBehaviour
 	/// </summary>
 	private void LoadLocation(GameSceneSO locationToLoad, bool showLoadingScreen, bool fadeScreen)
 	{
+		// To prevent reloading a location, as it gives Error that the scene asset has been already loaded.
+		// Thanks to stroibot for making me aware of this bug.
+		if (_currentlyLoadedScene == locationToLoad)
+		{
+			Debug.Log("Scene is already loaded, Doing nothing...", gameObject);
+			return;
+		}
+
 		//Prevent a double-loading, for situations where the player falls in two Exit colliders in one frame
 		if (_isLoading)
 			return;
