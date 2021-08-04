@@ -44,6 +44,8 @@ public class InputReader : ScriptableObject, GameInput.IGameplayActions, GameInp
 
 	private GameInput gameInput;
 
+	[SerializeField] private DebugConfigSO _debugConfigSO;
+
 	private void OnEnable()
 	{
 		if (gameInput == null)
@@ -158,6 +160,9 @@ public class InputReader : ScriptableObject, GameInput.IGameplayActions, GameInp
 
 	public void OnOpenDebugMenu(InputAction.CallbackContext context)
 	{
+		if (!_debugConfigSO.isDebugMode)
+			return;
+
 		if (context.phase == InputActionPhase.Performed)
 			openDebugMenu.Invoke();
 	}
