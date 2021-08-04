@@ -19,6 +19,8 @@ public class CutsceneManager : MonoBehaviour
 
 	[SerializeField] public VoidEventChannelSO _pauseTimelineEvent = default;
 
+	[SerializeField] public VoidEventChannelSO _onLineEndedEvent = default;
+
 	private PlayableDirector _activePlayableDirector;
 	private bool _isPaused;
 
@@ -38,6 +40,7 @@ public class CutsceneManager : MonoBehaviour
 		_playCutsceneEvent.OnEventRaised += PlayCutscene;
 		_playDialogueEvent.OnEventRaised += PlayDialogueFromClip;
 		_pauseTimelineEvent.OnEventRaised += PauseTimeline;
+		_onLineEndedEvent.OnEventRaised += LineEnded ;
 
 	}
 	void PlayCutscene(PlayableDirector activePlayableDirector)
