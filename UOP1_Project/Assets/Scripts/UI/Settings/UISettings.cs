@@ -4,14 +4,8 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Localization;
 using UnityEngine.Serialization;
-[System.Serializable]
-public enum SettingTabType
-{
-	Language,
-	Audio,
-	Graphics
 
-}
+
 [System.Serializable]
 public enum SettingFieldType
 {
@@ -20,22 +14,23 @@ public enum SettingFieldType
 	Volume_Music,
 	Resolution,
 	FullScreen,
-	GraphicQuality,
+	ShadowDistance,
 	AntiAliasing,
-	Shadow,
+	ShadowQuality,
+	Volume_Master,
 
 }
 [System.Serializable]
 public class SettingTab
 {
-	public SettingTabType settingTabsType;
+	public SettingsType settingTabsType;
 	public LocalizedString title;
 }
 
 [System.Serializable]
 public class SettingField
 {
-	public SettingTabType settingTabsType;
+	public SettingsType settingTabsType;
 	public SettingFieldType settingFieldType;
 	public LocalizedString title;
 }
@@ -70,23 +65,23 @@ public class UISettings : MonoBehaviour
 		if (settingTabsList.Count > 0)
 		{
 			SetTabs();
-			SettingTabType defaultTabType = settingTabsList[0].settingTabsType;
+			SettingsType defaultTabType = settingTabsList[0].settingTabsType;
 			SelectTab(defaultTabType);
 		}
 
 	}
 	void SetTabs()
 	{
-		_settingTabFiller.FillTabs(settingTabsList);
+		//_settingTabFiller.FillTabs(settingTabsList);
 	}
 
-	void SelectTab(SettingTabType selectedTab)
+	void SelectTab(SettingsType selectedTab)
 	{
 		_settingTabFiller.SelectTab(selectedTab);
 		SetFields(selectedTab);
 	}
 
-	void SetFields(SettingTabType selectedTab)
+	void SetFields(SettingsType selectedTab)
 	{
 		List<SettingField> fields = _settingFieldsList.FindAll(o => o.settingTabsType == selectedTab);
 		_settingFieldsFiller.FillFields(fields);

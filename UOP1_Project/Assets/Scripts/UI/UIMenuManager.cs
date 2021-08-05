@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class UIMenuManager : MonoBehaviour
 {
 	[SerializeField] private UIPopup _popupPanel = default;
-	[SerializeField] private UISettings _settingsPanel = default;
+	[SerializeField] private UISettingsController _settingsPanel = default;
 	[SerializeField] private UICredits _creditsPanel = default;
 	[SerializeField] private UIMainMenu _mainMenuPanel = default;
 
@@ -107,7 +107,6 @@ public class UIMenuManager : MonoBehaviour
 	public void OpenSettingsScreen()
 	{
 		_settingsPanel.gameObject.SetActive(true);
-		_settingsPanel.SetSettingsScreen();
 		_settingsPanel.Closed += CloseSettingsScreen;
 
 	}

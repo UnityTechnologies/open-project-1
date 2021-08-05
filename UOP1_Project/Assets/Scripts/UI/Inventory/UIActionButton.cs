@@ -4,8 +4,13 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Localization.Components;
 using UnityEngine.Events;
+enum ActionType
+{
+	Save,
+	Reset
 
-public class UIInventoryActionButton : MonoBehaviour
+}
+public class UIActionButton : MonoBehaviour
 {
 
 	[SerializeField]
@@ -50,6 +55,7 @@ public class UIInventoryActionButton : MonoBehaviour
 		}
 
 	}
+
 	public void ClickActionButton()
 	{
 		Clicked.Invoke();

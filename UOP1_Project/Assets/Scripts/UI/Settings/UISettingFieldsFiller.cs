@@ -9,12 +9,12 @@ public class UISettingFieldsFiller : MonoBehaviour
 	[SerializeField]
 	private UISettingItemFiller[] _settingfieldsList = default;
 	[SerializeField]
-	private InputReader _inputReader = default; 
+	private InputReader _inputReader = default;
 	public void FillFields(List<SettingField> settingItems)
 	{
 		for (int i = 0; i < _settingfieldsList.Length; i++)
 		{
-			if(i < settingItems.Count)
+			if (i < settingItems.Count)
 			{
 				SetField(settingItems[i], _settingfieldsList[i]);
 				_settingfieldsList[i].gameObject.SetActive(true);
@@ -26,22 +26,22 @@ public class UISettingFieldsFiller : MonoBehaviour
 		}
 
 	}
-	
+
 
 	public void SetField(SettingField field, UISettingItemFiller uiField)
 	{
-		int paginationCount=0;
-		int selectedPaginationIndex=0;
-		string selectedOption=default;
-		LocalizedString fieldTitle=field.title;
-		SettingFieldType fieldType= field.settingFieldType;
-		
-			switch (field.settingFieldType)
+		int paginationCount = 0;
+		int selectedPaginationIndex = 0;
+		string selectedOption = default;
+		LocalizedString fieldTitle = field.title;
+		SettingFieldType fieldType = field.settingFieldType;
+
+		switch (field.settingFieldType)
 		{
 			case SettingFieldType.Language:
 				paginationCount = LocalizationSettings.AvailableLocales.Locales.Count;
 				selectedPaginationIndex = LocalizationSettings.AvailableLocales.Locales.FindIndex(o => o == LocalizationSettings.SelectedLocale);
-				selectedOption = LocalizationSettings.SelectedLocale.LocaleName; 
+				selectedOption = LocalizationSettings.SelectedLocale.LocaleName;
 				break;
 			case SettingFieldType.AntiAliasing:
 
@@ -54,39 +54,37 @@ public class UISettingFieldsFiller : MonoBehaviour
 				else
 					selectedOption = "Off";
 				break;
-			case SettingFieldType.GraphicQuality:
-				selectedPaginationIndex = QualitySettings.GetQualityLevel(); 
-				paginationCount = 6;
-				selectedOption = QualitySettings.names[QualitySettings.GetQualityLevel()]; 
+			case SettingFieldType.ShadowDistance:
+
 				break;
 			case SettingFieldType.Resolution:
 
 				break;
-			case SettingFieldType.Shadow:
+			case SettingFieldType.ShadowQuality:
 
 				break;
 			case SettingFieldType.Volume_Music:
 			case SettingFieldType.Volume_SFx:
-				 paginationCount = 10;
-				 selectedPaginationIndex = 5;
-				 selectedOption = "5"; 
-				 break;
+				paginationCount = 10;
+				selectedPaginationIndex = 5;
+				selectedOption = "5";
+				break;
 
 
 
 		}
-		uiField.FillSettingField(paginationCount, selectedPaginationIndex, selectedOption, fieldTitle, fieldType); 
+		uiField.FillSettingField(paginationCount, selectedPaginationIndex, selectedOption);
 
 
 	}
 	string GetQualityLevelTitle()
 	{
-		string title = ""; 
+		string title = "";
 		switch (QualitySettings.GetQualityLevel())
 		{
 
-			case (int) QualityLevel.Beautiful:
-				title = QualityLevel.Beautiful.ToString(); 
+			case (int)QualityLevel.Beautiful:
+				title = QualityLevel.Beautiful.ToString();
 				break;
 			case (int)QualityLevel.Fantastic:
 				title = QualityLevel.Fantastic.ToString();
@@ -117,12 +115,13 @@ public class UISettingFieldsFiller : MonoBehaviour
 	}
 	int IsFullscreen()
 	{
-		if(Screen.fullScreen)
+		if (Screen.fullScreen)
 		{
-			return 0; 
-		}else
+			return 0;
+		}
+		else
 		{
-			return 1; 
+			return 1;
 		}
 
 	}

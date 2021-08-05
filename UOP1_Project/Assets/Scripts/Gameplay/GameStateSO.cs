@@ -34,7 +34,6 @@ public class GameStateSO : ScriptableObject
 	}
 	public void ChangeStateFromCombat(Transform enemy)
 	{
-		Debug.Log("ChangeStateFromCombat ::  " + _enemiesInCombat.Count);
 		if (_enemiesInCombat.Exists(o => o == enemy))
 		{
 			_enemiesInCombat.Remove(enemy);

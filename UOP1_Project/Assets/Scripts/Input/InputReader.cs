@@ -16,6 +16,8 @@ public class InputReader : ScriptableObject, GameInput.IGameplayActions, GameInp
 	public event UnityAction attackCanceledEvent = delegate { };
 	public event UnityAction interactEvent = delegate { }; // Used to talk, pickup objects, interact with tools like the cooking cauldron
 	public event UnityAction inventoryActionButtonEvent = delegate { };
+	public event UnityAction saveActionButtonEvent = delegate { };
+	public event UnityAction resetActionButtonEvent = delegate { };
 	public event UnityAction<Vector2> moveEvent = delegate { };
 	public event UnityAction<Vector2, bool> cameraMoveEvent = delegate { };
 	public event UnityAction enableMouseControlCameraEvent = delegate { };
@@ -97,7 +99,18 @@ public class InputReader : ScriptableObject, GameInput.IGameplayActions, GameInp
 			inventoryActionButtonEvent.Invoke();
 
 	}
+	public void OnSaveActionButton(InputAction.CallbackContext context)
+	{
+		if (context.phase == InputActionPhase.Performed)
+			saveActionButtonEvent.Invoke();
 
+	}
+	public void OnResetActionButton(InputAction.CallbackContext context)
+	{
+		if (context.phase == InputActionPhase.Performed)
+			resetActionButtonEvent.Invoke();
+
+	}
 	public void OnInteract(InputAction.CallbackContext context)
 	{
 		if ((context.phase == InputActionPhase.Performed) && (gameStateManager.CurrentGameState == GameState.Gameplay)) // Interaction is only possible when in gameplay GameState

@@ -6,7 +6,7 @@ using UnityEngine.Localization;
 using UnityEngine.Localization.Components;
 using UnityEngine.UI;
 
-public class UIButtonSetter : MonoBehaviour
+public class UIGenericButton : MonoBehaviour
 {
 	[SerializeField] private LocalizeStringEvent _buttonText = default;
 	[SerializeField] private MultiInputButton _button = default;
