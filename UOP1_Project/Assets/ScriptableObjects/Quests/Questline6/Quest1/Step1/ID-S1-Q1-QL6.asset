@@ -12,14 +12,63 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0c0171b565b4074a9462307824be26c, type: 3}
   m_Name: ID-S1-Q1-QL6
   m_EditorClassIdentifier: 
-  _actor: {fileID: 11400000, guid: 2f14ee79b2fa2574480372fff57ec101, type: 2}
-  _dialogueLines:
-  - m_TableReference:
-      m_TableCollectionName: Questline Dialogue
-    m_TableEntryReference:
-      m_KeyId: 0
-      m_Key: L1-ID-S1-Q1-QL6
-    m_FallbackState: 0
-    m_WaitForCompletion: 1
-  _choices: []
-  _dialogueType: 2
+  _lines:
+  - _actorID: 5
+    _textList:
+    - m_TableReference:
+        m_TableCollectionName: Questline Dialogue
+      m_TableEntryReference:
+        m_KeyId: 0
+        m_Key: L1-D1-SD-S1-Q1-QL5
+      m_FallbackState: 0
+      m_WaitForCompletion: 1
+    _choices: []
+  - _actorID: 1
+    _textList:
+    - m_TableReference:
+        m_TableCollectionName: Questline Dialogue
+      m_TableEntryReference:
+        m_KeyId: 0
+        m_Key: L1-D2-SD-S1-Q1-QL5
+      m_FallbackState: 0
+      m_WaitForCompletion: 1
+    - m_TableReference:
+        m_TableCollectionName: Questline Dialogue
+      m_TableEntryReference:
+        m_KeyId: 0
+        m_Key: L2-D2-SD-S1-Q1-QL5
+      m_FallbackState: 0
+      m_WaitForCompletion: 1
+    _choices: []
+  - _actorID: 5
+    _textList:
+    - m_TableReference:
+        m_TableCollectionName: Questline Dialogue
+      m_TableEntryReference:
+        m_KeyId: 0
+        m_Key: L1-D3-SD-S1-Q1-QL5
+      m_FallbackState: 0
+      m_WaitForCompletion: 1
+    _choices:
+    - _response:
+        m_TableReference:
+          m_TableCollectionName: Questline Dialogue
+        m_TableEntryReference:
+          m_KeyId: 0
+          m_Key: C1-D3-SD-S1-Q1-QL5
+        m_FallbackState: 0
+        m_WaitForCompletion: 1
+      _nextDialogue: {fileID: 0}
+      _actionType: 2
+    - _response:
+        m_TableReference:
+          m_TableCollectionName: Questline Dialogue
+        m_TableEntryReference:
+          m_KeyId: 0
+          m_Key: C2-D3-SD-S1-Q1-QL5
+        m_FallbackState: 0
+        m_WaitForCompletion: 1
+      _nextDialogue: {fileID: 0}
+      _actionType: 3
+  _dialogueType: 0
+  _endOfDialogueEvent: {fileID: 0}

@@ -44,6 +44,7 @@ public class UIManager : MonoBehaviour
 	[SerializeField] private VoidEventChannelSO _onInteractionEndedEvent = default;
 
 
+	[SerializeField] private ActorSO _mainProtagonist = default;
 	bool isForCooking = false;
 
 	private void Start()
@@ -76,9 +77,11 @@ public class UIManager : MonoBehaviour
 		Time.timeScale = 1;
 
 	}
+
 	void OpenUIDialogue(LocalizedString dialogueLine, ActorSO actor)
 	{
-		_dialogueController.SetDialogue(dialogueLine, actor);
+		bool isProtagonistTalking = (actor == _mainProtagonist);
+		_dialogueController.SetDialogue(dialogueLine, actor, isProtagonistTalking);
 		_dialogueController.gameObject.SetActive(true);
 	}
 	void CloseUIDialogue(int dialogueType)
@@ -135,9 +138,10 @@ public class UIManager : MonoBehaviour
 
 		_pauseScreen.gameObject.SetActive(false);
 
-		_inputReader.EnableGameplayInput();
-		_selectionHandler.Unselect();
 		_gameState.ResetToPreviousGameState();
+		if (_gameState.CurrentGameState == GameState.Gameplay || _gameState.CurrentGameState == GameState.Combat)
+			_inputReader.EnableGameplayInput();
+		_selectionHandler.Unselect();
 	}
 
 	void OpenSettingScreen()
@@ -264,8 +268,9 @@ public class UIManager : MonoBehaviour
 
 		}
 		_selectionHandler.Unselect();
-		_inputReader.EnableGameplayInput();
 		_gameState.ResetToPreviousGameState();
+		if (_gameState.CurrentGameState == GameState.Gameplay || _gameState.CurrentGameState == GameState.Combat)
+			_inputReader.EnableGameplayInput();
 	}
 
 

@@ -9,7 +9,7 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Events/Bool Event Channel")]
 public class BoolEventChannelSO : ScriptableObject
 {
-	public UnityAction<bool> OnEventRaised;
+	public event UnityAction<bool> OnEventRaised;
 	public void RaiseEvent(bool value)
 	{
 		if (OnEventRaised != null)
@@ -18,16 +18,16 @@ public class BoolEventChannelSO : ScriptableObject
 	public void UnsubscribeAll()
 	{
 		if (OnEventRaised != null)
-			{
+		{
 			if (OnEventRaised.GetInvocationList() != null)
-			
+
 				foreach (System.Delegate d in OnEventRaised.GetInvocationList())
 				{
 					OnEventRaised -= d as UnityAction<bool>;
 
 				}
 		}
-		
+
 
 	}
 }

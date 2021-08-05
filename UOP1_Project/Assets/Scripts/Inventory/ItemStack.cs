@@ -15,6 +15,11 @@ public class ItemStack
 		_item = null;
 		Amount = 0;
 	}
+	public ItemStack(ItemStack itemStack)
+	{
+		_item = itemStack.Item;
+		Amount = itemStack.Amount;
+	}
 	public ItemStack(ItemSO item, int amount)
 	{
 		_item = item;
