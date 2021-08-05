@@ -141,6 +141,15 @@ public class AudioManager : MonoBehaviour
 	}
 
 	/// <summary>
+	/// Only used by the timeline to stop the gameplay music during the final cutscene
+	/// </summary>
+	/// <returns></returns>
+	public void TimelineInterruptsMusic()
+	{
+		StopMusic(AudioCueKey.Invalid);
+	}
+
+	/// <summary>
 	/// Plays an AudioCue by requesting the appropriate number of SoundEmitters from the pool.
 	/// </summary>
 	public AudioCueKey PlayAudioCue(AudioCueSO audioCue, AudioConfigurationSO settings, Vector3 position = default)
