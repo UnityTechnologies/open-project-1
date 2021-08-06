@@ -19,7 +19,7 @@ public class UIManager : MonoBehaviour
 
 	[SerializeField] private UIPause _pauseScreen = default;
 
-	[SerializeField] private UISettings _settingScreen = default;
+	[SerializeField] private UISettingsController _settingScreen = default;
 
 	[Header("Gameplay Components")]
 	[SerializeField] private GameStateSO _gameStateManager = default;
