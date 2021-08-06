@@ -282,6 +282,11 @@ public class SettingsGraphicsComponent : MonoBehaviour
 
 	public void SaveSettings()
 	{
+
+		_savedResolutionIndex = _currentResolutionIndex;
+		_savedAntiAliasingIndex = _currentAntiAliasingIndex;
+		_savedShadowDistanceTier = _currentShadowDistanceTier;
+		_savedFullscreenState = _isFullscreen;
 		float shadowDistance = ShadowDistanceTierList[_currentShadowDistanceTier].Distance;
 		_save.Invoke(_currentResolutionIndex, _currentAntiAliasingIndex, shadowDistance, _isFullscreen);
 	}
