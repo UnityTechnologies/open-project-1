@@ -48,10 +48,13 @@ public class CutsceneTrigger : MonoBehaviour
 	//Remember to remove collider componenet when we remove this
 	private void OnTriggerEnter(Collider other)
 	{
-		if (_playCutsceneEvent != null)
-			_playCutsceneEvent.RaiseEvent(_playableDirector);
+		//Fake event raise to test quicker
+		_playSpeceficCutscene.RaiseEvent();
 
-		if (_playOnce)
-			Destroy(this);
+		//if (_playCutsceneEvent != null)
+		//	_playCutsceneEvent.RaiseEvent(_playableDirector);
+
+		//if (_playOnce)
+		//	Destroy(this);
 	}
 }

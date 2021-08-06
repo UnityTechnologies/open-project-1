@@ -13,6 +13,7 @@ public class DialogueBehaviour : PlayableBehaviour
 
 	[HideInInspector] public DialogueLineChannelSO PlayDialogueEvent;
 	[HideInInspector] public VoidEventChannelSO PauseTimelineEvent;
+	[SerializeField] public VoidEventChannelSO LineEndedEvent;
 
 	private bool _dialoguePlayed;
 
@@ -54,10 +55,17 @@ public class DialogueBehaviour : PlayableBehaviour
 			&& _dialoguePlayed)
 		{
 			if (_pauseWhenClipEnds)
+			{
 				if (PauseTimelineEvent != null)
 				{
 					PauseTimelineEvent.OnEventRaised();
 				}
+			}
+			else
+			{
+				//We need to disable the dialogue UI when the line is finished
+				LineEndedEvent.RaiseEvent();
+			}
 		}
 	}
 }

@@ -12,13 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0c0171b565b4074a9462307824be26c, type: 3}
   m_Name: Default-LegChef
   m_EditorClassIdentifier: 
-  _actor: {fileID: 11400000, guid: 2f14ee79b2fa2574480372fff57ec101, type: 2}
-  _dialogueLines:
-  - m_TableReference:
-      m_TableCollectionName: Questline Dialogue
-    m_TableEntryReference:
-      m_KeyId: 0
-      m_Key: L1-Default-FryKing
-    m_FallbackState: 0
-  _choices: []
-  _dialogueType: 0
+  _lines:
+  - _actorID: 5
+    _textList:
+    - m_TableReference:
+        m_TableCollectionName: Questline Dialogue
+      m_TableEntryReference:
+        m_KeyId: 0
+        m_Key: L1-D1-Default-LegChef
+      m_FallbackState: 0
+      m_WaitForCompletion: 1
+    _choices: []
+  _dialogueType: 3
+  _endOfDialogueEvent: {fileID: 0}

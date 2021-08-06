@@ -26,6 +26,11 @@ public class Damageable : MonoBehaviour
 		_currentHealth = _healthConfigSO.MaxHealth;
 	}
 
+	public void Kill()
+	{
+		ReceiveAnAttack(_currentHealth);
+	}
+
 	public void ReceiveAnAttack(int damage)
 	{
 		if (IsDead)

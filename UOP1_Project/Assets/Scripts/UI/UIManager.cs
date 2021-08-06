@@ -138,9 +138,10 @@ public class UIManager : MonoBehaviour
 
 		_pauseScreen.gameObject.SetActive(false);
 
-		_inputReader.EnableGameplayInput();
+		_gameState.ResetToPreviousGameState();
+		if (_gameState.CurrentGameState == GameState.Gameplay || _gameState.CurrentGameState == GameState.Combat)
+			_inputReader.EnableGameplayInput();
 		_selectionHandler.Unselect();
-		_gameStateManager.ResetToPreviousGameState();
 	}
 
 	void OpenSettingScreen()
@@ -272,8 +273,9 @@ public class UIManager : MonoBehaviour
 
 		}
 		_selectionHandler.Unselect();
-		_inputReader.EnableGameplayInput();
-		_gameStateManager.ResetToPreviousGameState();
+		_gameState.ResetToPreviousGameState();
+		if (_gameState.CurrentGameState == GameState.Gameplay || _gameState.CurrentGameState == GameState.Combat)
+			_inputReader.EnableGameplayInput();
 	}
 
 

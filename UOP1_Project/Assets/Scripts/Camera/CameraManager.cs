@@ -91,8 +91,12 @@ public class CameraManager : MonoBehaviour
 		if (isDeviceMouse && !_isRMBPressed)
 			return;
 
-		freeLookVCam.m_XAxis.m_InputAxisValue = cameraMovement.x * Time.deltaTime * _speedMultiplier;
-		freeLookVCam.m_YAxis.m_InputAxisValue = cameraMovement.y * Time.deltaTime * _speedMultiplier;
+		//Using a "fixed delta time" if the device is mouse,
+		//since for the mouse we don't have to account for frame duration
+		float deviceMultiplier = isDeviceMouse ? 0.02f : Time.deltaTime;
+
+		freeLookVCam.m_XAxis.m_InputAxisValue = cameraMovement.x * deviceMultiplier * _speedMultiplier;
+		freeLookVCam.m_YAxis.m_InputAxisValue = cameraMovement.y * deviceMultiplier * _speedMultiplier;
 	}
 
 	private void OnFrameObjectEvent(Transform value)
