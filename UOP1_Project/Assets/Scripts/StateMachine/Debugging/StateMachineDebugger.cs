@@ -115,7 +115,7 @@ namespace UOP1.StateMachine.Debugging
 			_logBuilder.AppendLine();
 			_logBuilder.Append("--------------------------------");
 
-			Debug.Log(_logBuilder.ToString());
+			//	Debug.Log(_logBuilder.ToString());
 		}
 	}
 }

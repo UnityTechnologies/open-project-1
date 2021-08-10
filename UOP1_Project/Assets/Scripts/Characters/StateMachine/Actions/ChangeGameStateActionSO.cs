@@ -59,6 +59,7 @@ public class ChangeGameStateAction : StateAction
 	}
 	public override void OnStateEnter()
 	{
+		Debug.Log("OnStateEnter :: " + _transform);
 		if (_whenToRun == Moment.OnStateEnter)
 			ChangeState();
 
@@ -66,6 +67,7 @@ public class ChangeGameStateAction : StateAction
 	}
 	public override void OnStateExit()
 	{
+		Debug.Log("OnStateExit :: " + _transform);
 		if (_whenToRun == Moment.OnStateExit)
 			ChangeState();
 
