@@ -141,7 +141,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 2.6006272, y: 1}
+    m_SensorSize: {x: 2.3706896, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -231,7 +231,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 2.6006272, y: 1}
+    m_SensorSize: {x: 2.3706896, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -506,7 +506,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 2.6006272, y: 1}
+    m_SensorSize: {x: 2.3706896, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -596,7 +596,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 2.6006272, y: 1}
+    m_SensorSize: {x: 2.3706896, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -686,7 +686,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 2.6006272, y: 1}
+    m_SensorSize: {x: 2.3706896, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -948,7 +948,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 2.6006272, y: 1}
+    m_SensorSize: {x: 2.3706896, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -985,6 +985,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2021596533}
+  - component: {fileID: 7955707696585730547}
+  - component: {fileID: 52669666117061954}
   m_Layer: 0
   m_Name: WinSceneLoader
   m_TagString: Untagged
@@ -1006,6 +1008,53 @@ Transform:
   m_Father: {fileID: 3336172139464101627}
   m_RootOrder: 17
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7955707696585730547
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2021596532}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 02e6b73898a4a52438d630a7ba29da77, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _locationToLoad: {fileID: 11400000, guid: 7f8ed3292b055484c81ecef146e54693, type: 2}
+  _leadsToPath: {fileID: 0}
+  _pathStorage: {fileID: 11400000, guid: a9ec09853cba047a8a58f5881053cfc6, type: 2}
+  _locationExitLoadChannel: {fileID: 11400000, guid: 00e3063edc5902e40832ea618644c597,
+    type: 2}
+--- !u!114 &52669666117061954
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2021596532}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e52de21a22b6dd44c9cc19f810c65059, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Events:
+    m_Signals:
+    - {fileID: 11400000, guid: 1550c0b25c64f074fab55878318a887c, type: 2}
+    m_Events:
+    - m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 7955707696585730547}
+          m_TargetAssemblyTypeName: LocationExit, Assembly-CSharp
+          m_MethodName: LoadScene
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &1202229953018614154
 GameObject:
   m_ObjectHideFlags: 0
@@ -1159,7 +1208,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 2.6006272, y: 1}
+    m_SensorSize: {x: 2.3706896, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -1292,7 +1341,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 2.6006272, y: 1}
+    m_SensorSize: {x: 2.3706896, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -1421,7 +1470,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 2.6006272, y: 1}
+    m_SensorSize: {x: 2.3706896, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -1511,7 +1560,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 2.6006272, y: 1}
+    m_SensorSize: {x: 2.3706896, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -1601,7 +1650,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 2.6006272, y: 1}
+    m_SensorSize: {x: 2.3706896, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -1953,7 +2002,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 2.6006272, y: 1}
+    m_SensorSize: {x: 2.3706896, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -3469,9 +3518,9 @@ PrefabInstance:
     - {fileID: 5557640735889932260, guid: 062b3805bf6784e4d9c599ee60eaa002, type: 3}
     - {fileID: 8300318066946783926, guid: 062b3805bf6784e4d9c599ee60eaa002, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 062b3805bf6784e4d9c599ee60eaa002, type: 3}
---- !u!1 &309633227168275177 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 309633228405838073, guid: 062b3805bf6784e4d9c599ee60eaa002,
+--- !u!95 &6236864712706564871 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 6236864711762602263, guid: 062b3805bf6784e4d9c599ee60eaa002,
     type: 3}
   m_PrefabInstance: {fileID: 1238125072}
   m_PrefabAsset: {fileID: 0}
@@ -3481,9 +3530,9 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1238125072}
   m_PrefabAsset: {fileID: 0}
---- !u!95 &6236864712706564871 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: 6236864711762602263, guid: 062b3805bf6784e4d9c599ee60eaa002,
+--- !u!1 &309633227168275177 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 309633228405838073, guid: 062b3805bf6784e4d9c599ee60eaa002,
     type: 3}
   m_PrefabInstance: {fileID: 1238125072}
   m_PrefabAsset: {fileID: 0}
@@ -4486,15 +4535,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 65c86d69f88e51447afc335693dfe455, type: 3}
---- !u!95 &6018860556548261513 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: 5875841568448061001, guid: 65c86d69f88e51447afc335693dfe455,
-    type: 3}
-  m_PrefabInstance: {fileID: 147606202228496576}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &8831370792652727688 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8683841676502515016, guid: 65c86d69f88e51447afc335693dfe455,
+    type: 3}
+  m_PrefabInstance: {fileID: 147606202228496576}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &6018860556548261513 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 5875841568448061001, guid: 65c86d69f88e51447afc335693dfe455,
     type: 3}
   m_PrefabInstance: {fileID: 147606202228496576}
   m_PrefabAsset: {fileID: 0}
@@ -5152,15 +5201,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cf7ef849ef0651046adb756161dddde0, type: 3}
---- !u!4 &5592937035813717485 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 8096454886103390463, guid: cf7ef849ef0651046adb756161dddde0,
-    type: 3}
-  m_PrefabInstance: {fileID: 4450251647543057682}
-  m_PrefabAsset: {fileID: 0}
 --- !u!95 &6445912605060790346 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 7256991247967642968, guid: cf7ef849ef0651046adb756161dddde0,
+    type: 3}
+  m_PrefabInstance: {fileID: 4450251647543057682}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &5592937035813717485 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8096454886103390463, guid: cf7ef849ef0651046adb756161dddde0,
     type: 3}
   m_PrefabInstance: {fileID: 4450251647543057682}
   m_PrefabAsset: {fileID: 0}
@@ -5288,15 +5337,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: de38e4bbfe5a86541bd140156b6a6d75, type: 3}
---- !u!4 &4561043568664879096 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 8683841676502515016, guid: de38e4bbfe5a86541bd140156b6a6d75,
-    type: 3}
-  m_PrefabInstance: {fileID: 5174397426126267056}
-  m_PrefabAsset: {fileID: 0}
 --- !u!95 &1604418144886177017 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 5875841568448061001, guid: de38e4bbfe5a86541bd140156b6a6d75,
+    type: 3}
+  m_PrefabInstance: {fileID: 5174397426126267056}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &4561043568664879096 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8683841676502515016, guid: de38e4bbfe5a86541bd140156b6a6d75,
     type: 3}
   m_PrefabInstance: {fileID: 5174397426126267056}
   m_PrefabAsset: {fileID: 0}
@@ -5475,15 +5524,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 49742b79daeb15e4984aced2143ad1d9, type: 3}
---- !u!4 &4506450903540477630 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 8096454886103390463, guid: 49742b79daeb15e4984aced2143ad1d9,
-    type: 3}
-  m_PrefabInstance: {fileID: 5680802652367074881}
-  m_PrefabAsset: {fileID: 0}
 --- !u!95 &3053512003874542361 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 7256991247967642968, guid: 49742b79daeb15e4984aced2143ad1d9,
+    type: 3}
+  m_PrefabInstance: {fileID: 5680802652367074881}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &4506450903540477630 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8096454886103390463, guid: 49742b79daeb15e4984aced2143ad1d9,
     type: 3}
   m_PrefabInstance: {fileID: 5680802652367074881}
   m_PrefabAsset: {fileID: 0}
@@ -5566,15 +5615,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b88e9f862f7dd5f4ab74a86145f4adda, type: 3}
---- !u!95 &4019394805854170393 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: 7256991247967642968, guid: b88e9f862f7dd5f4ab74a86145f4adda,
-    type: 3}
-  m_PrefabInstance: {fileID: 6012799531149035585}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &2534861946401657022 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8096454886103390463, guid: b88e9f862f7dd5f4ab74a86145f4adda,
+    type: 3}
+  m_PrefabInstance: {fileID: 6012799531149035585}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &4019394805854170393 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 7256991247967642968, guid: b88e9f862f7dd5f4ab74a86145f4adda,
     type: 3}
   m_PrefabInstance: {fileID: 6012799531149035585}
   m_PrefabAsset: {fileID: 0}
@@ -5652,15 +5701,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cf7ef849ef0651046adb756161dddde0, type: 3}
---- !u!4 &2570646991062296776 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 8096454886103390463, guid: cf7ef849ef0651046adb756161dddde0,
-    type: 3}
-  m_PrefabInstance: {fileID: 6048517935098163255}
-  m_PrefabAsset: {fileID: 0}
 --- !u!95 &3983051329384748399 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 7256991247967642968, guid: cf7ef849ef0651046adb756161dddde0,
+    type: 3}
+  m_PrefabInstance: {fileID: 6048517935098163255}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &2570646991062296776 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8096454886103390463, guid: cf7ef849ef0651046adb756161dddde0,
     type: 3}
   m_PrefabInstance: {fileID: 6048517935098163255}
   m_PrefabAsset: {fileID: 0}
@@ -5699,7 +5748,7 @@ PrefabInstance:
     - target: {fileID: 244216481246938342, guid: 254bf66f87892c94985b0720d6497bd3,
         type: 3}
       propertyPath: m_Lens.m_SensorSize.x
-      value: 2.4054055
+      value: 2.3706896
       objectReference: {fileID: 0}
     - target: {fileID: 303239861944462450, guid: 254bf66f87892c94985b0720d6497bd3,
         type: 3}

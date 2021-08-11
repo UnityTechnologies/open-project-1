@@ -18,7 +18,13 @@ public class LocationExit : MonoBehaviour
 		if (other.CompareTag("Player"))
 		{
 			_pathStorage.lastPathTaken = _leadsToPath;
-			_locationExitLoadChannel.RaiseEvent(_locationToLoad, false, true);
+			LoadScene();
 		}
+	}
+
+	//Used to load a location from a custscene
+	public void LoadScene()
+	{
+		_locationExitLoadChannel.RaiseEvent(_locationToLoad, false, true);
 	}
 }
