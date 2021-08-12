@@ -8,5 +8,10 @@ public class NPC : MonoBehaviour
 {
 	public NPCState npcState; //This is checked by conditions in the StateMachine
 	public GameObject[] talkingTo;
+
+	public void SwitchToWalkState()
+	{
+		npcState = NPCState.Walk;
+	}
 }
 
