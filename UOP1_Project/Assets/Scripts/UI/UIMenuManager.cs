@@ -57,10 +57,7 @@ public class UIMenuManager : MonoBehaviour
 		}
 
 	}
-	void testEvent()
-	{
 
-	}
 	void ConfirmStartNewGame()
 	{
 		_startNewGameEvent.RaiseEvent();

@@ -37,8 +37,9 @@ public class SettingsSystem : MonoBehaviour
 		_changeMusicVolumeEventChannel.RaiseEvent(_currentSettings.MusicVolume);//raise event for volume change
 		_changeSFXVolumeEventChannel.RaiseEvent(_currentSettings.SfxVolume); //raise event for volume change
 		_changeMasterVolumeEventChannel.RaiseEvent(_currentSettings.MasterVolume); //raise event for volume change
-
-		Resolution currentResolution = Screen.resolutions[_currentSettings.ResolutionsIndex];
+		Resolution currentResolution = Screen.currentResolution; // get a default resolution in case saved resolution doesn't exist in the resolution List
+		if (_currentSettings.ResolutionsIndex < Screen.resolutions.Length)
+			currentResolution = Screen.resolutions[_currentSettings.ResolutionsIndex];
 		Screen.SetResolution(currentResolution.width, currentResolution.height, _currentSettings.IsFullscreen);
 		_urpAsset.shadowDistance = _currentSettings.ShadowDistance;
 		_urpAsset.msaaSampleCount = _currentSettings.AntiAliasingIndex;

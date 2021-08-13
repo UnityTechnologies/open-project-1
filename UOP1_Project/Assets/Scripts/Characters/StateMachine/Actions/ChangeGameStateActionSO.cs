@@ -36,14 +36,13 @@ public class ChangeGameStateAction : StateAction
 		_whenToRun = whenToRun;
 	}
 	Transform _transform = default;
-
 	public override void Awake(StateMachine stateMachine)
 	{
-
 		_transform = stateMachine.transform;
 	}
 	void ChangeState()
 	{
+		Debug.Log("Change state " + _newGameState + " Transform " + _transform.name);
 		switch (_newGameState)
 		{
 			case GameState.Combat:
@@ -59,17 +58,22 @@ public class ChangeGameStateAction : StateAction
 	}
 	public override void OnStateEnter()
 	{
-		Debug.Log("OnStateEnter :: " + _transform);
+
 		if (_whenToRun == Moment.OnStateEnter)
+		{
+
 			ChangeState();
+		}
+
 
 
 	}
 	public override void OnStateExit()
 	{
-		Debug.Log("OnStateExit :: " + _transform);
 		if (_whenToRun == Moment.OnStateExit)
+		{
 			ChangeState();
+		}
 
 	}
 	public override void OnUpdate()
