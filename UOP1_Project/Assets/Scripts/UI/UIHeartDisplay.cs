@@ -22,11 +22,11 @@ public class UIHeartDisplay : MonoBehaviour
 	public void SetImage(float percent)
 	{
 		_slidingImage.fillAmount = percent;
-		if (percent < 1)
+		if (percent == 0)
 		{
 			_bgImage.color = new Color(_bgImage.color.r, _bgImage.color.g, _bgImage.color.b, 0.5f);
 		}
-		if (percent == 1)
+		else
 		{
 			_bgImage.color = new Color(_bgImage.color.r, _bgImage.color.g, _bgImage.color.b, 1);
 		}
