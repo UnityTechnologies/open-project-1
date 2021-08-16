@@ -17,8 +17,11 @@ public class LocationExit : MonoBehaviour
 	{
 		if (other.CompareTag("Player"))
 		{
-			_pathStorage.lastPathTaken = _leadsToPath;
-			LoadScene();
+			if (_pathStorage != null)
+			{
+				_pathStorage.lastPathTaken = _leadsToPath;
+				LoadScene();
+			}
 		}
 	}
 
