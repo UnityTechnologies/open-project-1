@@ -103,6 +103,7 @@ public class SaveSystem : ScriptableObject
 		FileManager.WriteToFile(saveFilename, "");
 		_playerInventory.Init();
 		_questManagerSO.ResetQuestlines();
+
 		SaveDataToDisk();
 
 	}

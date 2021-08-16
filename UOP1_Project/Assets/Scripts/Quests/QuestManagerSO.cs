@@ -53,6 +53,7 @@ public class QuestManagerSO : ScriptableObject
 		_makeWinningChoiceEvent.OnEventRaised += MakeWinningChoice;
 		_makeLosingChoiceEvent.OnEventRaised += MakeLosingChoice;
 		StartQuestline();
+		Debug.Log(isNewGame());
 	}
 	void StartQuestline()
 	{
@@ -418,7 +419,12 @@ public class QuestManagerSO : ScriptableObject
 		//Start Questline with the new data 
 		StartQuestline();
 	}
-
+	public bool isNewGame()
+	{
+		bool isNew = false;
+		isNew = (!_questlines.Exists(o => o.Quests.Exists(j => j.Steps.Exists(k => k.IsDone))));
+		return isNew;
+	}
 }
 
 
