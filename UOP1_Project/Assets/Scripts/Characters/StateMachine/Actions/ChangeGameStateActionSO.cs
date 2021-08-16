@@ -42,7 +42,6 @@ public class ChangeGameStateAction : StateAction
 	}
 	void ChangeState()
 	{
-		Debug.Log("Change state " + _newGameState + " Transform " + _transform.name);
 		switch (_newGameState)
 		{
 			case GameState.Combat:

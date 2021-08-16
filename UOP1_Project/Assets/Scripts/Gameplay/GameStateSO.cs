@@ -17,6 +17,8 @@ public class GameStateSO : ScriptableObject
 {
 	private GameState _currentGameState = default;
 	private GameState _previousGameState = default;
+
+	[SerializeField] BoolEventChannelSO _setAggroEvent = default;
 	public GameState CurrentGameState => _currentGameState;
 	List<Transform> _enemiesInCombat = new List<Transform>();
 	private void OnEnable()
@@ -56,15 +58,33 @@ public class GameStateSO : ScriptableObject
 
 		if (newGameState != CurrentGameState)
 		{
-			//Debug.Log("UpdateGameState " + newGameState);
+			if (newGameState == GameState.Combat) // if new game state is combat : switch to aggro
+			{
+				_setAggroEvent.RaiseEvent(true);
+			}
+			else
+			{
+				_setAggroEvent.RaiseEvent(false);
+			}
+
 			_previousGameState = _currentGameState;
 			_currentGameState = newGameState;
 		}
 	}
 	public void ResetToPreviousGameState()
 	{
-		//Debug.Log("ResetToPreviousGameState " + _currentGameState);
-		_currentGameState = _previousGameState;
+		if (_previousGameState != CurrentGameState)
+		{
+			if (_previousGameState == GameState.Combat) // if new game state is combat : switch to aggro
+			{
+				_setAggroEvent.RaiseEvent(true);
+			}
+			else if (CurrentGameState == GameState.Combat) // if current game state is combat then switch out of aggro 
+			{
+				_setAggroEvent.RaiseEvent(false);
+			}
+			_currentGameState = _previousGameState;
+		}
 	}
 
 }

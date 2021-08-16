@@ -70,6 +70,7 @@ public class InteractionManager : MonoBehaviour
 			case InteractionType.Talk:
 				if (_startTalking != null)
 				{
+					Debug.Log("_startTalking");
 					_potentialInteractions.First.Value.interactableObject.GetComponent<StepController>().InteractWithCharacter();
 					_inputReader.EnableDialogueInput();
 				}

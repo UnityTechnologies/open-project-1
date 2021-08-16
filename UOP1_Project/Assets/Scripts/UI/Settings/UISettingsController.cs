@@ -42,11 +42,11 @@ public enum SettingsType
 }
 public class UISettingsController : MonoBehaviour
 {
-	[SerializeField] private SettingsLanguageComponent _languageComponent;
-	[SerializeField] private SettingsGraphicsComponent _graphicsComponent;
-	[SerializeField] private SettingsAudioComponent _audioComponent;
+	[SerializeField] private UISettingsLanguageComponent _languageComponent;
+	[SerializeField] private UISettingsGraphicsComponent _graphicsComponent;
+	[SerializeField] private UISettingsAudioComponent _audioComponent;
 	[SerializeField] private UISettingTabsFiller _settingTabFiller = default;
-	[SerializeField] private SettingsSO _currentSettings;
+	[SerializeField] private SettingsSO _currentSettings = default;
 	[SerializeField] private List<SettingsType> _settingTabsList = new List<SettingsType>();
 	private SettingsType _selectedTab = SettingsType.Audio;
 	[SerializeField] private InputReader _inputReader = default;

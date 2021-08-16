@@ -80,6 +80,7 @@ public class UIManager : MonoBehaviour
 
 	void OpenUIDialogue(LocalizedString dialogueLine, ActorSO actor)
 	{
+		Debug.Log("OpenUIDialogue");
 		bool isProtagonistTalking = (actor == _mainProtagonist);
 		_dialogueController.SetDialogue(dialogueLine, actor, isProtagonistTalking);
 		_dialogueController.gameObject.SetActive(true);
