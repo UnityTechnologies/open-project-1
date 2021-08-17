@@ -6,21 +6,25 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 
 public class SaveSystem : ScriptableObject
 {
+	[SerializeField] private VoidEventChannelSO _saveSettingsEvent = default;
 	[SerializeField] private LoadEventChannelSO _loadLocation = default;
 	[SerializeField] private InventorySO _playerInventory = default;
-	[SerializeField]
-	private QuestManagerSO _questManagerSO = default;
+	[SerializeField] private SettingsSO _currentSettings = default;
+	[SerializeField] private QuestManagerSO _questManagerSO = default;
+
 	public string saveFilename = "save.chop";
 	public string backupSaveFilename = "save.chop.bak";
 	public Save saveData = new Save();
 
 	void OnEnable()
 	{
+		_saveSettingsEvent.OnEventRaised += SaveSettings;
 		_loadLocation.OnLoadingRequested += CacheLoadLocations;
 	}
 
 	void OnDisable()
 	{
+		_saveSettingsEvent.OnEventRaised -= SaveSettings;
 		_loadLocation.OnLoadingRequested -= CacheLoadLocations;
 	}
 
@@ -84,7 +88,7 @@ public class SaveSystem : ScriptableObject
 		{
 			if (FileManager.WriteToFile(saveFilename, saveData.ToJson()))
 			{
-				Debug.Log("Save successful");
+				//		Debug.Log("Save successful " + saveFilename);
 			}
 		}
 	}
@@ -99,7 +103,13 @@ public class SaveSystem : ScriptableObject
 		FileManager.WriteToFile(saveFilename, "");
 		_playerInventory.Init();
 		_questManagerSO.ResetQuestlines();
+
 		SaveDataToDisk();
+
+	}
+	void SaveSettings()
+	{
+		saveData.SaveSettings(_currentSettings);
 
 	}
 }

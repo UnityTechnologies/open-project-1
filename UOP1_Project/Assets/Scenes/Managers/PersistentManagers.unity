@@ -217,6 +217,12 @@ MonoBehaviour:
   _initialSize: 10
   _SFXEventChannel: {fileID: 11400000, guid: c3c796b7c31ad3647a3fbae42e74764e, type: 2}
   _musicEventChannel: {fileID: 11400000, guid: 51854f522e1d88442a90b878b27ea839, type: 2}
+  _SFXVolumeEventChannel: {fileID: 11400000, guid: 4f26356559fe2254fb6d1f23601bd896,
+    type: 2}
+  _musicVolumeEventChannel: {fileID: 11400000, guid: 13e4f5dfe966e1447ba01306e125c0c0,
+    type: 2}
+  _masterVolumeEventChannel: {fileID: 11400000, guid: ac033eaf5f8c5154e8df7c10fe3755ad,
+    type: 2}
   audioMixer: {fileID: 24100000, guid: 548a7f001ca6d3d4cb67c8edf84f62a3, type: 2}
   _masterVolume: 1
   _musicVolume: 0.8
@@ -239,10 +245,10 @@ MonoBehaviour:
     m_Events:
     - m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 610459580}
-          m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-          m_MethodName: SetActive
-          m_Mode: 6
+        - m_Target: {fileID: 610459582}
+          m_TargetAssemblyTypeName: AudioManager, Assembly-CSharp
+          m_MethodName: TimelineInterruptsMusic
+          m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
             m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -295,7 +301,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &819074216
 PrefabInstance:
@@ -307,7 +313,7 @@ PrefabInstance:
     - target: {fileID: 4398103872695503857, guid: f3351fde0c1164c1da695b12e67d8675,
         type: 3}
       propertyPath: m_RootOrder
-      value: 5
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 4398103872695503857, guid: f3351fde0c1164c1da695b12e67d8675,
         type: 3}
@@ -486,7 +492,7 @@ Transform:
   m_LocalScale: {x: 0.85714287, y: 0.85714287, z: 0.85714287}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1260877634
 GameObject:
@@ -714,6 +720,59 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1424775816
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1424775817}
+  - component: {fileID: 1424775818}
+  m_Layer: 0
+  m_Name: SettingsSystemManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1424775817
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1424775816}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 703.64465, y: 417.34354, z: -589.82983}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1424775818
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1424775816}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f22d7dd090554473dafb70b86d96e108, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SaveSettingsEvent: {fileID: 11400000, guid: e6ff8a48cab21e046a6cdb61bab35111, type: 2}
+  _currentSettings: {fileID: 11400000, guid: 10a9cfb7ceadb294da93b9773e89074b, type: 2}
+  _urpAsset: {fileID: 11400000, guid: 19ba41d7c0026c3459d37c2fe90c55a0, type: 2}
+  _saveSystem: {fileID: 11400000, guid: edc355c4a7d5028408d322b90814e19e, type: 2}
+  _changeMasterVolumeEventChannel: {fileID: 11400000, guid: ac033eaf5f8c5154e8df7c10fe3755ad,
+    type: 2}
+  _changeSFXVolumeEventChannel: {fileID: 11400000, guid: 4f26356559fe2254fb6d1f23601bd896,
+    type: 2}
+  _changeMusicVolumeEventChannel: {fileID: 11400000, guid: 13e4f5dfe966e1447ba01306e125c0c0,
+    type: 2}
 --- !u!1 &1492261400
 GameObject:
   m_ObjectHideFlags: 0

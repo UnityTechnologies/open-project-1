@@ -52,7 +52,7 @@ public class DialogueManager : MonoBehaviour
 	/// <param name="dialogueDataSO"></param>
 	public void DisplayDialogueData(DialogueDataSO dialogueDataSO)
 	{
-		if (_gameState.CurrentGameState != GameState.Cutscene)
+		if (_gameState.CurrentGameState != GameState.Cutscene) // the dialogue state is implied in the cutscene state
 			_gameState.UpdateGameState(GameState.Dialogue);
 		_counterDialogue = 0;
 		_counterLine = 0;

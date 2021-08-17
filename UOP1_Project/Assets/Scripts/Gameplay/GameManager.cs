@@ -48,13 +48,11 @@ public class GameManager : MonoBehaviour
 	}
 	void AddRockCandyRecipe()
 	{
-		Debug.Log("Add rock candy Recipe ");
 		_inventory.Add(_rockCandyRecipe);
 
 	}
 	void AddSweetDoughRecipe()
 	{
-		Debug.Log("Add sweet dough Recipe ");
 		_inventory.Add(_sweetDoughRecipe);
 
 	}
@@ -72,12 +70,6 @@ public class GameManager : MonoBehaviour
 		_gameState.UpdateGameState(GameState.Gameplay);
 		_questManager.StartGame();
 	}
-	public void PauseGame()
-	{
-	}
-	public void UnpauseGame()
-	{
-		_gameState.ResetToPreviousGameState();
-	}
+
 
 }

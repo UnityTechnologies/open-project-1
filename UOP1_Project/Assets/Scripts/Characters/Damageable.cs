@@ -7,6 +7,12 @@ public class Damageable : MonoBehaviour
 	[SerializeField] private GetHitEffectConfigSO _getHitEffectSO;
 	[SerializeField] private Renderer _mainMeshRenderer;
 	[SerializeField] private DroppableRewardConfigSO _droppableRewardSO;
+
+
+	[Header("Broadcasting On")]
+	[SerializeField] private IntEventChannelSO _setHealthBar = default;
+	[SerializeField] private IntEventChannelSO _inflictDamage = default;
+	[SerializeField] private IntEventChannelSO _restoreHealth = default;
 	public DroppableRewardConfigSO DroppableRewardConfig => _droppableRewardSO;
 
 	private int _currentHealth = default;
@@ -24,6 +30,9 @@ public class Damageable : MonoBehaviour
 	private void Awake()
 	{
 		_currentHealth = _healthConfigSO.MaxHealth;
+		if (_setHealthBar != null)
+			_setHealthBar.RaiseEvent(_currentHealth);
+
 	}
 
 	public void Kill()
@@ -35,7 +44,8 @@ public class Damageable : MonoBehaviour
 	{
 		if (IsDead)
 			return;
-
+		if (_inflictDamage != null)
+			_inflictDamage.RaiseEvent(damage);
 		_currentHealth -= damage;
 		GetHit = true;
 		if (_currentHealth <= 0)
@@ -49,6 +59,16 @@ public class Damageable : MonoBehaviour
 	public void ResetHealth()
 	{
 		_currentHealth = _healthConfigSO.MaxHealth;
+		if (_setHealthBar != null)
+			_setHealthBar.RaiseEvent(_currentHealth);
 		IsDead = false;
+	}
+	public void restoreHealth(int healthToAdd)
+	{
+		if (IsDead)
+			return;
+		_currentHealth += healthToAdd;
+		if (_restoreHealth != null)
+			_restoreHealth.RaiseEvent(healthToAdd);
 	}
 }

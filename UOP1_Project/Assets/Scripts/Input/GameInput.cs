@@ -567,6 +567,22 @@ public class @GameInput : IInputActionCollection, IDisposable
                     ""interactions"": """"
                 },
                 {
+                    ""name"": ""SaveActionButton"",
+                    ""type"": ""Button"",
+                    ""id"": ""3707d967-26ed-4b90-902c-15236e8aacc2"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""ResetActionButton"",
+                    ""type"": ""Button"",
+                    ""id"": ""c92e03f6-273c-4307-ae0f-de0e3a13e636"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
                     ""name"": ""Click"",
                     ""type"": ""PassThrough"",
                     ""id"": ""3c44a1cc-f827-4160-814f-7ac94e688aa5"",
@@ -1347,6 +1363,50 @@ public class @GameInput : IInputActionCollection, IDisposable
                     ""action"": ""CloseInventory"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""aa5835ba-5794-4b0d-a9e1-758f1f155560"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardOrGamepad"",
+                    ""action"": ""SaveActionButton"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b1e73345-2bb0-47b9-8692-54a929aa9516"",
+                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardOrGamepad"",
+                    ""action"": ""SaveActionButton"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""85fed4bd-eeca-4bb2-a0ab-eec73cab776a"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardOrGamepad"",
+                    ""action"": ""ResetActionButton"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0f41a27d-da4f-4d33-b8cc-9fa543b4e4cf"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardOrGamepad"",
+                    ""action"": ""ResetActionButton"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -1674,6 +1734,8 @@ public class @GameInput : IInputActionCollection, IDisposable
         m_Menus_Unpause = m_Menus.FindAction("Unpause", throwIfNotFound: true);
         m_Menus_ChangeTab = m_Menus.FindAction("ChangeTab", throwIfNotFound: true);
         m_Menus_InventoryActionButton = m_Menus.FindAction("InventoryActionButton", throwIfNotFound: true);
+        m_Menus_SaveActionButton = m_Menus.FindAction("SaveActionButton", throwIfNotFound: true);
+        m_Menus_ResetActionButton = m_Menus.FindAction("ResetActionButton", throwIfNotFound: true);
         m_Menus_Click = m_Menus.FindAction("Click", throwIfNotFound: true);
         m_Menus_Point = m_Menus.FindAction("Point", throwIfNotFound: true);
         m_Menus_RightClick = m_Menus.FindAction("RightClick", throwIfNotFound: true);
@@ -1837,6 +1899,8 @@ public class @GameInput : IInputActionCollection, IDisposable
     private readonly InputAction m_Menus_Unpause;
     private readonly InputAction m_Menus_ChangeTab;
     private readonly InputAction m_Menus_InventoryActionButton;
+    private readonly InputAction m_Menus_SaveActionButton;
+    private readonly InputAction m_Menus_ResetActionButton;
     private readonly InputAction m_Menus_Click;
     private readonly InputAction m_Menus_Point;
     private readonly InputAction m_Menus_RightClick;
@@ -1854,6 +1918,8 @@ public class @GameInput : IInputActionCollection, IDisposable
         public InputAction @Unpause => m_Wrapper.m_Menus_Unpause;
         public InputAction @ChangeTab => m_Wrapper.m_Menus_ChangeTab;
         public InputAction @InventoryActionButton => m_Wrapper.m_Menus_InventoryActionButton;
+        public InputAction @SaveActionButton => m_Wrapper.m_Menus_SaveActionButton;
+        public InputAction @ResetActionButton => m_Wrapper.m_Menus_ResetActionButton;
         public InputAction @Click => m_Wrapper.m_Menus_Click;
         public InputAction @Point => m_Wrapper.m_Menus_Point;
         public InputAction @RightClick => m_Wrapper.m_Menus_RightClick;
@@ -1894,6 +1960,12 @@ public class @GameInput : IInputActionCollection, IDisposable
                 @InventoryActionButton.started -= m_Wrapper.m_MenusActionsCallbackInterface.OnInventoryActionButton;
                 @InventoryActionButton.performed -= m_Wrapper.m_MenusActionsCallbackInterface.OnInventoryActionButton;
                 @InventoryActionButton.canceled -= m_Wrapper.m_MenusActionsCallbackInterface.OnInventoryActionButton;
+                @SaveActionButton.started -= m_Wrapper.m_MenusActionsCallbackInterface.OnSaveActionButton;
+                @SaveActionButton.performed -= m_Wrapper.m_MenusActionsCallbackInterface.OnSaveActionButton;
+                @SaveActionButton.canceled -= m_Wrapper.m_MenusActionsCallbackInterface.OnSaveActionButton;
+                @ResetActionButton.started -= m_Wrapper.m_MenusActionsCallbackInterface.OnResetActionButton;
+                @ResetActionButton.performed -= m_Wrapper.m_MenusActionsCallbackInterface.OnResetActionButton;
+                @ResetActionButton.canceled -= m_Wrapper.m_MenusActionsCallbackInterface.OnResetActionButton;
                 @Click.started -= m_Wrapper.m_MenusActionsCallbackInterface.OnClick;
                 @Click.performed -= m_Wrapper.m_MenusActionsCallbackInterface.OnClick;
                 @Click.canceled -= m_Wrapper.m_MenusActionsCallbackInterface.OnClick;
@@ -1937,6 +2009,12 @@ public class @GameInput : IInputActionCollection, IDisposable
                 @InventoryActionButton.started += instance.OnInventoryActionButton;
                 @InventoryActionButton.performed += instance.OnInventoryActionButton;
                 @InventoryActionButton.canceled += instance.OnInventoryActionButton;
+                @SaveActionButton.started += instance.OnSaveActionButton;
+                @SaveActionButton.performed += instance.OnSaveActionButton;
+                @SaveActionButton.canceled += instance.OnSaveActionButton;
+                @ResetActionButton.started += instance.OnResetActionButton;
+                @ResetActionButton.performed += instance.OnResetActionButton;
+                @ResetActionButton.canceled += instance.OnResetActionButton;
                 @Click.started += instance.OnClick;
                 @Click.performed += instance.OnClick;
                 @Click.canceled += instance.OnClick;
@@ -2026,6 +2104,8 @@ public class @GameInput : IInputActionCollection, IDisposable
         void OnUnpause(InputAction.CallbackContext context);
         void OnChangeTab(InputAction.CallbackContext context);
         void OnInventoryActionButton(InputAction.CallbackContext context);
+        void OnSaveActionButton(InputAction.CallbackContext context);
+        void OnResetActionButton(InputAction.CallbackContext context);
         void OnClick(InputAction.CallbackContext context);
         void OnPoint(InputAction.CallbackContext context);
         void OnRightClick(InputAction.CallbackContext context);
