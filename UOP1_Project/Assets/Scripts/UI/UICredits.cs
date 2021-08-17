@@ -38,13 +38,13 @@ public class UICredits : MonoBehaviour
 	private void OnEnable()
 	{
 		_inputReader.menuCloseEvent += CloseCreditsScreen;
-
+		SetCreditsScreen();
 	}
 	private void OnDisable()
 	{
 		_inputReader.menuCloseEvent -= CloseCreditsScreen;
 	}
-	public void SetCreditsScreen()
+	private void SetCreditsScreen()
 	{
 		_creditsRoller.rollingEnded += EndRolling;
 		FillCreditsRoller();
@@ -52,12 +52,12 @@ public class UICredits : MonoBehaviour
 
 
 	}
-	public void CloseCreditsScreen()
+	private void CloseCreditsScreen()
 	{
 		_creditsRoller.rollingEnded -= EndRolling;
 		closeCreditsAction.Invoke();
 	}
-	public void FillCreditsRoller()
+	private void FillCreditsRoller()
 	{
 		_creditsList = new CreditsList();
 		TextAsset creditsList = Resources.Load(_creditsFilename) as TextAsset;
@@ -65,7 +65,7 @@ public class UICredits : MonoBehaviour
 		_creditsList = JsonUtility.FromJson<CreditsList>(json);
 		SetCreditsText();
 	}
-	public void SetCreditsText()
+	private void SetCreditsText()
 	{
 		string creditsText = "";
 		for (int i = 0; i < _creditsList.Contributors.Count; i++)
@@ -81,7 +81,7 @@ public class UICredits : MonoBehaviour
 		_creditsText.text = creditsText;
 
 	}
-	public void EndRolling()
+	private void EndRolling()
 	{
 		if (_creditsRollEndEvent != null)
 			_creditsRollEndEvent.RaiseEvent();
