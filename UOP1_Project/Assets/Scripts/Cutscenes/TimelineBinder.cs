@@ -11,14 +11,14 @@ public class TimelineBinder : MonoBehaviour
 
 	private void OnEnable()
 	{
-		_playerInstantiatedChannel.OnEventRaised += BindPlayer;
+		_playerInstantiatedChannel.OnEventRaised += BindObjects;
 	}
 	private void OnDisable()
 	{
-		_playerInstantiatedChannel.OnEventRaised -= BindPlayer;
+		_playerInstantiatedChannel.OnEventRaised -= BindObjects;
 	}
 
-	private void BindPlayer(Transform playerTransform)
+	private void BindObjects(Transform playerTransform)
 	{
 		_objectsToBind = new GameObject[objectsToBindTags.Length];
 		for (int i=0; i< objectsToBindTags.Length; ++i)
