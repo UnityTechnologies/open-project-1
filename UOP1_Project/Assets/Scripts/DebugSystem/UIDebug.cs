@@ -57,7 +57,7 @@ public class UIDebug : MonoBehaviour
             int index = i;
             // To understand more about this, please refer here (https://programmerought.com/article/82934039881/), where I also got the solution.
 
-            // Adding extra parameters to Buttons OnClick event delegate from her: https://answers.unity.com/questions/1288510/buttononclickaddlistener-how-to-pass-parameter-or.html#
+            // Adding extra parameters to Buttons OnClick event using delegate from here: http://answers.unity.com/answers/1378134/view.html
             locationButtons[i].onClick.AddListener(delegate{
                 OnLocationButtonClick(index);
             });
