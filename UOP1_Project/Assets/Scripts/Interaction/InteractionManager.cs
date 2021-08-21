@@ -31,6 +31,7 @@ public class InteractionManager : MonoBehaviour
 	{
 		_inputReader.interactEvent -= OnInteractionButtonPress;
 		_onInteractionEnded.OnEventRaised -= OnInteractionEnd;
+		ResetPotentialInteractions();
 	}
 
 	// Called mid-way through the AnimationClip of collecting
@@ -70,6 +71,7 @@ public class InteractionManager : MonoBehaviour
 			case InteractionType.Talk:
 				if (_startTalking != null)
 				{
+					Debug.Log("_startTalking");
 					_potentialInteractions.First.Value.interactableObject.GetComponent<StepController>().InteractWithCharacter();
 					_inputReader.EnableDialogueInput();
 				}
@@ -149,5 +151,11 @@ public class InteractionManager : MonoBehaviour
 		}
 
 		_inputReader.EnableGameplayInput();
+	}
+
+	private void ResetPotentialInteractions()
+	{
+		_potentialInteractions.Clear();
+		RequestUpdateUI(_potentialInteractions.Count > 0);
 	}
 }

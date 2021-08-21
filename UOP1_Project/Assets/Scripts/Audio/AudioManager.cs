@@ -17,6 +17,12 @@ public class AudioManager : MonoBehaviour
 	[SerializeField] private AudioCueEventChannelSO _SFXEventChannel = default;
 	[Tooltip("The SoundManager listens to this event, fired by objects in any scene, to play Music")]
 	[SerializeField] private AudioCueEventChannelSO _musicEventChannel = default;
+	[Tooltip("The SoundManager listens to this event, fired by objects in any scene, to change SFXs volume")]
+	[SerializeField] private FloatEventChannelSO _SFXVolumeEventChannel = default;
+	[Tooltip("The SoundManager listens to this event, fired by objects in any scene, to change Music volume")]
+	[SerializeField] private FloatEventChannelSO _musicVolumeEventChannel = default;
+	[Tooltip("The SoundManager listens to this event, fired by objects in any scene, to change Master volume")]
+	[SerializeField] private FloatEventChannelSO _masterVolumeEventChannel = default;
 
 
 	[Header("Audio control")]
@@ -48,15 +54,24 @@ public class AudioManager : MonoBehaviour
 
 		_musicEventChannel.OnAudioCuePlayRequested += PlayMusicTrack;
 		_musicEventChannel.OnAudioCueStopRequested += StopMusic;
+
+		_masterVolumeEventChannel.OnEventRaised += ChangeMasterVolume;
+		_musicVolumeEventChannel.OnEventRaised += ChangeMusicVolume;
+		_SFXVolumeEventChannel.OnEventRaised += ChangeSFXVolume;
+
 	}
 
 	private void OnDestroy()
 	{
 		_SFXEventChannel.OnAudioCuePlayRequested -= PlayAudioCue;
 		_SFXEventChannel.OnAudioCueStopRequested -= StopAudioCue;
-		_SFXEventChannel.OnAudioCueFinishRequested -= FinishAudioCue;
 
+		_SFXEventChannel.OnAudioCueFinishRequested -= FinishAudioCue;
 		_musicEventChannel.OnAudioCuePlayRequested -= PlayMusicTrack;
+
+		_musicVolumeEventChannel.OnEventRaised -= ChangeMusicVolume;
+		_SFXVolumeEventChannel.OnEventRaised -= ChangeSFXVolume;
+		_masterVolumeEventChannel.OnEventRaised -= ChangeMasterVolume;
 	}
 
 	/// <summary>
@@ -72,7 +87,21 @@ public class AudioManager : MonoBehaviour
 			SetGroupVolume("SFXVolume", _sfxVolume);
 		}
 	}
-
+	void ChangeMasterVolume(float newVolume)
+	{
+		_masterVolume = newVolume;
+		SetGroupVolume("MasterVolume", _masterVolume);
+	}
+	void ChangeMusicVolume(float newVolume)
+	{
+		_musicVolume = newVolume;
+		SetGroupVolume("MusicVolume", _musicVolume);
+	}
+	void ChangeSFXVolume(float newVolume)
+	{
+		_sfxVolume = newVolume;
+		SetGroupVolume("SFXVolume", _sfxVolume);
+	}
 	public void SetGroupVolume(string parameterName, float normalizedVolume)
 	{
 		bool volumeSet = audioMixer.SetFloat(parameterName, NormalizedToMixerValue(normalizedVolume));
@@ -138,6 +167,15 @@ public class AudioManager : MonoBehaviour
 		}
 		else
 			return false;
+	}
+
+	/// <summary>
+	/// Only used by the timeline to stop the gameplay music during the final cutscene
+	/// </summary>
+	/// <returns></returns>
+	public void TimelineInterruptsMusic()
+	{
+		StopMusic(AudioCueKey.Invalid);
 	}
 
 	/// <summary>

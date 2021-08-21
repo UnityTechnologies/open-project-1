@@ -1,20 +1,24 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI; 
+using UnityEngine.UI;
 public class UIPaginationFiller : MonoBehaviour
 {
-	[SerializeField] private Image _imagePaginationPrefab= default;
+	[SerializeField] private Image _imagePaginationPrefab = default;
 	[SerializeField] private Transform _parentPagination = default;
 
 	[SerializeField] private Sprite _emptyPagination = default;
 	[SerializeField] private Sprite _filledPagination = default;
 
-	private List<Image> _instantiatedImages = default;
+	HorizontalLayoutGroup horizontalLayout = default;
 
-	private void Start()
+	private List<Image> _instantiatedImages = default;
+	[SerializeField]
+	private int maxSpacing = 10;
+	[SerializeField]
+	private int minSpacing = 1;
+	private void Awake()
 	{
-		//_instantiatedImages = new List<Image>(); 
 	}
 
 	public void SetPagination(int paginationCount, int selectedPaginationIndex)
@@ -31,7 +35,7 @@ public class UIPaginationFiller : MonoBehaviour
 				if (i >= _instantiatedImages.Count)
 				{
 					Image instantiatedImage = Instantiate(_imagePaginationPrefab, _parentPagination);
-					_instantiatedImages.Add(instantiatedImage); 
+					_instantiatedImages.Add(instantiatedImage);
 				}
 
 				if (i < paginationCount)
@@ -46,7 +50,20 @@ public class UIPaginationFiller : MonoBehaviour
 				}
 			}
 			SetCurrentPagination(selectedPaginationIndex);
-		} 
+		}
+
+		horizontalLayout = GetComponent<HorizontalLayoutGroup>();
+		if (paginationCount < 10)
+		{ horizontalLayout.spacing = maxSpacing; }
+		else if (paginationCount >= 10 && paginationCount < 20)
+		{
+			horizontalLayout.spacing = (maxSpacing - minSpacing) / 2;
+		}
+		else
+		{
+			horizontalLayout.spacing = minSpacing;
+		}
+
 	}
 
 	public void SetCurrentPagination(int selectedPaginationIndex)
@@ -65,6 +82,6 @@ public class UIPaginationFiller : MonoBehaviour
 				}
 			}
 		else
-			Debug.LogError("Error in pagination number"); 
+			Debug.LogError("Error in pagination number");
 	}
 }

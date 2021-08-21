@@ -17,6 +17,9 @@ public class ItemSO : SerializableScriptableObject
 	[SerializeField]
 	private LocalizedString _description = default;
 
+	[Tooltip("A description of the item")]
+	[SerializeField]
+	private int _healthResorationValue = default;
 
 	[Tooltip("The type of item")]
 	[SerializeField]
@@ -30,9 +33,10 @@ public class ItemSO : SerializableScriptableObject
 	public LocalizedString Name => _name;
 	public Sprite PreviewImage => _previewImage;
 	public LocalizedString Description => _description;
+	public int HealthResorationValue => _healthResorationValue;
 	public ItemTypeSO ItemType => _itemType;
 	public GameObject Prefab => _prefab;
-	public virtual List<ItemStack> IngredientsList { get;}
+	public virtual List<ItemStack> IngredientsList { get; }
 	public virtual ItemSO ResultingDish { get; }
 
 	public virtual bool IsLocalized { get; }

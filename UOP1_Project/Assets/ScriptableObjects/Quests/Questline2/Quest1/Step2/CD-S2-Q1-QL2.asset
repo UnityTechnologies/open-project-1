@@ -12,14 +12,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0c0171b565b4074a9462307824be26c, type: 3}
   m_Name: CD-S2-Q1-QL2
   m_EditorClassIdentifier: 
-  _actor: {fileID: 11400000, guid: 5e7bd0eed8324794fad1bc460c565ecb, type: 2}
-  _dialogueLines:
-  - m_TableReference:
-      m_TableCollectionName: GUID:f81a49615d56c1a4fbbd14b4569b06f3
-    m_TableEntryReference:
-      m_KeyId: 53578006731284480
-      m_Key: 
-    m_FallbackState: 0
-    m_WaitForCompletion: 0
-  _choices: []
+  _lines:
+  - _actorID: 3
+    _textList:
+    - m_TableReference:
+        m_TableCollectionName: Questline Dialogue
+      m_TableEntryReference:
+        m_KeyId: 0
+        m_Key: L1-D1-CD-S2-Q1-QL2
+      m_FallbackState: 0
+      m_WaitForCompletion: 1
+    - m_TableReference:
+        m_TableCollectionName: Questline Dialogue
+      m_TableEntryReference:
+        m_KeyId: 0
+        m_Key: L2-D1-CD-S2-Q1-QL2
+      m_FallbackState: 0
+      m_WaitForCompletion: 1
+    - m_TableReference:
+        m_TableCollectionName: Questline Dialogue
+      m_TableEntryReference:
+        m_KeyId: 0
+        m_Key: L3-D1-CD-S2-Q1-QL2
+      m_FallbackState: 0
+      m_WaitForCompletion: 1
+    _choices: []
   _dialogueType: 1
+  _endOfDialogueEvent: {fileID: 0}

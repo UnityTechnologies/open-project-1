@@ -1,5 +1,52 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3049526209703045695
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 655848291289296771}
+  - component: {fileID: 8543324722002667117}
+  m_Layer: 0
+  m_Name: Light Probe Group
+  m_TagString: EditorOnly
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &655848291289296771
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3049526209703045695}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0, y: 2.458, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 8271441551491845698}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!220 &8543324722002667117
+LightProbeGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3049526209703045695}
+  m_Enabled: 1
+  m_SourcePositions:
+  - {x: -0.35247257, y: 1.0000005, z: 1.2200276}
+  - {x: 0.7904948, y: 1.0000007, z: -0.51685196}
+  - {x: 0.3240704, y: -0.93550205, z: 0.5496779}
+  - {x: -0.09175351, y: -1.0000002, z: -0.84038883}
+  - {x: -1.2663637, y: 1.0000002, z: -0.6625904}
+  - {x: -0.955163, y: -0.99999976, z: 0.29237896}
+  m_Dering: 1
 --- !u!136 &40470853242200050
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -13,7 +60,7 @@ CapsuleCollider:
   m_Radius: 0.31
   m_Height: 3.46
   m_Direction: 1
-  m_Center: {x: 0, y: 1.26, z: 0}
+  m_Center: {x: 0, y: 1.55, z: 0}
 --- !u!1 &9201311995933557795
 GameObject:
   m_ObjectHideFlags: 0
@@ -39,7 +86,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9201311995933557795}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 3.26, z: -0.05}
+  m_LocalPosition: {x: -0, y: 5.19, z: -0.05}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 8271441551491845698}
@@ -56,7 +103,7 @@ SphereCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 2.09
+  m_Radius: 2.82
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &8448938963756820905
 PrefabInstance:
