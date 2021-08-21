@@ -31,6 +31,7 @@ public class InteractionManager : MonoBehaviour
 	{
 		_inputReader.interactEvent -= OnInteractionButtonPress;
 		_onInteractionEnded.OnEventRaised -= OnInteractionEnd;
+		ResetPotentialInteractions();
 	}
 
 	// Called mid-way through the AnimationClip of collecting
@@ -150,5 +151,11 @@ public class InteractionManager : MonoBehaviour
 		}
 
 		_inputReader.EnableGameplayInput();
+	}
+
+	private void ResetPotentialInteractions()
+	{
+		_potentialInteractions.Clear();
+		RequestUpdateUI(_potentialInteractions.Count > 0);
 	}
 }
