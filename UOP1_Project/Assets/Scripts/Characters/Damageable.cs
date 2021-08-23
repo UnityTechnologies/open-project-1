@@ -12,9 +12,10 @@ public class Damageable : MonoBehaviour
 
 	[Header("Broadcasting On")]
 	[SerializeField] private IntEventChannelSO _setHealthBar = default;
-	[SerializeField] private IntEventChannelSO _inflictDamage = default;
-	[SerializeField] private IntEventChannelSO _restoreHealth = default;
+	[SerializeField] private VoidEventChannelSO _updateHealthEvent = default;
 	[SerializeField] private VoidEventChannelSO _deathEvent = default;
+	[Header("Listening To")]
+	[SerializeField] private IntEventChannelSO _restoreHealth = default;
 	public DroppableRewardConfigSO DroppableRewardConfig => _droppableRewardSO;
 
 
@@ -32,15 +33,32 @@ public class Damageable : MonoBehaviour
 		if (_currentHealthSO == null)
 		{
 			_currentHealthSO = new HealthSO();
-			_currentHealthSO.MaxHealth = _healthConfigSO.MaxHealth;
-			_currentHealthSO.CurrentHealth = _healthConfigSO.MaxHealth;
+			_currentHealthSO.SetMaxHealth(_healthConfigSO.MaxHealth);
+			_currentHealthSO.SetCurrentHealth(_healthConfigSO.MaxHealth);
+		}
+		if (_updateHealthEvent != null)
+		{
+			_updateHealthEvent.RaiseEvent();
+
 		}
 
-		if (_setHealthBar != null)
-			_setHealthBar.RaiseEvent(_currentHealthSO.CurrentHealth);
-
 	}
+	private void OnEnable()
+	{
+		if (_restoreHealth != null)
+		{
+			_restoreHealth.OnEventRaised += restoreHealth;
 
+		}
+	}
+	private void OnDisable()
+	{
+		if (_restoreHealth != null)
+		{
+			_restoreHealth.OnEventRaised -= restoreHealth;
+
+		}
+	}
 	public void Kill()
 	{
 		ReceiveAnAttack(_currentHealthSO.CurrentHealth);
@@ -50,10 +68,13 @@ public class Damageable : MonoBehaviour
 	{
 		if (IsDead)
 			return;
-		if (_inflictDamage != null)
-			_inflictDamage.RaiseEvent(damage);
-		_currentHealthSO.CurrentHealth -= damage;
 
+		_currentHealthSO.InflictDamage(damage);
+		if (_updateHealthEvent != null)
+		{
+			_updateHealthEvent.RaiseEvent();
+
+		}
 		GetHit = true;
 		if (_currentHealthSO.CurrentHealth <= 0)
 		{
@@ -67,17 +88,23 @@ public class Damageable : MonoBehaviour
 
 	public void ResetHealth()
 	{
-		_currentHealthSO.CurrentHealth = _healthConfigSO.MaxHealth;
-		if (_setHealthBar != null)
-			_setHealthBar.RaiseEvent(_currentHealthSO.CurrentHealth);
+		_currentHealthSO.SetCurrentHealth(_healthConfigSO.MaxHealth);
+		if (_updateHealthEvent != null)
+		{
+			_updateHealthEvent.RaiseEvent();
+
+		}
 		IsDead = false;
 	}
 	public void restoreHealth(int healthToAdd)
 	{
 		if (IsDead)
 			return;
-		_currentHealthSO.CurrentHealth += healthToAdd;
-		if (_restoreHealth != null)
-			_restoreHealth.RaiseEvent(healthToAdd);
+		_currentHealthSO.RestoreHealth(healthToAdd);
+		if (_updateHealthEvent != null)
+		{
+			_updateHealthEvent.RaiseEvent();
+
+		}
 	}
 }

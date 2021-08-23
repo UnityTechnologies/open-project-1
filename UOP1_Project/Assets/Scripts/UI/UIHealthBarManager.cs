@@ -15,26 +15,22 @@ public class UIHealthBarManager : MonoBehaviour
 	[SerializeField] private TextMeshProUGUI healthText = default;
 
 	[Header("Listening to")]
-	[SerializeField] private IntEventChannelSO _inflictDamage = default;
-	[SerializeField] private IntEventChannelSO _restoreHealth = default;
 	[SerializeField] private VoidEventChannelSO _deathEvent = default;
 
+	[SerializeField] private VoidEventChannelSO _updateHealthEvent = default;
 
 	private void OnEnable()
 	{
 		_deathEvent.OnEventRaised += SetHealthBar;
-		_inflictDamage.OnEventRaised += InflictDamage;
+		_updateHealthEvent.OnEventRaised += SetHeartImages;
 
-		_restoreHealth.OnEventRaised += RestoreHealth;
 		_deathEvent.OnEventRaised += RegisterDeath;
 		SetHealthBar();
 	}
 	private void OnDestroy()
 	{
-		_inflictDamage.OnEventRaised -= InflictDamage;
-
+		_updateHealthEvent.OnEventRaised -= SetHeartImages;
 		_deathEvent.OnEventRaised -= SetHealthBar;
-		_restoreHealth.OnEventRaised -= RestoreHealth;
 		_deathEvent.OnEventRaised -= RegisterDeath;
 
 	}
@@ -43,13 +39,12 @@ public class UIHealthBarManager : MonoBehaviour
 	}
 	private void OnLevelWasLoaded(int level)
 	{
-
 		SetHeartImages();
 	}
 	public void SetHealthBar()
 	{
-		_currentHealth.MaxHealth = _healthConfig.MaxHealth;
-		_currentHealth.CurrentHealth = _healthConfig.MaxHealth;
+		_currentHealth.SetMaxHealth(_healthConfig.MaxHealth);
+		_currentHealth.SetCurrentHealth(_healthConfig.MaxHealth);
 
 		SetHeartImages();
 

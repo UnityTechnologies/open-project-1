@@ -6,403 +6,405 @@ using UnityEngine.Serialization;
 public class UIInventory : MonoBehaviour
 {
 
-    [SerializeField]
-    private InventorySO _currentInventory = default;
+	[SerializeField]
+	private InventorySO _currentInventory = default;
 
-    [SerializeField]
-    private UIInventoryItem _itemPrefab = default;
+	[SerializeField]
+	private UIInventoryItem _itemPrefab = default;
 
-    [SerializeField]
-    private GameObject _contentParent = default;
+	[SerializeField]
+	private GameObject _contentParent = default;
 
-    [FormerlySerializedAs("_inspectorFiller")]
-    [SerializeField]
-    private UIInventoryInspector _inspectorPanel = default;
+	[FormerlySerializedAs("_inspectorFiller")]
+	[SerializeField]
+	private UIInventoryInspector _inspectorPanel = default;
 
-    [FormerlySerializedAs("_tabFiller")]
-    [SerializeField]
-    private UIInventoryTabs _tabsPanel = default;
+	[FormerlySerializedAs("_tabFiller")]
+	[SerializeField]
+	private UIInventoryTabs _tabsPanel = default;
 
-    [FormerlySerializedAs("_buttonFiller")]
-    [SerializeField]
-    private UIActionButton _actionButton = default;
+	[FormerlySerializedAs("_buttonFiller")]
+	[SerializeField]
+	private UIActionButton _actionButton = default;
 
-    InventoryTabSO _selectedTab = default;
+	InventoryTabSO _selectedTab = default;
 
-    [SerializeField]
-    List<InventoryTabSO> _tabTypesList = new List<InventoryTabSO>();
+	[SerializeField]
+	List<InventoryTabSO> _tabTypesList = new List<InventoryTabSO>();
 
-    private int selectedItemId = -1;
+	private int selectedItemId = -1;
 
-    [FormerlySerializedAs("_instanciatedItems")]
-    [SerializeField]
-    private List<UIInventoryItem> _availableItemSlots = default;
+	[FormerlySerializedAs("_instanciatedItems")]
+	[SerializeField]
+	private List<UIInventoryItem> _availableItemSlots = default;
 
-    [SerializeField]
-    private VoidEventChannelSO _onInteractionEndedEvent = default;
+	[SerializeField]
+	private VoidEventChannelSO _onInteractionEndedEvent = default;
 
-    [SerializeField]
-    private ItemEventChannelSO _useItemEvent = default;
-    [SerializeField]
-    private ItemEventChannelSO _equipItemEvent = default;
-    [SerializeField]
-    private ItemEventChannelSO _cookRecipeEvent = default;
+	[SerializeField]
+	private ItemEventChannelSO _useItemEvent = default;
+	[SerializeField]
+	private IntEventChannelSO _restoreHealth = default;
+	[SerializeField]
+	private ItemEventChannelSO _equipItemEvent = default;
+	[SerializeField]
+	private ItemEventChannelSO _cookRecipeEvent = default;
 
-    [SerializeField]
-    private InputReader _inputReader = default;
+	[SerializeField]
+	private InputReader _inputReader = default;
 
-    public UnityAction Closed;
-    bool _isNearPot = false;
+	public UnityAction Closed;
+	bool _isNearPot = false;
 
-    private void OnEnable()
-    {
-        //Check if the event exists to avoid errors
+	private void OnEnable()
+	{
+		//Check if the event exists to avoid errors
 
-        _actionButton.Clicked += OnActionButtonClicked;
+		_actionButton.Clicked += OnActionButtonClicked;
 
-        _tabsPanel.TabChanged += OnChangeTab;
+		_tabsPanel.TabChanged += OnChangeTab;
 
 
-        _onInteractionEndedEvent.OnEventRaised += InteractionEnded;
+		_onInteractionEndedEvent.OnEventRaised += InteractionEnded;
 
 
-        for (int i = 0; i < _availableItemSlots.Count; i++)
-        {
-            _availableItemSlots[i].ItemSelected += InspectItem;
-        }
+		for (int i = 0; i < _availableItemSlots.Count; i++)
+		{
+			_availableItemSlots[i].ItemSelected += InspectItem;
+		}
 
-        _inputReader.TabSwitched += OnSwitchTab;
-    }
+		_inputReader.TabSwitched += OnSwitchTab;
+	}
 
-    private void OnDisable()
-    {
-        _actionButton.Clicked -= OnActionButtonClicked;
+	private void OnDisable()
+	{
+		_actionButton.Clicked -= OnActionButtonClicked;
 
-        _tabsPanel.TabChanged -= OnChangeTab;
+		_tabsPanel.TabChanged -= OnChangeTab;
 
-        for (int i = 0; i < _availableItemSlots.Count; i++)
-        {
-            _availableItemSlots[i].ItemSelected -= InspectItem;
-        }
+		for (int i = 0; i < _availableItemSlots.Count; i++)
+		{
+			_availableItemSlots[i].ItemSelected -= InspectItem;
+		}
 
-        _inputReader.TabSwitched -= OnSwitchTab;
-    }
+		_inputReader.TabSwitched -= OnSwitchTab;
+	}
 
-    void OnSwitchTab(float orientation)
-    {
+	void OnSwitchTab(float orientation)
+	{
 
-        if (orientation != 0)
-        {
-            bool isLeft = orientation < 0;
-            int initialIndex = _tabTypesList.FindIndex(o => o == _selectedTab);
-            if (initialIndex != -1)
-            {
-                if (isLeft)
-                {
-                    initialIndex--;
-                }
-                else
-                {
-                    initialIndex++;
-                }
+		if (orientation != 0)
+		{
+			bool isLeft = orientation < 0;
+			int initialIndex = _tabTypesList.FindIndex(o => o == _selectedTab);
+			if (initialIndex != -1)
+			{
+				if (isLeft)
+				{
+					initialIndex--;
+				}
+				else
+				{
+					initialIndex++;
+				}
 
-                initialIndex = Mathf.Clamp(initialIndex, 0, _tabTypesList.Count - 1);
-            }
-
-            OnChangeTab(_tabTypesList[initialIndex]);
-        }
-
-
-
-    }
-
-    public void FillInventory(InventoryTabType _selectedTabType = InventoryTabType.CookingItem, bool isNearPot = false)
-    {
-        _isNearPot = isNearPot;
-
-        if ((_tabTypesList.Exists(o => o.TabType == _selectedTabType)))
-        {
-            _selectedTab = _tabTypesList.Find(o => o.TabType == _selectedTabType);
-        }
-        else
-        {
-            if (_tabTypesList != null)
-            {
-                if (_tabTypesList.Count > 0)
-                {
-                    _selectedTab = _tabTypesList[0];
-                }
-            }
+				initialIndex = Mathf.Clamp(initialIndex, 0, _tabTypesList.Count - 1);
+			}
 
-        }
-
-
-        if (_selectedTab != null)
-        {
-            SetTabs(_tabTypesList, _selectedTab);
-            List<ItemStack> listItemsToShow = new List<ItemStack>();
-            listItemsToShow = _currentInventory.Items.FindAll(o => o.Item.ItemType.TabType == _selectedTab);
-
-            FillInvetoryItems(listItemsToShow);
-        }
-        else
-        {
-
-            Debug.LogError("There's no selected tab ");
+			OnChangeTab(_tabTypesList[initialIndex]);
+		}
 
-        }
-    }
 
-    void InteractionEnded()
-    {
-        _isNearPot = false;
-    }
+
+	}
 
-    void SetTabs(List<InventoryTabSO> typesList, InventoryTabSO selectedType)
-    {
+	public void FillInventory(InventoryTabType _selectedTabType = InventoryTabType.CookingItem, bool isNearPot = false)
+	{
+		_isNearPot = isNearPot;
 
-        _tabsPanel.SetTabs(typesList, selectedType);
+		if ((_tabTypesList.Exists(o => o.TabType == _selectedTabType)))
+		{
+			_selectedTab = _tabTypesList.Find(o => o.TabType == _selectedTabType);
+		}
+		else
+		{
+			if (_tabTypesList != null)
+			{
+				if (_tabTypesList.Count > 0)
+				{
+					_selectedTab = _tabTypesList[0];
+				}
+			}
 
+		}
 
-    }
-    void FillInvetoryItems(List<ItemStack> listItemsToShow)
-    {
 
-        if (_availableItemSlots == null)
-            _availableItemSlots = new List<UIInventoryItem>();
+		if (_selectedTab != null)
+		{
+			SetTabs(_tabTypesList, _selectedTab);
+			List<ItemStack> listItemsToShow = new List<ItemStack>();
+			listItemsToShow = _currentInventory.Items.FindAll(o => o.Item.ItemType.TabType == _selectedTab);
+
+			FillInvetoryItems(listItemsToShow);
+		}
+		else
+		{
 
-        int maxCount = Mathf.Max(listItemsToShow.Count, _availableItemSlots.Count);
+			Debug.LogError("There's no selected tab ");
 
-        for (int i = 0; i < maxCount; i++)
-        {
-            if (i < listItemsToShow.Count)
-            {
+		}
+	}
 
-                //fill
-                bool isSelected = selectedItemId == i;
-                _availableItemSlots[i].SetItem(listItemsToShow[i], isSelected);
+	void InteractionEnded()
+	{
+		_isNearPot = false;
+	}
 
-            }
-            else if (i < _availableItemSlots.Count)
-            {
-                //Desactive
-                _availableItemSlots[i].SetInactiveItem();
-            }
+	void SetTabs(List<InventoryTabSO> typesList, InventoryTabSO selectedType)
+	{
 
-        }
-        HideItemInformation();
-        //unselect selected Item
-        if (selectedItemId >= 0)
-        {
-            UnselectItem(selectedItemId);
-            selectedItemId = -1;
-        }
-        //hover First Element
-        if (_availableItemSlots.Count > 0)
-        {
-            _availableItemSlots[0].SelectFirstElement();
-        }
+		_tabsPanel.SetTabs(typesList, selectedType);
 
-    }
 
-    void UpdateItemInInventory(ItemStack itemToUpdate, bool removeItem)
-    {
-        if (_availableItemSlots == null)
-            _availableItemSlots = new List<UIInventoryItem>();
+	}
+	void FillInvetoryItems(List<ItemStack> listItemsToShow)
+	{
 
-        if (removeItem)
-        {
-            if (_availableItemSlots.Exists(o => o._currentItem == itemToUpdate))
-            {
+		if (_availableItemSlots == null)
+			_availableItemSlots = new List<UIInventoryItem>();
 
-                int index = _availableItemSlots.FindIndex(o => o._currentItem == itemToUpdate);
-                _availableItemSlots[index].SetInactiveItem();
+		int maxCount = Mathf.Max(listItemsToShow.Count, _availableItemSlots.Count);
 
-            }
+		for (int i = 0; i < maxCount; i++)
+		{
+			if (i < listItemsToShow.Count)
+			{
 
-        }
-        else
-        {
-            int index = 0;
-            //if the item has already been created
-            if (_availableItemSlots.Exists(o => o._currentItem == itemToUpdate))
-            {
+				//fill
+				bool isSelected = selectedItemId == i;
+				_availableItemSlots[i].SetItem(listItemsToShow[i], isSelected);
 
-                index = _availableItemSlots.FindIndex(o => o._currentItem == itemToUpdate);
+			}
+			else if (i < _availableItemSlots.Count)
+			{
+				//Desactive
+				_availableItemSlots[i].SetInactiveItem();
+			}
 
+		}
+		HideItemInformation();
+		//unselect selected Item
+		if (selectedItemId >= 0)
+		{
+			UnselectItem(selectedItemId);
+			selectedItemId = -1;
+		}
+		//hover First Element
+		if (_availableItemSlots.Count > 0)
+		{
+			_availableItemSlots[0].SelectFirstElement();
+		}
 
-            }
-            //if the item needs to be created
-            else
-            {
-                //if the new item needs to be instantiated
-                if (_currentInventory.Items.Count > _availableItemSlots.Count)
-                {
-                    //instantiate 
-                    UIInventoryItem instantiatedPrefab = Instantiate(_itemPrefab, _contentParent.transform) as UIInventoryItem;
-                    _availableItemSlots.Add(instantiatedPrefab);
+	}
 
+	void UpdateItemInInventory(ItemStack itemToUpdate, bool removeItem)
+	{
+		if (_availableItemSlots == null)
+			_availableItemSlots = new List<UIInventoryItem>();
 
-                }
-                //find the last instantiated game object not used
-                index = _currentInventory.Items.Count;
+		if (removeItem)
+		{
+			if (_availableItemSlots.Exists(o => o._currentItem == itemToUpdate))
+			{
 
+				int index = _availableItemSlots.FindIndex(o => o._currentItem == itemToUpdate);
+				_availableItemSlots[index].SetInactiveItem();
 
-            }
+			}
 
-            //set item
-            bool isSelected = selectedItemId == index;
-            _availableItemSlots[index].SetItem(itemToUpdate, isSelected);
+		}
+		else
+		{
+			int index = 0;
+			//if the item has already been created
+			if (_availableItemSlots.Exists(o => o._currentItem == itemToUpdate))
+			{
 
+				index = _availableItemSlots.FindIndex(o => o._currentItem == itemToUpdate);
 
-        }
 
-    }
+			}
+			//if the item needs to be created
+			else
+			{
+				//if the new item needs to be instantiated
+				if (_currentInventory.Items.Count > _availableItemSlots.Count)
+				{
+					//instantiate 
+					UIInventoryItem instantiatedPrefab = Instantiate(_itemPrefab, _contentParent.transform) as UIInventoryItem;
+					_availableItemSlots.Add(instantiatedPrefab);
 
 
+				}
+				//find the last instantiated game object not used
+				index = _currentInventory.Items.Count;
 
-    public void InspectItem(ItemSO itemToInspect)
-    {
-        if (_availableItemSlots.Exists(o => o._currentItem.Item == itemToInspect))
-        {
-            int itemIndex = _availableItemSlots.FindIndex(o => o._currentItem.Item == itemToInspect);
 
+			}
 
-            //unselect selected Item
-            if (selectedItemId >= 0 && selectedItemId != itemIndex)
-                UnselectItem(selectedItemId);
+			//set item
+			bool isSelected = selectedItemId == index;
+			_availableItemSlots[index].SetItem(itemToUpdate, isSelected);
 
-            //change Selected ID 
-            selectedItemId = itemIndex;
 
-            //show Information
-            ShowItemInformation(itemToInspect);
+		}
 
-            //check if interactable
-            bool isInteractable = true;
-            _actionButton.gameObject.SetActive(true);
-            if (itemToInspect.ItemType.ActionType == ItemInventoryActionType.Cook)
-            {
-                isInteractable = _currentInventory.hasIngredients(itemToInspect.IngredientsList) && _isNearPot;
+	}
 
-            }
-            else if (itemToInspect.ItemType.ActionType == ItemInventoryActionType.DoNothing)
-            {
-                isInteractable = false;
-                _actionButton.gameObject.SetActive(false);
-            }
 
-            //set button
-            _actionButton.FillInventoryButton(itemToInspect.ItemType, isInteractable);
 
+	public void InspectItem(ItemSO itemToInspect)
+	{
+		if (_availableItemSlots.Exists(o => o._currentItem.Item == itemToInspect))
+		{
+			int itemIndex = _availableItemSlots.FindIndex(o => o._currentItem.Item == itemToInspect);
 
-        }
 
-    }
+			//unselect selected Item
+			if (selectedItemId >= 0 && selectedItemId != itemIndex)
+				UnselectItem(selectedItemId);
 
-    void ShowItemInformation(ItemSO item)
-    {
+			//change Selected ID 
+			selectedItemId = itemIndex;
 
-        bool[] availabilityArray = _currentInventory.IngredientsAvailability(item.IngredientsList);
+			//show Information
+			ShowItemInformation(itemToInspect);
 
-        _inspectorPanel.FillInspector(item, availabilityArray);
-        _inspectorPanel.gameObject.SetActive(true);
+			//check if interactable
+			bool isInteractable = true;
+			_actionButton.gameObject.SetActive(true);
+			if (itemToInspect.ItemType.ActionType == ItemInventoryActionType.Cook)
+			{
+				isInteractable = _currentInventory.hasIngredients(itemToInspect.IngredientsList) && _isNearPot;
 
-    }
-    void HideItemInformation()
-    {
-        _actionButton.gameObject.SetActive(false);
-        _inspectorPanel.gameObject.SetActive(false);
+			}
+			else if (itemToInspect.ItemType.ActionType == ItemInventoryActionType.DoNothing)
+			{
+				isInteractable = false;
+				_actionButton.gameObject.SetActive(false);
+			}
 
-    }
+			//set button
+			_actionButton.FillInventoryButton(itemToInspect.ItemType, isInteractable);
 
 
-    void UnselectItem(int itemIndex)
-    {
+		}
 
-        if (_availableItemSlots.Count > itemIndex)
-        {
-            _availableItemSlots[itemIndex].UnselectItem();
+	}
 
-        }
-    }
-    void UpdateInventory()
-    {
-        FillInventory(_selectedTab.TabType, _isNearPot);
-    }
+	void ShowItemInformation(ItemSO item)
+	{
 
-    void OnActionButtonClicked()
-    {
+		bool[] availabilityArray = _currentInventory.IngredientsAvailability(item.IngredientsList);
 
-        //find the selected Item
-        if (_availableItemSlots.Count > selectedItemId && selectedItemId > -1)
-        {
-            //find the item 
-            ItemSO itemToActOn = new ItemSO();
-            itemToActOn = _availableItemSlots[selectedItemId]._currentItem.Item;
+		_inspectorPanel.FillInspector(item, availabilityArray);
+		_inspectorPanel.gameObject.SetActive(true);
 
-            //check the selected Item type
-            //call action function depending on the itemType
-            switch (itemToActOn.ItemType.ActionType)
-            {
+	}
+	void HideItemInformation()
+	{
+		_actionButton.gameObject.SetActive(false);
+		_inspectorPanel.gameObject.SetActive(false);
 
-                case ItemInventoryActionType.Cook:
-                    CookRecipe(itemToActOn);
-                    break;
-                case ItemInventoryActionType.Use:
-                    UseItem(itemToActOn);
-                    break;
-                case ItemInventoryActionType.Equip:
-                    EquipItem(itemToActOn);
-                    break;
-                default:
+	}
 
-                    break;
 
-            }
-        }
+	void UnselectItem(int itemIndex)
+	{
 
-    }
-    void UseItem(ItemSO itemToUse)
-    {
-        Debug.Log("USE ITEM " + itemToUse.name);
+		if (_availableItemSlots.Count > itemIndex)
+		{
+			_availableItemSlots[itemIndex].UnselectItem();
 
-        _useItemEvent.OnEventRaised(itemToUse);
-        //update inventory
-        UpdateInventory();
-    }
+		}
+	}
+	void UpdateInventory()
+	{
+		FillInventory(_selectedTab.TabType, _isNearPot);
+	}
 
+	void OnActionButtonClicked()
+	{
 
-    void EquipItem(ItemSO itemToUse)
-    {
-        Debug.Log("Equip ITEM " + itemToUse.name);
-        _equipItemEvent.OnEventRaised(itemToUse);
-    }
+		//find the selected Item
+		if (_availableItemSlots.Count > selectedItemId && selectedItemId > -1)
+		{
+			//find the item 
+			ItemSO itemToActOn = new ItemSO();
+			itemToActOn = _availableItemSlots[selectedItemId]._currentItem.Item;
 
-    void CookRecipe(ItemSO recipeToCook)
-    {
+			//check the selected Item type
+			//call action function depending on the itemType
+			switch (itemToActOn.ItemType.ActionType)
+			{
 
-        //get item
-        _cookRecipeEvent.OnEventRaised(recipeToCook);
+				case ItemInventoryActionType.Cook:
+					CookRecipe(itemToActOn);
+					break;
+				case ItemInventoryActionType.Use:
+					UseItem(itemToActOn);
+					break;
+				case ItemInventoryActionType.Equip:
+					EquipItem(itemToActOn);
+					break;
+				default:
 
-        //update inspector
-        InspectItem(recipeToCook);
+					break;
 
-        //update inventory
-        UpdateInventory();
+			}
+		}
 
+	}
+	void UseItem(ItemSO itemToUse)
+	{
+		if (itemToUse.HealthResorationValue > 0)
+		{ _restoreHealth.RaiseEvent(itemToUse.HealthResorationValue); }
+		_useItemEvent.RaiseEvent(itemToUse);
+		//update inventory
+		UpdateInventory();
+	}
 
-    }
 
-    void OnChangeTab(InventoryTabSO tabType)
-    {
+	void EquipItem(ItemSO itemToUse)
+	{
+		Debug.Log("Equip ITEM " + itemToUse.name);
+		_equipItemEvent.RaiseEvent(itemToUse);
+	}
 
-        FillInventory(tabType.TabType, _isNearPot);
+	void CookRecipe(ItemSO recipeToCook)
+	{
 
-    }
-    public void CloseInventory()
-    {
-        Closed.Invoke();
-    }
+		//get item
+		_cookRecipeEvent.RaiseEvent(recipeToCook);
+
+		//update inspector
+		InspectItem(recipeToCook);
+
+		//update inventory
+		UpdateInventory();
+
+
+	}
+
+	void OnChangeTab(InventoryTabSO tabType)
+	{
+
+		FillInventory(tabType.TabType, _isNearPot);
+
+	}
+	public void CloseInventory()
+	{
+		Closed.Invoke();
+	}
 
 }
