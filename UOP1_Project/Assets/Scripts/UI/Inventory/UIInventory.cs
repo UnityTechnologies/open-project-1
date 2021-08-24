@@ -14,6 +14,8 @@ public class UIInventory : MonoBehaviour
 
 	[SerializeField]
 	private GameObject _contentParent = default;
+	[SerializeField]
+	private GameObject _errorPotMessage = default;
 
 	[FormerlySerializedAs("_inspectorFiller")]
 	[SerializeField]
@@ -283,10 +285,11 @@ public class UIInventory : MonoBehaviour
 			//check if interactable
 			bool isInteractable = true;
 			_actionButton.gameObject.SetActive(true);
+			_errorPotMessage.SetActive(false);
 			if (itemToInspect.ItemType.ActionType == ItemInventoryActionType.Cook)
 			{
 				isInteractable = _currentInventory.hasIngredients(itemToInspect.IngredientsList) && _isNearPot;
-
+				_errorPotMessage.SetActive(!isInteractable);
 			}
 			else if (itemToInspect.ItemType.ActionType == ItemInventoryActionType.DoNothing)
 			{

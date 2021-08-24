@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 public class MultiInputSelectableElement : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, ISelectHandler
 {
 	private MenuSelectionHandler _menuSelectionHandler;
-	public bool isSelected = false;
+
 	private void Awake()
 	{
 		_menuSelectionHandler = transform.root.gameObject.GetComponentInChildren<MenuSelectionHandler>();
@@ -19,14 +19,11 @@ public class MultiInputSelectableElement : MonoBehaviour, IPointerEnterHandler, 
 
 	public void OnPointerExit(PointerEventData eventData)
 	{
-
 		_menuSelectionHandler.HandleMouseExit(gameObject);
 	}
 
 	public void OnSelect(BaseEventData eventData)
 	{
-		isSelected = true;
 		_menuSelectionHandler.UpdateSelection(gameObject);
 	}
-
 }
