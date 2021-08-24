@@ -14,7 +14,6 @@ public class HealthSO : ScriptableObject
 	public void SetMaxHealth(int newValue)
 	{
 		_maxHealth = newValue;
-		Debug.Log("Max Health " + _maxHealth);
 	}
 
 	public void SetCurrentHealth(int newValue)
