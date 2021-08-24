@@ -19,6 +19,8 @@ public class UIManager : MonoBehaviour
 
 	[SerializeField] private GameObject _switchTabDisplay = default;
 
+	[SerializeField] private UIItemForAnimation _cookingAnimation = default;
+
 	[SerializeField] private UIPause _pauseScreen = default;
 
 	[SerializeField] private UISettingsController _settingScreen = default;
@@ -38,6 +40,9 @@ public class UIManager : MonoBehaviour
 
 	[Header("Inventory Events")]
 	[SerializeField] private VoidEventChannelSO _openInventoryScreenForCookingEvent = default;
+	[SerializeField]
+	private ItemEventChannelSO _cookRecipeEvent = default;
+
 	[Header("Interaction Events")]
 	[SerializeField] private InteractionUIEventChannelSO _setInteractionEvent = default;
 
@@ -62,6 +67,8 @@ public class UIManager : MonoBehaviour
 		_inputReader.openInventoryEvent += SetInventoryScreen;
 		_inventoryPanel.Closed += CloseInventoryScreen;
 
+		_cookRecipeEvent.OnEventRaised += PlayCookingAnimation;
+
 
 
 
@@ -77,6 +84,8 @@ public class UIManager : MonoBehaviour
 		_interactionPanel.gameObject.SetActive(false);
 
 		_switchTabDisplay.SetActive(false);
+
+		_cookingAnimation.gameObject.SetActive(false);
 		Time.timeScale = 1;
 
 	}
@@ -111,6 +120,7 @@ public class UIManager : MonoBehaviour
 
 		_inventoryPanel.Closed -= CloseInventoryScreen;
 
+		_cookRecipeEvent.OnEventRaised -= PlayCookingAnimation;
 	}
 	void OpenUIPause()
 	{
@@ -302,6 +312,20 @@ public class UIManager : MonoBehaviour
 
 		}
 
+	}
+
+	public void PlayCookingAnimation(ItemSO itemToCook)
+	{
+
+		CloseInventoryScreen();
+		_cookingAnimation.SetItem(itemToCook);
+		_cookingAnimation.gameObject.SetActive(true);
+		_cookingAnimation.AnimationEnded += StopCookingAnimation;
+	}
+	public void StopCookingAnimation()
+	{
+		_cookingAnimation.AnimationEnded -= StopCookingAnimation;
+		_cookingAnimation.gameObject.SetActive(false);
 	}
 
 
