@@ -23,6 +23,8 @@ public class InputReader : ScriptableObject, GameInput.IGameplayActions, GameInp
 	public event UnityAction startedRunning = delegate { };
 	public event UnityAction stoppedRunning = delegate { };
 	public event UnityAction openDebugMenu = delegate { };
+	public event UnityAction startedDebugWalkRun = delegate { };
+	public event UnityAction stoppedDebugWalkRun = delegate { };
 
 	// Shared between menus and dialogues
 	public event UnityAction moveSelectionEvent = delegate { };
@@ -44,7 +46,7 @@ public class InputReader : ScriptableObject, GameInput.IGameplayActions, GameInp
 
 	private GameInput gameInput;
 
-	[SerializeField] private DebugConfigSO _debugConfigSO;
+	public DebugConfigSO _debugConfigSO;
 
 	private void OnEnable()
 	{
@@ -165,6 +167,22 @@ public class InputReader : ScriptableObject, GameInput.IGameplayActions, GameInp
 
 		if (context.phase == InputActionPhase.Performed)
 			openDebugMenu.Invoke();
+	}
+
+	public void OnDebugWalkRun(InputAction.CallbackContext context)
+	{
+		if (!_debugConfigSO.isDebugMode)
+			return;
+		
+		switch (context.phase)
+		{
+			case InputActionPhase.Performed:
+				startedDebugWalkRun.Invoke();
+				break;
+			case InputActionPhase.Canceled:
+				stoppedDebugWalkRun.Invoke();
+				break;
+		}
 	}
 
 	private bool IsDeviceMouse(InputAction.CallbackContext context) => context.control.device.name == "Mouse";

@@ -97,6 +97,14 @@ public class @GameInput : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""DebugWalkRun"",
+                    ""type"": ""Button"",
+                    ""id"": ""8d0cd13b-3188-4110-b1b5-80488c26df44"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -504,6 +512,17 @@ public class @GameInput : IInputActionCollection, IDisposable
                     ""processors"": """",
                     ""groups"": ""KeyboardOrGamepad"",
                     ""action"": ""OpenDebugMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e33b451b-ef8e-43d9-bbd0-9a575f6a485f"",
+                    ""path"": ""<Keyboard>/leftCtrl"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardOrGamepad"",
+                    ""action"": ""DebugWalkRun"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1683,6 +1702,7 @@ public class @GameInput : IInputActionCollection, IDisposable
         m_Gameplay_MouseControlCamera = m_Gameplay.FindAction("MouseControlCamera", throwIfNotFound: true);
         m_Gameplay_Run = m_Gameplay.FindAction("Run", throwIfNotFound: true);
         m_Gameplay_OpenDebugMenu = m_Gameplay.FindAction("OpenDebugMenu", throwIfNotFound: true);
+        m_Gameplay_DebugWalkRun = m_Gameplay.FindAction("DebugWalkRun", throwIfNotFound: true);
         // Menus
         m_Menus = asset.FindActionMap("Menus", throwIfNotFound: true);
         m_Menus_MoveSelection = m_Menus.FindAction("MoveSelection", throwIfNotFound: true);
@@ -1761,6 +1781,7 @@ public class @GameInput : IInputActionCollection, IDisposable
     private readonly InputAction m_Gameplay_MouseControlCamera;
     private readonly InputAction m_Gameplay_Run;
     private readonly InputAction m_Gameplay_OpenDebugMenu;
+    private readonly InputAction m_Gameplay_DebugWalkRun;
     public struct GameplayActions
     {
         private @GameInput m_Wrapper;
@@ -1775,6 +1796,7 @@ public class @GameInput : IInputActionCollection, IDisposable
         public InputAction @MouseControlCamera => m_Wrapper.m_Gameplay_MouseControlCamera;
         public InputAction @Run => m_Wrapper.m_Gameplay_Run;
         public InputAction @OpenDebugMenu => m_Wrapper.m_Gameplay_OpenDebugMenu;
+        public InputAction @DebugWalkRun => m_Wrapper.m_Gameplay_DebugWalkRun;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1814,6 +1836,9 @@ public class @GameInput : IInputActionCollection, IDisposable
                 @OpenDebugMenu.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnOpenDebugMenu;
                 @OpenDebugMenu.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnOpenDebugMenu;
                 @OpenDebugMenu.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnOpenDebugMenu;
+                @DebugWalkRun.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnDebugWalkRun;
+                @DebugWalkRun.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnDebugWalkRun;
+                @DebugWalkRun.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnDebugWalkRun;
             }
             m_Wrapper.m_GameplayActionsCallbackInterface = instance;
             if (instance != null)
@@ -1848,6 +1873,9 @@ public class @GameInput : IInputActionCollection, IDisposable
                 @OpenDebugMenu.started += instance.OnOpenDebugMenu;
                 @OpenDebugMenu.performed += instance.OnOpenDebugMenu;
                 @OpenDebugMenu.canceled += instance.OnOpenDebugMenu;
+                @DebugWalkRun.started += instance.OnDebugWalkRun;
+                @DebugWalkRun.performed += instance.OnDebugWalkRun;
+                @DebugWalkRun.canceled += instance.OnDebugWalkRun;
             }
         }
     }
@@ -2043,6 +2071,7 @@ public class @GameInput : IInputActionCollection, IDisposable
         void OnMouseControlCamera(InputAction.CallbackContext context);
         void OnRun(InputAction.CallbackContext context);
         void OnOpenDebugMenu(InputAction.CallbackContext context);
+        void OnDebugWalkRun(InputAction.CallbackContext context);
     }
     public interface IMenusActions
     {

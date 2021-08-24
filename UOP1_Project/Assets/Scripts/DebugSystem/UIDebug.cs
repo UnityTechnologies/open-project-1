@@ -1,27 +1,41 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// This class handles UI logic for the debug menu.
 /// </summary>
 public class UIDebug : MonoBehaviour
 {
+    [Header("Debug Stuff")]
     [SerializeField] private DebugConfigSO debugConfig;
     [SerializeField] private Button[] locationButtons;
     [SerializeField] private GameObject buttonPrefab;
     [SerializeField] private GameObject locationsParent;
 
+    [Header("Broadcasting On")]
     [SerializeField] private LoadEventChannelSO locationLoadEventChannel;
 
-    public UnityAction Closed; 
+    public UnityAction Closed;
 
+    private void OnEnable()
+    {
+        RemoveOldButtons();
+        DrawButtons();
+    }
 
-    private void Start()
+    public void RemoveOldButtons()
+    {
+        for (int i = 0; i < locationButtons.Length; i++)
+        {
+            //Debug.Log("Removing " + locationButtons[i].gameObject, gameObject);
+            Destroy(locationButtons[i].gameObject);
+        }
+    }
+
+    private void DrawButtons()
     {
         locationButtons = new Button[debugConfig.locations.Length]; 
 
@@ -42,6 +56,11 @@ public class UIDebug : MonoBehaviour
 
             TextMeshProUGUI text = locationButton.transform.GetChild(0).GetComponent<TextMeshProUGUI>();
             text.SetText(debugConfig.locations[i].name);
+
+            if (SceneManager.GetSceneByName(debugConfig.locations[i].sceneReference.editorAsset.name).isLoaded)
+            {
+                button.interactable = false;
+            }
 
 
             //Debug.Log(i);
@@ -66,10 +85,6 @@ public class UIDebug : MonoBehaviour
 
     public void OnLocationButtonClick(int locationIndex)
     {
-        //Debug.Log(locationIndex);
-        //Debug.Log(debugConfig.locations[locationIndex]);
-        //Debug.Log(locationButtons[locationIndex]);
-
         locationLoadEventChannel.RaiseEvent(debugConfig.locations[locationIndex], false, true);
     }
 

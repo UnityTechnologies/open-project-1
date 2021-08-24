@@ -12,18 +12,19 @@ public class DebugConfigSO : ScriptableObject
     /// Stores whether it is debug mode or not
     /// This is set by <see cref="EditorColdStartup" /> script on line 37 if its an cold startup.
     /// And used by <see cref="InputReader"/> on line 163 to discard debug input if it is not debug mode.
-    /// This should be visible in the inspector to see its value while debugging.
     /// </summary>
-    public bool isDebugMode = false;
+    [HideInInspector] public bool isDebugMode = false;
 
     /// <summary>
     /// Stores the list of all locations in the game to quickly warp to in debug mode.
     /// </summary>
     public LocationSO[] locations;
+    public int playerDebugLayerIndex = 14; // DebugNoCollision Layer
+    public int playerOriginalLayerIndex = 9; // Characters Layer (Player Default Layer)
 
     private void OnDisable()
     {
-        isDebugMode = false;    
+        isDebugMode = false;
     }
 
 #if UNITY_EDITOR
@@ -32,12 +33,6 @@ public class DebugConfigSO : ScriptableObject
     private void Reset() 
     {
         isDebugMode = false;
-    }
-
-    // Sets isDebugMode back to false if someone checks the checkbox in the inspector by mistake.
-    private void OnValidate() 
-    {
-        isDebugMode = false;    
     }
 
 #endif
