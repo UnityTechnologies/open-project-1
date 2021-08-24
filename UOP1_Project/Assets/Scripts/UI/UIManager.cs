@@ -17,6 +17,8 @@ public class UIManager : MonoBehaviour
 
 	[SerializeField] private UIInteraction _interactionPanel = default;
 
+	[SerializeField] private GameObject _switchTabDisplay = default;
+
 	[SerializeField] private UIPause _pauseScreen = default;
 
 	[SerializeField] private UISettingsController _settingScreen = default;
@@ -74,6 +76,7 @@ public class UIManager : MonoBehaviour
 
 		_interactionPanel.gameObject.SetActive(false);
 
+		_switchTabDisplay.SetActive(false);
 		Time.timeScale = 1;
 
 	}
@@ -254,7 +257,7 @@ public class UIManager : MonoBehaviour
 		}
 
 		_inventoryPanel.gameObject.SetActive(true);
-
+		_switchTabDisplay.SetActive(true);
 		_inputReader.EnableMenuInput();
 
 		_gameStateManager.UpdateGameState(GameState.Inventory);
@@ -267,7 +270,7 @@ public class UIManager : MonoBehaviour
 		_inputReader.menuCloseEvent -= CloseInventoryScreen;
 		_inputReader.closeInventoryEvent -= CloseInventoryScreen;
 
-
+		_switchTabDisplay.SetActive(false);
 		_inventoryPanel.gameObject.SetActive(false);
 
 		if (isForCooking)

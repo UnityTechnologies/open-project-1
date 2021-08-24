@@ -289,7 +289,7 @@ public class UIInventory : MonoBehaviour
 			if (itemToInspect.ItemType.ActionType == ItemInventoryActionType.Cook)
 			{
 				isInteractable = _currentInventory.hasIngredients(itemToInspect.IngredientsList) && _isNearPot;
-				_errorPotMessage.SetActive(!isInteractable);
+				_errorPotMessage.SetActive(!_isNearPot);
 			}
 			else if (itemToInspect.ItemType.ActionType == ItemInventoryActionType.DoNothing)
 			{
