@@ -80,15 +80,16 @@ public class UIManager : MonoBehaviour
 
 	void OpenUIDialogue(LocalizedString dialogueLine, ActorSO actor)
 	{
-		Debug.Log("OpenUIDialogue");
 		bool isProtagonistTalking = (actor == _mainProtagonist);
 		_dialogueController.SetDialogue(dialogueLine, actor, isProtagonistTalking);
+		_interactionPanel.gameObject.SetActive(false);
 		_dialogueController.gameObject.SetActive(true);
 	}
 	void CloseUIDialogue(int dialogueType)
 	{
 		_selectionHandler.Unselect();
 		_dialogueController.gameObject.SetActive(false);
+		_onInteractionEndedEvent.RaiseEvent();
 	}
 
 	private void OnDestroy()
@@ -222,6 +223,7 @@ public class UIManager : MonoBehaviour
 		if (_gameStateManager.CurrentGameState == GameState.Gameplay)
 		{
 			isForCooking = true;
+			_interactionPanel.gameObject.SetActive(false);
 			OpenInventoryScreen();
 		}
 
@@ -282,13 +284,19 @@ public class UIManager : MonoBehaviour
 
 	void SetInteractionPanel(bool isOpenEvent, InteractionType interactionType)
 	{
-		if (_gameStateManager.CurrentGameState == GameState.Gameplay)
+		if (_gameStateManager.CurrentGameState != GameState.Combat)
 		{
 			if (isOpenEvent)
 			{
 				_interactionPanel.FillInteractionPanel(interactionType);
 			}
+
 			_interactionPanel.gameObject.SetActive(isOpenEvent);
+		}
+		else if (!isOpenEvent)
+		{
+			_interactionPanel.gameObject.SetActive(isOpenEvent);
+
 		}
 
 	}
