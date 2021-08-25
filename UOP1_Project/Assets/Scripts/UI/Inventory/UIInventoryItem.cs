@@ -17,12 +17,14 @@ public class UIInventoryItem : MonoBehaviour
 	[SerializeField] private Button _itemButton = default;
 	[SerializeField] private Image _bgInactiveImage = default;
 
+	bool _isSelected = false;
 	public UnityAction<ItemSO> ItemSelected;
 
 	[SerializeField] private LocalizeSpriteEvent _bgLocalizedImage = default;
 
 	public void SetItem(ItemStack itemStack, bool isSelected)
 	{
+		_isSelected = isSelected;
 		_itemPreviewImage.gameObject.SetActive(true);
 		_itemCount.gameObject.SetActive(true);
 		_bgImage.gameObject.SetActive(true);
@@ -67,10 +69,15 @@ public class UIInventoryItem : MonoBehaviour
 
 	public void SelectFirstElement()
 	{
+		_isSelected = true;
 		_itemButton.Select();
 		SelectItem();
 	}
-
+	private void OnEnable()
+	{
+		if (_isSelected)
+		{ SelectItem(); }
+	}
 	public void HoverItem()
 	{
 		_imgHover.gameObject.SetActive(true);
@@ -84,6 +91,7 @@ public class UIInventoryItem : MonoBehaviour
 
 	public void SelectItem()
 	{
+		_isSelected = true;
 		if (ItemSelected != null && _currentItem != null && _currentItem.Item != null)
 
 		{
@@ -99,6 +107,7 @@ public class UIInventoryItem : MonoBehaviour
 
 	public void UnselectItem()
 	{
+		_isSelected = false;
 		_imgSelected.gameObject.SetActive(false);
 
 	}

@@ -17,6 +17,10 @@ public class UIManager : MonoBehaviour
 
 	[SerializeField] private UIInteraction _interactionPanel = default;
 
+	[SerializeField] private GameObject _switchTabDisplay = default;
+
+	[SerializeField] private UIItemForAnimation _cookingAnimation = default;
+
 	[SerializeField] private UIPause _pauseScreen = default;
 
 	[SerializeField] private UISettingsController _settingScreen = default;
@@ -38,6 +42,9 @@ public class UIManager : MonoBehaviour
 
 	[Header("Inventory Events")]
 	[SerializeField] private VoidEventChannelSO _openInventoryScreenForCookingEvent = default;
+	[SerializeField]
+	private ItemEventChannelSO _cookRecipeEvent = default;
+
 	[Header("Interaction Events")]
 	[SerializeField] private InteractionUIEventChannelSO _setInteractionEvent = default;
 
@@ -61,10 +68,11 @@ public class UIManager : MonoBehaviour
 
 		_inputReader.openInventoryEvent += SetInventoryScreen;
 		_inventoryPanel.Closed += CloseInventoryScreen;
-
+    
+    _inputReader.openDebugMenu += SetDebugMenu;
 		_debugScreen.Closed += CloseDebugMenu;
-
-		_inputReader.openDebugMenu += SetDebugMenu;
+    
+		_cookRecipeEvent.OnEventRaised += PlayCookingAnimation;
 
 
 	}
@@ -80,21 +88,26 @@ public class UIManager : MonoBehaviour
 
 		_debugScreen.gameObject.SetActive(false);
 
+		_switchTabDisplay.SetActive(false);
+
+		_cookingAnimation.gameObject.SetActive(false);
+
 		Time.timeScale = 1;
 
 	}
 
 	void OpenUIDialogue(LocalizedString dialogueLine, ActorSO actor)
 	{
-		Debug.Log("OpenUIDialogue");
 		bool isProtagonistTalking = (actor == _mainProtagonist);
 		_dialogueController.SetDialogue(dialogueLine, actor, isProtagonistTalking);
+		_interactionPanel.gameObject.SetActive(false);
 		_dialogueController.gameObject.SetActive(true);
 	}
 	void CloseUIDialogue(int dialogueType)
 	{
 		_selectionHandler.Unselect();
 		_dialogueController.gameObject.SetActive(false);
+		_onInteractionEndedEvent.RaiseEvent();
 	}
 
 	private void OnDestroy()
@@ -115,6 +128,7 @@ public class UIManager : MonoBehaviour
 
 		_debugScreen.Closed -= CloseDebugMenu;
 
+		_cookRecipeEvent.OnEventRaised -= PlayCookingAnimation;
 	}
 	void OpenUIPause()
 	{
@@ -230,6 +244,7 @@ public class UIManager : MonoBehaviour
 		if (_gameStateManager.CurrentGameState == GameState.Gameplay)
 		{
 			isForCooking = true;
+			_interactionPanel.gameObject.SetActive(false);
 			OpenInventoryScreen();
 		}
 
@@ -260,7 +275,7 @@ public class UIManager : MonoBehaviour
 		}
 
 		_inventoryPanel.gameObject.SetActive(true);
-
+		_switchTabDisplay.SetActive(true);
 		_inputReader.EnableMenuInput();
 
 		_gameStateManager.UpdateGameState(GameState.Inventory);
@@ -273,7 +288,7 @@ public class UIManager : MonoBehaviour
 		_inputReader.menuCloseEvent -= CloseInventoryScreen;
 		_inputReader.closeInventoryEvent -= CloseInventoryScreen;
 
-
+		_switchTabDisplay.SetActive(false);
 		_inventoryPanel.gameObject.SetActive(false);
 
 		if (isForCooking)
@@ -290,15 +305,35 @@ public class UIManager : MonoBehaviour
 
 	void SetInteractionPanel(bool isOpenEvent, InteractionType interactionType)
 	{
-		if (_gameStateManager.CurrentGameState == GameState.Gameplay)
+		if (_gameStateManager.CurrentGameState != GameState.Combat)
 		{
 			if (isOpenEvent)
 			{
 				_interactionPanel.FillInteractionPanel(interactionType);
 			}
+
 			_interactionPanel.gameObject.SetActive(isOpenEvent);
 		}
+		else if (!isOpenEvent)
+		{
+			_interactionPanel.gameObject.SetActive(isOpenEvent);
 
+		}
+
+	}
+
+	public void PlayCookingAnimation(ItemSO itemToCook)
+	{
+
+		CloseInventoryScreen();
+		_cookingAnimation.SetItem(itemToCook);
+		_cookingAnimation.gameObject.SetActive(true);
+		_cookingAnimation.AnimationEnded += StopCookingAnimation;
+	}
+	public void StopCookingAnimation()
+	{
+		_cookingAnimation.AnimationEnded -= StopCookingAnimation;
+		_cookingAnimation.gameObject.SetActive(false);
 	}
 
 	void SetDebugMenu()
