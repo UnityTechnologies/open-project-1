@@ -247,7 +247,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 2.7390106, y: 1}
+    m_SensorSize: {x: 1.9894445, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -317,7 +317,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 2.7390106, y: 1}
+    m_SensorSize: {x: 1.9894445, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -380,8 +380,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9086061863206215909}
-  - component: {fileID: 7006415184538745756}
   - component: {fileID: 2313194055260239634}
+  - component: {fileID: 1513774127311603601}
   m_Layer: 0
   m_Name: MainMenuSceneLoader
   m_TagString: Untagged
@@ -403,23 +403,6 @@ Transform:
   m_Father: {fileID: 3099274937134098496}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7006415184538745756
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3726207256704925240}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 02e6b73898a4a52438d630a7ba29da77, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _locationToLoad: {fileID: 11400000, guid: 431ff81b74b48fb4d9301fb76ca633dd, type: 2}
-  _leadsToPath: {fileID: 0}
-  _pathStorage: {fileID: 11400000, guid: a9ec09853cba047a8a58f5881053cfc6, type: 2}
-  _locationExitLoadChannel: {fileID: 11400000, guid: 33cec85652903d245b99985f9cec9841,
-    type: 2}
 --- !u!114 &2313194055260239634
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -438,8 +421,8 @@ MonoBehaviour:
     m_Events:
     - m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 7006415184538745756}
-          m_TargetAssemblyTypeName: LocationExit, Assembly-CSharp
+        - m_Target: {fileID: 1513774127311603601}
+          m_TargetAssemblyTypeName: CutsceneSceneLoader, Assembly-CSharp
           m_MethodName: LoadScene
           m_Mode: 1
           m_Arguments:
@@ -450,6 +433,20 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+--- !u!114 &1513774127311603601
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3726207256704925240}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af0ba6b30850e36419a21b4175d8e655, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _sceneToLoad: {fileID: 11400000, guid: 431ff81b74b48fb4d9301fb76ca633dd, type: 2}
+  _sceneLoadChannel: {fileID: 11400000, guid: 33cec85652903d245b99985f9cec9841, type: 2}
 --- !u!95 &1488944481849032395
 Animator:
   serializedVersion: 3
