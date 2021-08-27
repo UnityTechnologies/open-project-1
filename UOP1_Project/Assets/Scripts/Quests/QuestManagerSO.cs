@@ -53,7 +53,6 @@ public class QuestManagerSO : ScriptableObject
 		_makeWinningChoiceEvent.OnEventRaised += MakeWinningChoice;
 		_makeLosingChoiceEvent.OnEventRaised += MakeLosingChoice;
 		StartQuestline();
-		Debug.Log(isNewGame());
 	}
 	void StartQuestline()
 	{
