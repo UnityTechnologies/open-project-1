@@ -5,60 +5,68 @@ using UnityEngine.UI;
 using TMPro;
 public class UIHealthBarManager : MonoBehaviour
 {
-	int _maxHealth;
-	float _currentHealth;
+	[SerializeField]
+	private HealthSO _currentHealth = default;
+	[SerializeField]
+	private HealthConfigSO _healthConfig = default;
+
+
 	[SerializeField] private UIHeartDisplay[] _heartImages = default;
 	[SerializeField] private TextMeshProUGUI healthText = default;
 
 	[Header("Listening to")]
-	[SerializeField] private IntEventChannelSO _setHealthBar = default;
-	[SerializeField] private IntEventChannelSO _inflictDamage = default;
-	[SerializeField] private IntEventChannelSO _restoreHealth = default;
+	[SerializeField] private VoidEventChannelSO _deathEvent = default;
 
+	[SerializeField] private VoidEventChannelSO _updateHealthEvent = default;
 
 	private void OnEnable()
 	{
+		_deathEvent.OnEventRaised += SetHealthBar;
+		_updateHealthEvent.OnEventRaised += SetHeartImages;
 
-		_setHealthBar.OnEventRaised += SetHealthBar;
-
-		_inflictDamage.OnEventRaised += InflictDamage;
-
-		_restoreHealth.OnEventRaised += RestoreHealth;
-
+		_deathEvent.OnEventRaised += RegisterDeath;
+		SetHealthBar();
 	}
 	private void OnDestroy()
 	{
-
-		_setHealthBar.OnEventRaised -= SetHealthBar;
-
-		_inflictDamage.OnEventRaised -= InflictDamage;
-
-		_restoreHealth.OnEventRaised -= RestoreHealth;
+		_updateHealthEvent.OnEventRaised -= SetHeartImages;
+		_deathEvent.OnEventRaised -= SetHealthBar;
+		_deathEvent.OnEventRaised -= RegisterDeath;
 
 	}
-	public void SetHealthBar(int _maxHealth)
+	private void Start()
 	{
-		this._maxHealth = _maxHealth;
-		_currentHealth = _maxHealth;
+	}
+	private void OnLevelWasLoaded(int level)
+	{
+		SetHeartImages();
+	}
+	public void SetHealthBar()
+	{
+		_currentHealth.SetMaxHealth(_healthConfig.MaxHealth);
+		_currentHealth.SetCurrentHealth(_healthConfig.MaxHealth);
+
 		SetHeartImages();
 
 	}
 	public void InflictDamage(int _damage)
 	{
-		_currentHealth -= _damage;
 		SetHeartImages();
 	}
 	public void RestoreHealth(int _healthToAdd)
 	{
-		_currentHealth += _healthToAdd;
 		SetHeartImages();
 	}
+	public void RegisterDeath()
+	{
+		SetHealthBar();
 
+	}
 	void SetHeartImages()
 	{
 
-		int heartValue = _maxHealth / _heartImages.Length;
-		int filledHeartCount = Mathf.FloorToInt(_currentHealth / heartValue);
+		int heartValue = _currentHealth.MaxHealth / _heartImages.Length;
+		int filledHeartCount = Mathf.FloorToInt((float)_currentHealth.CurrentHealth / heartValue);
 
 		for (int i = 0; i < _heartImages.Length; i++)
 		{
@@ -70,7 +78,7 @@ public class UIHealthBarManager : MonoBehaviour
 			}
 			else if (i == filledHeartCount)
 			{
-				heartPercent = ((float)_currentHealth - (float)filledHeartCount * (float)heartValue) / (float)heartValue;
+				heartPercent = ((float)_currentHealth.CurrentHealth - (float)filledHeartCount * (float)heartValue) / (float)heartValue;
 			}
 			else
 			{
