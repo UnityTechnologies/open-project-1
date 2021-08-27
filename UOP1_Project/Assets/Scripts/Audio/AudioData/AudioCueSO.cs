@@ -7,6 +7,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "newAudioCue", menuName = "Audio/Audio Cue")]
 public class AudioCueSO : ScriptableObject
 {
+	public string onomatopoeia = "";
 	public bool looping = false;
 	[SerializeField] private AudioClipsGroup[] _audioClipGroups = default;
 
