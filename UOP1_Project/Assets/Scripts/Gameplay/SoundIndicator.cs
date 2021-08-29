@@ -12,19 +12,22 @@ public class SoundIndicator : MonoBehaviour
 	[SerializeField]private GameObject onScreenIndicator;
 	[SerializeField] private GameObject offScreenIndicator;
 	[SerializeField] private RectTransform indicatorGroup;
-
-	List<Tuple<AudioCueSO,Vector3,int,bool>> screenSounds = new List<Tuple<AudioCueSO, Vector3, int, bool>>();//bool true = onScreen
-	List<Tuple<GameObject, int>> onScreenIndicators = new List<Tuple<GameObject,int>>();
-	List<Tuple<GameObject, int>> offScreenIndocators = new List<Tuple<GameObject, int>>();
-
+	[SerializeField]public Tuple<AudioCueSO, Vector3, bool, GameObject>[] a;
+	public List<Tuple<AudioCueSO,Vector3,bool,GameObject>> screenSounds = new List<Tuple<AudioCueSO, Vector3, bool, GameObject>>();//bool true = onScreen
+	public int count=0;
+	public float t = 0f;
 	// Start is called before the first frame update
 	void Awake()
 	{
 		audioCueEventChannelSO.OnAudioCuePlayRequested += OnSoundPLay;
-		audioCueEventChannelSO.OnAudioCueFinishRequested += OnSoundFinished;
-		audioCueEventChannelSO.OnAudioCueStopRequested += OnSoundFinished;
-
-		//inputReader.cameraMoveEvent += OnCameraMove;
+	}
+	private void Update()
+	{
+		t++;
+		count = screenSounds.Count;
+		a = screenSounds
+			.ToArray();
+		OnCameraMove(Vector2.one,false);
 	}
 
 	private AudioCueKey OnSoundPLay(AudioCueSO audioCue, AudioConfigurationSO audioConfiguration, Vector3 positionInSpace)
@@ -36,10 +39,10 @@ public class SoundIndicator : MonoBehaviour
 	{
 		Debug.Log("SoundEnded");
 			Vector3 temp;
-			if (screenSounds.Any(t => t.Item1 == audioCueKey.AudioCue && t.Item3 == audioCueKey.Value))
+			if (screenSounds.Any(t => t.Item1 == audioCueKey.AudioCue ))
 			{
 				temp = screenSounds[audioCueKey.Value].Item2;
-				RemoveSound(audioCueKey.AudioCue,temp,audioCueKey.Value);
+				//RemoveSound(audioCueKey.AudioCue,temp);
 			}
 			
 		return true;
@@ -48,46 +51,37 @@ public class SoundIndicator : MonoBehaviour
 
 	private bool AddSound(AudioCueSO audioCue, Vector3 positionInSpace)
 	{
-		if (audioCue != null && positionInSpace != null )//&& audioCue.onomatopoeia != "")
+		if (audioCue != null && positionInSpace != null && audioCue.onomatopoeia != "")
 		{
-			int index = screenSounds.Count;
+			Debug.Log(t);
 			if (OnScreen(positionInSpace))
 			{
-				screenSounds.Add(new Tuple<AudioCueSO, Vector3 , int,bool>(audioCue, positionInSpace, index,true));
-				SpawnOnScreenIndicator(audioCue, positionInSpace, index);
+				screenSounds.Add(new Tuple<AudioCueSO, Vector3 ,bool,GameObject>(audioCue, positionInSpace, true,null));
+				SpawnOnScreenIndicator(screenSounds.Count - 1);
 			}
 			else
 			{
-				screenSounds.Add(new Tuple<AudioCueSO, Vector3, int,bool>(audioCue, positionInSpace, index,false));
+					screenSounds.Add(new Tuple<AudioCueSO, Vector3, bool,GameObject>(audioCue, positionInSpace,false,null));
+					SpawnOffScreenIndicator(screenSounds.Count - 1);
 
 			}
-
-
+			StartCoroutine(RemoveSound(screenSounds.Count -1,1f));
 			return true;
 		}
 		return false;
 	}//Add sound to the list of sounds
-	private bool RemoveSound(AudioCueSO audioCue, Vector3 positionInSpace, int index)
+	private IEnumerator RemoveSound(int i,float duration)
 	{
-		if (screenSounds.Any(t => t.Item1 == audioCue && t.Item2 == positionInSpace && t.Item3 == index))
+		yield return new WaitForSeconds(duration);
+		if (i < screenSounds.Count)
 		{
 			
-			if (OnScreen(positionInSpace))
-			{
-				screenSounds.Remove(new Tuple<AudioCueSO, Vector3, int, bool>(audioCue, positionInSpace, index,true));
-				RemoveOnScreenIndicator(audioCue,positionInSpace,index);
-			}
-			else
-			{
-				screenSounds.Remove(new Tuple<AudioCueSO, Vector3 ,int,bool>(audioCue, positionInSpace, index,false));
-
-			}
+				RemoveScreenIndicator(i);
+				screenSounds.RemoveAt(i);
 
 
-			return true;
 		}
 		Debug.LogWarning("You trying to remove soundIndicator from non existing sound. Please chcek what is wrong.");
-		return false;
 	}//Remove sound from a list of sounds
 
 	private bool OnScreen(Vector3 positionInSpace) {
@@ -107,7 +101,8 @@ public class SoundIndicator : MonoBehaviour
 	}//check if point in space is on screen. IF is it return true
 	private Vector2 CalculatePostionOfOffScreenIndicator(Vector3 point)
 	{
-		Camera camera = Camera.current;
+		
+		Camera camera = Camera.main;
 		Vector3 screenPoint = camera.WorldToScreenPoint(point);
 		if (screenPoint.z < 0)
 		{
@@ -123,7 +118,10 @@ public class SoundIndicator : MonoBehaviour
 		float a = screenPoint.y / screenPoint.x;
 
 		float angelBorder = Mathf.Atan2(screenCenter.y, screenCenter.x) * Mathf.Rad2Deg;
-		Vector3 borders = screenCenter * 0.9f;
+		Vector3 borders = screenCenter* 2 * 0.9f;
+
+
+
 		float x = 0;
 		float y = 0;
 		if (-angelBorder <= angel && angel < angelBorder)
@@ -151,85 +149,57 @@ public class SoundIndicator : MonoBehaviour
 	}
 
 
-	private void SpawnOnScreenIndicator(AudioCueSO audioCue, Vector3 positionInSpace,int index)
+	private void SpawnOnScreenIndicator(int index)
 	{
 		Debug.Log("Spawnning...");
 
 		//onScreenIndicator.GetComponent<TMPro.TextMeshPro>().text = audioCue.onomatopoeia;
-		var objectInd = Instantiate(onScreenIndicator, positionInSpace, Quaternion.identity);
+		var objectInd = Instantiate(onScreenIndicator, screenSounds[index].Item2, Quaternion.identity);
 		//Debug.Log("index: " + screenSounds.IndexOf(new Tuple<AudioCueSO, Vector3, int, bool>(audioCue, positionInSpace, index, true)));
-		onScreenIndicators.Add(new Tuple<GameObject,int>( objectInd, screenSounds.IndexOf(new Tuple<AudioCueSO, Vector3, int, bool>(audioCue, positionInSpace, index, true))));
+		screenSounds[index] = new Tuple<AudioCueSO, Vector3, bool, GameObject>(screenSounds[index].Item1, screenSounds[index].Item2, true,objectInd);
 	}// this spawn an InWoldsIndicator 
-	private void RemoveOnScreenIndicator(AudioCueSO audioCue, Vector3 positionInSpace, int index)
+	private void RemoveScreenIndicator(int index)
 	{
-		int tempInt = screenSounds.IndexOf(new Tuple<AudioCueSO, Vector3, int, bool>(audioCue, positionInSpace, index, true));
-		foreach (var item in onScreenIndicators)
-		{
-			if (tempInt == item.Item2)
-			{
-				Destroy(item.Item1);
-				return;
-			}
-		}
+		Destroy(screenSounds[index].Item4);
+		screenSounds[index] = new Tuple<AudioCueSO, Vector3, bool, GameObject>(screenSounds[index].Item1, screenSounds[index].Item2, screenSounds[index].Item3, null);
+
+		Debug.Log("Removing...");
 	}//this despawn InWorldIndicator
 
-	private void SpawnOffScreenIndicator(AudioCueSO audioCue, Vector3 positionInSpace, int index)
+	private void SpawnOffScreenIndicator(int index)
 	{
 		Debug.Log("Spawning...");
 
 		GameObject temp = Instantiate(offScreenIndicator);
-		temp.transform.SetParent(transform,false);
+		temp.transform.SetParent(indicatorGroup,false);
 
-		temp.GetComponent<RectTransform>().anchoredPosition = CalculatePostionOfOffScreenIndicator(positionInSpace);
-		offScreenIndocators.Add(new Tuple<GameObject, int>(temp, screenSounds.IndexOf(new Tuple<AudioCueSO, Vector3, int, bool>(audioCue, positionInSpace, index, true))));
-	}
-	private void RemoveOffScreenIndicator(AudioCueSO audioCue, Vector3 positionInSpace, int index)
-	{
-		int tempInt = screenSounds.IndexOf(new Tuple<AudioCueSO, Vector3, int, bool>(audioCue, positionInSpace, index, true));
-		foreach (var item in offScreenIndocators)
-		{
-			if (tempInt == item.Item2)
-			{
-				Destroy(item.Item1);
-				return;
-			}
-		}
+		temp.GetComponent<RectTransform>().anchoredPosition = CalculatePostionOfOffScreenIndicator(screenSounds[index].Item2);
+		screenSounds[index] = new Tuple<AudioCueSO, Vector3, bool, GameObject>(screenSounds[index].Item1, screenSounds[index].Item2, false,temp);
+
 	}
 
 	private void OnOffScreenCheck(int i)
 	{
-		AudioCueSO audioCueTemp = screenSounds[i].Item1;
-		Vector3 positionTemp = screenSounds[i].Item2;
-		int indexTemp = screenSounds[i].Item3;
 
-		if (OnScreen(positionTemp))
+		if (OnScreen(screenSounds[i].Item2))
 		{
-			if (screenSounds[i].Item4 != true)//Change from Off to On screen indicator
+			if (screenSounds[i].Item3 == false)//Change from Off to On screen indicator
 			{
-				screenSounds[i] = new Tuple<AudioCueSO, Vector3, int, bool>(audioCueTemp, positionTemp, indexTemp, true);
-				RemoveOffScreenIndicator(audioCueTemp, positionTemp, indexTemp);
-				SpawnOnScreenIndicator(audioCueTemp, positionTemp, indexTemp);
+				RemoveScreenIndicator(i);
+				SpawnOnScreenIndicator(i);
 			}
 		}
-		else if(!OnScreen(positionTemp))
+		else// if(!OnScreen(positionTemp))
 		{
-			if (screenSounds[i].Item4 != false)//Change from On to Off screen indicator
+
+			if (screenSounds[i].Item3 == true)//Change from On to Off screen indicator
 			{
-				screenSounds[i] = new Tuple<AudioCueSO, Vector3, int, bool>(audioCueTemp, positionTemp, indexTemp, false);
-				RemoveOnScreenIndicator(audioCueTemp, positionTemp, indexTemp);
-				SpawnOffScreenIndicator(audioCueTemp, positionTemp, indexTemp);
+				RemoveScreenIndicator(i);
+				SpawnOffScreenIndicator(i);
 			}
-			else //recalculate postiotn
+			else if(screenSounds[i].Item4 != null) //recalculate postiotn
 			{
-				foreach (var item in offScreenIndocators)
-				{
-					if (i == item.Item2)
-					{
-						item.Item1.GetComponent<RectTransform>().anchoredPosition = CalculatePostionOfOffScreenIndicator(screenSounds[i].Item2);
-						break;
-					}
-				}
-					
+				screenSounds[i].Item4.GetComponent<RectTransform>().anchoredPosition = CalculatePostionOfOffScreenIndicator(screenSounds[i].Item2);
 			}
 		}
 	}//This recalculate status of IN/Out of screen
@@ -237,7 +207,6 @@ public class SoundIndicator : MonoBehaviour
 
 	private void OnCameraMove(Vector2 movement,bool isMouseMove)
 	{
-		Debug.Log("CameraMOving");
 
 		for (int i = 0; i < screenSounds.Count; i++)
 		{
