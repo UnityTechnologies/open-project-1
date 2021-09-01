@@ -93,7 +93,7 @@ public class AudioClipsGroup
 [Serializable]
 public class Caption
 {
-	public bool Visualise = true;	
+	public bool Visualise = false;	
 	public LocalizedString SoundText;
 	public float Duration = 1f;
 }
