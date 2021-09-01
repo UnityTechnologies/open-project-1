@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Assets.Scripts.Audio;
+using System;
 using UnityEngine;
+using UnityEngine.Localization;
 
 /// <summary>
 /// A collection of audio clips that are played in parallel, and support randomisation.
@@ -10,10 +12,10 @@ public class AudioCueSO : ScriptableObject
 	public bool looping = false;
 	[SerializeField] private AudioClipsGroup[] _audioClipGroups = default;
 
-	public AudioClip[] GetClips()
+	public VisualisableAudioClip[] GetClips()
 	{
 		int numberOfClips = _audioClipGroups.Length;
-		AudioClip[] resultingClips = new AudioClip[numberOfClips];
+		VisualisableAudioClip[] resultingClips = new VisualisableAudioClip[numberOfClips];
 
 		for (int i = 0; i < numberOfClips; i++)
 		{
@@ -33,6 +35,7 @@ public class AudioClipsGroup
 {
 	public SequenceMode sequenceMode = SequenceMode.RandomNoImmediateRepeat;
 	public AudioClip[] audioClips;
+	public Onomatopoeia Onomatopoeia = default;
 
 	private int _nextClipToPlay = -1;
 	private int _lastClipPlayed = -1;
@@ -41,11 +44,11 @@ public class AudioClipsGroup
 	/// Chooses the next clip in the sequence, either following the order or randomly.
 	/// </summary>
 	/// <returns>A reference to an AudioClip</returns>
-	public AudioClip GetNextClip()
+	public VisualisableAudioClip GetNextClip()
 	{
 		// Fast out if there is only one clip to play
 		if (audioClips.Length == 1)
-			return audioClips[0];
+			return new VisualisableAudioClip(audioClips[0], Onomatopoeia);
 
 		if (_nextClipToPlay == -1)
 		{
@@ -76,7 +79,7 @@ public class AudioClipsGroup
 
 		_lastClipPlayed = _nextClipToPlay;
 
-		return audioClips[_nextClipToPlay];
+		return new VisualisableAudioClip(audioClips[_nextClipToPlay], Onomatopoeia);
 	}
 
 	public enum SequenceMode
@@ -85,4 +88,12 @@ public class AudioClipsGroup
 		RandomNoImmediateRepeat,
 		Sequential,
 	}
+}
+
+[Serializable]
+public class Onomatopoeia
+{
+	public bool Visualise = true;	
+	public LocalizedString SoundText;
+	public float Duration = 1f;
 }

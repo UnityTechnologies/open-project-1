@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
 using System;
+using Assets.Scripts.Audio;
 
 public class AudioManager : MonoBehaviour
 {
@@ -143,7 +144,7 @@ public class AudioManager : MonoBehaviour
 
 		if (_musicSoundEmitter != null && _musicSoundEmitter.IsPlaying())
 		{
-			AudioClip songToPlay = audioCue.GetClips()[0];
+			AudioClip songToPlay = audioCue.GetClips()[0].Clip;
 			if (_musicSoundEmitter.GetClip() == songToPlay)
 				return AudioCueKey.Invalid;
 
@@ -152,7 +153,7 @@ public class AudioManager : MonoBehaviour
 		}
 
 		_musicSoundEmitter = _pool.Request();
-		_musicSoundEmitter.FadeMusicIn(audioCue.GetClips()[0], audioConfiguration, 1f, startTime);
+		_musicSoundEmitter.FadeMusicIn(audioCue.GetClips()[0].Clip, audioConfiguration, 1f, startTime);
 		_musicSoundEmitter.OnSoundFinishedPlaying += StopMusicEmitter;
 
 		return AudioCueKey.Invalid; //No need to return a valid key for music
@@ -183,7 +184,7 @@ public class AudioManager : MonoBehaviour
 	/// </summary>
 	public AudioCueKey PlayAudioCue(AudioCueSO audioCue, AudioConfigurationSO settings, Vector3 position = default)
 	{
-		AudioClip[] clipsToPlay = audioCue.GetClips();
+		VisualisableAudioClip[] clipsToPlay = audioCue.GetClips();
 		SoundEmitter[] soundEmitterArray = new SoundEmitter[clipsToPlay.Length];
 
 		int nOfClips = clipsToPlay.Length;
@@ -192,9 +193,18 @@ public class AudioManager : MonoBehaviour
 			soundEmitterArray[i] = _pool.Request();
 			if (soundEmitterArray[i] != null)
 			{
-				soundEmitterArray[i].PlayAudioClip(clipsToPlay[i], settings, audioCue.looping, position);
+				soundEmitterArray[i].PlayAudioClip(clipsToPlay[i].Clip, settings, audioCue.looping, position);				
+
 				if (!audioCue.looping)
+				{
 					soundEmitterArray[i].OnSoundFinishedPlaying += OnSoundEmitterFinishedPlaying;
+				}
+
+				if (clipsToPlay[i].Onomatopoeia.Visualise && !audioCue.looping)
+				{
+					var captioningSystem = this.GetComponent<ClosedCaptioningSystem>();
+					captioningSystem.VisualiseAudioClip(clipsToPlay[i].Onomatopoeia, position);
+				}
 			}
 		}
 
