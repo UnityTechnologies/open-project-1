@@ -200,10 +200,10 @@ public class AudioManager : MonoBehaviour
 					soundEmitterArray[i].OnSoundFinishedPlaying += OnSoundEmitterFinishedPlaying;
 				}
 
-				if (clipsToPlay[i].Onomatopoeia.Visualise && !audioCue.looping)
+				if (clipsToPlay[i].Caption.Visualise && !audioCue.looping)
 				{
 					var captioningSystem = this.GetComponent<ClosedCaptioningSystem>();
-					captioningSystem.VisualiseAudioClip(clipsToPlay[i].Onomatopoeia, position);
+					captioningSystem.VisualiseAudioClip(clipsToPlay[i].Caption, position);
 				}
 			}
 		}

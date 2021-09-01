@@ -6,21 +6,21 @@ namespace Assets.Scripts.Audio
 {
 	public class ClosedCaptioningSystem : MonoBehaviour
 	{
-		public GameObject OnomatopoeiaPrefab;
+		public GameObject CaptionPrefab;
 
-		public void VisualiseAudioClip(Onomatopoeia onomatopoeia, Vector3 position = default)
+		public void VisualiseAudioClip(Caption caption, Vector3 position = default)
 		{
-			var newOnomatopoeia = Instantiate(OnomatopoeiaPrefab, position, Quaternion.identity);
-			var onomatopoeiaTextComponent = newOnomatopoeia.GetComponentInChildren<TextMeshPro>();
+			var newCaption = Instantiate(CaptionPrefab, position, Quaternion.identity);
+			var captionTextComponent = newCaption.GetComponentInChildren<TextMeshPro>();
 
-			if (!string.IsNullOrEmpty(onomatopoeia.SoundText.TableReference))
+			if (!string.IsNullOrEmpty(caption.SoundText.TableReference))
 			{
-				onomatopoeiaTextComponent.text = onomatopoeia.SoundText.GetLocalizedString();
+				captionTextComponent.text = caption.SoundText.GetLocalizedString();
 			}
-			StartCoroutine(DestroyNewOnomatopoeia(newOnomatopoeia, onomatopoeia.Duration));
+			StartCoroutine(DestroyNewCaption(newCaption, caption.Duration));
 		}
 
-		IEnumerator DestroyNewOnomatopoeia(GameObject newOnomatopoeia, float duration)
+		IEnumerator DestroyNewCaption(GameObject newOnomatopoeia, float duration)
 		{
 			yield return new WaitForSeconds(duration);
 			Destroy(newOnomatopoeia);

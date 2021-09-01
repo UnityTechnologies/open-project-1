@@ -35,7 +35,7 @@ public class AudioClipsGroup
 {
 	public SequenceMode sequenceMode = SequenceMode.RandomNoImmediateRepeat;
 	public AudioClip[] audioClips;
-	public Onomatopoeia Onomatopoeia = default;
+	public Caption Caption = default;
 
 	private int _nextClipToPlay = -1;
 	private int _lastClipPlayed = -1;
@@ -48,7 +48,7 @@ public class AudioClipsGroup
 	{
 		// Fast out if there is only one clip to play
 		if (audioClips.Length == 1)
-			return new VisualisableAudioClip(audioClips[0], Onomatopoeia);
+			return new VisualisableAudioClip(audioClips[0], Caption);
 
 		if (_nextClipToPlay == -1)
 		{
@@ -79,7 +79,7 @@ public class AudioClipsGroup
 
 		_lastClipPlayed = _nextClipToPlay;
 
-		return new VisualisableAudioClip(audioClips[_nextClipToPlay], Onomatopoeia);
+		return new VisualisableAudioClip(audioClips[_nextClipToPlay], Caption);
 	}
 
 	public enum SequenceMode
@@ -91,7 +91,7 @@ public class AudioClipsGroup
 }
 
 [Serializable]
-public class Onomatopoeia
+public class Caption
 {
 	public bool Visualise = true;	
 	public LocalizedString SoundText;

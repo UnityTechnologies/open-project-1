@@ -5,12 +5,12 @@ namespace Assets.Scripts.Audio
 	public class VisualisableAudioClip
 	{
 		public AudioClip Clip;
-		public Onomatopoeia Onomatopoeia;
+		public Caption Caption;
 
-		public VisualisableAudioClip(AudioClip clip, Onomatopoeia onomatopoeia)
+		public VisualisableAudioClip(AudioClip clip, Caption caption)
 		{
 			Clip = clip;
-			Onomatopoeia = onomatopoeia;
+			Caption = caption;
 		}
 	}
 }
