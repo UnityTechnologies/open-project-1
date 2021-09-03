@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.Localization;
 
 /// <summary>
 /// A collection of audio clips that are played in parallel, and support randomisation.
@@ -7,7 +8,6 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "newAudioCue", menuName = "Audio/Audio Cue")]
 public class AudioCueSO : ScriptableObject
 {
-	public string onomatopoeia = "";
 	public bool looping = false;
 	[SerializeField] private AudioClipsGroup[] _audioClipGroups = default;
 
@@ -23,15 +23,32 @@ public class AudioCueSO : ScriptableObject
 
 		return resultingClips;
 	}
+	public Onomatopeia[] GetOnomatopeia()
+	{
+		int nOfOnomatopeias = _audioClipGroups.Length;
+		Onomatopeia[] res = new Onomatopeia[nOfOnomatopeias];
+		for (int i = 0; i < nOfOnomatopeias; i++)
+		{
+			res[i] = _audioClipGroups[i].onomatopeia;
+		}
+		return res;
+	}
 }
-
+[Serializable]
+public class Onomatopeia
+{
+	public LocalizedString SoundText;
+	public float duration = 0f;
+}
 
 /// <summary>
 /// Represents a group of AudioClips that can be treated as one, and provides automatic randomisation or sequencing based on the <c>SequenceMode</c> value.
 /// </summary>
+
 [Serializable]
 public class AudioClipsGroup
 {
+	public Onomatopeia onomatopeia = default;
 	public SequenceMode sequenceMode = SequenceMode.RandomNoImmediateRepeat;
 	public AudioClip[] audioClips;
 
@@ -87,3 +104,4 @@ public class AudioClipsGroup
 		Sequential,
 	}
 }
+
