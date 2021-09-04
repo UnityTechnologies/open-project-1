@@ -17,6 +17,10 @@ namespace Assets.Scripts.Audio
 		[Tooltip("The ClosedCaptioningManger listens to this event, fired by settings menu or SettingsSystem initializator, to turn on/off captioning")]
 		[SerializeField] private BoolEventChannelSO _changeCaptioningEventChannel = default;
 
+		[Header("Captions display settings")]
+		[Tooltip("Space between captions if many available for same source")]
+		[SerializeField] private float _spaceBetweenCaptions = 0.5f;
+
 		private bool _isCaptioningEnabled = default;
 
 		private void Awake()
@@ -53,6 +57,7 @@ namespace Assets.Scripts.Audio
 						captionEmitterArray[i] = _pool.Request();
 						if (captionEmitterArray[i] != null)
 						{
+							position.y += i* _spaceBetweenCaptions;
 							captionEmitterArray[i].Display(currentAudioCaption, position);
 							StartCoroutine(CleanEmitter(captionEmitterArray[i], currentAudioCaption.Duration));
 						}
