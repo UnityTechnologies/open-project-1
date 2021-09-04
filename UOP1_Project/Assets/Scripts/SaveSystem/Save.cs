@@ -26,6 +26,7 @@ public class Save
 	public float _shadowDistance = default;
 	public bool _isFullscreen = default;
 	public Locale _currentLocale = default;
+	public bool _isCaptioningEnabled = default;
 
 	public void SaveSettings(SettingsSO settings)
 	{
@@ -37,6 +38,7 @@ public class Save
 		_shadowDistance = settings.ShadowDistance;
 		_isFullscreen = settings.IsFullscreen;
 		_currentLocale = settings.CurrentLocale;
+		_isCaptioningEnabled = settings.IsCaptioningEnabled;
 	}
 	public string ToJson()
 	{

@@ -12,14 +12,16 @@ public class SettingsSO : ScriptableObject
 	[SerializeField] float _shadowDistance = default;
 	[SerializeField] bool _isFullscreen = default;
 	[SerializeField] Locale _currentLocale = default;
+	[SerializeField] bool _isCaptioningEnabled = default;
 	public float MasterVolume => _masterVolume;
 	public float MusicVolume => _musicVolume;
 	public float SfxVolume => _sfxVolume;
 	public int ResolutionsIndex => _resolutionsIndex;
 	public int AntiAliasingIndex => _antiAliasingIndex;
 	public float ShadowDistance => _shadowDistance;
-	public bool IsFullscreen => _isFullscreen;
+	public bool IsFullscreen => _isFullscreen;	
 	public Locale CurrentLocale => _currentLocale;
+	public bool IsCaptioningEnabled => _isCaptioningEnabled;
 	public void SaveAudioSettings(float newMusicVolume, float newSfxVolume, float newMasterVolume)
 	{
 		_masterVolume = newMasterVolume;
@@ -33,9 +35,10 @@ public class SettingsSO : ScriptableObject
 		_shadowDistance = newShadowDistance;
 		_isFullscreen = fullscreenState;
 	}
-	public void SaveLanguageSettings(Locale local)
+	public void SaveLanguageSettings(Locale local, bool isCaptioningEnabled)
 	{
 		_currentLocale = local;
+		_isCaptioningEnabled = isCaptioningEnabled;
 	}
 	public SettingsSO() { }
 	public void LoadSavedSettings(Save savedFile)
@@ -48,5 +51,6 @@ public class SettingsSO : ScriptableObject
 		_shadowDistance = savedFile._shadowDistance;
 		_isFullscreen = savedFile._isFullscreen;
 		_currentLocale = savedFile._currentLocale;
+		_isCaptioningEnabled = savedFile._isCaptioningEnabled;
 	}
 }

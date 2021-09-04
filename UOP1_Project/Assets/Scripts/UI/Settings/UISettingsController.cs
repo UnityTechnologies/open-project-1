@@ -17,6 +17,7 @@ public enum SettingFieldType
 	AntiAliasing,
 	ShadowQuality,
 	Volume_Master,
+	Captioning
 
 }
 [System.Serializable]
@@ -89,7 +90,8 @@ public class UISettingsController : MonoBehaviour
 		switch (settingType)
 		{
 			case SettingsType.Language:
-				_currentSettings.SaveLanguageSettings(_currentSettings.CurrentLocale);
+				_currentSettings.SaveLanguageSettings(_currentSettings.CurrentLocale, _currentSettings.IsCaptioningEnabled);
+				_languageComponent.Setup(_currentSettings.IsCaptioningEnabled);
 				break;
 			case SettingsType.Graphics:
 				_graphicsComponent.Setup();
@@ -109,7 +111,6 @@ public class UISettingsController : MonoBehaviour
 	}
 	void SwitchTab(float orientation)
 	{
-
 		if (orientation != 0)
 		{
 			bool isLeft = orientation < 0;
@@ -131,9 +132,9 @@ public class UISettingsController : MonoBehaviour
 			OpenSetting(_settingTabsList[initialIndex]);
 		}
 	}
-	public void SaveLaguageSettings(Locale local)
+	public void SaveLaguageSettings(Locale local, bool isCaptioningEnabled)
 	{
-		_currentSettings.SaveLanguageSettings(local);
+		_currentSettings.SaveLanguageSettings(local, isCaptioningEnabled);
 		SaveSettingsEvent.RaiseEvent();
 	}
 	public void SaveGraphicsSettings(int newResolutionsIndex, int newAntiAliasingIndex, float newShadowDistance, bool fullscreenState)

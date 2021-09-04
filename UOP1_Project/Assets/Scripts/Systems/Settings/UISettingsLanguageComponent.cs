@@ -17,12 +17,17 @@ public class UISettingsLanguageComponent : MonoBehaviour
 	AsyncOperationHandle m_InitializeOperation;
 	List<string> languageList = new List<string>();
 
-	public event UnityAction<Locale> _save = delegate { };
+	public event UnityAction<Locale, bool> _save = delegate { };
 	private int _currentSelectedOption = 0;
 	private int _savedSelectedOption = default;
 
+	[SerializeField] private UISettingItemFiller _captioningField = default;
+	private bool _isCaptioningEnabled = default;
+	private bool _savedIsCaptioningEnabled = default;
+
 	[SerializeField] private UIGenericButton _saveButton;
 	[SerializeField] private UIGenericButton _resetButton;
+
 
 	void OnEnable()
 	{
@@ -37,8 +42,12 @@ public class UISettingsLanguageComponent : MonoBehaviour
 		}
 		_saveButton.Clicked += SaveSettings;
 		_resetButton.Clicked += ResetSettings;
+
 		_languageField._nextOption += NextOption;
 		_languageField._previousOption += PreviousOption;
+
+		_captioningField._nextOption += NextIsCaptioningEnabledState;
+		_captioningField._previousOption += PreviousIsCaptioningEnabledState;
 	}
 	private void OnDisable()
 	{
@@ -50,6 +59,14 @@ public class UISettingsLanguageComponent : MonoBehaviour
 		_languageField._previousOption -= PreviousOption;
 		LocalizationSettings.SelectedLocaleChanged -= LocalizationSettings_SelectedLocaleChanged;
 	}
+
+	public void Setup(bool isCaptioningEnabled)
+	{
+		_isCaptioningEnabled = isCaptioningEnabled;
+		_savedIsCaptioningEnabled = _isCaptioningEnabled;
+
+		SetCaptioning();		
+	}	
 
 	void InitializeCompleted(AsyncOperationHandle obj)
 	{
@@ -109,12 +126,44 @@ public class UISettingsLanguageComponent : MonoBehaviour
 	{
 		Locale _currentLocale = LocalizationSettings.AvailableLocales.Locales[_currentSelectedOption];
 		_savedSelectedOption = _currentSelectedOption;
-		_save.Invoke(_currentLocale);
+		_savedIsCaptioningEnabled = _isCaptioningEnabled;
+		_save.Invoke(_currentLocale, _isCaptioningEnabled);
 	}
 	public void ResetSettings()
 	{
 		_currentSelectedOption = _savedSelectedOption;
 		OnSelectionChanged();
+
+		_isCaptioningEnabled = _savedIsCaptioningEnabled;		
+		OnCaptioningChange();
 	}
 
+	#region IsCaptioningEnabled
+	void NextIsCaptioningEnabledState()
+	{
+		_isCaptioningEnabled = true;
+		OnCaptioningChange();
+	}
+	void PreviousIsCaptioningEnabledState()
+	{
+		_isCaptioningEnabled = false;
+		OnCaptioningChange();
+	}
+	void OnCaptioningChange()
+	{
+		SetCaptioning();
+	}
+
+	private void SetCaptioning()
+	{
+		if (_isCaptioningEnabled)
+		{
+			_captioningField.FillSettingField_Localized(2, 1, "On");
+		}
+		else
+		{
+			_captioningField.FillSettingField_Localized(2, 0, "Off");
+		}	
+	}
+	#endregion
 }
