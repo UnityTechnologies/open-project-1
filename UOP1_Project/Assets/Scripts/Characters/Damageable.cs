@@ -11,20 +11,19 @@ public class Damageable : MonoBehaviour
 
 
 	[Header("Broadcasting On")]
-	[SerializeField] private IntEventChannelSO _setHealthBar = default;
 	[SerializeField] private VoidEventChannelSO _updateHealthEvent = default;
 	[SerializeField] private VoidEventChannelSO _deathEvent = default;
+
 	[Header("Listening To")]
 	[SerializeField] private IntEventChannelSO _restoreHealth = default;
-	public DroppableRewardConfigSO DroppableRewardConfig => _droppableRewardSO;
 
+	public DroppableRewardConfigSO DroppableRewardConfig => _droppableRewardSO;
 
 	public bool GetHit { get; set; }
 	public bool IsDead { get; set; }
 
 	public GetHitEffectConfigSO GetHitEffectConfig => _getHitEffectSO;
 	public Renderer MainMeshRenderer => _mainMeshRenderer;
-
 
 	public UnityAction OnDie;
 
@@ -41,24 +40,24 @@ public class Damageable : MonoBehaviour
 			_updateHealthEvent.RaiseEvent();
 
 		}
-
 	}
+
 	private void OnEnable()
 	{
 		if (_restoreHealth != null)
 		{
 			_restoreHealth.OnEventRaised += restoreHealth;
-
 		}
 	}
+
 	private void OnDisable()
 	{
 		if (_restoreHealth != null)
 		{
 			_restoreHealth.OnEventRaised -= restoreHealth;
-
 		}
 	}
+
 	public void Kill()
 	{
 		ReceiveAnAttack(_currentHealthSO.CurrentHealth);
@@ -73,9 +72,10 @@ public class Damageable : MonoBehaviour
 		if (_updateHealthEvent != null)
 		{
 			_updateHealthEvent.RaiseEvent();
-
 		}
+
 		GetHit = true;
+
 		if (_currentHealthSO.CurrentHealth <= 0)
 		{
 			IsDead = true;
@@ -96,6 +96,7 @@ public class Damageable : MonoBehaviour
 		}
 		IsDead = false;
 	}
+
 	public void restoreHealth(int healthToAdd)
 	{
 		if (IsDead)
