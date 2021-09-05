@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Timeline;
-using UnityEngine.Localization;
-using UnityEditor.Localization;
-using UnityEditor;
 using UnityEngine.Localization.Settings;
 using UnityEngine.Localization.Metadata;
+using UnityEngine.Localization;
+
+#if UNITY_EDITOR
+using UnityEditor.Localization;
+using UnityEditor;
+#endif
 
 public enum DialogueType
 {
@@ -38,6 +40,7 @@ public class DialogueDataSO : ScriptableObject
 	[SerializeField] private VoidEventChannelSO _endOfDialogueEvent = default;
 	public VoidEventChannelSO EndOfDialogueEvent => _endOfDialogueEvent;
 	public List<Line> _Lines => _lines;
+
 	public DialogueType DialogueType
 	{
 		get { return _dialogueType; }
@@ -49,6 +52,7 @@ public class DialogueDataSO : ScriptableObject
 		//_actor = newActor;
 
 	}
+
 	public DialogueDataSO()
 	{
 	}
@@ -70,6 +74,7 @@ public class DialogueDataSO : ScriptableObject
 			_dialogueType = dialogue.DialogueType;
 		*/
 	}
+
 	public void FinishDialogue()
 	{
 		if (EndOfDialogueEvent != null)
@@ -102,10 +107,7 @@ public class DialogueDataSO : ScriptableObject
 				_lines.Add(_dialogueLine);
 
 		} while (_dialogueLine.TextList != null);
-
-
 	}
-
 
 	/// <summary>
 	/// This function is only useful for the Questline Tool in Editor to remove a Questline
