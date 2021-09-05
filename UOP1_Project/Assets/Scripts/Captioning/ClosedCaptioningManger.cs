@@ -1,5 +1,6 @@
 ﻿using Assets.Scripts.Captioning.CaptionEmitters;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Assets.Scripts.Audio
@@ -22,11 +23,15 @@ namespace Assets.Scripts.Audio
 		[SerializeField] private float _spaceBetweenCaptions = 0.5f;
 
 		private bool _isCaptioningEnabled = default;
+		private List<CaptionEmitter> captionEmmiters = new List<CaptionEmitter>();
+		private UnityEngine.Camera MainCamera;		
 
 		private void Awake()
 		{
 			_pool.Prewarm(_initialSize);
 			_pool.SetParent(this.transform);
+
+			MainCamera = GameObject.Find("Main Camera").GetComponent<UnityEngine.Camera>();
 		}
 
 		private void OnEnable()
@@ -39,6 +44,17 @@ namespace Assets.Scripts.Audio
 		{
 			_SFXEventChannel.OnAudioCuePlayRequested -= DisplayCaption;
 			_changeCaptioningEventChannel.OnEventRaised -= OnChangeCaptioning;
+		}
+
+		private void Update()
+		{
+			if (_isCaptioningEnabled && captionEmmiters.Count > 0)
+			{
+				for (int i = 0; i < captionEmmiters.Count; i++)
+				{
+					captionEmmiters[i].GetOffscreentTargetIndicator().UpdateTargetIndicator();
+				}
+			}
 		}
 
 		public AudioCueKey DisplayCaption(AudioCueSO audioCue, AudioConfigurationSO settings, Vector3 position = default)
@@ -59,6 +75,8 @@ namespace Assets.Scripts.Audio
 						{
 							position.y += i* _spaceBetweenCaptions;
 							captionEmitterArray[i].Display(currentAudioCaption, position);
+							AddCaptionToOffscreenIndicatorWatchList(captionEmitterArray[i]);
+
 							StartCoroutine(CleanEmitter(captionEmitterArray[i], currentAudioCaption.Duration));
 						}
 					}
@@ -71,12 +89,25 @@ namespace Assets.Scripts.Audio
 		private IEnumerator CleanEmitter(CaptionEmitter captionEmitter, float duration)
 		{
 			yield return new WaitForSeconds(duration);
+
+			RemoveCaptionFromOffscreenIndicatorWatchList(captionEmitter);
 			_pool.Return(captionEmitter);
 		}
 
 		private void OnChangeCaptioning(bool isCaptioningEnabled)
 		{
 			_isCaptioningEnabled = isCaptioningEnabled;
+		}
+
+		private void AddCaptionToOffscreenIndicatorWatchList(CaptionEmitter target)
+		{
+			target.GetOffscreentTargetIndicator().InitialiseTargetIndicator(target.gameObject, MainCamera);
+			captionEmmiters.Add(target);
+		}
+
+		private void RemoveCaptionFromOffscreenIndicatorWatchList(CaptionEmitter target)
+		{
+			captionEmmiters.Remove(target);
 		}
 	}
 }
