@@ -12,10 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 08e854ccd8588da4694c3ae040c10c5e, type: 3}
   m_Name: SFX_BardHareSingShort
   m_EditorClassIdentifier: 
-  onomatopoeia: La
   looping: 0
   _audioClipGroups:
-  - sequenceMode: 1
+  - onomatopeia:
+      SoundText:
+        m_TableReference:
+          m_TableCollectionName: GUID:44ef248ef81542e478621886bf8796dc
+        m_TableEntryReference:
+          m_KeyId: 108549201920
+          m_Key: 
+        m_FallbackState: 0
+        m_WaitForCompletion: 1
+      duration: 1
+    sequenceMode: 1
     audioClips:
     - {fileID: 8300000, guid: 1cda866e39effa749bc415735c5093fc, type: 3}
     - {fileID: 8300000, guid: 93031fe83e7902e41aa708a3db00325e, type: 3}
