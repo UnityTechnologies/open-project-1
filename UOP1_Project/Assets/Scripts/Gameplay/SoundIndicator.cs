@@ -12,10 +12,12 @@ public class SoundIndicator : MonoBehaviour
 	[SerializeField] private GameObject offScreenIndicator;
 	[SerializeField] private RectTransform indicatorGroup;
 	[SerializeField] private Transform indicatorOnScreenGroup;
-
+	private GameObject player;
 	public Dictionary<int,Tuple<AudioCueSO,Vector3,bool,GameObject>> screenSounds = new Dictionary<int, Tuple<AudioCueSO, Vector3, bool, GameObject>>();//bool true = onScreen
 
+	public float maxDistance = 10f;
 	private  int n = 0;
+
 
 
 
@@ -28,7 +30,7 @@ public class SoundIndicator : MonoBehaviour
 	private void Start()
 	{
 		indicatorOnScreenGroup = new GameObject("IndicatorGroup").transform;
-		
+		player = GameObject.FindGameObjectWithTag("Player");
 	}
 	private void Update()
 	{
@@ -57,7 +59,8 @@ public class SoundIndicator : MonoBehaviour
 					SpawnOffScreenIndicator(n);
 
 			}
-			StartCoroutine(RemoveSound(n, audioCue.GetOnomatopeia()[0].duration));
+			if (!audioCue.looping)// => looping sound will be shown forever
+				StartCoroutine(RemoveSound(n, audioCue.GetOnomatopeia()[0].duration));
 
 			n++;
 			return true;
@@ -69,7 +72,6 @@ public class SoundIndicator : MonoBehaviour
 		yield return new WaitForSeconds(duration);
 			Destroy(screenSounds[i].Item4);
 				screenSounds.Remove(i);
-			
 
 	}//Remove sound from a list of sounds
 	#region HelpingFunctions
@@ -137,10 +139,24 @@ public class SoundIndicator : MonoBehaviour
 		}
 		
 		return new Vector2(x,y); 
-	}
-	private void OnOffScreenCheck(int i)
+	}//return postion on screen
+	private void OnOffScreenCheck(int i)//This chceck and recalculate position of one sound
 	{
-
+		//Distance Feature
+		if (Vector3.Distance(player.transform.position,screenSounds[i].Item2) > maxDistance && screenSounds[i].Item4 != null)
+		{
+			RemoveScreenIndicator(i);
+			return;
+		}
+		else if (Vector3.Distance(player.transform.position, screenSounds[i].Item2) <= maxDistance && screenSounds[i].Item4 == null)
+		{
+			if (OnScreen(screenSounds[i].Item2))
+				SpawnOnScreenIndicator(i);
+			else
+				SpawnOffScreenIndicator(i);
+			return;
+		}
+			
 		if (OnScreen(screenSounds[i].Item2))
 		{
 			if (screenSounds[i].Item3 == false)//Change from Off to On screen indicator
@@ -170,6 +186,7 @@ public class SoundIndicator : MonoBehaviour
 	{
 		var objectInd = Instantiate(onScreenIndicator, screenSounds[index].Item2, Quaternion.identity);
 
+		//Code bellow just find all onomatopeias and add them to 1 string
 		Onomatopeia[] onomatopeias= screenSounds[index].Item1.GetOnomatopeia();
 		string temp = "";
 		for (int i = 0; i < onomatopeias.Length; i++)
@@ -189,6 +206,7 @@ public class SoundIndicator : MonoBehaviour
 		GameObject temp = Instantiate(offScreenIndicator);
 		temp.transform.SetParent(indicatorGroup,false);
 
+		//Code bellow just find all onomatopeias and add them to 1 string
 		Onomatopeia[] onomatopeias = screenSounds[index].Item1.GetOnomatopeia();
 		string tempString = "";
 		for (int i = 0; i < onomatopeias.Length; i++)
@@ -202,14 +220,14 @@ public class SoundIndicator : MonoBehaviour
 		temp.GetComponent<RectTransform>().anchoredPosition = CalculatePostionOfOffScreenIndicator(screenSounds[index].Item2);
 		screenSounds[index] = new Tuple<AudioCueSO, Vector3, bool, GameObject>(screenSounds[index].Item1, screenSounds[index].Item2, false,temp);
 		return temp;
-	}
+	}// this spawn an InCanvasIndicator
 
 	private void RemoveScreenIndicator(int index)
 	{
 		Destroy(screenSounds[index].Item4);
 		screenSounds[index] = new Tuple<AudioCueSO, Vector3, bool, GameObject>(screenSounds[index].Item1, screenSounds[index].Item2, screenSounds[index].Item3, null);
 
-	}//this despawn InWorldIndicator
+	}//this despawn any Indicator
 
 	private void RecalculateSounds()
 	{
@@ -219,7 +237,7 @@ public class SoundIndicator : MonoBehaviour
 			OnOffScreenCheck(keys.ElementAt(i));
 		}
 
-	}
+	}//This function is called every frame and it loops through all sounds currently playinh and recalculate postion on them
 
 }
 
