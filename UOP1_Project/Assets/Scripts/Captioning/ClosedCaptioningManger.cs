@@ -19,10 +19,12 @@ namespace Assets.Scripts.Audio
 		[SerializeField] private BoolEventChannelSO _changeCaptioningEventChannel = default;
 
 		[Header("Captions display settings")]
+		[Tooltip("Settings object")]
+		[SerializeField] private SettingsSO _currentSettings = default;
 		[Tooltip("Space between captions if many available for same source")]
 		[SerializeField] private float _spaceBetweenCaptions = 0.5f;
 
-		private bool _isCaptioningEnabled = default;
+		private bool _isCaptioningEnabled => _currentSettings.IsCaptioningEnabled;
 		private List<CaptionEmitter> captionEmmiters = new List<CaptionEmitter>();
 		private UnityEngine.Camera MainCamera;		
 
@@ -30,20 +32,16 @@ namespace Assets.Scripts.Audio
 		{
 			_pool.Prewarm(_initialSize);
 			_pool.SetParent(this.transform);
-
-			MainCamera = GameObject.Find("Main Camera").GetComponent<UnityEngine.Camera>();
 		}
 
 		private void OnEnable()
 		{
 			_SFXEventChannel.OnAudioCuePlayRequested += DisplayCaption;
-			_changeCaptioningEventChannel.OnEventRaised += OnChangeCaptioning;
 		}
 
 		private void OnDestroy()
 		{
 			_SFXEventChannel.OnAudioCuePlayRequested -= DisplayCaption;
-			_changeCaptioningEventChannel.OnEventRaised -= OnChangeCaptioning;
 		}
 
 		private void Update()
@@ -94,13 +92,13 @@ namespace Assets.Scripts.Audio
 			_pool.Return(captionEmitter);
 		}
 
-		private void OnChangeCaptioning(bool isCaptioningEnabled)
-		{
-			_isCaptioningEnabled = isCaptioningEnabled;
-		}
-
 		private void AddCaptionToOffscreenIndicatorWatchList(CaptionEmitter target)
 		{
+			if (MainCamera == null)
+			{
+				MainCamera = GameObject.Find("Main Camera").GetComponent<UnityEngine.Camera>();
+			}
+
 			target.GetOffscreentTargetIndicator().InitialiseTargetIndicator(target.gameObject, MainCamera);
 			captionEmmiters.Add(target);
 		}

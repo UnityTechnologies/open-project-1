@@ -52,7 +52,6 @@ public class UISettingsController : MonoBehaviour
 	private SettingsType _selectedTab = SettingsType.Audio;
 	[SerializeField] private InputReader _inputReader = default;
 	[SerializeField] private VoidEventChannelSO SaveSettingsEvent = default;
-	[SerializeField] private BoolEventChannelSO _changeCaptioningEventChannel = default;
 	public UnityAction Closed;
 
 	private void OnEnable()
@@ -137,7 +136,6 @@ public class UISettingsController : MonoBehaviour
 	public void SaveLaguageSettings(Locale local, bool isCaptioningEnabled)
 	{
 		_currentSettings.SaveLanguageSettings(local, isCaptioningEnabled);
-		_changeCaptioningEventChannel.RaiseEvent(isCaptioningEnabled);
 		SaveSettingsEvent.RaiseEvent();
 	}
 	public void SaveGraphicsSettings(int newResolutionsIndex, int newAntiAliasingIndex, float newShadowDistance, bool fullscreenState)

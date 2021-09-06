@@ -14,7 +14,6 @@ public class SettingsSystem : MonoBehaviour
 	[SerializeField] private FloatEventChannelSO _changeMasterVolumeEventChannel = default;
 	[SerializeField] private FloatEventChannelSO _changeSFXVolumeEventChannel = default;
 	[SerializeField] private FloatEventChannelSO _changeMusicVolumeEventChannel = default;
-	[SerializeField] private BoolEventChannelSO _changeCaptioningEventChannel = default;
 
 	private void Awake()
 	{
@@ -46,7 +45,6 @@ public class SettingsSystem : MonoBehaviour
 		_urpAsset.msaaSampleCount = _currentSettings.AntiAliasingIndex;
 
 		LocalizationSettings.SelectedLocale = _currentSettings.CurrentLocale;
-		_changeCaptioningEventChannel.RaiseEvent(_currentSettings.IsCaptioningEnabled);
 	}
 	void SaveSettings()
 	{
