@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Playables;
 
 public enum InteractionType { None = 0, PickUp, Cook, Talk };
 
@@ -20,18 +21,21 @@ public class InteractionManager : MonoBehaviour
 
 	[Header("Listening to")]
 	[SerializeField] private VoidEventChannelSO _onInteractionEnded = default;
+	[SerializeField] private PlayableDirectorChannelSO _onCutsceneStart = default;
+
 
 	private void OnEnable()
 	{
 		_inputReader.interactEvent += OnInteractionButtonPress;
 		_onInteractionEnded.OnEventRaised += OnInteractionEnd;
+		_onCutsceneStart.OnEventRaised += ResetPotentialInteractions;
 	}
 
 	private void OnDisable()
 	{
 		_inputReader.interactEvent -= OnInteractionButtonPress;
 		_onInteractionEnded.OnEventRaised -= OnInteractionEnd;
-		ResetPotentialInteractions();
+		_onCutsceneStart.OnEventRaised -= ResetPotentialInteractions;
 	}
 
 	// Called mid-way through the AnimationClip of collecting
@@ -71,7 +75,6 @@ public class InteractionManager : MonoBehaviour
 			case InteractionType.Talk:
 				if (_startTalking != null)
 				{
-					Debug.Log("_startTalking");
 					_potentialInteractions.First.Value.interactableObject.GetComponent<StepController>().InteractWithCharacter();
 					_inputReader.EnableDialogueInput();
 				}
@@ -153,7 +156,7 @@ public class InteractionManager : MonoBehaviour
 		_inputReader.EnableGameplayInput();
 	}
 
-	private void ResetPotentialInteractions()
+	private void ResetPotentialInteractions(PlayableDirector _playableDirector)
 	{
 		_potentialInteractions.Clear();
 		RequestUpdateUI(_potentialInteractions.Count > 0);

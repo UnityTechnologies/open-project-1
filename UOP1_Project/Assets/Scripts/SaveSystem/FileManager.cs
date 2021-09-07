@@ -61,7 +61,7 @@ public static class FileManager
 		}
 		catch (Exception e)
 		{
-			//Debug.LogError($"Failed to move file from {fullPath} to {newFullPath} with exception {e}");
+			Debug.LogError($"Failed to move file from {fullPath} to {newFullPath} with exception {e}");
 			return false;
 		}
 

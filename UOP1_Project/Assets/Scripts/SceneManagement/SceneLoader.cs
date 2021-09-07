@@ -93,7 +93,7 @@ public class SceneLoader : MonoBehaviour
 			|| !_gameplayManagerSceneInstance.Scene.isLoaded)
 		{
 			_gameplayManagerLoadingOpHandle = _gameplayScene.sceneReference.LoadSceneAsync(LoadSceneMode.Additive, true);
-			_gameplayManagerLoadingOpHandle.Completed += OnGameplayMangersLoaded;
+			_gameplayManagerLoadingOpHandle.Completed += OnGameplayManagersLoaded;
 		}
 		else
 		{
@@ -101,7 +101,7 @@ public class SceneLoader : MonoBehaviour
 		}
 	}
 
-	private void OnGameplayMangersLoaded(AsyncOperationHandle<SceneInstance> obj)
+	private void OnGameplayManagersLoaded(AsyncOperationHandle<SceneInstance> obj)
 	{
 		_gameplayManagerSceneInstance = _gameplayManagerLoadingOpHandle.Result;
 

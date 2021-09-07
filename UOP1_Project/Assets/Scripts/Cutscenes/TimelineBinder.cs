@@ -21,10 +21,10 @@ public class TimelineBinder : MonoBehaviour
 	private void BindObjects(Transform playerTransform)
 	{
 		_objectsToBind = new GameObject[objectsToBindTags.Length];
-		for (int i=0; i< objectsToBindTags.Length; ++i)
+		for (int i = 0; i < objectsToBindTags.Length; ++i)
 		{
 			_objectsToBind[i] = GameObject.FindGameObjectWithTag(objectsToBindTags[i]);
-			Debug.Log(objectsToBindTags[i]);
+			//	Debug.Log(objectsToBindTags[i]);
 		}
 
 		foreach (var playableAssetOutput in _playableDirector.playableAsset.outputs)

@@ -21,11 +21,13 @@ public class GameStateSO : ScriptableObject
 	[SerializeField] BoolEventChannelSO _setAggroEvent = default;
 	public GameState CurrentGameState => _currentGameState;
 	List<Transform> _enemiesInCombat = new List<Transform>();
+
 	private void OnEnable()
 	{
 		_enemiesInCombat = new List<Transform>();
 
 	}
+
 	public void ChangeStateToCombat(Transform enemy)
 	{
 		if (!_enemiesInCombat.Exists(o => o == enemy))
@@ -35,6 +37,7 @@ public class GameStateSO : ScriptableObject
 
 		UpdateGameState(GameState.Combat);
 	}
+
 	public void ChangeStateFromCombat(Transform enemy)
 	{
 
@@ -53,6 +56,7 @@ public class GameStateSO : ScriptableObject
 			}
 		}
 	}
+
 	public void UpdateGameState(GameState newGameState)
 	{
 
@@ -71,6 +75,7 @@ public class GameStateSO : ScriptableObject
 			_currentGameState = newGameState;
 		}
 	}
+
 	public void ResetToPreviousGameState()
 	{
 		if (_previousGameState != CurrentGameState)
