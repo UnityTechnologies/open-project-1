@@ -6,10 +6,8 @@ using UnityEngine.Localization.Settings;
 
 public class UISettingFieldsFiller : MonoBehaviour
 {
-	[SerializeField]
-	private UISettingItemFiller[] _settingfieldsList = default;
-	[SerializeField]
-	private InputReader _inputReader = default;
+	[SerializeField] private UISettingItemFiller[] _settingfieldsList = default;
+
 	public void FillFields(List<SettingField> settingItems)
 	{
 		for (int i = 0; i < _settingfieldsList.Length; i++)
@@ -26,7 +24,6 @@ public class UISettingFieldsFiller : MonoBehaviour
 		}
 
 	}
-
 
 	public void SetField(SettingField field, UISettingItemFiller uiField)
 	{
@@ -77,42 +74,7 @@ public class UISettingFieldsFiller : MonoBehaviour
 
 
 	}
-	string GetQualityLevelTitle()
-	{
-		string title = "";
-		switch (QualitySettings.GetQualityLevel())
-		{
-
-			case (int)QualityLevel.Beautiful:
-				title = QualityLevel.Beautiful.ToString();
-				break;
-			case (int)QualityLevel.Fantastic:
-				title = QualityLevel.Fantastic.ToString();
-				break;
-			case (int)QualityLevel.Fast:
-				title = QualityLevel.Fast.ToString();
-
-				break;
-			case (int)QualityLevel.Fastest:
-				title = QualityLevel.Fastest.ToString();
-
-				break;
-			case (int)QualityLevel.Good:
-				title = QualityLevel.Good.ToString();
-
-				break;
-			case (int)QualityLevel.Simple:
-				title = QualityLevel.Simple.ToString();
-
-				break;
-
-
-
-
-		}
-		return title;
-
-	}
+	
 	int IsFullscreen()
 	{
 		if (Screen.fullScreen)
@@ -123,17 +85,6 @@ public class UISettingFieldsFiller : MonoBehaviour
 		{
 			return 1;
 		}
-
-	}
-	int _selectedFieldIndex;
-
-	void NextField()
-	{
-
-	}
-	void PreviousField()
-	{
-
 
 	}
 }

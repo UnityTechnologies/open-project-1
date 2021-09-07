@@ -178,7 +178,7 @@ public class InputReader : ScriptableObject, GameInput.IGameplayActions, GameInp
 
 	public void OnAdvanceDialogue(InputAction.CallbackContext context)
 	{
-		Debug.Log("AdvanceDialogue");
+
 		if (context.phase == InputActionPhase.Performed)
 			advanceDialogueEvent.Invoke();
 	}

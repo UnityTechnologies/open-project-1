@@ -4,7 +4,7 @@ using UOP1.StateMachine.ScriptableObjects;
 using Moment = UOP1.StateMachine.StateAction.SpecificMoment;
 
 /// <summary>
-/// This Action handles horizontal movement while in the air, keeping momentum, simulating air resistance, and accelerating towards the desired speed.
+/// This Action handles updating the game state.
 /// </summary>
 [CreateAssetMenu(fileName = "ChangeGameState", menuName = "State Machines/Actions/Change GameState")]
 public class ChangeGameStateActionSO : StateActionSO
