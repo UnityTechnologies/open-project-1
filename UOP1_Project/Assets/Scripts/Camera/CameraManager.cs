@@ -40,7 +40,7 @@ public class CameraManager : MonoBehaviour
 		_frameObjectChannel.OnEventRaised += OnFrameObjectEvent;
 		_camShakeEvent.OnEventRaised += impulseSource.GenerateImpulse;
 
-		_cameraTransformAnchor.Transform = mainCamera.transform;
+		_cameraTransformAnchor.Value = mainCamera.transform;
 	}
 
 	private void OnDisable()

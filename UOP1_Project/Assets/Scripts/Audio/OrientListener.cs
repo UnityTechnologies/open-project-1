@@ -9,6 +9,6 @@ public class OrientListener : MonoBehaviour
     void LateUpdate()
     {
 		if(_cameraTransform.isSet)
-	        transform.forward = _cameraTransform.Transform.forward;
+	        transform.forward = _cameraTransform.Value.forward;
     }
 }

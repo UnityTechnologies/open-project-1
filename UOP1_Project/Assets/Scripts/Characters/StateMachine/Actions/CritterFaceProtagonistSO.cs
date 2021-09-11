@@ -23,7 +23,7 @@ public class CritterFaceProtagonist : StateAction
 	{
 		if (_protagonist.isSet)
 		{
-			Vector3 relativePos = _protagonist.Transform.position - _actor.position;
+			Vector3 relativePos = _protagonist.Value.position - _actor.position;
 			relativePos.y = 0f; // Force rotation to be only on Y axis.
 
 			Quaternion rotation = Quaternion.LookRotation(relativePos);

@@ -59,13 +59,7 @@ public class Protagonist : MonoBehaviour
 
 	private void Update()
 	{
-		GroundCheck();
 		RecalculateMovement();
-	}
-
-	private void GroundCheck()
-	{
-
 	}
 
 	private void RecalculateMovement()
@@ -76,9 +70,9 @@ public class Protagonist : MonoBehaviour
 		if (gameplayCameraTransform.isSet)
 		{
 			//Get the two axes from the camera and flatten them on the XZ plane
-			Vector3 cameraForward = gameplayCameraTransform.Transform.forward;
+			Vector3 cameraForward = gameplayCameraTransform.Value.forward;
 			cameraForward.y = 0f;
-			Vector3 cameraRight = gameplayCameraTransform.Transform.right;
+			Vector3 cameraRight = gameplayCameraTransform.Value.right;
 			cameraRight.y = 0f;
 
 			//Use the two axes, modulated by the corresponding inputs, and construct the final vector

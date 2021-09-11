@@ -17,7 +17,7 @@ public class SpawnSystem : MonoBehaviour
 	private Transform _defaultSpawnPoint;
 
 	[Header("Scene Ready Event")]
-	[SerializeField] private VoidEventChannelSO _OnSceneReady = default; //Raised when the scene is loaded and set active
+	[SerializeField] private VoidEventChannelSO _onSceneReady = default; //Raised by SceneLoader when the scene is set to active
 
 	private void Awake()
 	{
@@ -27,12 +27,12 @@ public class SpawnSystem : MonoBehaviour
 
 	private void OnEnable()
 	{
-		_OnSceneReady.OnEventRaised += SpawnPlayer;
+		_onSceneReady.OnEventRaised += SpawnPlayer;
 	}
 
 	private void OnDisable()
 	{
-		_OnSceneReady.OnEventRaised -= SpawnPlayer;
+		_onSceneReady.OnEventRaised -= SpawnPlayer;
 	}
 
 	private Transform GetSpawnLocation()
@@ -55,9 +55,6 @@ public class SpawnSystem : MonoBehaviour
 
 	private Protagonist InstantiatePlayer(Protagonist playerPrefab, Transform spawnLocation)
 	{
-		if (playerPrefab == null)
-			throw new Exception("Player Prefab can't be null.");
-
 		Protagonist playerInstance = Instantiate(playerPrefab, spawnLocation.position, spawnLocation.rotation);
 
 		return playerInstance;
@@ -68,7 +65,7 @@ public class SpawnSystem : MonoBehaviour
 		Protagonist playerInstance = InstantiatePlayer(_playerPrefab, GetSpawnLocation());
 
 		_playerInstantiatedChannel.RaiseEvent(playerInstance.transform); // The CameraSystem will pick this up to frame the player
-		_playerTransformAnchor.Transform = playerInstance.transform;
+		_playerTransformAnchor.Value = playerInstance.transform;
 
 		//TODO: Probably move this to the GameManager once it's up and running
 		_inputReader.EnableGameplayInput();

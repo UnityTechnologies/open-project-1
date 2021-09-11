@@ -23,7 +23,7 @@ public class AudioCueEventChannelSO : EventChannelBaseSO
 		}
 		else
 		{
-			Debug.LogWarning("An AudioCue play event was requested, but nobody picked it up. " +
+			Debug.LogWarning("An AudioCue play event was requested  for " + audioCue.name +", but nobody picked it up. " +
 				"Check why there is no AudioManager already loaded, " +
 				"and make sure it's listening on this AudioCue Event channel.");
 		}
