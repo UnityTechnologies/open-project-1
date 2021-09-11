@@ -64,8 +64,8 @@ public class SpawnSystem : MonoBehaviour
 	{
 		Protagonist playerInstance = InstantiatePlayer(_playerPrefab, GetSpawnLocation());
 
-		_playerInstantiatedChannel.RaiseEvent(playerInstance.transform); // The CameraSystem will pick this up to frame the player
-		_playerTransformAnchor.Value = playerInstance.transform;
+		_playerInstantiatedChannel.RaiseEvent(playerInstance.transform);
+		_playerTransformAnchor.Value = playerInstance.transform; //the CameraSystem will pick this up to frame the player
 
 		//TODO: Probably move this to the GameManager once it's up and running
 		_inputReader.EnableGameplayInput();

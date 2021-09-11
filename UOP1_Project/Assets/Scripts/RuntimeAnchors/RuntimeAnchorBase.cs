@@ -7,7 +7,7 @@ public class RuntimeAnchorBase<T> : DescriptionBaseSO where T : UnityEngine.Obje
 {
 	[HideInInspector] public bool isSet = false; // Any script can check if the transform is null before using it, by just checking this bool
 
-	public UnityAction AnchorProvided;
+	public UnityAction OnAnchorProvided;
 
 	private T _value;
 	public T Value
@@ -19,16 +19,16 @@ public class RuntimeAnchorBase<T> : DescriptionBaseSO where T : UnityEngine.Obje
 			isSet = _value != null;
 			
 			//Notify whoever is waiting for this anchor
-			if(AnchorProvided != null)
+			if(OnAnchorProvided != null)
 			{
-				AnchorProvided.Invoke();
-				Debug.Log(AnchorProvided.GetInvocationList()[0].Method.Name);
+				OnAnchorProvided.Invoke();
+				Debug.Log(OnAnchorProvided.GetInvocationList()[0].Method.Name);
 			}
 			
 		}
 	}
 
-	public void OnDisable()
+	private void OnDisable()
 	{
 		_value = null;
 		isSet = false;
