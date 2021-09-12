@@ -29,6 +29,8 @@ public class CameraManager : MonoBehaviour
 
 		_protagonistTransformAnchor.OnAnchorProvided += SetupProtagonistVirtualCamera;
 		_camShakeEvent.OnEventRaised += impulseSource.GenerateImpulse;
+
+		_cameraTransformAnchor.Value = mainCamera.transform;
 	}
 
 	private void OnDisable()
@@ -39,6 +41,8 @@ public class CameraManager : MonoBehaviour
 
 		_protagonistTransformAnchor.OnAnchorProvided -= SetupProtagonistVirtualCamera;
 		_camShakeEvent.OnEventRaised -= impulseSource.GenerateImpulse;
+
+		_cameraTransformAnchor.Value = null;
 	}
 
 	private void Start()
@@ -46,8 +50,6 @@ public class CameraManager : MonoBehaviour
 		//Setup the camera target if the protagonist is already available
 		if(_protagonistTransformAnchor.isSet)
 			SetupProtagonistVirtualCamera();
-
-		_cameraTransformAnchor.Value = mainCamera.transform;
 	}
 
 	private void OnEnableMouseControlCamera()

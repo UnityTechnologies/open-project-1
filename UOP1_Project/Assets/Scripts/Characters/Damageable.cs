@@ -31,7 +31,7 @@ public class Damageable : MonoBehaviour
 	{
 		if (_currentHealthSO == null)
 		{
-			_currentHealthSO = new HealthSO();
+			_currentHealthSO = ScriptableObject.CreateInstance<HealthSO>();
 			_currentHealthSO.SetMaxHealth(_healthConfigSO.MaxHealth);
 			_currentHealthSO.SetCurrentHealth(_healthConfigSO.MaxHealth);
 		}

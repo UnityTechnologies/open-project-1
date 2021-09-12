@@ -5,11 +5,12 @@ using  UnityEngine.Events;
 
 public class RuntimeAnchorBase<T> : DescriptionBaseSO where T : UnityEngine.Object
 {
-	[HideInInspector] public bool isSet = false; // Any script can check if the transform is null before using it, by just checking this bool
-
 	public UnityAction OnAnchorProvided;
 
-	private T _value;
+	[Header("Debug")]
+	[ReadOnly] public bool isSet = false; // Any script can check if the transform is null before using it, by just checking this bool
+
+	[ReadOnly] [SerializeField] private T _value;
 	public T Value
 	{
 		get { return _value; }
@@ -18,11 +19,10 @@ public class RuntimeAnchorBase<T> : DescriptionBaseSO where T : UnityEngine.Obje
 			_value = value;
 			isSet = _value != null;
 			
-			//Notify whoever is waiting for this anchor
-			if(OnAnchorProvided != null)
+			if(OnAnchorProvided != null
+				&& isSet)
 			{
 				OnAnchorProvided.Invoke();
-				Debug.Log(OnAnchorProvided.GetInvocationList()[0].Method.Name);
 			}
 			
 		}

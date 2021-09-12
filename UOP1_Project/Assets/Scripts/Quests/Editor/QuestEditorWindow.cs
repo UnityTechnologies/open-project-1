@@ -22,11 +22,12 @@ public class QuestEditorWindow : EditorWindow
 	private int _idQuestSelected = default;
 	private int _idStepSelected = default;
 
-	[MenuItem("ChopChop/QuestEditorWindow")]
+	//Note: Hidden from the tools because it's not fully functional at the moment
+	//[MenuItem("ChopChop/Quest Editor")]
 	public static void ShowWindow()
 	{
 		QuestEditorWindow wnd = GetWindow<QuestEditorWindow>();
-		wnd.titleContent = new GUIContent("QuestEditorWindow");
+		wnd.titleContent = new GUIContent("Quest Editor");
 
 		// Sets a minimum size to the window.
 		wnd.minSize = new Vector2(250, 250);
@@ -38,7 +39,7 @@ public class QuestEditorWindow : EditorWindow
 		// Adds a title to the window.
 
 
-		window.titleContent = new GUIContent("QuestEditorWindow");
+		window.titleContent = new GUIContent("Quest Editor");
 
 		// Sets a minimum size to the window.
 		window.minSize = new Vector2(250, 250);

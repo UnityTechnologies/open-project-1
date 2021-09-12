@@ -5,19 +5,17 @@ using UnityEngine;
 public class SpawnSystem : MonoBehaviour
 {
 	[Header("Asset References")]
-
 	[SerializeField] private InputReader _inputReader = default;
 	[SerializeField] private Protagonist _playerPrefab = default;
 	[SerializeField] private TransformAnchor _playerTransformAnchor = default;
 	[SerializeField] private TransformEventChannelSO _playerInstantiatedChannel = default;
 	[SerializeField] private PathStorageSO _pathTaken = default;
 
-	[Header("Scene References")]
-	private LocationEntrance[] _spawnLocations;
-	private Transform _defaultSpawnPoint;
-
 	[Header("Scene Ready Event")]
 	[SerializeField] private VoidEventChannelSO _onSceneReady = default; //Raised by SceneLoader when the scene is set to active
+
+	private LocationEntrance[] _spawnLocations;
+	private Transform _defaultSpawnPoint;
 
 	private void Awake()
 	{
@@ -33,6 +31,8 @@ public class SpawnSystem : MonoBehaviour
 	private void OnDisable()
 	{
 		_onSceneReady.OnEventRaised -= SpawnPlayer;
+
+		_playerTransformAnchor.Value = null;
 	}
 
 	private Transform GetSpawnLocation()
