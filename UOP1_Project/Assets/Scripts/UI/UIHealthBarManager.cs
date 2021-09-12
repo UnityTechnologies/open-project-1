@@ -12,49 +12,27 @@ public class UIHealthBarManager : MonoBehaviour
 
 	private void OnEnable()
 	{
-		_deathEvent.OnEventRaised += SetHealthBar;
-		_updateHealthEvent.OnEventRaised += SetHeartImages;
-		_deathEvent.OnEventRaised += RegisterDeath;
+		_updateHealthEvent.OnEventRaised += UpdateHeartImages;
+		_deathEvent.OnEventRaised += UpdateHeartImages;
 
 		SetHealthBar();
 	}
 
 	private void OnDestroy()
 	{
-		_updateHealthEvent.OnEventRaised -= SetHeartImages;
-		_deathEvent.OnEventRaised -= SetHealthBar;
-		_deathEvent.OnEventRaised -= RegisterDeath;
+		_updateHealthEvent.OnEventRaised -= UpdateHeartImages;
+		_deathEvent.OnEventRaised -= UpdateHeartImages;
 	}
 
-	private void OnLevelWasLoaded(int level)
+	private void SetHealthBar()
 	{
-		SetHeartImages();
+		_currentHealth.SetMaxHealth(_healthConfig.InitialHealth);
+		_currentHealth.SetCurrentHealth(_healthConfig.InitialHealth);
+
+		UpdateHeartImages();
 	}
 
-	public void SetHealthBar()
-	{
-		_currentHealth.SetMaxHealth(_healthConfig.MaxHealth);
-		_currentHealth.SetCurrentHealth(_healthConfig.MaxHealth);
-
-		SetHeartImages();
-	}
-
-	public void InflictDamage(int _damage)
-	{
-		SetHeartImages();
-	}
-
-	public void RestoreHealth(int _healthToAdd)
-	{
-		SetHeartImages();
-	}
-
-	public void RegisterDeath()
-	{
-		SetHealthBar();
-	}
-
-	void SetHeartImages()
+	private void UpdateHeartImages()
 	{
 		int heartValue = _currentHealth.MaxHealth / _heartImages.Length;
 		int filledHeartCount = Mathf.FloorToInt((float)_currentHealth.CurrentHealth / heartValue);

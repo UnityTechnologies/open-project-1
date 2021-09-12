@@ -14,23 +14,31 @@ public class RuntimeAnchorBase<T> : DescriptionBaseSO where T : UnityEngine.Obje
 	public T Value
 	{
 		get { return _value; }
-		set
+	}
+
+	public void Provide(T value)
+	{
+		if(value == null)
 		{
-			_value = value;
-			isSet = _value != null;
-			
-			if(OnAnchorProvided != null
-				&& isSet)
-			{
-				OnAnchorProvided.Invoke();
-			}
-			
+			Debug.LogError("A null value was provided to the " + this.name + " runtime anchor.");
+			return;
 		}
+
+		_value = value;
+		isSet = true;
+		
+		if(OnAnchorProvided != null)
+			OnAnchorProvided.Invoke();
+	}
+
+	public void Unset()
+	{
+		_value = null;
+		isSet = false;
 	}
 
 	private void OnDisable()
 	{
-		_value = null;
-		isSet = false;
+		Unset();
 	}
 }

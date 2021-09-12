@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using TMPro;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Localization;
@@ -40,6 +37,7 @@ public class UISettingsLanguageComponent : MonoBehaviour
 		_languageField._nextOption += NextOption;
 		_languageField._previousOption += PreviousOption;
 	}
+
 	private void OnDisable()
 	{
 		ResetSettings();
@@ -76,7 +74,6 @@ public class UISettingsLanguageComponent : MonoBehaviour
 	void NextOption()
 	{
 		_currentSelectedOption++;
-		Debug.Log(_currentSelectedOption);
 		_currentSelectedOption = Mathf.Clamp(_currentSelectedOption, 0, languageList.Count - 1);
 		OnSelectionChanged();
 	}
@@ -86,6 +83,7 @@ public class UISettingsLanguageComponent : MonoBehaviour
 		_currentSelectedOption = Mathf.Clamp(_currentSelectedOption, 0, languageList.Count - 1);
 		OnSelectionChanged();
 	}
+
 	void OnSelectionChanged()
 	{
 		// Unsubscribe from SelectedLocaleChanged so we don't get an unnecessary callback from the change we are about to make.
@@ -105,12 +103,14 @@ public class UISettingsLanguageComponent : MonoBehaviour
 		_languageField.FillSettingField(languageList.Count, selectedIndex, languageList[selectedIndex]);
 
 	}
+
 	public void SaveSettings()
 	{
 		Locale _currentLocale = LocalizationSettings.AvailableLocales.Locales[_currentSelectedOption];
 		_savedSelectedOption = _currentSelectedOption;
 		_save.Invoke(_currentLocale);
 	}
+
 	public void ResetSettings()
 	{
 		_currentSelectedOption = _savedSelectedOption;

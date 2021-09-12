@@ -30,7 +30,7 @@ public class CameraManager : MonoBehaviour
 		_protagonistTransformAnchor.OnAnchorProvided += SetupProtagonistVirtualCamera;
 		_camShakeEvent.OnEventRaised += impulseSource.GenerateImpulse;
 
-		_cameraTransformAnchor.Value = mainCamera.transform;
+		_cameraTransformAnchor.Provide(mainCamera.transform);
 	}
 
 	private void OnDisable()
@@ -42,7 +42,7 @@ public class CameraManager : MonoBehaviour
 		_protagonistTransformAnchor.OnAnchorProvided -= SetupProtagonistVirtualCamera;
 		_camShakeEvent.OnEventRaised -= impulseSource.GenerateImpulse;
 
-		_cameraTransformAnchor.Value = null;
+		_cameraTransformAnchor.Unset();
 	}
 
 	private void Start()
