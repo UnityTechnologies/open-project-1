@@ -211,7 +211,6 @@ public class UISettingsGraphicsComponent : MonoBehaviour
 		{
 			_fullscreenField.FillSettingField_Localized(2, 0, "Off");
 		}
-
 	}
 	bool GetCurrentFullscreenState()
 	{

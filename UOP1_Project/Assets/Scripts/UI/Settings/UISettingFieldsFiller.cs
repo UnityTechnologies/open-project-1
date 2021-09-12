@@ -51,6 +51,9 @@ public class UISettingFieldsFiller : MonoBehaviour
 				else
 					selectedOption = "Off";
 				break;
+			case SettingFieldType.Captioning:
+				paginationCount = 2;	
+				break;
 			case SettingFieldType.ShadowDistance:
 
 				break;
