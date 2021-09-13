@@ -3,7 +3,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.Events;
 
 [CreateAssetMenu(fileName = "InputReader", menuName = "Game/Input Reader")]
-public class InputReader : DescriptionBaseSO, GameInput.IGameplayActions, GameInput.IDialoguesActions, GameInput.IMenusActions
+public class InputReader : DescriptionBaseSO, GameInput.IGameplayActions, GameInput.IDialoguesActions, GameInput.IMenusActions, GameInput.ICheatsActions
 {
 	[Space]
 	[SerializeField] private GameStateSO _gameStateManager;
@@ -43,6 +43,9 @@ public class InputReader : DescriptionBaseSO, GameInput.IGameplayActions, GameIn
 	public event UnityAction CloseInventoryEvent = delegate { }; // Used to bring up the inventory
 	public event UnityAction<float> TabSwitched = delegate { };
 
+	// Cheats (has effect only in the Editor)
+	public event UnityAction CheatMenuEvent = delegate { };
+
 	private GameInput _gameInput;
 
 	private void OnEnable()
@@ -54,7 +57,12 @@ public class InputReader : DescriptionBaseSO, GameInput.IGameplayActions, GameIn
 			_gameInput.Menus.SetCallbacks(this);
 			_gameInput.Gameplay.SetCallbacks(this);
 			_gameInput.Dialogues.SetCallbacks(this);
+			_gameInput.Cheats.SetCallbacks(this);
 		}
+
+#if UNITY_EDITOR
+	_gameInput.Cheats.Enable();
+#endif
 	}
 
 	private void OnDisable()
@@ -190,6 +198,12 @@ public class InputReader : DescriptionBaseSO, GameInput.IGameplayActions, GameIn
 	{
 		if (context.phase == InputActionPhase.Performed)
 			MenuUnpauseEvent.Invoke();
+	}
+
+	public void OnOpenCheatMenu(InputAction.CallbackContext context)
+	{
+		if (context.phase == InputActionPhase.Performed)
+			CheatMenuEvent.Invoke();
 	}
 
 	public void EnableDialogueInput()
