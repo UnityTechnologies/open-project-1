@@ -80,7 +80,7 @@ public class Damageable : MonoBehaviour
 	}
 
 	/// <summary>
-	/// Called by the StateMachine action RestoreHealth. Used to revive the stone critter.
+	/// Called by the StateMachine action ResetHealth. Used to revive the stone critter.
 	/// </summary>
 	public void ResetHealth()
 	{

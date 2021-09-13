@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace UOP1.StateMachine.ScriptableObjects
 {
-	public abstract class StateActionSO : ScriptableObject
+	public abstract class StateActionSO : DescriptionSMActionBaseSO
 	{
 		/// <summary>
 		/// Will create a new custom <see cref="StateAction"/> or return an existing one inside <paramref name="createdInstances"/>

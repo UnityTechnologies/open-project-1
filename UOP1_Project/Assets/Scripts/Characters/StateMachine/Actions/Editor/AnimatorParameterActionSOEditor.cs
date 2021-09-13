@@ -11,6 +11,9 @@ public class AnimatorParameterActionSOEditor : CustomBaseEditor
 
 		serializedObject.Update();
 
+		EditorGUILayout.PropertyField(serializedObject.FindProperty("description"));
+		EditorGUILayout.Space();
+
 		EditorGUILayout.PropertyField(serializedObject.FindProperty("whenToRun"));
 		EditorGUILayout.Space();
 
