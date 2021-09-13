@@ -1,16 +1,16 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Localization.Components;
 using UnityEngine.UI;
 using UnityEngine.Events;
+
 public class UIItemForAnimation : MonoBehaviour
 {
 	[SerializeField] private LocalizeSpriteEvent _bgLocalizedImage = default;
 	[SerializeField] private Image _itemPreviewImage = default;
 	[SerializeField] private Image _bgImage = default;
 
-	public UnityAction AnimationEnded;
+	public event UnityAction AnimationEnded;
+
 	public void SetItem(ItemSO item)
 	{
 		if (item.IsLocalized)
@@ -25,9 +25,9 @@ public class UIItemForAnimation : MonoBehaviour
 		}
 		_bgImage.color = item.ItemType.TypeColor;
 	}
+
 	public void OnAnimationEnded()
 	{
 		AnimationEnded.Invoke();
-
 	}
 }

@@ -36,24 +36,24 @@ public class Protagonist : MonoBehaviour
 	//Adds listeners for events being triggered in the InputReader script
 	private void OnEnable()
 	{
-		_inputReader.jumpEvent += OnJumpInitiated;
-		_inputReader.jumpCanceledEvent += OnJumpCanceled;
-		_inputReader.moveEvent += OnMove;
-		_inputReader.startedRunning += OnStartedRunning;
-		_inputReader.stoppedRunning += OnStoppedRunning;
-		_inputReader.attackEvent += OnStartedAttack;
+		_inputReader.JumpEvent += OnJumpInitiated;
+		_inputReader.JumpCanceledEvent += OnJumpCanceled;
+		_inputReader.MoveEvent += OnMove;
+		_inputReader.StartedRunning += OnStartedRunning;
+		_inputReader.StoppedRunning += OnStoppedRunning;
+		_inputReader.AttackEvent += OnStartedAttack;
 		//...
 	}
 
 	//Removes all listeners to the events coming from the InputReader script
 	private void OnDisable()
 	{
-		_inputReader.jumpEvent -= OnJumpInitiated;
-		_inputReader.jumpCanceledEvent -= OnJumpCanceled;
-		_inputReader.moveEvent -= OnMove;
-		_inputReader.startedRunning -= OnStartedRunning;
-		_inputReader.stoppedRunning -= OnStoppedRunning;
-		_inputReader.attackEvent -= OnStartedAttack;
+		_inputReader.JumpEvent -= OnJumpInitiated;
+		_inputReader.JumpCanceledEvent -= OnJumpCanceled;
+		_inputReader.MoveEvent -= OnMove;
+		_inputReader.StartedRunning -= OnStartedRunning;
+		_inputReader.StoppedRunning -= OnStoppedRunning;
+		_inputReader.AttackEvent -= OnStartedAttack;
 		//...
 	}
 

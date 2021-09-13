@@ -6,7 +6,8 @@ public class MusicPlayer : MonoBehaviour
 	[SerializeField] private AudioCueEventChannelSO _playMusicOn = default;
 	[SerializeField] private GameSceneSO _thisSceneSO = default;
 	[SerializeField] private AudioConfigurationSO _audioConfig = default;
-	[Header("Pause music configuration")]
+
+	[Header("Pause menu music")]
 	[SerializeField] private AudioCueSO _pauseMusic = default;
 	[SerializeField] private BoolEventChannelSO _onPauseOpened = default; 
 

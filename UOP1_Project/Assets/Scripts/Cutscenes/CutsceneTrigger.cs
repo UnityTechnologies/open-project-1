@@ -6,17 +6,17 @@ using UnityEngine.Playables;
 /// </summary>
 public class CutsceneTrigger : MonoBehaviour
 {
-	private PlayableDirector _playableDirector = default;
 	[SerializeField] private bool _playOnStart = default;
 	[SerializeField] private bool _playOnce = default;
 	[SerializeField] private QuestManagerSO _questManager = default;
 
-	[Header("Listening to channels")]
+	[Header("Listening to")]
 	[SerializeField] private VoidEventChannelSO _playSpeceficCutscene = default;
 
-	[Header("Broadcasting on channels")]
+	[Header("Broadcasting on")]
 	[SerializeField] private PlayableDirectorChannelSO _playCutsceneEvent = default;
 
+	private PlayableDirector _playableDirector = default;
 
 	private void Start()
 	{

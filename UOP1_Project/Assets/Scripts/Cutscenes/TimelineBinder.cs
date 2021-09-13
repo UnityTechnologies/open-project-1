@@ -5,14 +5,17 @@ public class TimelineBinder : MonoBehaviour
 {
 	[SerializeField] private PlayableDirector _playableDirector;
 	[SerializeField] private GameObject[] _objectsToBind;
+
 	public string[] objectsToBindTags;
 	public string[] trackNames;
+
 	[SerializeField] private TransformEventChannelSO _playerInstantiatedChannel = default;
 
 	private void OnEnable()
 	{
 		_playerInstantiatedChannel.OnEventRaised += BindObjects;
 	}
+
 	private void OnDisable()
 	{
 		_playerInstantiatedChannel.OnEventRaised -= BindObjects;
@@ -24,7 +27,6 @@ public class TimelineBinder : MonoBehaviour
 		for (int i = 0; i < objectsToBindTags.Length; ++i)
 		{
 			_objectsToBind[i] = GameObject.FindGameObjectWithTag(objectsToBindTags[i]);
-			//	Debug.Log(objectsToBindTags[i]);
 		}
 
 		foreach (var playableAssetOutput in _playableDirector.playableAsset.outputs)

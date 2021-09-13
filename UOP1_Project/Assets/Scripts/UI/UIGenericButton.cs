@@ -1,10 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Localization;
 using UnityEngine.Localization.Components;
-using UnityEngine.UI;
 
 public class UIGenericButton : MonoBehaviour
 {
@@ -13,40 +10,37 @@ public class UIGenericButton : MonoBehaviour
 
 	public UnityAction Clicked = default;
 
-	private bool isDefaultSelection = false;
-
+	private bool _isDefaultSelection = false;
 
 	private void OnDisable()
 	{
 		_button.IsSelected = false;
-		isDefaultSelection = false;
+		_isDefaultSelection = false;
 	}
+
 	public void SetButton(bool isSelect)
 	{
-		isDefaultSelection = isSelect;
+		_isDefaultSelection = isSelect;
 		if (isSelect)
 			_button.UpdateSelected();
 	}
 
 	public void SetButton(LocalizedString localizedString, bool isSelected)
 	{
-
 		_buttonText.StringReference = localizedString;
 
 		if (isSelected)
 			SelectButton();
-
 	}
 
 	public void SetButton(string tableEntryReference, bool isSelected)
 	{
-
 		_buttonText.StringReference.TableEntryReference = tableEntryReference;
 
 		if (isSelected)
 			SelectButton();
-
 	}
+
 	void SelectButton()
 	{
 		_button.Select();

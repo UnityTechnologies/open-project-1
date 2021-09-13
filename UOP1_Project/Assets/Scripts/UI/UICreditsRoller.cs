@@ -13,9 +13,10 @@ public class UICreditsRoller : MonoBehaviour
 	[SerializeField] private RectTransform _textCredits = default;
 	[SerializeField] private RectTransform _mask = default;
 
+	public event UnityAction OnRollingEnded;
+	
 	private float _expectedFinishingPoint;
 
-	public UnityAction rollingEnded;
 
 	public void StartRolling()
 	{
@@ -25,12 +26,12 @@ public class UICreditsRoller : MonoBehaviour
 
 	private void OnEnable()
 	{
-		_inputReader.moveEvent += OnMove;
+		_inputReader.MoveEvent += OnMove;
 	}
 
 	private void OnDisable()
 	{
-		_inputReader.moveEvent -= OnMove;
+		_inputReader.MoveEvent -= OnMove;
 	}
 
 	void Update()
@@ -81,7 +82,7 @@ public class UICreditsRoller : MonoBehaviour
 		}
 		else
 		{
-			rollingEnded.Invoke();
+			OnRollingEnded.Invoke();
 		}
 	}
 }

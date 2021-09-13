@@ -2,26 +2,29 @@ using UnityEngine;
 
 public class UIHealthBarManager : MonoBehaviour
 {
-	[SerializeField] private HealthSO _currentHealth = default;
+	[SerializeField] private HealthSO _currentHealth = default; //the HealthBar is watching this object, which is the health of the player
 	[SerializeField] private HealthConfigSO _healthConfig = default;
 	[SerializeField] private UIHeartDisplay[] _heartImages = default;
 
 	[Header("Listening to")]
-	[SerializeField] private VoidEventChannelSO _deathEvent = default;
+	[SerializeField] private TransformEventChannelSO _onPlayerInstantiated = default;
 	[SerializeField] private VoidEventChannelSO _updateHealthEvent = default;
 
 	private void OnEnable()
 	{
+		_onPlayerInstantiated.OnEventRaised += ResetHealthOnSpawn;
 		_updateHealthEvent.OnEventRaised += UpdateHeartImages;
-		_deathEvent.OnEventRaised += UpdateHeartImages;
-
-		SetHealthBar();
 	}
 
 	private void OnDestroy()
 	{
+		_onPlayerInstantiated.OnEventRaised -= ResetHealthOnSpawn;
 		_updateHealthEvent.OnEventRaised -= UpdateHeartImages;
-		_deathEvent.OnEventRaised -= UpdateHeartImages;
+	}
+
+	private void ResetHealthOnSpawn(Transform t)
+	{
+		UpdateHeartImages();
 	}
 
 	private void SetHealthBar()

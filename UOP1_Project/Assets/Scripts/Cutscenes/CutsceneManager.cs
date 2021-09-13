@@ -5,20 +5,14 @@ using UnityEngine.Playables;
 
 public class CutsceneManager : MonoBehaviour
 {
-
 	[SerializeField] private DialogueManager _dialogueManager = default;
-	[Header("Gameplay Components")]
 	[SerializeField] private InputReader _inputReader = default;
 	[SerializeField] private GameStateSO _gameState = default;
 
-
-	[Header("Listening to channels")]
+	[Header("Listening on")]
 	[SerializeField] private PlayableDirectorChannelSO _playCutsceneEvent = default;
-
 	[SerializeField] public DialogueLineChannelSO _playDialogueEvent = default;
-
 	[SerializeField] public VoidEventChannelSO _pauseTimelineEvent = default;
-
 	[SerializeField] public VoidEventChannelSO _onLineEndedEvent = default;
 
 	private PlayableDirector _activePlayableDirector;
@@ -28,21 +22,22 @@ public class CutsceneManager : MonoBehaviour
 
 	private void OnEnable()
 	{
-		_inputReader.advanceDialogueEvent += OnAdvance;
+		_inputReader.AdvanceDialogueEvent += OnAdvance;
 	}
 
 	private void OnDisable()
 	{
-		_inputReader.advanceDialogueEvent -= OnAdvance;
+		_inputReader.AdvanceDialogueEvent -= OnAdvance;
 	}
+
 	private void Start()
 	{
 		_playCutsceneEvent.OnEventRaised += PlayCutscene;
 		_playDialogueEvent.OnEventRaised += PlayDialogueFromClip;
 		_pauseTimelineEvent.OnEventRaised += PauseTimeline;
 		_onLineEndedEvent.OnEventRaised += LineEnded ;
-
 	}
+
 	void PlayCutscene(PlayableDirector activePlayableDirector)
 	{
 		_inputReader.EnableDialogueInput();
@@ -56,7 +51,6 @@ public class CutsceneManager : MonoBehaviour
 
 	void CutsceneEnded()
 	{
-
 		if (_activePlayableDirector != null)
 			_activePlayableDirector.stopped -= HandleDirectorStopped;
 
@@ -68,7 +62,6 @@ public class CutsceneManager : MonoBehaviour
 	public void LineEnded()
 	{
 		_dialogueManager.CutsceneDialogueEnded();
-
 	}
 
 	private void HandleDirectorStopped(PlayableDirector director) => CutsceneEnded();

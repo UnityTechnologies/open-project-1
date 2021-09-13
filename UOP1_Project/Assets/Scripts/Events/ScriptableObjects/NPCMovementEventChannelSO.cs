@@ -6,7 +6,7 @@ using UnityEngine;
 /// </summary>
 
 [CreateAssetMenu(menuName = "Events/NPC Movement Event Channel")]
-public class NPCMovementEventChannelSO : EventChannelBaseSO
+public class NPCMovementEventChannelSO : DescriptionBaseSO
 {
 	public UnityAction<NPCMovementConfigSO> OnEventRaised;
 

@@ -58,7 +58,7 @@ public class UISettingsController : MonoBehaviour
 		_audioComponent._save += SaveAudioSettings;
 		_graphicsComponent._save += SaveGraphicsSettings;
 
-		_inputReader.menuCloseEvent += CloseScreen;
+		_inputReader.MenuCloseEvent += CloseScreen;
 		_inputReader.TabSwitched += SwitchTab;
 
 		_settingTabFiller.FillTabs(_settingTabsList);
@@ -69,7 +69,7 @@ public class UISettingsController : MonoBehaviour
 	}
 	private void OnDisable()
 	{
-		_inputReader.menuCloseEvent -= CloseScreen;
+		_inputReader.MenuCloseEvent -= CloseScreen;
 		_inputReader.TabSwitched -= SwitchTab;
 
 		_languageComponent._save -= SaveLaguageSettings;

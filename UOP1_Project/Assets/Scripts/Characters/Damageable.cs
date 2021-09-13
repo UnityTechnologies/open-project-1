@@ -9,7 +9,6 @@ public class Damageable : MonoBehaviour
 	[SerializeField] private Renderer _mainMeshRenderer;
 	[SerializeField] private DroppableRewardConfigSO _droppableRewardSO;
 
-
 	[Header("Broadcasting On")]
 	[SerializeField] private VoidEventChannelSO _updateHealthEvent = default;
 	[SerializeField] private VoidEventChannelSO _deathEvent = default;
@@ -25,37 +24,30 @@ public class Damageable : MonoBehaviour
 	public GetHitEffectConfigSO GetHitEffectConfig => _getHitEffectSO;
 	public Renderer MainMeshRenderer => _mainMeshRenderer;
 
-	public UnityAction OnDie;
+	public event UnityAction OnDie;
 
 	private void Awake()
 	{
+		//If the HealthSO hasn't been provided in the Inspector (as it's the case for the player),
+		//we create a new SO unique to this instance of the component. This is typical for NPCs.
 		if (_currentHealthSO == null)
-		{
 			_currentHealthSO = ScriptableObject.CreateInstance<HealthSO>();
-			_currentHealthSO.SetMaxHealth(_healthConfigSO.InitialHealth);
-			_currentHealthSO.SetCurrentHealth(_healthConfigSO.InitialHealth);
-		}
-		if (_updateHealthEvent != null)
-		{
-			_updateHealthEvent.RaiseEvent();
 
-		}
+		_currentHealthSO.SetMaxHealth(_healthConfigSO.InitialHealth);
+		_currentHealthSO.SetCurrentHealth(_healthConfigSO.InitialHealth);
+
+		if (_updateHealthEvent != null)
+			_updateHealthEvent.RaiseEvent();
 	}
 
 	private void OnEnable()
 	{
-		if (_restoreHealth != null)
-		{
-			_restoreHealth.OnEventRaised += restoreHealth;
-		}
+		_restoreHealth.OnEventRaised += RestoreHealth;
 	}
 
 	private void OnDisable()
 	{
-		if (_restoreHealth != null)
-		{
-			_restoreHealth.OnEventRaised -= restoreHealth;
-		}
+		_restoreHealth.OnEventRaised -= RestoreHealth;
 	}
 
 	public void Kill()
@@ -69,43 +61,45 @@ public class Damageable : MonoBehaviour
 			return;
 
 		_currentHealthSO.InflictDamage(damage);
+
 		if (_updateHealthEvent != null)
-		{
 			_updateHealthEvent.RaiseEvent();
-		}
 
 		GetHit = true;
 
 		if (_currentHealthSO.CurrentHealth <= 0)
 		{
 			IsDead = true;
+
 			if (OnDie != null)
 				OnDie.Invoke();
+
 			if (_deathEvent != null)
 				_deathEvent.RaiseEvent();
 		}
 	}
 
+	/// <summary>
+	/// Called by the StateMachine action RestoreHealth. Used to revive the stone critter.
+	/// </summary>
 	public void ResetHealth()
 	{
 		_currentHealthSO.SetCurrentHealth(_healthConfigSO.InitialHealth);
-		if (_updateHealthEvent != null)
-		{
-			_updateHealthEvent.RaiseEvent();
 
-		}
+		if (_updateHealthEvent != null)
+			_updateHealthEvent.RaiseEvent();
+			
 		IsDead = false;
 	}
 
-	public void restoreHealth(int healthToAdd)
+	private void RestoreHealth(int healthToAdd)
 	{
 		if (IsDead)
 			return;
+			
 		_currentHealthSO.RestoreHealth(healthToAdd);
-		if (_updateHealthEvent != null)
-		{
-			_updateHealthEvent.RaiseEvent();
 
-		}
+		if (_updateHealthEvent != null)
+			_updateHealthEvent.RaiseEvent();
 	}
 }

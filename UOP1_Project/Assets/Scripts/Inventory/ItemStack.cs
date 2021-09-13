@@ -4,8 +4,7 @@ using UnityEngine;
 [Serializable]
 public class ItemStack
 {
-	[SerializeField]
-	private ItemSO _item;
+	[SerializeField] private ItemSO _item;
 
 	public ItemSO Item => _item;
 

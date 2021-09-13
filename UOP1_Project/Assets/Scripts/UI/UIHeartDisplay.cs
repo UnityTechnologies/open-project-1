@@ -1,39 +1,40 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class UIHeartDisplay : MonoBehaviour
 {
-	[SerializeField]
-	BoolEventChannelSO _setAggroEvent = default;
-
 	[SerializeField] Image _slidingImage = default;
-	[SerializeField] Image _aggroImage = default;
-	[SerializeField] Image _bgImage = default;
+	[SerializeField] Image _combatBackgroundImage = default;
+	[SerializeField] Image _backgroundImage = default;
+
+	[Header("Listening on")]
+	[SerializeField] BoolEventChannelSO _combatStateEvent = default;
+
 	private void OnEnable()
 	{
-		_setAggroEvent.OnEventRaised += SetAggro;
+		_combatStateEvent.OnEventRaised += OnCombatState;
 	}
+
 	private void OnDisable()
 	{
-		_setAggroEvent.OnEventRaised -= SetAggro;
+		_combatStateEvent.OnEventRaised -= OnCombatState;
 	}
+
 	public void SetImage(float percent)
 	{
 		_slidingImage.fillAmount = percent;
-		if (percent == 0)
+		if (percent == 0f)
 		{
-			_bgImage.color = new Color(_bgImage.color.r, _bgImage.color.g, _bgImage.color.b, 0.5f);
+			_backgroundImage.color = new Color(_backgroundImage.color.r, _backgroundImage.color.g, _backgroundImage.color.b, 0.5f);
 		}
 		else
 		{
-			_bgImage.color = new Color(_bgImage.color.r, _bgImage.color.g, _bgImage.color.b, 1);
+			_backgroundImage.color = new Color(_backgroundImage.color.r, _backgroundImage.color.g, _backgroundImage.color.b, 1f);
 		}
-
 	}
-	public void SetAggro(bool isAggro)
+
+	private void OnCombatState(bool isCombat)
 	{
-		_aggroImage.gameObject.SetActive(isAggro);
+		_combatBackgroundImage.gameObject.SetActive(isCombat);
 	}
 }

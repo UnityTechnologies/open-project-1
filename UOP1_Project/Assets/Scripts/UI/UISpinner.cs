@@ -3,15 +3,15 @@
 public class UISpinner : MonoBehaviour
 {
 	[SerializeField] private float _rotateSpeed = -150f;
-	private RectTransform rectComponent;
+	private RectTransform _rectComponent;
 
 	private void Start()
 	{
-		rectComponent = GetComponent<RectTransform>();
+		_rectComponent = GetComponent<RectTransform>();
 	}
 
 	private void Update()
 	{
-		rectComponent.Rotate(0f, 0f, _rotateSpeed * Time.deltaTime);
+		_rectComponent.Rotate(0f, 0f, _rotateSpeed * Time.deltaTime);
 	}
 }

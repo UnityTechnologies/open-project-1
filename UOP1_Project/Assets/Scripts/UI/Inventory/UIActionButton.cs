@@ -1,74 +1,51 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Localization.Components;
 using UnityEngine.Events;
-enum ActionType
-{
-	Save,
-	Reset
 
-}
 public class UIActionButton : MonoBehaviour
 {
-
-	[SerializeField]
-	private LocalizeStringEvent _buttonActionText = default;
-
-	[SerializeField]
-	private Button _buttonAction = default;
-
-	[SerializeField]
-	UIButtonPrompt buttonPromptSetter = default;
-
-	[SerializeField]
-	InputReader _inputReader = default;
-
-	bool hasEvent = false;
+	[SerializeField] private LocalizeStringEvent _buttonActionText = default;
+	[SerializeField] private Button _buttonAction = default;
+	[SerializeField] private UIButtonPrompt _buttonPromptSetter = default;
+	[SerializeField] private InputReader _inputReader = default;
 
 	public UnityAction Clicked;
+
+	bool _hasEvent = false;
 
 	public void FillInventoryButton(ItemTypeSO itemType, bool isInteractable = true)
 	{
 		_buttonAction.interactable = isInteractable;
 		_buttonActionText.StringReference = itemType.ActionName;
-		//bool isKeyboard = !(Input.GetJoystickNames() != null && Input.GetJoystickNames().Length > 0);
 
 		bool isKeyboard = true;
-		buttonPromptSetter.SetButtonPrompt(isKeyboard);
+		_buttonPromptSetter.SetButtonPrompt(isKeyboard);
 		if (isInteractable)
 		{
-
 			if (_inputReader != null)
 			{
-				hasEvent = true;
-				_inputReader.inventoryActionButtonEvent += ClickActionButton;
+				_hasEvent = true;
+				_inputReader.InventoryActionButtonEvent += ClickActionButton;
 			}
 		}
 		else
 		{
 			if (_inputReader != null)
-				if (hasEvent)
-					_inputReader.inventoryActionButtonEvent -= ClickActionButton;
-
+				if (_hasEvent)
+					_inputReader.InventoryActionButtonEvent -= ClickActionButton;
 		}
-
 	}
 
 	public void ClickActionButton()
 	{
 		Clicked.Invoke();
-
-
 	}
+
 	private void OnDisable()
 	{
 		if (_inputReader != null)
-			if (hasEvent)
-				_inputReader.inventoryActionButtonEvent -= ClickActionButton;
-
+			if (_hasEvent)
+				_inputReader.InventoryActionButtonEvent -= ClickActionButton;
 	}
-
-
 }

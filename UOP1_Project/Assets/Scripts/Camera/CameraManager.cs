@@ -23,9 +23,9 @@ public class CameraManager : MonoBehaviour
 
 	private void OnEnable()
 	{
-		inputReader.cameraMoveEvent += OnCameraMove;
-		inputReader.enableMouseControlCameraEvent += OnEnableMouseControlCamera;
-		inputReader.disableMouseControlCameraEvent += OnDisableMouseControlCamera;
+		inputReader.CameraMoveEvent += OnCameraMove;
+		inputReader.EnableMouseControlCameraEvent += OnEnableMouseControlCamera;
+		inputReader.DisableMouseControlCameraEvent += OnDisableMouseControlCamera;
 
 		_protagonistTransformAnchor.OnAnchorProvided += SetupProtagonistVirtualCamera;
 		_camShakeEvent.OnEventRaised += impulseSource.GenerateImpulse;
@@ -35,9 +35,9 @@ public class CameraManager : MonoBehaviour
 
 	private void OnDisable()
 	{
-		inputReader.cameraMoveEvent -= OnCameraMove;
-		inputReader.enableMouseControlCameraEvent -= OnEnableMouseControlCamera;
-		inputReader.disableMouseControlCameraEvent -= OnDisableMouseControlCamera;
+		inputReader.CameraMoveEvent -= OnCameraMove;
+		inputReader.EnableMouseControlCameraEvent -= OnEnableMouseControlCamera;
+		inputReader.DisableMouseControlCameraEvent -= OnDisableMouseControlCamera;
 
 		_protagonistTransformAnchor.OnAnchorProvided -= SetupProtagonistVirtualCamera;
 		_camShakeEvent.OnEventRaised -= impulseSource.GenerateImpulse;

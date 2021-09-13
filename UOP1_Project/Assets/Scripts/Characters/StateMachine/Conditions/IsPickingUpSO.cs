@@ -21,7 +21,6 @@ public class IsPickingUpCondition : Condition
 		{
 			// Consume it
 			_interactScript.currentInteractionType = InteractionType.None;
-
 			return true;
 		}
 		else

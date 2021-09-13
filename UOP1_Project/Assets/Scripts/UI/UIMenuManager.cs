@@ -119,7 +119,7 @@ public class UIMenuManager : MonoBehaviour
 	{
 		_creditsPanel.gameObject.SetActive(true);
 
-		_creditsPanel.closeCreditsAction += CloseCreditsScreen;
+		_creditsPanel.OnCloseCredits += CloseCreditsScreen;
 
 
 
@@ -127,7 +127,7 @@ public class UIMenuManager : MonoBehaviour
 	}
 	public void CloseCreditsScreen()
 	{
-		_creditsPanel.closeCreditsAction -= CloseCreditsScreen;
+		_creditsPanel.OnCloseCredits -= CloseCreditsScreen;
 		_creditsPanel.gameObject.SetActive(false);
 		_mainMenuPanel.SetMenuScreen(_hasSaveData);
 

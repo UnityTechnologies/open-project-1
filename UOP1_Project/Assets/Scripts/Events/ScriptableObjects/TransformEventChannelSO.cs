@@ -7,7 +7,7 @@ using UnityEngine;
 /// </summary>
 
 [CreateAssetMenu(menuName = "Events/Transform Event Channel")]
-public class TransformEventChannelSO : EventChannelBaseSO
+public class TransformEventChannelSO : DescriptionBaseSO
 {
 	public UnityAction<Transform> OnEventRaised;
 
