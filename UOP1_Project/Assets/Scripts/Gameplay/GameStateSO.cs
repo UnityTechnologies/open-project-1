@@ -74,18 +74,20 @@ public class GameStateSO : DescriptionBaseSO
 
 	public void ResetToPreviousGameState()
 	{
-		if (_previousGameState != CurrentGameState)
+		if (_previousGameState == _currentGameState)
 			return;
 
 		if (_previousGameState == GameState.Combat)
 		{
 			_onCombatStateEvent.RaiseEvent(false);
 		}
-		else if (CurrentGameState == GameState.Combat)
+		else if (_currentGameState == GameState.Combat)
 		{
 			_onCombatStateEvent.RaiseEvent(true);
 		}
 		
-		_currentGameState = _previousGameState;
+		GameState stateToReturnTo = _previousGameState;
+		_previousGameState = _currentGameState;
+		_currentGameState = stateToReturnTo;
 	}
 }

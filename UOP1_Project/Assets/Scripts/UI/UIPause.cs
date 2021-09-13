@@ -18,6 +18,7 @@ public class UIPause : MonoBehaviour
 	private void OnEnable()
 	{
 		_onPauseOpened.RaiseEvent(true);
+
 		_resumeButton.SetButton(true);
 		_inputReader.MenuCloseEvent += Resume;
 		_resumeButton.Clicked += Resume;
@@ -28,6 +29,7 @@ public class UIPause : MonoBehaviour
 	private void OnDisable()
 	{
 		_onPauseOpened.RaiseEvent(false);
+		
 		_inputReader.MenuCloseEvent -= Resume;
 		_resumeButton.Clicked -= Resume;
 		_settingsButton.Clicked -= OpenSettingsScreen;

@@ -268,17 +268,16 @@ public class UIInventory : MonoBehaviour
 	void OnActionButtonClicked()
 	{
 		//find the selected Item
-		if (_availableItemSlots.Count > selectedItemId && selectedItemId > -1)
+		if (_availableItemSlots.Count > selectedItemId
+			&& selectedItemId > -1)
 		{
-			//find the item 
-			ItemSO itemToActOn = new ItemSO();
+			ItemSO itemToActOn = ScriptableObject.CreateInstance<ItemSO>();
 			itemToActOn = _availableItemSlots[selectedItemId].currentItem.Item;
 
 			//check the selected Item type
 			//call action function depending on the itemType
 			switch (itemToActOn.ItemType.ActionType)
 			{
-
 				case ItemInventoryActionType.Cook:
 					CookRecipe(itemToActOn);
 					break;
@@ -291,10 +290,8 @@ public class UIInventory : MonoBehaviour
 				default:
 
 					break;
-
 			}
 		}
-
 	}
 
 	void UseItem(ItemSO itemToUse)
@@ -302,7 +299,6 @@ public class UIInventory : MonoBehaviour
 		if (itemToUse.HealthResorationValue > 0)
 		{ _restoreHealth.RaiseEvent(itemToUse.HealthResorationValue); }
 		_useItemEvent.RaiseEvent(itemToUse);
-		//update inventory
 		UpdateInventory();
 	}
 

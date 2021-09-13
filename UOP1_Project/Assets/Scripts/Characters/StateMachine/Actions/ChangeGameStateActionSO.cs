@@ -58,7 +58,6 @@ public class ChangeGameStateAction : StateAction
 	{
 		if (_whenToRun == Moment.OnStateEnter)
 		{
-
 			ChangeState();
 		}
 	}
