@@ -11,6 +11,7 @@ public class Protagonist : MonoBehaviour
 
 	private Vector2 _inputVector;
 	private float _previousSpeed;
+	private double _lastHitTime = double.NegativeInfinity;
 
 	//These fields are read and manipulated by the StateMachine actions
 	[NonSerialized] public bool jumpInput;
@@ -30,7 +31,29 @@ public class Protagonist : MonoBehaviour
 
 	private void OnControllerColliderHit(ControllerColliderHit hit)
 	{
-		lastHit = hit;
+		bool isHitAccepted = false;
+		double time = Time.timeAsDouble;
+		if (_lastHitTime < time)
+		{
+			// New hit is in new frame, discard our outdated hit
+			isHitAccepted = true;
+		}
+		else
+		{
+			// Its the same frame, let's decide which hit to keep
+			if (lastHit.normal.y < hit.normal.y)
+			{
+				// New hit is pointing more upwards, more likely a floor hit
+				// We should prioritize floor hits over wall hits
+				isHitAccepted = true;
+			}
+		}
+
+		if(isHitAccepted)
+		{
+			lastHit = hit;
+			_lastHitTime = time;
+		}
 	}
 
 	//Adds listeners for events being triggered in the InputReader script
