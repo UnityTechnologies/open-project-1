@@ -7,6 +7,12 @@ public class SlideActionSO : StateActionSO<SlideAction> { }
 
 public class SlideAction : StateAction
 {
+	/// <summary>
+	/// Calculated by Cos(90-3 degrees) because 3 degrees is the problem begins
+	/// </summary>
+	const float FLAT_NORMAL_THRESHOLD = 0.05233595624f;
+	const float ADD_NORMAL_FACTOR = 0.1f;
+
 	private Protagonist _protagonist;
 
 	public override void Awake(StateMachine stateMachine)
@@ -21,9 +27,7 @@ public class SlideAction : StateAction
 		Vector3 biTangent = Vector3.Cross(hitNormal, Vector3.up);
 		Vector3 slideDirection = Vector3.Cross(hitNormal, biTangent);
 
-		const float FLAT_NORMAL_THRESHOLD = 0.1f;
-		const float ADD_NORMAL_FACTOR = 0.1f;
-		// Check if the normal is close to flat, this happens when the surface is too steep
+		// Check if the normal is close to flat/when the surface is too steep
 		if (Mathf.Abs(Vector3.Dot(hitNormal, Vector3.up)) < FLAT_NORMAL_THRESHOLD)
 		{
 			// Moving downwards now may cause the CharacterController to get stuck
