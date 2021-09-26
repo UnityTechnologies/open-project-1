@@ -33,49 +33,42 @@ public class AerialMovementAction : StateAction
 	public override void OnUpdate()
 	{
 		Vector3 velocity = _protagonist.movementVector;
-		Vector3 input = _protagonist.movementInput;
-		float speed = OriginSO.Speed;
+		Vector2 horizontalInput = new Vector2(_protagonist.movementInput.x, _protagonist.movementInput.z);
 		float acceleration = OriginSO.Acceleration;
+		float speed = OriginSO.Speed;
 
-		SetVelocityPerAxis(ref velocity.x, input.x, acceleration, speed);
-		SetVelocityPerAxis(ref velocity.z, input.z, acceleration, speed);
+		Vector2 horizontalVelocity = new Vector2(velocity.x, velocity.z);
+		SetHorizontalVelocity(ref horizontalVelocity, horizontalInput, acceleration, speed);
+		velocity.x = horizontalVelocity.x;
+		velocity.z = horizontalVelocity.y;
 
 		_protagonist.movementVector = velocity;
 	}
 
-	private void SetVelocityPerAxis(ref float currentAxisSpeed, float axisInput, float acceleration, float targetSpeed)
+	private void SetHorizontalVelocity(ref Vector2 horizontalVelocity, Vector2 horizontalInput, float acceleration, float targetSpeed)
 	{
-		if (axisInput == 0f)
+		float inputMagnitude = horizontalInput.magnitude;
+		if (Mathf.Approximately(inputMagnitude, 0f))
 		{
-			if (currentAxisSpeed != 0f)
-			{
-				ApplyAirResistance(ref currentAxisSpeed);
-			}
+			ApplyAirResistance(ref horizontalVelocity);
 		}
 		else
 		{
-			(float absVel, float absInput) = (Mathf.Abs(currentAxisSpeed), Mathf.Abs(axisInput));
-			(float signVel, float signInput) = (Mathf.Sign(currentAxisSpeed), Mathf.Sign(axisInput));
-			targetSpeed *= absInput;
+			targetSpeed *= inputMagnitude;
 
-			if (signVel != signInput || absVel < targetSpeed)
-			{
-				currentAxisSpeed += axisInput * acceleration;
-				currentAxisSpeed = Mathf.Clamp(currentAxisSpeed, -targetSpeed, targetSpeed);
-			}
-			else
-			{
-				ApplyAirResistance(ref currentAxisSpeed);
-			}
+			horizontalVelocity += horizontalInput * acceleration;
+
+			// Apply a speed limit
+			float horizontalSpeed = horizontalVelocity.magnitude;
+			if (targetSpeed < horizontalSpeed)
+				horizontalVelocity = horizontalVelocity / horizontalSpeed * targetSpeed;
 		}
 	}
 
-	private void ApplyAirResistance(ref float value)
+	private void ApplyAirResistance(ref Vector2 vector)
 	{
-		float sign = Mathf.Sign(value);
-
-		value -= sign * Protagonist.AIR_RESISTANCE * Time.deltaTime;
-		if (Mathf.Sign(value) != sign)
-			value = 0;
+		if (Mathf.Approximately(vector.sqrMagnitude, 0))
+			return;
+		vector -= vector.normalized * Protagonist.AIR_RESISTANCE * Time.deltaTime;
 	}
 }
