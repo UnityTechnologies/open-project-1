@@ -3,26 +3,30 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Localization.Components;
 using UnityEngine.UI;
-using TMPro; 
-	public class UISettingTabFiller : MonoBehaviour
+using TMPro;
+using UnityEngine.Events;
+
+public class UISettingTabFiller : MonoBehaviour
 {
 	[SerializeField] private LocalizeStringEvent _localizedTabTitle;
 	[SerializeField] private Image _bgSelectedTab;
 	[SerializeField] private Color _colorSelectedTab;
 	[SerializeField] private Color _colorUnselectedTab;
 
-	SettingTabType _currentTabType; 
+	SettingsType _currentTabType;
 
-	public void SetTab(SettingTab settingTab, bool isSelected)
+	public UnityAction<SettingsType> Clicked;
+
+	public void SetTab(SettingsType settingTab, bool isSelected)
 	{
-		_localizedTabTitle.StringReference = settingTab.title;
-		_currentTabType = settingTab.settingTabsType; 
+		_localizedTabTitle.StringReference.TableEntryReference = settingTab.ToString();
+		_currentTabType = settingTab;
 		if (isSelected)
-		{ SelectTab();  }
+		{ SelectTab(); }
 		else
-		{ UnselectTab();  }
+		{ UnselectTab(); }
 	}
-	public void SetTab(SettingTabType tabType)
+	public void SetTab(SettingsType tabType)
 	{
 		bool isSelected = (_currentTabType == tabType);
 		if (isSelected)
@@ -30,16 +34,21 @@ using TMPro;
 		else
 		{ UnselectTab(); }
 	}
-	 void SelectTab()
+	void SelectTab()
 	{
-		_bgSelectedTab.enabled=true;
+		_bgSelectedTab.enabled = true;
 		_localizedTabTitle.GetComponent<TextMeshProUGUI>().color = _colorSelectedTab;
 
 	}
-	 void UnselectTab()
+	void UnselectTab()
 	{
 		_bgSelectedTab.enabled = false;
-		_localizedTabTitle.GetComponent<TextMeshProUGUI>().color = _colorUnselectedTab; 
+		_localizedTabTitle.GetComponent<TextMeshProUGUI>().color = _colorUnselectedTab;
+
+	}
+	public void Click()
+	{
+		Clicked.Invoke(_currentTabType);
 
 	}
 }

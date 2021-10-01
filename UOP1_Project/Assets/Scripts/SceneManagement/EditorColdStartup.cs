@@ -16,9 +16,9 @@ public class EditorColdStartup : MonoBehaviour
 	[SerializeField] private VoidEventChannelSO _onSceneReadyChannel = default;
 	[SerializeField] private PathStorageSO _pathStorage = default;
 	[SerializeField] private DebugConfigSO _debugConfig = default;
+	[SerializeField] private SaveSystem _saveSystem = default;
 
 	private bool isColdStart = false;
-
 	private void Awake()
 	{
 		if (!SceneManager.GetSceneByName(_persistentManagersSO.sceneReference.editorAsset.name).isLoaded)
@@ -28,6 +28,7 @@ public class EditorColdStartup : MonoBehaviour
 			//Reset the path taken, so the character will spawn in this location's default spawn point
 			_pathStorage.lastPathTaken = null;
 		}
+		CreateSaveFileIfNotPresent();
 	}
 
 	private void Start()
@@ -36,9 +37,17 @@ public class EditorColdStartup : MonoBehaviour
 		{
 			_debugConfig.isDebugMode = true;
 			_persistentManagersSO.sceneReference.LoadSceneAsync(LoadSceneMode.Additive, true).Completed += LoadEventChannel;
+
+		}
+		CreateSaveFileIfNotPresent();
+	}
+	private void CreateSaveFileIfNotPresent()
+	{
+		if (_saveSystem != null && !_saveSystem.LoadSaveDataFromDisk())
+		{
+			_saveSystem.SetNewGameData();
 		}
 	}
-
 	private void LoadEventChannel(AsyncOperationHandle<SceneInstance> obj)
 	{
 		_notifyColdStartupChannel.LoadAssetAsync<LoadEventChannelSO>().Completed += OnNotifyChannelLoaded;
@@ -46,7 +55,7 @@ public class EditorColdStartup : MonoBehaviour
 
 	private void OnNotifyChannelLoaded(AsyncOperationHandle<LoadEventChannelSO> obj)
 	{
-		if(_thisSceneSO != null)
+		if (_thisSceneSO != null)
 		{
 			obj.Result.RaiseEvent(_thisSceneSO);
 		}
@@ -57,5 +66,7 @@ public class EditorColdStartup : MonoBehaviour
 			//When this happens, the player won't be able to move between scenes because the SceneLoader has no conception of which scene we are in
 		}
 	}
+
+
 #endif
 }

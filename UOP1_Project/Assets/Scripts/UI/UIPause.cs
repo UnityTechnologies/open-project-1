@@ -5,9 +5,9 @@ using UnityEngine.Events;
 using UnityEngine.UI;
 public class UIPause : MonoBehaviour
 {
-	[SerializeField] private UIButtonSetter _resumeButton = default;
-	[SerializeField] private UIButtonSetter _settingsButton = default;
-	[SerializeField] private UIButtonSetter _backToMenuButton = default;
+	[SerializeField] private UIGenericButton _resumeButton = default;
+	[SerializeField] private UIGenericButton _settingsButton = default;
+	[SerializeField] private UIGenericButton _backToMenuButton = default;
 
 	public UnityAction Resumed = default;
 	public UnityAction SettingsScreenOpened = default;
@@ -18,7 +18,7 @@ public class UIPause : MonoBehaviour
 
 	private void OnEnable()
 	{
-		_onPauseOpened?.OnEventRaised(true);
+		_onPauseOpened?.RaiseEvent(true);
 		_resumeButton.SetButton(true);
 		_inputReader.menuCloseEvent += Resume;
 		_resumeButton.Clicked += Resume;
@@ -30,9 +30,8 @@ public class UIPause : MonoBehaviour
 
 	private void OnDisable()
 	{
-		_onPauseOpened?.OnEventRaised(false);
+		_onPauseOpened?.RaiseEvent(false);
 		_inputReader.menuCloseEvent -= Resume;
-
 		_resumeButton.Clicked -= Resume;
 		_settingsButton.Clicked -= OpenSettingsScreen;
 		_backToMenuButton.Clicked -= BackToMainMenuConfirmation;

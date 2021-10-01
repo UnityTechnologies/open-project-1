@@ -14,6 +14,8 @@ public class UIInventory : MonoBehaviour
 
 	[SerializeField]
 	private GameObject _contentParent = default;
+	[SerializeField]
+	private GameObject _errorPotMessage = default;
 
 	[FormerlySerializedAs("_inspectorFiller")]
 	[SerializeField]
@@ -25,7 +27,7 @@ public class UIInventory : MonoBehaviour
 
 	[FormerlySerializedAs("_buttonFiller")]
 	[SerializeField]
-	private UIInventoryActionButton _actionButton = default;
+	private UIActionButton _actionButton = default;
 
 	InventoryTabSO _selectedTab = default;
 
@@ -43,6 +45,8 @@ public class UIInventory : MonoBehaviour
 
 	[SerializeField]
 	private ItemEventChannelSO _useItemEvent = default;
+	[SerializeField]
+	private IntEventChannelSO _restoreHealth = default;
 	[SerializeField]
 	private ItemEventChannelSO _equipItemEvent = default;
 	[SerializeField]
@@ -281,12 +285,13 @@ public class UIInventory : MonoBehaviour
 			//check if interactable
 			bool isInteractable = true;
 			_actionButton.gameObject.SetActive(true);
-			if (itemToInspect.ItemType.ActionType == ItemInventoryActionType.cook)
+			_errorPotMessage.SetActive(false);
+			if (itemToInspect.ItemType.ActionType == ItemInventoryActionType.Cook)
 			{
 				isInteractable = _currentInventory.hasIngredients(itemToInspect.IngredientsList) && _isNearPot;
-
+				_errorPotMessage.SetActive(!_isNearPot);
 			}
-			else if (itemToInspect.ItemType.ActionType == ItemInventoryActionType.doNothing)
+			else if (itemToInspect.ItemType.ActionType == ItemInventoryActionType.DoNothing)
 			{
 				isInteractable = false;
 				_actionButton.gameObject.SetActive(false);
@@ -328,7 +333,7 @@ public class UIInventory : MonoBehaviour
 	}
 	void UpdateInventory()
 	{
-		FillInventory(_selectedTab.TabType);
+		FillInventory(_selectedTab.TabType, _isNearPot);
 	}
 
 	void OnActionButtonClicked()
@@ -346,13 +351,13 @@ public class UIInventory : MonoBehaviour
 			switch (itemToActOn.ItemType.ActionType)
 			{
 
-				case ItemInventoryActionType.cook:
+				case ItemInventoryActionType.Cook:
 					CookRecipe(itemToActOn);
 					break;
-				case ItemInventoryActionType.use:
+				case ItemInventoryActionType.Use:
 					UseItem(itemToActOn);
 					break;
-				case ItemInventoryActionType.equip:
+				case ItemInventoryActionType.Equip:
 					EquipItem(itemToActOn);
 					break;
 				default:
@@ -365,9 +370,9 @@ public class UIInventory : MonoBehaviour
 	}
 	void UseItem(ItemSO itemToUse)
 	{
-		Debug.Log("USE ITEM " + itemToUse.name);
-
-		_useItemEvent.OnEventRaised(itemToUse);
+		if (itemToUse.HealthResorationValue > 0)
+		{ _restoreHealth.RaiseEvent(itemToUse.HealthResorationValue); }
+		_useItemEvent.RaiseEvent(itemToUse);
 		//update inventory
 		UpdateInventory();
 	}
@@ -376,14 +381,14 @@ public class UIInventory : MonoBehaviour
 	void EquipItem(ItemSO itemToUse)
 	{
 		Debug.Log("Equip ITEM " + itemToUse.name);
-		_equipItemEvent.OnEventRaised(itemToUse);
+		_equipItemEvent.RaiseEvent(itemToUse);
 	}
 
 	void CookRecipe(ItemSO recipeToCook)
 	{
 
 		//get item
-		_cookRecipeEvent.OnEventRaised(recipeToCook);
+		_cookRecipeEvent.RaiseEvent(recipeToCook);
 
 		//update inspector
 		InspectItem(recipeToCook);
@@ -397,7 +402,7 @@ public class UIInventory : MonoBehaviour
 	void OnChangeTab(InventoryTabSO tabType)
 	{
 
-		FillInventory(tabType.TabType);
+		FillInventory(tabType.TabType, _isNearPot);
 
 	}
 	public void CloseInventory()

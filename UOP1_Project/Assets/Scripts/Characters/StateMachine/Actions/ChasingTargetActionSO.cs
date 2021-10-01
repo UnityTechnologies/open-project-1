@@ -25,6 +25,8 @@ public class ChasingTargetAction : StateAction
 	private NavMeshAgent _agent;
 	private bool _isActiveAgent;
 
+
+
 	public override void Awake(StateMachine stateMachine)
 	{
 		_config = (ChasingTargetActionSO)OriginSO;
@@ -48,4 +50,6 @@ public class ChasingTargetAction : StateAction
 			_agent.speed = _config.ChasingSpeed;
 		}
 	}
+
+
 }
