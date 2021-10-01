@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Timeline;
+using UnityEngine.Localization.Metadata;
 using UnityEngine.Localization;
+
+#if UNITY_EDITOR
 using UnityEditor.Localization;
 using UnityEditor;
-using UnityEngine.Localization.Settings;
-using UnityEngine.Localization.Metadata;
+#endif
 
 public enum DialogueType
 {
@@ -14,8 +15,8 @@ public enum DialogueType
 	CompletionDialogue,
 	IncompletionDialogue,
 	DefaultDialogue,
-
 }
+
 public enum ChoiceActionType
 {
 	DoNothing,
@@ -23,8 +24,8 @@ public enum ChoiceActionType
 	WinningChoice,
 	LosingChoice,
 	IncompleteStep
-
 }
+
 /// <summary>
 /// A Dialogue is a list of consecutive DialogueLines. They play in sequence using the input of the player to skip forward.
 /// In future versions it might contain support for branching conversations.
@@ -32,44 +33,19 @@ public enum ChoiceActionType
 [CreateAssetMenu(fileName = "new Dialogue", menuName = "Dialogues/Dialogue Data")]
 public class DialogueDataSO : ScriptableObject
 {
-
 	[SerializeField] private List<Line> _lines = default;
 	[SerializeField] private DialogueType _dialogueType = default;
 	[SerializeField] private VoidEventChannelSO _endOfDialogueEvent = default;
+	
 	public VoidEventChannelSO EndOfDialogueEvent => _endOfDialogueEvent;
-	public List<Line> _Lines => _lines;
+	public List<Line> Lines => _lines;
+
 	public DialogueType DialogueType
 	{
 		get { return _dialogueType; }
 		set { _dialogueType = value; }
 	}
 
-	public void SetActor(ActorSO newActor)
-	{
-		//_actor = newActor;
-
-	}
-	public DialogueDataSO()
-	{
-	}
-
-	public DialogueDataSO(DialogueDataSO dialogue)
-	{
-
-		/*	_actor = dialogue.Actor;
-			_dialogueLines = new List<LocalizedString>(dialogue.DialogueLines);
-			_choices = new List<Choice>();
-			_endOfDialogueEvent = dialogue.EndOfDialogueEvent;
-			if (dialogue.Choices != null)
-				for (int i = 0; i < dialogue.Choices.Count; i++)
-				{
-
-					_choices.Add(new Choice(dialogue.Choices[i]));
-
-				}
-			_dialogueType = dialogue.DialogueType;
-		*/
-	}
 	public void FinishDialogue()
 	{
 		if (EndOfDialogueEvent != null)
@@ -102,10 +78,7 @@ public class DialogueDataSO : ScriptableObject
 				_lines.Add(_dialogueLine);
 
 		} while (_dialogueLine.TextList != null);
-
-
 	}
-
 
 	/// <summary>
 	/// This function is only useful for the Questline Tool in Editor to remove a Questline
@@ -116,9 +89,7 @@ public class DialogueDataSO : ScriptableObject
 		return AssetDatabase.GetAssetPath(this);
 	}
 #endif
-
 }
-
 
 [Serializable]
 public class Choice
@@ -126,32 +97,34 @@ public class Choice
 	[SerializeField] private LocalizedString _response = default;
 	[SerializeField] private DialogueDataSO _nextDialogue = default;
 	[SerializeField] private ChoiceActionType _actionType = default;
+
 	public LocalizedString Response => _response;
 	public DialogueDataSO NextDialogue => _nextDialogue;
 	public ChoiceActionType ActionType => _actionType;
+	
 	public void SetNextDialogue(DialogueDataSO dialogue)
 	{
 		_nextDialogue = dialogue;
 	}
-	public Choice()
-	{
-	}
+
 	public Choice(Choice choice)
 	{
 		_response = choice.Response;
 		_nextDialogue = choice.NextDialogue;
 		_actionType = ActionType;
 	}
+
 	public Choice(LocalizedString response)
 	{
 		_response = response;
-
 	}
+
 	public void SetChoiceAction(Comment comment)
 	{
 		_actionType = (ChoiceActionType)Enum.Parse(typeof(ChoiceActionType), comment.CommentText);
 	}
 }
+
 [Serializable]
 public class Line
 {
@@ -162,14 +135,17 @@ public class Line
 	public ActorID Actor => _actorID;
 	public List<LocalizedString> TextList => _textList;
 	public List<Choice> Choices => _choices;
+
 	public Line()
 	{
 		_textList = null;
 	}
+
 	public void SetActor(Comment comment)
 	{
 		_actorID = (ActorID)Enum.Parse(typeof(ActorID), comment.CommentText);
 	}
+
 #if UNITY_EDITOR
 	public Line(string _name)
 	{
@@ -204,7 +180,6 @@ public class Line
 			Choice choice = null;
 			do
 			{
-
 				choiceIndex++;
 				string key = "C" + choiceIndex + "-" + _name;
 
@@ -224,17 +199,12 @@ public class Line
 				{
 					choice = null;
 				}
-
 			} while (choice != null);
-
 		}
 		else
 		{
 			_textList = null;
-
 		}
-
 	}
 #endif
-
 }

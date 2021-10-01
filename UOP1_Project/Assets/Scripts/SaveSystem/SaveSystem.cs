@@ -88,7 +88,7 @@ public class SaveSystem : ScriptableObject
 		{
 			if (FileManager.WriteToFile(saveFilename, saveData.ToJson()))
 			{
-				//		Debug.Log("Save successful " + saveFilename);
+				//Debug.Log("Save successful " + saveFilename);
 			}
 		}
 	}

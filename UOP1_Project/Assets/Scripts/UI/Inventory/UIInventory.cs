@@ -1,74 +1,40 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.Serialization;
 
 public class UIInventory : MonoBehaviour
 {
-
-	[SerializeField]
-	private InventorySO _currentInventory = default;
-
-	[SerializeField]
-	private UIInventoryItem _itemPrefab = default;
-
-	[SerializeField]
-	private GameObject _contentParent = default;
-	[SerializeField]
-	private GameObject _errorPotMessage = default;
-
-	[FormerlySerializedAs("_inspectorFiller")]
-	[SerializeField]
-	private UIInventoryInspector _inspectorPanel = default;
-
-	[FormerlySerializedAs("_tabFiller")]
-	[SerializeField]
-	private UIInventoryTabs _tabsPanel = default;
-
-	[FormerlySerializedAs("_buttonFiller")]
-	[SerializeField]
-	private UIActionButton _actionButton = default;
-
-	InventoryTabSO _selectedTab = default;
-
-	[SerializeField]
-	List<InventoryTabSO> _tabTypesList = new List<InventoryTabSO>();
-
-	private int selectedItemId = -1;
-
-	[FormerlySerializedAs("_instanciatedItems")]
-	[SerializeField]
-	private List<UIInventoryItem> _availableItemSlots = default;
-
-	[SerializeField]
-	private VoidEventChannelSO _onInteractionEndedEvent = default;
-
-	[SerializeField]
-	private ItemEventChannelSO _useItemEvent = default;
-	[SerializeField]
-	private IntEventChannelSO _restoreHealth = default;
-	[SerializeField]
-	private ItemEventChannelSO _equipItemEvent = default;
-	[SerializeField]
-	private ItemEventChannelSO _cookRecipeEvent = default;
-
-	[SerializeField]
-	private InputReader _inputReader = default;
-
 	public UnityAction Closed;
-	bool _isNearPot = false;
+
+	[SerializeField] private InputReader _inputReader = default;
+	[SerializeField] private InventorySO _currentInventory = default;
+	[SerializeField] private UIInventoryItem _itemPrefab = default;
+	[SerializeField] private GameObject _contentParent = default;
+	[SerializeField] private GameObject _errorPotMessage = default;
+	[SerializeField] private UIInventoryInspector _inspectorPanel = default;
+	[SerializeField] private List<InventoryTabSO> _tabTypesList = new List<InventoryTabSO>();
+	[SerializeField] private List<UIInventoryItem> _availableItemSlots = default;
+
+	[Header("Listening to")]
+	[SerializeField] private UIInventoryTabs _tabsPanel = default;
+	[SerializeField] private UIActionButton _actionButton = default;
+	[SerializeField] private VoidEventChannelSO _onInteractionEndedEvent = default;
+
+	[Header("Broadcasting on")]
+	[SerializeField] private ItemEventChannelSO _useItemEvent = default;
+	[SerializeField] private IntEventChannelSO _restoreHealth = default;
+	[SerializeField] private ItemEventChannelSO _equipItemEvent = default;
+	[SerializeField] private ItemEventChannelSO _cookRecipeEvent = default;
+
+	private InventoryTabSO _selectedTab = default;
+	private bool _isNearPot = false;
+	private int selectedItemId = -1;
 
 	private void OnEnable()
 	{
-		//Check if the event exists to avoid errors
-
 		_actionButton.Clicked += OnActionButtonClicked;
-
 		_tabsPanel.TabChanged += OnChangeTab;
-
-
 		_onInteractionEndedEvent.OnEventRaised += InteractionEnded;
-
 
 		for (int i = 0; i < _availableItemSlots.Count; i++)
 		{
@@ -81,8 +47,8 @@ public class UIInventory : MonoBehaviour
 	private void OnDisable()
 	{
 		_actionButton.Clicked -= OnActionButtonClicked;
-
 		_tabsPanel.TabChanged -= OnChangeTab;
+		_onInteractionEndedEvent.OnEventRaised -= InteractionEnded;
 
 		for (int i = 0; i < _availableItemSlots.Count; i++)
 		{
@@ -92,9 +58,8 @@ public class UIInventory : MonoBehaviour
 		_inputReader.TabSwitched -= OnSwitchTab;
 	}
 
-	void OnSwitchTab(float orientation)
+	private void OnSwitchTab(float orientation)
 	{
-
 		if (orientation != 0)
 		{
 			bool isLeft = orientation < 0;
@@ -115,9 +80,6 @@ public class UIInventory : MonoBehaviour
 
 			OnChangeTab(_tabTypesList[initialIndex]);
 		}
-
-
-
 	}
 
 	public void FillInventory(InventoryTabType _selectedTabType = InventoryTabType.CookingItem, bool isNearPot = false)
@@ -137,9 +99,7 @@ public class UIInventory : MonoBehaviour
 					_selectedTab = _tabTypesList[0];
 				}
 			}
-
 		}
-
 
 		if (_selectedTab != null)
 		{
@@ -151,9 +111,7 @@ public class UIInventory : MonoBehaviour
 		}
 		else
 		{
-
-			Debug.LogError("There's no selected tab ");
-
+			Debug.LogError("There's no selected tab");
 		}
 	}
 
@@ -164,14 +122,11 @@ public class UIInventory : MonoBehaviour
 
 	void SetTabs(List<InventoryTabSO> typesList, InventoryTabSO selectedType)
 	{
-
 		_tabsPanel.SetTabs(typesList, selectedType);
-
-
 	}
+
 	void FillInvetoryItems(List<ItemStack> listItemsToShow)
 	{
-
 		if (_availableItemSlots == null)
 			_availableItemSlots = new List<UIInventoryItem>();
 
@@ -181,32 +136,28 @@ public class UIInventory : MonoBehaviour
 		{
 			if (i < listItemsToShow.Count)
 			{
-
-				//fill
 				bool isSelected = selectedItemId == i;
 				_availableItemSlots[i].SetItem(listItemsToShow[i], isSelected);
 
 			}
 			else if (i < _availableItemSlots.Count)
 			{
-				//Desactive
 				_availableItemSlots[i].SetInactiveItem();
 			}
 
 		}
+
 		HideItemInformation();
-		//unselect selected Item
+
 		if (selectedItemId >= 0)
 		{
 			UnselectItem(selectedItemId);
 			selectedItemId = -1;
 		}
-		//hover First Element
 		if (_availableItemSlots.Count > 0)
 		{
 			_availableItemSlots[0].SelectFirstElement();
 		}
-
 	}
 
 	void UpdateItemInInventory(ItemStack itemToUpdate, bool removeItem)
@@ -216,25 +167,21 @@ public class UIInventory : MonoBehaviour
 
 		if (removeItem)
 		{
-			if (_availableItemSlots.Exists(o => o._currentItem == itemToUpdate))
+			if (_availableItemSlots.Exists(o => o.currentItem == itemToUpdate))
 			{
 
-				int index = _availableItemSlots.FindIndex(o => o._currentItem == itemToUpdate);
+				int index = _availableItemSlots.FindIndex(o => o.currentItem == itemToUpdate);
 				_availableItemSlots[index].SetInactiveItem();
-
 			}
-
 		}
 		else
 		{
 			int index = 0;
+
 			//if the item has already been created
-			if (_availableItemSlots.Exists(o => o._currentItem == itemToUpdate))
+			if (_availableItemSlots.Exists(o => o.currentItem == itemToUpdate))
 			{
-
-				index = _availableItemSlots.FindIndex(o => o._currentItem == itemToUpdate);
-
-
+				index = _availableItemSlots.FindIndex(o => o.currentItem == itemToUpdate);
 			}
 			//if the item needs to be created
 			else
@@ -242,35 +189,24 @@ public class UIInventory : MonoBehaviour
 				//if the new item needs to be instantiated
 				if (_currentInventory.Items.Count > _availableItemSlots.Count)
 				{
-					//instantiate 
 					UIInventoryItem instantiatedPrefab = Instantiate(_itemPrefab, _contentParent.transform) as UIInventoryItem;
 					_availableItemSlots.Add(instantiatedPrefab);
-
-
 				}
+
 				//find the last instantiated game object not used
 				index = _currentInventory.Items.Count;
-
-
 			}
 
-			//set item
 			bool isSelected = selectedItemId == index;
 			_availableItemSlots[index].SetItem(itemToUpdate, isSelected);
-
-
 		}
-
 	}
-
-
 
 	public void InspectItem(ItemSO itemToInspect)
 	{
-		if (_availableItemSlots.Exists(o => o._currentItem.Item == itemToInspect))
+		if (_availableItemSlots.Exists(o => o.currentItem.Item == itemToInspect))
 		{
-			int itemIndex = _availableItemSlots.FindIndex(o => o._currentItem.Item == itemToInspect);
-
+			int itemIndex = _availableItemSlots.FindIndex(o => o.currentItem.Item == itemToInspect);
 
 			//unselect selected Item
 			if (selectedItemId >= 0 && selectedItemId != itemIndex)
@@ -299,38 +235,31 @@ public class UIInventory : MonoBehaviour
 
 			//set button
 			_actionButton.FillInventoryButton(itemToInspect.ItemType, isInteractable);
-
-
 		}
-
 	}
 
 	void ShowItemInformation(ItemSO item)
 	{
-
 		bool[] availabilityArray = _currentInventory.IngredientsAvailability(item.IngredientsList);
 
 		_inspectorPanel.FillInspector(item, availabilityArray);
 		_inspectorPanel.gameObject.SetActive(true);
-
 	}
+
 	void HideItemInformation()
 	{
 		_actionButton.gameObject.SetActive(false);
 		_inspectorPanel.gameObject.SetActive(false);
-
 	}
-
 
 	void UnselectItem(int itemIndex)
 	{
-
 		if (_availableItemSlots.Count > itemIndex)
 		{
 			_availableItemSlots[itemIndex].UnselectItem();
-
 		}
 	}
+
 	void UpdateInventory()
 	{
 		FillInventory(_selectedTab.TabType, _isNearPot);
@@ -338,19 +267,17 @@ public class UIInventory : MonoBehaviour
 
 	void OnActionButtonClicked()
 	{
-
 		//find the selected Item
-		if (_availableItemSlots.Count > selectedItemId && selectedItemId > -1)
+		if (_availableItemSlots.Count > selectedItemId
+			&& selectedItemId > -1)
 		{
-			//find the item 
-			ItemSO itemToActOn = new ItemSO();
-			itemToActOn = _availableItemSlots[selectedItemId]._currentItem.Item;
+			ItemSO itemToActOn = ScriptableObject.CreateInstance<ItemSO>();
+			itemToActOn = _availableItemSlots[selectedItemId].currentItem.Item;
 
 			//check the selected Item type
 			//call action function depending on the itemType
 			switch (itemToActOn.ItemType.ActionType)
 			{
-
 				case ItemInventoryActionType.Cook:
 					CookRecipe(itemToActOn);
 					break;
@@ -363,20 +290,17 @@ public class UIInventory : MonoBehaviour
 				default:
 
 					break;
-
 			}
 		}
-
 	}
+
 	void UseItem(ItemSO itemToUse)
 	{
 		if (itemToUse.HealthResorationValue > 0)
 		{ _restoreHealth.RaiseEvent(itemToUse.HealthResorationValue); }
 		_useItemEvent.RaiseEvent(itemToUse);
-		//update inventory
 		UpdateInventory();
 	}
-
 
 	void EquipItem(ItemSO itemToUse)
 	{
@@ -386,8 +310,6 @@ public class UIInventory : MonoBehaviour
 
 	void CookRecipe(ItemSO recipeToCook)
 	{
-
-		//get item
 		_cookRecipeEvent.RaiseEvent(recipeToCook);
 
 		//update inspector
@@ -395,19 +317,15 @@ public class UIInventory : MonoBehaviour
 
 		//update inventory
 		UpdateInventory();
-
-
 	}
 
 	void OnChangeTab(InventoryTabSO tabType)
 	{
-
 		FillInventory(tabType.TabType, _isNearPot);
-
 	}
+
 	public void CloseInventory()
 	{
 		Closed.Invoke();
 	}
-
 }

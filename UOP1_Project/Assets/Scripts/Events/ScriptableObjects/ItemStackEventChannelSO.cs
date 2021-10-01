@@ -7,9 +7,10 @@ using UnityEngine;
 /// </summary>
 
 [CreateAssetMenu(menuName = "Events/UI/Item stack Event Channel")]
-public class ItemStackEventChannelSO : ScriptableObject
+public class ItemStackEventChannelSO : DescriptionBaseSO
 {
 	public UnityAction<ItemStack> OnEventRaised;
+	
 	public void RaiseEvent(ItemStack item)
 	{
 		if (OnEventRaised != null)

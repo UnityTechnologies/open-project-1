@@ -133,6 +133,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  IsSelected: 0
 --- !u!1 &550526546634029911
 GameObject:
   m_ObjectHideFlags: 0
@@ -193,8 +194,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _choiceText: {fileID: 550526547636381840}
-  _makeAChoiceEvent: {fileID: 11400000, guid: f7b40077957f3834a8d5354c3e4ce759, type: 2}
   _actionButton: {fileID: 57285731237384622}
+  _onChoiceMade: {fileID: 11400000, guid: f7b40077957f3834a8d5354c3e4ce759, type: 2}
 --- !u!1 &550526547636381838
 GameObject:
   m_ObjectHideFlags: 0
@@ -350,6 +351,7 @@ MonoBehaviour:
       m_KeyId: 214189465600
       m_Key: 
     m_FallbackState: 0
+    m_WaitForCompletion: 1
   m_FormatArguments: []
   m_UpdateString:
     m_PersistentCalls:

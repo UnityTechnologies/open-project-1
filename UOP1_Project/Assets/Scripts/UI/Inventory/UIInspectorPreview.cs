@@ -1,22 +1,13 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 public class UIInspectorPreview : MonoBehaviour
 {
-	[SerializeField]
-	private Image _previewImage = default;
-
+	[SerializeField] private Image _previewImage = default;
 
 	public void FillPreview(ItemSO ItemToInspect)
 	{
-
 		_previewImage.gameObject.SetActive(true);
 		_previewImage.sprite = ItemToInspect.PreviewImage;
-
 	}
-
-
-
 }

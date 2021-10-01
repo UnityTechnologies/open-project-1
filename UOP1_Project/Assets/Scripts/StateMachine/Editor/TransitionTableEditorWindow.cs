@@ -15,11 +15,11 @@ namespace UOP1.StateMachine.Editor
 
 		private UnityEditor.Editor _transitionTableEditor;
 
-		[MenuItem("Transition Table Editor", menuItem = "ChopChop/Transition Table Editor")]
+		[MenuItem("State Machine Editor", menuItem = "ChopChop/State Machine Editor")]
 		internal static void Display()
 		{
 			if (_window == null)
-				_window = GetWindow<TransitionTableEditorWindow>("Transition Table Editor");
+				_window = GetWindow<TransitionTableEditorWindow>("State Machine Editor");
 
 			_window.Show();
 		}
@@ -66,7 +66,7 @@ namespace UOP1.StateMachine.Editor
 		private void OnLostFocus()
 		{
 			ListView listView = rootVisualElement.Q<ListView>(className: "table-list");
-			listView.onSelectionChanged -= OnListSelectionChanged;
+			listView.onSelectionChange -= OnListSelectionChanged;
 		}
 
 		private void Update()
@@ -98,17 +98,19 @@ namespace UOP1.StateMachine.Editor
 			listView.bindItem = (element, i) => ((Label)element).text = assets[i].name;
 			listView.selectionType = SelectionType.Single;
 
-			listView.onSelectionChanged -= OnListSelectionChanged;
-			listView.onSelectionChanged += OnListSelectionChanged;
+			listView.onSelectionChange -= OnListSelectionChanged;
+			listView.onSelectionChange += OnListSelectionChanged;
 
 			if (_transitionTableEditor && _transitionTableEditor.target)
 				listView.selectedIndex = System.Array.IndexOf(assets, _transitionTableEditor.target);
 		}
 
-		private void OnListSelectionChanged(List<object> list)
+		private void OnListSelectionChanged(IEnumerable<object> enumerable)
 		{
 			IMGUIContainer editor = rootVisualElement.Q<IMGUIContainer>(className: "table-editor");
 			editor.onGUIHandler = null;
+
+			List<object> list = (List<object>)enumerable;
 
 			if (list.Count == 0)
 				return;

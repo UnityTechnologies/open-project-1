@@ -1,13 +1,10 @@
 ﻿using UnityEngine;
-using System.Collections;
-using UnityEngine.Events;
-using System.Collections.Generic;
 
 /// <summary>
 /// Event on which <c>AudioCue</c> components send a message to play SFX and music. <c>AudioManager</c> listens on these events, and actually plays the sound.
 /// </summary>
 [CreateAssetMenu(menuName = "Events/AudioCue Event Channel")]
-public class AudioCueEventChannelSO : EventChannelBaseSO
+public class AudioCueEventChannelSO : DescriptionBaseSO
 {
 	public AudioCuePlayAction OnAudioCuePlayRequested;
 	public AudioCueStopAction OnAudioCueStopRequested;
@@ -23,7 +20,7 @@ public class AudioCueEventChannelSO : EventChannelBaseSO
 		}
 		else
 		{
-			Debug.LogWarning("An AudioCue play event was requested, but nobody picked it up. " +
+			Debug.LogWarning("An AudioCue play event was requested  for " + audioCue.name +", but nobody picked it up. " +
 				"Check why there is no AudioManager already loaded, " +
 				"and make sure it's listening on this AudioCue Event channel.");
 		}

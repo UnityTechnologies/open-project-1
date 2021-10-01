@@ -1,37 +1,40 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Playables;
 
 public enum InteractionType { None = 0, PickUp, Cook, Talk };
 
 public class InteractionManager : MonoBehaviour
 {
-	[HideInInspector] public InteractionType currentInteractionType; //This is checked by conditions in the StateMachine
 	[SerializeField] private InputReader _inputReader = default;
-	//To store the object we are currently interacting with
-	private LinkedList<Interaction> _potentialInteractions = new LinkedList<Interaction>();
 
 	//Events for the different interaction types
 	[Header("Broadcasting on")]
 	[SerializeField] private ItemEventChannelSO _onObjectPickUp = default;
 	[SerializeField] private VoidEventChannelSO _onCookingStart = default;
 	[SerializeField] private DialogueActorChannelSO _startTalking = default;
-	//UI event
 	[SerializeField] private InteractionUIEventChannelSO _toggleInteractionUI = default;
 
 	[Header("Listening to")]
 	[SerializeField] private VoidEventChannelSO _onInteractionEnded = default;
+	[SerializeField] private PlayableDirectorChannelSO _onCutsceneStart = default;
+	
+	[ReadOnly] public InteractionType currentInteractionType; //This is checked/consumed by conditions in the StateMachine
+
+	private LinkedList<Interaction> _potentialInteractions = new LinkedList<Interaction>(); //To store the objects we the player could potentially interact with
 
 	private void OnEnable()
 	{
-		_inputReader.interactEvent += OnInteractionButtonPress;
+		_inputReader.InteractEvent += OnInteractionButtonPress;
 		_onInteractionEnded.OnEventRaised += OnInteractionEnd;
+		_onCutsceneStart.OnEventRaised += ResetPotentialInteractions;
 	}
 
 	private void OnDisable()
 	{
-		_inputReader.interactEvent -= OnInteractionButtonPress;
+		_inputReader.InteractEvent -= OnInteractionButtonPress;
 		_onInteractionEnded.OnEventRaised -= OnInteractionEnd;
-		ResetPotentialInteractions();
+		_onCutsceneStart.OnEventRaised -= ResetPotentialInteractions;
 	}
 
 	// Called mid-way through the AnimationClip of collecting
@@ -152,7 +155,7 @@ public class InteractionManager : MonoBehaviour
 		_inputReader.EnableGameplayInput();
 	}
 
-	private void ResetPotentialInteractions()
+	private void ResetPotentialInteractions(PlayableDirector _playableDirector)
 	{
 		_potentialInteractions.Clear();
 		RequestUpdateUI(_potentialInteractions.Count > 0);

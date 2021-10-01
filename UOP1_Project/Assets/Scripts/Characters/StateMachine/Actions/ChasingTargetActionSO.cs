@@ -12,7 +12,7 @@ public class ChasingTargetActionSO : StateActionSO
 	[Tooltip("NPC chasing speed")]
 	[SerializeField] private float _chasingSpeed = default;
 
-	public Vector3 TargetPosition => _targetTransform.Transform.position;
+	public Vector3 TargetPosition => _targetTransform.Value.position;
 	public float ChasingSpeed => _chasingSpeed;
 
 	protected override StateAction CreateAction() => new ChasingTargetAction();

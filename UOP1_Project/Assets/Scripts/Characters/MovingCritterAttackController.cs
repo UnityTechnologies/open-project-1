@@ -1,20 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class MovingCritterAttackController : MonoBehaviour
 {
-	// Reference of the player transform to compute the propel target position
-	[SerializeField]
-	private TransformAnchor _playerTransform;
-
-	// Propel factor is the proportion of the distance between the critter and the player crossed by the critter during the propel animation
-	[SerializeField]
-	private float _propelFactor = 1.0f;
-
-	// Duration of the propel section of the animation.
-	[SerializeField]
-	private float _propelDuration = 0.2f;
+	[SerializeField] private TransformAnchor _playerTransform;
+	[SerializeField] private float _propelFactor = 1.0f; // Propel factor is the proportion of the distance between the critter and the player crossed by the critter during the propel animation
+	[SerializeField] private float _propelDuration = 0.2f;
 
 	private float _innerTime = 0.0f;
 	private Vector3 _propelTargetVector = default;
@@ -22,7 +12,7 @@ public class MovingCritterAttackController : MonoBehaviour
 	// When the attack starts, the position targeted by the attack is determined and is not changed afterward
 	public void SetAttackTarget()
 	{
-		_propelTargetVector = (_playerTransform.Transform.position - transform.position) * _propelFactor / _propelDuration;
+		_propelTargetVector = (_playerTransform.Value.position - transform.position) * _propelFactor / _propelDuration;
 	}
 
 	// Trigger the propel movement during the attack
@@ -31,7 +21,6 @@ public class MovingCritterAttackController : MonoBehaviour
 		_innerTime = _propelDuration;
 	}
 
-	// Update is called once per frame
 	void Update()
 	{
 		if (_innerTime > 0)

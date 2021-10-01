@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
@@ -15,14 +13,14 @@ public class SceneLoader : MonoBehaviour
 	[SerializeField] private GameSceneSO _gameplayScene = default;
 	[SerializeField] private InputReader _inputReader = default;
 
-	[Header("Load Events")]
+	[Header("Listening to")]
 	[SerializeField] private LoadEventChannelSO _loadLocation = default;
 	[SerializeField] private LoadEventChannelSO _loadMenu = default;
 	[SerializeField] private LoadEventChannelSO _coldStartupLocation = default;
 
 	[Header("Broadcasting on")]
 	[SerializeField] private BoolEventChannelSO _toggleLoadingScreen = default;
-	[SerializeField] private VoidEventChannelSO _onSceneReady = default;
+	[SerializeField] private VoidEventChannelSO _onSceneReady = default; //picked up by the SpawnSystem
 	[SerializeField] private FadeChannelSO _fadeRequestChannel = default;
 
 	private AsyncOperationHandle<SceneInstance> _loadingOperationHandle;
@@ -93,7 +91,7 @@ public class SceneLoader : MonoBehaviour
 			|| !_gameplayManagerSceneInstance.Scene.isLoaded)
 		{
 			_gameplayManagerLoadingOpHandle = _gameplayScene.sceneReference.LoadSceneAsync(LoadSceneMode.Additive, true);
-			_gameplayManagerLoadingOpHandle.Completed += OnGameplayMangersLoaded;
+			_gameplayManagerLoadingOpHandle.Completed += OnGameplayManagersLoaded;
 		}
 		else
 		{
@@ -101,7 +99,7 @@ public class SceneLoader : MonoBehaviour
 		}
 	}
 
-	private void OnGameplayMangersLoaded(AsyncOperationHandle<SceneInstance> obj)
+	private void OnGameplayManagersLoaded(AsyncOperationHandle<SceneInstance> obj)
 	{
 		_gameplayManagerSceneInstance = _gameplayManagerLoadingOpHandle.Result;
 

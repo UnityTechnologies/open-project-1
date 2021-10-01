@@ -7,7 +7,7 @@ using UnityEngine;
 public class Protagonist : MonoBehaviour
 {
 	[SerializeField] private InputReader _inputReader = default;
-	public TransformAnchor gameplayCameraTransform;
+	[SerializeField] private TransformAnchor _gameplayCameraTransform = default;
 
 	private Vector2 _inputVector;
 	private float _previousSpeed;
@@ -36,12 +36,12 @@ public class Protagonist : MonoBehaviour
 	//Adds listeners for events being triggered in the InputReader script
 	private void OnEnable()
 	{
-		_inputReader.jumpEvent += OnJumpInitiated;
-		_inputReader.jumpCanceledEvent += OnJumpCanceled;
-		_inputReader.moveEvent += OnMove;
-		_inputReader.startedRunning += OnStartedRunning;
-		_inputReader.stoppedRunning += OnStoppedRunning;
-		_inputReader.attackEvent += OnStartedAttack;
+		_inputReader.JumpEvent += OnJumpInitiated;
+		_inputReader.JumpCanceledEvent += OnJumpCanceled;
+		_inputReader.MoveEvent += OnMove;
+		_inputReader.StartedRunning += OnStartedRunning;
+		_inputReader.StoppedRunning += OnStoppedRunning;
+		_inputReader.AttackEvent += OnStartedAttack;
 		_inputReader.startedDebugWalkRun += OnStartedDebugWalkRun;
 		_inputReader.stoppedDebugWalkRun += OnStoppedDebugWalkRun;
 		//...
@@ -50,12 +50,12 @@ public class Protagonist : MonoBehaviour
 	//Removes all listeners to the events coming from the InputReader script
 	private void OnDisable()
 	{
-		_inputReader.jumpEvent -= OnJumpInitiated;
-		_inputReader.jumpCanceledEvent -= OnJumpCanceled;
-		_inputReader.moveEvent -= OnMove;
-		_inputReader.startedRunning -= OnStartedRunning;
-		_inputReader.stoppedRunning -= OnStoppedRunning;
-		_inputReader.attackEvent -= OnStartedAttack;
+		_inputReader.JumpEvent -= OnJumpInitiated;
+		_inputReader.JumpCanceledEvent -= OnJumpCanceled;
+		_inputReader.MoveEvent -= OnMove;
+		_inputReader.StartedRunning -= OnStartedRunning;
+		_inputReader.StoppedRunning -= OnStoppedRunning;
+		_inputReader.AttackEvent -= OnStartedAttack;
 		_inputReader.startedDebugWalkRun -= OnStartedDebugWalkRun;
 		_inputReader.stoppedDebugWalkRun -= OnStoppedDebugWalkRun;
 		//...
@@ -63,13 +63,7 @@ public class Protagonist : MonoBehaviour
 
 	private void Update()
 	{
-		GroundCheck();
 		RecalculateMovement();
-	}
-
-	private void GroundCheck()
-	{
-
 	}
 
 	private void RecalculateMovement()
@@ -77,12 +71,12 @@ public class Protagonist : MonoBehaviour
 		float targetSpeed;
 		Vector3 adjustedMovement;
 
-		if (gameplayCameraTransform.isSet)
+		if (_gameplayCameraTransform.isSet)
 		{
 			//Get the two axes from the camera and flatten them on the XZ plane
-			Vector3 cameraForward = gameplayCameraTransform.Transform.forward;
+			Vector3 cameraForward = _gameplayCameraTransform.Value.forward;
 			cameraForward.y = 0f;
-			Vector3 cameraRight = gameplayCameraTransform.Transform.right;
+			Vector3 cameraRight = _gameplayCameraTransform.Value.right;
 			cameraRight.y = 0f;
 
 			//Use the two axes, modulated by the corresponding inputs, and construct the final vector

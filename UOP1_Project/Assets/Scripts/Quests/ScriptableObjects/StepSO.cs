@@ -9,37 +9,24 @@ public enum StepType
 [CreateAssetMenu(fileName = "step", menuName = "Quests/Step")]
 public class StepSO : SerializableScriptableObject
 {
-
 	[Tooltip("The Character this mission will need interaction with")]
-	[SerializeField]
-	private ActorSO _actor = default;
+	[SerializeField] private ActorSO _actor = default;
 	[Tooltip("The dialogue that will be diplayed befor an action, if any")]
-	[SerializeField]
-	private DialogueDataSO _dialogueBeforeStep = default;
+	[SerializeField] private DialogueDataSO _dialogueBeforeStep = default;
 	[Tooltip("The dialogue that will be diplayed when the step is achieved")]
-	[SerializeField]
-	private DialogueDataSO _completeDialogue = default;
+	[SerializeField] private DialogueDataSO _completeDialogue = default;
 	[Tooltip("The dialogue that will be diplayed if the step is not achieved yet")]
-	[SerializeField]
-	private DialogueDataSO _incompleteDialogue = default;
-	[Tooltip("The type of the step")]
-	[SerializeField]
-	private StepType _type = default;
+	[SerializeField] private DialogueDataSO _incompleteDialogue = default;
+	[SerializeField] private StepType _type = default;
 	[Tooltip("The item to check/give")]
-	[SerializeField]
-	private ItemSO _item = default;
-	[Tooltip("Is there any reward")]
-	[SerializeField]
-	private bool _hasReward = default;
+	[SerializeField] private ItemSO _item = default;
+	[SerializeField] private bool _hasReward = default;
 	[Tooltip("The item to reward if any")]
-	[SerializeField]
-	private ItemSO _rewardItem = default;
-	[SerializeField]
-	private int _rewardItemCount = 1; // by default the reward is 1 item (if any)
-	[SerializeField]
-	bool _isDone = false;
-	[SerializeField]
-	VoidEventChannelSO _endStepEvent = default;
+	[SerializeField] private ItemSO _rewardItem = default;
+	[SerializeField] private int _rewardItemCount = 1; // by default the reward is 1 item (if any)
+	[SerializeField] bool _isDone = false;
+	[SerializeField] VoidEventChannelSO _endStepEvent = default;
+
 	public DialogueDataSO DialogueBeforeStep
 	{
 		get { return _dialogueBeforeStep; }
@@ -81,12 +68,12 @@ public class StepSO : SerializableScriptableObject
 		if (_endStepEvent != null)
 			_endStepEvent.RaiseEvent();
 		_isDone = true;
-
 	}
 
+	//This function is a leftover of the QuestEditorWindow, which is currently non functional
 	public DialogueDataSO StepToDialogue()
 	{
-		DialogueDataSO dialogueData = new DialogueDataSO();
+		DialogueDataSO dialogueData = ScriptableObject.CreateInstance<DialogueDataSO>();
 		/*
 				dialogueData.SetActor(Actor);
 				if (DialogueBeforeStep != null)
@@ -120,6 +107,7 @@ public class StepSO : SerializableScriptableObject
 				*/
 		return dialogueData;
 	}
+
 #if UNITY_EDITOR
 	/// <summary>
 	/// This function is only useful for the Questline Tool in Editor to remove a Step
@@ -130,7 +118,4 @@ public class StepSO : SerializableScriptableObject
 		return AssetDatabase.GetAssetPath(this);
 	}
 #endif
-
-
-
 }

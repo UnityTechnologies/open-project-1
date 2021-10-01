@@ -7,9 +7,12 @@ public class AnimatorParameterActionSOEditor : CustomBaseEditor
 {
 	public override void OnInspectorGUI()
 	{
-		DrawNonEdtiableScriptReference<AnimatorParameterActionSO>();
+		base.DrawNonEditableScriptReference<AnimatorParameterActionSO>();
 
 		serializedObject.Update();
+
+		EditorGUILayout.PropertyField(serializedObject.FindProperty("description"));
+		EditorGUILayout.Space();
 
 		EditorGUILayout.PropertyField(serializedObject.FindProperty("whenToRun"));
 		EditorGUILayout.Space();

@@ -1,13 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Events;
 
 [System.Serializable]
-public class BoolEvent : UnityEvent<bool, GameObject>
-{
-
-}
+public class BoolEvent : UnityEvent<bool, GameObject> { }
 
 /// <summary>
 /// A generic class for a "zone", that is a trigger collider that can detect if an object of a certain type (layer) entered or exited it.

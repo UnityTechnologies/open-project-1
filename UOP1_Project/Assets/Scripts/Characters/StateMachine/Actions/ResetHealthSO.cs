@@ -24,6 +24,6 @@ public class ResetHealth : StateAction
 
 	public override void OnStateExit()
 	{
-		_damageableEntity.ResetHealth();
+		_damageableEntity.Revive();
 	}
 }

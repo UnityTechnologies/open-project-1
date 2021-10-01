@@ -9,10 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6352810064952983069}
-  - component: {fileID: 6395593152779691077}
-  - component: {fileID: 4731765889197187948}
-  - component: {fileID: 7057594148529581253}
+  - component: {fileID: 5798732883492657535}
   - component: {fileID: 5382124729891650614}
+  - component: {fileID: 7057594148529581253}
   m_Layer: 9
   m_Name: UIHealthDisplay
   m_TagString: Untagged
@@ -44,67 +43,14 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 20}
   m_Pivot: {x: 0, y: 1}
---- !u!223 &6395593152779691077
-Canvas:
+--- !u!222 &5798732883492657535
+CanvasRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2815881603653157998}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_RenderMode: 2
-  m_Camera: {fileID: 0}
-  m_PlaneDistance: 100
-  m_PixelPerfect: 0
-  m_ReceivesEvents: 1
-  m_OverrideSorting: 0
-  m_OverridePixelPerfect: 0
-  m_SortingBucketNormalizedSize: 0
-  m_AdditionalShaderChannelsFlag: 25
-  m_SortingLayerID: 0
-  m_SortingOrder: 0
-  m_TargetDisplay: 0
---- !u!114 &4731765889197187948
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2815881603653157998}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_IgnoreReversedGraphics: 1
-  m_BlockingObjects: 0
-  m_BlockingMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
---- !u!114 &7057594148529581253
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2815881603653157998}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f8dfad91156ef4bff806fff3c3f9eacd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _currentHealth: {fileID: 11400000, guid: 9f77d45699a310c4c893d07ae96f341a, type: 2}
-  _healthConfig: {fileID: 11400000, guid: e45145042f2750b448851311cae4a1ec, type: 2}
-  _heartImages:
-  - {fileID: 1496849399793334725}
-  - {fileID: 2698728842335926261}
-  - {fileID: 882479229851078226}
-  - {fileID: 8327551769276309930}
-  - {fileID: 8717325367621303831}
-  healthText: {fileID: 0}
-  _deathEvent: {fileID: 11400000, guid: 0a29544909be226418bc1677ec369790, type: 2}
-  _updateHealthEvent: {fileID: 11400000, guid: 2447a760b3f9f134f8730aa53c8d2ece, type: 2}
+  m_CullTransparentMesh: 1
 --- !u!114 &5382124729891650614
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -131,6 +77,27 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &7057594148529581253
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2815881603653157998}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f8dfad91156ef4bff806fff3c3f9eacd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _protagonistHealth: {fileID: 11400000, guid: 9f77d45699a310c4c893d07ae96f341a, type: 2}
+  _healthConfig: {fileID: 11400000, guid: e45145042f2750b448851311cae4a1ec, type: 2}
+  _heartImages:
+  - {fileID: 1496849399793334725}
+  - {fileID: 2698728842335926261}
+  - {fileID: 882479229851078226}
+  - {fileID: 8327551769276309930}
+  - {fileID: 8717325367621303831}
+  _UIUpdateNeeded: {fileID: 11400000, guid: 2447a760b3f9f134f8730aa53c8d2ece, type: 2}
 --- !u!1001 &1205441492839601400
 PrefabInstance:
   m_ObjectHideFlags: 0

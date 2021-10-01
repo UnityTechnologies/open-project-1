@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using TMPro;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Localization;
@@ -11,51 +8,50 @@ using UnityEngine.Serialization;
 
 public class UISettingsLanguageComponent : MonoBehaviour
 {
-	[FormerlySerializedAs("languageDropdown")]
-	[SerializeField] UISettingItemFiller _languageField = default;
-
-	AsyncOperationHandle m_InitializeOperation;
-	List<string> languageList = new List<string>();
-
-	public event UnityAction<Locale> _save = delegate { };
-	private int _currentSelectedOption = 0;
-	private int _savedSelectedOption = default;
-
+	[SerializeField] private UISettingItemFiller _languageField = default;
 	[SerializeField] private UIGenericButton _saveButton;
 	[SerializeField] private UIGenericButton _resetButton;
 
+	public event UnityAction<Locale> _save = delegate { };
+	
+	private int _currentSelectedOption = 0;
+	private int _savedSelectedOption = default;
+	private AsyncOperationHandle _initializeOperation;
+	private List<string> _languagesList = new List<string>();
+
 	void OnEnable()
 	{
-		m_InitializeOperation = LocalizationSettings.SelectedLocaleAsync;
-		if (m_InitializeOperation.IsDone)
+		_initializeOperation = LocalizationSettings.SelectedLocaleAsync;
+		if (_initializeOperation.IsDone)
 		{
-			InitializeCompleted(m_InitializeOperation);
+			InitializeCompleted(_initializeOperation);
 		}
 		else
 		{
-			m_InitializeOperation.Completed += InitializeCompleted;
+			_initializeOperation.Completed += InitializeCompleted;
 		}
 		_saveButton.Clicked += SaveSettings;
 		_resetButton.Clicked += ResetSettings;
-		_languageField._nextOption += NextOption;
-		_languageField._previousOption += PreviousOption;
+		_languageField.OnNextOption += NextOption;
+		_languageField.OnPreviousOption += PreviousOption;
 	}
+
 	private void OnDisable()
 	{
 		ResetSettings();
 
 		_saveButton.Clicked -= SaveSettings;
 		_resetButton.Clicked -= ResetSettings;
-		_languageField._nextOption -= NextOption;
-		_languageField._previousOption -= PreviousOption;
+		_languageField.OnNextOption -= NextOption;
+		_languageField.OnPreviousOption -= PreviousOption;
 		LocalizationSettings.SelectedLocaleChanged -= LocalizationSettings_SelectedLocaleChanged;
 	}
 
 	void InitializeCompleted(AsyncOperationHandle obj)
 	{
-		m_InitializeOperation.Completed -= InitializeCompleted;
+		_initializeOperation.Completed -= InitializeCompleted;
 		// Create an option in the dropdown for each Locale
-		languageList = new List<string>();
+		_languagesList = new List<string>();
 
 		List<Locale> locales = LocalizationSettings.AvailableLocales.Locales;
 
@@ -66,9 +62,9 @@ public class UISettingsLanguageComponent : MonoBehaviour
 				_currentSelectedOption = i;
 
 			var displayName = locales[i].Identifier.CultureInfo != null ? locales[i].Identifier.CultureInfo.NativeName : locales[i].ToString();
-			languageList.Add(displayName);
+			_languagesList.Add(displayName);
 		}
-		_languageField.FillSettingField(languageList.Count, _currentSelectedOption, languageList[_currentSelectedOption]);
+		_languageField.FillSettingField(_languagesList.Count, _currentSelectedOption, _languagesList[_currentSelectedOption]);
 		_savedSelectedOption = _currentSelectedOption;
 		LocalizationSettings.SelectedLocaleChanged += LocalizationSettings_SelectedLocaleChanged;
 	}
@@ -76,16 +72,17 @@ public class UISettingsLanguageComponent : MonoBehaviour
 	void NextOption()
 	{
 		_currentSelectedOption++;
-		Debug.Log(_currentSelectedOption);
-		_currentSelectedOption = Mathf.Clamp(_currentSelectedOption, 0, languageList.Count - 1);
+		_currentSelectedOption = Mathf.Clamp(_currentSelectedOption, 0, _languagesList.Count - 1);
 		OnSelectionChanged();
 	}
+
 	void PreviousOption()
 	{
 		_currentSelectedOption--;
-		_currentSelectedOption = Mathf.Clamp(_currentSelectedOption, 0, languageList.Count - 1);
+		_currentSelectedOption = Mathf.Clamp(_currentSelectedOption, 0, _languagesList.Count - 1);
 		OnSelectionChanged();
 	}
+
 	void OnSelectionChanged()
 	{
 		// Unsubscribe from SelectedLocaleChanged so we don't get an unnecessary callback from the change we are about to make.
@@ -102,19 +99,19 @@ public class UISettingsLanguageComponent : MonoBehaviour
 	{
 		// We need to update the dropdown selection to match.
 		var selectedIndex = LocalizationSettings.AvailableLocales.Locales.IndexOf(locale);
-		_languageField.FillSettingField(languageList.Count, selectedIndex, languageList[selectedIndex]);
-
+		_languageField.FillSettingField(_languagesList.Count, selectedIndex, _languagesList[selectedIndex]);
 	}
+
 	public void SaveSettings()
 	{
 		Locale _currentLocale = LocalizationSettings.AvailableLocales.Locales[_currentSelectedOption];
 		_savedSelectedOption = _currentSelectedOption;
 		_save.Invoke(_currentLocale);
 	}
+
 	public void ResetSettings()
 	{
 		_currentSelectedOption = _savedSelectedOption;
 		OnSelectionChanged();
 	}
-
 }

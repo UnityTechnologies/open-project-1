@@ -1,11 +1,11 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Critter : MonoBehaviour
 {
 	[HideInInspector] public bool isPlayerInAlertZone;
 	[HideInInspector] public bool isPlayerInAttackZone;
-	public Damageable currentTarget; //The StateMachine evaluates its health when needed
+	
+	[ReadOnly] public Damageable currentTarget; //The StateMachine evaluates its health when needed
 
 	public void OnAlertTriggerChange(bool entered, GameObject who)
 	{

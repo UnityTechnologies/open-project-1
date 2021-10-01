@@ -26,27 +26,27 @@ public class UISettingsAudioComponent : MonoBehaviour
 	public event UnityAction<float, float, float> _save = delegate { };
 	private void OnEnable()
 	{
-		_musicVolumeField._nextOption += IncreaseMusicVolume;
-		_musicVolumeField._previousOption += DecreaseMusicVolume;
+		_musicVolumeField.OnNextOption += IncreaseMusicVolume;
+		_musicVolumeField.OnPreviousOption += DecreaseMusicVolume;
 		_saveButton.Clicked += SaveVolumes;
 		_resetButton.Clicked += ResetVolumes;
-		_sfxVolumeField._nextOption += IncreaseSFXVolume;
-		_sfxVolumeField._previousOption += DecreaseSFXVolume;
-		_masterVolumeField._nextOption += IncreaseMasterVolume;
-		_masterVolumeField._previousOption += DecreaseMasterVolume;
+		_sfxVolumeField.OnNextOption += IncreaseSFXVolume;
+		_sfxVolumeField.OnPreviousOption += DecreaseSFXVolume;
+		_masterVolumeField.OnNextOption += IncreaseMasterVolume;
+		_masterVolumeField.OnPreviousOption += DecreaseMasterVolume;
 
 	}
 	private void OnDisable()
 	{
 		ResetVolumes(); // reset volumes on disable. If not saved, it will reset to initial volumes. 
-		_musicVolumeField._nextOption -= IncreaseMusicVolume;
-		_musicVolumeField._previousOption -= DecreaseMusicVolume;
+		_musicVolumeField.OnNextOption -= IncreaseMusicVolume;
+		_musicVolumeField.OnPreviousOption -= DecreaseMusicVolume;
 		_saveButton.Clicked -= SaveVolumes;
 		_resetButton.Clicked -= ResetVolumes;
-		_sfxVolumeField._nextOption -= IncreaseSFXVolume;
-		_sfxVolumeField._previousOption -= DecreaseSFXVolume;
-		_masterVolumeField._nextOption -= IncreaseMasterVolume;
-		_masterVolumeField._previousOption -= DecreaseMasterVolume;
+		_sfxVolumeField.OnNextOption -= IncreaseSFXVolume;
+		_sfxVolumeField.OnPreviousOption -= DecreaseSFXVolume;
+		_masterVolumeField.OnNextOption -= IncreaseMasterVolume;
+		_masterVolumeField.OnPreviousOption -= DecreaseMasterVolume;
 
 	}
 	public void Setup(float musicVolume, float sfxVolume, float masterVolume)

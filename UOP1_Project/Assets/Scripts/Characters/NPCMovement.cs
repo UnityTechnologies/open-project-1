@@ -1,10 +1,8 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public class NPCMovement : MonoBehaviour
 {
 	[SerializeField] NPCMovementConfigSO _npcMovementConfig;
-
 	[SerializeField] NPCMovementEventChannelSO _channel;
 
 	public NPCMovementConfigSO NPCMovementConfig => _npcMovementConfig;
@@ -19,5 +17,4 @@ public class NPCMovement : MonoBehaviour
 	{
 		_npcMovementConfig = value;
 	}
-
 }

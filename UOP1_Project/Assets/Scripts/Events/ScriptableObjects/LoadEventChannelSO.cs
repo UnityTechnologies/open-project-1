@@ -6,7 +6,7 @@ using UnityEngine.Events;
 /// Takes a GameSceneSO of the location or menu that needs to be loaded, and a bool to specify if a loading screen needs to display.
 /// </summary>
 [CreateAssetMenu(menuName = "Events/Load Event Channel")]
-public class LoadEventChannelSO : EventChannelBaseSO
+public class LoadEventChannelSO : DescriptionBaseSO
 {
 	public UnityAction<GameSceneSO, bool, bool> OnLoadingRequested;
 
