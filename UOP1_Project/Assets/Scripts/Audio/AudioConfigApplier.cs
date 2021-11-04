@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 /// <summary>
 /// Helper component, to quickly apply the settings from an <c>AudioConfigurationSO</c> SO to an <c>AudioSource</c>.

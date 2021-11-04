@@ -3,7 +3,6 @@
 /// <summary>
 /// This class goes on a trigger which, when entered, sends the player to another Location
 /// </summary>
-
 public class LocationExit : MonoBehaviour
 {
 	[SerializeField] private GameSceneSO _locationToLoad = default;

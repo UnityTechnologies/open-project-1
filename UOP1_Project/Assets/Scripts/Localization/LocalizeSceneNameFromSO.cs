@@ -1,15 +1,13 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Localization.Components;
+
 public class LocalizeSceneNameFromSO : MonoBehaviour
 {
-	[SerializeField] LocalizeStringEvent localizationEvent = default;
-
-	[SerializeField] LocationSO SO = default;
+	[SerializeField] LocalizeStringEvent _localizationEvent = default;
+	[SerializeField] LocationSO _location = default;
 
 	private void Start()
 	{
-		localizationEvent.StringReference = SO.locationName;
+		_localizationEvent.StringReference = _location.locationName;
 	}
 }

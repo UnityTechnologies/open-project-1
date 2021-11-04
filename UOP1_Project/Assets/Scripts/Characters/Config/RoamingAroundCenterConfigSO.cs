@@ -1,15 +1,12 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 [CreateAssetMenu(fileName = "RoamingAroundCenter", menuName = "EntityConfig/Roaming Around Center")]
 public class RoamingAroundCenterConfigSO : NPCMovementConfigSO
 {
 	[Tooltip("Is roaming from spwaning center")]
 	[SerializeField] private bool _fromSpawningPoint = true;
-
 	[Tooltip("Custom roaming center")]
 	[SerializeField] private Vector3 _customCenter;
-
 	[Tooltip("Roaming distance from center")]
 	[SerializeField] private float _radius;
 

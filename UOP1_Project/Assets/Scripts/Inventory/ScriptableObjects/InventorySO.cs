@@ -1,17 +1,30 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-// Created with collaboration from:
+// Created with collaboration with:
 // https://forum.unity.com/threads/inventory-system.980646/
+
 [CreateAssetMenu(fileName = "Inventory", menuName = "Inventory/Inventory")]
 public class InventorySO : ScriptableObject
 {
 	[Tooltip("The collection of items and their quantities.")]
-	[SerializeField]
-	private List<ItemStack> _items = new List<ItemStack>();
-	[SerializeField]
-	private List<ItemStack> _defaultItems = new List<ItemStack>();
+	[SerializeField] private List<ItemStack> _items = new List<ItemStack>();
+	[SerializeField] private List<ItemStack> _defaultItems = new List<ItemStack>();
+	
 	public List<ItemStack> Items => _items;
+
+	public void Init()
+	{
+		if (_items == null)
+		{
+			_items = new List<ItemStack>();
+		}
+		_items.Clear();
+		foreach (ItemStack item in _defaultItems)
+		{
+			_items.Add(new ItemStack(item));
+		}
+	}
 
 	public void Add(ItemSO item, int count = 1)
 	{
@@ -107,18 +120,5 @@ public class InventorySO : ScriptableObject
 		return hasIngredients;
 
 
-	}
-	public void Init()
-	{
-		if (_items == null)
-		{
-			_items = new List<ItemStack>();
-		}
-		_items.Clear();
-		foreach (ItemStack item in _defaultItems)
-		{
-			_items.Add(new ItemStack(item));
-
-		}
 	}
 }

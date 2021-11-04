@@ -52,17 +52,17 @@ public class UISettingsGraphicsComponent : MonoBehaviour
 
 	void OnEnable()
 	{
-		_resolutionsField._nextOption += NextResolution;
-		_resolutionsField._previousOption += PreviousResolution;
+		_resolutionsField.OnNextOption += NextResolution;
+		_resolutionsField.OnPreviousOption += PreviousResolution;
 
-		_shadowDistanceField._nextOption += NextShadowDistanceTier;
-		_shadowDistanceField._previousOption += PreviousShadowDistanceTier;
+		_shadowDistanceField.OnNextOption += NextShadowDistanceTier;
+		_shadowDistanceField.OnPreviousOption += PreviousShadowDistanceTier;
 
-		_fullscreenField._nextOption += NextFullscreenState;
-		_fullscreenField._previousOption += PreviousFullscreenState;
+		_fullscreenField.OnNextOption += NextFullscreenState;
+		_fullscreenField.OnPreviousOption += PreviousFullscreenState;
 
-		_antiAliasingField._nextOption += NextAntiAliasingTier;
-		_antiAliasingField._previousOption += PreviousAntiAliasingTier;
+		_antiAliasingField.OnNextOption += NextAntiAliasingTier;
+		_antiAliasingField.OnPreviousOption += PreviousAntiAliasingTier;
 
 		_saveButton.Clicked += SaveSettings;
 		_resetButton.Clicked += ResetSettings;
@@ -71,17 +71,17 @@ public class UISettingsGraphicsComponent : MonoBehaviour
 	private void OnDisable()
 	{
 		ResetSettings();
-		_resolutionsField._nextOption -= NextResolution;
-		_resolutionsField._previousOption -= PreviousResolution;
+		_resolutionsField.OnNextOption -= NextResolution;
+		_resolutionsField.OnPreviousOption -= PreviousResolution;
 
-		_shadowDistanceField._nextOption -= NextShadowDistanceTier;
-		_shadowDistanceField._previousOption -= PreviousShadowDistanceTier;
+		_shadowDistanceField.OnNextOption -= NextShadowDistanceTier;
+		_shadowDistanceField.OnPreviousOption -= PreviousShadowDistanceTier;
 
-		_fullscreenField._nextOption -= NextFullscreenState;
-		_fullscreenField._previousOption -= PreviousFullscreenState;
+		_fullscreenField.OnNextOption -= NextFullscreenState;
+		_fullscreenField.OnPreviousOption -= PreviousFullscreenState;
 
-		_antiAliasingField._nextOption -= NextAntiAliasingTier;
-		_antiAliasingField._previousOption -= PreviousAntiAliasingTier;
+		_antiAliasingField.OnNextOption -= NextAntiAliasingTier;
+		_antiAliasingField.OnPreviousOption -= PreviousAntiAliasingTier;
 
 		_saveButton.Clicked -= SaveSettings;
 		_resetButton.Clicked -= ResetSettings;

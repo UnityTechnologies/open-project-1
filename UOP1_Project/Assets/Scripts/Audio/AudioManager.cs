@@ -1,14 +1,9 @@
-﻿using System.Collections;
-using System.Linq;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Audio;
-using System;
 
 public class AudioManager : MonoBehaviour
 {
 	[Header("SoundEmitters pool")]
-	[SerializeField] private SoundEmitterFactorySO _factory = default;
 	[SerializeField] private SoundEmitterPoolSO _pool = default;
 	[SerializeField] private int _initialSize = 10;
 
@@ -170,9 +165,9 @@ public class AudioManager : MonoBehaviour
 	}
 
 	/// <summary>
-	/// Only used by the timeline to stop the gameplay music during the final cutscene
+	/// Only used by the timeline to stop the gameplay music during cutscenes.
+	/// Called by the SignalReceiver present on this same GameObject.
 	/// </summary>
-	/// <returns></returns>
 	public void TimelineInterruptsMusic()
 	{
 		StopMusic(AudioCueKey.Invalid);

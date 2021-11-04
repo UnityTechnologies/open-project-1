@@ -58,12 +58,21 @@ namespace UOP1.StateMachine.Editor
 				var prop = reorderableList.serializedProperty.GetArrayElementAtIndex(index);
 				if (prop.objectReferenceValue != null)
 				{
-					var label = prop.objectReferenceValue.name;
+					//The icon of the asset SO (basically an object field, cut to show just the icon)
 					r.width = 35;
 					EditorGUI.PropertyField(r, prop, GUIContent.none);
 					r.width = rect.width - 50;
 					r.x += 42;
+
+					//The name of the StateAction
+					string label = prop.objectReferenceValue.name;
 					GUI.Label(r, label, EditorStyles.boldLabel);
+
+					//The description
+					r.x += 180;
+					r.width = rect.width - 50 - 180;
+					string description = (prop.objectReferenceValue as DescriptionSMActionBaseSO).description;
+					GUI.Label(r, description);
 				}
 				else
 					EditorGUI.PropertyField(r, prop, GUIContent.none);

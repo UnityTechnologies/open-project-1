@@ -6,18 +6,6 @@ public class MenuController : MonoBehaviour
 	[SerializeField] private GameObject _menuPrefab;
 	private GameObject _menuInstance;
 
-	private void OnEnable()
-	{
-		//_inputReader.menuPauseEvent += OpenMenu;
-		//_inputReader.menuUnpauseEvent += UnpauseMenu;
-	}
-
-	private void OnDisable()
-	{
-		//_inputReader.menuPauseEvent -= OpenMenu;
-		//_inputReader.menuUnpauseEvent -= UnpauseMenu;
-	}
-
 	private void OpenMenu()
 	{
 		if (_menuInstance == null)

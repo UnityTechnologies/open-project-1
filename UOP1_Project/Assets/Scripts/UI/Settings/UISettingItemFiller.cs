@@ -1,39 +1,26 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.Localization.Components;
-using UnityEngine.Localization;
 using UnityEngine.Events;
 
 public class UISettingItemFiller : MonoBehaviour
 {
+	[SerializeField] private SettingFieldType _fieldType = default;
 	[SerializeField] private UIPaginationFiller _pagination = default;
 	[SerializeField] private LocalizeStringEvent _currentSelectedOption_LocalizedEvent = default;
-	[SerializeField] private TextMeshProUGUI _currentSelectedOption_Text = default;
-
-
-	[SerializeField] private Image _bg = default;
 	[SerializeField] private LocalizeStringEvent _title = default;
-
-
+	[SerializeField] private TextMeshProUGUI _currentSelectedOption_Text = default;
+	[SerializeField] private Image _bg = default;
 	[SerializeField] private Color _colorSelected = default;
 	[SerializeField] private Color _colorUnselected = default;
-
 	[SerializeField] private Sprite _bgSelected = default;
 	[SerializeField] private Sprite _bgUnselected = default;
-
-	[SerializeField] private SettingFieldType _fieldType = default;
-
-
 	[SerializeField] private MultiInputButton _buttonNext = default;
 	[SerializeField] private MultiInputButton _buttonPrevious = default;
 
-	public event UnityAction _nextOption = delegate { };
-	public event UnityAction _previousOption = delegate { };
-
-
+	public event UnityAction OnNextOption = delegate { };
+	public event UnityAction OnPreviousOption = delegate { };
 
 	public void FillSettingField_Localized(int paginationCount, int selectedPaginationIndex, string selectedOption)
 	{
@@ -46,6 +33,7 @@ public class UISettingItemFiller : MonoBehaviour
 		_buttonNext.interactable = (selectedPaginationIndex < paginationCount - 1);
 		_buttonPrevious.interactable = (selectedPaginationIndex > 0);
 	}
+	
 	public void FillSettingField(int paginationCount, int selectedPaginationIndex, string selectedOption_int)
 	{
 		_pagination.SetPagination(paginationCount, selectedPaginationIndex);
@@ -57,35 +45,33 @@ public class UISettingItemFiller : MonoBehaviour
 		_buttonPrevious.interactable = (selectedPaginationIndex > 0);
 	}
 
-
 	public void SelectItem()
 	{
 		_bg.sprite = _bgSelected;
 		_title.GetComponent<TextMeshProUGUI>().color = _colorSelected;
 		_currentSelectedOption_Text.color = _colorSelected;
 	}
+
 	public void UnselectItem()
 	{
 		_bg.sprite = _bgUnselected;
 
 		_title.GetComponent<TextMeshProUGUI>().color = _colorUnselected;
 		_currentSelectedOption_Text.color = _colorUnselected;
-
-
 	}
 
 	public void NextOption()
 	{
-		_nextOption.Invoke();
-
+		OnNextOption.Invoke();
 	}
+
 	public void PreviousOption()
 	{
-		_previousOption.Invoke();
+		OnPreviousOption.Invoke();
 	}
+
 	public void SetNavigation(MultiInputButton buttonToSelectOnDown, MultiInputButton buttonToSelectOnUp)
 	{
-
 		MultiInputButton[] buttonNavigation = GetComponentsInChildren<MultiInputButton>();
 		foreach (MultiInputButton button in buttonNavigation)
 		{
@@ -99,9 +85,5 @@ public class UISettingItemFiller : MonoBehaviour
 			newNavigation.selectOnRight = button.navigation.selectOnRight;
 			button.navigation = newNavigation;
 		}
-
-
 	}
-
-
 }

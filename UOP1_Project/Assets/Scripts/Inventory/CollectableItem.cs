@@ -1,10 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using DG.Tweening;
+
 public class CollectableItem : MonoBehaviour
 {
-
 	[SerializeField] private ItemSO _currentItem = default;
 	[SerializeField] private GameObject _itemGO = default;
 
@@ -15,23 +13,19 @@ public class CollectableItem : MonoBehaviour
 
 	public ItemSO GetItem()
 	{
-
 		return _currentItem;
-
 	}
+
 	public void SetItem(ItemSO item)
 	{
 		_currentItem = item;
-
 	}
+
 	public void AnimateItem()
 	{
-
 		if (_itemGO != null)
 		{
 			_itemGO.transform.DORotate(Vector3.one * 180, 5, RotateMode.Fast).SetLoops(-1, LoopType.Incremental);
-
 		}
 	}
-
 }

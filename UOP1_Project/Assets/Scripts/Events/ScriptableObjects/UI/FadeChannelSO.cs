@@ -2,7 +2,7 @@
 using UnityEngine.Events;
 
 [CreateAssetMenu(menuName = "Events/UI/Fade Channel")]
-public class FadeChannelSO : ScriptableObject
+public class FadeChannelSO : DescriptionBaseSO
 {
 	public UnityAction<bool, float, Color> OnEventRaised;
 

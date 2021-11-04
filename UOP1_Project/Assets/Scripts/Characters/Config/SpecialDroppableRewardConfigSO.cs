@@ -5,14 +5,11 @@ using UnityEngine;
 public class SpecialDroppableRewardConfigSO : DroppableRewardConfigSO
 {
 	[Tooltip("Current count of dropped items")]
-	[SerializeField]
-	private int _specialDroppableCurrentCount = 0;
+	[SerializeField] private int _specialDroppableCurrentCount = 0;
 	[Tooltip("Max count where the special droppable needs to be dropped")]
-	[SerializeField]
-	private int _specialDroppableMaxCount = 0;
-	[Tooltip("The special item to drop")]
-	[SerializeField]
-	private DropGroup _specialItem = new DropGroup();
+	[SerializeField] private int _specialDroppableMaxCount = 0;
+	[SerializeField] private DropGroup _specialItem = new DropGroup();
+
 	public override DropGroup DropSpecialItem()
 	{
 		_specialDroppableCurrentCount++;

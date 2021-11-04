@@ -1686,6 +1686,55 @@ public class @GameInput : IInputActionCollection, IDisposable
                     ""isPartOfComposite"": true
                 }
             ]
+        },
+        {
+            ""name"": ""Cheats"",
+            ""id"": ""a58ec1e7-2c80-488a-a58c-690c816dd1f7"",
+            ""actions"": [
+                {
+                    ""name"": ""OpenCheatMenu"",
+                    ""type"": ""Button"",
+                    ""id"": ""92c80776-a34c-4bc5-896a-36fddfe5c93d"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""c1aafc6a-35bc-409b-a9e6-7ab5681ea9f8"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardOrGamepad"",
+                    ""action"": ""OpenCheatMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""df4ce7ca-8bf4-4389-b9e6-2988b8aa1963"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardOrGamepad"",
+                    ""action"": ""OpenCheatMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8e8b3a36-9a8d-4480-a51d-66e7fa933cf1"",
+                    ""path"": ""<Keyboard>/c"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardOrGamepad"",
+                    ""action"": ""OpenCheatMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": [
@@ -1744,6 +1793,9 @@ public class @GameInput : IInputActionCollection, IDisposable
         m_Dialogues = asset.FindActionMap("Dialogues", throwIfNotFound: true);
         m_Dialogues_MoveSelection = m_Dialogues.FindAction("MoveSelection", throwIfNotFound: true);
         m_Dialogues_AdvanceDialogue = m_Dialogues.FindAction("AdvanceDialogue", throwIfNotFound: true);
+        // Cheats
+        m_Cheats = asset.FindActionMap("Cheats", throwIfNotFound: true);
+        m_Cheats_OpenCheatMenu = m_Cheats.FindAction("OpenCheatMenu", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -2072,6 +2124,39 @@ public class @GameInput : IInputActionCollection, IDisposable
         }
     }
     public DialoguesActions @Dialogues => new DialoguesActions(this);
+
+    // Cheats
+    private readonly InputActionMap m_Cheats;
+    private ICheatsActions m_CheatsActionsCallbackInterface;
+    private readonly InputAction m_Cheats_OpenCheatMenu;
+    public struct CheatsActions
+    {
+        private @GameInput m_Wrapper;
+        public CheatsActions(@GameInput wrapper) { m_Wrapper = wrapper; }
+        public InputAction @OpenCheatMenu => m_Wrapper.m_Cheats_OpenCheatMenu;
+        public InputActionMap Get() { return m_Wrapper.m_Cheats; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(CheatsActions set) { return set.Get(); }
+        public void SetCallbacks(ICheatsActions instance)
+        {
+            if (m_Wrapper.m_CheatsActionsCallbackInterface != null)
+            {
+                @OpenCheatMenu.started -= m_Wrapper.m_CheatsActionsCallbackInterface.OnOpenCheatMenu;
+                @OpenCheatMenu.performed -= m_Wrapper.m_CheatsActionsCallbackInterface.OnOpenCheatMenu;
+                @OpenCheatMenu.canceled -= m_Wrapper.m_CheatsActionsCallbackInterface.OnOpenCheatMenu;
+            }
+            m_Wrapper.m_CheatsActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @OpenCheatMenu.started += instance.OnOpenCheatMenu;
+                @OpenCheatMenu.performed += instance.OnOpenCheatMenu;
+                @OpenCheatMenu.canceled += instance.OnOpenCheatMenu;
+            }
+        }
+    }
+    public CheatsActions @Cheats => new CheatsActions(this);
     private int m_KeyboardOrGamepadSchemeIndex = -1;
     public InputControlScheme KeyboardOrGamepadScheme
     {
@@ -2115,5 +2200,9 @@ public class @GameInput : IInputActionCollection, IDisposable
     {
         void OnMoveSelection(InputAction.CallbackContext context);
         void OnAdvanceDialogue(InputAction.CallbackContext context);
+    }
+    public interface ICheatsActions
+    {
+        void OnOpenCheatMenu(InputAction.CallbackContext context);
     }
 }

@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace UOP1.StateMachine.ScriptableObjects
 {
-	[CreateAssetMenu(fileName = "New Transition Table", menuName = "State Machines/Transition Table")]
+	[CreateAssetMenu(fileName = "NewTransitionTable", menuName = "State Machines/Transition Table")]
 	public class TransitionTableSO : ScriptableObject
 	{
 		[SerializeField] private TransitionItem[] _transitions = default;

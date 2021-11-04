@@ -1,35 +1,30 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using TMPro;
+﻿using UnityEngine;
 using UnityEngine.Localization.Components;
-using UnityEngine.UI;
 
 public class UIDialogueChoiceFiller : MonoBehaviour
 {
-
 	[SerializeField] private LocalizeStringEvent _choiceText = default;
-	[SerializeField] private DialogueChoiceChannelSO _makeAChoiceEvent = default;
 	[SerializeField] private MultiInputButton _actionButton = default;
 
-	Choice currentChoice;
+	[Header("Broadcasting on")]
+	[SerializeField] private DialogueChoiceChannelSO _onChoiceMade = default;
+
+	private Choice _currentChoice;
 
 	public void FillChoice(Choice choiceToFill, bool isSelected)
 	{
-		currentChoice = choiceToFill;
+		_currentChoice = choiceToFill;
 		_choiceText.StringReference = choiceToFill.Response;
 		_actionButton.interactable = true;
+
 		if (isSelected)
 		{
 			_actionButton.UpdateSelected();
 		}
-
 	}
 
 	public void ButtonClicked()
 	{
-		_makeAChoiceEvent.RaiseEvent(currentChoice);
+		_onChoiceMade.RaiseEvent(_currentChoice);
 	}
-
-
 }

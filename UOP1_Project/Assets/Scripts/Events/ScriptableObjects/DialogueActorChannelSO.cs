@@ -7,9 +7,10 @@ using UnityEngine;
 /// </summary>
 
 [CreateAssetMenu(menuName = "Events/Dialogue Actor Channel")]
-public class DialogueActorChannelSO : ScriptableObject
+public class DialogueActorChannelSO : DescriptionBaseSO
 {
 	public UnityAction<ActorSO> OnEventRaised;
+	
 	public void RaiseEvent(ActorSO actor)
 	{
 		if (OnEventRaised != null)

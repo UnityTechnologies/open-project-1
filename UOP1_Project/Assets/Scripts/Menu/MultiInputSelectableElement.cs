@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.EventSystems;
 
 [AddComponentMenu("UOP1/UI/MultiInputSelectableElement")]
