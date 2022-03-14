@@ -38,7 +38,7 @@ public class UISettingsAudioComponent : MonoBehaviour
 	}
 	private void OnDisable()
 	{
-		ResetVolumes(); // reset volumes on disable. If not saved, it will reset to initial volumes. 
+		ResetVolumes(); // reset volumes on disable. If not saved, it will reset to initial volumes.
 		_musicVolumeField.OnNextOption -= IncreaseMusicVolume;
 		_musicVolumeField.OnPreviousOption -= DecreaseMusicVolume;
 		_saveButton.Clicked -= SaveVolumes;
@@ -52,8 +52,8 @@ public class UISettingsAudioComponent : MonoBehaviour
 	public void Setup(float musicVolume, float sfxVolume, float masterVolume)
 	{
 		_masterVolume = masterVolume;
-		_musicVolume = sfxVolume;
-		_sfxVolume = musicVolume;
+		_musicVolume = musicVolume;
+		_sfxVolume = sfxVolume;
 
 		_savedMasterVolume = _masterVolume;
 		_savedMusicVolume = _musicVolume;
