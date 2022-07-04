@@ -17,7 +17,9 @@ public class UIManager : MonoBehaviour
 	[SerializeField] private UIPause _pauseScreen = default;
 	[SerializeField] private UISettingsController _settingScreen = default;
 
-	[Header("Gameplay")]
+	[SerializeField] private UIDebug _debugScreen = default;
+
+	[Header("Gameplay Components")]
 	[SerializeField] private GameStateSO _gameStateManager = default;
 	[SerializeField] private MenuSO _mainMenu = default;
 	[SerializeField] private InputReader _inputReader = default;
@@ -52,7 +54,9 @@ public class UIManager : MonoBehaviour
 		_openInventoryScreenForCookingEvent.OnEventRaised += SetInventoryScreenForCooking;
 		_setInteractionEvent.OnEventRaised += SetInteractionPanel;
 		_inputReader.OpenInventoryEvent += SetInventoryScreen;
-		_inventoryPanel.Closed += CloseInventoryScreen;
+		_inventoryPanel.Closed += CloseInventoryScreen; 
+    	_inputReader.openDebugMenu += SetDebugMenu;
+		_debugScreen.Closed += CloseDebugMenu;
 		_cookRecipeEvent.OnEventRaised += PlayCookingAnimation;
 	}
 
@@ -75,6 +79,7 @@ public class UIManager : MonoBehaviour
 		_inventoryPanel.gameObject.SetActive(false);
 		_pauseScreen.gameObject.SetActive(false);
 		_interactionPanel.gameObject.SetActive(false);
+		_debugScreen.gameObject.SetActive(false);
 		_switchTabDisplay.SetActive(false);
 		_cookingAnimation.gameObject.SetActive(false);
 
@@ -291,4 +296,34 @@ public class UIManager : MonoBehaviour
 		_cookingAnimation.AnimationEnded -= StopCookingAnimation;
 		_cookingAnimation.gameObject.SetActive(false);
 	}
+
+	void SetDebugMenu()
+	{
+		OpenDebugMenu();
+	}
+
+	void OpenDebugMenu()
+	{
+		_inputReader.menuPauseEvent -= OpenUIPause; // you cant open the UI Pause again when you are in inventory  
+		_inputReader.menuUnpauseEvent -= CloseUIPause; // you can close the UI Pause popup when you are in inventory 
+
+		_debugScreen.gameObject.SetActive(true);
+
+		_inputReader.EnableMenuInput();
+
+		_gameState.UpdateGameState(GameState.Inventory);
+	}
+	void CloseDebugMenu()
+	{
+
+		_inputReader.menuPauseEvent += OpenUIPause; // you cant open the UI Pause again when you are in inventory  
+
+		_debugScreen.gameObject.SetActive(false);
+		
+		_selectionHandler.Unselect();
+		_inputReader.EnableGameplayInput();
+		_gameState.ResetToPreviousGameState();
+	}
+
+
 }

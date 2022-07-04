@@ -48,6 +48,12 @@ public class InputReader : DescriptionBaseSO, GameInput.IGameplayActions, GameIn
 
 	private GameInput _gameInput;
 
+	private GameInput gameInput;
+
+	[SerializeField] private DebugConfigSO _debugConfigSO;
+  
+	public GameStateSO gameStateManager;
+
 	private void OnEnable()
 	{
 		if (_gameInput == null)
@@ -164,6 +170,31 @@ public class InputReader : DescriptionBaseSO, GameInput.IGameplayActions, GameIn
 
 		if (context.phase == InputActionPhase.Canceled)
 			DisableMouseControlCameraEvent.Invoke();
+	}
+
+	public void OnOpenDebugMenu(InputAction.CallbackContext context)
+	{
+		if (!_debugConfigSO.isDebugMode)
+			return;
+
+		if (context.phase == InputActionPhase.Performed)
+			openDebugMenu.Invoke();
+	}
+
+	public void OnDebugWalkRun(InputAction.CallbackContext context)
+	{
+		if (!_debugConfigSO.isDebugMode)
+			return;
+		
+		switch (context.phase)
+		{
+			case InputActionPhase.Performed:
+				startedDebugWalkRun.Invoke();
+				break;
+			case InputActionPhase.Canceled:
+				stoppedDebugWalkRun.Invoke();
+				break;
+		}
 	}
 
 	private bool IsDeviceMouse(InputAction.CallbackContext context) => context.control.device.name == "Mouse";

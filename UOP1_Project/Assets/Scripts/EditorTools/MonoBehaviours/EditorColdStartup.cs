@@ -15,6 +15,7 @@ public class EditorColdStartup : MonoBehaviour
 	[SerializeField] private AssetReference _notifyColdStartupChannel = default;
 	[SerializeField] private VoidEventChannelSO _onSceneReadyChannel = default;
 	[SerializeField] private PathStorageSO _pathStorage = default;
+	[SerializeField] private DebugConfigSO _debugConfig = default;
 	[SerializeField] private SaveSystem _saveSystem = default;
 
 	private bool isColdStart = false;
@@ -34,6 +35,7 @@ public class EditorColdStartup : MonoBehaviour
 	{
 		if (isColdStart)
 		{
+			_debugConfig.isDebugMode = true;
 			_persistentManagersSO.sceneReference.LoadSceneAsync(LoadSceneMode.Additive, true).Completed += LoadEventChannel;
 
 		}

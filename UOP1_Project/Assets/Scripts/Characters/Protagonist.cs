@@ -42,6 +42,8 @@ public class Protagonist : MonoBehaviour
 		_inputReader.StartedRunning += OnStartedRunning;
 		_inputReader.StoppedRunning += OnStoppedRunning;
 		_inputReader.AttackEvent += OnStartedAttack;
+		_inputReader.startedDebugWalkRun += OnStartedDebugWalkRun;
+		_inputReader.stoppedDebugWalkRun += OnStoppedDebugWalkRun;
 		//...
 	}
 
@@ -54,6 +56,8 @@ public class Protagonist : MonoBehaviour
 		_inputReader.StartedRunning -= OnStartedRunning;
 		_inputReader.StoppedRunning -= OnStoppedRunning;
 		_inputReader.AttackEvent -= OnStartedAttack;
+		_inputReader.startedDebugWalkRun -= OnStartedDebugWalkRun;
+		_inputReader.stoppedDebugWalkRun -= OnStoppedDebugWalkRun;
 		//...
 	}
 
@@ -133,6 +137,17 @@ public class Protagonist : MonoBehaviour
 
 
 	private void OnStartedAttack() => attackInput = true;
+
+	private void OnStartedDebugWalkRun()
+	{
+		gameObject.layer = _inputReader._debugConfigSO.playerDebugLayerIndex;
+	}
+
+	private void OnStoppedDebugWalkRun()
+	{
+		gameObject.layer = _inputReader._debugConfigSO.playerOriginalLayerIndex;
+	}
+
 
 	// Triggered from Animation Event
 	public void ConsumeAttackInput() => attackInput = false;
