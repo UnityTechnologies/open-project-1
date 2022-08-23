@@ -13,4 +13,12 @@ public class Attacker : MonoBehaviour
 	{
 		_attackCollider.SetActive(false);
 	}
+	
+	public void EmptyTest() {
+		var a = 10;
+		if(true) Debug.LogError("testing this as well);
+		if(a > 5) {
+			Debug.LogError("another test);
+		}
+	}
 }
