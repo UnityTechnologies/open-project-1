@@ -2,7 +2,7 @@
 %TAG !u! tag:unity3d.com,2011:
 --- !u!21 &2100000
 Material:
-  serializedVersion: 6
+  serializedVersion: 8
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -10,7 +10,9 @@ Material:
   m_Name: UnloadColliderMaterial
   m_Shader: {fileID: -6465566751694194690, guid: 6308ea4821d1aeb4cbe77aa991079282,
     type: 3}
-  m_ShaderKeywords: _SPECULAR_COLOR
+  m_ValidKeywords: []
+  m_InvalidKeywords:
+  - _SPECULAR_COLOR
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -65,6 +67,7 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    m_Ints: []
     m_Floats:
     - Vector1_398E6F7F: 0.5
     - Vector1_495DBFDC: 0
@@ -105,6 +108,7 @@ Material:
     - _Color: {r: 0.9622641, g: 0.30411175, b: 0.30411175, a: 0.19607843}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _SpecColor: {r: 0.5, g: 0.5, b: 0.5, a: 0}
+  m_BuildTextureStacks: []
 --- !u!114 &3239358138175470791
 MonoBehaviour:
   m_ObjectHideFlags: 11
@@ -117,4 +121,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  version: 2
+  version: 5
