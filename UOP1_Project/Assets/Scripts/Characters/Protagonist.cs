@@ -12,6 +12,9 @@ public class Protagonist : MonoBehaviour
 	private Vector2 _inputVector;
 	private float _previousSpeed;
 
+	// For the slime/bush hopping bug: sets the max distance between player and object allowed when colliders clip
+	public float maxDistance = 0.5f;
+
 	//These fields are read and manipulated by the StateMachine actions
 	[NonSerialized] public bool jumpInput;
 	[NonSerialized] public bool extraActionInput;
@@ -136,4 +139,27 @@ public class Protagonist : MonoBehaviour
 
 	// Triggered from Animation Event
 	public void ConsumeAttackInput() => attackInput = false;
+
+	//---- Slime/bush hopping fail-safe ----
+    private void OnCollisionStay(Collision collision)
+    {
+		// If the player has continued contact with a critter or bush object
+        if (collision.gameObject.tag == "Critter" || collision.gameObject.tag == "Bush")
+        {
+			// Calculates the distance between the player and the object
+            float distance = Vector3.Distance(collision.gameObject.transform.position, this.transform.position);
+			// Checks if colliders are clipping
+            if (distance <= maxDistance)
+            {
+				// Calculates the direction between the player and object
+                Vector3 direction = collision.gameObject.transform.position - this.transform.position;
+				// Sets vertical direction to 0, to prevent hopping
+                direction.y = 0f;
+
+                // Calculates new position for player to move outside of clipped collider based on direction
+                Vector3 newPos = this.transform.position + direction.normalized * (maxDistance - distance);
+				this.transform.position = Vector3.Lerp(this.transform.position, newPos, Time.deltaTime);
+            }
+        }
+    }
 }
