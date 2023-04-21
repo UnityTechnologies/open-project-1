@@ -52,8 +52,8 @@ public class UISettingsAudioComponent : MonoBehaviour
 	public void Setup(float musicVolume, float sfxVolume, float masterVolume)
 	{
 		_masterVolume = masterVolume;
-		_musicVolume = sfxVolume;
-		_sfxVolume = musicVolume;
+		_musicVolume = musicVolume;
+		_sfxVolume = sfxVolume;
 
 		_savedMasterVolume = _masterVolume;
 		_savedMusicVolume = _musicVolume;
