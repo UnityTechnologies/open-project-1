@@ -109,6 +109,26 @@ public class Protagonist : MonoBehaviour
 		_previousSpeed = targetSpeed;
 	}
 
+	// Ensure that player does not get stuck in corners/edges of rocks
+	void OnCollisionEnter(Collision collisionInfo)
+    {
+        if (collisionInfo.gameObject.name.Contains("rock") ||
+			collisionInfo.gameObject.name.Contains("Rock")){
+			
+			// While colliding with a rock, increase character controller slope limit
+			GetComponent<CharacterController>().slopeLimit = 90;
+		}
+    }
+	void OnCollisionExit(Collision collisionInfo)
+	{
+		if (collisionInfo.gameObject.name.Contains("rock") ||
+			collisionInfo.gameObject.name.Contains("Rock")){
+			
+			// After colliding with a rock, decrease character controller slope limit
+			GetComponent<CharacterController>().slopeLimit = 50;
+		}
+	}
+
 	//---- EVENT LISTENERS ----
 
 	private void OnMove(Vector2 movement)
